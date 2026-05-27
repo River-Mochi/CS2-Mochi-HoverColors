@@ -1,55 +1,42 @@
 // File: UI/src/MochiColorPickerPanel.tsx
-// Purpose: In-city panel anchored under the GameTopLeft icon button.
-// Layout (current):
-//   - Outline section:   vanilla ColorField swatch that opens the full vanilla picker popup
-//   - Fill section:      vanilla Slider for fill alpha only (Fill RGB sliders dropped — they
-//                        didn't visibly do anything because we route Outline RGB to all surfaces)
-//   - Guidelines section: vanilla Slider mirroring the Options-UI Guidelines opacity
-//                         (both surfaces write to Settings.GuidelineOpacityPercent; either works)
-//   - Presets row:       compact preset buttons + bottom-right drag handle + top-right close button
-//
-// State sync model:
-//   useValue() on each bound channel reads live from C# (Settings.OutlineR etc.).
-//   We keep a local React copy so preset clicks update the panel instantly without waiting on
-//   the next binding tick.
+// Purpose: Compact in-city hover-color panel anchored under the GameTopLeft icon button.
+// Layout:
+//   - Short draggable title bar with info tooltip + close button
+//   - Outline row: larger vanilla ColorField launcher
+//   - Fill / Guidelines rows: compact sliders with percent readouts
+//   - Preset row: right-aligned bordered buttons
 
 import React from "react";
 import { Button, Tooltip } from "cs2/ui";
 import { Color } from "cs2/bindings";
 import { bindValue, trigger, useValue } from "cs2/api";
 import { VanillaComponentResolver } from "./utils/vanilla/VanillaComponentResolver";
+import infoIconSrc from "../images/AdvisorInfoViewWhite.svg";
 import styles from "./MochiColorPickerPanel.module.scss";
 
 const CHANNEL = "HoverPower";
 
-const outlineR$ = bindValue<number>(CHANNEL, "OutlineR", 0.502);
-const outlineG$ = bindValue<number>(CHANNEL, "OutlineG", 0.869);
+const outlineR$ = bindValue<number>(CHANNEL, "OutlineR", 0.50);
+const outlineG$ = bindValue<number>(CHANNEL, "OutlineG", 0.50);
 const outlineB$ = bindValue<number>(CHANNEL, "OutlineB", 1);
-const outlineA$ = bindValue<number>(CHANNEL, "OutlineA", 0.855);
+const outlineA$ = bindValue<number>(CHANNEL, "OutlineA", 0.50);
 const fillA$ = bindValue<number>(CHANNEL, "FillA", 0);
 const guidelineOpacity$ = bindValue<number>(CHANNEL, "GuidelineOpacityPercent", 40);
 const closeIconSrc = "coui://uil/Standard/XClose.svg";
 
-// -----------------------------------------------------------------------
-// Presets (keep in sync with Settings/Setting.cs SetDefaults() for the Reset case)
-// -----------------------------------------------------------------------
-
-// Vanilla cyan-blue — exact values from the OutlinesWorldUIPass material defaults.
-const PRESET_VANILLA_OUTLINE: Color = { r: 0.502, g: 0.869, b: 1, a: 0.855 };
+// Vanilla cyan-blue defaults confirmed by Mert's original mod.
+const PRESET_VANILLA_OUTLINE: Color = { r: 0.50, g: 0.50, b: 1, a: 0.50 };
 const PRESET_VANILLA_FILL_A = 0;
 
-// Set1: light gray with 10% halo alpha — a subtle ambient highlight.
-const PRESET_LIGHT_GRAY_OUTLINE: Color = { r: 0.85, g: 0.85, b: 0.88, a: 0.10 };
-const PRESET_LIGHT_GRAY_FILL_A = 0;
+// Gentle neutral preset for River-Mochi's preferred subtle highlight.
+const PRESET_RIVER_MOCHI_GRAY_OUTLINE: Color = { r: 0.85, g: 0.85, b: 0.88, a: 0.10 };
+const PRESET_RIVER_MOCHI_GRAY_FILL_A = 0;
 
-// Set2: purple-gray from yenyang's HighlightsAndGuidelinesTweaks POC.
-// Yenyang's original m_HoveredColor was (0.25, 0.15, 0.25, 0.01). We keep the RGB and bump alpha
-// to 0.50 so the halo is actually visible as a usable preset rather than near-invisible.
-const PRESET_YENYANG_OUTLINE: Color = { r: 0.25, g: 0.15, b: 0.25, a: 0.5 };
+// Purple-gray test preset inspired by yenyang's highlight experiments.
+const PRESET_YENYANG_OUTLINE: Color = { r: 0.25, g: 0.15, b: 0.25, a: 0.3 };
 const PRESET_YENYANG_FILL_A = 0;
 
 export const MochiColorPickerPanel = () => {
-    // Live values from C# settings via bindings.
     const boundOutline: Color = {
         r: useValue(outlineR$),
         g: useValue(outlineG$),
@@ -59,7 +46,6 @@ export const MochiColorPickerPanel = () => {
     const boundFillA = useValue(fillA$);
     const boundGuideline = useValue(guidelineOpacity$);
 
-    // Local mirrors so preset clicks snap state without waiting on the binding round-trip.
     const [outline, setOutline] = React.useState<Color>(boundOutline);
     const [fillA, setFillA] = React.useState<number>(boundFillA);
     const [guidelineOpacity, setGuidelineOpacity] = React.useState<number>(boundGuideline);
@@ -115,21 +101,21 @@ export const MochiColorPickerPanel = () => {
         };
     }, [panelDragging]);
 
-    const handleOutlineChange = (c: Color) => {
-        setOutline(c);
-        trigger(CHANNEL, "SetOutlineColor", c.r, c.g, c.b, c.a);
+    const handleOutlineChange = (value: Color) => {
+        setOutline(value);
+        trigger(CHANNEL, "SetOutlineColor", value.r, value.g, value.b, value.a);
     };
 
     const handleFillAChange = (sliderValue: number) => {
-        const a = Math.max(0, Math.min(1, sliderValue));
-        setFillA(a);
-        trigger(CHANNEL, "SetFillAlpha", a);
+        const value = Math.max(0, Math.min(1, sliderValue));
+        setFillA(value);
+        trigger(CHANNEL, "SetFillAlpha", value);
     };
 
     const handleGuidelineChange = (percent: number) => {
-        const clamped = Math.max(0, Math.min(100, Math.round(percent / 5) * 5));
-        setGuidelineOpacity(clamped);
-        trigger(CHANNEL, "SetGuidelineOpacity", clamped);
+        const value = Math.max(0, Math.min(100, Math.round(percent / 5) * 5));
+        setGuidelineOpacity(value);
+        trigger(CHANNEL, "SetGuidelineOpacity", value);
     };
 
     const applyPreset = (outlineColor: Color, fillAlpha: number) => {
@@ -139,10 +125,11 @@ export const MochiColorPickerPanel = () => {
         trigger(CHANNEL, "SetFillAlpha", fillAlpha);
     };
 
-    const handleSet1 = () => applyPreset(PRESET_LIGHT_GRAY_OUTLINE, PRESET_LIGHT_GRAY_FILL_A);
+    const handleSet1 = () => applyPreset(PRESET_RIVER_MOCHI_GRAY_OUTLINE, PRESET_RIVER_MOCHI_GRAY_FILL_A);
     const handleSet2 = () => applyPreset(PRESET_YENYANG_OUTLINE, PRESET_YENYANG_FILL_A);
     const handleReset = () => applyPreset(PRESET_VANILLA_OUTLINE, PRESET_VANILLA_FILL_A);
     const handleClosePanel = () => trigger(CHANNEL, "SetPanelOpen", false);
+
     const handlePanelDragStart = (event: React.MouseEvent<HTMLDivElement>) => {
         event.preventDefault();
         event.stopPropagation();
@@ -157,7 +144,6 @@ export const MochiColorPickerPanel = () => {
 
     const ColorField = VanillaComponentResolver.instance.ColorField;
     const Slider = VanillaComponentResolver.instance.Slider;
-    const Section = VanillaComponentResolver.instance.Section;
     const focusDisabled = VanillaComponentResolver.instance.FOCUS_DISABLED;
     const numberFieldClass = VanillaComponentResolver.instance.mouseToolOptionsTheme["number-field"];
     const colorFieldTheme = VanillaComponentResolver.instance.colorFieldTheme;
@@ -171,8 +157,23 @@ export const MochiColorPickerPanel = () => {
             style={{ transform: `translate(${panelOffset.x}px, ${panelOffset.y}px)` }}
         >
             <div className={`panel_YqS menu_O_M ${styles.panelFrame}`}>
-                <div className={` content_XD5 content_AD7 child-opacity-transition_nkS content_Hzl ${styles.panelContent}`}>
-                    <div className={styles.panelUtilityRow}>
+                <div className={`content_XD5 content_AD7 child-opacity-transition_nkS content_Hzl ${styles.panelContent}`}>
+                    <div className={styles.titleBar}>
+                        <Tooltip tooltip="Mochi's color picker.">
+                            <div className={styles.infoButton}>
+                                <img src={infoIconSrc} className={styles.infoIcon} alt="" />
+                            </div>
+                        </Tooltip>
+
+                        <Tooltip tooltip="Draggable">
+                            <div
+                                className={`${styles.titleDragHandle} ${panelDragging ? styles.titleDragHandleActive : ""}`}
+                                onMouseDown={handlePanelDragStart}
+                            >
+                                <span className={styles.dragHandleLine}></span>
+                            </div>
+                        </Tooltip>
+
                         <Tooltip tooltip="Close this panel. You can also toggle it with the GTL icon or the H hotkey.">
                             <Button
                                 className={closeButtonClass}
@@ -186,10 +187,13 @@ export const MochiColorPickerPanel = () => {
                     </div>
 
                     <div className={styles.body}>
-                        <Section title="Outline">
-                            <div className={styles.outlineControl}>
+                        <div className={styles.controlRow}>
+                            <Tooltip tooltip="Outline color for the active hover and selection highlight. Click the swatch to open the vanilla color picker.">
+                                <div className={styles.controlLabel}>Outline</div>
+                            </Tooltip>
+                            <div className={styles.controlBody}>
                                 <Tooltip tooltip="Click this color box to open the full vanilla picker with wheel, RGB sliders, alpha, and hex input. This changes only the active hover/selection highlight, not the building permanently.">
-                                    <div className={styles.outlineFieldAnchor}>
+                                    <div className={styles.outlineFieldShell}>
                                         <ColorField
                                             focusKey={focusDisabled}
                                             className={outlineFieldClass}
@@ -203,80 +207,75 @@ export const MochiColorPickerPanel = () => {
                                         />
                                     </div>
                                 </Tooltip>
-                                <div className={styles.helperText}>
-                                    Click the box for the full vanilla color picker.
-                                </div>
                             </div>
-                        </Section>
+                        </div>
 
-                        <Section title="Fill">
+                        <div className={styles.controlRow}>
                             <Tooltip tooltip="Opacity of the fill inside the hovered outline. 0% = no inner fill, 100% = fully visible fill.">
-                                <div className={styles.sliderRow}>
-                                    <Slider
-                                        focusKey={focusDisabled}
-                                        className={styles.slider}
-                                        value={fillA}
-                                        start={0}
-                                        end={1}
-                                        gamepadStep={0.01}
-                                        onChange={handleFillAChange}
-                                    />
-                                    <div className={`${styles.valueField} ${numberFieldClass}`}>
-                                        {`${Math.round(fillA * 100)}%`}
+                                <div className={styles.controlLabel}>Fill</div>
+                            </Tooltip>
+                            <Tooltip tooltip="Opacity of the fill inside the hovered outline. 0% = no inner fill, 100% = fully visible fill.">
+                                <div className={styles.controlBody}>
+                                    <div className={styles.sliderRow}>
+                                        <Slider
+                                            focusKey={focusDisabled}
+                                            className={styles.slider}
+                                            value={fillA}
+                                            start={0}
+                                            end={1}
+                                            gamepadStep={0.01}
+                                            onChange={handleFillAChange}
+                                        />
+                                        <div className={`${styles.valueField} ${numberFieldClass}`}>
+                                            {`${Math.round(fillA * 100)}%`}
+                                        </div>
                                     </div>
                                 </div>
                             </Tooltip>
-                        </Section>
+                        </div>
 
-                        <Section title="Guidelines">
-                            <Tooltip tooltip="Guidelines opacity. This is the same setting used in the Options UI menu, so both places stay in sync.">
-                                <div className={styles.sliderRow}>
-                                    <Slider
-                                        focusKey={focusDisabled}
-                                        className={styles.slider}
-                                        value={guidelineOpacity}
-                                        start={0}
-                                        end={100}
-                                        gamepadStep={5}
-                                        onChange={handleGuidelineChange}
-                                    />
-                                    <div className={`${styles.valueField} ${numberFieldClass}`}>
-                                        {`${guidelineOpacity}%`}
+                        <div className={styles.controlRow}>
+                            <Tooltip tooltip="Guidelines opacity. This is the same setting used in the Options menu, so both places stay in sync.">
+                                <div className={styles.controlLabel}>Guidelines</div>
+                            </Tooltip>
+                            <Tooltip tooltip="Guidelines opacity. This is the same setting used in the Options menu, so both places stay in sync.">
+                                <div className={styles.controlBody}>
+                                    <div className={styles.sliderRow}>
+                                        <Slider
+                                            focusKey={focusDisabled}
+                                            className={styles.slider}
+                                            value={guidelineOpacity}
+                                            start={0}
+                                            end={100}
+                                            gamepadStep={5}
+                                            onChange={handleGuidelineChange}
+                                        />
+                                        <div className={`${styles.valueField} ${numberFieldClass}`}>
+                                            {`${guidelineOpacity}%`}
+                                        </div>
                                     </div>
                                 </div>
                             </Tooltip>
-                        </Section>
+                        </div>
                     </div>
 
                     <div className={styles.actions}>
-                        <Tooltip tooltip="Preset 1: light gray with a subtle 10% outline halo.">
-                            <Button className={styles.presetButton} variant="menu" focusKey={focusDisabled} onSelect={handleSet1}>
-                                Set1
+                        <Tooltip tooltip="River-Mochi Gray: light gray with a subtle 10% outline halo.">
+                            <Button className={`${styles.actionButton} ${styles.actionButtonWide}`} focusKey={focusDisabled} onSelect={handleSet1}>
+                                River-Mochi Gray
                             </Button>
                         </Tooltip>
                         <Tooltip tooltip="Preset 2: purple-gray test colors inspired by yenyang's highlight experiments.">
-                            <Button className={styles.presetButton} variant="menu" focusKey={focusDisabled} onSelect={handleSet2}>
-                                Set2
+                            <Button className={styles.actionButton} focusKey={focusDisabled} onSelect={handleSet2}>
+                                Set 2
                             </Button>
                         </Tooltip>
-                        <Tooltip tooltip="Reset to the Hover Power default blue outline and no fill.">
-                            <Button className={styles.presetButton} variant="menu" focusKey={focusDisabled} onSelect={handleReset}>
+                        <Tooltip tooltip="Reset to the vanilla cyan-blue outline and no fill.">
+                            <Button className={styles.actionButton} focusKey={focusDisabled} onSelect={handleReset}>
                                 Reset
                             </Button>
                         </Tooltip>
                     </div>
-
-                    <Tooltip tooltip="Drag this little tab to move the panel.">
-                        <div
-                            className={`${styles.dragGrip} ${panelDragging ? styles.dragGripActive : ""}`}
-                            onMouseDown={handlePanelDragStart}
-                        >
-                            <span className={styles.dragGripDot}></span>
-                            <span className={styles.dragGripDot}></span>
-                            <span className={styles.dragGripDot}></span>
-                            <span className={styles.dragGripDot}></span>
-                        </div>
-                    </Tooltip>
                 </div>
             </div>
         </div>

@@ -1,5 +1,5 @@
-// .anchor only positions the panel relative to the GTL button. The button itself uses pure
-// vanilla CS2 styling via <Button variant="floating" src={...} selected={...} /> — no custom
+// .anchor only positions the panel relative to the GTL button.
+// GTL button uses pure vanilla CS2 styling via <Button variant="floating" src={...} selected={...} /> — no custom
 // img overrides here (legacy maskImage rules used to paint the button white).
 .anchor {
     position: relative;

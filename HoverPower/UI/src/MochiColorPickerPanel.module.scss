@@ -15,73 +15,159 @@
 .panelContent {
     position: relative;
     overflow: visible;
+    min-width: 352rem;
+    border: 1rem solid rgba(255, 255, 255, 0.16);
+    border-radius: 12rem;
+    background-image: linear-gradient(to bottom, rgba(56, 84, 99, 0.90), rgba(31, 45, 60, 0.88));
+    background-color: rgba(31, 45, 60, 0.88);
+    box-shadow: 0 6rem 18rem rgba(0, 0, 0, 0.16);
 }
 
-.body {
-    width: 290rem;
-    padding: 4rem 10rem 4rem 10rem;
+.titleBar {
+    min-height: 28rem;
     display: flex;
-    flex-direction: column;
-    gap: 8rem;
-}
-
-.panelUtilityRow {
-    min-height: 22rem;
-    display: flex;
-    justify-content: flex-end;
     align-items: center;
-    padding: 6rem 8rem 0 8rem;
+    gap: 8rem;
+    padding: 6rem 8rem 4rem 8rem;
 }
 
-.closeButton {
-    width: 22rem;
-    height: 22rem;
-    min-width: 22rem;
-    padding: 0 !important;
-    border-radius: 999rem;
+.infoButton {
+    width: 24rem;
+    height: 24rem;
+    flex: 0 0 24rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4rem;
+    border: 1rem solid rgba(255, 255, 255, 0.35);
+    background-color: rgba(36, 54, 66, 0.58);
+    transition: background-color 120ms ease-out, border-color 120ms ease-out, box-shadow 120ms ease-out;
 }
 
-.closeIcon {
-    width: 14rem;
-    height: 14rem;
+.infoButton:hover {
+    background-color: rgba(108, 136, 150, 0.34);
+    border-color: rgba(255, 255, 255, 0.58);
+    box-shadow: inset 0 0 0 1rem rgba(255, 255, 255, 0.06);
+}
+
+.infoIcon {
+    width: 18rem;
+    height: 18rem;
     display: block;
     object-fit: contain;
     pointer-events: none;
 }
 
-.outlineControl {
+.titleDragHandle {
+    flex: 1 1 auto;
+    min-width: 0;
+    min-height: 24rem;
     display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 3rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: 7rem;
+    border: 1rem solid rgba(255, 255, 255, 0.12);
+    background-color: rgba(255, 255, 255, 0.04);
+    cursor: move;
+    user-select: none;
+    transition: background-color 120ms ease-out, border-color 120ms ease-out;
 }
 
-.outlineFieldAnchor {
+.titleDragHandle:hover,
+.titleDragHandleActive {
+    background-color: rgba(84, 215, 255, 0.16);
+    border-color: rgba(255, 255, 255, 0.36);
+}
+
+.dragHandleLine {
+    width: 48rem;
+    height: 3rem;
+    border-radius: 999rem;
+    background-color: rgba(255, 255, 255, 0.72);
+    pointer-events: none;
+}
+
+.closeButton {
+    width: 26rem;
+    height: 26rem;
+    min-width: 26rem;
+    padding: 0 !important;
+    border-radius: 999rem;
+}
+
+.closeIcon {
+    width: 16rem;
+    height: 16rem;
+    display: block;
+    object-fit: contain;
+    pointer-events: none;
+}
+
+.body {
+    display: flex;
+    flex-direction: column;
+    gap: 8rem;
+    padding: 2rem 10rem 8rem 10rem;
+}
+
+.controlRow {
+    display: flex;
+    align-items: center;
+    gap: 10rem;
+    min-height: 30rem;
+}
+
+.controlLabel {
+    width: 80rem;
+    flex: 0 0 80rem;
+    color: rgba(255, 255, 255, 0.95);
+    font-size: 15rem;
+    font-weight: 600;
+    line-height: 1;
+}
+
+.controlBody {
+    flex: 1 1 auto;
+    min-width: 0;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.outlineFieldShell {
     display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    border-radius: 4rem;
+    border: 1rem solid rgba(255, 255, 255, 0.35);
+    background-color: rgba(36, 54, 66, 0.58);
+    transition: background-color 120ms ease-out, border-color 120ms ease-out, box-shadow 120ms ease-out;
+}
+
+.outlineFieldShell:hover {
+    background-color: rgba(108, 136, 150, 0.34);
+    border-color: rgba(255, 255, 255, 0.58);
+    box-shadow: inset 0 0 0 1rem rgba(255, 255, 255, 0.06);
 }
 
 .outlineField {
-    width: 96rem !important;
+    width: 108rem !important;
     height: 30rem !important;
 }
 
 .outlineField > button {
-    width: 96rem !important;
+    width: 108rem !important;
     height: 30rem !important;
     padding-right: 2rem !important;
+    border: 0 !important;
+    border-radius: 3rem !important;
     opacity: 1 !important;
-}
-
-.helperText {
-    max-width: 150rem;
-    text-align: right;
-    font-size: 10rem;
-    line-height: 1.2;
-    color: rgba(255, 255, 255, 0.72);
+    box-shadow: none !important;
 }
 
 .sliderRow {
-    min-width: 196rem;
+    width: 100%;
     display: flex;
     align-items: center;
     gap: 8rem;
@@ -92,8 +178,8 @@
 }
 
 .valueField {
-    width: 42rem;
-    flex: 0 0 42rem;
+    width: 46rem;
+    flex: 0 0 46rem;
     text-align: center;
     border-radius: 4rem;
     border: 1rem solid rgba(255, 255, 255, 0.20);
@@ -102,48 +188,38 @@
 .actions {
     display: flex;
     justify-content: flex-end;
-    gap: 4rem;
-    padding: 6rem 28rem 10rem 8rem;
+    align-items: center;
+    gap: 6rem;
+    padding: 8rem 10rem 10rem 10rem;
     border-top: 1rem solid rgba(255, 255, 255, 0.15);
 }
 
-.presetButton {
-    min-width: 54rem !important;
-    height: 28rem !important;
-    padding: 0 8rem !important;
-    font-size: 11rem !important;
-    line-height: 1 !important;
-    text-transform: uppercase;
-}
-
-.dragGrip {
-    position: absolute;
-    right: 8rem;
-    bottom: 8rem;
-    width: 16rem;
-    height: 16rem;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 2rem;
-    padding: 2rem;
+.actionButton {
+    min-width: 70rem;
+    height: 32rem;
+    padding: 0 10rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border-radius: 4rem;
-    border: 1rem solid rgba(255, 255, 255, 0.20);
-    background-color: rgba(255, 255, 255, 0.06);
-    cursor: move;
-    user-select: none;
+    border: 1rem solid rgba(255, 255, 255, 0.35);
+    background-color: rgba(36, 54, 66, 0.58);
+    color: rgba(255, 255, 255, 0.95);
+    font-size: 12rem;
+    line-height: 1;
+    text-align: center;
+    text-transform: none;
+    white-space: nowrap;
+    transition: background-color 120ms ease-out, border-color 120ms ease-out, box-shadow 120ms ease-out, color 120ms ease-out;
 }
 
-.dragGrip:hover,
-.dragGripActive {
-    background-color: rgba(84, 215, 255, 0.18);
-    border-color: rgba(84, 215, 255, 0.50);
+.actionButton:hover {
+    background-color: rgba(108, 136, 150, 0.34);
+    border-color: rgba(255, 255, 255, 0.58);
+    box-shadow: inset 0 0 0 1rem rgba(255, 255, 255, 0.06);
+    color: #ffffff;
 }
 
-.dragGripDot {
-    width: 4rem;
-    height: 4rem;
-    border-radius: 50%;
-    background-color: rgba(255, 255, 255, 0.82);
-    justify-self: center;
-    align-self: center;
+.actionButtonWide {
+    min-width: 126rem;
 }

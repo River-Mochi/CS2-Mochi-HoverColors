@@ -23,17 +23,18 @@ import type {
 
 // Shared vanilla-module library for HoverPower and future CS2 mods.
 //
-// This combines two good patterns from community resolvers:
-// - yenyang's "how to discover modules in the UI bundle" comments
+// This combines two good patterns from community:
+// - yenyang's "how to in the UI" comments
 // - Luca's scalable grouped registries for components/themes/focus helpers
+// - River-Mochi notes and tweaks
 //
-// Practical notes for future you:
+// Practical notes for future:
 // 1. Open the in-game UI dev tools at http://localhost:9444/
 // 2. In Sources -> index.js, pretty-print if needed
-// 3. Search for the TSX/SCSS path you want
+// 3. Search for the TSX/SCSS path wanted
 // 4. Add it to one of the maps below and expose a typed getter
 //
-// Also remember: `UI/types/bindings.d.ts` is helpful for binding/widget payloads,
+// Remember: `UI/types/bindings.d.ts` is helpful for binding/widget payloads,
 // but the vanilla React module props can differ from the binding model.
 
 export const VANILLA_COMPONENT_MODULES = {

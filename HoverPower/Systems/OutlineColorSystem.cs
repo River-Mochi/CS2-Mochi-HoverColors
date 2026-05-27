@@ -105,7 +105,7 @@ namespace HoverPower.Systems
                 return;
             }
 
-            bool ecsOk = ApplyRenderingSettingsColors(r, g, b);
+            bool ecsOk = ApplyRenderingSettingsColors(r, g, b, outlineA);
             bool matOk = ApplyOutlineMaterialColors(r, g, b, outlineA, fillA);
 
             // Only cache the snapshot when BOTH writes land — otherwise retry next frame.
@@ -120,10 +120,11 @@ namespace HoverPower.Systems
             }
         }
 
-        // ECS singleton: lot-pattern tint for hovered + owner objects. Alpha is force-pinned to 0.25
-        // inside BuildingLotRenderJob, so writing anything other than 1f to .a here is pointless;
-        // we keep it at 1f for documentation clarity.
-        private bool ApplyRenderingSettingsColors(float r, float g, float b)
+        // ECS singleton: hovered + owner overlay color used by several vanilla render paths.
+        // Building lots clamp this alpha internally, but area/surface borders read it directly,
+        // so we forward OutlineA here to make extractor and painted-area borders respect the
+        // same outline-opacity control as the main hover highlight.
+        private bool ApplyRenderingSettingsColors(float r, float g, float b, float outlineA)
         {
             if (m_RenderSettingsQuery.IsEmptyIgnoreFilter)
             {
@@ -133,7 +134,7 @@ namespace HoverPower.Systems
             Entity entity = m_RenderSettingsQuery.GetSingletonEntity();
             RenderingSettingsData data = EntityManager.GetComponentData<RenderingSettingsData>(entity);
 
-            Color rgb = new Color(r, g, b, 1f);
+            Color rgb = new Color(r, g, b, outlineA);
             data.m_HoveredColor = rgb;
             data.m_OwnerColor = rgb;
 

@@ -53,7 +53,7 @@ namespace HoverPower.UI
 
             AddUpdateBinding(new GetterValueBinding<int>(
                 Mod.ModId, "GuidelineOpacityPercent",
-                () => Mod.Settings?.GuidelineOpacityPercent ?? 100));
+                () => Mod.Settings?.GuidelineOpacityPercent ?? 40));
 
             AddUpdateBinding(new GetterValueBinding<bool>(
                 Mod.ModId, "PanelOpen",
