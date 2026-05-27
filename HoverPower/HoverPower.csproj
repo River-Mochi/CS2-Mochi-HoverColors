@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <!--
-    HighlightsOpacity.csproj   CS2 mod: "Magic Highlights" [MMH]
+    HoverPower.csproj   CS2 mod: "Hover Power" [HP]
     - CS2 toolchain (Mod.props / Mod.targets) supplies TargetFramework, game ref resolution, analyzers.
     - No LangVersion override: CS2 toolchain stays on the supported C# version.
     - Nullable enable to match LogUtils + River-Mochi mod defaults.
@@ -28,10 +28,10 @@
         <FileVersion>$(Version).0</FileVersion>
 
         <!-- Assembly identity -->
-        <RootNamespace>HighlightsOpacity</RootNamespace>
-        <AssemblyName>HighlightsOpacity</AssemblyName>
-        <AssemblyTitle>Magic Highlights</AssemblyTitle>
-        <Product>Magic Highlights</Product>
+        <RootNamespace>HoverPower</RootNamespace>
+        <AssemblyName>HoverPower</AssemblyName>
+        <AssemblyTitle>Hover Power</AssemblyTitle>
+        <Product>Hover Power</Product>
         <Copyright>Copyright © 2026 River-Mochi</Copyright>
 
         <!-- Path to the PowerShell that syncs PublishConfiguration.xml + mod.json with $(Version). -->
@@ -134,8 +134,8 @@
     </ItemGroup>
 
     <!-- Repo-root files (LICENSE, README, .editorconfig, .gitignore, .gitattributes) are exposed via
-         a "Solution Items" solution folder in HighlightsOpacity.sln — NOT linked under this project.
-         See HighlightsOpacity.sln for the SolutionItems entry. -->
+         a "Solution Items" solution folder in HoverPower.sln — NOT linked under this project.
+         See HoverPower.sln for the SolutionItems entry. -->
 
     <!-- AUTO UPDATE PublishConfiguration.xml ModVersion + nested mod.json "version" from $(Version). -->
     <Target Name="UpdatePublishConfigVersion" BeforeTargets="Build" Condition="Exists('$(PublishConfigScript)') AND Exists('$(MSBuildProjectDirectory)\$(PublishConfigurationPath)')">

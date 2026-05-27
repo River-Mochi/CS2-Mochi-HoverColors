@@ -20,11 +20,11 @@
 using CS2Shared.RiverMochi;
 using Game;
 using Game.Prefabs;
-using HighlightsOpacity.Settings;
+using HoverPower.Settings;
 using Unity.Entities;
 using UnityEngine;
 
-namespace HighlightsOpacity.Systems
+namespace HoverPower.Systems
 {
     public partial class GuidelineColorSystem : GameSystemBase
     {
@@ -51,7 +51,7 @@ namespace HighlightsOpacity.Systems
 
         protected override void OnUpdate()
         {
-            HighlightsOpacitySettings? settings = Mod.Settings;
+            HoverPowerSettings? settings = Mod.Settings;
             if (settings == null)
             {
                 return;

@@ -1,5 +1,5 @@
 // File: UI/src/ModIconButton.tsx
-// Purpose: Floating GameTopLeft launcher button for the Magic Highlights in-city panel.
+// Purpose: Floating GameTopLeft launcher button for the Hover Power in-city panel.
 // Matches the CityWatchdog/EasyZoning EntryButton pattern:
 //   - Vanilla <Button variant="floating" src={iconPath} selected={isOpen} /> handles hover +
 //     selected styling natively. No <img maskImage> trick (that was the cause of "all white" bug).
@@ -19,7 +19,7 @@ export default () => {
 
     return (
         <div className={styles.anchor}>
-            <Tooltip tooltip="Magic Highlights">
+            <Tooltip tooltip="Hover Power">
                 <Button
                     variant="floating"
                     src={ModIconPath}

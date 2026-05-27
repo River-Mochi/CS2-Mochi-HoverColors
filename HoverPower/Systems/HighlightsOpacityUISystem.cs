@@ -1,20 +1,22 @@
-// File: Systems/HighlightsOpacityUISystem.cs
+// File: Systems/HoverPowerUISystem.cs
 // Purpose: Bridges Mod settings to/from the cs2/api bindings the UI (cohtml) layer reads.
 // Post-redesign binding shape:
 //   Getters (settings -> UI):
-//     OutlineR, OutlineG, OutlineB, OutlineA, FillA
+//     OutlineR, OutlineG, OutlineB, OutlineA, FillA, GuidelineOpacityPercent
 //   Triggers (UI -> settings):
-//     SetOutlineColor(r, g, b, a)   — fired by the vanilla ColorField onChange
-//     SetFillAlpha(a)               — fired by the Fill alpha slider onChange
-// OutlineColorSystem (Rendering phase) picks up changes via its dirty-flag.
+//     SetOutlineColor(r, g, b, a)         — fired by the vanilla ColorField onChange
+//     SetFillAlpha(a)                     — fired by the Fill alpha slider onChange
+//     SetGuidelineOpacity(percent)        — fired by the in-city Guidelines slider
+//                                           (Options-UI slider for the same field stays as fallback)
+// OutlineColorSystem + GuidelineColorSystem (Rendering phase) pick up changes via their dirty-flag.
 
 using Colossal.UI.Binding;
 using Game.UI;
-using HighlightsOpacity.Settings;
+using HoverPower.Settings;
 
-namespace HighlightsOpacity.UI
+namespace HoverPower.UI
 {
-    public partial class HighlightsOpacityUISystem : UISystemBase
+    public partial class HoverPowerUISystem : UISystemBase
     {
         protected override void OnCreate()
         {
@@ -40,12 +42,16 @@ namespace HighlightsOpacity.UI
                 Mod.ModId, "FillA",
                 () => Mod.Settings?.FillA ?? 0f));
 
+            AddUpdateBinding(new GetterValueBinding<int>(
+                Mod.ModId, "GuidelineOpacityPercent",
+                () => Mod.Settings?.GuidelineOpacityPercent ?? 100));
+
             AddBinding(new TriggerBinding<float, float, float, float>(
                 Mod.ModId,
                 "SetOutlineColor",
                 (r, g, b, a) =>
                 {
-                    HighlightsOpacitySettings? settings = Mod.Settings;
+                    HoverPowerSettings? settings = Mod.Settings;
                     if (settings == null) return;
 
                     settings.OutlineR = r;
@@ -60,10 +66,25 @@ namespace HighlightsOpacity.UI
                 "SetFillAlpha",
                 a =>
                 {
-                    HighlightsOpacitySettings? settings = Mod.Settings;
+                    HoverPowerSettings? settings = Mod.Settings;
                     if (settings == null) return;
 
                     settings.FillA = a;
+                    settings.ApplyAndSave();
+                }));
+
+            AddBinding(new TriggerBinding<int>(
+                Mod.ModId,
+                "SetGuidelineOpacity",
+                percent =>
+                {
+                    HoverPowerSettings? settings = Mod.Settings;
+                    if (settings == null) return;
+
+                    if (percent < 0) percent = 0;
+                    if (percent > 100) percent = 100;
+
+                    settings.GuidelineOpacityPercent = percent;
                     settings.ApplyAndSave();
                 }));
         }

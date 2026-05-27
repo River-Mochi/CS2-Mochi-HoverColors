@@ -28,17 +28,17 @@ using Game;
 using Game.Prefabs;
 using Game.Rendering;
 using Game.Tools;
-using HighlightsOpacity.Settings;
+using HoverPower.Settings;
 using Unity.Entities;
 using UnityEngine;
 using UnityEngine.Rendering.HighDefinition;
 
-namespace HighlightsOpacity.Systems
+namespace HoverPower.Systems
 {
     public partial class OutlineColorSystem : GameSystemBase
     {
         // Vanilla cyan defaults applied during Bulldoze / Net tool override.
-        // Keep in sync with HighlightsOpacitySettings.SetDefaults().
+        // Keep in sync with HoverPowerSettings.SetDefaults().
         private const float VanillaR = 0.502f;
         private const float VanillaG = 0.869f;
         private const float VanillaB = 1f;
@@ -65,7 +65,7 @@ namespace HighlightsOpacity.Systems
 
         protected override void OnUpdate()
         {
-            HighlightsOpacitySettings? settings = Mod.Settings;
+            HoverPowerSettings? settings = Mod.Settings;
             if (settings == null)
             {
                 return;

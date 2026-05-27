@@ -1,0 +1,17 @@
+{
+  "HoverPower.Panel.Title": "Mochi's Blue Buster",
+  "HoverPower.Panel.Tooltip": "Pick the inner fill and outer outline colors for hovered objects.",
+
+  "HoverPower.Panel.Section.Fill": "Fill",
+  "HoverPower.Panel.Section.Outline": "Outline",
+
+  "HoverPower.Panel.Reset.Label": "Reset",
+  "HoverPower.Panel.Reset.Tooltip": "Reset colors to game defaults, cyan blue.",
+
+  "HoverPower.Slider.Red": "Red",
+  "HoverPower.Slider.Green": "Green",
+  "HoverPower.Slider.Blue": "Blue",
+  "HoverPower.Slider.Alpha": "Alpha",
+
+  "HoverPower.TopLeft.Tooltip": "Hover Power - highlights + opacity"
+}

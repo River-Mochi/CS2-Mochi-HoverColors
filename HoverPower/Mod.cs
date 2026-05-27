@@ -1,7 +1,7 @@
 // File: Mod.cs
 // Purpose: Mod entrypoint; registers settings, schedules systems, and configures the mod logger.
 
-namespace HighlightsOpacity
+namespace HoverPower
 {
     using Colossal;
     using Colossal.IO.AssetDatabase;
@@ -11,19 +11,20 @@ namespace HighlightsOpacity
     using Game;
     using Game.Modding;
     using Game.SceneFlow;
-    using HighlightsOpacity.Localization;
-    using HighlightsOpacity.Settings;
-    using HighlightsOpacity.Systems;
-    using HighlightsOpacity.UI;
+    using HoverPower.Localization;
+    using HoverPower.Settings;
+    using HoverPower.Systems;
+    using HoverPower.UI;
     using System;
     using System.Reflection;
     using Unity.Entities;
 
     public sealed class Mod : IMod
     {
-        public const string ModName = "Highlights + Opacity Tuner";
-        public const string ModId = "HighlightsOpacity";
-        public const string ModTag = "[HOT]";
+        public const string ModName = "Hover Power";
+        public const string ModId = "HoverPower";
+        public const string ModTag = "[HP]";
+        public const string kTogglePanelActionName = "TogglePanel";
 
         public static readonly string ModVersion =
             Assembly.GetExecutingAssembly().GetName().Version?.ToString(3) ?? "0.5.0";
@@ -31,7 +32,7 @@ namespace HighlightsOpacity
         public static readonly ILog s_Log =
             LogManager.GetLogger(ModId).SetShowsErrorsInUI(false);
 
-        public static HighlightsOpacitySettings? Settings { get; private set; }
+        public static HoverPowerSettings? Settings { get; private set; }
 
         private static bool s_BannerLogged;
 
@@ -58,12 +59,12 @@ namespace HighlightsOpacity
                 return;
             }
 
-            HighlightsOpacitySettings setting = new HighlightsOpacitySettings(this);
+            HoverPowerSettings setting = new HoverPowerSettings(this);
             Settings = setting;
 
             try
             {
-                AssetDatabase.global.LoadSettings(ModId, setting, new HighlightsOpacitySettings(this));
+                AssetDatabase.global.LoadSettings(ModId, setting, new HoverPowerSettings(this));
             }
             catch (Exception ex)
             {
@@ -122,7 +123,7 @@ namespace HighlightsOpacity
         {
             DebugLog(() => $"{ModTag} Mod Dispose");
 
-            HighlightsOpacitySettings? setting = Settings;
+            HoverPowerSettings? setting = Settings;
             if (setting != null)
             {
                 try
@@ -146,7 +147,7 @@ namespace HighlightsOpacity
             World.DefaultGameObjectInjectionWorld.GetOrCreateSystemManaged<GuidelineColorSystem>();
             updateSystem.UpdateAt<GuidelineColorSystem>(SystemUpdatePhase.Rendering);
 
-            updateSystem.UpdateAt<HighlightsOpacityUISystem>(SystemUpdatePhase.UIUpdate);
+            updateSystem.UpdateAt<HoverPowerUISystem>(SystemUpdatePhase.UIUpdate);
         }
 
         private static void LogStartupBanner()
