@@ -1,41 +1,34 @@
 // File: Systems/HoverPowerUISystem.cs
-// Purpose: Bridges Mod settings to/from the cs2/api bindings the UI (cohtml) layer reads,
-// and owns the shared panel-open flag toggled by both the GTL button and the H hotkey.
-//
-// Binding shape:
-//   Getters (UISystem -> UI):
-//     OutlineR, OutlineG, OutlineB, OutlineA, FillA, GuidelineOpacityPercent, PanelOpen
-//   Triggers (UI -> UISystem):
-//     SetOutlineColor(r, g, b, a)         — vanilla ColorField onChange
-//     SetFillAlpha(a)                     — Fill alpha slider onChange
-//     SetGuidelineOpacity(percent)        — in-city Guidelines slider (Options-UI slider is fallback)
-//     SetPanelOpen(open)                  — GTL button onSelect flips the shared panel flag
-//
-// OutlineColorSystem + GuidelineColorSystem (Rendering phase) pick up settings changes via dirty-flag.
-// The hotkey (Setting.TogglePanelBinding "H") fires a ProxyAction handled in Mod.cs which calls
-// the static TogglePanel() helper below — the GTL button reads the same flag via PanelOpen.
+// Bridges Mod.Settings to cs2/api bindings, owns shared panel-open flag,
+// and polls the H hotkey each frame (CityWatchdog pattern).
 
 using Colossal.UI.Binding;
+using CS2Shared.RiverMochi;
+using Game;
+using Game.Input;
+using Game.SceneFlow;
 using Game.UI;
 using HoverPower.Settings;
+using System;
 
 namespace HoverPower.UI
 {
     public partial class HoverPowerUISystem : UISystemBase
     {
-        // Shared panel-open flag. Toggled by either the GTL button (SetPanelOpen trigger) or the
-        // hotkey (TogglePanel() static called from Mod.cs onInteraction handler).
         private static bool s_PanelOpen;
 
-        // Called from Mod.cs when the TogglePanel ProxyAction fires.
-        public static void TogglePanel()
-        {
-            s_PanelOpen = !s_PanelOpen;
-        }
+        // Toggle target for both the GTL button (via SetPanelOpen trigger) and the H hotkey poll below.
+        public static void TogglePanel() => s_PanelOpen = !s_PanelOpen;
+
+        // ProxyAction for the H key, fetched after Setting.RegisterKeyBindings() ran in Mod.OnLoad.
+        // Polled via WasReleasedThisFrame() each tick — matches CityWatchdog (no event handlers).
+        private ProxyAction? m_TogglePanelAction;
 
         protected override void OnCreate()
         {
             base.OnCreate();
+
+            InitializeKeybindActions();
 
             AddUpdateBinding(new GetterValueBinding<float>(
                 Mod.ModId, "OutlineR",
@@ -111,6 +104,65 @@ namespace HoverPower.UI
                 Mod.ModId,
                 "SetPanelOpen",
                 open => s_PanelOpen = open));
+        }
+
+        protected override void OnUpdate()
+        {
+            // Re-fetch if the action wasn't ready at OnCreate (RegisterKeyBindings race) or got dropped.
+            RefreshKeybindActions();
+
+            // Don't fire hotkeys in main menu / editor.
+            if (!IsInGame())
+            {
+                return;
+            }
+
+            // Read current shared state and flip it — works whether button or previous hotkey set it.
+            if (m_TogglePanelAction?.WasReleasedThisFrame() == true)
+            {
+                TogglePanel();
+            }
+        }
+
+        private void InitializeKeybindActions()
+        {
+            m_TogglePanelAction = EnableAction(Mod.kTogglePanelActionName);
+        }
+
+        private void RefreshKeybindActions()
+        {
+            if (m_TogglePanelAction == null)
+            {
+                m_TogglePanelAction = EnableAction(Mod.kTogglePanelActionName);
+            }
+        }
+
+        // CWD-style: fetch the ProxyAction registered by the [SettingsUIKeyboardBinding] attribute
+        // and flip shouldBeEnabled so it actually receives input. Returns null on miss.
+        private static ProxyAction? EnableAction(string actionName)
+        {
+            try
+            {
+                ProxyAction? action = Mod.Settings?.GetAction(actionName);
+                if (action != null)
+                {
+                    action.shouldBeEnabled = true;
+                }
+                return action;
+            }
+            catch (Exception ex)
+            {
+                LogUtils.WarnOnce(
+                    "missing-keybind-" + actionName,
+                    () => $"{Mod.ModTag} Keybinding '{actionName}' unavailable: {ex.GetType().Name}: {ex.Message}",
+                    ex);
+                return null;
+            }
+        }
+
+        private static bool IsInGame()
+        {
+            return GameManager.instance != null && GameManager.instance.gameMode == GameMode.Game;
         }
     }
 }
