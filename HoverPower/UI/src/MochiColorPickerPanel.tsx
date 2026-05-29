@@ -16,7 +16,7 @@ import infoIconSrc from "../images/AdvisorInfoViewWhite.svg";
 import surfaceIconSrc from "../images/Districts02.svg";
 import fillIconSrc from "../images/MainElements-Fill2.svg";
 import outlineIconSrc from "../images/MainElements.svg";
-import guidelinesIconSrc from "../images/GuideLines.svg";
+import guidelinesIconSrc from "../images/GuideLines4.svg";
 import resetIconSrc from "../images/Reset_Button2.svg";
 import closeIconSrc from "../images/Close.svg";
 import locale from "../../L10n/lang/en-US.json";

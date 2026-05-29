@@ -1,0 +1,18 @@
+<!-- File: GuideLines4.svg -->
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="40"
+     height="40"
+     viewBox="0 0 40 40"
+     role="img"
+     aria-label="Guidelines icon">
+
+  <g fill="none"
+     stroke="#D9D9D9"
+     stroke-linecap="butt">
+
+    <path d="M3.5 20h33" stroke-width="2.8"/>
+    <path d="M20 3.5v33" stroke-width="2.8"/>
+    <circle cx="20" cy="20" r="7.6" stroke-width="1.7"/>
+
+  </g>
+</svg>
