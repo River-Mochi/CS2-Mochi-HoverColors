@@ -28,14 +28,14 @@
     display: flex;
     align-items: center;
     gap: 6rem;
-    margin: -6rem -1rem 0 -1rem;
+    margin: -7rem -1rem 0 -1rem;
     padding: 0.5rem 6rem 1rem 6rem;
     border-radius: 12rem 12rem 0 0;
-    background-color: rgba(96, 122, 136, 0.32);
+    background-color: transparent;
     transition: background-color 120ms ease-out;
 
     &:hover {
-        background-color: rgba(150, 172, 184, 0.10);
+        background-color: rgba(255, 255, 255, 0.08);
     }
 }
 
@@ -47,7 +47,7 @@
     justify-content: center;
     border-radius: 4rem;
     border: 1rem solid rgba(255, 255, 255, 0.35);
-    background-color: rgba(36, 54, 66, 0.48);
+    background-color: rgba(36, 54, 66, 0.58);
     transition: background-color 120ms ease-out, border-color 120ms ease-out, box-shadow 120ms ease-out;
     box-shadow: none;
 }
@@ -65,11 +65,19 @@
     width: 32rem;
     height: 32rem;
     flex: 0 0 32rem;
+    border-color: transparent;
+    background-color: transparent;
+
+    &:hover {
+        background-color: rgba(255, 255, 255, 0.08);
+        border-color: transparent;
+        box-shadow: none;
+    }
 }
 
 .infoIcon {
-    width: 30rem;
-    height: 30rem;
+    width: 28.5rem;
+    height: 28.5rem;
     display: block;
     object-fit: contain;
     pointer-events: none;
@@ -138,7 +146,7 @@
 }
 
 .controlRow + .controlRow {
-    margin-top: 5rem;
+    margin-top: 2.5rem;
 }
 
 .outlineRow {
@@ -153,14 +161,14 @@
         width: 152rem;
         height: 48rem;
         border-radius: 11rem;
-        background-color: var(--toolbarFieldColor, var(--commonBlack, #141b22));
+        background-color: rgba(36, 54, 66, 0.58);
         transition: background-color 120ms ease-out;
         z-index: 0;
     }
 
     &:hover::before,
     &:focus-within::before {
-        background-color: var(--toolbarFieldColor-hover, rgba(40, 40, 40, 0.45));
+        background-color: rgba(108, 136, 150, 0.34);
     }
 }
 
@@ -215,14 +223,14 @@
     margin-right: 0;
     border-radius: 10rem;
     border: 0;
-    background-color: rgba(36, 54, 66, 0.64);
+    background-color: rgba(36, 54, 66, 0.58);
     box-shadow: none;
     transition: background-color 120ms ease-out;
 }
 
 .outlineFieldShell:hover,
 .outlineFieldShell:focus-within {
-    background-color: rgba(42, 62, 76, 0.72);
+    background-color: rgba(108, 136, 150, 0.34);
 }
 
 .outlineField {
@@ -237,7 +245,7 @@
 
 .outlineFieldShell:hover .outlineField,
 .outlineFieldShell:focus-within .outlineField {
-    box-shadow: inset 0 0 0 2rem rgba(255, 255, 255, 1);
+    box-shadow: inset 0 0 0 3rem rgba(255, 255, 255, 1);
 }
 
 .outlineField > button {
@@ -253,7 +261,7 @@
 
 .outlineFieldShell:hover .outlineField > button,
 .outlineFieldShell:focus-within .outlineField > button {
-    box-shadow: inset 0 0 0 2rem rgba(255, 255, 255, 1) !important;
+    box-shadow: inset 0 0 0 3rem rgba(255, 255, 255, 1) !important;
 }
 
 .sliderRow {
@@ -300,12 +308,12 @@
 
 .presetActions > * + *,
 .actionButton + .actionButton {
-    margin-left: 6rem;
+    margin-left: 3rem;
 }
 
 .actionButton {
     min-width: 34rem;
-    height: 32rem;
+    height: 36rem;
     padding: 0 5rem;
     display: flex;
     align-items: center;
@@ -314,7 +322,7 @@
     margin: 0;
     border-radius: 4rem;
     border: 1rem solid rgba(255, 255, 255, 0.35);
-    background-color: rgba(36, 54, 66, 0.48);
+    background-color: rgba(36, 54, 66, 0.58);
     background-image: none !important;
     box-shadow: none !important;
     color: rgba(255, 255, 255, 0.96) !important;
@@ -344,8 +352,8 @@
 }
 
 .surfaceButton {
-    min-width: 34rem;
-    width: 34rem;
+    min-width: 36rem;
+    width: 36rem;
     padding: 0;
 }
 
