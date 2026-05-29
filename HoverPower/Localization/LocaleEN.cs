@@ -53,7 +53,7 @@ namespace HoverPower.Localization
                     "**2. Vanilla tool colors** restores the game's normal vanilla blue while those tools are active.\n" +
                     "**3. Keep my custom color** uses your chosen color everywhere.\n\n" +
                     "This does not overwrite your automatically saved custom color in the color picker.\n"+
-                    "This feature exists because some users find their custom color hard to see while bulldozing, and wanted stronger color outlines back on during tool usage. 
+                    "Some users find their custom color hard to see while bulldozing, and wanted strong color outlines back on automatically during tool usage."
                 },
                 { m_Settings.GetToolColorModeLocaleID("Recommended"), "1. Recommended" },
                 { m_Settings.GetToolColorModeLocaleID("Vanilla"), "2. Vanilla tool colors" },
