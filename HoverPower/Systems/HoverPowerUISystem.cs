@@ -1,20 +1,20 @@
 // File: Systems/HoverPowerUISystem.cs
-// Bridges Mod.Settings to cs2/api bindings, owns shared panel-open flag,
-// and polls the H hotkey each frame (CityWatchdog pattern).
-
-using Colossal.UI.Binding;
-using CS2Shared.RiverMochi;
-using Game;
-using Game.Input;
-using Game.SceneFlow;
-using Game.UI;
-using HoverPower.Settings;
-using HoverPower.Systems;
-using System;
-using System.Collections.Generic;
+// Bridges Mod.Settings to cs2/api bindings, owns the shared panel-open flag,
+// and checks cached keybind actions for panel/tool toggles.
 
 namespace HoverPower.UI
 {
+    using Colossal.UI.Binding;
+    using CS2Shared.RiverMochi;
+    using Game;
+    using Game.Input;
+    using Game.SceneFlow;
+    using Game.UI;
+    using HoverPower.Settings;
+    using HoverPower.Systems;
+    using System;
+    using System.Collections.Generic;
+
     public partial class HoverPowerUISystem : UISystemBase
     {
         private static bool s_PanelOpen;
@@ -22,8 +22,8 @@ namespace HoverPower.UI
         // Toggle target for both the GTL button (via SetPanelOpen trigger) and the H hotkey poll below.
         public static void TogglePanel() => s_PanelOpen = !s_PanelOpen;
 
-        // ProxyAction for the H key, fetched after Setting.RegisterKeyBindings() ran in Mod.OnLoad.
-        // Polled via WasReleasedThisFrame() each tick — matches CityWatchdog (no event handlers).
+        // ProxyActions registered by Setting.RegisterKeyBindings() in Mod.OnLoad.
+        // Cached actions are checked with WasReleasedThisFrame(); lookup is retried only if an action is missing.
         private ProxyAction? m_TogglePanelAction;
         private ProxyAction? m_ToggleSurfaceToolAreasAction;
         private ValueBinding<float> m_OutlineRBinding = null!;

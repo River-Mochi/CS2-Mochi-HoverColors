@@ -3,15 +3,15 @@
 // multiplier. The guideline overlay is what the game draws while placing roads/zones/props
 // (high/medium/low/very-low priority arrows + the positive-feedback green).
 //
-// Discovery credit: yenyang's HighlightsAndGuidelinesTweaks pointed at GuideLineSettingsData on
+// Background: HighlightsAndGuidelinesTweaks repo pointed at GuideLineSettingsData on
 // the rendering-settings prefab. We instead write to the runtime singleton each time the slider
 // moves, which:
 //   - applies live without needing the player to reload the city, and
 //   - is read every frame by Game.Rendering.GuideLinesSystem
 //     (m_RenderingSettingsQuery.GetSingleton<GuideLineSettingsData>()).
 //
-// Performance contract — same as OutlineColorSystem.cs:
-//   - Capture the game's default alphas ONCE (first successful read of the singleton). The
+// Performance — same as OutlineColorSystem.cs:
+//   - Capture the game's default alphas ONCE (first successful read of singleton). The
 //     multiplier scales these defaults; defaults themselves are never modified by us, so
 //     the per-priority alpha relationships the artists picked are preserved.
 //   - Compare current slider value against last-applied value at the top of OnUpdate and

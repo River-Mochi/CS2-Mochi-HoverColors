@@ -4,14 +4,15 @@
 	<!--Name of the mod to display to players-->
 	<DisplayName Value="Hover Power" />
 	<!--Short description of the mod-->
-	<ShortDescription Value="Change Blue Color Highlights over all buildings and cars" />
+	<ShortDescription Value="Change Blue Color Highlights over all buildings, cars, cims. Surface tool QoL, turn preview layers off." />
 	<!--Long description of the mod. Single line or multi line. Supports minimal markdown subset-->
 	<!--LongDescription Value="This is a long description" /-->
 	<LongDescription>
 
-- Change Blue Color Highlights over all buildings, cars, cims, trees and more!
+- Change the ubiquitous Blue outline color that appears on everything in the game
+- Any object you can hover over can change: all buildings, cars, cims, trees and more!
 - Guidelines - opacity slider
-- Surfaces preview layer toggle - does it annoy you that a cloudy layer prevents you from seeing your real surfaces and interrupting workflow? - Now you can toggle that silly vanilla preview layer OFF.
+- Surfaces Tool: are cloudy layer previews from the game preventing you from seeing your real surfaces and interrupting workflow? - Now you can toggle that silly vanilla preview layer OFF.
 
 - If you can hover over it then you can probably change it :)
 
@@ -23,7 +24,7 @@ River-Mochi - modder/maintainer
 Flashbond - collab, updates, testing
 yenyang - collab, tech feedback, testing
 StarQ - tech feedback, testing
-Dx, MayorCheeks, BugsyG - testing
+Dx, Necko1996, Noel,  BugsyG - testing
 
 </LongDescription>
 	<!--Thumbnail-->

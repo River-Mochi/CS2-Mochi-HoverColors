@@ -61,6 +61,27 @@ namespace HoverPower.Settings
         public float FillA { get; set; }
 
         // -----------------------------------------------------------------------
+        // Player-editable preset slots (slots 1 + 2 on the in-city panel)
+        // Not decorated for Options UI. Each slot stores the same five values as the
+        // live swatch (Outline RGBA + FillA). The panel's Save button overwrites a slot
+        // with the current live color; the slot button applies it back. Persisted in the
+        // .coc like the live values AND mirrored to ModsData JSON (see PresetStore) so a
+        // corrupted .coc can be repaired from the backup on next load.
+        // -----------------------------------------------------------------------
+
+        public float Preset1R { get; set; }
+        public float Preset1G { get; set; }
+        public float Preset1B { get; set; }
+        public float Preset1A { get; set; }
+        public float Preset1FillA { get; set; }
+
+        public float Preset2R { get; set; }
+        public float Preset2G { get; set; }
+        public float Preset2B { get; set; }
+        public float Preset2A { get; set; }
+        public float Preset2FillA { get; set; }
+
+        // -----------------------------------------------------------------------
         // Actions tab — Tool color behavior
         // -----------------------------------------------------------------------
         // This controls temporary effective colors only. It never overwrites the
@@ -137,6 +158,20 @@ namespace HoverPower.Settings
 
             // FillA=0 matches vanilla CS2: no extra silhouette overlay until the player turns it up.
             FillA = 0f;
+
+            // Starter presets (players can overwrite these with the panel's Save button).
+            // Slot 1 = Mochi's gentle gray-purple. Slot 2 = yenyang-inspired purple-gray.
+            Preset1R = 140f / 255f;
+            Preset1G = 140f / 255f;
+            Preset1B = 171f / 255f;
+            Preset1A = 0.5f;
+            Preset1FillA = 0f;
+
+            Preset2R = 0.25f;
+            Preset2G = 0.15f;
+            Preset2B = 0.25f;
+            Preset2A = 0.5f;
+            Preset2FillA = 0f;
 
             // Release default: help players see demolition/road targets even if their custom
             // alpha is very low, without changing their saved custom color.
