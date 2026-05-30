@@ -210,6 +210,30 @@ namespace HoverPower.UI
                     settings.ApplyAndSave();
                     SyncValueBindings(); // updates Preset*Active + stored color bindings
                 }));
+
+            // Restore both preset slots to the original mod factory defaults.
+            // Does not change the live swatch color.
+            AddBinding(new TriggerBinding(
+                Mod.ModId,
+                "ResetPresetsToDefault",
+                () =>
+                {
+                    HoverPowerSettings? settings = Mod.Settings;
+                    if (settings == null) return;
+
+                    settings.Preset1R = 140f / 255f;
+                    settings.Preset1G = 140f / 255f;
+                    settings.Preset1B = 171f / 255f;
+                    settings.Preset1A = 0.5f;
+                    settings.Preset1FillA = 0f;
+                    settings.Preset2R = 0.25f;
+                    settings.Preset2G = 0.15f;
+                    settings.Preset2B = 0.25f;
+                    settings.Preset2A = 0.5f;
+                    settings.Preset2FillA = 0f;
+                    settings.ApplyAndSave();
+                    SyncValueBindings();
+                }));
         }
 
         protected override void OnUpdate()

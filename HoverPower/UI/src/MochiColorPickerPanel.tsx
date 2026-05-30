@@ -1,10 +1,10 @@
 // File: UI/src/MochiColorPickerPanel.tsx
 // Purpose: Compact in-city hover-color panel anchored under the GameTopLeft icon button.
 // Layout:
-//   - Short draggable title bar with info tooltip, title, close button, and backup grip
-//   - Outline row: icon + vanilla ColorField swatch launcher
-//   - Fill / Guidelines rows: icon-led compact sliders with percent readouts
-//   - Preset row: ➀ ➁ slots (tap = apply, hold 500ms = save current color into slot)
+//   - Title bar: info toggle (tooltips on/off), draggable title, close button
+//   - Outline row: icon (resets + shows vanilla-active indicator bar) + color swatch
+//   - Fill / Guidelines rows: icon-led sliders
+//   - Bottom: surface toggle | preset slots ① ② (tap=apply, hold 0.8s=save) + reset-presets
 
 import React from "react";
 import { Button, Tooltip } from "cs2/ui";
@@ -17,12 +17,14 @@ import surfaceIconSrc from "../images/Districts02.svg";
 import fillIconSrc from "../images/MainElements-Fill2.svg";
 import outlineIconSrc from "../images/MainElements.svg";
 import guidelinesIconSrc from "../images/GuideLines4.svg";
+import resetIconSrc from "../images/Reset_Button2.svg";
 import closeIconSrc from "../images/Close.svg";
 import locale from "../../L10n/lang/en-US.json";
 import styles from "./MochiColorPickerPanel.module.scss";
 
 const CHANNEL = "HoverPower";
-const PRESET_HOLD_MS = 500; // hold duration to save into a slot
+// How long the player must hold a preset button to save (ms). Increase if 0.8s still feels fast.
+const PRESET_HOLD_MS = 800;
 type LocaleKey = keyof typeof locale;
 
 // Live color bindings
@@ -35,17 +37,15 @@ const guidelineOpacity$ = bindValue<number>(CHANNEL, "GuidelineOpacityPercent", 
 const surfaceToolAreasSuppressed$ = bindValue<boolean>(CHANNEL, "SurfaceToolAreasSuppressed", false);
 const vanillaOutlineActive$ = bindValue<boolean>(CHANNEL, "VanillaOutlineActive", false);
 
-// Preset stored-color bindings (read-only — write happens via SavePreset trigger)
+// Preset stored-color bindings
 const preset1R$ = bindValue<number>(CHANNEL, "Preset1R", 140 / 255);
 const preset1G$ = bindValue<number>(CHANNEL, "Preset1G", 140 / 255);
 const preset1B$ = bindValue<number>(CHANNEL, "Preset1B", 171 / 255);
 const preset1A$ = bindValue<number>(CHANNEL, "Preset1A", 0.5);
-const preset1FillA$ = bindValue<number>(CHANNEL, "Preset1FillA", 0);
 const preset2R$ = bindValue<number>(CHANNEL, "Preset2R", 0.25);
 const preset2G$ = bindValue<number>(CHANNEL, "Preset2G", 0.15);
 const preset2B$ = bindValue<number>(CHANNEL, "Preset2B", 0.25);
 const preset2A$ = bindValue<number>(CHANNEL, "Preset2A", 0.5);
-const preset2FillA$ = bindValue<number>(CHANNEL, "Preset2FillA", 0);
 const preset1Active$ = bindValue<boolean>(CHANNEL, "Preset1Active", false);
 const preset2Active$ = bindValue<boolean>(CHANNEL, "Preset2Active", false);
 
@@ -63,11 +63,22 @@ export const MochiColorPickerPanel = () => {
     const preset1Active = useValue(preset1Active$);
     const preset2Active = useValue(preset2Active$);
 
-    // Stored slot colors for swatch dot previews
+    // Stored slot colors — used for the corner dot badge on each preset button.
+    // Just plain CSS inline style; not a special React feature.
     const p1: Color = { r: useValue(preset1R$), g: useValue(preset1G$), b: useValue(preset1B$), a: useValue(preset1A$) };
     const p2: Color = { r: useValue(preset2R$), g: useValue(preset2G$), b: useValue(preset2B$), a: useValue(preset2A$) };
 
     const { translate } = useLocalization();
+
+    // Tooltip toggle — persists for this panel session only; resets when panel re-mounts.
+    const [tooltipsEnabled, setTooltipsEnabled] = React.useState(true);
+    // tt() wraps every tooltip string; returns undefined when tooltips are off (no tooltip shown).
+    // The info button always gets its tooltip so players can re-enable.
+    const tt = React.useCallback(
+        (s: string): string | undefined => (tooltipsEnabled ? s : undefined),
+        [tooltipsEnabled],
+    );
+
     const text = React.useMemo(() => {
         const l = (key: LocaleKey) => translate(key, locale[key]) ?? locale[key];
         return {
@@ -84,8 +95,8 @@ export const MochiColorPickerPanel = () => {
             tooltipResetFill: l("HoverPower.UI.Tooltip.ResetFill"),
             tooltipResetGuidelines: l("HoverPower.UI.Tooltip.ResetGuidelines"),
             tooltipResetOutline: l("HoverPower.UI.Tooltip.ResetOutline"),
+            tooltipResetPresets: l("HoverPower.UI.Tooltip.ResetPresets"),
             tooltipSurfaceToggle: l("HoverPower.UI.Tooltip.SurfaceToggle"),
-            tooltipVanillaReset: l("HoverPower.UI.Tooltip.VanillaReset"),
         };
     }, [translate]);
 
@@ -96,9 +107,9 @@ export const MochiColorPickerPanel = () => {
     const [panelDragging, setPanelDragging] = React.useState(false);
     const [colorPickerDirection, setColorPickerDirection] = React.useState<"up" | "down">("down");
 
-    // Preset hold-to-save state: which slot is being held + animated progress 0..1
+    // Hold-to-save state for preset buttons
     const [holdSlot, setHoldSlot] = React.useState<0 | 1 | 2>(0);
-    const [holdProgress, setHoldProgress] = React.useState(0);
+    const [holdProgress, setHoldProgress] = React.useState(0); // 0..1, drives holdBar scaleX
     const holdTimerRef = React.useRef<number | null>(null);
     const holdStartRef = React.useRef<number>(0);
     const holdRafRef = React.useRef<number | null>(null);
@@ -122,17 +133,15 @@ export const MochiColorPickerPanel = () => {
     // Panel drag
     React.useEffect(() => {
         if (!panelDragging) return;
-        const handleMouseMove = (event: MouseEvent) => {
+        const onMove = (e: MouseEvent) => {
             const d = panelDragRef.current;
             if (d == null) return;
-            const dx = event.clientX - d.pointerX;
-            const dy = event.clientY - d.pointerY;
+            const dx = e.clientX - d.pointerX;
+            const dy = e.clientY - d.pointerY;
             let nx = d.originX + dx;
             let ny = d.originY + dy;
-            const nl = d.originLeft + dx;
-            const nt = d.originTop + dy;
-            const nr = nl + d.originWidth;
-            const nb = nt + d.originHeight;
+            const nl = d.originLeft + dx, nt = d.originTop + dy;
+            const nr = nl + d.originWidth, nb = nt + d.originHeight;
             if (nl < 0) nx -= nl;
             if (nt < 0) ny -= nt;
             if (nr > window.innerWidth) nx -= nr - window.innerWidth;
@@ -145,7 +154,7 @@ export const MochiColorPickerPanel = () => {
                 });
             }
         };
-        const handleMouseUp = () => {
+        const onUp = () => {
             if (panelDragFrameRef.current != null) {
                 window.cancelAnimationFrame(panelDragFrameRef.current);
                 panelDragFrameRef.current = null;
@@ -154,12 +163,9 @@ export const MochiColorPickerPanel = () => {
             setPanelDragging(false);
             setPanelOffset(panelDragPendingOffsetRef.current);
         };
-        window.addEventListener("mousemove", handleMouseMove);
-        window.addEventListener("mouseup", handleMouseUp);
-        return () => {
-            window.removeEventListener("mousemove", handleMouseMove);
-            window.removeEventListener("mouseup", handleMouseUp);
-        };
+        window.addEventListener("mousemove", onMove);
+        window.addEventListener("mouseup", onUp);
+        return () => { window.removeEventListener("mousemove", onMove); window.removeEventListener("mouseup", onUp); };
     }, [panelDragging]);
 
     // Live color handlers
@@ -182,9 +188,9 @@ export const MochiColorPickerPanel = () => {
     const handleResetFill = () => handleFillAChange(0);
     const handleResetGuidelines = () => handleGuidelineChange(40);
     const handleToggleSurfaceToolAreas = () => trigger(CHANNEL, "ToggleSurfaceToolAreas");
-    const handleVanillaReset = () => trigger(CHANNEL, "ResetToVanilla");
+    const handleResetPresetsToDefault = () => trigger(CHANNEL, "ResetPresetsToDefault");
 
-    // Preset hold-to-save helpers
+    // Preset hold-to-save
     const cancelHold = React.useCallback(() => {
         if (holdTimerRef.current != null) { clearTimeout(holdTimerRef.current); holdTimerRef.current = null; }
         if (holdRafRef.current != null) { cancelAnimationFrame(holdRafRef.current); holdRafRef.current = null; }
@@ -198,19 +204,15 @@ export const MochiColorPickerPanel = () => {
         holdStartRef.current = performance.now();
         setHoldSlot(slot);
         setHoldProgress(0);
-
-        // Animate fill bar while held
         const tick = () => {
             const p = Math.min((performance.now() - holdStartRef.current) / PRESET_HOLD_MS, 1);
             setHoldProgress(p);
             if (p < 1) holdRafRef.current = requestAnimationFrame(tick);
         };
         holdRafRef.current = requestAnimationFrame(tick);
-
         holdTimerRef.current = window.setTimeout(() => {
             holdTimerRef.current = null;
             if (holdRafRef.current != null) { cancelAnimationFrame(holdRafRef.current); holdRafRef.current = null; }
-            // Save current live color into this slot
             trigger(CHANNEL, "SavePreset", slot);
             setHoldSlot(0);
             setHoldProgress(0);
@@ -219,10 +221,9 @@ export const MochiColorPickerPanel = () => {
 
     const handlePresetMouseUp = (slot: 1 | 2) => () => {
         if (holdTimerRef.current != null) {
-            // Released before save threshold — tap: apply stored preset
             clearTimeout(holdTimerRef.current);
             holdTimerRef.current = null;
-            trigger(CHANNEL, "ApplyPreset", slot);
+            trigger(CHANNEL, "ApplyPreset", slot); // tap = apply
         }
         if (holdRafRef.current != null) { cancelAnimationFrame(holdRafRef.current); holdRafRef.current = null; }
         setHoldSlot(0);
@@ -236,13 +237,12 @@ export const MochiColorPickerPanel = () => {
         setColorPickerDirection(rect.top + rect.height / 2 < window.innerHeight / 2 ? "down" : "up");
     }, []);
 
-    const handlePanelDragStart = (event: React.MouseEvent<HTMLDivElement>) => {
-        event.preventDefault();
-        event.stopPropagation();
+    const handlePanelDragStart = (e: React.MouseEvent<HTMLDivElement>) => {
+        e.preventDefault(); e.stopPropagation();
         const rect = panelElementRef.current?.getBoundingClientRect();
         panelDragPendingOffsetRef.current = panelOffset;
         panelDragRef.current = {
-            pointerX: event.clientX, pointerY: event.clientY,
+            pointerX: e.clientX, pointerY: e.clientY,
             originX: panelOffset.x, originY: panelOffset.y,
             originLeft: rect?.left ?? 0, originTop: rect?.top ?? 0,
             originWidth: rect?.width ?? 0, originHeight: rect?.height ?? 0,
@@ -259,10 +259,14 @@ export const MochiColorPickerPanel = () => {
     const outlineFieldClass = styles.outlineField;
     const closeButtonClass = `${roundHighlightButtonTheme["button"] ?? ""} ${styles.closeButton}`;
 
-    // Inline color dot showing what's stored in a preset slot
-    const slotDotStyle = (c: Color) => ({
+    // Corner dot color: inline style sets the dot background to the stored preset RGBA.
+    // This is just a CSS background-color set via React's style prop — no special React feature.
+    const dotStyle = (c: Color) => ({
         backgroundColor: `rgba(${Math.round(c.r * 255)},${Math.round(c.g * 255)},${Math.round(c.b * 255)},${c.a.toFixed(2)})`,
     });
+
+    // holdBar uses transform: scaleX so percentage works regardless of button width
+    const holdBarStyle = (progress: number) => ({ transform: `scaleX(${progress})` });
 
     return (
         <div
@@ -271,14 +275,21 @@ export const MochiColorPickerPanel = () => {
         >
             <div ref={panelElementRef} className={`panel_YqS menu_O_M ${styles.panelFrame}`}>
                 <div className={`content_XD5 content_AD7 child-opacity-transition_nkS content_Hzl ${styles.panelContent}`}>
+
+                    {/* Title bar */}
                     <div className={styles.titleBar}>
+                        {/* Info button toggles panel tooltips. Always shows its own tooltip so player can re-enable. */}
                         <Tooltip tooltip={text.tooltipInfo}>
-                            <div className={styles.infoButton}>
-                                <img src={infoIconSrc} className={styles.infoIcon} alt="" />
-                            </div>
+                            <button
+                                type="button"
+                                className={`${styles.infoButton} ${!tooltipsEnabled ? styles.infoButtonActive : ""}`}
+                                onClick={() => setTooltipsEnabled(prev => !prev)}
+                            >
+                                <img src={infoIconSrc} className={`${styles.infoIcon} ${styles.idleIcon}`} alt="" />
+                            </button>
                         </Tooltip>
 
-                        <Tooltip tooltip={text.tooltipDraggable}>
+                        <Tooltip tooltip={tt(text.tooltipDraggable)}>
                             <div
                                 className={`${styles.titleDragHandle} ${panelDragging ? styles.titleDragHandleActive : ""}`}
                                 onMouseDown={handlePanelDragStart}
@@ -287,7 +298,7 @@ export const MochiColorPickerPanel = () => {
                             </div>
                         </Tooltip>
 
-                        <Tooltip tooltip={text.tooltipClose}>
+                        <Tooltip tooltip={tt(text.tooltipClose)}>
                             <Button
                                 className={closeButtonClass}
                                 variant="icon"
@@ -300,17 +311,21 @@ export const MochiColorPickerPanel = () => {
                         </Tooltip>
                     </div>
 
+                    {/* Control rows */}
                     <div className={styles.body}>
-                        {/* Outline row */}
+                        {/* Outline row — click icon to reset to vanilla; indicator bar appears when vanilla is active */}
                         <div className={`${styles.controlRow} ${styles.outlineRow}`}>
-                            <Tooltip tooltip={text.tooltipResetOutline}>
-                                <button type="button" className={styles.controlIconButton} onClick={handleResetOutline}>
-                                    {/* opacity trick: 0.82 idle → 1 on hover/focus */}
+                            <Tooltip tooltip={tt(text.tooltipResetOutline)}>
+                                <button
+                                    type="button"
+                                    className={`${styles.controlIconButton} ${vanillaOutlineActive ? styles.vanillaActiveButton : ""}`}
+                                    onClick={handleResetOutline}
+                                >
                                     <img src={outlineIconSrc} className={`${styles.controlIcon} ${styles.idleIcon}`} alt="" />
                                 </button>
                             </Tooltip>
                             <div className={`${styles.controlBody} ${styles.outlineControlBody}`}>
-                                <Tooltip tooltip={text.tooltipOutlineSwatch}>
+                                <Tooltip tooltip={tt(text.tooltipOutlineSwatch)}>
                                     <div
                                         ref={outlineSwatchRef}
                                         className={styles.outlineFieldShell}
@@ -336,12 +351,12 @@ export const MochiColorPickerPanel = () => {
 
                         {/* Fill row */}
                         <div className={styles.controlRow}>
-                            <Tooltip tooltip={text.tooltipResetFill}>
+                            <Tooltip tooltip={tt(text.tooltipResetFill)}>
                                 <button type="button" className={styles.controlIconButton} onClick={handleResetFill}>
                                     <img src={fillIconSrc} className={`${styles.controlIcon} ${styles.idleIcon}`} alt="" />
                                 </button>
                             </Tooltip>
-                            <Tooltip tooltip={text.tooltipFillOpacity}>
+                            <Tooltip tooltip={tt(text.tooltipFillOpacity)}>
                                 <div className={styles.controlBody}>
                                     <div className={styles.sliderRow}>
                                         <Slider
@@ -363,13 +378,12 @@ export const MochiColorPickerPanel = () => {
 
                         {/* Guidelines row */}
                         <div className={styles.controlRow}>
-                            <Tooltip tooltip={text.tooltipResetGuidelines}>
+                            <Tooltip tooltip={tt(text.tooltipResetGuidelines)}>
                                 <button type="button" className={styles.controlIconButton} onClick={handleResetGuidelines}>
-                                    {/* idleIcon + guidelinesIcon: original opacity trick already on this icon */}
-                                    <img src={guidelinesIconSrc} className={`${styles.controlIcon} ${styles.guidelinesIcon}`} alt="" />
+                                    <img src={guidelinesIconSrc} className={`${styles.controlIcon} ${styles.idleIcon} ${styles.guidelinesIcon}`} alt="" />
                                 </button>
                             </Tooltip>
-                            <Tooltip tooltip={text.tooltipGuidelinesOpacity}>
+                            <Tooltip tooltip={tt(text.tooltipGuidelinesOpacity)}>
                                 <div className={styles.controlBody}>
                                     <div className={styles.sliderRow}>
                                         <Slider
@@ -394,7 +408,7 @@ export const MochiColorPickerPanel = () => {
                     <div className={styles.actions}>
                         {/* Left: surface toggle */}
                         <div className={styles.surfaceActions}>
-                            <Tooltip tooltip={text.tooltipSurfaceToggle}>
+                            <Tooltip tooltip={tt(text.tooltipSurfaceToggle)}>
                                 <button
                                     type="button"
                                     className={`${styles.actionButton} ${styles.surfaceButton} ${surfaceToolAreasSuppressed ? styles.surfaceButtonActive : ""}`}
@@ -405,10 +419,10 @@ export const MochiColorPickerPanel = () => {
                             </Tooltip>
                         </div>
 
-                        {/* Right: preset slots + vanilla reset */}
+                        {/* Right: preset slots + reset-to-defaults */}
                         <div className={styles.presetActions}>
-                            {/* Slot 1 — tap to apply, hold to save */}
-                            <Tooltip tooltip={text.tooltipPreset1}>
+                            {/* Slot 1 — tap=apply, hold 0.8s=save */}
+                            <Tooltip tooltip={tt(text.tooltipPreset1)}>
                                 <button
                                     type="button"
                                     className={`${styles.actionButton} ${styles.presetButton} ${preset1Active ? styles.presetButtonActive : ""}`}
@@ -416,17 +430,19 @@ export const MochiColorPickerPanel = () => {
                                     onMouseUp={handlePresetMouseUp(1)}
                                     onMouseLeave={cancelHold}
                                 >
-                                    <span className={styles.presetDot} style={slotDotStyle(p1)} />
-                                    <span className={styles.presetGlyph}>①</span>
-                                    {/* Fill bar sweeps across the button while the player holds */}
+                                    {/* Top-right corner dot: shows the color stored in this slot */}
+                                    <span className={styles.presetDot} style={dotStyle(p1)} />
+                                    {/* Centered number glyph — plain text, no Unicode circled digits (Cohtml renders those in black) */}
+                                    <span className={styles.presetGlyph}>1</span>
+                                    {/* Hold progress bar sweeps left-to-right while saving; uses scaleX for reliable width */}
                                     {holdSlot === 1 && (
-                                        <span className={styles.holdBar} style={{ width: `${holdProgress * 100}%` }} />
+                                        <span className={styles.holdBar} style={holdBarStyle(holdProgress)} />
                                     )}
                                 </button>
                             </Tooltip>
 
                             {/* Slot 2 */}
-                            <Tooltip tooltip={text.tooltipPreset2}>
+                            <Tooltip tooltip={tt(text.tooltipPreset2)}>
                                 <button
                                     type="button"
                                     className={`${styles.actionButton} ${styles.presetButton} ${preset2Active ? styles.presetButtonActive : ""}`}
@@ -434,28 +450,28 @@ export const MochiColorPickerPanel = () => {
                                     onMouseUp={handlePresetMouseUp(2)}
                                     onMouseLeave={cancelHold}
                                 >
-                                    <span className={styles.presetDot} style={slotDotStyle(p2)} />
-                                    <span className={styles.presetGlyph}>②</span>
+                                    <span className={styles.presetDot} style={dotStyle(p2)} />
+                                    <span className={styles.presetGlyph}>2</span>
                                     {holdSlot === 2 && (
-                                        <span className={styles.holdBar} style={{ width: `${holdProgress * 100}%` }} />
+                                        <span className={styles.holdBar} style={holdBarStyle(holdProgress)} />
                                     )}
                                 </button>
                             </Tooltip>
 
-                            {/* Vanilla reset (↺ symbol, no image needed) */}
-                            <Tooltip tooltip={text.tooltipVanillaReset}>
+                            {/* Reset preset slots to factory defaults — does NOT change the live swatch */}
+                            <Tooltip tooltip={tt(text.tooltipResetPresets)}>
                                 <button
                                     type="button"
-                                    className={`${styles.actionButton} ${styles.resetButton} ${vanillaOutlineActive ? styles.resetButtonActive : ""}`}
-                                    onClick={handleVanillaReset}
+                                    className={`${styles.actionButton} ${styles.resetButton}`}
+                                    onClick={handleResetPresetsToDefault}
                                 >
-                                    <span className={styles.vanillaResetGlyph}>↺</span>
+                                    <img src={resetIconSrc} className={`${styles.actionIcon} ${styles.idleIcon}`} alt="" />
                                 </button>
                             </Tooltip>
                         </div>
                     </div>
 
-                    <Tooltip tooltip={text.tooltipDraggable}>
+                    <Tooltip tooltip={tt(text.tooltipDraggable)}>
                         <div
                             className={`${styles.dragGrip} ${panelDragging ? styles.dragGripActive : ""}`}
                             onMouseDown={handlePanelDragStart}
