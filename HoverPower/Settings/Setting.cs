@@ -37,6 +37,10 @@ namespace HoverPower.Settings
         public const int ToolColorModeVanilla = 1;
         public const int ToolColorModeCustom = 2;
 
+        // Centralised default for the guideline opacity slider.
+        // Vanilla CS2 is 100; lower = more transparent. Change only here — C# UISystem and TSX both read this.
+        public const int DefaultGuidelineOpacityPercent = 30;
+
         private const string AboutLinksRow = nameof(AboutLinksRow);
         // Same Paradox URL pattern as CityWatchdog — lands on River-Mochi's author page filtered to CS2.
         private const string UrlParadox =
@@ -59,6 +63,14 @@ namespace HoverPower.Settings
         public float OutlineB { get; set; }
         public float OutlineA { get; set; }
         public float FillA { get; set; }
+
+        // District overlay fill color. Disabled by default so we do not touch vanilla/other-mod
+        // district prefabs until the player actually picks a color from the in-game panel.
+        public bool DistrictColorEnabled { get; set; }
+        public float DistrictR { get; set; }
+        public float DistrictG { get; set; }
+        public float DistrictB { get; set; }
+        public float DistrictA { get; set; }
 
         // -----------------------------------------------------------------------
         // Player-editable preset slots (slots 1 + 2 on the in-city panel)
@@ -159,6 +171,14 @@ namespace HoverPower.Settings
             // FillA=0 matches vanilla CS2: no extra silhouette overlay until the player turns it up.
             FillA = 0f;
 
+            // Safe fallback for the District picker until DistrictColorSystem captures the authored
+            // default district prefab color. Not applied unless DistrictColorEnabled is true.
+            DistrictColorEnabled = false;
+            DistrictR = 128f / 255f;
+            DistrictG = 128f / 255f;
+            DistrictB = 128f / 255f;
+            DistrictA = 64f / 255f;
+
             // Starter presets (players can overwrite these with the panel's Save button).
             // Slot 1 = Mochi's gentle gray-purple. Slot 2 = yenyang-inspired purple-gray.
             Preset1R = 140f / 255f;
@@ -177,8 +197,8 @@ namespace HoverPower.Settings
             // alpha is very low, without changing their saved custom color.
             ToolColorMode = ToolColorModeRecommended;
 
-            // 100 = no change from game defaults. Lower = more transparent guidelines.
-            GuidelineOpacityPercent = 40;
+            // 100 = vanilla default. Lower = more transparent guidelines.
+            GuidelineOpacityPercent = DefaultGuidelineOpacityPercent;
         }
 
         // -----------------------------------------------------------------------

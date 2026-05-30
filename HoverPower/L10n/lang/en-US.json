@@ -15,5 +15,6 @@
   "HoverPower.UI.Tooltip.SurfaceToggle": "Hide Surface tool boundary preview fill.\nDefault hotkey: L.",
   "HoverPower.UI.Tooltip.Preset1": "Slot 1 — tap to apply, hold 0.8s to overwrite with your current color.",
   "HoverPower.UI.Tooltip.Preset2": "Slot 2 — tap to apply, hold 0.8s to overwrite with your current color.",
-  "HoverPower.UI.Tooltip.ResetPresets": "Reset both preset slots back to the original mod defaults."
+  "HoverPower.UI.Tooltip.ResetPresets": "Reset both preset slots back to the original mod defaults.",
+  "HoverPower.UI.Tooltip.DistrictColors": "Click to change District overlay fill color and opacity."
 }

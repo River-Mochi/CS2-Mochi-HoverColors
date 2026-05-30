@@ -33,7 +33,11 @@ const outlineG$ = bindValue<number>(CHANNEL, "OutlineG", 0.869);
 const outlineB$ = bindValue<number>(CHANNEL, "OutlineB", 1);
 const outlineA$ = bindValue<number>(CHANNEL, "OutlineA", 0.855);
 const fillA$ = bindValue<number>(CHANNEL, "FillA", 0);
-const guidelineOpacity$ = bindValue<number>(CHANNEL, "GuidelineOpacityPercent", 40);
+const districtR$ = bindValue<number>(CHANNEL, "DistrictR", 128 / 255);
+const districtG$ = bindValue<number>(CHANNEL, "DistrictG", 128 / 255);
+const districtB$ = bindValue<number>(CHANNEL, "DistrictB", 128 / 255);
+const districtA$ = bindValue<number>(CHANNEL, "DistrictA", 64 / 255);
+const guidelineOpacity$ = bindValue<number>(CHANNEL, "GuidelineOpacityPercent", 30);
 const surfaceToolAreasSuppressed$ = bindValue<boolean>(CHANNEL, "SurfaceToolAreasSuppressed", false);
 const vanillaOutlineActive$ = bindValue<boolean>(CHANNEL, "VanillaOutlineActive", false);
 
@@ -57,6 +61,12 @@ export const MochiColorPickerPanel = () => {
         a: useValue(outlineA$),
     };
     const boundFillA = useValue(fillA$);
+    const boundDistrict: Color = {
+        r: useValue(districtR$),
+        g: useValue(districtG$),
+        b: useValue(districtB$),
+        a: useValue(districtA$),
+    };
     const boundGuideline = useValue(guidelineOpacity$);
     const surfaceToolAreasSuppressed = useValue(surfaceToolAreasSuppressed$);
     const vanillaOutlineActive = useValue(vanillaOutlineActive$);
@@ -97,15 +107,18 @@ export const MochiColorPickerPanel = () => {
             tooltipResetOutline: l("HoverPower.UI.Tooltip.ResetOutline"),
             tooltipResetPresets: l("HoverPower.UI.Tooltip.ResetPresets"),
             tooltipSurfaceToggle: l("HoverPower.UI.Tooltip.SurfaceToggle"),
+            tooltipDistrictColors: l("HoverPower.UI.Tooltip.DistrictColors"),
         };
     }, [translate]);
 
     const [outline, setOutline] = React.useState<Color>(boundOutline);
     const [fillA, setFillA] = React.useState<number>(boundFillA);
+    const [districtColor, setDistrictColor] = React.useState<Color>(boundDistrict);
     const [guidelineOpacity, setGuidelineOpacity] = React.useState<number>(boundGuideline);
     const [panelOffset, setPanelOffset] = React.useState({ x: 0, y: 0 });
     const [panelDragging, setPanelDragging] = React.useState(false);
     const [colorPickerDirection, setColorPickerDirection] = React.useState<"up" | "down">("down");
+    const [districtPickerDirection, setDistrictPickerDirection] = React.useState<"up" | "down">("up");
     // React-driven hover for the swatch shell — Cohtml doesn't reliably fire CSS :hover on a div
     // that contains an interactive button child (the ColorField button captures the pointer).
     const [swatchHovered, setSwatchHovered] = React.useState(false);
@@ -118,6 +131,7 @@ export const MochiColorPickerPanel = () => {
     const holdRafRef = React.useRef<number | null>(null);
 
     const outlineSwatchRef = React.useRef<HTMLDivElement | null>(null);
+    const districtPickerRef = React.useRef<HTMLDivElement | null>(null);
     const panelElementRef = React.useRef<HTMLDivElement | null>(null);
     const panelDragFrameRef = React.useRef<number | null>(null);
     const panelDragPendingOffsetRef = React.useRef(panelOffset);
@@ -131,6 +145,8 @@ export const MochiColorPickerPanel = () => {
     React.useEffect(() => { setOutline(boundOutline); },
         [boundOutline.r, boundOutline.g, boundOutline.b, boundOutline.a]);
     React.useEffect(() => { setFillA(boundFillA); }, [boundFillA]);
+    React.useEffect(() => { setDistrictColor(boundDistrict); },
+        [boundDistrict.r, boundDistrict.g, boundDistrict.b, boundDistrict.a]);
     React.useEffect(() => { setGuidelineOpacity(boundGuideline); }, [boundGuideline]);
 
     // Panel drag
@@ -181,6 +197,10 @@ export const MochiColorPickerPanel = () => {
         setFillA(value);
         trigger(CHANNEL, "SetFillAlpha", value);
     };
+    const handleDistrictColorChange = (value: Color) => {
+        setDistrictColor(value);
+        trigger(CHANNEL, "SetDistrictColor", value.r, value.g, value.b, value.a);
+    };
     const handleGuidelineChange = (v: number) => {
         const value = Math.max(0, Math.min(100, Math.round(v / 5) * 5));
         setGuidelineOpacity(value);
@@ -189,9 +209,9 @@ export const MochiColorPickerPanel = () => {
     const handleClosePanel = () => trigger(CHANNEL, "SetPanelOpen", false);
     const handleResetOutline = () => trigger(CHANNEL, "ResetOutlineToVanilla");
     const handleResetFill = () => handleFillAChange(0);
-    const handleResetGuidelines = () => handleGuidelineChange(40);
+    const handleResetGuidelines = () => handleGuidelineChange(30); // matches DefaultGuidelineOpacityPercent in Setting.cs
     const handleToggleSurfaceToolAreas = () => trigger(CHANNEL, "ToggleSurfaceToolAreas");
-    const handleResetPresetsToDefault = () => trigger(CHANNEL, "ResetPresetsToDefault");
+    const handleTogglePresetDefaults = () => trigger(CHANNEL, "TogglePresetDefaults");
 
     // Preset hold-to-save
     const cancelHold = React.useCallback(() => {
@@ -240,6 +260,13 @@ export const MochiColorPickerPanel = () => {
         setColorPickerDirection(rect.top + rect.height / 2 < window.innerHeight / 2 ? "down" : "up");
     }, []);
 
+    const updateDistrictPickerDirection = React.useCallback(() => {
+        const swatch = districtPickerRef.current;
+        if (swatch == null) return;
+        const rect = swatch.getBoundingClientRect();
+        setDistrictPickerDirection(rect.top + rect.height / 2 < window.innerHeight / 2 ? "down" : "up");
+    }, []);
+
     const handlePanelDragStart = (e: React.MouseEvent<HTMLDivElement>) => {
         e.preventDefault(); e.stopPropagation();
         const rect = panelElementRef.current?.getBoundingClientRect();
@@ -260,6 +287,7 @@ export const MochiColorPickerPanel = () => {
     const numberFieldClass = resolver.mouseToolOptionsTheme["number-field"];
     const roundHighlightButtonTheme = resolver.roundHighlightButtonTheme;
     const outlineFieldClass = styles.outlineField;
+    const districtFieldClass = styles.districtColorField;
     const closeButtonClass = `${roundHighlightButtonTheme["button"] ?? ""} ${styles.closeButton}`;
 
     // Corner dot color: inline style sets the dot background to the stored preset RGBA.
@@ -332,8 +360,9 @@ export const MochiColorPickerPanel = () => {
                                     <div
                                         ref={outlineSwatchRef}
                                         className={`${styles.outlineFieldShell} ${swatchHovered ? styles.outlineFieldShellHovered : ""}`}
-                                        onMouseEnter={() => { setSwatchHovered(true); updateColorPickerDirection(); }}
-                                        onMouseLeave={() => setSwatchHovered(false)}
+                                        // onMouseOver bubbles up from the ColorField button child — more reliable in Cohtml than onMouseEnter
+                                        onMouseOver={() => { setSwatchHovered(true); updateColorPickerDirection(); }}
+                                        onMouseOut={(e) => { if (!e.currentTarget.contains(e.relatedTarget as Node)) setSwatchHovered(false); }}
                                         onMouseDown={updateColorPickerDirection}
                                     >
                                         <ColorField
@@ -345,11 +374,57 @@ export const MochiColorPickerPanel = () => {
                                             hideHint={true}
                                             hexInput={true}
                                             colorWheel={true}
+                                            // ColorField exposes onMouseEnter/Leave directly (VanillaColorFieldProps).
+                                            // This is the reliable path — parent div hover events fail in Cohtml
+                                            // when a native button child absorbs pointer events.
+                                            onMouseEnter={() => setSwatchHovered(true)}
+                                            onMouseLeave={() => setSwatchHovered(false)}
                                             onChange={handleOutlineChange}
                                             onOpenPicker={updateColorPickerDirection}
                                         />
                                     </div>
                                 </Tooltip>
+
+                                {/* Preset circles — inline with swatch. Tap=apply, hold 0.8s=save. */}
+                                {/* Background fills the circle with the stored color; no text needed. */}
+                                <Tooltip tooltip={tt(text.tooltipPreset1)}>
+                                    <button
+                                        type="button"
+                                        className={`${styles.presetColorButton} ${preset1Active ? styles.presetColorButtonActive : ""}`}
+                                        style={{ marginLeft: "6rem", backgroundColor: `rgba(${Math.round(p1.r*255)},${Math.round(p1.g*255)},${Math.round(p1.b*255)},${p1.a.toFixed(2)})` }}
+                                        onMouseDown={handlePresetMouseDown(1)}
+                                        onMouseUp={handlePresetMouseUp(1)}
+                                        onMouseLeave={cancelHold}
+                                    >
+                                        {holdSlot === 1 && <span className={styles.holdBar} style={holdBarStyle(holdProgress)} />}
+                                    </button>
+                                </Tooltip>
+                                <Tooltip tooltip={tt(text.tooltipPreset2)}>
+                                    <button
+                                        type="button"
+                                        className={`${styles.presetColorButton} ${preset2Active ? styles.presetColorButtonActive : ""}`}
+                                        style={{ marginLeft: "8rem", backgroundColor: `rgba(${Math.round(p2.r*255)},${Math.round(p2.g*255)},${Math.round(p2.b*255)},${p2.a.toFixed(2)})` }}
+                                        onMouseDown={handlePresetMouseDown(2)}
+                                        onMouseUp={handlePresetMouseUp(2)}
+                                        onMouseLeave={cancelHold}
+                                    >
+                                        {holdSlot === 2 && <span className={styles.holdBar} style={holdBarStyle(holdProgress)} />}
+                                    </button>
+                                </Tooltip>
+                                {/* ↺ toggle — far right of the outline row.
+                                    div.resetPusher is the actual flex child; margin-left:auto must be on
+                                    a direct flex child, not on the button inside Tooltip's wrapper. */}
+                                <div className={styles.resetPusher}>
+                                    <Tooltip tooltip={tt(text.tooltipResetPresets)}>
+                                        <button
+                                            type="button"
+                                            className={`${styles.presetResetInline}`}
+                                            onClick={handleTogglePresetDefaults}
+                                        >
+                                            <span className={styles.resetGlyph} style={{ color: "rgba(255,255,255,0.82)" }}>↺</span>
+                                        </button>
+                                    </Tooltip>
+                                </div>
                             </div>
                         </div>
 
@@ -410,71 +485,44 @@ export const MochiColorPickerPanel = () => {
 
                     {/* Bottom action bar */}
                     <div className={styles.actions}>
-                        {/* Left: surface toggle — LotTool icon primary, Districts02 secondary */}
+                        {/* Left: two separate surface-area buttons, each with its own indicator */}
                         <div className={styles.surfaceActions}>
+                            {/* LotTool: toggles surface tool area suppression, owns the active indicator */}
                             <Tooltip tooltip={tt(text.tooltipSurfaceToggle)}>
                                 <button
                                     type="button"
                                     className={`${styles.actionButton} ${styles.surfaceButton} ${surfaceToolAreasSuppressed ? styles.surfaceButtonActive : ""}`}
                                     onClick={handleToggleSurfaceToolAreas}
                                 >
-                                    <img src={lotToolIconSrc} className={styles.actionIcon} alt="" />
-                                    {/* surfaceSecondIcon adds explicit margin — sibling combinators unreliable in Cohtml */}
-                                    <img src={surfaceIconSrc} className={`${styles.actionIcon} ${styles.surfaceSecondIcon}`} alt="" />
+                                    <img src={lotToolIconSrc} className={styles.controlIcon} alt="" />
                                 </button>
+                            </Tooltip>
+                            {/* Districts: small vanilla slider/hex picker (colorWheel=false). */}
+                            <Tooltip tooltip={tt(text.tooltipDistrictColors)}>
+                                <div
+                                    ref={districtPickerRef}
+                                    className={`${styles.actionButton} ${styles.surfaceButton} ${styles.buttonGap} ${styles.districtPickerButton}`}
+                                    onMouseOver={updateDistrictPickerDirection}
+                                    onMouseDown={updateDistrictPickerDirection}
+                                >
+                                    <img src={surfaceIconSrc} className={`${styles.controlIcon} ${styles.districtPickerIcon}`} alt="" />
+                                    <ColorField
+                                        focusKey={focusDisabled}
+                                        className={districtFieldClass}
+                                        value={districtColor}
+                                        alpha={true}
+                                        popupDirection={districtPickerDirection}
+                                        hideHint={true}
+                                        hexInput={true}
+                                        colorWheel={false}
+                                        onChange={handleDistrictColorChange}
+                                        onOpenPicker={updateDistrictPickerDirection}
+                                    />
+                                </div>
                             </Tooltip>
                         </div>
 
-                        {/* Right: preset slots + reset-to-defaults */}
-                        <div className={styles.presetActions}>
-                            {/* Slot 1 — tap=apply, hold 0.8s=save */}
-                            <Tooltip tooltip={tt(text.tooltipPreset1)}>
-                                <button
-                                    type="button"
-                                    className={`${styles.actionButton} ${styles.presetButton} ${preset1Active ? styles.presetButtonActive : ""}`}
-                                    onMouseDown={handlePresetMouseDown(1)}
-                                    onMouseUp={handlePresetMouseUp(1)}
-                                    onMouseLeave={cancelHold}
-                                >
-                                    {/* Top-right corner dot: shows the color stored in this slot */}
-                                    <span className={styles.presetDot} style={dotStyle(p1)} />
-                                    {/* Inline color forces white in Cohtml — CSS class alone is overridden by button's ButtonText default */}
-                                    <span className={styles.presetGlyph} style={{ color: "rgba(255,255,255,0.82)" }}>1</span>
-                                    {/* Hold progress bar sweeps left-to-right while saving; uses scaleX for reliable width */}
-                                    {holdSlot === 1 && (
-                                        <span className={styles.holdBar} style={holdBarStyle(holdProgress)} />
-                                    )}
-                                </button>
-                            </Tooltip>
-
-                            {/* Slot 2 — buttonGap adds margin-left since sibling CSS combinator loses to actionButton margin:0 */}
-                            <Tooltip tooltip={tt(text.tooltipPreset2)}>
-                                <button
-                                    type="button"
-                                    className={`${styles.actionButton} ${styles.presetButton} ${styles.buttonGap} ${preset2Active ? styles.presetButtonActive : ""}`}
-                                    onMouseDown={handlePresetMouseDown(2)}
-                                    onMouseUp={handlePresetMouseUp(2)}
-                                    onMouseLeave={cancelHold}
-                                >
-                                    <span className={styles.presetDot} style={dotStyle(p2)} />
-                                    <span className={styles.presetGlyph} style={{ color: "rgba(255,255,255,0.82)" }}>2</span>
-                                    {holdSlot === 2 && (
-                                        <span className={styles.holdBar} style={holdBarStyle(holdProgress)} />
-                                    )}
-                                </button>
-                            </Tooltip>
-
-                            {/* Reset preset slots to factory defaults */}
-                            <Tooltip tooltip={tt(text.tooltipResetPresets)}>
-                                <button
-                                    type="button"
-                                    className={`${styles.actionButton} ${styles.resetButton} ${styles.buttonGap}`}
-                                    onClick={handleResetPresetsToDefault}
-                                >
-                                    <span className={styles.resetGlyph} style={{ color: "rgba(255,255,255,0.82)" }}>↺</span>
-                                </button>
-                            </Tooltip>
-                        </div>
+                        {/* ↺ is now in the outline row — nothing here */}
                     </div>
 
                     <Tooltip tooltip={tt(text.tooltipDraggable)}>

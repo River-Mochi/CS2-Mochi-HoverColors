@@ -15,8 +15,7 @@
 .panelContent {
     position: relative;
     overflow: visible;
-    // Narrower panel — brings percent boxes closer to slider ends.
-    min-width: 200rem;
+    min-width: 192rem;
     border: 1rem solid rgba(255, 255, 255, 0.18);
     border-radius: 12rem;
     background-image: linear-gradient(to bottom, rgba(95, 124, 136, 0.32), rgba(58, 78, 88, 0.24));
@@ -240,56 +239,64 @@
 .outlineControlBody {
     justify-content: flex-start;
     box-sizing: border-box;
-    padding-left: 8rem;
+    padding-left: 0;
     padding-right: 0;
 }
 
 // ─── Color swatch ─────────────────────────────────────────────────────────────
-// Square, same size as the (smaller) left-column icon buttons.
+// Compact vanilla ColorField launcher. Keep this simple: no outer frame/padding,
+// because uneven wrapper padding makes the checker strip look sloppy in Cohtml.
 
 .outlineFieldShell {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 32rem;
-    height: 32rem;
+    width: 78rem;
+    height: 22rem;
     box-sizing: border-box;
-    padding: 3rem;
-    border-radius: 4rem;
+    padding: 0;
+    border-radius: 10rem;
     background-color: transparent;
-    border: 1rem solid transparent;
+    border: 0;
     box-shadow: none;
     cursor: pointer;
-    transition: border-color 120ms ease-out, box-shadow 120ms ease-out;
-}
-
-// White outline via React onMouseEnter/Leave (CSS :hover unreliable on divs with button children in Cohtml).
-.outlineFieldShellHovered {
-    border-color: rgba(255, 255, 255, 0.85) !important;
-    box-shadow: 0 0 0 1rem rgba(255, 255, 255, 0.18) !important;
 }
 
 .outlineField {
-    // 32rem shell - 2×3rem padding = 26rem interior.
-    width: 26rem !important;
-    height: 26rem !important;
+    width: 78rem !important;
+    height: 22rem !important;
     display: block !important;
     overflow: hidden !important;
-    border-radius: 3rem !important;
+    border-radius: 10rem !important;
     box-shadow: none !important;
-    outline: none;
+    // outline-offset: 0 means the 2rem ring draws right at the element edge — visible without clipping.
+    // (outline-offset: -1rem with 1rem width netted to zero visible ring — that's why hover was invisible.)
+    outline: 2rem solid rgba(255, 255, 255, 0);
+    outline-offset: 0;
+    transition: outline-color 120ms ease-out !important;
 }
 
 .outlineField button {
-    width: 26rem !important;
-    height: 26rem !important;
+    width: 78rem !important;
+    height: 22rem !important;
     padding: 0 !important;
     border: 0 !important;
-    border-radius: 3rem !important;
+    border-radius: 10rem !important;
     opacity: 1 !important;
     box-shadow: none !important;
+    outline: 2rem solid rgba(255, 255, 255, 0) !important;
+    outline-offset: 0 !important;
     background-color: transparent !important;
     cursor: pointer !important;
+}
+
+// White ring on hover. outline-offset:0 means the 2rem outline draws right at the element edge.
+// .outlineFieldShellHovered is set by React onMouseOver on the shell div (secondary path).
+// .outlineField button:hover is the primary path — native button :hover is reliable in Cohtml.
+.outlineFieldShellHovered .outlineField,
+.outlineFieldShellHovered .outlineField button,
+.outlineField button:hover {
+    outline-color: rgba(255, 255, 255, 0.9) !important;
 }
 
 // ─── Sliders ──────────────────────────────────────────────────────────────────
@@ -299,7 +306,7 @@
     display: flex;
     align-items: center;
     box-sizing: border-box;
-    padding-left: 8rem;
+    padding-left: 4rem;
 }
 
 .slider {
@@ -391,16 +398,48 @@
     margin-left: 4rem !important;
 }
 
-// Surface button: wider to show LotTool + Districts02 side by side.
+// Surface buttons: each shows one icon, same square size as preset buttons.
 .surfaceButton {
-    width: 52rem;
-    min-width: 52rem;
-    padding: 0 4rem;
+    width: 32rem;
+    min-width: 32rem;
 }
 
-// Explicit margin on the second surface icon — avoids + combinator unreliability in Cohtml.
-.surfaceSecondIcon {
-    margin-left: 5rem !important;
+.districtPickerButton {
+    position: relative;
+    overflow: visible;
+}
+
+.districtPickerIcon {
+    position: relative;
+    z-index: 1;
+}
+
+// Invisible ColorField trigger over the District icon. The popup is still 100% vanilla;
+// only the tiny launcher is transparent so the button can keep the District SVG.
+.districtColorField {
+    position: absolute !important;
+    inset: 0;
+    width: 32rem !important;
+    height: 32rem !important;
+    display: block !important;
+    z-index: 2;
+}
+
+.districtColorField button {
+    width: 32rem !important;
+    height: 32rem !important;
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: 4rem !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    outline: 0 !important;
+    opacity: 1 !important;
+    cursor: pointer !important;
+}
+
+.districtColorField button > div {
+    opacity: 0 !important;
 }
 
 .surfaceButtonActive {
@@ -408,33 +447,107 @@
     box-shadow: inset 0 0 0 1rem rgba(84, 215, 255, 0.35), 0 0 0 1rem rgba(84, 215, 255, 0.7) !important;
 }
 
-.surfaceButtonActive::after,
-.presetButtonActive::after {
+.surfaceButtonActive::after {
     content: "";
     position: absolute;
-    left: 5rem;
-    right: 5rem;
+    left: 6rem;
+    right: 6rem;
     bottom: 3rem;
     height: 3rem;
     border-radius: 2rem;
     background-color: rgba(84, 215, 255, 1);
 }
 
-// Preset buttons: 32rem square, corner dot top-right, number centered.
+// Preset buttons (legacy square class — kept in case needed, now replaced by circles in outline row).
 .presetButton {
     width: 32rem;
     min-width: 32rem;
 }
 
-// Corner badge: stored slot color. background-color set via React inline style.
+// Circular preset color buttons — sit inline with the color swatch in the outline row.
+// The button IS the color: background-color is set via React inline style.
+// No text needed; the color itself identifies the slot.
+// Smaller circle (20rem) gives room for the hover ring to show without overlapping neighbor.
+.presetColorButton {
+    width: 20rem;
+    height: 20rem;
+    border-radius: 50%;
+    border: 2rem solid rgba(255, 255, 255, 0.25);
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    outline: none;
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+    // transform-origin center so scale grows outward from the circle center.
+    transform-origin: center center;
+    transition: border-color 120ms ease-out, box-shadow 120ms ease-out, transform 120ms ease-out;
+
+    // Hover: circle scales up slightly AND shows a bright cyan ring.
+    // The scale gives the "grows" effect the user wants without needing extra margin.
+    &:hover {
+        transform: scale(1.2) !important;
+        border-color: rgba(84, 215, 255, 0.85) !important;
+        box-shadow: 0 0 0 2rem rgba(84, 215, 255, 0.5) !important;
+    }
+}
+
+// Active: bright solid cyan ring, no scale (already selected — stable state).
+.presetColorButtonActive {
+    border-width: 3rem !important;
+    border-color: rgba(84, 215, 255, 1) !important;
+    box-shadow: 0 0 0 2rem rgba(84, 215, 255, 0.55), 0 0 6rem rgba(84, 215, 255, 0.25) !important;
+}
+
+// Pushes the ↺ button to the far right of the outline row.
+// Must be the direct flex child — margin-left:auto on a button inside Tooltip's wrapper does nothing.
+.resetPusher {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+// ↺ inline in the outline row — same style as bottom action buttons but pushed to the right via margin-left:auto.
+.presetResetInline {
+    width: 24rem;
+    min-width: 24rem;
+    height: 24rem;
+    border-radius: 4rem;
+    border: 1rem solid rgba(255, 255, 255, 0.35);
+    background-color: rgba(36, 54, 66, 0.58) !important;
+    background-image: none !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    outline: none;
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+    transition: background-color 120ms ease-out, border-color 120ms ease-out;
+
+    &:hover {
+        background-color: rgba(108, 136, 150, 0.34) !important;
+        border-color: rgba(255, 255, 255, 0.58);
+    }
+}
+
+// Corner wedge: triangle in the top-right corner of the preset button.
+// clip-path clips a square to the upper-right triangle. background-color set via React inline style.
+// The button's overflow:hidden + border-radius:4rem naturally rounds the corner of the wedge.
 .presetDot {
     position: absolute;
-    top: 3rem;
-    right: 3rem;
-    width: 6rem;
-    height: 6rem;
-    border-radius: 50%;
-    border: 1rem solid rgba(255, 255, 255, 0.45);
+    top: 0;
+    right: 0;
+    width: 12rem;
+    height: 12rem;
+    clip-path: polygon(100% 0%, 0% 0%, 100% 100%);
     pointer-events: none;
     z-index: 1;
 }
@@ -486,8 +599,8 @@
 }
 
 .actionIcon {
-    width: 17rem;
-    height: 17rem;
+    width: 20rem;
+    height: 20rem;
     display: block;
     object-fit: contain;
     pointer-events: none;

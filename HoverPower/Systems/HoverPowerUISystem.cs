@@ -33,6 +33,10 @@ namespace HoverPower.UI
         private ValueBinding<float> m_OutlineBBinding = null!;
         private ValueBinding<float> m_OutlineABinding = null!;
         private ValueBinding<float> m_FillABinding = null!;
+        private ValueBinding<float> m_DistrictRBinding = null!;
+        private ValueBinding<float> m_DistrictGBinding = null!;
+        private ValueBinding<float> m_DistrictBBinding = null!;
+        private ValueBinding<float> m_DistrictABinding = null!;
         private ValueBinding<int> m_GuidelineOpacityBinding = null!;
         private ValueBinding<bool> m_PanelOpenBinding = null!;
         private ValueBinding<bool> m_SurfaceToolAreasSuppressedBinding = null!;
@@ -51,6 +55,17 @@ namespace HoverPower.UI
         private ValueBinding<float> m_Preset2FillABinding = null!;
         private ValueBinding<bool> m_Preset1ActiveBinding = null!;
         private ValueBinding<bool> m_Preset2ActiveBinding = null!;
+
+        // Factory defaults — keep in sync with HoverPowerSettings.SetDefaults().
+        private const float DefaultPreset1R = 140f / 255f, DefaultPreset1G = 140f / 255f, DefaultPreset1B = 171f / 255f;
+        private const float DefaultPreset1A = 0.5f, DefaultPreset1FillA = 0f;
+        private const float DefaultPreset2R = 0.25f, DefaultPreset2G = 0.15f, DefaultPreset2B = 0.25f;
+        private const float DefaultPreset2A = 0.5f, DefaultPreset2FillA = 0f;
+
+        // In-memory backup for TogglePresetDefaults (session-only, not persisted to .coc).
+        private float m_BkP1R, m_BkP1G, m_BkP1B, m_BkP1A, m_BkP1FillA;
+        private float m_BkP2R, m_BkP2G, m_BkP2B, m_BkP2A, m_BkP2FillA;
+        private bool m_PresetBackupExists;
 
         protected override void OnCreate()
         {
@@ -102,6 +117,23 @@ namespace HoverPower.UI
                     if (percent > 100) percent = 100;
 
                     settings.GuidelineOpacityPercent = percent;
+                    settings.ApplyAndSave();
+                    SyncValueBindings();
+                }));
+
+            AddBinding(new TriggerBinding<float, float, float, float>(
+                Mod.ModId,
+                "SetDistrictColor",
+                (r, g, b, a) =>
+                {
+                    HoverPowerSettings? settings = Mod.Settings;
+                    if (settings == null) return;
+
+                    settings.DistrictColorEnabled = true;
+                    settings.DistrictR = r;
+                    settings.DistrictG = g;
+                    settings.DistrictB = b;
+                    settings.DistrictA = a;
                     settings.ApplyAndSave();
                     SyncValueBindings();
                 }));
@@ -211,26 +243,43 @@ namespace HoverPower.UI
                     SyncValueBindings(); // updates Preset*Active + stored color bindings
                 }));
 
-            // Restore both preset slots to the original mod factory defaults.
-            // Does not change the live swatch color.
+            // Toggle preset slots between current player values and mod factory defaults.
+            // First press: saves current slots as in-memory backup, applies defaults.
+            // Second press: restores the backup.
+            // If already at defaults with no backup (fresh install), does nothing.
             AddBinding(new TriggerBinding(
                 Mod.ModId,
-                "ResetPresetsToDefault",
+                "TogglePresetDefaults",
                 () =>
                 {
                     HoverPowerSettings? settings = Mod.Settings;
                     if (settings == null) return;
 
-                    settings.Preset1R = 140f / 255f;
-                    settings.Preset1G = 140f / 255f;
-                    settings.Preset1B = 171f / 255f;
-                    settings.Preset1A = 0.5f;
-                    settings.Preset1FillA = 0f;
-                    settings.Preset2R = 0.25f;
-                    settings.Preset2G = 0.15f;
-                    settings.Preset2B = 0.25f;
-                    settings.Preset2A = 0.5f;
-                    settings.Preset2FillA = 0f;
+                    if (!PresetsAtDefaults(settings))
+                    {
+                        // Save current player colors then apply defaults.
+                        m_BkP1R = settings.Preset1R; m_BkP1G = settings.Preset1G; m_BkP1B = settings.Preset1B;
+                        m_BkP1A = settings.Preset1A; m_BkP1FillA = settings.Preset1FillA;
+                        m_BkP2R = settings.Preset2R; m_BkP2G = settings.Preset2G; m_BkP2B = settings.Preset2B;
+                        m_BkP2A = settings.Preset2A; m_BkP2FillA = settings.Preset2FillA;
+                        m_PresetBackupExists = true;
+
+                        settings.Preset1R = DefaultPreset1R; settings.Preset1G = DefaultPreset1G; settings.Preset1B = DefaultPreset1B;
+                        settings.Preset1A = DefaultPreset1A; settings.Preset1FillA = DefaultPreset1FillA;
+                        settings.Preset2R = DefaultPreset2R; settings.Preset2G = DefaultPreset2G; settings.Preset2B = DefaultPreset2B;
+                        settings.Preset2A = DefaultPreset2A; settings.Preset2FillA = DefaultPreset2FillA;
+                    }
+                    else if (m_PresetBackupExists)
+                    {
+                        // Restore backup.
+                        settings.Preset1R = m_BkP1R; settings.Preset1G = m_BkP1G; settings.Preset1B = m_BkP1B;
+                        settings.Preset1A = m_BkP1A; settings.Preset1FillA = m_BkP1FillA;
+                        settings.Preset2R = m_BkP2R; settings.Preset2G = m_BkP2G; settings.Preset2B = m_BkP2B;
+                        settings.Preset2A = m_BkP2A; settings.Preset2FillA = m_BkP2FillA;
+                        m_PresetBackupExists = false;
+                    }
+                    // Already at defaults with no backup → no-op (nothing to restore).
+
                     settings.ApplyAndSave();
                     SyncValueBindings();
                 }));
@@ -272,7 +321,11 @@ namespace HoverPower.UI
             m_OutlineBBinding = AddValueBinding("OutlineB", settings?.OutlineB ?? 1f);
             m_OutlineABinding = AddValueBinding("OutlineA", settings?.OutlineA ?? 0.855f);
             m_FillABinding = AddValueBinding("FillA", settings?.FillA ?? 0f);
-            m_GuidelineOpacityBinding = AddValueBinding("GuidelineOpacityPercent", settings?.GuidelineOpacityPercent ?? 40);
+            m_DistrictRBinding = AddValueBinding("DistrictR", settings?.DistrictR ?? 128f / 255f);
+            m_DistrictGBinding = AddValueBinding("DistrictG", settings?.DistrictG ?? 128f / 255f);
+            m_DistrictBBinding = AddValueBinding("DistrictB", settings?.DistrictB ?? 128f / 255f);
+            m_DistrictABinding = AddValueBinding("DistrictA", settings?.DistrictA ?? 64f / 255f);
+            m_GuidelineOpacityBinding = AddValueBinding("GuidelineOpacityPercent", settings?.GuidelineOpacityPercent ?? HoverPowerSettings.DefaultGuidelineOpacityPercent);
             m_PanelOpenBinding = AddValueBinding("PanelOpen", s_PanelOpen);
             m_SurfaceToolAreasSuppressedBinding = AddValueBinding("SurfaceToolAreasSuppressed", SurfaceToolOverlaySystem.SuppressSurfaceToolAreas);
             m_VanillaOutlineActiveBinding = AddValueBinding("VanillaOutlineActive", IsVanillaOutlineActive());
@@ -307,7 +360,11 @@ namespace HoverPower.UI
             UpdateIfChanged(m_OutlineBBinding, settings?.OutlineB ?? 1f);
             UpdateIfChanged(m_OutlineABinding, settings?.OutlineA ?? 0.855f);
             UpdateIfChanged(m_FillABinding, settings?.FillA ?? 0f);
-            UpdateIfChanged(m_GuidelineOpacityBinding, settings?.GuidelineOpacityPercent ?? 40);
+            UpdateIfChanged(m_DistrictRBinding, settings?.DistrictR ?? 128f / 255f);
+            UpdateIfChanged(m_DistrictGBinding, settings?.DistrictG ?? 128f / 255f);
+            UpdateIfChanged(m_DistrictBBinding, settings?.DistrictB ?? 128f / 255f);
+            UpdateIfChanged(m_DistrictABinding, settings?.DistrictA ?? 64f / 255f);
+            UpdateIfChanged(m_GuidelineOpacityBinding, settings?.GuidelineOpacityPercent ?? HoverPowerSettings.DefaultGuidelineOpacityPercent);
             UpdateIfChanged(m_PanelOpenBinding, s_PanelOpen);
             UpdateIfChanged(m_SurfaceToolAreasSuppressedBinding, SurfaceToolOverlaySystem.SuppressSurfaceToolAreas);
             UpdateIfChanged(m_VanillaOutlineActiveBinding, IsVanillaOutlineActive());
@@ -389,6 +446,16 @@ namespace HoverPower.UI
         }
 
         private static bool ApproxEqual(float a, float b) => Math.Abs(a - b) < 0.0005f;
+
+        private static bool PresetsAtDefaults(HoverPowerSettings s)
+        {
+            return ApproxEqual(s.Preset1R, DefaultPreset1R) && ApproxEqual(s.Preset1G, DefaultPreset1G)
+                && ApproxEqual(s.Preset1B, DefaultPreset1B) && ApproxEqual(s.Preset1A, DefaultPreset1A)
+                && ApproxEqual(s.Preset1FillA, DefaultPreset1FillA)
+                && ApproxEqual(s.Preset2R, DefaultPreset2R) && ApproxEqual(s.Preset2G, DefaultPreset2G)
+                && ApproxEqual(s.Preset2B, DefaultPreset2B) && ApproxEqual(s.Preset2A, DefaultPreset2A)
+                && ApproxEqual(s.Preset2FillA, DefaultPreset2FillA);
+        }
 
         private void InitializeKeybindActions()
         {

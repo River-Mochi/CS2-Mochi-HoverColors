@@ -163,6 +163,9 @@ namespace HoverPower
             World.DefaultGameObjectInjectionWorld.GetOrCreateSystemManaged<SurfaceToolOverlaySystem>();
             updateSystem.UpdateAt<SurfaceToolOverlaySystem>(SystemUpdatePhase.Rendering);
 
+            World.DefaultGameObjectInjectionWorld.GetOrCreateSystemManaged<DistrictColorSystem>();
+            updateSystem.UpdateAt<DistrictColorSystem>(SystemUpdatePhase.Rendering);
+
             updateSystem.UpdateAt<HoverPowerUISystem>(SystemUpdatePhase.UIUpdate);
         }
 
