@@ -26,6 +26,8 @@ namespace HoverPower.UI
         // Cached actions are checked with WasReleasedThisFrame(); lookup is retried only if an action is missing.
         private ProxyAction? m_TogglePanelAction;
         private ProxyAction? m_ToggleSurfaceToolAreasAction;
+
+        // Live color bindings
         private ValueBinding<float> m_OutlineRBinding = null!;
         private ValueBinding<float> m_OutlineGBinding = null!;
         private ValueBinding<float> m_OutlineBBinding = null!;
@@ -35,6 +37,20 @@ namespace HoverPower.UI
         private ValueBinding<bool> m_PanelOpenBinding = null!;
         private ValueBinding<bool> m_SurfaceToolAreasSuppressedBinding = null!;
         private ValueBinding<bool> m_VanillaOutlineActiveBinding = null!;
+
+        // Preset slot bindings — panel reads stored colors for swatch previews + active-state dots.
+        private ValueBinding<float> m_Preset1RBinding = null!;
+        private ValueBinding<float> m_Preset1GBinding = null!;
+        private ValueBinding<float> m_Preset1BBinding = null!;
+        private ValueBinding<float> m_Preset1ABinding = null!;
+        private ValueBinding<float> m_Preset1FillABinding = null!;
+        private ValueBinding<float> m_Preset2RBinding = null!;
+        private ValueBinding<float> m_Preset2GBinding = null!;
+        private ValueBinding<float> m_Preset2BBinding = null!;
+        private ValueBinding<float> m_Preset2ABinding = null!;
+        private ValueBinding<float> m_Preset2FillABinding = null!;
+        private ValueBinding<bool> m_Preset1ActiveBinding = null!;
+        private ValueBinding<bool> m_Preset2ActiveBinding = null!;
 
         protected override void OnCreate()
         {
@@ -134,6 +150,66 @@ namespace HoverPower.UI
                 Mod.ModId,
                 "ToggleSurfaceToolAreas",
                 ToggleSurfaceToolAreas));
+
+            // Apply a stored preset slot (slot = 1 or 2) — pushes that slot's color to live swatch.
+            AddBinding(new TriggerBinding<int>(
+                Mod.ModId,
+                "ApplyPreset",
+                slot =>
+                {
+                    HoverPowerSettings? settings = Mod.Settings;
+                    if (settings == null) return;
+
+                    if (slot == 1)
+                    {
+                        settings.OutlineR = settings.Preset1R;
+                        settings.OutlineG = settings.Preset1G;
+                        settings.OutlineB = settings.Preset1B;
+                        settings.OutlineA = settings.Preset1A;
+                        settings.FillA = settings.Preset1FillA;
+                    }
+                    else if (slot == 2)
+                    {
+                        settings.OutlineR = settings.Preset2R;
+                        settings.OutlineG = settings.Preset2G;
+                        settings.OutlineB = settings.Preset2B;
+                        settings.OutlineA = settings.Preset2A;
+                        settings.FillA = settings.Preset2FillA;
+                    }
+
+                    settings.ApplyAndSave();
+                    SyncValueBindings();
+                }));
+
+            // Save the current live color into a preset slot. Persisted to .coc automatically.
+            AddBinding(new TriggerBinding<int>(
+                Mod.ModId,
+                "SavePreset",
+                slot =>
+                {
+                    HoverPowerSettings? settings = Mod.Settings;
+                    if (settings == null) return;
+
+                    if (slot == 1)
+                    {
+                        settings.Preset1R = settings.OutlineR;
+                        settings.Preset1G = settings.OutlineG;
+                        settings.Preset1B = settings.OutlineB;
+                        settings.Preset1A = settings.OutlineA;
+                        settings.Preset1FillA = settings.FillA;
+                    }
+                    else if (slot == 2)
+                    {
+                        settings.Preset2R = settings.OutlineR;
+                        settings.Preset2G = settings.OutlineG;
+                        settings.Preset2B = settings.OutlineB;
+                        settings.Preset2A = settings.OutlineA;
+                        settings.Preset2FillA = settings.FillA;
+                    }
+
+                    settings.ApplyAndSave();
+                    SyncValueBindings(); // updates Preset*Active + stored color bindings
+                }));
         }
 
         protected override void OnUpdate()
@@ -176,6 +252,20 @@ namespace HoverPower.UI
             m_PanelOpenBinding = AddValueBinding("PanelOpen", s_PanelOpen);
             m_SurfaceToolAreasSuppressedBinding = AddValueBinding("SurfaceToolAreasSuppressed", SurfaceToolOverlaySystem.SuppressSurfaceToolAreas);
             m_VanillaOutlineActiveBinding = AddValueBinding("VanillaOutlineActive", IsVanillaOutlineActive());
+
+            // Preset slot stored-color bindings (swatch previews + active-state).
+            m_Preset1RBinding = AddValueBinding("Preset1R", settings?.Preset1R ?? 140f / 255f);
+            m_Preset1GBinding = AddValueBinding("Preset1G", settings?.Preset1G ?? 140f / 255f);
+            m_Preset1BBinding = AddValueBinding("Preset1B", settings?.Preset1B ?? 171f / 255f);
+            m_Preset1ABinding = AddValueBinding("Preset1A", settings?.Preset1A ?? 0.5f);
+            m_Preset1FillABinding = AddValueBinding("Preset1FillA", settings?.Preset1FillA ?? 0f);
+            m_Preset2RBinding = AddValueBinding("Preset2R", settings?.Preset2R ?? 0.25f);
+            m_Preset2GBinding = AddValueBinding("Preset2G", settings?.Preset2G ?? 0.15f);
+            m_Preset2BBinding = AddValueBinding("Preset2B", settings?.Preset2B ?? 0.25f);
+            m_Preset2ABinding = AddValueBinding("Preset2A", settings?.Preset2A ?? 0.5f);
+            m_Preset2FillABinding = AddValueBinding("Preset2FillA", settings?.Preset2FillA ?? 0f);
+            m_Preset1ActiveBinding = AddValueBinding("Preset1Active", IsPresetActive(1));
+            m_Preset2ActiveBinding = AddValueBinding("Preset2Active", IsPresetActive(2));
         }
 
         private ValueBinding<T> AddValueBinding<T>(string name, T initialValue)
@@ -197,6 +287,20 @@ namespace HoverPower.UI
             UpdateIfChanged(m_PanelOpenBinding, s_PanelOpen);
             UpdateIfChanged(m_SurfaceToolAreasSuppressedBinding, SurfaceToolOverlaySystem.SuppressSurfaceToolAreas);
             UpdateIfChanged(m_VanillaOutlineActiveBinding, IsVanillaOutlineActive());
+
+            // Preset stored colors + active flags
+            UpdateIfChanged(m_Preset1RBinding, settings?.Preset1R ?? 140f / 255f);
+            UpdateIfChanged(m_Preset1GBinding, settings?.Preset1G ?? 140f / 255f);
+            UpdateIfChanged(m_Preset1BBinding, settings?.Preset1B ?? 171f / 255f);
+            UpdateIfChanged(m_Preset1ABinding, settings?.Preset1A ?? 0.5f);
+            UpdateIfChanged(m_Preset1FillABinding, settings?.Preset1FillA ?? 0f);
+            UpdateIfChanged(m_Preset2RBinding, settings?.Preset2R ?? 0.25f);
+            UpdateIfChanged(m_Preset2GBinding, settings?.Preset2G ?? 0.15f);
+            UpdateIfChanged(m_Preset2BBinding, settings?.Preset2B ?? 0.25f);
+            UpdateIfChanged(m_Preset2ABinding, settings?.Preset2A ?? 0.5f);
+            UpdateIfChanged(m_Preset2FillABinding, settings?.Preset2FillA ?? 0f);
+            UpdateIfChanged(m_Preset1ActiveBinding, IsPresetActive(1));
+            UpdateIfChanged(m_Preset2ActiveBinding, IsPresetActive(2));
         }
 
         private static void UpdateIfChanged<T>(ValueBinding<T> binding, T value)
@@ -232,6 +336,35 @@ namespace HoverPower.UI
                     settings.OutlineA,
                     settings.FillA);
         }
+
+        // True when the live swatch exactly matches what's stored in that slot.
+        private static bool IsPresetActive(int slot)
+        {
+            HoverPowerSettings? s = Mod.Settings;
+            if (s == null) return false;
+
+            if (slot == 1)
+            {
+                return ApproxEqual(s.OutlineR, s.Preset1R)
+                    && ApproxEqual(s.OutlineG, s.Preset1G)
+                    && ApproxEqual(s.OutlineB, s.Preset1B)
+                    && ApproxEqual(s.OutlineA, s.Preset1A)
+                    && ApproxEqual(s.FillA, s.Preset1FillA);
+            }
+
+            if (slot == 2)
+            {
+                return ApproxEqual(s.OutlineR, s.Preset2R)
+                    && ApproxEqual(s.OutlineG, s.Preset2G)
+                    && ApproxEqual(s.OutlineB, s.Preset2B)
+                    && ApproxEqual(s.OutlineA, s.Preset2A)
+                    && ApproxEqual(s.FillA, s.Preset2FillA);
+            }
+
+            return false;
+        }
+
+        private static bool ApproxEqual(float a, float b) => Math.Abs(a - b) < 0.0005f;
 
         private void InitializeKeybindActions()
         {

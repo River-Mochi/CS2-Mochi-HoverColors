@@ -4,7 +4,7 @@
 //   - Short draggable title bar with info tooltip, title, close button, and backup grip
 //   - Outline row: icon + vanilla ColorField swatch launcher
 //   - Fill / Guidelines rows: icon-led compact sliders with percent readouts
-//   - Preset row: compact slot buttons + icon reset
+//   - Preset row: ➀ ➁ slots (tap = apply, hold 500ms = save current color into slot)
 
 import React from "react";
 import { Button, Tooltip } from "cs2/ui";
@@ -17,14 +17,15 @@ import surfaceIconSrc from "../images/Districts02.svg";
 import fillIconSrc from "../images/MainElements-Fill2.svg";
 import outlineIconSrc from "../images/MainElements.svg";
 import guidelinesIconSrc from "../images/GuideLines4.svg";
-import resetIconSrc from "../images/Reset_Button2.svg";
 import closeIconSrc from "../images/Close.svg";
 import locale from "../../L10n/lang/en-US.json";
 import styles from "./MochiColorPickerPanel.module.scss";
 
 const CHANNEL = "HoverPower";
+const PRESET_HOLD_MS = 500; // hold duration to save into a slot
 type LocaleKey = keyof typeof locale;
 
+// Live color bindings
 const outlineR$ = bindValue<number>(CHANNEL, "OutlineR", 0.502);
 const outlineG$ = bindValue<number>(CHANNEL, "OutlineG", 0.869);
 const outlineB$ = bindValue<number>(CHANNEL, "OutlineB", 1);
@@ -34,24 +35,19 @@ const guidelineOpacity$ = bindValue<number>(CHANNEL, "GuidelineOpacityPercent", 
 const surfaceToolAreasSuppressed$ = bindValue<boolean>(CHANNEL, "SurfaceToolAreasSuppressed", false);
 const vanillaOutlineActive$ = bindValue<boolean>(CHANNEL, "VanillaOutlineActive", false);
 
-// Gentle neutral preset for Mochi's preferred subtle highlight.
-const PRESET_MOCHI_GRAY_OUTLINE: Color = { r: 140 / 255, g: 140 / 255, b: 171 / 255, a: 0.5 };
-const PRESET_MOCHI_GRAY_FILL_A = 0;
-
-// Purple-gray test preset inspired by yenyang's highlight experiments.
-const PRESET_YENYANG_OUTLINE: Color = { r: 0.25, g: 0.15, b: 0.25, a: 0.5 };
-const PRESET_YENYANG_FILL_A = 0;
-
-const COLOR_EPSILON = 0.0005;
-
-const approximatelyEqual = (left: number, right: number) => Math.abs(left - right) < COLOR_EPSILON;
-
-const matchesPreset = (current: Color, currentFillA: number, preset: Color, presetFillA: number) =>
-    approximatelyEqual(current.r, preset.r)
-    && approximatelyEqual(current.g, preset.g)
-    && approximatelyEqual(current.b, preset.b)
-    && approximatelyEqual(current.a, preset.a)
-    && approximatelyEqual(currentFillA, presetFillA);
+// Preset stored-color bindings (read-only — write happens via SavePreset trigger)
+const preset1R$ = bindValue<number>(CHANNEL, "Preset1R", 140 / 255);
+const preset1G$ = bindValue<number>(CHANNEL, "Preset1G", 140 / 255);
+const preset1B$ = bindValue<number>(CHANNEL, "Preset1B", 171 / 255);
+const preset1A$ = bindValue<number>(CHANNEL, "Preset1A", 0.5);
+const preset1FillA$ = bindValue<number>(CHANNEL, "Preset1FillA", 0);
+const preset2R$ = bindValue<number>(CHANNEL, "Preset2R", 0.25);
+const preset2G$ = bindValue<number>(CHANNEL, "Preset2G", 0.15);
+const preset2B$ = bindValue<number>(CHANNEL, "Preset2B", 0.25);
+const preset2A$ = bindValue<number>(CHANNEL, "Preset2A", 0.5);
+const preset2FillA$ = bindValue<number>(CHANNEL, "Preset2FillA", 0);
+const preset1Active$ = bindValue<boolean>(CHANNEL, "Preset1Active", false);
+const preset2Active$ = bindValue<boolean>(CHANNEL, "Preset2Active", false);
 
 export const MochiColorPickerPanel = () => {
     const boundOutline: Color = {
@@ -64,6 +60,13 @@ export const MochiColorPickerPanel = () => {
     const boundGuideline = useValue(guidelineOpacity$);
     const surfaceToolAreasSuppressed = useValue(surfaceToolAreasSuppressed$);
     const vanillaOutlineActive = useValue(vanillaOutlineActive$);
+    const preset1Active = useValue(preset1Active$);
+    const preset2Active = useValue(preset2Active$);
+
+    // Stored slot colors for swatch dot previews
+    const p1: Color = { r: useValue(preset1R$), g: useValue(preset1G$), b: useValue(preset1B$), a: useValue(preset1A$) };
+    const p2: Color = { r: useValue(preset2R$), g: useValue(preset2G$), b: useValue(preset2B$), a: useValue(preset2A$) };
+
     const { translate } = useLocalization();
     const text = React.useMemo(() => {
         const l = (key: LocaleKey) => translate(key, locale[key]) ?? locale[key];
@@ -78,11 +81,11 @@ export const MochiColorPickerPanel = () => {
             tooltipOutlineSwatch: l("HoverPower.UI.Tooltip.OutlineSwatch"),
             tooltipPreset1: l("HoverPower.UI.Tooltip.Preset1"),
             tooltipPreset2: l("HoverPower.UI.Tooltip.Preset2"),
-            tooltipReset: l("HoverPower.UI.Tooltip.Reset"),
             tooltipResetFill: l("HoverPower.UI.Tooltip.ResetFill"),
             tooltipResetGuidelines: l("HoverPower.UI.Tooltip.ResetGuidelines"),
             tooltipResetOutline: l("HoverPower.UI.Tooltip.ResetOutline"),
             tooltipSurfaceToggle: l("HoverPower.UI.Tooltip.SurfaceToggle"),
+            tooltipVanillaReset: l("HoverPower.UI.Tooltip.VanillaReset"),
         };
     }, [translate]);
 
@@ -92,78 +95,56 @@ export const MochiColorPickerPanel = () => {
     const [panelOffset, setPanelOffset] = React.useState({ x: 0, y: 0 });
     const [panelDragging, setPanelDragging] = React.useState(false);
     const [colorPickerDirection, setColorPickerDirection] = React.useState<"up" | "down">("down");
+
+    // Preset hold-to-save state: which slot is being held + animated progress 0..1
+    const [holdSlot, setHoldSlot] = React.useState<0 | 1 | 2>(0);
+    const [holdProgress, setHoldProgress] = React.useState(0);
+    const holdTimerRef = React.useRef<number | null>(null);
+    const holdStartRef = React.useRef<number>(0);
+    const holdRafRef = React.useRef<number | null>(null);
+
     const outlineSwatchRef = React.useRef<HTMLDivElement | null>(null);
     const panelElementRef = React.useRef<HTMLDivElement | null>(null);
     const panelDragFrameRef = React.useRef<number | null>(null);
     const panelDragPendingOffsetRef = React.useRef(panelOffset);
     const panelDragRef = React.useRef<{
-        pointerX: number;
-        pointerY: number;
-        originX: number;
-        originY: number;
-        originLeft: number;
-        originTop: number;
-        originWidth: number;
-        originHeight: number;
+        pointerX: number; pointerY: number;
+        originX: number; originY: number;
+        originLeft: number; originTop: number;
+        originWidth: number; originHeight: number;
     } | null>(null);
 
-    React.useEffect(() => {
-        setOutline(boundOutline);
-    }, [boundOutline.r, boundOutline.g, boundOutline.b, boundOutline.a]);
+    React.useEffect(() => { setOutline(boundOutline); },
+        [boundOutline.r, boundOutline.g, boundOutline.b, boundOutline.a]);
+    React.useEffect(() => { setFillA(boundFillA); }, [boundFillA]);
+    React.useEffect(() => { setGuidelineOpacity(boundGuideline); }, [boundGuideline]);
 
+    // Panel drag
     React.useEffect(() => {
-        setFillA(boundFillA);
-    }, [boundFillA]);
-
-    React.useEffect(() => {
-        setGuidelineOpacity(boundGuideline);
-    }, [boundGuideline]);
-
-    React.useEffect(() => {
-        if (!panelDragging) {
-            return;
-        }
-
+        if (!panelDragging) return;
         const handleMouseMove = (event: MouseEvent) => {
-            const dragState = panelDragRef.current;
-            if (dragState == null) {
-                return;
-            }
-
-            const deltaX = event.clientX - dragState.pointerX;
-            const deltaY = event.clientY - dragState.pointerY;
-            let nextX = dragState.originX + deltaX;
-            let nextY = dragState.originY + deltaY;
-
-            // Keep the panel inside the viewport, especially on the left where the
-            // vanilla ColorField popup anchors to the swatch and can otherwise start off-screen.
-            const nextLeft = dragState.originLeft + deltaX;
-            const nextTop = dragState.originTop + deltaY;
-            const nextRight = nextLeft + dragState.originWidth;
-            const nextBottom = nextTop + dragState.originHeight;
-            if (nextLeft < 0) {
-                nextX -= nextLeft;
-            }
-            if (nextTop < 0) {
-                nextY -= nextTop;
-            }
-            if (nextRight > window.innerWidth) {
-                nextX -= nextRight - window.innerWidth;
-            }
-            if (nextBottom > window.innerHeight) {
-                nextY -= nextBottom - window.innerHeight;
-            }
-
-            panelDragPendingOffsetRef.current = { x: nextX, y: nextY };
+            const d = panelDragRef.current;
+            if (d == null) return;
+            const dx = event.clientX - d.pointerX;
+            const dy = event.clientY - d.pointerY;
+            let nx = d.originX + dx;
+            let ny = d.originY + dy;
+            const nl = d.originLeft + dx;
+            const nt = d.originTop + dy;
+            const nr = nl + d.originWidth;
+            const nb = nt + d.originHeight;
+            if (nl < 0) nx -= nl;
+            if (nt < 0) ny -= nt;
+            if (nr > window.innerWidth) nx -= nr - window.innerWidth;
+            if (nb > window.innerHeight) ny -= nb - window.innerHeight;
+            panelDragPendingOffsetRef.current = { x: nx, y: ny };
             if (panelDragFrameRef.current == null) {
                 panelDragFrameRef.current = window.requestAnimationFrame(() => {
                     panelDragFrameRef.current = null;
-                    // Keep React as the owner of the DOM; rAF only limits mousemove churn.
                     setPanelOffset(panelDragPendingOffsetRef.current);
                 });
             }
         };
-
         const handleMouseUp = () => {
             if (panelDragFrameRef.current != null) {
                 window.cancelAnimationFrame(panelDragFrameRef.current);
@@ -173,60 +154,86 @@ export const MochiColorPickerPanel = () => {
             setPanelDragging(false);
             setPanelOffset(panelDragPendingOffsetRef.current);
         };
-
         window.addEventListener("mousemove", handleMouseMove);
         window.addEventListener("mouseup", handleMouseUp);
-
         return () => {
             window.removeEventListener("mousemove", handleMouseMove);
             window.removeEventListener("mouseup", handleMouseUp);
         };
     }, [panelDragging]);
 
+    // Live color handlers
     const handleOutlineChange = (value: Color) => {
         setOutline(value);
         trigger(CHANNEL, "SetOutlineColor", value.r, value.g, value.b, value.a);
     };
-
-    const handleFillAChange = (sliderValue: number) => {
-        const value = Math.max(0, Math.min(1, sliderValue));
+    const handleFillAChange = (v: number) => {
+        const value = Math.max(0, Math.min(1, v));
         setFillA(value);
         trigger(CHANNEL, "SetFillAlpha", value);
     };
-
-    const handleGuidelineChange = (percent: number) => {
-        const value = Math.max(0, Math.min(100, Math.round(percent / 5) * 5));
+    const handleGuidelineChange = (v: number) => {
+        const value = Math.max(0, Math.min(100, Math.round(v / 5) * 5));
         setGuidelineOpacity(value);
         trigger(CHANNEL, "SetGuidelineOpacity", value);
     };
-
-    const applyPreset = (outlineColor: Color, fillAlpha: number) => {
-        setOutline(outlineColor);
-        setFillA(fillAlpha);
-        trigger(CHANNEL, "SetOutlineColor", outlineColor.r, outlineColor.g, outlineColor.b, outlineColor.a);
-        trigger(CHANNEL, "SetFillAlpha", fillAlpha);
-    };
-
-    const handleSet1 = () => applyPreset(PRESET_MOCHI_GRAY_OUTLINE, PRESET_MOCHI_GRAY_FILL_A);
-    const handleSet2 = () => applyPreset(PRESET_YENYANG_OUTLINE, PRESET_YENYANG_FILL_A);
-    const handleReset = () => trigger(CHANNEL, "ResetToVanilla");
     const handleClosePanel = () => trigger(CHANNEL, "SetPanelOpen", false);
     const handleResetOutline = () => trigger(CHANNEL, "ResetOutlineToVanilla");
     const handleResetFill = () => handleFillAChange(0);
     const handleResetGuidelines = () => handleGuidelineChange(40);
     const handleToggleSurfaceToolAreas = () => trigger(CHANNEL, "ToggleSurfaceToolAreas");
-    const preset1Active = matchesPreset(outline, fillA, PRESET_MOCHI_GRAY_OUTLINE, PRESET_MOCHI_GRAY_FILL_A);
-    const preset2Active = matchesPreset(outline, fillA, PRESET_YENYANG_OUTLINE, PRESET_YENYANG_FILL_A);
+    const handleVanillaReset = () => trigger(CHANNEL, "ResetToVanilla");
+
+    // Preset hold-to-save helpers
+    const cancelHold = React.useCallback(() => {
+        if (holdTimerRef.current != null) { clearTimeout(holdTimerRef.current); holdTimerRef.current = null; }
+        if (holdRafRef.current != null) { cancelAnimationFrame(holdRafRef.current); holdRafRef.current = null; }
+        setHoldSlot(0);
+        setHoldProgress(0);
+    }, []);
+
+    const handlePresetMouseDown = (slot: 1 | 2) => (e: React.MouseEvent) => {
+        e.preventDefault();
+        cancelHold();
+        holdStartRef.current = performance.now();
+        setHoldSlot(slot);
+        setHoldProgress(0);
+
+        // Animate fill bar while held
+        const tick = () => {
+            const p = Math.min((performance.now() - holdStartRef.current) / PRESET_HOLD_MS, 1);
+            setHoldProgress(p);
+            if (p < 1) holdRafRef.current = requestAnimationFrame(tick);
+        };
+        holdRafRef.current = requestAnimationFrame(tick);
+
+        holdTimerRef.current = window.setTimeout(() => {
+            holdTimerRef.current = null;
+            if (holdRafRef.current != null) { cancelAnimationFrame(holdRafRef.current); holdRafRef.current = null; }
+            // Save current live color into this slot
+            trigger(CHANNEL, "SavePreset", slot);
+            setHoldSlot(0);
+            setHoldProgress(0);
+        }, PRESET_HOLD_MS);
+    };
+
+    const handlePresetMouseUp = (slot: 1 | 2) => () => {
+        if (holdTimerRef.current != null) {
+            // Released before save threshold — tap: apply stored preset
+            clearTimeout(holdTimerRef.current);
+            holdTimerRef.current = null;
+            trigger(CHANNEL, "ApplyPreset", slot);
+        }
+        if (holdRafRef.current != null) { cancelAnimationFrame(holdRafRef.current); holdRafRef.current = null; }
+        setHoldSlot(0);
+        setHoldProgress(0);
+    };
 
     const updateColorPickerDirection = React.useCallback(() => {
         const swatch = outlineSwatchRef.current;
-        if (swatch == null) {
-            return;
-        }
-
+        if (swatch == null) return;
         const rect = swatch.getBoundingClientRect();
-        const swatchMiddleY = rect.top + rect.height / 2;
-        setColorPickerDirection(swatchMiddleY < window.innerHeight / 2 ? "down" : "up");
+        setColorPickerDirection(rect.top + rect.height / 2 < window.innerHeight / 2 ? "down" : "up");
     }, []);
 
     const handlePanelDragStart = (event: React.MouseEvent<HTMLDivElement>) => {
@@ -235,14 +242,10 @@ export const MochiColorPickerPanel = () => {
         const rect = panelElementRef.current?.getBoundingClientRect();
         panelDragPendingOffsetRef.current = panelOffset;
         panelDragRef.current = {
-            pointerX: event.clientX,
-            pointerY: event.clientY,
-            originX: panelOffset.x,
-            originY: panelOffset.y,
-            originLeft: rect?.left ?? 0,
-            originTop: rect?.top ?? 0,
-            originWidth: rect?.width ?? 0,
-            originHeight: rect?.height ?? 0,
+            pointerX: event.clientX, pointerY: event.clientY,
+            originX: panelOffset.x, originY: panelOffset.y,
+            originLeft: rect?.left ?? 0, originTop: rect?.top ?? 0,
+            originWidth: rect?.width ?? 0, originHeight: rect?.height ?? 0,
         };
         setPanelDragging(true);
     };
@@ -255,6 +258,11 @@ export const MochiColorPickerPanel = () => {
     const roundHighlightButtonTheme = resolver.roundHighlightButtonTheme;
     const outlineFieldClass = styles.outlineField;
     const closeButtonClass = `${roundHighlightButtonTheme["button"] ?? ""} ${styles.closeButton}`;
+
+    // Inline color dot showing what's stored in a preset slot
+    const slotDotStyle = (c: Color) => ({
+        backgroundColor: `rgba(${Math.round(c.r * 255)},${Math.round(c.g * 255)},${Math.round(c.b * 255)},${c.a.toFixed(2)})`,
+    });
 
     return (
         <div
@@ -293,10 +301,12 @@ export const MochiColorPickerPanel = () => {
                     </div>
 
                     <div className={styles.body}>
+                        {/* Outline row */}
                         <div className={`${styles.controlRow} ${styles.outlineRow}`}>
                             <Tooltip tooltip={text.tooltipResetOutline}>
                                 <button type="button" className={styles.controlIconButton} onClick={handleResetOutline}>
-                                    <img src={outlineIconSrc} className={styles.controlIcon} alt="" />
+                                    {/* opacity trick: 0.82 idle → 1 on hover/focus */}
+                                    <img src={outlineIconSrc} className={`${styles.controlIcon} ${styles.idleIcon}`} alt="" />
                                 </button>
                             </Tooltip>
                             <div className={`${styles.controlBody} ${styles.outlineControlBody}`}>
@@ -324,10 +334,11 @@ export const MochiColorPickerPanel = () => {
                             </div>
                         </div>
 
+                        {/* Fill row */}
                         <div className={styles.controlRow}>
                             <Tooltip tooltip={text.tooltipResetFill}>
                                 <button type="button" className={styles.controlIconButton} onClick={handleResetFill}>
-                                    <img src={fillIconSrc} className={styles.controlIcon} alt="" />
+                                    <img src={fillIconSrc} className={`${styles.controlIcon} ${styles.idleIcon}`} alt="" />
                                 </button>
                             </Tooltip>
                             <Tooltip tooltip={text.tooltipFillOpacity}>
@@ -350,9 +361,11 @@ export const MochiColorPickerPanel = () => {
                             </Tooltip>
                         </div>
 
+                        {/* Guidelines row */}
                         <div className={styles.controlRow}>
                             <Tooltip tooltip={text.tooltipResetGuidelines}>
                                 <button type="button" className={styles.controlIconButton} onClick={handleResetGuidelines}>
+                                    {/* idleIcon + guidelinesIcon: original opacity trick already on this icon */}
                                     <img src={guidelinesIconSrc} className={`${styles.controlIcon} ${styles.guidelinesIcon}`} alt="" />
                                 </button>
                             </Tooltip>
@@ -377,7 +390,9 @@ export const MochiColorPickerPanel = () => {
                         </div>
                     </div>
 
+                    {/* Bottom action bar */}
                     <div className={styles.actions}>
+                        {/* Left: surface toggle */}
                         <div className={styles.surfaceActions}>
                             <Tooltip tooltip={text.tooltipSurfaceToggle}>
                                 <button
@@ -389,32 +404,52 @@ export const MochiColorPickerPanel = () => {
                                 </button>
                             </Tooltip>
                         </div>
+
+                        {/* Right: preset slots + vanilla reset */}
                         <div className={styles.presetActions}>
+                            {/* Slot 1 — tap to apply, hold to save */}
                             <Tooltip tooltip={text.tooltipPreset1}>
                                 <button
                                     type="button"
                                     className={`${styles.actionButton} ${styles.presetButton} ${preset1Active ? styles.presetButtonActive : ""}`}
-                                    onClick={handleSet1}
+                                    onMouseDown={handlePresetMouseDown(1)}
+                                    onMouseUp={handlePresetMouseUp(1)}
+                                    onMouseLeave={cancelHold}
                                 >
-                                    <span className={styles.presetGlyph}>➀</span>
+                                    <span className={styles.presetDot} style={slotDotStyle(p1)} />
+                                    <span className={styles.presetGlyph}>①</span>
+                                    {/* Fill bar sweeps across the button while the player holds */}
+                                    {holdSlot === 1 && (
+                                        <span className={styles.holdBar} style={{ width: `${holdProgress * 100}%` }} />
+                                    )}
                                 </button>
                             </Tooltip>
+
+                            {/* Slot 2 */}
                             <Tooltip tooltip={text.tooltipPreset2}>
                                 <button
                                     type="button"
                                     className={`${styles.actionButton} ${styles.presetButton} ${preset2Active ? styles.presetButtonActive : ""}`}
-                                    onClick={handleSet2}
+                                    onMouseDown={handlePresetMouseDown(2)}
+                                    onMouseUp={handlePresetMouseUp(2)}
+                                    onMouseLeave={cancelHold}
                                 >
-                                    <span className={styles.presetGlyph}>➁</span>
+                                    <span className={styles.presetDot} style={slotDotStyle(p2)} />
+                                    <span className={styles.presetGlyph}>②</span>
+                                    {holdSlot === 2 && (
+                                        <span className={styles.holdBar} style={{ width: `${holdProgress * 100}%` }} />
+                                    )}
                                 </button>
                             </Tooltip>
-                            <Tooltip tooltip={text.tooltipReset}>
+
+                            {/* Vanilla reset (↺ symbol, no image needed) */}
+                            <Tooltip tooltip={text.tooltipVanillaReset}>
                                 <button
                                     type="button"
                                     className={`${styles.actionButton} ${styles.resetButton} ${vanillaOutlineActive ? styles.resetButtonActive : ""}`}
-                                    onClick={handleReset}
+                                    onClick={handleVanillaReset}
                                 >
-                                    <img src={resetIconSrc} className={styles.actionIcon} alt="" />
+                                    <span className={styles.vanillaResetGlyph}>↺</span>
                                 </button>
                             </Tooltip>
                         </div>

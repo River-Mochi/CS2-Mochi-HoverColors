@@ -184,15 +184,22 @@
     // Avoid CSS filter/drop-shadow here. Cohtml can make filters expensive over a live city view.
 }
 
-.guidelinesIcon {
-    transform: none;
+// Idle-opacity trick: white SVG appears light-gray at rest, white on hover/focus.
+// Applied to all three row icon buttons (Outline, Fill, Guidelines).
+// No second SVG, no CSS filter needed.
+.idleIcon {
     opacity: 0.82;
     transition: opacity 120ms ease-out;
 }
 
-.controlIconButton:hover .guidelinesIcon,
-.controlIconButton:focus-visible .guidelinesIcon {
+.controlIconButton:hover .idleIcon,
+.controlIconButton:focus-visible .idleIcon {
     opacity: 1;
+}
+
+// Guidelines icon keeps this class for any future per-icon tweaks (rotation etc.)
+.guidelinesIcon {
+    transform: none;
 }
 
 .controlBody {
@@ -207,28 +214,24 @@
 .outlineControlBody {
     justify-content: flex-start;
     box-sizing: border-box;
-    // Keep the swatch banner near the slider track without using nested percentage widths
-    // inside the vanilla ColorField. Cohtml gets expensive when vanilla internals use calc().
     padding-left: 10rem;
     padding-right: 0;
 }
 
+// Swatch shell: thin border, centered content, neutral dark bg so chosen color reads true.
 .outlineFieldShell {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    // Swatch frame: this is the clickable dark banner around the actual color preview.
-    // Keep it neutral so it does not bias the player's perception of the chosen color.
-    width: 156rem;
-    height: 28rem;
+    width: 152rem;
+    height: 26rem;
     box-sizing: border-box;
-    padding: 4rem 5rem;
-    // The shell is the black-ish banner; the actual ColorField is centered inside it.
-    margin-left: 0;
-    margin-right: 0;
-    border-radius: 8rem;
-    border: 1rem solid rgba(255, 255, 255, 0.18);
-    background-color: rgba(36, 54, 66, 0.58);
+    // Reduced from 4rem/5rem padding — keeps swatch centered with thinner frame feel.
+    padding: 3rem 4rem;
+    border-radius: 7rem;
+    // Thinner border than before (was effectively 2px due to high contrast).
+    border: 1rem solid rgba(255, 255, 255, 0.15);
+    background-color: rgba(28, 44, 54, 0.72);
     box-shadow: none;
     cursor: pointer;
     transition: background-color 120ms ease-out, border-color 120ms ease-out, box-shadow 120ms ease-out;
@@ -242,13 +245,14 @@
 }
 
 .outlineField {
-    width: 144rem !important;
+    width: 142rem !important;
     height: 18rem !important;
     display: block !important;
     overflow: hidden !important;
-    border-radius: 7rem !important;
+    border-radius: 6rem !important;
     box-shadow: none !important;
-    outline: 1rem solid rgba(240, 251, 255, 0.86);
+    // Subtle inner outline so color swatch has definition without a heavy black border.
+    outline: 1rem solid rgba(255, 255, 255, 0.22);
     outline-offset: -1rem;
     transition: outline-color 120ms ease-out !important;
 }
@@ -256,19 +260,19 @@
 .outlineFieldShell:hover .outlineField,
 .outlineFieldShell:focus-within .outlineField {
     box-shadow: none !important;
-    outline: 2rem solid #ffffff;
-    outline-offset: -2rem;
+    outline: 1rem solid rgba(255, 255, 255, 0.7);
+    outline-offset: -1rem;
 }
 
 .outlineField button {
-    width: 144rem !important;
+    width: 142rem !important;
     height: 18rem !important;
     padding: 0 !important;
     border: 0 !important;
-    border-radius: 7rem !important;
+    border-radius: 6rem !important;
     opacity: 1 !important;
     box-shadow: none !important;
-    outline: 1rem solid rgba(240, 251, 255, 0.86) !important;
+    outline: 1rem solid rgba(255, 255, 255, 0.22) !important;
     outline-offset: -1rem !important;
     background-color: transparent !important;
     cursor: pointer !important;
@@ -277,8 +281,8 @@
 .outlineFieldShell:hover .outlineField button,
 .outlineFieldShell:focus-within .outlineField button {
     box-shadow: none !important;
-    outline: 2rem solid #ffffff !important;
-    outline-offset: -2rem !important;
+    outline: 1rem solid rgba(255, 255, 255, 0.7) !important;
+    outline-offset: -1rem !important;
 }
 
 .sliderRow {
@@ -286,9 +290,6 @@
     display: flex;
     align-items: center;
     box-sizing: border-box;
-    // Slider spacing knobs:
-    // - padding-left keeps the slider from touching the icon button.
-    // - gap keeps the slider from touching the percent box.
     padding-left: 10rem;
     gap: 20rem;
 }
@@ -314,6 +315,11 @@
     line-height: 1;
 }
 
+.sliderRow .valueField {
+    // Percent right-edge alignment: make this more negative to shift % boxes right.
+    margin-right: -6rem;
+}
+
 .actions {
     display: flex;
     justify-content: space-between;
@@ -321,11 +327,6 @@
     gap: 0;
     padding: 6rem 8rem 22rem 8rem;
     border-top: 1rem solid rgba(255, 255, 255, 0.12);
-}
-
-.sliderRow .valueField {
-    // Percent right-edge alignment: make this more negative to shift % boxes right.
-    margin-right: -6rem;
 }
 
 .surfaceActions,
@@ -346,11 +347,10 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 5rem;
+    gap: 4rem;
     margin: 0;
     border-radius: 4rem;
     border: 1rem solid rgba(255, 255, 255, 0.35);
-    // Same neutral button color family as CityWatchdog.
     background-color: rgba(36, 54, 66, 0.58);
     background-image: none !important;
     box-shadow: none !important;
@@ -364,6 +364,9 @@
     appearance: none;
     outline: none;
     cursor: pointer;
+    // Needed for the holdBar absolute child
+    position: relative;
+    overflow: hidden;
     transition: background-color 120ms ease-out, border-color 120ms ease-out, box-shadow 120ms ease-out, color 120ms ease-out;
 
     &:hover,
@@ -377,16 +380,16 @@
 }
 
 .presetButton {
-    min-width: 36rem;
-    width: 36rem;
-    padding: 0;
+    // Wide enough for color dot + glyph side by side
+    min-width: 48rem;
+    width: 48rem;
+    padding: 0 5rem;
 }
 
 .surfaceButton {
     min-width: 36rem;
     width: 36rem;
     padding: 0;
-    position: relative;
 }
 
 .surfaceButton .actionIcon {
@@ -395,7 +398,6 @@
 }
 
 .surfaceButtonActive {
-    position: relative;
     border-color: rgba(84, 215, 255, 1);
     box-shadow: inset 0 0 0 1rem rgba(84, 215, 255, 0.35), 0 0 0 1rem rgba(84, 215, 255, 0.7) !important;
 }
@@ -418,31 +420,63 @@
     background-color: rgba(84, 215, 255, 1);
 }
 
+// Small circle showing the color stored in the preset slot.
+.presetDot {
+    width: 10rem;
+    height: 10rem;
+    border-radius: 50%;
+    flex: 0 0 10rem;
+    border: 1rem solid rgba(255, 255, 255, 0.4);
+    display: inline-block;
+    pointer-events: none;
+}
+
+.presetGlyph {
+    height: 20rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 16rem;
+    font-weight: 700;
+    line-height: 1;
+    pointer-events: none;
+}
+
+// Save-progress fill bar: sweeps left-to-right over the preset button while the player holds.
+.holdBar {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    background-color: rgba(84, 215, 255, 0.28);
+    pointer-events: none;
+    transition: none; // width is driven by rAF, no CSS transition needed
+}
+
 .actionIcon {
     width: 18rem;
     height: 18rem;
     display: block;
     object-fit: contain;
     pointer-events: none;
-    // Keep icons flat for performance; the button frame supplies enough contrast.
-}
-
-.presetGlyph {
-    min-width: 24rem;
-    height: 24rem;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    color: rgba(255, 255, 255, 1);
-    font-size: 20rem;
-    font-weight: 900;
-    line-height: 1;
 }
 
 .resetButton {
     min-width: 36rem;
     width: 36rem;
     padding: 0;
+}
+
+// ↺ symbol for the vanilla-reset button — no SVG needed.
+.vanillaResetGlyph {
+    font-size: 20rem;
+    line-height: 1;
+    color: rgba(255, 255, 255, 0.9);
+    pointer-events: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .dragGrip {

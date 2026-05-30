@@ -13,7 +13,7 @@
   "HoverPower.UI.Tooltip.ResetGuidelines": "Guidelines: click to reset to mod defaults. Both this slider + Options menu slider stay in sync.",
   "HoverPower.UI.Tooltip.GuidelinesOpacity": "Guidelines opacity. Below 15% is not advised because the guides may become hard to see.",
   "HoverPower.UI.Tooltip.SurfaceToggle": "Hide Surface tool boundary preview lines.\nDefault hotkey: L.",
-  "HoverPower.UI.Tooltip.Preset1": "Mochi's gray-purple preset.",
-  "HoverPower.UI.Tooltip.Preset2": "yenyang purple-gray preset.",
-  "HoverPower.UI.Tooltip.Reset": "Reset Outline back to game defaults."
+  "HoverPower.UI.Tooltip.Preset1": "Slot 1 — tap to apply, hold to overwrite with your current color.",
+  "HoverPower.UI.Tooltip.Preset2": "Slot 2 — tap to apply, hold to overwrite with your current color.",
+  "HoverPower.UI.Tooltip.VanillaReset": "Reset outline + fill back to game defaults (vanilla cyan blue)."
 }
