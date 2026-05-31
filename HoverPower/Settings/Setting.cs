@@ -74,8 +74,8 @@ namespace HoverPower.Settings
         [SettingsUIHidden]
         public float FillA { get; set; }
 
-        // District overlay fill color. Disabled by default so we do not touch vanilla/other-mod
-        // district prefabs until the player actually picks a color from the in-game panel.
+        // District overlay color. Disabled by default so we do not touch vanilla/other-mod
+        // district prefabs until the player picks a color from the in-game District picker.
         [SettingsUIHidden]
         public bool DistrictColorEnabled { get; set; }
 
@@ -130,6 +130,13 @@ namespace HoverPower.Settings
         [SettingsUIHidden]
         public float Preset2FillA { get; set; }
 
+        // Guideline opacity saved per-slot so the preset fully restores the panel state.
+        [SettingsUIHidden]
+        public int Preset1GuidelinePercent { get; set; }
+
+        [SettingsUIHidden]
+        public int Preset2GuidelinePercent { get; set; }
+
         // -----------------------------------------------------------------------
         // Actions tab — Tool color behavior
         // -----------------------------------------------------------------------
@@ -154,6 +161,10 @@ namespace HoverPower.Settings
         [SettingsUISection(Actions, KeyBindings)]
         [SettingsUIKeyboardBinding(BindingKeyboard.L, Mod.kToggleSurfaceToolAreasActionName)]
         public ProxyBinding ToggleSurfaceToolAreasBinding { get; set; }
+
+        [SettingsUISection(Actions, KeyBindings)]
+        [SettingsUIKeyboardBinding(BindingKeyboard.K, Mod.kTogglePresetActionName)]
+        public ProxyBinding TogglePresetBinding { get; set; }
 
         [SettingsUISlider(min = 0, max = 100, step = 5, scalarMultiplier = 1, unit = Unit.kPercentage)]
         [SettingsUISection(Actions, Guidelines)]
@@ -213,7 +224,7 @@ namespace HoverPower.Settings
             FillA = 0f;
 
             // Safe fallback for the District picker until DistrictColorSystem captures the authored
-            // default district prefab color. Not applied unless DistrictColorEnabled is true.
+            // default district prefab colors. Not applied unless DistrictColorEnabled is true.
             DistrictColorEnabled = false;
             DistrictR = 128f / 255f;
             DistrictG = 128f / 255f;
@@ -233,6 +244,8 @@ namespace HoverPower.Settings
             Preset2B = 0.25f;
             Preset2A = 0.5f;
             Preset2FillA = 0f;
+            Preset1GuidelinePercent = DefaultGuidelineOpacityPercent;
+            Preset2GuidelinePercent = DefaultGuidelineOpacityPercent;
 
             // Release default: help players see demolition/road targets even if their custom
             // alpha is very low, without changing their saved custom color.

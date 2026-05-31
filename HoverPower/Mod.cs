@@ -26,6 +26,7 @@ namespace HoverPower
         public const string ModTag = "[HP]";
         public const string kTogglePanelActionName = "TogglePanel";
         public const string kToggleSurfaceToolAreasActionName = "ToggleSurfaceToolAreas";
+        public const string kTogglePresetActionName = "TogglePreset";
 
         public static readonly string ModVersion =
             Assembly.GetExecutingAssembly().GetName().Version?.ToString(3) ?? "0.5.0";

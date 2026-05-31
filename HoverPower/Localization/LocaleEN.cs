@@ -74,15 +74,21 @@ namespace HoverPower.Localization
                 },
 
                 // Keybinds
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverPowerSettings.TogglePanelBinding)), "Toggle panel (H)" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverPowerSettings.TogglePanelBinding)), "Main panel open/close" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverPowerSettings.TogglePanelBinding)),
-                    "Keyboard shortcut to open / close the in-city Hover objects Color Panel." },
+                    "Hotkey shortcut to open / close the in-city Hover objects Color Panel." },
                 { m_Settings.GetBindingKeyLocaleID(Mod.kTogglePanelActionName), "Toggle Hover Power panel" },
 
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverPowerSettings.ToggleSurfaceToolAreasBinding)), "Toggle Surface tool lines (L)" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverPowerSettings.ToggleSurfaceToolAreasBinding)), "Toggle Surface tool previews on/off" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverPowerSettings.ToggleSurfaceToolAreasBinding)),
-                    "Keyboard shortcut to hide or restore active Surface tool boundary preview lines while placing surfaces." },
-                { m_Settings.GetBindingKeyLocaleID(Mod.kToggleSurfaceToolAreasActionName), "Toggle Surface tool lines" },
+                    "Hotkey shortcut to hide or restore active Surface tool boundary preview lines while placing surfaces." },
+                { m_Settings.GetBindingKeyLocaleID(Mod.kToggleSurfaceToolAreasActionName), "Toggle Surface tool lines on/off" },
+
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverPowerSettings.TogglePresetBinding)), "Toggle presets 1+2" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverPowerSettings.TogglePresetBinding)),
+                    "Hotkey shortcut to flip between preset slot 1 and slot 2." },
+                { m_Settings.GetBindingKeyLocaleID(Mod.kTogglePresetActionName),
+                    "Toggle between presets 1 and 2" },
 
                 // About — name + version
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverPowerSettings.NameText)), "Mod" },
@@ -96,10 +102,12 @@ namespace HoverPower.Localization
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverPowerSettings.OpenParadox)), "Open the author's Paradox Mods page." },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverPowerSettings.MochiDedicationText)),
-                    "In loving memory of Mochi.\n\n" +
-                    "This mod is dedicated to her. Mochi was a beloved dog, adopted at age 7, " +
-                    "and gave 13 years of love. This mod would not be possible without Mochi." },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverPowerSettings.MochiDedicationText)), string.Empty },
+                    "In loving memory of Mochi."
+                    },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverPowerSettings.MochiDedicationText)),
+                    "This mod is dedicated to Mochi. She was a beloved dog, adopted at age 7,\n" +
+                    "she gave 13 years of love and joy. This mod would not be possible without Mochi."
+                    },
             };
         }
 

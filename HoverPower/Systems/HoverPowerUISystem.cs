@@ -64,8 +64,14 @@ namespace HoverPower.UI
 
         // In-memory backup for TogglePresetDefaults (session-only, not persisted to .coc).
         private float m_BkP1R, m_BkP1G, m_BkP1B, m_BkP1A, m_BkP1FillA;
+        private int m_BkP1Guideline;
         private float m_BkP2R, m_BkP2G, m_BkP2B, m_BkP2A, m_BkP2FillA;
+        private int m_BkP2Guideline;
         private bool m_PresetBackupExists;
+
+        // K hotkey toggle: alternates between applying preset 1 and preset 2.
+        private ProxyAction? m_TogglePresetAction;
+        private int m_LastAppliedPreset = 1;
 
         protected override void OnCreate()
         {
@@ -199,6 +205,7 @@ namespace HoverPower.UI
                         settings.OutlineB = settings.Preset1B;
                         settings.OutlineA = settings.Preset1A;
                         settings.FillA = settings.Preset1FillA;
+                        settings.GuidelineOpacityPercent = settings.Preset1GuidelinePercent;
                     }
                     else if (slot == 2)
                     {
@@ -207,6 +214,7 @@ namespace HoverPower.UI
                         settings.OutlineB = settings.Preset2B;
                         settings.OutlineA = settings.Preset2A;
                         settings.FillA = settings.Preset2FillA;
+                        settings.GuidelineOpacityPercent = settings.Preset2GuidelinePercent;
                     }
 
                     settings.ApplyAndSave();
@@ -229,6 +237,7 @@ namespace HoverPower.UI
                         settings.Preset1B = settings.OutlineB;
                         settings.Preset1A = settings.OutlineA;
                         settings.Preset1FillA = settings.FillA;
+                        settings.Preset1GuidelinePercent = settings.GuidelineOpacityPercent;
                     }
                     else if (slot == 2)
                     {
@@ -237,6 +246,7 @@ namespace HoverPower.UI
                         settings.Preset2B = settings.OutlineB;
                         settings.Preset2A = settings.OutlineA;
                         settings.Preset2FillA = settings.FillA;
+                        settings.Preset2GuidelinePercent = settings.GuidelineOpacityPercent;
                     }
 
                     settings.ApplyAndSave();
@@ -259,23 +269,25 @@ namespace HoverPower.UI
                     {
                         // Save current player colors then apply defaults.
                         m_BkP1R = settings.Preset1R; m_BkP1G = settings.Preset1G; m_BkP1B = settings.Preset1B;
-                        m_BkP1A = settings.Preset1A; m_BkP1FillA = settings.Preset1FillA;
+                        m_BkP1A = settings.Preset1A; m_BkP1FillA = settings.Preset1FillA; m_BkP1Guideline = settings.Preset1GuidelinePercent;
                         m_BkP2R = settings.Preset2R; m_BkP2G = settings.Preset2G; m_BkP2B = settings.Preset2B;
-                        m_BkP2A = settings.Preset2A; m_BkP2FillA = settings.Preset2FillA;
+                        m_BkP2A = settings.Preset2A; m_BkP2FillA = settings.Preset2FillA; m_BkP2Guideline = settings.Preset2GuidelinePercent;
                         m_PresetBackupExists = true;
 
                         settings.Preset1R = DefaultPreset1R; settings.Preset1G = DefaultPreset1G; settings.Preset1B = DefaultPreset1B;
                         settings.Preset1A = DefaultPreset1A; settings.Preset1FillA = DefaultPreset1FillA;
+                        settings.Preset1GuidelinePercent = HoverPowerSettings.DefaultGuidelineOpacityPercent;
                         settings.Preset2R = DefaultPreset2R; settings.Preset2G = DefaultPreset2G; settings.Preset2B = DefaultPreset2B;
                         settings.Preset2A = DefaultPreset2A; settings.Preset2FillA = DefaultPreset2FillA;
+                        settings.Preset2GuidelinePercent = HoverPowerSettings.DefaultGuidelineOpacityPercent;
                     }
                     else if (m_PresetBackupExists)
                     {
                         // Restore backup.
                         settings.Preset1R = m_BkP1R; settings.Preset1G = m_BkP1G; settings.Preset1B = m_BkP1B;
-                        settings.Preset1A = m_BkP1A; settings.Preset1FillA = m_BkP1FillA;
+                        settings.Preset1A = m_BkP1A; settings.Preset1FillA = m_BkP1FillA; settings.Preset1GuidelinePercent = m_BkP1Guideline;
                         settings.Preset2R = m_BkP2R; settings.Preset2G = m_BkP2G; settings.Preset2B = m_BkP2B;
-                        settings.Preset2A = m_BkP2A; settings.Preset2FillA = m_BkP2FillA;
+                        settings.Preset2A = m_BkP2A; settings.Preset2FillA = m_BkP2FillA; settings.Preset2GuidelinePercent = m_BkP2Guideline;
                         m_PresetBackupExists = false;
                     }
                     // Already at defaults with no backup → no-op (nothing to restore).
@@ -311,6 +323,37 @@ namespace HoverPower.UI
             {
                 ToggleSurfaceToolAreas();
             }
+
+            // K toggles between preset slot 1 and slot 2.
+            if (m_TogglePresetAction?.WasReleasedThisFrame() == true)
+            {
+                m_LastAppliedPreset = (m_LastAppliedPreset == 1) ? 2 : 1;
+                ApplyPresetSlot(m_LastAppliedPreset);
+            }
+        }
+
+        private void ApplyPresetSlot(int slot)
+        {
+            HoverPowerSettings? settings = Mod.Settings;
+            if (settings == null) return;
+
+            if (slot == 1)
+            {
+                settings.OutlineR = settings.Preset1R; settings.OutlineG = settings.Preset1G;
+                settings.OutlineB = settings.Preset1B; settings.OutlineA = settings.Preset1A;
+                settings.FillA = settings.Preset1FillA;
+                settings.GuidelineOpacityPercent = settings.Preset1GuidelinePercent;
+            }
+            else
+            {
+                settings.OutlineR = settings.Preset2R; settings.OutlineG = settings.Preset2G;
+                settings.OutlineB = settings.Preset2B; settings.OutlineA = settings.Preset2A;
+                settings.FillA = settings.Preset2FillA;
+                settings.GuidelineOpacityPercent = settings.Preset2GuidelinePercent;
+            }
+
+            settings.ApplyAndSave();
+            SyncValueBindings();
         }
 
         private void RegisterValueBindings()
@@ -452,15 +495,18 @@ namespace HoverPower.UI
             return ApproxEqual(s.Preset1R, DefaultPreset1R) && ApproxEqual(s.Preset1G, DefaultPreset1G)
                 && ApproxEqual(s.Preset1B, DefaultPreset1B) && ApproxEqual(s.Preset1A, DefaultPreset1A)
                 && ApproxEqual(s.Preset1FillA, DefaultPreset1FillA)
+                && s.Preset1GuidelinePercent == HoverPowerSettings.DefaultGuidelineOpacityPercent
                 && ApproxEqual(s.Preset2R, DefaultPreset2R) && ApproxEqual(s.Preset2G, DefaultPreset2G)
                 && ApproxEqual(s.Preset2B, DefaultPreset2B) && ApproxEqual(s.Preset2A, DefaultPreset2A)
-                && ApproxEqual(s.Preset2FillA, DefaultPreset2FillA);
+                && ApproxEqual(s.Preset2FillA, DefaultPreset2FillA)
+                && s.Preset2GuidelinePercent == HoverPowerSettings.DefaultGuidelineOpacityPercent;
         }
 
         private void InitializeKeybindActions()
         {
             m_TogglePanelAction = EnableAction(Mod.kTogglePanelActionName);
             m_ToggleSurfaceToolAreasAction = EnableAction(Mod.kToggleSurfaceToolAreasActionName);
+            m_TogglePresetAction = EnableAction(Mod.kTogglePresetActionName);
         }
 
         private void RefreshKeybindActions()
@@ -473,6 +519,11 @@ namespace HoverPower.UI
             if (m_ToggleSurfaceToolAreasAction == null)
             {
                 m_ToggleSurfaceToolAreasAction = EnableAction(Mod.kToggleSurfaceToolAreasActionName);
+            }
+
+            if (m_TogglePresetAction == null)
+            {
+                m_TogglePresetAction = EnableAction(Mod.kTogglePresetActionName);
             }
         }
 

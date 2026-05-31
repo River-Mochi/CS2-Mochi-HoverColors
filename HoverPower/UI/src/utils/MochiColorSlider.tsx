@@ -1,3 +1,7 @@
+// File: UI/src/utils/MochiColorSlider.tsx
+// Purpose: Custom slider component used before the vanilla Slider was available via VanillaResolver.
+//   Kept for potential future use but the main panel now uses the vanilla Slider directly.
+
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import styles from './MochiColorSlider.module.scss';
 import { trigger } from 'cs2/api';

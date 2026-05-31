@@ -1,10 +1,10 @@
 // File: Systems/DistrictColorSystem.cs
-// Purpose: Applies the player's District overlay fill color/opacity to the vanilla District area prefab.
+// Purpose: Applies the player's District overlay color/opacity to the vanilla District area prefab.
 //
 // Why prefab data here:
 //   Districts are rendered through Game.Prefabs.AreaColorData on the District prefab entity.
-//   AreaBufferSystem reads that prefab color while rebuilding the overlay buffer, so we write
-//   the prefab-side fill colors and then mark live District area entities Updated.
+//   AreaBufferSystem reads those prefab fill + edge colors while rebuilding the overlay
+//   buffer, so we write prefab-side colors and then mark live District area entities Updated.
 
 namespace HoverPower.Systems
 {
@@ -26,8 +26,10 @@ namespace HoverPower.Systems
     public partial class DistrictColorSystem : GameSystemBase
     {
         private static readonly Color s_FallbackDistrictFill = new(128f / 255f, 128f / 255f, 128f / 255f, 64f / 255f);
+        private static readonly Color s_FallbackDistrictEdge = new(128f / 255f, 128f / 255f, 128f / 255f, 128f / 255f);
 
         public static Color CapturedDistrictFillColor { get; private set; } = s_FallbackDistrictFill;
+        public static Color CapturedDistrictEdgeColor { get; private set; } = s_FallbackDistrictEdge;
         public static bool HasCapturedDistrictDefaults { get; private set; }
 
         private PrefabSystem? m_PrefabSystem;
@@ -104,7 +106,7 @@ namespace HoverPower.Systems
                 return;
             }
 
-            ApplyDistrictFill(new Color(r, g, b, a));
+            ApplyDistrictColors(new Color(r, g, b, a));
             MarkDistrictAreasUpdated();
 
             m_LastEnabled = true;
@@ -136,12 +138,14 @@ namespace HoverPower.Systems
                 && prefabBase is AreaPrefab areaPrefab)
             {
                 CapturedDistrictFillColor = areaPrefab.m_Color;
+                CapturedDistrictEdgeColor = areaPrefab.m_EdgeColor;
                 HasCapturedDistrictDefaults = true;
             }
             else
             {
                 PrefabAreaColorData colorData = EntityManager.GetComponentData<PrefabAreaColorData>(prefabEntity);
                 CapturedDistrictFillColor = colorData.m_FillColor;
+                CapturedDistrictEdgeColor = colorData.m_EdgeColor;
                 HasCapturedDistrictDefaults = true;
             }
 
@@ -150,7 +154,9 @@ namespace HoverPower.Systems
                 m_CaptureLogged = true;
                 LogUtils.Info(() => $"{Mod.ModTag} Captured vanilla District fill color: " +
                     $"RGBA=({CapturedDistrictFillColor.r:F3}, {CapturedDistrictFillColor.g:F3}, " +
-                    $"{CapturedDistrictFillColor.b:F3}, {CapturedDistrictFillColor.a:F3})");
+                    $"{CapturedDistrictFillColor.b:F3}, {CapturedDistrictFillColor.a:F3}); edge " +
+                    $"RGBA=({CapturedDistrictEdgeColor.r:F3}, {CapturedDistrictEdgeColor.g:F3}, " +
+                    $"{CapturedDistrictEdgeColor.b:F3}, {CapturedDistrictEdgeColor.a:F3})");
             }
         }
 
@@ -170,7 +176,7 @@ namespace HoverPower.Systems
             m_SeededSettingsFromCapture = true;
         }
 
-        private void ApplyDistrictFill(Color color)
+        private void ApplyDistrictColors(Color color)
         {
             Color32 color32 = color;
 
@@ -182,11 +188,12 @@ namespace HoverPower.Systems
                 Entity prefabEntity = entities[i];
                 PrefabAreaColorData data = EntityManager.GetComponentData<PrefabAreaColorData>(prefabEntity);
 
-                // Keep edge colors vanilla/other-mod controlled for now. The requested feature is
-                // District overlay fill color/opacity, while outline/border behavior already has
-                // its own controls through the hover outline swatch.
+                // AreaBufferSystem consumes all four colors. Driving edge + selection edge here
+                // is what controls the persistent District boundary line shown while editing.
                 data.m_FillColor = color32;
+                data.m_EdgeColor = color32;
                 data.m_SelectionFillColor = color32;
+                data.m_SelectionEdgeColor = color32;
                 EntityManager.SetComponentData(prefabEntity, data);
             }
         }
