@@ -1,5 +1,5 @@
 // File: Mod.cs
-// Purpose: Mod entrypoint; registers settings, schedules systems, and configures the mod logger.
+// Purpose: Mod entrypoint; registers settings, localization, systems, keybindings, and the dedicated mod log.
 
 namespace HoverColors
 {
@@ -38,6 +38,21 @@ namespace HoverColors
 
         private static bool s_BannerLogged;
 
+        private static readonly string[] s_SupportedLocaleIds =
+        {
+            "en-US",
+            "fr-FR",
+            "es-ES",
+            "de-DE",
+            "it-IT",
+            "ja-JP",
+            "ko-KR",
+            "pl-PL",
+            "pt-BR",
+            "zh-HANS",
+            "zh-HANT",
+        };
+
         [System.Diagnostics.Conditional("DEBUG")]
         internal static void DebugLog(string message)
         {
@@ -64,6 +79,9 @@ namespace HoverColors
             HoverColorsSettings setting = new HoverColorsSettings(this);
             Settings = setting;
 
+            // Register localization sources before settings/options UI reads the dictionary so labels resolve.
+            RegisterLocaleSources(setting);
+
             try
             {
                 AssetDatabase.global.LoadSettings(ModId, setting, new HoverColorsSettings(this));
@@ -81,9 +99,6 @@ namespace HoverColors
             {
                 LogUtils.Error(() => $"{ModTag} Options UI registration failed: {ex.GetType().Name}: {ex.Message}", ex);
             }
-
-            // Register localization sources before the Options UI reads the dictionary so labels resolve.
-            AddLocaleSource("en-US", new LocaleEN(setting));
 
             try
             {
@@ -131,6 +146,35 @@ namespace HoverColors
                 LogUtils.Warn(() => $"{ModTag} AddLocaleSource('{localeId}') failed: {ex.GetType().Name}: {ex.Message}", ex);
                 return false;
             }
+        }
+
+        private static void RegisterLocaleSources(HoverColorsSettings setting)
+        {
+            foreach (string localeId in s_SupportedLocaleIds)
+            {
+                AddLocaleSource(localeId, CreateLocaleSource(localeId, setting));
+            }
+        }
+
+        private static IDictionarySource CreateLocaleSource(string localeId, HoverColorsSettings setting)
+        {
+            // Translation files/classes can replace these cases one by one.
+            // Until then, English is the safe fallback for every registered CS2 locale.
+            return localeId switch
+            {
+                "en-US" => new LocaleEN(setting),
+                "fr-FR" => new LocaleEN(setting),
+                "es-ES" => new LocaleEN(setting),
+                "de-DE" => new LocaleEN(setting),
+                "it-IT" => new LocaleEN(setting),
+                "ja-JP" => new LocaleEN(setting),
+                "ko-KR" => new LocaleEN(setting),
+                "pl-PL" => new LocaleEN(setting),
+                "pt-BR" => new LocaleEN(setting),
+                "zh-HANS" => new LocaleEN(setting),
+                "zh-HANT" => new LocaleEN(setting),
+                _ => new LocaleEN(setting),
+            };
         }
 
         public void OnDispose()

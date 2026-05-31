@@ -61,10 +61,9 @@ namespace HoverColors.Localization
                 { m_Settings.GetToolColorModeLocaleID("Custom"), "3. Keep my custom color" },
 
                 // Guidelines opacity slider
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.GuidelineOpacityPercent)), "Guidelines opacity" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.GuidelineOpacityPercent)), "Guidelines opacity (alpha)" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.GuidelineOpacityPercent)),
-                    "Scales the in-game guideline overlay (the colored arrows/lines shown while placing roads, " +
-                    "zones, props, etc.) relative to the game's defaults.\n\n" +
+                    "Scales the in-game guidelines (the colored arrows/lines shown while placing roads, props, etc.)\n\n" +
                     "**100%** keeps vanilla default look.\n" +
                     "**Lower** makes guidelines more transparent.\n" +
                     "**0%** hides them entirely - <Not recommended>.\n" +           
