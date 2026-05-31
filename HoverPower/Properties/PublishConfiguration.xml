@@ -9,27 +9,31 @@
 	<!--LongDescription Value="This is a long description" /-->
 	<LongDescription>
 
-        - Change the ubiquitous Blue outline color that appears on everything in the game
-        - Any object you can hover over can change: all buildings, cars, cims, trees and more!
-        - Guidelines - opacity slider
-        - Surfaces: turn off the preview layers while in Surface tool so you can see the actual colors without a cloudy preview layer on top.
-        - District tool: change color of district borders and overlays or turn them off completely.
+- Change the ubiquitous Blue outline color that appears on everything in the game
+- Any object you can hover over can change: all buildings, cars, cims, trees and more!
+- Guidelines - opacity slider
+- Surfaces: turn off the preview layers while in Surface tool so you can see the actual ground surface colors without a cloudy preview layer on top.
+- District tool: change color of district borders and overlays or turn them off completely.
 
-        - If you can hover over it then you can probably change it :)
+- If you can hover over it then you can probably change it :)
 
-        ### Feedback  and Support:
-        Feedback is welcome through GitHub or Discord links on the right.
-        If you like free mods, give a Like :)
+- Save safe, safe to remove anytime
+- No known compatibility issues. No Harmony patches.
 
-        ### Credits
-        River-Mochi - modder/maintainer
-        Flashbond - collab, tech feedback, testing
-        yenyang - collab, tech feedback, testing
-        StarQ - tech feedback, testing
-        gagaxm - feature idea, testing
-        Dx, Necko1996, Noel, BugsyG - testing
 
-    </LongDescription>
+### Feedback  and Support:
+Feedback is welcome through GitHub or Discord links on the right.
+If you like free mods, give a Like :)
+
+### Credits
+River-Mochi - modder/maintainer
+Flashbond - collab, tech feedback, testing
+yenyang - collab, tech feedback, testing
+StarQ - tech feedback, testing
+gagaxm - feature idea, testing
+Dx, Necko1996, Noel, BugsyG - testing
+
+</LongDescription>
 	<!--Thumbnail-->
 	<Thumbnail Value="Properties/Thumbnail.png" />
 	<!--Screenshot, can be set multiple times-->

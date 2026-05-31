@@ -40,7 +40,7 @@ namespace HoverColors.Settings
 
         // Centralised default for the guideline opacity slider.
         // Vanilla CS2 is 100; lower = more transparent. Change only here — C# UISystem and TSX both read this.
-        public const int DefaultGuidelineOpacityPercent = 30;
+        public const int DefaultGuidelineOpacityPercent = 40;
 
         // Player's personal guideline default (tap on guideline icon applies this; hold overwrites it).
         // Starts at DefaultGuidelineOpacityPercent; persists to .coc so it survives game restarts.
@@ -100,8 +100,7 @@ namespace HoverColors.Settings
         // Not decorated for Options UI. Each slot stores the same five values as the
         // live swatch (Outline RGBA + FillA). The panel's Save button overwrites a slot
         // with the current live color; the slot button applies it back. Persisted in the
-        // .coc like the live values AND mirrored to ModsData JSON (see PresetStore) so a
-        // corrupted .coc can be repaired from the backup on next load.
+        // .coc like the live values, so the in-city panel restores them after a reboot.
         // -----------------------------------------------------------------------
 
         [SettingsUIHidden]

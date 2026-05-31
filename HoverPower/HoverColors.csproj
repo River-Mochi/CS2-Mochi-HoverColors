@@ -38,8 +38,8 @@
         <PublishConfigScript>$(MSBuildProjectDirectory)\Scripts\Update-PublishConfig.ps1</PublishConfigScript>
 
         <!-- Configurable npm timeouts (ms). Prevents "looks stuck forever" without a hard cap on success. -->
-        <MMHNpmCiTimeoutMs Condition="'$(MMHNpmCiTimeoutMs)'==''">450000</MMHNpmCiTimeoutMs>
-        <MMHNpmBuildTimeoutMs Condition="'$(MMHNpmBuildTimeoutMs)'==''">300000</MMHNpmBuildTimeoutMs>
+        <HCNpmCiTimeoutMs Condition="'$(HCNpmCiTimeoutMs)'==''">450000</HCNpmCiTimeoutMs>
+        <HCNpmBuildTimeoutMs Condition="'$(HCNpmBuildTimeoutMs)'==''">300000</HCNpmBuildTimeoutMs>
     </PropertyGroup>
 
     <ItemGroup>
@@ -150,7 +150,7 @@
 
         <Message Text="$(AssemblyTitle) UI: npm ci (first-time or lockfile changed)..." Importance="high" />
 
-        <Exec Command="npm ci" WorkingDirectory="$(ProjectDir)UI" IgnoreExitCode="true" Timeout="$(MMHNpmCiTimeoutMs)">
+        <Exec Command="npm ci" WorkingDirectory="$(ProjectDir)UI" IgnoreExitCode="true" Timeout="$(HCNpmCiTimeoutMs)">
             <Output TaskParameter="ExitCode" PropertyName="NpmCiExit" />
         </Exec>
 
@@ -166,7 +166,7 @@
 
         <Message Text="$(AssemblyTitle) UI: npm run build ($(Configuration))..." Importance="high" />
 
-        <Exec Command="npm run build" WorkingDirectory="$(ProjectDir)UI" IgnoreExitCode="true" Timeout="$(MMHNpmBuildTimeoutMs)">
+        <Exec Command="npm run build" WorkingDirectory="$(ProjectDir)UI" IgnoreExitCode="true" Timeout="$(HCNpmBuildTimeoutMs)">
             <Output TaskParameter="ExitCode" PropertyName="NpmBuildExit" />
         </Exec>
 

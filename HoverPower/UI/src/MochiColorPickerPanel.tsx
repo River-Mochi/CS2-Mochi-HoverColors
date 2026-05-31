@@ -9,7 +9,7 @@
 import React from "react";
 import { Button, Tooltip } from "cs2/ui";
 import { Color, tool, toolbar } from "cs2/bindings";
-import { bindValue, trigger, useValue } from "cs2/api";
+import { bindValue, trigger, useMapValue, useValue } from "cs2/api";
 import { useLocalization } from "cs2/l10n";
 import { VanillaComponentResolver } from "./utils/vanilla/VanillaComponentResolver";
 import infoIconSrc from "../images/AdvisorInfoViewWhite.svg";
@@ -37,10 +37,16 @@ const districtR$ = bindValue<number>(CHANNEL, "DistrictR", 128 / 255);
 const districtG$ = bindValue<number>(CHANNEL, "DistrictG", 128 / 255);
 const districtB$ = bindValue<number>(CHANNEL, "DistrictB", 128 / 255);
 const districtA$ = bindValue<number>(CHANNEL, "DistrictA", 64 / 255);
-const guidelineOpacity$ = bindValue<number>(CHANNEL, "GuidelineOpacityPercent", 30);
+const guidelineOpacity$ = bindValue<number>(CHANNEL, "GuidelineOpacityPercent", 40);
 const surfaceToolAreasSuppressed$ = bindValue<boolean>(CHANNEL, "SurfaceToolAreasSuppressed", false);
 const vanillaOutlineActive$ = bindValue<boolean>(CHANNEL, "VanillaOutlineActive", false);
 const AREA_MENU_NAME_TOKENS = ["SERVICES.NAMES[AREAS]", "SERVICES.NAME[AREAS]", "AREAS"];
+const DISTRICT_AREA_NAME_TOKENS = [
+    "ASSETS.NAME[DISTRICT AREA]",
+    "ASSETS.DESCRIPTION[DISTRICT AREA]",
+    "DISTRICT AREA",
+    "DISTRICT",
+];
 
 // Preset stored-color bindings
 const preset1R$ = bindValue<number>(CHANNEL, "Preset1R", 140 / 255);
@@ -123,6 +129,19 @@ export const MochiColorPickerPanel = () => {
     const preset1Active = useValue(preset1Active$);
     const preset2Active = useValue(preset2Active$);
     const toolbarGroups = useValue(toolbar.toolbarGroups$);
+    const normalizeToolbarName = React.useCallback((value: string) => value.toUpperCase(), []);
+    const areasMenu = React.useMemo(() => (
+        toolbarGroups
+            ?.flatMap(group => group.children ?? [])
+            .find(item =>
+                item.type === toolbar.ToolbarItemType.menu
+                && AREA_MENU_NAME_TOKENS.some(token => normalizeToolbarName(item.name).includes(token)))
+    ), [normalizeToolbarName, toolbarGroups]);
+    const areasCategories = useMapValue(toolbar.assetCategories$, areasMenu?.entity);
+    const districtCategory = React.useMemo(() => (
+        areasCategories
+            ?.find(item => DISTRICT_AREA_NAME_TOKENS.some(token => normalizeToolbarName(item.name).includes(token)))
+    ), [areasCategories, normalizeToolbarName]);
 
     // Stored slot colors — used for the corner dot badge on each preset button.
     // Just plain CSS inline style; not a special React feature.
@@ -418,28 +437,29 @@ export const MochiColorPickerPanel = () => {
             a: { index: number; version: number } | null | undefined,
             b: { index: number; version: number } | null | undefined,
         ) => a != null && b != null && a.index === b.index && a.version === b.version;
-        const normalize = (value: string) => value.toUpperCase();
-        const areasMenu = toolbarGroups
-            ?.flatMap(group => group.children ?? [])
-            .find(item =>
-                item.type === toolbar.ToolbarItemType.menu
-                && AREA_MENU_NAME_TOKENS.some(token => normalize(item.name).includes(token)));
 
         if (areaPanelOpenTimerRef.current != null) {
             clearTimeout(areaPanelOpenTimerRef.current);
         }
 
         // Defer until after the picker click finishes. Vanilla toolbar menu actions can
-        // behave like toggles, so use the live binding value at execution time to avoid
-        // reopening then immediately closing the Areas panel.
+        // be cleared if AREA_TOOL is forced without a selected area prefab. Open the
+        // Areas menu first, then select the District category when the vanilla binding
+        // exposes it; this keeps the panel open instead of flashing for one frame.
         areaPanelOpenTimerRef.current = window.setTimeout(() => {
-            tool.selectTool(tool.AREA_TOOL);
             if (areasMenu != null && !sameEntity(toolbar.selectedAssetMenu$.value, areasMenu.entity)) {
                 toolbar.selectAssetMenu(areasMenu.entity);
             }
+            if (districtCategory != null && !sameEntity(toolbar.selectedAssetCategory$.value, districtCategory.entity)) {
+                toolbar.selectAssetCategory(districtCategory.entity);
+            } else if (districtCategory == null) {
+                // Fallback only: do not call tool.selectTool(tool.AREA_TOOL) here.
+                // Without a District prefab selected, vanilla clears the menu on update.
+                tool.selectTool(tool.DEFAULT_TOOL);
+            }
             areaPanelOpenTimerRef.current = null;
         }, 80);
-    }, [toolbarGroups]);
+    }, [areasMenu, districtCategory]);
 
     const handleDistrictPickerOpen = React.useCallback(() => {
         openAreasToolPanel();
@@ -706,7 +726,7 @@ export const MochiColorPickerPanel = () => {
                                     ref={districtPickerRef}
                                     className={`${styles.actionButton} ${styles.surfaceButton} ${styles.buttonGap} ${styles.districtPickerButton} ${districtPickerOpen ? styles.districtPickerButtonActive : ""}`}
                                     onMouseOver={updateDistrictPickerDirection}
-                                    onMouseDown={handleDistrictPickerOpen}
+                                    onClick={handleDistrictPickerOpen}
                                 >
                                     <img src={surfaceIconSrc} className={`${styles.controlIcon} ${styles.idleIcon} ${styles.districtPickerIcon}`} alt="" />
                                     {districtPickerOpen && (
@@ -714,6 +734,7 @@ export const MochiColorPickerPanel = () => {
                                             ref={districtPickerPopupRef}
                                             className={`${styles.districtPickerPopup} ${districtPickerDirection === "up" ? styles.districtPickerPopupUp : styles.districtPickerPopupDown}`}
                                             onMouseDown={e => e.stopPropagation()}
+                                            onClick={e => e.stopPropagation()}
                                         >
                                             <ColorPicker
                                                 focusKey={focusDisabled}
