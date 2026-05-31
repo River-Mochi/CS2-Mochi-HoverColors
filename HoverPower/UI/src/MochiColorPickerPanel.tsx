@@ -13,7 +13,7 @@ import { bindValue, trigger, useValue } from "cs2/api";
 import { useLocalization } from "cs2/l10n";
 import { VanillaComponentResolver } from "./utils/vanilla/VanillaComponentResolver";
 import infoIconSrc from "../images/AdvisorInfoViewWhite.svg";
-import lotToolIconSrc from "../images/LotTool.svg";
+import lotToolIconSrc from "../images/LotTool03.svg";
 import surfaceIconSrc from "../images/Districts03.svg";
 import fillIconSrc from "../images/MainElements-Fill2.svg";
 import outlineIconSrc from "../images/MainElements.svg";
