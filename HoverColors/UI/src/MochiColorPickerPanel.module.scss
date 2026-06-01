@@ -25,6 +25,19 @@
     box-shadow: 0 6rem 18rem rgba(0, 0, 0, 0.16);
 }
 
+// Options > Panel style > LegacyUI readable.
+// LegacyUI makes the game's own panels more transparent. This HC-only style stays
+// darker/steadier so color swatches can still be judged accurately.
+// Main values to tune after in-game testing:
+//   - background-color alpha: raise toward 0.96 for darker, lower toward 0.80 for clearer.
+//   - gradient alpha: keep close to background alpha so the panel does not look patchy.
+.panelLegacyReadable {
+    background-image: linear-gradient(to bottom, rgba(48, 66, 76, 0.96), rgba(30, 43, 52, 0.92));
+    background-color: rgba(30, 43, 52, 0.92);
+    border-color: rgba(255, 255, 255, 0.30);
+    box-shadow: 0 8rem 22rem rgba(0, 0, 0, 0.30);
+}
+
 // ─── Title bar ────────────────────────────────────────────────────────────────
 
 .titleBar {
@@ -833,4 +846,38 @@
 .dragGrip:hover .dragGripDot,
 .dragGripActive .dragGripDot {
     background-color: rgba(255, 255, 255, 0.92);
+}
+
+// Stronger controls for players using the game's LegacyUI transparency option.
+// Scoped under .panelLegacyReadable only, so normal mode and other mods are untouched.
+.panelLegacyReadable {
+    .infoButton,
+    .controlIconButton,
+    .actionButton,
+    .presetSlot {
+        background-color: rgba(30, 43, 52, 0.92) !important;
+        border-color: rgba(255, 255, 255, 0.42);
+    }
+
+    .infoButton {
+        background-color: transparent !important;
+    }
+
+    .infoButtonActive {
+        background-color: rgba(30, 131, 170, 0.68) !important;
+        border-color: rgba(84, 215, 255, 0.55) !important;
+    }
+
+    .valueField {
+        background-color: rgba(14, 23, 30, 0.94);
+    }
+
+    .presetSlotActive {
+        background-color: rgba(30, 43, 52, 0.96) !important;
+        border-color: rgba(84, 215, 255, 0.72) !important;
+    }
+
+    .dragGrip {
+        background-color: rgba(130, 155, 168, 0.62);
+    }
 }

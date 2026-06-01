@@ -39,6 +39,7 @@ namespace HoverColors.Localization
 
                 // Groups
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.ToolColors), "도구 색상 방식" },
+                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.Panel), "패널" },
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.KeyBindings), "키 바인딩" },
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.Guidelines), "가이드라인" },
                 // AboutInfo + AboutLinks intentionally have empty group headers.
@@ -59,6 +60,17 @@ namespace HoverColors.Localization
                 { m_Settings.GetToolColorModeLocaleID("Recommended"), "1. 추천" },
                 { m_Settings.GetToolColorModeLocaleID("Vanilla"), "2. 바닐라 도구 색상" },
                 { m_Settings.GetToolColorModeLocaleID("Custom"), "3. 내 사용자 색상 유지" },
+
+                // Panel style
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelStyle)), "Panel style" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelStyle)),
+                    "Choose how opaque the in-city Hover Colors panel should be.\n\n" +
+                    "**Standard** keeps the current translucent style.\n" +
+                    "**LegacyUI readable** uses a darker panel and darker buttons for players using the game's LegacyUI transparency option.\n\n" +
+                    "Use this if the color swatch or preset buttons are too hard to see."
+                },
+                { m_Settings.GetPanelStyleLocaleID("Standard"), "Standard" },
+                { m_Settings.GetPanelStyleLocaleID("LegacyReadable"), "LegacyUI readable" },
 
                 // Guidelines opacity slider
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.GuidelineOpacityPercent)), "가이드라인 불투명도 (알파)" },

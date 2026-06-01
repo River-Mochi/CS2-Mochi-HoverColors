@@ -39,6 +39,7 @@ namespace HoverColors.Localization
 
                 // Groups
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.ToolColors), "Comportamento das cores das ferramentas" },
+                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.Panel), "Painel" },
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.KeyBindings), "Atalhos de teclado" },
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.Guidelines), "Guias" },
                 // AboutInfo + AboutLinks intentionally have empty group headers.
@@ -59,6 +60,17 @@ namespace HoverColors.Localization
                 { m_Settings.GetToolColorModeLocaleID("Recommended"), "1. Recomendado" },
                 { m_Settings.GetToolColorModeLocaleID("Vanilla"), "2. Cores vanilla das ferramentas" },
                 { m_Settings.GetToolColorModeLocaleID("Custom"), "3. Manter minha cor personalizada" },
+
+                // Panel style
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelStyle)), "Panel style" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelStyle)),
+                    "Choose how opaque the in-city Hover Colors panel should be.\n\n" +
+                    "**Standard** keeps the current translucent style.\n" +
+                    "**LegacyUI readable** uses a darker panel and darker buttons for players using the game's LegacyUI transparency option.\n\n" +
+                    "Use this if the color swatch or preset buttons are too hard to see."
+                },
+                { m_Settings.GetPanelStyleLocaleID("Standard"), "Standard" },
+                { m_Settings.GetPanelStyleLocaleID("LegacyReadable"), "LegacyUI readable" },
 
                 // Guidelines opacity slider
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.GuidelineOpacityPercent)), "Opacidade das guias (alfa)" },

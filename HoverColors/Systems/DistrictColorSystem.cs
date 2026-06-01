@@ -2,9 +2,11 @@
 // Purpose: Applies the player's District overlay color/opacity to the vanilla District area prefab.
 //
 // Why prefab data here:
-//   Districts are rendered through Game.Prefabs.AreaColorData on the District prefab entity.
+//   Districts are rendered through Game.Prefabs.AreaColorData on the default District prefab entity.
 //   AreaBufferSystem reads those prefab fill + edge colors while rebuilding the overlay
 //   buffer, so we write prefab-side colors and then mark live District area entities Updated.
+//   Important: do not query every prefab with DistrictData. Custom assets can define their
+//   own district-like area prefabs, so we target the exact vanilla District Area prefab ID.
 
 namespace HoverColors.Systems
 {
@@ -25,6 +27,9 @@ namespace HoverColors.Systems
 
     public partial class DistrictColorSystem : GameSystemBase
     {
+        private static readonly PrefabID s_VanillaDistrictPrefabId =
+            new(nameof(DistrictPrefab), "District Area");
+
         private static readonly Color s_FallbackDistrictFill = new(128f / 255f, 128f / 255f, 128f / 255f, 64f / 255f);
         private static readonly Color s_FallbackDistrictEdge = new(128f / 255f, 128f / 255f, 128f / 255f, 128f / 255f);
 
@@ -33,7 +38,6 @@ namespace HoverColors.Systems
         public static bool HasCapturedDistrictDefaults { get; private set; }
 
         private PrefabSystem? m_PrefabSystem;
-        private EntityQuery m_DistrictPrefabQuery;
         private EntityQuery m_DistrictAreaQuery;
 
         private bool m_CaptureLogged;
@@ -50,9 +54,6 @@ namespace HoverColors.Systems
             base.OnCreate();
 
             m_PrefabSystem = World.GetOrCreateSystemManaged<PrefabSystem>();
-            m_DistrictPrefabQuery = SystemAPI.QueryBuilder()
-                .WithAll<PrefabData, DistrictData, PrefabAreaColorData>()
-                .Build();
             m_DistrictAreaQuery = SystemAPI.QueryBuilder()
                 .WithAll<AreaComponent, DistrictComponent, AreaNode, AreaTriangle>()
                 .WithNone<Deleted>()
@@ -119,20 +120,11 @@ namespace HoverColors.Systems
 
         private void TryCaptureDefaults()
         {
-            if (HasCapturedDistrictDefaults || m_DistrictPrefabQuery.IsEmptyIgnoreFilter)
+            if (HasCapturedDistrictDefaults || !TryGetDefaultDistrictPrefab(out Entity prefabEntity))
             {
                 return;
             }
 
-            using Unity.Collections.NativeArray<Entity> entities =
-                m_DistrictPrefabQuery.ToEntityArray(Unity.Collections.Allocator.Temp);
-
-            if (entities.Length == 0)
-            {
-                return;
-            }
-
-            Entity prefabEntity = entities[0];
             if (m_PrefabSystem != null
                 && m_PrefabSystem.TryGetPrefab(prefabEntity, out PrefabBase prefabBase)
                 && prefabBase is AreaPrefab areaPrefab)
@@ -178,24 +170,22 @@ namespace HoverColors.Systems
 
         private void ApplyDistrictColors(Color color)
         {
+            if (!TryGetDefaultDistrictPrefab(out Entity prefabEntity))
+            {
+                return;
+            }
+
             Color32 color32 = color;
 
-            using Unity.Collections.NativeArray<Entity> entities =
-                m_DistrictPrefabQuery.ToEntityArray(Unity.Collections.Allocator.Temp);
+            PrefabAreaColorData data = EntityManager.GetComponentData<PrefabAreaColorData>(prefabEntity);
 
-            for (int i = 0; i < entities.Length; i++)
-            {
-                Entity prefabEntity = entities[i];
-                PrefabAreaColorData data = EntityManager.GetComponentData<PrefabAreaColorData>(prefabEntity);
-
-                // AreaBufferSystem consumes all four colors. Driving edge + selection edge here
-                // is what controls the persistent District boundary line shown while editing.
-                data.m_FillColor = color32;
-                data.m_EdgeColor = color32;
-                data.m_SelectionFillColor = color32;
-                data.m_SelectionEdgeColor = color32;
-                EntityManager.SetComponentData(prefabEntity, data);
-            }
+            // AreaBufferSystem consumes all four colors. Driving edge + selection edge here
+            // is what controls the persistent District boundary line shown while editing.
+            data.m_FillColor = color32;
+            data.m_EdgeColor = color32;
+            data.m_SelectionFillColor = color32;
+            data.m_SelectionEdgeColor = color32;
+            EntityManager.SetComponentData(prefabEntity, data);
         }
 
         private void MarkDistrictAreasUpdated()
@@ -208,6 +198,25 @@ namespace HoverColors.Systems
             // AreaBufferSystem uses this exact signal when district display needs rebuilding
             // (for example on localization/name changes), so we use the same safe vanilla path.
             EntityManager.AddComponent<Updated>(m_DistrictAreaQuery);
+        }
+
+        private bool TryGetDefaultDistrictPrefab(out Entity prefabEntity)
+        {
+            prefabEntity = Entity.Null;
+
+            if (m_PrefabSystem == null
+                || !m_PrefabSystem.TryGetPrefab(s_VanillaDistrictPrefabId, out PrefabBase prefabBase)
+                || !m_PrefabSystem.TryGetEntity(prefabBase, out Entity candidate)
+                || candidate == Entity.Null
+                || !EntityManager.Exists(candidate)
+                || !EntityManager.HasComponent<PrefabAreaColorData>(candidate)
+                || !EntityManager.HasComponent<DistrictData>(candidate))
+            {
+                return false;
+            }
+
+            prefabEntity = candidate;
+            return true;
         }
 
         private static bool ApproximatelyEqual(float a, float b)

@@ -18,8 +18,8 @@ namespace HoverColors.Settings
 
     [FileLocation("ModsSettings/HoverColors/HoverColors")]
     [SettingsUITabOrder(Actions, About)]
-    [SettingsUIGroupOrder(ToolColors, KeyBindings, Guidelines, AboutInfo, AboutLinks, AboutDedication)]
-    [SettingsUIShowGroupName(ToolColors, KeyBindings, Guidelines, AboutDedication)]
+    [SettingsUIGroupOrder(ToolColors, Panel, KeyBindings, Guidelines, AboutInfo, AboutLinks, AboutDedication)]
+    [SettingsUIShowGroupName(ToolColors, Panel, KeyBindings, Guidelines, AboutDedication)]
     public class HoverColorsSettings : ModSetting
     {
         // Tab IDs
@@ -28,6 +28,7 @@ namespace HoverColors.Settings
 
         // Group IDs
         internal const string ToolColors = nameof(ToolColors);
+        internal const string Panel = nameof(Panel);
         internal const string Guidelines = nameof(Guidelines);
         internal const string KeyBindings = nameof(KeyBindings);
         internal const string AboutInfo = nameof(AboutInfo);
@@ -37,6 +38,9 @@ namespace HoverColors.Settings
         public const int ToolColorModeRecommended = 0;
         public const int ToolColorModeVanilla = 1;
         public const int ToolColorModeCustom = 2;
+
+        public const int PanelStyleStandard = 0;
+        public const int PanelStyleLegacyReadable = 1;
 
         // Centralised default for the guideline opacity slider.
         // Vanilla CS2 is 100; lower = more transparent. Change only here — C# UISystem and TSX both read this.
@@ -156,6 +160,16 @@ namespace HoverColors.Settings
         public int ToolColorMode { get; set; }
 
         // -----------------------------------------------------------------------
+        // Actions tab — Panel readability
+        // -----------------------------------------------------------------------
+        // LegacyUI makes game panels more transparent globally. For a color-picking
+        // panel, too much transparency makes swatches and preset previews hard to judge.
+
+        [SettingsUIDropdown(typeof(HoverColorsSettings), nameof(GetPanelStyleItems))]
+        [SettingsUISection(Actions, Panel)]
+        public int PanelStyle { get; set; }
+
+        // -----------------------------------------------------------------------
         // Actions tab — Guidelines
         // -----------------------------------------------------------------------
         // Slider is 0..100 (percent) so the SettingsUISlider can use kPercentage units.
@@ -259,6 +273,7 @@ namespace HoverColors.Settings
             // Release default: help players see demolition/road targets even if their custom
             // alpha is very low, without changing their saved custom color.
             ToolColorMode = ToolColorModeRecommended;
+            PanelStyle = PanelStyleStandard;
 
             // 100 = vanilla default. Lower = more transparent guidelines.
             GuidelineOpacityPercent = DefaultGuidelineOpacityPercent;
@@ -293,6 +308,28 @@ namespace HoverColors.Settings
         public string GetToolColorModeLocaleID(string valueName)
         {
             return "Options[" + id + ".ToolColorMode." + valueName + "]";
+        }
+
+        public DropdownItem<int>[] GetPanelStyleItems()
+        {
+            return new[]
+            {
+                new DropdownItem<int>
+                {
+                    value = PanelStyleStandard,
+                    displayName = GetPanelStyleLocaleID("Standard"),
+                },
+                new DropdownItem<int>
+                {
+                    value = PanelStyleLegacyReadable,
+                    displayName = GetPanelStyleLocaleID("LegacyReadable"),
+                },
+            };
+        }
+
+        public string GetPanelStyleLocaleID(string valueName)
+        {
+            return "Options[" + id + ".PanelStyle." + valueName + "]";
         }
 
         private static void TryOpenUrl(string url)

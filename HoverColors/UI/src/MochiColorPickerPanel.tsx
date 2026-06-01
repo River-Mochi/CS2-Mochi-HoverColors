@@ -38,6 +38,7 @@ const districtB$ = bindValue<number>(CHANNEL, "DistrictB", 128 / 255);
 const districtA$ = bindValue<number>(CHANNEL, "DistrictA", 64 / 255);
 const guidelineOpacity$ = bindValue<number>(CHANNEL, "GuidelineOpacityPercent", 30);
 const panelTooltipsEnabled$ = bindValue<boolean>(CHANNEL, "PanelTooltipsEnabled", true);
+const panelStyle$ = bindValue<number>(CHANNEL, "PanelStyle", 0);
 const surfaceToolAreasSuppressed$ = bindValue<boolean>(CHANNEL, "SurfaceToolAreasSuppressed", false);
 const vanillaOutlineActive$ = bindValue<boolean>(CHANNEL, "VanillaOutlineActive", false);
 const AREA_MENU_NAME_TOKENS = ["SERVICES.NAMES[AREAS]", "SERVICES.NAME[AREAS]", "AREAS"];
@@ -82,6 +83,7 @@ export const MochiColorPickerPanel = () => {
         a: useValue(districtA$),
     };
     const boundGuideline = useValue(guidelineOpacity$);
+    const panelStyle = useValue(panelStyle$);
     const surfaceToolAreasSuppressed = useValue(surfaceToolAreasSuppressed$);
     const vanillaOutlineActive = useValue(vanillaOutlineActive$);
     const preset1Active = useValue(preset1Active$);
@@ -531,7 +533,7 @@ export const MochiColorPickerPanel = () => {
             style={{ transform: `translate(${panelOffset.x}px, ${panelOffset.y}px)` }}
         >
             <div ref={panelElementRef} className={`panel_YqS menu_O_M ${styles.panelFrame}`}>
-                <div className={`content_XD5 content_AD7 child-opacity-transition_nkS content_Hzl ${styles.panelContent}`}>
+                <div className={`content_XD5 content_AD7 child-opacity-transition_nkS content_Hzl ${styles.panelContent} ${panelStyle === 1 ? styles.panelLegacyReadable : ""}`}>
 
                     {/* Title bar */}
                     <div className={styles.titleBar}>
