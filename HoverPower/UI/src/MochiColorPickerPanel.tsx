@@ -19,6 +19,7 @@ import fillIconSrc from "../images/MainElements-Fill2.svg";
 import outlineIconSrc from "../images/MainElements.svg";
 import guidelinesIconSrc from "../images/GuideLines4.svg";
 import closeIconSrc from "../images/Close.svg";
+import resetIconSrc from "../images/Reset_Button2.svg";
 import styles from "./MochiColorPickerPanel.module.scss";
 
 const CHANNEL = "HoverColors";
@@ -580,7 +581,7 @@ export const MochiColorPickerPanel = () => {
                                     </Tooltip>
                                 </div>
 
-                                {/* Right group: ↺ bare icon (no dark box) — same feel as the info button */}
+                                {/* Right group: SVG reset icon (no dark box) — avoids missing glyph boxes in CJK fonts. */}
                                 <div className={styles.outlineRight}>
                                     <Tooltip tooltip={tt(text.tooltipResetPresets)}>
                                         <button
@@ -588,7 +589,7 @@ export const MochiColorPickerPanel = () => {
                                             className={styles.presetResetBare}
                                             onClick={handleTogglePresetDefaults}
                                         >
-                                            <span className={styles.resetGlyph}>↺</span>
+                                            <img src={resetIconSrc} className={styles.resetIcon} alt="" />
                                         </button>
                                     </Tooltip>
                                 </div>

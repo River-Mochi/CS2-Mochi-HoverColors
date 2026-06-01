@@ -624,7 +624,9 @@
     box-shadow: 0 0 0 1rem rgba(84, 215, 255, 0.45), 0 0 5rem rgba(84, 215, 255, 0.2) !important;
 }
 
-// ↺ reset button as a bare icon. Hover uses only color/transform, so it is cheap
+// Reset button as a bare SVG icon. Do not use a text arrow here: some CJK fonts
+// render that glyph as a missing-character box.
+// Hover uses only opacity/filter/transform, so it is cheap
 // and makes the reset affordance obvious without adding React hover state.
 .presetResetBare {
     background: none !important;
@@ -651,7 +653,7 @@
     }
 }
 
-// Pushes the ↺ button to the far right of the outline row.
+// Pushes the reset button to the far right of the outline row.
 // Must be the direct flex child — margin-left:auto on a button inside Tooltip's wrapper does nothing.
 .resetPusher {
     margin-left: auto;
@@ -678,7 +680,7 @@
     justify-content: center;
 }
 
-// ↺ inline in the outline row — same style as bottom action buttons but pushed to the right via margin-left:auto.
+// Reset inline in the outline row — same style as bottom action buttons but pushed to the right via margin-left:auto.
 .presetResetInline {
     width: 24rem;
     min-width: 24rem;
@@ -734,26 +736,22 @@
     z-index: 1;
 }
 
-// ↺ reset glyph.
-.resetGlyph {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 18rem;
-    font-weight: 400;
-    line-height: 1;
+// Reset SVG icon. The SVG itself is light gray; hover filters it to white.
+.resetIcon {
+    width: 18rem;
+    height: 18rem;
     pointer-events: none;
     position: relative;
     z-index: 1;
-    color: rgba(255, 255, 255, 0.84);
-    text-shadow: 0 0 3rem rgba(0, 0, 0, 0.42);
-    transition: color 120ms ease-out, text-shadow 120ms ease-out, transform 120ms ease-out;
+    opacity: 0.86;
+    filter: drop-shadow(0 0 3rem rgba(0, 0, 0, 0.42));
+    transition: filter 120ms ease-out, opacity 120ms ease-out, transform 120ms ease-out;
 }
 
-.presetResetBare:hover .resetGlyph,
-.presetResetBare:focus-visible .resetGlyph {
-    color: rgba(255, 255, 255, 1);
-    text-shadow: 0 0 5rem rgba(255, 255, 255, 0.32), 0 0 4rem rgba(0, 0, 0, 0.65);
+.presetResetBare:hover .resetIcon,
+.presetResetBare:focus-visible .resetIcon {
+    opacity: 1;
+    filter: brightness(0) invert(1) drop-shadow(0 0 5rem rgba(255, 255, 255, 0.28)) drop-shadow(0 0 4rem rgba(0, 0, 0, 0.65));
     transform: scale(1.12);
 }
 
