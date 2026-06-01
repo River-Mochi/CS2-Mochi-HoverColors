@@ -76,6 +76,9 @@ namespace HoverColors
             AddLocaleSource("pt-BR", new LocalePT_BR(setting));
             AddLocaleSource("zh-HANS", new LocaleZH_HANS(setting));
             AddLocaleSource("zh-HANT", new LocaleZH_HANT(setting));
+            AddLocaleSource("th-TH", new LocaleTH(setting));    // Thai
+            AddLocaleSource("vi-VN", new LocaleVI(setting));    // Vietnamese
+            AddLocaleSource("tr-TR", new LocaleTR(setting));    // Turkish
 
             try
             {
