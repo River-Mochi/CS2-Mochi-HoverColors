@@ -78,10 +78,10 @@ namespace HoverColors.Localization
                     "用于打开 / 关闭城市内 Hover Colors 面板的快捷键。" },
                 { m_Settings.GetBindingKeyLocaleID(Mod.kTogglePanelActionName), "切换 Hover Colors 面板" },
 
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleSurfaceToolAreasBinding)), "开启/关闭 Surface 工具预览" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleSurfaceToolAreasBinding)), "开启/关闭地表工具预览" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ToggleSurfaceToolAreasBinding)),
-                    "放置地表时，用于隐藏或恢复当前 Surface 工具边界预览线的快捷键。" },
-                { m_Settings.GetBindingKeyLocaleID(Mod.kToggleSurfaceToolAreasActionName), "开启/关闭 Surface 工具线条" },
+                    "放置地表时，用于隐藏或恢复当前地表工具边界预览线的快捷键。" },
+                { m_Settings.GetBindingKeyLocaleID(Mod.kToggleSurfaceToolAreasActionName), "开启/关闭地表工具线条" },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.TogglePresetBinding)), "切换预设 1+2" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.TogglePresetBinding)),

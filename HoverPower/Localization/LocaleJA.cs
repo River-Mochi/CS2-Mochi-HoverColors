@@ -78,10 +78,10 @@ namespace HoverColors.Localization
                     "都市内のHover Colorsパネルを開く / 閉じるためのホットキーです。" },
                 { m_Settings.GetBindingKeyLocaleID(Mod.kTogglePanelActionName), "Hover Colorsパネルを切り替え" },
 
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleSurfaceToolAreasBinding)), "Surfaceツールのプレビューをオン/オフ" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleSurfaceToolAreasBinding)), "地表ツールのプレビューをオン/オフ" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ToggleSurfaceToolAreasBinding)),
-                    "サーフェスを配置している間、アクティブなSurfaceツールの境界プレビュー線を非表示または復元するホットキーです。" },
-                { m_Settings.GetBindingKeyLocaleID(Mod.kToggleSurfaceToolAreasActionName), "Surfaceツールの線をオン/オフ" },
+                    "地表を配置している間、アクティブな地表ツールの境界プレビュー線を非表示または復元するホットキーです。" },
+                { m_Settings.GetBindingKeyLocaleID(Mod.kToggleSurfaceToolAreasActionName), "地表ツールの線をオン/オフ" },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.TogglePresetBinding)), "プリセット1+2を切り替え" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.TogglePresetBinding)),
