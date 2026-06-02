@@ -541,7 +541,8 @@ export const MochiColorPickerPanel = () => {
     const outlineFieldClass = styles.outlineField;
     const closeButtonClass = `${roundHighlightButtonTheme["button"] ?? ""} ${styles.closeButton}`;
     const panelFrameClass = `${panelBaseTheme.panel ?? "panel_YqS"} ${infoviewMenuTheme.menu ?? "menu_O_M"} ${styles.panelFrame}`;
-    const panelContentClass = `${panelTheme.content ?? "content_XD5 content_AD7 child-opacity-transition_nkS"} ${infoviewMenuTheme.content ?? "content_Hzl"} ${styles.panelContent} ${useDarkerPanel ? styles.panelDarker : ""}`;
+    const panelSurfaceClass = useDarkerPanel ? styles.panelDarker : styles.panelStandard;
+    const panelContentClass = `${panelTheme.content ?? "content_XD5 content_AD7 child-opacity-transition_nkS"} ${infoviewMenuTheme.content ?? "content_Hzl"} ${styles.panelContent} ${panelSurfaceClass}`;
 
     // Preset preview swatches intentionally ignore alpha so dark/transparent colors remain legible
     // against the translucent panel. The saved preset still includes alpha and applies it in-game.
