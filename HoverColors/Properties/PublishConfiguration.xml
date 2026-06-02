@@ -4,7 +4,7 @@
 	<!--Name of the mod to display to players-->
 	<DisplayName Value="Hover Colors" />
 	<!--Short description of the mod-->
-	<ShortDescription Value="Change blue hover outlines to any color or opacity. Surface tool layers on/off, District colors, and Guideline opacity." />
+	<ShortDescription Value="Change blue outlines to any color or opacity. Surface layers on/off, District colors, and Guideline opacity." />
 	<!--Long description of the mod. Single line or multi line. Supports minimal markdown subset-->
 	<!--LongDescription Value="This is a long description" /-->
 	<LongDescription>
@@ -14,9 +14,9 @@
 - If you can hover over it then you can probably change it: buildings, cars, trees, cims, etc.!
 - Guidelines: opacity slider for less cluttered placements.
 - Surfaces: turn off preview layers while using the Surface tool so you can see the real ground colors without a cloudy layer on top.
-- District tool: change the color and opacity of district borders and overlays, or turn them off completely.
+- District tool: change the color + opacity of district borders and overlays, or turn them off completely.
 
-- Save safe, safe to remove any time.
+- Save-game safe and safe to remove any time.
 - No known compatibility issues. No Harmony patches.
 
 ## Important
