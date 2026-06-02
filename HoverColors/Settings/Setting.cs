@@ -18,7 +18,7 @@ namespace HoverColors.Settings
 
     [FileLocation("ModsSettings/HoverColors/HoverColors")]
     [SettingsUITabOrder(Actions, About)]
-    [SettingsUIGroupOrder(ToolColors, Panel, KeyBindings, Guidelines, AboutInfo, AboutLinks, AboutDedication)]
+    [SettingsUIGroupOrder(ToolColors, Panel, Guidelines, KeyBindings, AboutInfo, AboutLinks, AboutDedication)]
     [SettingsUIShowGroupName(ToolColors, Panel, KeyBindings, Guidelines, AboutDedication)]
     public class HoverColorsSettings : ModSetting
     {
@@ -38,9 +38,6 @@ namespace HoverColors.Settings
         public const int ToolColorModeRecommended = 0;
         public const int ToolColorModeVanilla = 1;
         public const int ToolColorModeCustom = 2;
-
-        public const int PanelStyleStandard = 0;
-        public const int PanelStyleLegacyReadable = 1;
 
         // Centralised default for the guideline opacity slider.
         // Vanilla CS2 is 100; lower = more transparent. Change only here — C# UISystem and TSX both read this.
@@ -162,12 +159,12 @@ namespace HoverColors.Settings
         // -----------------------------------------------------------------------
         // Actions tab — Panel readability
         // -----------------------------------------------------------------------
-        // LegacyUI makes game panels more transparent globally. For a color-picking
-        // panel, too much transparency makes swatches and preset previews hard to judge.
+        // User-facing label is "Darker panel". LegacyUI's extra transparency exposed
+        // the need for this, but Modern UI players can use it too if they prefer
+        // stronger panel contrast.
 
-        [SettingsUIDropdown(typeof(HoverColorsSettings), nameof(GetPanelStyleItems))]
         [SettingsUISection(Actions, Panel)]
-        public int PanelStyle { get; set; }
+        public bool UseDarkerPanel { get; set; }
 
         // -----------------------------------------------------------------------
         // Actions tab — Guidelines
@@ -175,6 +172,14 @@ namespace HoverColors.Settings
         // Slider is 0..100 (percent) so the SettingsUISlider can use kPercentage units.
         // GuidelineColorSystem divides by 100 and multiplies the game's default per-priority
         // alphas, so 100 = no change, 50 = half as visible, 0 = fully invisible guidelines.
+
+        [SettingsUISlider(min = 0, max = 100, step = 5, scalarMultiplier = 1, unit = Unit.kPercentage)]
+        [SettingsUISection(Actions, Guidelines)]
+        public int GuidelineOpacityPercent { get; set; }
+
+        // -----------------------------------------------------------------------
+        // Actions tab — Key bindings
+        // -----------------------------------------------------------------------
 
         [SettingsUISection(Actions, KeyBindings)]
         [SettingsUIKeyboardBinding(BindingKeyboard.H, Mod.kTogglePanelActionName)]
@@ -187,10 +192,6 @@ namespace HoverColors.Settings
         [SettingsUISection(Actions, KeyBindings)]
         [SettingsUIKeyboardBinding(BindingKeyboard.K, Mod.kTogglePresetActionName)]
         public ProxyBinding TogglePresetBinding { get; set; }
-
-        [SettingsUISlider(min = 0, max = 100, step = 5, scalarMultiplier = 1, unit = Unit.kPercentage)]
-        [SettingsUISection(Actions, Guidelines)]
-        public int GuidelineOpacityPercent { get; set; }
 
         // -----------------------------------------------------------------------
         // About tab
@@ -273,7 +274,7 @@ namespace HoverColors.Settings
             // Release default: help players see demolition/road targets even if their custom
             // alpha is very low, without changing their saved custom color.
             ToolColorMode = ToolColorModeRecommended;
-            PanelStyle = PanelStyleStandard;
+            UseDarkerPanel = false;
 
             // 100 = vanilla default. Lower = more transparent guidelines.
             GuidelineOpacityPercent = DefaultGuidelineOpacityPercent;
@@ -308,28 +309,6 @@ namespace HoverColors.Settings
         public string GetToolColorModeLocaleID(string valueName)
         {
             return "Options[" + id + ".ToolColorMode." + valueName + "]";
-        }
-
-        public DropdownItem<int>[] GetPanelStyleItems()
-        {
-            return new[]
-            {
-                new DropdownItem<int>
-                {
-                    value = PanelStyleStandard,
-                    displayName = GetPanelStyleLocaleID("Standard"),
-                },
-                new DropdownItem<int>
-                {
-                    value = PanelStyleLegacyReadable,
-                    displayName = GetPanelStyleLocaleID("LegacyReadable"),
-                },
-            };
-        }
-
-        public string GetPanelStyleLocaleID(string valueName)
-        {
-            return "Options[" + id + ".PanelStyle." + valueName + "]";
         }
 
         private static void TryOpenUrl(string url)

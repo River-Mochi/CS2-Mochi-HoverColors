@@ -61,17 +61,13 @@ namespace HoverColors.Localization
                 { m_Settings.GetToolColorModeLocaleID("Vanilla"), "2. Waniliowe kolory narzędzi" },
                 { m_Settings.GetToolColorModeLocaleID("Custom"), "3. Zachowaj mój własny kolor" },
 
-                // Panel style
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelStyle)), "Panel style" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelStyle)),
-                    "Choose how opaque the in-city Hover Colors panel should be.\n\n" +
-                    "**Standard** keeps the current translucent style.\n" +
-                    "**LegacyUI readable** uses a darker panel and darker buttons for players using the game's LegacyUI transparency option.\n\n" +
-                    "Use this if the color swatch or preset buttons are too hard to see."
+                // Darker panel
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)), "Darker panel" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)),
+                    "Makes the in-city Hover Colors panel darker and easier to read.\n\n" +
+                    "Recommended for players using the game's LegacyUI transparency option, and also useful if you prefer a stronger, darker panel in Modern UI."
                 },
-                { m_Settings.GetPanelStyleLocaleID("Standard"), "Standard" },
-                { m_Settings.GetPanelStyleLocaleID("LegacyReadable"), "LegacyUI readable" },
-
+                
                 // Guidelines opacity slider
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.GuidelineOpacityPercent)), "Przezroczystość linii pomocniczych (alfa)" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.GuidelineOpacityPercent)),

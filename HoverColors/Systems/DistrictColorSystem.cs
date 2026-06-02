@@ -1,12 +1,12 @@
 // File: Systems/DistrictColorSystem.cs
-// Purpose: Applies the player's District overlay color/opacity to the vanilla District area prefab.
+// Purpose: Applies player's District overlay color/opacity to the vanilla District area prefab.
 //
 // Why prefab data here:
 //   Districts are rendered through Game.Prefabs.AreaColorData on the default District prefab entity.
 //   AreaBufferSystem reads those prefab fill + edge colors while rebuilding the overlay
 //   buffer, so we write prefab-side colors and then mark live District area entities Updated.
 //   Important: do not query every prefab with DistrictData. Custom assets can define their
-//   own district-like area prefabs, so we target the exact vanilla District Area prefab ID.
+//   own district-like area prefabs, so we now target the exact vanilla District Area prefab ID.
 
 namespace HoverColors.Systems
 {
@@ -196,7 +196,7 @@ namespace HoverColors.Systems
             }
 
             // AreaBufferSystem uses this exact signal when district display needs rebuilding
-            // (for example on localization/name changes), so we use the same safe vanilla path.
+            // (for example on localization/name changes), so this uses same safe vanilla path.
             EntityManager.AddComponent<Updated>(m_DistrictAreaQuery);
         }
 

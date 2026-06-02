@@ -19,7 +19,8 @@
 //
 // Performance contract (matters because this system runs every Rendering tick):
 //   - The HDRP CustomPassVolume / OutlinesWorldUIPass / Material refs are found ONCE and cached.
-//     Calling Object.FindObjectsOfType<CustomPassVolume>() every frame is what would tank FPS.
+//     The fallback scene scan is throttled while loading so we never call
+//     Object.FindObjectsOfType<CustomPassVolume>() every frame.
 //   - Last-applied 5-float snapshot is kept, so OnUpdate early-returns (5 compares + return) when
 //     neither the sliders nor the active-tool override flag changed.
 //   - Cache invalidates only when the Material reference goes destroyed-null (e.g. scene reload).
@@ -51,6 +52,7 @@ namespace HoverColors.Systems
         private const float VanillaOwnerB = 0.247f;
         private const float VanillaOwnerA = 0.702f;
         private const float RoadRecommendedOutlineA = 0.75f;
+        private const float MaterialResolveRetrySeconds = 0.5f;
 
         public static Color CapturedHoveredColor { get; private set; } = new Color(VanillaR, VanillaG, VanillaB, VanillaOutlineA);
         public static Color CapturedOwnerColor { get; private set; } = new Color(VanillaOwnerR, VanillaOwnerG, VanillaOwnerB, VanillaOwnerA);
@@ -67,6 +69,7 @@ namespace HoverColors.Systems
 
         // Cached HDRP outline material. UnityEngine.Object operator!= detects destroyed-but-not-null.
         private Material? m_OutlineMaterial;
+        private float m_NextMaterialResolveTime;
         private bool m_PrefabDefaultsCaptured;
         private bool m_RenderingDefaultsCaptured;
         private bool m_MaterialDefaultsCaptured;
@@ -391,6 +394,17 @@ namespace HoverColors.Systems
             {
                 return true;
             }
+
+            // Scene load can briefly run before the outline pass exists. Throttle the expensive
+            // Unity object scan; once the material is found, the cached reference handles all
+            // future frames until Unity destroys it on scene reload.
+            float now = UnityEngine.Time.realtimeSinceStartup;
+            if (now < m_NextMaterialResolveTime)
+            {
+                return false;
+            }
+
+            m_NextMaterialResolveTime = now + MaterialResolveRetrySeconds;
 
             CustomPassVolume[] volumes = UnityEngine.Object.FindObjectsOfType<CustomPassVolume>();
             for (int i = 0; i < volumes.Length; i++)

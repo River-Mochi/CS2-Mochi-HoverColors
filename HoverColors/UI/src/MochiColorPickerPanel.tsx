@@ -38,7 +38,7 @@ const districtB$ = bindValue<number>(CHANNEL, "DistrictB", 128 / 255);
 const districtA$ = bindValue<number>(CHANNEL, "DistrictA", 64 / 255);
 const guidelineOpacity$ = bindValue<number>(CHANNEL, "GuidelineOpacityPercent", 30);
 const panelTooltipsEnabled$ = bindValue<boolean>(CHANNEL, "PanelTooltipsEnabled", true);
-const panelStyle$ = bindValue<number>(CHANNEL, "PanelStyle", 0);
+const useDarkerPanel$ = bindValue<boolean>(CHANNEL, "UseDarkerPanel", false);
 const surfaceToolAreasSuppressed$ = bindValue<boolean>(CHANNEL, "SurfaceToolAreasSuppressed", false);
 const vanillaOutlineActive$ = bindValue<boolean>(CHANNEL, "VanillaOutlineActive", false);
 const AREA_MENU_NAME_TOKENS = ["SERVICES.NAMES[AREAS]", "SERVICES.NAME[AREAS]", "AREAS"];
@@ -83,7 +83,7 @@ export const MochiColorPickerPanel = () => {
         a: useValue(districtA$),
     };
     const boundGuideline = useValue(guidelineOpacity$);
-    const panelStyle = useValue(panelStyle$);
+    const useDarkerPanel = useValue(useDarkerPanel$);
     const surfaceToolAreasSuppressed = useValue(surfaceToolAreasSuppressed$);
     const vanillaOutlineActive = useValue(vanillaOutlineActive$);
     const preset1Active = useValue(preset1Active$);
@@ -180,6 +180,7 @@ export const MochiColorPickerPanel = () => {
     const districtPickerRef = React.useRef<HTMLDivElement | null>(null);
     const areaPanelOpenTimerRef = React.useRef<number | null>(null);
     const districtToolOpenTimeoutRef = React.useRef<number | null>(null);
+    const districtToolSelectRetryRef = React.useRef<number | null>(null);
     const panelElementRef = React.useRef<HTMLDivElement | null>(null);
     const panelDragFrameRef = React.useRef<number | null>(null);
     const panelDragPendingOffsetRef = React.useRef(panelOffset);
@@ -239,6 +240,10 @@ export const MochiColorPickerPanel = () => {
             clearTimeout(districtToolOpenTimeoutRef.current);
             districtToolOpenTimeoutRef.current = null;
         }
+        if (districtToolSelectRetryRef.current != null) {
+            clearTimeout(districtToolSelectRetryRef.current);
+            districtToolSelectRetryRef.current = null;
+        }
     }, []);
 
     React.useEffect(() => {
@@ -269,11 +274,28 @@ export const MochiColorPickerPanel = () => {
             return;
         }
 
-        if (!sameEntity(selectedAsset, districtAsset.entity)) {
-            // The category only opens the Areas panel. Selecting the District Area
-            // asset is the step that puts vanilla into the actual District tool.
-            toolbar.selectAsset(districtAsset.entity, true);
+        // The category only opens the Areas panel. Selecting the District Area
+        // asset is the step that puts vanilla into the actual District tool.
+        // Vanilla can briefly restore the previous Areas subtool after opening
+        // the panel, so we make one delayed retry with the same toolbar API.
+        toolbar.clearAssetSelection();
+        toolbar.selectAssetMenu(areasMenu.entity);
+        toolbar.selectAssetCategory(districtCategory.entity);
+        toolbar.selectAsset(districtAsset.entity, true);
+
+        if (districtToolSelectRetryRef.current != null) {
+            clearTimeout(districtToolSelectRetryRef.current);
         }
+        const areasMenuEntity = areasMenu.entity;
+        const districtCategoryEntity = districtCategory.entity;
+        const districtEntity = districtAsset.entity;
+        districtToolSelectRetryRef.current = window.setTimeout(() => {
+            toolbar.clearAssetSelection();
+            toolbar.selectAssetMenu(areasMenuEntity);
+            toolbar.selectAssetCategory(districtCategoryEntity);
+            toolbar.selectAsset(districtEntity, true);
+            districtToolSelectRetryRef.current = null;
+        }, 250);
 
         if (districtToolOpenTimeoutRef.current != null) {
             clearTimeout(districtToolOpenTimeoutRef.current);
@@ -474,11 +496,16 @@ export const MochiColorPickerPanel = () => {
         if (districtToolOpenTimeoutRef.current != null) {
             clearTimeout(districtToolOpenTimeoutRef.current);
         }
+        if (districtToolSelectRetryRef.current != null) {
+            clearTimeout(districtToolSelectRetryRef.current);
+            districtToolSelectRetryRef.current = null;
+        }
 
         // Defer until after the picker click finishes. Vanilla exposes the Areas
         // category/assets over multiple binding updates, so an effect completes the
         // District selection as soon as each piece is available.
         areaPanelOpenTimerRef.current = window.setTimeout(() => {
+            toolbar.clearAssetSelection();
             setPendingDistrictToolOpen(true);
             areaPanelOpenTimerRef.current = null;
         }, 80);
@@ -508,8 +535,13 @@ export const MochiColorPickerPanel = () => {
     const focusDisabled = resolver.FOCUS_DISABLED;
     const numberFieldClass = resolver.mouseToolOptionsTheme["number-field"];
     const roundHighlightButtonTheme = resolver.roundHighlightButtonTheme;
+    const panelBaseTheme = resolver.panelBaseTheme;
+    const panelTheme = resolver.panelTheme;
+    const infoviewMenuTheme = resolver.infoviewMenuTheme;
     const outlineFieldClass = styles.outlineField;
     const closeButtonClass = `${roundHighlightButtonTheme["button"] ?? ""} ${styles.closeButton}`;
+    const panelFrameClass = `${panelBaseTheme.panel ?? "panel_YqS"} ${infoviewMenuTheme.menu ?? "menu_O_M"} ${styles.panelFrame}`;
+    const panelContentClass = `${panelTheme.content ?? "content_XD5 content_AD7 child-opacity-transition_nkS"} ${infoviewMenuTheme.content ?? "content_Hzl"} ${styles.panelContent} ${useDarkerPanel ? styles.panelDarker : ""}`;
 
     // Preset preview swatches intentionally ignore alpha so dark/transparent colors remain legible
     // against the translucent panel. The saved preset still includes alpha and applies it in-game.
@@ -521,7 +553,9 @@ export const MochiColorPickerPanel = () => {
         if (hovered) {
             return "rgba(255, 255, 255, 1)";
         }
-        return active ? "rgba(154, 231, 255, 0.9)" : "rgba(255, 255, 255, 0.78)";
+        // Active number: keep alpha high for readability; reduce cyan intensity
+        // by moving RGB toward white instead of making the glyph transparent.
+        return active ? "rgba(150, 235, 255, 0.96)" : "rgba(255, 255, 255, 0.78)";
     };
 
     // holdBar uses transform: scaleX so percentage works regardless of button width
@@ -532,8 +566,8 @@ export const MochiColorPickerPanel = () => {
             className={styles.panelAnchor}
             style={{ transform: `translate(${panelOffset.x}px, ${panelOffset.y}px)` }}
         >
-            <div ref={panelElementRef} className={`panel_YqS menu_O_M ${styles.panelFrame}`}>
-                <div className={`content_XD5 content_AD7 child-opacity-transition_nkS content_Hzl ${styles.panelContent} ${panelStyle === 1 ? styles.panelLegacyReadable : ""}`}>
+            <div ref={panelElementRef} className={panelFrameClass}>
+                <div className={panelContentClass}>
 
                     {/* Title bar */}
                     <div className={styles.titleBar}>

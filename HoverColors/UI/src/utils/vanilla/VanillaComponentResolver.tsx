@@ -214,8 +214,16 @@ export class VanillaComponentResolver {
         return this.resolveTheme("infoRowTheme");
     }
 
+    public get panelBaseTheme(): VanillaThemeValue {
+        return this.resolveTheme("panelBaseTheme");
+    }
+
     public get panelTheme(): VanillaThemeValue {
         return this.resolveTheme("panelTheme");
+    }
+
+    public get infoviewMenuTheme(): VanillaThemeValue {
+        return this.resolveTheme("infoviewMenuTheme");
     }
 
     public get pageSelectorTheme(): VanillaThemeValue {

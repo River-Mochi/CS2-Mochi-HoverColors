@@ -13,29 +13,46 @@
 }
 
 .panelContent {
+    // Main sizing knobs.
+    // --hc-panel-width is the one to tweak first if the whole in-city panel
+    // should be wider/narrower. 215rem is roughly the safe minimum for the
+    // current top row: icon + swatch + preset 1 + preset 2 + reset.
+    --hc-panel-width: 238rem;
+    --hc-panel-alpha-top: 0.32;
+    --hc-panel-alpha-bottom: 0.24;
+    // Title knobs. Keep nowrap on the title; tune these if the title is
+    // too wide after changing --hc-panel-width.
+    --hc-title-font-size: 12rem;
+    --hc-title-letter-spacing: 0.75rem;
+    --hc-title-word-spacing: 1.7rem;
+
     position: relative;
     overflow: visible;
-    // Wide enough for swatch + two half-color preset buttons + ↺ on the top row.
-    // To adjust panel width: change this value.
-    min-width: 222rem;
+    width: var(--hc-panel-width);
+    min-width: var(--hc-panel-width);
+    max-width: var(--hc-panel-width);
+    box-sizing: border-box;
     border: 1rem solid rgba(255, 255, 255, 0.18);
     border-radius: 12rem;
-    background-image: linear-gradient(to bottom, rgba(95, 124, 136, 0.32), rgba(58, 78, 88, 0.24));
-    background-color: rgba(58, 78, 88, 0.24);
+    background-image: linear-gradient(to bottom, rgba(95, 124, 136, var(--hc-panel-alpha-top)), rgba(58, 78, 88, var(--hc-panel-alpha-bottom)));
+    background-color: rgba(58, 78, 88, var(--hc-panel-alpha-bottom));
     box-shadow: 0 6rem 18rem rgba(0, 0, 0, 0.16);
 }
 
-// Options > Panel style > LegacyUI readable.
-// LegacyUI makes the game's own panels more transparent. This HC-only style stays
-// darker/steadier so color swatches can still be judged accurately.
+// Options > Darker panel.
+// TSX applies resolved vanilla panel/menu theme classes first. This scoped HC
+// override only raises contrast so color swatches stay readable under LegacyUI.
+// Modern UI players can also use it if they prefer a stronger panel.
 // Main values to tune after in-game testing:
-//   - background-color alpha: raise toward 0.96 for darker, lower toward 0.80 for clearer.
-//   - gradient alpha: keep close to background alpha so the panel does not look patchy.
-.panelLegacyReadable {
-    background-image: linear-gradient(to bottom, rgba(48, 66, 76, 0.96), rgba(30, 43, 52, 0.92));
-    background-color: rgba(30, 43, 52, 0.92);
-    border-color: rgba(255, 255, 255, 0.30);
-    box-shadow: 0 8rem 22rem rgba(0, 0, 0, 0.30);
+//   - alpha around 0.66..0.74 keeps LegacyUI readable while still letting the
+//     game's UI transparency show through.
+//   - RGB is intentionally vanilla-navy instead of green/teal, so this fallback
+//     looks closer to the game's own Legacy panels.
+.panelDarker {
+    background-image: linear-gradient(to bottom, rgba(47, 59, 86, 0.72), rgba(27, 39, 62, 0.68));
+    background-color: rgba(27, 39, 62, 0.80);
+    border-color: rgba(255, 255, 255, 0.20);
+    box-shadow: 0 8rem 22rem rgba(0, 0, 0, 0.20);
 }
 
 // ─── Title bar ────────────────────────────────────────────────────────────────
@@ -67,15 +84,17 @@
     cursor: move;
     user-select: none;
     border-radius: 7rem;
+    overflow: hidden;
 }
 
 .titleText {
     color: rgba(255, 255, 255, 0.96);
-    font-size: 13.5rem;
+    font-size: var(--hc-title-font-size);
     font-weight: 600;
-    letter-spacing: 1rem;
-    word-spacing: 2rem;
+    letter-spacing: var(--hc-title-letter-spacing);
+    word-spacing: var(--hc-title-word-spacing);
     line-height: 1;
+    white-space: nowrap;
     pointer-events: none;
     transition: color 120ms ease-out;
 }
@@ -134,8 +153,8 @@
     cursor: pointer;
     appearance: none;
     outline: none;
-    // Nudge right so its left edge aligns with the icon buttons in the body below.
-    margin-left: 3rem;
+    // Nudge right so its center aligns better with the body icon column below.
+    margin-left: 6rem;
     border-radius: 50%;
     border-color: transparent;
     background-color: transparent;
@@ -487,7 +506,8 @@
     margin-left: 4rem !important;
 }
 
-// Surface buttons: each shows one icon, same square size as preset buttons.
+// Surface buttons: each shows one icon. They share the 32rem width of preset
+// slots, but use the taller action-button height so the icons read clearly.
 .surfaceButton {
     width: 32rem;
     min-width: 32rem;
@@ -557,14 +577,21 @@
     min-width: 32rem;
     height: 26rem;
     padding: 0;
+    box-sizing: border-box;
     display: flex;
     align-items: stretch;
     justify-content: stretch;
     border-radius: 4rem;
-    border: 1rem solid rgba(255, 255, 255, 0.35);
+    // Border is always 2rem so active state never changes layout size.
+    border: 2rem solid rgba(255, 255, 255, 0.24);
+    // Same family as the other panel buttons for a cleaner, more unified look.
+    // Saved-color preview remains solid on .presetSwatch.
     background-color: rgba(36, 54, 66, 0.58) !important;
     background-image: none !important;
-    overflow: hidden;
+    // Keep overflow visible so the active preset ring can sit outside the
+    // button instead of covering the number/color halves and making them look
+    // smaller.
+    overflow: visible;
     cursor: pointer;
     appearance: none;
     -webkit-appearance: none;
@@ -574,7 +601,7 @@
     transition: background-color 120ms ease-out, border-color 120ms ease-out, box-shadow 120ms ease-out;
 
     &:hover {
-        background-color: rgba(60, 80, 96, 0.85) !important;
+        background-color: #314350 !important;
         border-color: rgba(255, 255, 255, 0.58);
     }
     &:focus, &:active {
@@ -585,18 +612,20 @@
 // Left side: clear preset number.
 // Keep this wider than the color sliver so the number is the identity.
 .presetNumber {
-    width: 20rem;
-    min-width: 20rem;
+    width: 19rem;
+    min-width: 19rem;
     height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
     pointer-events: none;
     position: relative;
-    z-index: 2;
+    z-index: 5; // above holdBar so the number stays readable during hold-to-save.
     font-size: 13rem;
     font-weight: 900;
     line-height: 1;
+    // Fallback only. TSX sets the real active/idle/hover number colors inline
+    // because Cohtml can force ButtonText colors inside native buttons.
     color: rgba(255, 255, 255, 0.82);
     text-shadow: 0 0 4rem rgba(0, 0, 0, 0.9);
 }
@@ -604,8 +633,8 @@
 // Right side: full-height color sliver.
 // This gives more color preview without making the button bigger.
 .presetSwatch {
-    width: 12rem;
-    min-width: 12rem;
+    width: 13rem;
+    min-width: 13rem;
     height: 100%;
     display: block;
     pointer-events: none;
@@ -618,12 +647,23 @@
 }
 
 .presetSlotActive {
-    border-color: rgba(84, 215, 255, 0.68) !important;
-    background-color: rgba(36, 54, 66, 0.58) !important;
+    // Selected outline: this is the actual button border, so it wraps both the
+    // number side and color side. Raise alpha for stronger outline.
+    border-color: rgba(84, 215, 255, 0.95) !important;
+    background-color: rgba(36, 54, 66, 0.72) !important;
+    // Whole-button selected outline. Increase the first 1.2rem for a thicker
+    // outline; increase 0.78 for stronger cyan. The second shadow is soft glow.
     box-shadow:
-        inset 0 0 0 1rem rgba(84, 215, 255, 0.16),
-        0 0 7rem rgba(84, 215, 255, 0.60);
+        0 0 0 1.2rem rgba(84, 215, 255, 0.15),
+        0 0 4rem rgba(84, 215, 255, 0.34);
 }
+
+// Preset style options for testing, kept as notes instead of dead CSS classes:
+// - Current: actual 2rem button border + soft outside halo only.
+// - Stronger outline: raise the first box-shadow size above 1.1rem or alpha above 0.78.
+// - Quieter outline: lower the first box-shadow size toward 0.8rem or alpha toward 0.60.
+// - Bottom bar / corner wedge were tried and removed because they fought the saved-color sliver.
+
 
 // Reset button as a bare SVG icon. Do not use a text arrow here: some CJK fonts
 // render that glyph as a missing-character box.
@@ -654,89 +694,6 @@
     }
 }
 
-// Pushes the reset button to the far right of the outline row.
-// Must be the direct flex child — margin-left:auto on a button inside Tooltip's wrapper does nothing.
-.resetPusher {
-    margin-left: auto;
-    display: flex;
-    align-items: center;
-    flex-shrink: 0;
-}
-
-// White number inside the preset circle. text-shadow provides contrast on any fill color.
-// CSS class color is a fallback — the inline style in TSX is the authoritative override
-// because Cohtml applies ButtonText (black) to spans inside buttons otherwise.
-// Change font-size here to make numbers bigger/smaller (currently 13rem).
-.presetCircleNumber {
-    position: relative;
-    z-index: 2; // above the holdBar (z-index:0) so number shows during hold sweep
-    font-size: 13rem;
-    font-weight: 900;
-    line-height: 1;
-    color: rgba(255, 255, 255, 0.92); // fallback — overridden by inline style in TSX
-    text-shadow: 0 0 4rem rgba(0, 0, 0, 0.9), 0 1rem 3rem rgba(0, 0, 0, 0.7);
-    pointer-events: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-// Reset inline in the outline row — same style as bottom action buttons but pushed to the right via margin-left:auto.
-.presetResetInline {
-    width: 24rem;
-    min-width: 24rem;
-    height: 24rem;
-    border-radius: 4rem;
-    border: 1rem solid rgba(255, 255, 255, 0.35);
-    background-color: rgba(36, 54, 66, 0.58) !important;
-    background-image: none !important;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0;
-    cursor: pointer;
-    appearance: none;
-    -webkit-appearance: none;
-    outline: none;
-    position: relative;
-    overflow: hidden;
-    flex-shrink: 0;
-    transition: background-color 120ms ease-out, border-color 120ms ease-out;
-
-    &:hover {
-        background-color: rgba(108, 136, 150, 0.34) !important;
-        border-color: rgba(255, 255, 255, 0.58);
-    }
-}
-
-// Corner wedge: triangle in the top-right corner of the preset button.
-// clip-path clips a square to the upper-right triangle. background-color set via React inline style.
-// The button's overflow:hidden + border-radius:4rem naturally rounds the corner of the wedge.
-.presetDot {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 12rem;
-    height: 12rem;
-    clip-path: polygon(100% 0%, 0% 0%, 100% 100%);
-    pointer-events: none;
-    z-index: 1;
-}
-
-// Centered glyph for 1/2.
-// CSS color is a fallback; inline style in TSX is the authoritative override for Cohtml.
-.presetGlyph {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 16rem;
-    font-weight: 700;
-    line-height: 1;
-    pointer-events: none;
-    position: relative;
-    z-index: 1;
-}
-
 // Reset SVG icon. The SVG itself is light gray; hover filters it to white.
 .resetIcon {
     width: 16rem;
@@ -746,6 +703,7 @@
     z-index: 1;
     opacity: 0.86;
     filter: drop-shadow(0 0 3rem rgba(0, 0, 0, 0.42));
+    transform: scaleX(-1);
     transition: filter 120ms ease-out, opacity 120ms ease-out, transform 120ms ease-out;
 }
 
@@ -753,7 +711,7 @@
 .presetResetBare:focus-visible .resetIcon {
     opacity: 1;
     filter: brightness(0) invert(1) drop-shadow(0 0 5rem rgba(255, 255, 255, 0.28)) drop-shadow(0 0 4rem rgba(0, 0, 0, 0.65));
-    transform: scale(1.2);
+    transform: scaleX(-1) scale(1.2);
 }
 
 .resetButton {
@@ -762,17 +720,21 @@
 }
 
 // Hold-progress bar: scaleX driven by rAF.
+// This is the "saving preset" sweep. To make the fill-up animation more visible:
+//   - increase background alpha (currently 0.62)
+//   - increase the inset white line alpha (currently 0.20)
 .holdBar {
     position: absolute;
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(84, 215, 255, 0.3);
+    background-color: rgba(84, 215, 255, 0.55);
+    box-shadow: inset 0 0 0 1rem rgba(255, 255, 255, 0.20);
     transform: scaleX(0);
     transform-origin: left center;
     pointer-events: none;
-    z-index: 1;
+    z-index: 3; // above presetSwatch so the save sweep visibly crosses both halves.
 }
 
 // Guideline button hold-to-save sweep — same visual as holdBar but inside a square icon button.
@@ -848,15 +810,15 @@
     background-color: rgba(255, 255, 255, 0.92);
 }
 
-// Stronger controls for players using the game's LegacyUI transparency option.
-// Scoped under .panelLegacyReadable only, so normal mode and other mods are untouched.
-.panelLegacyReadable {
+// Stronger controls for "Darker panel" mode.
+// Scoped under .panelDarker only, so normal mode and other mods are untouched.
+.panelDarker {
     .infoButton,
     .controlIconButton,
     .actionButton,
     .presetSlot {
-        background-color: rgba(30, 43, 52, 0.92) !important;
-        border-color: rgba(255, 255, 255, 0.42);
+        background-color: rgba(25, 38, 61, 0.70) !important;
+        border-color: rgba(255, 255, 255, 0.26);
     }
 
     .infoButton {
@@ -869,15 +831,23 @@
     }
 
     .valueField {
-        background-color: rgba(14, 23, 30, 0.94);
+        // Percent labels are readouts, not buttons; keep them flat in darker mode.
+        background-color: transparent;
+        border: 0;
     }
 
     .presetSlotActive {
-        background-color: rgba(30, 43, 52, 0.96) !important;
-        border-color: rgba(84, 215, 255, 0.72) !important;
+        background-color: rgba(25, 38, 61, 0.82) !important;
+        border-color: rgba(84, 215, 255, 0.98) !important;
     }
 
     .dragGrip {
         background-color: rgba(130, 155, 168, 0.62);
+    }
+
+    .dragGrip:hover,
+    .dragGripActive {
+        background-color: #1E83AA;
+        border-color: #1E83AA;
     }
 }

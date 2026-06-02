@@ -4,36 +4,36 @@
 	<!--Name of the mod to display to players-->
 	<DisplayName Value="Hover Colors" />
 	<!--Short description of the mod-->
-	<ShortDescription Value="Change Blue Color on everything to Any color / Any opacity. Surface tool QoL, turn preview layers off." />
+	<ShortDescription Value="Change blue hover outlines to any color and opacity. Includes Surface preview toggle, District colors, and guideline opacity." />
 	<!--Long description of the mod. Single line or multi line. Supports minimal markdown subset-->
 	<!--LongDescription Value="This is a long description" /-->
 	<LongDescription>
-###  Mochi's Hover Colors
+### Mochi's Hover Colors
 
-- Change the Blue outline color that has haunted every part of your city.
-- Any object you can hover over can change: all buildings, cars, cims, trees and more!
-- Guidelines - opacity slider for any transparency.
-- Surfaces: turn off the preview layers while in Surface tool so you can see the actual ground surface colors without a cloudy preview layer on top.
-- District tool: change color of district borders and overlays or turn them off completely.
+- Change the blue outline color that has haunted every part of your city.
+- Objects you can hover over can change: buildings, cars, cims, trees and more.
+- Guidelines: opacity slider for cleaner building and placement previews.
+- Surfaces: turn off preview layers while using the Surface tool so you can see the real ground colors without a cloudy preview layer on top.
+- District tool: change the color and opacity of district borders and overlays, or turn them off completely.
 
 - If you can hover over it then you can probably change it :)
-- Save safe, safe to remove anytime
+- Save safe, safe to remove any time.
 - No known compatibility issues. No Harmony patches.
 
-##  Important
-- Check the OPTIONS MENU For bulldozer settings
-- To turn off ALL Tooltips (click on the Info button top left)
-- only see it when you need it
-- Alpha setting is what makes things Transparent - it's the LAST bar on the color picker.
-- Tap preset 1 or 2 to switch colors
-- Change presets: select a color from main color picker, then HOLD preset button for 1 second (fill-bar will show save progress)
-- yes everything has Hotkeys - check options menu (tool tips on the right side has most of what you need to know)
+## Important
+- Check the Options menu for bulldozer and road-tool color behavior.
+- If the panel is too transparent, enable Darker panel in Options. Recommended for LegacyUI users.
+- To turn off panel tooltips, click the Info button in the top-left of the in-city panel.
+- Alpha is transparency. It is the last bar on the color picker.
+- Tap preset 1 or 2 to switch colors.
+- Change presets: select a color from the main color picker, then hold preset 1 or 2 until the fill bar completes.
+- Hotkeys are in the Options menu. Tooltip text on the right side has most of what you need to know.
 
-###   Feedback and Support
+### Feedback and Support
 
 - Feedback is welcome through GitHub or Discord links on the right.
-- This mod took many months to overcome  many obstacles in game code.
-- If you like the free mods made with love and lots of late night coffee, give a Like :)
+- This mod took many months to overcome many obstacles in game code.
+- If you like free mods made with love and lots of late night coffee, give a Like :)
 
 ### Credits
 - River-Mochi - modder/maintainer
@@ -44,10 +44,10 @@
 - Dx, Necko1996, Noel, BugsyG, ElGendo87 - testing
 
 
-12d+ Languages
+14 Languages
 English, Français, Deutsch, Español, Italiano, Polski
 简体中文 , 한국어, Português Brasil, 繁體中文 , 日本語
-WIP: Thai ภาษาไทย, Vietnamese Tiếng Việt, Turlish Türkçe
+Thai ภาษาไทย, Vietnamese Tiếng Việt, Turkish Türkçe
 
 </LongDescription>
 	<!--Thumbnail-->
@@ -77,11 +77,11 @@ WIP: Thai ภาษาไทย, Vietnamese Tiếng Việt, Turlish Türkçe
 	<!--Required DLC, can be set multiple times. Supported values are "Landmark Buildings", "San Fransisco Set", "Beach Properties", "Urban Promenades", "Modern Architecture"-->
 	<RequiredDLC Value="" />
 	<!--Change log for new version. Single line or multi line. Supports minimal markdown subset-->
-	<ChangeLog Value="" />
 <ChangeLog>
-- add WIP Thai, Vietnamese, and Turkish locales.
-- update all translations files
-- Ui/Ux improvements for District tool and Presets glow
+- UI/UX improvements for preset buttons, reset button, and panel readability.
+- Darker panel option: better for LegacyUI or anyone who prefers a higher-contrast panel.
+- Options menu: moved Guidelines opacity above Key bindings.
+- Fix: District color changes only the vanilla District Area prefab, not custom assets.
 </ChangeLog>
 	<!--External link, can be set multiple times. supported types are "discord", "github", "youtube", "twitch", "x", "paypal", "patreon", "buymeacoffee", "kofi", "crowdin", "gitlab", "gofundme"-->
 	<ExternalLink Type="" Url="" />

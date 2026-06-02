@@ -51,7 +51,7 @@ namespace HoverColors.Localization
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToolColorMode)), "Bulldozer + Roads" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ToolColorMode)),
                     "Controls temporary outline colors while bulldozer, or road tools are active.\n\n" +
-                    "**1. Recommended** uses game's Warning Color for demolition and a softer vanilla blue for roads.\n" +
+                    "**1. Recommended** uses game's Warning color for demolition and a softer vanilla blue for roads.\n" +
                     "**2. Vanilla tool colors** restores the game's normal vanilla blue while those tools are active.\n" +
                     "**3. Keep my custom color** uses your chosen color everywhere.\n\n" +
 
@@ -63,17 +63,13 @@ namespace HoverColors.Localization
                 { m_Settings.GetToolColorModeLocaleID("Vanilla"), "2. Vanilla tool colors" },
                 { m_Settings.GetToolColorModeLocaleID("Custom"), "3. Keep my custom color" },
 
-                // Panel style
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelStyle)), "Panel style" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelStyle)),
-                    "Choose how opaque the in-city Hover Colors panel should be.\n\n" +
-                    "**Standard** keeps the current translucent style.\n" +
-                    "**LegacyUI readable** uses a darker panel and darker buttons for players using the game's LegacyUI transparency option.\n\n" +
-                    "Use this if the color swatch or preset buttons are too hard to see."
+                // Darker panel
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)), "Darker panel" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)),
+                    "Makes the in-city Hover Colors panel darker and easier to read.\n\n" +
+                    "Made for LegacyUI users, and also useful if you prefer a darker panel in Modern UI."
                 },
-                { m_Settings.GetPanelStyleLocaleID("Standard"), "Standard" },
-                { m_Settings.GetPanelStyleLocaleID("LegacyReadable"), "LegacyUI readable" },
-
+                
                 // Guidelines opacity slider
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.GuidelineOpacityPercent)), "Guidelines opacity (alpha)" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.GuidelineOpacityPercent)),
@@ -118,7 +114,7 @@ namespace HoverColors.Localization
                     "In loving memory of Mochi."
                     },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.MochiDedicationText)),
-                    "This mod is dedicated to Mochi. She was a beloved dog, adopted at age 7,\n" +
+                    "This mod is dedicated to Mochi. She was a beloved doggie, adopted at age 7,\n" +
                     "and gave 13 years of love and joy. This mod would not be possible without Mochi."
                     },
             };
