@@ -56,19 +56,17 @@ WIP: Thai ภาษาไทย, Vietnamese Tiếng Việt, Turkish Türkçe
     <Screenshot Value="Properties/02-image-castle02.jpg" />
     <Screenshot Value="Properties/03-image-house01.jpg" />
     <Screenshot Value="Properties/04-image-house02.jpg" />
-
 	<Screenshot Value="Properties/10-image-Options.jpg" />
-    <Screenshot Value="Properties/15-image-MainPanel.jpg" />
     <Screenshot Value="Properties/20-image-ColorPicker.jpg" />
-    <Screenshot Value="Properties/25-image-DistrictColorPicker.jpg" />
     <Screenshot Value="Properties/30-image-Guidelines.jpg" />
+    <Screenshot Value="Properties/40-image-DistrictColorPicker.jpg" />
     <Screenshot Value="Properties/50-image-Districts.jpg" />
 	<!--Tag, can be set multiple times-->
 	<Tag Value="" />
 	<!--Link to the forum post where the mod can be discussed-->
 	<ForumLink Value="https://forum.paradoxplaza.com/forum/threads/mochis-hover-colors.1925898/" />
 	<!--Version of the mod-->
-	<ModVersion Value="0.7.4" />
+	<ModVersion Value="0.8.0" />
 	<!--Recommended version of the base game to use the mod-->
 	<GameVersion Value="1.5.*" />
 	<!--Dependency for the mod, can be set multiple times-->
@@ -79,7 +77,7 @@ WIP: Thai ภาษาไทย, Vietnamese Tiếng Việt, Turkish Türkçe
 <ChangeLog>
 - UI/UX improvements for preset buttons, reset button, and panel readability.
 - Darker panel option: better for LegacyUI or anyone who prefers a higher-contrast panel.
-- Options menu: moved Guidelines opacity above Key bindings.
+- Options menu: added features
 - Fix: District color changes only the vanilla District Area prefab, not custom assets.
 </ChangeLog>
 	<!--External link, can be set multiple times. supported types are "discord", "github", "youtube", "twitch", "x", "paypal", "patreon", "buymeacoffee", "kofi", "crowdin", "gitlab", "gofundme"-->
