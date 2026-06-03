@@ -735,7 +735,7 @@ export const MochiColorPickerPanel = () => {
                             </Tooltip>
                         </div>
 
-                        {/* Guidelines: icon resets both guideline colors + opacity. */}
+                        {/* Guidelines: icon resets guideline colors; opacity slider stays as-is. */}
                         <div className={styles.controlRow}>
                             <Tooltip tooltip={tt(text.tooltipResetGuidelines)}>
                                 <button

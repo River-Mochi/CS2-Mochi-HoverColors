@@ -96,6 +96,16 @@ namespace HoverColors.Localization
                 { m_Settings.GetGuidelineColorPresetLocaleID("HighVisibility"), "High visibility" },
                 { m_Settings.GetGuidelineColorPresetLocaleID("Custom"), "Custom" },
 
+                // Dashed alignment guide color
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.GuidelineDashedColorPreset)), "Dashed alignment guide color" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.GuidelineDashedColorPreset)),
+                    "Sets the dashed alignment guide color used for road angles, 90-degree helpers, and connection hints.\n\n" +
+                    "The city slider still controls dashed guide opacity."
+                },
+                { m_Settings.GetGuidelineDashedColorPresetLocaleID("Vanilla"), "Vanilla white" },
+                { m_Settings.GetGuidelineDashedColorPresetLocaleID("Yellow"), "High visibility yellow" },
+                { m_Settings.GetGuidelineDashedColorPresetLocaleID("Green"), "Construction green" },
+
                 // Guidelines opacity slider
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.GuidelineOpacityPercent)), "辅助线不透明度（Alpha）" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.GuidelineOpacityPercent)),

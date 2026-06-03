@@ -45,6 +45,10 @@ namespace HoverColors.Settings
         public const int GuidelineColorPresetHighVisibility = 3;
         public const int GuidelineColorPresetCustom = 4;
 
+        public const int GuidelineDashedColorPresetVanilla = 0;
+        public const int GuidelineDashedColorPresetYellow = 1;
+        public const int GuidelineDashedColorPresetGreen = 2;
+
         // Centralised default for the guideline opacity slider.
         // Vanilla CS2 is 100; lower = more transparent. Keep TSX fallback bindings in sync.
         public const int DefaultGuidelineOpacityPercent = 30;
@@ -160,7 +164,7 @@ namespace HoverColors.Settings
         public float GuidelineB { get; set; }
 
         // Large guide circles/spacing lines (GuideLineSettingsData Low + VeryLow).
-        // Alpha is independent from the dashed/snap guideline opacity slider.
+        // Alpha is independent from the dashed alignment guideline opacity slider.
         [SettingsUIHidden]
         public float GuidelineLinesR { get; set; }
 
@@ -226,13 +230,15 @@ namespace HoverColors.Settings
         // GuidelineColorSystem divides by 100 and multiplies the game's default per-priority
         // alphas, so 100 = no change, 50 = half as visible, 0 = fully invisible guidelines.
 
-        [SettingsUIDropdown(typeof(HoverColorsSettings), nameof(GetGuidelineColorPresetItems))]
-        [SettingsUISection(Actions, Guidelines)]
+        [SettingsUIHidden]
         public int GuidelineLinesColorPreset { get; set; }
 
-        [SettingsUIDropdown(typeof(HoverColorsSettings), nameof(GetGuidelineColorPresetItems))]
-        [SettingsUISection(Actions, Guidelines)]
+        [SettingsUIHidden]
         public int GuidelinePreviewColorPreset { get; set; }
+
+        [SettingsUIDropdown(typeof(HoverColorsSettings), nameof(GetGuidelineDashedColorPresetItems))]
+        [SettingsUISection(Actions, Guidelines)]
+        public int GuidelineDashedColorPreset { get; set; }
 
         [SettingsUISlider(min = 0, max = 100, step = 5, scalarMultiplier = 1, unit = Unit.kPercentage)]
         [SettingsUISection(Actions, Guidelines)]
@@ -344,6 +350,7 @@ namespace HoverColors.Settings
             GuidelinePreviewG = 0.7f;
             GuidelinePreviewB = 1f;
             GuidelinePreviewA = 1f;
+            GuidelineDashedColorPreset = GuidelineDashedColorPresetVanilla;
             PanelTooltipsEnabled = true;
             SurfaceToolAreasSuppressed = true;
 
@@ -423,6 +430,33 @@ namespace HoverColors.Settings
         public string GetGuidelineColorPresetLocaleID(string valueName)
         {
             return "Options[" + id + ".GuidelineColorPreset." + valueName + "]";
+        }
+
+        public DropdownItem<int>[] GetGuidelineDashedColorPresetItems()
+        {
+            return new[]
+            {
+                new DropdownItem<int>
+                {
+                    value = GuidelineDashedColorPresetVanilla,
+                    displayName = GetGuidelineDashedColorPresetLocaleID("Vanilla"),
+                },
+                new DropdownItem<int>
+                {
+                    value = GuidelineDashedColorPresetYellow,
+                    displayName = GetGuidelineDashedColorPresetLocaleID("Yellow"),
+                },
+                new DropdownItem<int>
+                {
+                    value = GuidelineDashedColorPresetGreen,
+                    displayName = GetGuidelineDashedColorPresetLocaleID("Green"),
+                },
+            };
+        }
+
+        public string GetGuidelineDashedColorPresetLocaleID(string valueName)
+        {
+            return "Options[" + id + ".GuidelineDashedColorPreset." + valueName + "]";
         }
 
         private static void TryOpenUrl(string url)
