@@ -323,7 +323,7 @@
     position: relative; // required for .outlineFieldHoverRing
     // Width: to adjust swatch width change this AND the matching values in .outlineField + .outlineField button.
     width: 50rem;
-    // Height: 26rem matches the preset slot buttons for a consistent top-row height.
+    // Height: 26rem matches the preset slot buttons for consistent top-row height.
     height: 26rem;
     box-sizing: border-box;
     padding: 0;
@@ -333,7 +333,7 @@
     cursor: pointer;
 }
 
-// Hover ring is a real child span, not a pseudo-element, because Cohtml and the
+// Hover ring is a real child span, and not pseudo-element, because Cohtml and the
 // embedded vanilla ColorField can be unreliable with pseudo-elements over buttons.
 // .outlineFieldShellHovered is set by React when any of these fire:
 //   - onMouseMove on the shell (bubbles from ColorField button child)
@@ -583,9 +583,10 @@
     border-radius: 4rem;
     // Border is always 2rem so active state never changes layout size.
     border: 2rem solid rgba(255, 255, 255, 0.24);
-    // Same family as the other panel buttons for a cleaner, more unified look.
-    // Saved-color preview remains solid on .presetSwatch.
-    background-color: rgba(36, 54, 66, 0.58) !important;
+    // Slightly darker than the other panel buttons so 1/2 remain readable when
+    // players raise the game's UI transparency. Saved-color preview remains
+    // solid and true-color on .presetSwatch.
+    background-color: rgba(26, 39, 48, 0.78) !important;
     background-image: none !important;
     // Keep overflow visible so the active preset ring can sit outside the
     // button instead of covering the number/color halves and making them look
@@ -600,7 +601,7 @@
     transition: background-color 120ms ease-out, border-color 120ms ease-out, box-shadow 120ms ease-out;
 
     &:hover {
-        background-color: #314350 !important;
+        background-color: rgba(38, 56, 68, 0.92) !important;
         border-color: rgba(255, 255, 255, 0.58);
     }
     &:focus, &:active {
@@ -649,11 +650,11 @@
     // Selected outline: this is the actual button border, so it wraps both the
     // number side and color side. Raise alpha for stronger outline.
     border-color: rgba(84, 215, 255, 0.95) !important;
-    background-color: rgba(36, 54, 66, 0.72) !important;
+    background-color: rgba(26, 39, 48, 0.86) !important;
     // Whole-button selected outline. Increase the first 1.2rem for a thicker
     // outline; increase 0.78 for stronger cyan. The second shadow is soft glow.
     box-shadow:
-        0 0 0 1.2rem rgba(84, 215, 255, 0.30),
+        0 0 0 1.2rem rgba(84, 215, 255, 0.50),
         0 0 4rem rgba(84, 215, 255, 0.34);
 }
 

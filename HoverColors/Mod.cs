@@ -31,6 +31,13 @@ namespace HoverColors
         public static readonly string ModVersion =
             Assembly.GetExecutingAssembly().GetName().Version?.ToString(3) ?? "0.5.0";
 
+        public static string BuildFlavor =>
+#if DEBUG
+            "DEBUG";
+#else
+            "RELEASE";
+#endif
+
         public static readonly ILog s_Log =
             LogManager.GetLogger(ModId).SetShowsErrorsInUI(false);
 
@@ -191,7 +198,7 @@ namespace HoverColors
             }
 
             s_BannerLogged = true;
-            LogUtils.Info(() => $"{ModName} v{ModVersion} {ModTag} loaded");
+            LogUtils.Info(() => $"{ModName} v{ModVersion} {BuildFlavor} loaded");
         }
     }
 }

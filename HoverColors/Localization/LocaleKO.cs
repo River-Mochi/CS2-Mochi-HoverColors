@@ -60,9 +60,9 @@ namespace HoverColors.Localization
                 { m_Settings.GetToolColorModeLocaleID("Recommended"), "1. 추천" },
                 { m_Settings.GetToolColorModeLocaleID("Vanilla"), "2. 바닐라 도구 색상" },
                 { m_Settings.GetToolColorModeLocaleID("Custom"), "3. 내 사용자 색상 유지" },
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseOverlapWarningColor)), "Overlapping items warning color" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseOverlapWarningColor)), "Enable Overlapping items outline" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseOverlapWarningColor)),
-                    "When vanilla placement validation blocks an action, such as Overlapping items, use the game's salmon error outline.\n\n" +
+                    "Uses the game's vanilla salmon error outline when placement is blocked by Overlapping items.\n\n" +
                     "This works with all Bulldozer + Roads modes and does not overwrite your saved custom color."
                 },
 
