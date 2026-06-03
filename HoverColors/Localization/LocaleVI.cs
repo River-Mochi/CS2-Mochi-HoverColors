@@ -62,17 +62,21 @@ namespace HoverColors.Localization
                 { m_Settings.GetToolColorModeLocaleID("Recommended"), "1. Khuyên dùng" },
                 { m_Settings.GetToolColorModeLocaleID("Vanilla"), "2. Màu công cụ vanilla" },
                 { m_Settings.GetToolColorModeLocaleID("Custom"), "3. Giữ màu tùy chỉnh của tôi" },
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseOverlapWarningColor)), "Enable Overlapping items outline" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseOverlapWarningColor)), "Bật viền khi vật bị chồng lên nhau" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseOverlapWarningColor)),
-                    "Uses the game's vanilla salmon error outline when placement is blocked by Overlapping items.\n\n" +
-                    "This works with all Bulldozer + Roads modes and does not overwrite your saved custom color."
+                    "Bật lại hành vi vanilla bình thường khi đặt vật chồng lên vật khác.\n" +
+                    "Dùng viền lỗi màu cá hồi của game khi thử đặt chồng lên nhau.\n\n" +
+                    "Hoạt động với mọi chế độ Bulldozer + Roads và không ghi đè màu tùy chỉnh đã lưu."
                 },
 
                 // Darker panel
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)), "Darker panel" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)), "Bảng tối hơn" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)),
-                    "Makes the in-city Hover Colors panel darker and easier to read.\n\n" +
-                    "Recommended for players using the game's LegacyUI transparency option, and also useful if you prefer a stronger, darker panel in Modern UI."
+                    "<Bảng tối>: dành cho người dùng Legacy UI; cũng dùng được trong Modern UI nếu thích bảng tối hơn.\n" +
+                    "<Bảng chuẩn>: kiểu trong suốt riêng của Hover Colors.\n" +
+                    "Nhìn sáng hơn và hiện đại hơn.\n" +
+                    "Phù hợp nhất với đa số người chơi dùng Modern UI mới của game.\n" +
+                    "Thử cả hai để chọn kiểu thích hơn. Chỉ đổi nền bảng của mod này, không đổi UI của game."
                 },
                 
                 // Guidelines opacity slider

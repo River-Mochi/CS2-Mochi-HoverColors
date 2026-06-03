@@ -12,7 +12,7 @@
 
 - Change the blue outline color that has haunted every part of your city.
 - If you can hover over it then you can probably change it: buildings, cars, trees, cims, etc.!
-- Guidelines: opacity slider for less cluttered placements.
+- Guidelines: change opacity so you can see items being placed and not just a thick white line!
 - Surfaces: turn off preview layers while using the Surface tool so you can see the real ground colors without a cloudy layer on top.
 - District tool: change the color + opacity of district borders and overlays, or turn them off completely.
 
@@ -42,10 +42,10 @@
 - Dx, Necko1996, Noel, BugsyG, ElGendo87 - testing
 
 
-14 Languages
-English, Français, Deutsch, Español, Italiano, Polski
-简体中文 , 한국어, Português Brasil, 繁體中文 , 日本語
-WIP: Thai ภาษาไทย, Vietnamese Tiếng Việt, Turkish Türkçe
+### 14 Languages
+- English, Français, Deutsch, Español, Italiano, Polski, 简体中文 , 한국어
+- Português Brasil, 繁體中文 , 日本語
+WIP: Thai ภาษาไทย, Vietnamese Tiếng Việt, Turkish Türkçe, EU Portuguese Português
 
 tags: Mochi's blue scrubber, Highlight, border color, remove blue
 
@@ -67,7 +67,7 @@ tags: Mochi's blue scrubber, Highlight, border color, remove blue
 	<!--Link to the forum post where the mod can be discussed-->
 	<ForumLink Value="https://forum.paradoxplaza.com/forum/threads/mochis-hover-colors.1925898/" />
 	<!--Version of the mod-->
-	<ModVersion Value="0.8.0" />
+	<ModVersion Value="0.8.2" />
 	<!--Recommended version of the base game to use the mod-->
 	<GameVersion Value="1.5.*" />
 	<!--Dependency for the mod, can be set multiple times-->
@@ -76,10 +76,10 @@ tags: Mochi's blue scrubber, Highlight, border color, remove blue
 	<RequiredDLC Value="" />
 	<!--Change log for new version. Single line or multi line. Supports minimal markdown subset-->
 <ChangeLog>
-- UI/UX improvements for preset buttons, reset button, and panel readability.
-- Darker panel option: better for LegacyUI or anyone who prefers a higher-contrast panel.
-- Options menu: added features
-- Fix: District color changes only the vanilla District Area prefab, not custom assets.
+- UI/UX improvements
+- Options menu: add toggle to apply hover colors to overlapping items just like vanilla. default on.
+- added EU-portuguese translation.
+- updated translations.
 </ChangeLog>
 	<!--External link, can be set multiple times. supported types are "discord", "github", "youtube", "twitch", "x", "paypal", "patreon", "buymeacoffee", "kofi", "crowdin", "gitlab", "gofundme"-->
 	<ExternalLink Type="" Url="" />
