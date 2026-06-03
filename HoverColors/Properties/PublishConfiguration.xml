@@ -53,11 +53,9 @@ tags: Mochi's blue scrubber, Highlight, border color, remove blue
 	<!--Thumbnail-->
 	<Thumbnail Value="Properties/Thumbnail-HC02.jpg" />
 	<!--Screenshot, can be set multiple times-->
-    <Screenshot Value="Properties/01-image-castle01.jpg" />
-    <Screenshot Value="Properties/02-image-castle02.jpg" />
-    <Screenshot Value="Properties/03-image-house01.jpg" />
-    <Screenshot Value="Properties/04-image-house02.jpg" />
-	<Screenshot Value="Properties/10-image-Options.jpg" />
+    <Screenshot Value="Properties/10-image-before-after.jpg" />
+    <Screenshot Value="Properties/11-image-before-after.jpg" />
+	<Screenshot Value="Properties/15-image-Options.jpg" />
     <Screenshot Value="Properties/20-image-ColorPicker.jpg" />
     <Screenshot Value="Properties/30-image-Guidelines.jpg" />
     <Screenshot Value="Properties/40-image-DistrictColorPicker.jpg" />
