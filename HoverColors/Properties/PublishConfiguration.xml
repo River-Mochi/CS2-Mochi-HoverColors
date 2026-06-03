@@ -16,17 +16,16 @@
 - Surfaces: turn off preview layers while using the Surface tool so you can see the real ground colors without a cloudy layer on top.
 - District tool: change the color + opacity of district borders and overlays, or turn them off completely.
 
-- Save-game safe and safe to remove any time.
-- No known compatibility issues. No Harmony patches.
-
 ## Important
 - Check the Options menu for bulldozer and road-tool color behavior.
 - To turn off panel tooltips, click the Info button in the top-left of the in-city panel.
-- **Darker panel** option. Recommended for LegacyUI or players who prefer darker high contrast.
+- **Darker panel** option. Recommended for LegacyUI or players who prefer darker high contrast. Try both panels and see what you like!
 - Alpha is transparency; it's the last bar on the color picker.
 - Tap preset 1 or 2 to switch your saved colors.
 - Change presets: select a color from the main color picker, then hold preset 1 or 2 until the fill bar completes.
 - Hotkeys are in the Options menu. Read the tooltips or Options Menu 3rd panel if you get lost.
+- Save-game safe and safe to remove any time.
+- No known compatibility issues. No Harmony patches.
 
 ### Feedback and Support
 
@@ -47,6 +46,8 @@
 English, Français, Deutsch, Español, Italiano, Polski
 简体中文 , 한국어, Português Brasil, 繁體中文 , 日本語
 WIP: Thai ภาษาไทย, Vietnamese Tiếng Việt, Turkish Türkçe
+
+tags: Mochi's blue scrubber, Highlight, border color, remove blue
 
 </LongDescription>
 	<!--Thumbnail-->

@@ -8,6 +8,8 @@ namespace HoverColors.Localization
     using Colossal;
     using HoverColors.Settings;
     using System.Collections.Generic;
+    using System.Threading;
+    using static Game.UI.Editor.AssetImportPanel;
 
     public sealed class LocaleEN : IDictionarySource
     {
@@ -73,8 +75,11 @@ namespace HoverColors.Localization
                 // Darker panel
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)), "Darker panel" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)),
-                    "Makes the in-city Hover Colors panel darker and easier to read.\n\n" +
-                    "Made for LegacyUI users, and also useful if you prefer a darker panel in Modern UI."
+                    "<Dark panel>: made for legacy UI players; can be used in Modern UI too if you like a darker panel.\n"+
+                    "<Standard panel>: custom translucent Hover Colors style.\n"+
+                    "Lighter, more modern look.\n" +
+                    "Best for most players using the new Modern game UI.\n" +
+                    "Try both and see which you prefer! This only changes the background of this mod panel and not the game's UI."
                 },
                 
                 // Guidelines opacity slider
