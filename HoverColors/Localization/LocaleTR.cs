@@ -80,16 +80,16 @@ namespace HoverColors.Localization
                 },
                 
                 // Guidelines color presets
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.GuidelineLinesColorPreset)), "Guide/snap line color" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.GuidelineLinesColorPreset)), "Guide circles / spacing color" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.GuidelineLinesColorPreset)),
-                    "Sets the color for snap/telegraph guide lines, like helper lines that point toward nearby roads.\n\n" +
-                    "The in-city guide-line swatch switches this to <Custom>.\n" +
-                    "Low-priority guide circles keep vanilla RGB and follow the opacity slider."
+                    "Sets the color preset for large road-spacing guide circles/arcs.\n\n" +
+                    "Use the in-city guide swatch for custom color + alpha.\n" +
+                    "Dashed snap/alignment guide lines stay vanilla-color and use the opacity slider."
                 },
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.GuidelinePreviewColorPreset)), "Road/tool preview overlay color" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.GuidelinePreviewColorPreset)),
-                    "Sets the color for the preview overlay body used by roads and some tool previews.\n\n" +
-                    "The in-city preview swatch switches this to <Custom>.\n" +
+                    "Sets the color preset for the road/tool preview overlay body.\n\n" +
+                    "Use the in-city preview swatch for custom color + alpha.\n" +
                     "Positive feedback stays vanilla green so valid placement is still clear."
                 },
                 { m_Settings.GetGuidelineColorPresetLocaleID("Vanilla"), "Vanilla" },

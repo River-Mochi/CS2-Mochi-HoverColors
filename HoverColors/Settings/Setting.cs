@@ -159,7 +159,8 @@ namespace HoverColors.Settings
         [SettingsUIHidden]
         public float GuidelineB { get; set; }
 
-        // Guide/snap telegraph lines (GuideLineSettingsData.m_HighPriorityColor).
+        // Large guide circles/spacing lines (GuideLineSettingsData Low + VeryLow).
+        // Alpha is independent from the dashed/snap guideline opacity slider.
         [SettingsUIHidden]
         public float GuidelineLinesR { get; set; }
 
@@ -169,7 +170,10 @@ namespace HoverColors.Settings
         [SettingsUIHidden]
         public float GuidelineLinesB { get; set; }
 
-        // Road/tool preview overlay body (GuideLineSettingsData.m_MediumPriorityColor).
+        [SettingsUIHidden]
+        public float GuidelineLinesA { get; set; }
+
+        // Road/tool preview overlay body (GuideLineSettingsData Medium).
         [SettingsUIHidden]
         public float GuidelinePreviewR { get; set; }
 
@@ -178,6 +182,9 @@ namespace HoverColors.Settings
 
         [SettingsUIHidden]
         public float GuidelinePreviewB { get; set; }
+
+        [SettingsUIHidden]
+        public float GuidelinePreviewA { get; set; }
 
         // In-city info button preference. Hidden from Options UI; persisted here so
         // "tooltips off" survives closing/reopening the panel and game restarts.
@@ -331,10 +338,12 @@ namespace HoverColors.Settings
             GuidelineLinesR = 0.7f;
             GuidelineLinesG = 0.7f;
             GuidelineLinesB = 1f;
+            GuidelineLinesA = DefaultGuidelineOpacityPercent / 100f;
             GuidelinePreviewColorPreset = GuidelineColorPresetVanilla;
             GuidelinePreviewR = 0.7f;
             GuidelinePreviewG = 0.7f;
             GuidelinePreviewB = 1f;
+            GuidelinePreviewA = DefaultGuidelineOpacityPercent / 100f;
             PanelTooltipsEnabled = true;
             SurfaceToolAreasSuppressed = true;
 

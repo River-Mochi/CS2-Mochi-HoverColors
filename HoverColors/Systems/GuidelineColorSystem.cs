@@ -1,7 +1,7 @@
 // File: Systems/GuidelineColorSystem.cs
 // Purpose: Apply player guideline color/opacity to vanilla GuideLineSettingsData.
-// The game splits guideline overlays into priority colors. HC exposes only the
-// two useful player-facing groups and leaves the rest close to vanilla.
+// The game splits guideline overlays into priority colors. HC exposes the two
+// useful player-facing color groups and keeps dashed snap lines vanilla-color.
 //
 // Background: HighlightsAndGuidelinesTweaks repo pointed at GuideLineSettingsData on
 // the rendering-settings prefab. We instead write to the runtime singleton each time the slider
@@ -50,10 +50,12 @@ namespace HoverColors.Systems
         private float m_LastLinesR = float.NaN;
         private float m_LastLinesG = float.NaN;
         private float m_LastLinesB = float.NaN;
+        private float m_LastLinesA = float.NaN;
         private int m_LastPreviewPreset = int.MinValue;
         private float m_LastPreviewR = float.NaN;
         private float m_LastPreviewG = float.NaN;
         private float m_LastPreviewB = float.NaN;
+        private float m_LastPreviewA = float.NaN;
 
         protected override void OnCreate()
         {
@@ -70,15 +72,17 @@ namespace HoverColors.Systems
                 return;
             }
 
-            float opacity = Mathf.Clamp01(settings.GuidelineOpacityPercent / 100f);
+            float snapOpacity = Mathf.Clamp01(settings.GuidelineOpacityPercent / 100f);
             int linesPreset = settings.GuidelineLinesColorPreset;
             float linesR = Mathf.Clamp01(settings.GuidelineLinesR);
             float linesG = Mathf.Clamp01(settings.GuidelineLinesG);
             float linesB = Mathf.Clamp01(settings.GuidelineLinesB);
+            float linesA = Mathf.Clamp01(settings.GuidelineLinesA);
             int previewPreset = settings.GuidelinePreviewColorPreset;
             float previewR = Mathf.Clamp01(settings.GuidelinePreviewR);
             float previewG = Mathf.Clamp01(settings.GuidelinePreviewG);
             float previewB = Mathf.Clamp01(settings.GuidelinePreviewB);
+            float previewA = Mathf.Clamp01(settings.GuidelinePreviewA);
 
             if (m_Query.IsEmptyIgnoreFilter)
             {
@@ -91,15 +95,17 @@ namespace HoverColors.Systems
             // Hot-path early-return: defaults captured, same singleton, and no relevant setting changed.
             if (m_DefaultsCaptured
                 && !entityChanged
-                && opacity == m_LastOpacity
+                && snapOpacity == m_LastOpacity
                 && linesPreset == m_LastLinesPreset
                 && linesR == m_LastLinesR
                 && linesG == m_LastLinesG
                 && linesB == m_LastLinesB
+                && linesA == m_LastLinesA
                 && previewPreset == m_LastPreviewPreset
                 && previewR == m_LastPreviewR
                 && previewG == m_LastPreviewG
-                && previewB == m_LastPreviewB)
+                && previewB == m_LastPreviewB
+                && previewA == m_LastPreviewA)
             {
                 return;
             }
@@ -113,7 +119,7 @@ namespace HoverColors.Systems
                 m_DefMedium = data.m_MediumPriorityColor;
                 m_DefHigh = data.m_HighPriorityColor;
                 m_DefPositive = data.m_PositiveFeedbackColor;
-                CapturedVanillaGuidelineLinesColor = WithoutAlpha(m_DefHigh);
+                CapturedVanillaGuidelineLinesColor = WithoutAlpha(m_DefLow);
                 CapturedVanillaGuidelinePreviewColor = WithoutAlpha(m_DefMedium);
                 m_DefaultsCaptured = true;
                 m_LastEntity = entity;
@@ -126,25 +132,29 @@ namespace HoverColors.Systems
             Color linesRgb = GetGuidelineLinesColor(settings);
             Color previewRgb = GetGuidelinePreviewColor(settings);
 
-            // Low/VeryLow are the big vanilla guide circles/arcs. Keep RGB vanilla for phase 1.
-            data.m_VeryLowPriorityColor = WithAlpha(m_DefVeryLow, m_DefVeryLow.a * opacity);
-            data.m_LowPriorityColor = WithAlpha(m_DefLow, m_DefLow.a * opacity);
-            data.m_MediumPriorityColor = ApplyGuidelineColor(m_DefMedium, previewRgb, opacity);
-            data.m_HighPriorityColor = ApplyGuidelineColor(m_DefHigh, linesRgb, opacity);
+            // Low/VeryLow are the big road-spacing circles/arcs/guide lines.
+            // Swatch alpha scales vanilla alpha so their original ratio stays intact.
+            data.m_VeryLowPriorityColor = ApplyGuidelineColor(m_DefVeryLow, linesRgb, linesA);
+            data.m_LowPriorityColor = ApplyGuidelineColor(m_DefLow, linesRgb, linesA);
+            data.m_MediumPriorityColor = ApplyGuidelineColor(m_DefMedium, previewRgb, previewA);
+            // High draws dashed snap/alignment telegraph lines. Keep vanilla RGB; slider controls alpha.
+            data.m_HighPriorityColor = WithAlpha(m_DefHigh, m_DefHigh.a * snapOpacity);
 
             // Leave positive placement feedback fully vanilla so valid-placement green stays familiar.
             data.m_PositiveFeedbackColor = m_DefPositive;
 
             EntityManager.SetComponentData(entity, data);
-            m_LastOpacity = opacity;
+            m_LastOpacity = snapOpacity;
             m_LastLinesPreset = linesPreset;
             m_LastLinesR = linesR;
             m_LastLinesG = linesG;
             m_LastLinesB = linesB;
+            m_LastLinesA = linesA;
             m_LastPreviewPreset = previewPreset;
             m_LastPreviewR = previewR;
             m_LastPreviewG = previewG;
             m_LastPreviewB = previewB;
+            m_LastPreviewA = previewA;
         }
 
         public static Color GetGuidelineLinesColor(HoverColorsSettings? settings)

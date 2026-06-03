@@ -41,9 +41,11 @@ const districtA$ = bindValue<number>(CHANNEL, "DistrictA", 64 / 255);
 const guidelineLinesColorR$ = bindValue<number>(CHANNEL, "GuidelineLinesColorR", 0.7);
 const guidelineLinesColorG$ = bindValue<number>(CHANNEL, "GuidelineLinesColorG", 0.7);
 const guidelineLinesColorB$ = bindValue<number>(CHANNEL, "GuidelineLinesColorB", 1);
+const guidelineLinesColorA$ = bindValue<number>(CHANNEL, "GuidelineLinesColorA", 0.3);
 const guidelinePreviewColorR$ = bindValue<number>(CHANNEL, "GuidelinePreviewColorR", 0.7);
 const guidelinePreviewColorG$ = bindValue<number>(CHANNEL, "GuidelinePreviewColorG", 0.7);
 const guidelinePreviewColorB$ = bindValue<number>(CHANNEL, "GuidelinePreviewColorB", 1);
+const guidelinePreviewColorA$ = bindValue<number>(CHANNEL, "GuidelinePreviewColorA", 0.3);
 const guidelineOpacity$ = bindValue<number>(CHANNEL, "GuidelineOpacityPercent", 30);
 const panelTooltipsEnabled$ = bindValue<boolean>(CHANNEL, "PanelTooltipsEnabled", true);
 const useDarkerPanel$ = bindValue<boolean>(CHANNEL, "UseDarkerPanel", false);
@@ -95,13 +97,13 @@ export const MochiColorPickerPanel = () => {
         r: useValue(guidelineLinesColorR$),
         g: useValue(guidelineLinesColorG$),
         b: useValue(guidelineLinesColorB$),
-        a: boundGuideline / 100,
+        a: useValue(guidelineLinesColorA$),
     };
     const boundGuidelinePreviewColor: Color = {
         r: useValue(guidelinePreviewColorR$),
         g: useValue(guidelinePreviewColorG$),
         b: useValue(guidelinePreviewColorB$),
-        a: boundGuideline / 100,
+        a: useValue(guidelinePreviewColorA$),
     };
     const useDarkerPanel = useValue(useDarkerPanel$);
     const surfaceToolAreasSuppressed = useValue(surfaceToolAreasSuppressed$);
@@ -400,31 +402,23 @@ export const MochiColorPickerPanel = () => {
         setDistrictColor(value);
         trigger(CHANNEL, "SetDistrictColor", value.r, value.g, value.b, value.a);
     };
-    const normalizeGuidelinePickerValue = (value: Color) => {
-        const syncedValue = {
-            ...value,
-            a: Math.max(0, Math.min(1, value.a)),
-        };
-        const percent = Math.max(0, Math.min(100, Math.round(syncedValue.a * 100 / 5) * 5));
-        syncedValue.a = percent / 100;
-        setGuidelineOpacity(percent);
-        return syncedValue;
-    };
+    const normalizeColorFieldValue = (value: Color) => ({
+        ...value,
+        a: Math.max(0, Math.min(1, value.a)),
+    });
     const handleGuidelineLinesColorChange = (value: Color) => {
-        const syncedValue = normalizeGuidelinePickerValue(value);
+        const syncedValue = normalizeColorFieldValue(value);
         setGuidelineLinesColor(syncedValue);
         trigger(CHANNEL, "SetGuidelineLinesColor", syncedValue.r, syncedValue.g, syncedValue.b, syncedValue.a);
     };
     const handleGuidelinePreviewColorChange = (value: Color) => {
-        const syncedValue = normalizeGuidelinePickerValue(value);
+        const syncedValue = normalizeColorFieldValue(value);
         setGuidelinePreviewColor(syncedValue);
         trigger(CHANNEL, "SetGuidelinePreviewColor", syncedValue.r, syncedValue.g, syncedValue.b, syncedValue.a);
     };
     const handleGuidelineChange = (v: number) => {
         const value = Math.max(0, Math.min(100, Math.round(v / 5) * 5));
         setGuidelineOpacity(value);
-        setGuidelineLinesColor(prev => ({ ...prev, a: value / 100 }));
-        setGuidelinePreviewColor(prev => ({ ...prev, a: value / 100 }));
         trigger(CHANNEL, "SetGuidelineOpacity", value);
     };
     const handleClosePanel = () => trigger(CHANNEL, "SetPanelOpen", false);
