@@ -77,6 +77,19 @@ namespace HoverColors.Localization
                     "Prueba ambos y quédate con el que prefieras. Solo cambia el fondo de este panel del mod, no la UI del juego."
                 },
                 
+                // Guidelines color preset
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.GuidelineColorPreset)), "Guidelines color" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.GuidelineColorPreset)),
+                    "Sets the base color used by vanilla guideline overlays.\n\n" +
+                    "The in-city guideline swatch switches this to <Custom>.\n" +
+                    "Positive feedback stays vanilla green so valid placement is still clear."
+                },
+                { m_Settings.GetGuidelineColorPresetLocaleID("Vanilla"), "Vanilla" },
+                { m_Settings.GetGuidelineColorPresetLocaleID("White"), "White" },
+                { m_Settings.GetGuidelineColorPresetLocaleID("SoftBlue"), "Soft blue" },
+                { m_Settings.GetGuidelineColorPresetLocaleID("HighVisibility"), "High visibility" },
+                { m_Settings.GetGuidelineColorPresetLocaleID("Custom"), "Custom" },
+
                 // Guidelines opacity slider
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.GuidelineOpacityPercent)), "Opacidad de guías (alfa)" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.GuidelineOpacityPercent)),

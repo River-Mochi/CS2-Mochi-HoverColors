@@ -77,6 +77,19 @@ namespace HoverColors.Localization
                     "둘 다 써 보고 마음에 드는 쪽을 고르세요. 게임 UI가 아니라 이 모드 패널 배경만 바뀝니다."
                 },
                 
+                // Guidelines color preset
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.GuidelineColorPreset)), "Guidelines color" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.GuidelineColorPreset)),
+                    "Sets the base color used by vanilla guideline overlays.\n\n" +
+                    "The in-city guideline swatch switches this to <Custom>.\n" +
+                    "Positive feedback stays vanilla green so valid placement is still clear."
+                },
+                { m_Settings.GetGuidelineColorPresetLocaleID("Vanilla"), "Vanilla" },
+                { m_Settings.GetGuidelineColorPresetLocaleID("White"), "White" },
+                { m_Settings.GetGuidelineColorPresetLocaleID("SoftBlue"), "Soft blue" },
+                { m_Settings.GetGuidelineColorPresetLocaleID("HighVisibility"), "High visibility" },
+                { m_Settings.GetGuidelineColorPresetLocaleID("Custom"), "Custom" },
+
                 // Guidelines opacity slider
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.GuidelineOpacityPercent)), "가이드라인 불투명도 (알파)" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.GuidelineOpacityPercent)),

@@ -77,6 +77,19 @@ namespace HoverColors.Localization
                     "兩個都試試，看你喜歡哪一個。此選項只改變本模組面板背景，不改變遊戲 UI。"
                 },
                 
+                // Guidelines color preset
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.GuidelineColorPreset)), "Guidelines color" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.GuidelineColorPreset)),
+                    "Sets the base color used by vanilla guideline overlays.\n\n" +
+                    "The in-city guideline swatch switches this to <Custom>.\n" +
+                    "Positive feedback stays vanilla green so valid placement is still clear."
+                },
+                { m_Settings.GetGuidelineColorPresetLocaleID("Vanilla"), "Vanilla" },
+                { m_Settings.GetGuidelineColorPresetLocaleID("White"), "White" },
+                { m_Settings.GetGuidelineColorPresetLocaleID("SoftBlue"), "Soft blue" },
+                { m_Settings.GetGuidelineColorPresetLocaleID("HighVisibility"), "High visibility" },
+                { m_Settings.GetGuidelineColorPresetLocaleID("Custom"), "Custom" },
+
                 // Guidelines opacity slider
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.GuidelineOpacityPercent)), "輔助線不透明度（Alpha）" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.GuidelineOpacityPercent)),

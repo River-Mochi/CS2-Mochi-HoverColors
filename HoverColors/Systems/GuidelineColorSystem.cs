@@ -1,6 +1,6 @@
 // File: Systems/GuidelineColorSystem.cs
-// Purpose: Scale the alpha of the in-game guideline overlay colors by a single user-controlled
-// multiplier. The guideline overlay is what the game draws while placing roads/zones/props
+// Purpose: Apply the player's guideline color/opacity to vanilla GuideLineSettingsData.
+// The guideline overlay is what the game draws while placing roads/zones/props
 // (high/medium/low/very-low priority arrows + the positive-feedback green).
 //
 // Background: HighlightsAndGuidelinesTweaks repo pointed at GuideLineSettingsData on
@@ -11,11 +11,9 @@
 //     (m_RenderingSettingsQuery.GetSingleton<GuideLineSettingsData>()).
 //
 // Performance — same as OutlineColorSystem.cs:
-//   - Capture the game's default alphas ONCE (first successful read of singleton). The
-//     multiplier scales these defaults; defaults themselves are never modified by us, so
-//     the per-priority alpha relationships the artists picked are preserved.
-//   - Compare current slider value against last-applied value at the top of OnUpdate and
-//     early-return when the user isn't moving the slider. Idle cost = one float compare.
+//   - Capture the game's default colors once per rendering-settings singleton. The
+//     opacity multiplier scales those defaults; defaults themselves are never modified.
+//   - Compare current settings against last-applied values and early-return while idle.
 
 namespace HoverColors.Systems
 {
@@ -30,17 +28,28 @@ namespace HoverColors.Systems
     {
         private EntityQuery m_Query;
 
-        // Snapshot of the game's default alphas, captured the first time we successfully read the
-        // singleton. multiplier scales these, never the previously-modified values.
-        private float m_DefAlphaVeryLow;
-        private float m_DefAlphaLow;
-        private float m_DefAlphaMedium;
-        private float m_DefAlphaHigh;
-        private float m_DefAlphaPositive;
-        private bool m_DefaultsCaptured;
+        private static readonly Color FallbackVanillaGuidelineColor = new(0.7f, 0.7f, 1f, 1f);
+        private static readonly Color SoftBlueGuidelineColor = new(0.502f, 0.869f, 1f, 1f);
+        private static readonly Color HighVisibilityGuidelineColor = new(0.85f, 1f, 1f, 1f);
 
-        // Last applied opacity (0..1). NaN sentinel ensures the first apply always runs.
+        // Snapshot of the game's default colors. Opacity multiplies the default alphas and
+        // custom RGB replaces only the four priority colors, not positive-feedback green.
+        private Color m_DefVeryLow;
+        private Color m_DefLow;
+        private Color m_DefMedium;
+        private Color m_DefHigh;
+        private Color m_DefPositive;
+        private bool m_DefaultsCaptured;
+        private Entity m_LastEntity = Entity.Null;
+
+        public static Color CapturedVanillaGuidelineColor { get; private set; } = FallbackVanillaGuidelineColor;
+
+        // Last applied values. NaN/int sentinels ensure the first apply always runs.
         private float m_LastOpacity = float.NaN;
+        private int m_LastPreset = int.MinValue;
+        private float m_LastR = float.NaN;
+        private float m_LastG = float.NaN;
+        private float m_LastB = float.NaN;
 
         protected override void OnCreate()
         {
@@ -58,12 +67,10 @@ namespace HoverColors.Systems
             }
 
             float opacity = Mathf.Clamp01(settings.GuidelineOpacityPercent / 100f);
-
-            // Hot-path early-return: defaults captured AND slider unchanged since last apply.
-            if (m_DefaultsCaptured && opacity == m_LastOpacity)
-            {
-                return;
-            }
+            int preset = settings.GuidelineColorPreset;
+            float customR = Mathf.Clamp01(settings.GuidelineR);
+            float customG = Mathf.Clamp01(settings.GuidelineG);
+            float customB = Mathf.Clamp01(settings.GuidelineB);
 
             if (m_Query.IsEmptyIgnoreFilter)
             {
@@ -71,35 +78,94 @@ namespace HoverColors.Systems
             }
 
             Entity entity = m_Query.GetSingletonEntity();
-            GuideLineSettingsData data = EntityManager.GetComponentData<GuideLineSettingsData>(entity);
+            bool entityChanged = entity != m_LastEntity;
 
-            if (!m_DefaultsCaptured)
+            // Hot-path early-return: defaults captured, same singleton, and no relevant setting changed.
+            if (m_DefaultsCaptured
+                && !entityChanged
+                && opacity == m_LastOpacity
+                && preset == m_LastPreset
+                && customR == m_LastR
+                && customG == m_LastG
+                && customB == m_LastB)
             {
-                m_DefAlphaVeryLow = data.m_VeryLowPriorityColor.a;
-                m_DefAlphaLow = data.m_LowPriorityColor.a;
-                m_DefAlphaMedium = data.m_MediumPriorityColor.a;
-                m_DefAlphaHigh = data.m_HighPriorityColor.a;
-                m_DefAlphaPositive = data.m_PositiveFeedbackColor.a;
-                m_DefaultsCaptured = true;
-                LogUtils.Info(() => $"{Mod.ModTag} GuidelineColorSystem captured default alphas " +
-                    $"(VL={m_DefAlphaVeryLow:F3} L={m_DefAlphaLow:F3} M={m_DefAlphaMedium:F3} " +
-                    $"H={m_DefAlphaHigh:F3} P={m_DefAlphaPositive:F3})");
+                return;
             }
 
-            data.m_VeryLowPriorityColor = WithAlpha(data.m_VeryLowPriorityColor, m_DefAlphaVeryLow * opacity);
-            data.m_LowPriorityColor = WithAlpha(data.m_LowPriorityColor, m_DefAlphaLow * opacity);
-            data.m_MediumPriorityColor = WithAlpha(data.m_MediumPriorityColor, m_DefAlphaMedium * opacity);
-            data.m_HighPriorityColor = WithAlpha(data.m_HighPriorityColor, m_DefAlphaHigh * opacity);
-            data.m_PositiveFeedbackColor = WithAlpha(data.m_PositiveFeedbackColor, m_DefAlphaPositive * opacity);
+            GuideLineSettingsData data = EntityManager.GetComponentData<GuideLineSettingsData>(entity);
+
+            if (!m_DefaultsCaptured || entityChanged)
+            {
+                m_DefVeryLow = data.m_VeryLowPriorityColor;
+                m_DefLow = data.m_LowPriorityColor;
+                m_DefMedium = data.m_MediumPriorityColor;
+                m_DefHigh = data.m_HighPriorityColor;
+                m_DefPositive = data.m_PositiveFeedbackColor;
+                CapturedVanillaGuidelineColor = WithoutAlpha(m_DefHigh);
+                m_DefaultsCaptured = true;
+                m_LastEntity = entity;
+                LogUtils.Info(() => $"{Mod.ModTag} GuidelineColorSystem captured default colors " +
+                    $"VL={FormatColor(m_DefVeryLow)} L={FormatColor(m_DefLow)} " +
+                    $"M={FormatColor(m_DefMedium)} H={FormatColor(m_DefHigh)} " +
+                    $"P={FormatColor(m_DefPositive)}");
+            }
+
+            Color guidelineRgb = GetGuidelineColor(settings);
+            data.m_VeryLowPriorityColor = ApplyGuidelineColor(m_DefVeryLow, guidelineRgb, opacity);
+            data.m_LowPriorityColor = ApplyGuidelineColor(m_DefLow, guidelineRgb, opacity);
+            data.m_MediumPriorityColor = ApplyGuidelineColor(m_DefMedium, guidelineRgb, opacity);
+            data.m_HighPriorityColor = ApplyGuidelineColor(m_DefHigh, guidelineRgb, opacity);
+            data.m_PositiveFeedbackColor = WithAlpha(m_DefPositive, m_DefPositive.a * opacity);
 
             EntityManager.SetComponentData(entity, data);
             m_LastOpacity = opacity;
+            m_LastPreset = preset;
+            m_LastR = customR;
+            m_LastG = customG;
+            m_LastB = customB;
+        }
+
+        public static Color GetGuidelineColor(HoverColorsSettings? settings)
+        {
+            if (settings == null)
+            {
+                return CapturedVanillaGuidelineColor;
+            }
+
+            return settings.GuidelineColorPreset switch
+            {
+                HoverColorsSettings.GuidelineColorPresetWhite => Color.white,
+                HoverColorsSettings.GuidelineColorPresetSoftBlue => SoftBlueGuidelineColor,
+                HoverColorsSettings.GuidelineColorPresetHighVisibility => HighVisibilityGuidelineColor,
+                HoverColorsSettings.GuidelineColorPresetCustom => new Color(
+                    Mathf.Clamp01(settings.GuidelineR),
+                    Mathf.Clamp01(settings.GuidelineG),
+                    Mathf.Clamp01(settings.GuidelineB),
+                    1f),
+                _ => CapturedVanillaGuidelineColor,
+            };
+        }
+
+        private static Color ApplyGuidelineColor(Color defaultColor, Color rgb, float opacity)
+        {
+            return new Color(rgb.r, rgb.g, rgb.b, defaultColor.a * opacity);
         }
 
         private static Color WithAlpha(Color c, float a)
         {
             c.a = a;
             return c;
+        }
+
+        private static Color WithoutAlpha(Color c)
+        {
+            c.a = 1f;
+            return c;
+        }
+
+        private static string FormatColor(Color c)
+        {
+            return $"RGBA=({c.r:F3}, {c.g:F3}, {c.b:F3}, {c.a:F3})";
         }
     }
 }

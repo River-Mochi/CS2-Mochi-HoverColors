@@ -39,6 +39,12 @@ namespace HoverColors.Settings
         public const int ToolColorModeVanilla = 1;
         public const int ToolColorModeCustom = 2;
 
+        public const int GuidelineColorPresetVanilla = 0;
+        public const int GuidelineColorPresetWhite = 1;
+        public const int GuidelineColorPresetSoftBlue = 2;
+        public const int GuidelineColorPresetHighVisibility = 3;
+        public const int GuidelineColorPresetCustom = 4;
+
         // Centralised default for the guideline opacity slider.
         // Vanilla CS2 is 100; lower = more transparent. Change only here — C# UISystem and TSX both read this.
         public const int DefaultGuidelineOpacityPercent = 30;
@@ -134,12 +140,22 @@ namespace HoverColors.Settings
         [SettingsUIHidden]
         public float Preset2FillA { get; set; }
 
-        // Guideline opacity saved per-slot so the preset fully restores the panel state.
+        // Guideline opacity saved per outline preset; guideline RGB stays independent.
         [SettingsUIHidden]
         public int Preset1GuidelinePercent { get; set; }
 
         [SettingsUIHidden]
         public int Preset2GuidelinePercent { get; set; }
+
+        // Custom guideline RGB. Only used when GuidelineColorPreset is Custom.
+        [SettingsUIHidden]
+        public float GuidelineR { get; set; }
+
+        [SettingsUIHidden]
+        public float GuidelineG { get; set; }
+
+        [SettingsUIHidden]
+        public float GuidelineB { get; set; }
 
         // In-city info button preference. Hidden from Options UI; persisted here so
         // "tooltips off" survives closing/reopening the panel and game restarts.
@@ -180,6 +196,10 @@ namespace HoverColors.Settings
         // Slider is 0..100 (percent) so the SettingsUISlider can use kPercentage units.
         // GuidelineColorSystem divides by 100 and multiplies the game's default per-priority
         // alphas, so 100 = no change, 50 = half as visible, 0 = fully invisible guidelines.
+
+        [SettingsUIDropdown(typeof(HoverColorsSettings), nameof(GetGuidelineColorPresetItems))]
+        [SettingsUISection(Actions, Guidelines)]
+        public int GuidelineColorPreset { get; set; }
 
         [SettingsUISlider(min = 0, max = 100, step = 5, scalarMultiplier = 1, unit = Unit.kPercentage)]
         [SettingsUISection(Actions, Guidelines)]
@@ -277,6 +297,10 @@ namespace HoverColors.Settings
             Preset1GuidelinePercent = DefaultGuidelineOpacityPercent;
             Preset2GuidelinePercent = DefaultGuidelineOpacityPercent;
             GuidelineDefaultPercent = DefaultGuidelineOpacityPercent;
+            GuidelineColorPreset = GuidelineColorPresetVanilla;
+            GuidelineR = 0.7f;
+            GuidelineG = 0.7f;
+            GuidelineB = 1f;
             PanelTooltipsEnabled = true;
             SurfaceToolAreasSuppressed = true;
 
@@ -319,6 +343,43 @@ namespace HoverColors.Settings
         public string GetToolColorModeLocaleID(string valueName)
         {
             return "Options[" + id + ".ToolColorMode." + valueName + "]";
+        }
+
+        public DropdownItem<int>[] GetGuidelineColorPresetItems()
+        {
+            return new[]
+            {
+                new DropdownItem<int>
+                {
+                    value = GuidelineColorPresetVanilla,
+                    displayName = GetGuidelineColorPresetLocaleID("Vanilla"),
+                },
+                new DropdownItem<int>
+                {
+                    value = GuidelineColorPresetWhite,
+                    displayName = GetGuidelineColorPresetLocaleID("White"),
+                },
+                new DropdownItem<int>
+                {
+                    value = GuidelineColorPresetSoftBlue,
+                    displayName = GetGuidelineColorPresetLocaleID("SoftBlue"),
+                },
+                new DropdownItem<int>
+                {
+                    value = GuidelineColorPresetHighVisibility,
+                    displayName = GetGuidelineColorPresetLocaleID("HighVisibility"),
+                },
+                new DropdownItem<int>
+                {
+                    value = GuidelineColorPresetCustom,
+                    displayName = GetGuidelineColorPresetLocaleID("Custom"),
+                },
+            };
+        }
+
+        public string GetGuidelineColorPresetLocaleID(string valueName)
+        {
+            return "Options[" + id + ".GuidelineColorPreset." + valueName + "]";
         }
 
         private static void TryOpenUrl(string url)

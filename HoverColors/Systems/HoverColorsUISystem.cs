@@ -37,6 +37,9 @@ namespace HoverColors.UI
         private ValueBinding<float> m_DistrictGBinding = null!;
         private ValueBinding<float> m_DistrictBBinding = null!;
         private ValueBinding<float> m_DistrictABinding = null!;
+        private ValueBinding<float> m_GuidelineColorRBinding = null!;
+        private ValueBinding<float> m_GuidelineColorGBinding = null!;
+        private ValueBinding<float> m_GuidelineColorBBinding = null!;
         private ValueBinding<int> m_GuidelineOpacityBinding = null!;
         private ValueBinding<int> m_GuidelineDefaultBinding = null!;
         private ValueBinding<bool> m_PanelOpenBinding = null!;
@@ -126,6 +129,23 @@ namespace HoverColors.UI
                     if (percent > 100) percent = 100;
 
                     settings.GuidelineOpacityPercent = percent;
+                    settings.ApplyAndSave();
+                    SyncValueBindings();
+                }));
+
+            AddBinding(new TriggerBinding<float, float, float, float>(
+                Mod.ModId,
+                "SetGuidelineColor",
+                (r, g, b, a) =>
+                {
+                    HoverColorsSettings? settings = Mod.Settings;
+                    if (settings == null) return;
+
+                    settings.GuidelineColorPreset = HoverColorsSettings.GuidelineColorPresetCustom;
+                    settings.GuidelineR = Math.Max(0f, Math.Min(1f, r));
+                    settings.GuidelineG = Math.Max(0f, Math.Min(1f, g));
+                    settings.GuidelineB = Math.Max(0f, Math.Min(1f, b));
+                    settings.GuidelineOpacityPercent = Math.Max(0, Math.Min(100, (int)Math.Round(a * 100f)));
                     settings.ApplyAndSave();
                     SyncValueBindings();
                 }));
@@ -414,6 +434,10 @@ namespace HoverColors.UI
             m_DistrictGBinding = AddValueBinding("DistrictG", settings?.DistrictG ?? 128f / 255f);
             m_DistrictBBinding = AddValueBinding("DistrictB", settings?.DistrictB ?? 128f / 255f);
             m_DistrictABinding = AddValueBinding("DistrictA", settings?.DistrictA ?? 64f / 255f);
+            UnityEngine.Color guidelineColor = GuidelineColorSystem.GetGuidelineColor(settings);
+            m_GuidelineColorRBinding = AddValueBinding("GuidelineColorR", guidelineColor.r);
+            m_GuidelineColorGBinding = AddValueBinding("GuidelineColorG", guidelineColor.g);
+            m_GuidelineColorBBinding = AddValueBinding("GuidelineColorB", guidelineColor.b);
             m_GuidelineOpacityBinding = AddValueBinding("GuidelineOpacityPercent", settings?.GuidelineOpacityPercent ?? HoverColorsSettings.DefaultGuidelineOpacityPercent);
             m_GuidelineDefaultBinding = AddValueBinding("GuidelineDefaultPercent", settings?.GuidelineDefaultPercent ?? HoverColorsSettings.DefaultGuidelineOpacityPercent);
             m_PanelOpenBinding = AddValueBinding("PanelOpen", s_PanelOpen);
@@ -456,6 +480,10 @@ namespace HoverColors.UI
             UpdateIfChanged(m_DistrictGBinding, settings?.DistrictG ?? 128f / 255f);
             UpdateIfChanged(m_DistrictBBinding, settings?.DistrictB ?? 128f / 255f);
             UpdateIfChanged(m_DistrictABinding, settings?.DistrictA ?? 64f / 255f);
+            UnityEngine.Color guidelineColor = GuidelineColorSystem.GetGuidelineColor(settings);
+            UpdateIfChanged(m_GuidelineColorRBinding, guidelineColor.r);
+            UpdateIfChanged(m_GuidelineColorGBinding, guidelineColor.g);
+            UpdateIfChanged(m_GuidelineColorBBinding, guidelineColor.b);
             UpdateIfChanged(m_GuidelineOpacityBinding, settings?.GuidelineOpacityPercent ?? HoverColorsSettings.DefaultGuidelineOpacityPercent);
             UpdateIfChanged(m_GuidelineDefaultBinding, settings?.GuidelineDefaultPercent ?? HoverColorsSettings.DefaultGuidelineOpacityPercent);
             UpdateIfChanged(m_PanelOpenBinding, s_PanelOpen);
