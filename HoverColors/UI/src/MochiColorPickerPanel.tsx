@@ -578,6 +578,20 @@ export const MochiColorPickerPanel = () => {
         return { backgroundColor: `rgb(${r},${g},${b})` };
     };
 
+    const guidelineSwatchStyle = (c: Color, hovered: boolean) => ({
+        ...guidelinePreviewStyle(c),
+        boxShadow: hovered
+            ? "inset 0 0 0 1rem rgba(7, 13, 18, 0.32), 0 0 0 1.5rem rgba(255, 255, 255, 0.72)"
+            : "inset 0 0 0 1rem rgba(7, 13, 18, 0.32)",
+    });
+
+    const guidelineHoverRingStyle = (hovered: boolean) => ({
+        borderColor: hovered ? "rgba(255, 255, 255, 0.62)" : "rgba(255, 255, 255, 0)",
+        boxShadow: hovered
+            ? "0 0 0 1rem rgba(8, 15, 20, 0.28), 0 0 4rem rgba(255, 255, 255, 0.12)"
+            : "none",
+    });
+
     const presetNumberColor = (active: boolean, hovered: boolean) => {
         if (hovered) {
             return "rgba(255, 255, 255, 1)";
@@ -785,8 +799,6 @@ export const MochiColorPickerPanel = () => {
                                                 hideHint={true}
                                                 hexInput={true}
                                                 colorWheel={false}
-                                                onMouseEnter={() => setGuidelineLinesHovered(true)}
-                                                onMouseLeave={() => setGuidelineLinesHovered(false)}
                                                 onChange={handleGuidelineLinesColorChange}
                                                 onOpenPicker={() => {
                                                     setGuidelineLinesPickerOpen(true);
@@ -796,10 +808,14 @@ export const MochiColorPickerPanel = () => {
                                             />
                                             <span
                                                 className={styles.guidelineColorPreview}
-                                                style={guidelinePreviewStyle(guidelineLinesColor)}
+                                                style={guidelineSwatchStyle(guidelineLinesColor, guidelineLinesHovered)}
                                                 aria-hidden="true"
                                             />
-                                            <span className={styles.guidelineColorHoverRing} aria-hidden="true" />
+                                            <span
+                                                className={styles.guidelineColorHoverRing}
+                                                style={guidelineHoverRingStyle(guidelineLinesHovered)}
+                                                aria-hidden="true"
+                                            />
                                         </div>
                                     </Tooltip>
                                     <Tooltip tooltip={tt(text.tooltipGuidelinesPreviewColor)}>
@@ -822,8 +838,6 @@ export const MochiColorPickerPanel = () => {
                                                 hideHint={true}
                                                 hexInput={true}
                                                 colorWheel={false}
-                                                onMouseEnter={() => setGuidelinePreviewHovered(true)}
-                                                onMouseLeave={() => setGuidelinePreviewHovered(false)}
                                                 onChange={handleGuidelinePreviewColorChange}
                                                 onOpenPicker={() => {
                                                     setGuidelinePreviewPickerOpen(true);
@@ -833,10 +847,14 @@ export const MochiColorPickerPanel = () => {
                                             />
                                             <span
                                                 className={styles.guidelineColorPreview}
-                                                style={guidelinePreviewStyle(guidelinePreviewColor)}
+                                                style={guidelineSwatchStyle(guidelinePreviewColor, guidelinePreviewHovered)}
                                                 aria-hidden="true"
                                             />
-                                            <span className={styles.guidelineColorHoverRing} aria-hidden="true" />
+                                            <span
+                                                className={styles.guidelineColorHoverRing}
+                                                style={guidelineHoverRingStyle(guidelinePreviewHovered)}
+                                                aria-hidden="true"
+                                            />
                                         </div>
                                     </Tooltip>
                                 </div>
