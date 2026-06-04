@@ -76,8 +76,8 @@ namespace HoverColors.Localization
                 // Darker panel
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)), "Darker panel" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)),
-                    "<Dark panel>: made for legacy UI players; can also be used in Modern UI if you like a darker panel.\n"+
-                    "<Standard panel>: custom translucent Hover Colors style.\n"+
+                    "Enabled uses <Dark panel>: made for legacy UI players; can also be used in Modern UI if you like a darker panel.\n"+
+                    "Disabled uses <Standard panel>: custom translucent Hover Colors style.\n"+
                     " - Lighter, more modern look.\n" +
                     " - Best for most players using the new Modern game UI.\n\n" +
                     "Try both and see which you prefer! This only changes the background of this mod panel and not the game's UI."
