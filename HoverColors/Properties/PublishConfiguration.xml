@@ -66,7 +66,7 @@ tags: Mochi's blue scrubber, Highlight, border color, remove blue
 	<!--Link to the forum post where the mod can be discussed-->
 	<ForumLink Value="https://forum.paradoxplaza.com/forum/threads/mochis-hover-colors.1925898/" />
 	<!--Version of the mod-->
-	<ModVersion Value="0.8.2" />
+	<ModVersion Value="0.9.0" />
 	<!--Recommended version of the base game to use the mod-->
 	<GameVersion Value="1.5.*" />
 	<!--Dependency for the mod, can be set multiple times-->
@@ -76,10 +76,11 @@ tags: Mochi's blue scrubber, Highlight, border color, remove blue
 	<!--Change log for new version. Single line or multi line. Supports minimal markdown subset-->
 <ChangeLog>
 - UI/UX improvements
-- Options menu: add toggle to apply hover colors to Overlapping items just like vanilla. default On.
-- added EU-portuguese translation.
+- UI/UX improvements
+- added two Guideline color swatches to customize the new road tool (circles with spacing lines and road overlay color).
+- clicking on Guideline icon button resets to vanilla blue colors.
+- added Options menu dropdown list of 4 selectable custom colors for Dashed Guideline (default white).
 - updated translations.
-- Surface tool default on.
 </ChangeLog>
 	<!--External link, can be set multiple times. supported types are "discord", "github", "youtube", "twitch", "x", "paypal", "patreon", "buymeacoffee", "kofi", "crowdin", "gitlab", "gofundme"-->
 	<ExternalLink Type="" Url="" />
