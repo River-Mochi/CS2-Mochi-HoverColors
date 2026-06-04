@@ -4,7 +4,7 @@
   "HoverColors.UI.Aria.ClosePanel": "패널 닫기",
   "HoverColors.UI.Tooltip.Info": "클릭하면 툴팁을 켜거나 끌 수 있습니다.",
   "HoverColors.UI.Tooltip.Draggable": "드래그 가능",
-  "HoverColors.UI.Tooltip.Close": "닫기/나가기. 기본 단축키: H. 게임 왼쪽 위 아이콘을 클릭해도 동일합니다.",
+  "HoverColors.UI.Tooltip.Close": "닫기/나가기. 기본 단축키: J. 게임 왼쪽 위 아이콘을 클릭해도 동일합니다.",
   "HoverColors.UI.Tooltip.ResetOutline": "윤곽선: 클릭하면 색상과 알파를 게임 기본값으로 초기화합니다.",
   "HoverColors.UI.Tooltip.OutlineSwatch": "윤곽선: 클릭하여 색상 + 불투명도를 설정합니다.",
   "HoverColors.UI.Tooltip.ResetFill": "채우기: 클릭하면 0%로 초기화합니다(게임 기본값).",

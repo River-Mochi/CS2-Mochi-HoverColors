@@ -19,7 +19,7 @@ namespace HoverColors.UI
     {
         private static bool s_PanelOpen;
 
-        // Toggle target for both the GTL button (via SetPanelOpen trigger) and the H hotkey poll below.
+        // Toggle target for both the GTL button (via SetPanelOpen trigger) and the J hotkey poll below.
         public static void TogglePanel() => s_PanelOpen = !s_PanelOpen;
 
         // ProxyActions registered by Setting.RegisterKeyBindings() in Mod.OnLoad.

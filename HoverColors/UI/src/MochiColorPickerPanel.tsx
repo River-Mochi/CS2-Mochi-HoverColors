@@ -566,6 +566,18 @@ export const MochiColorPickerPanel = () => {
         backgroundColor: `rgb(${Math.round(c.r * 255)},${Math.round(c.g * 255)},${Math.round(c.b * 255)})`,
     });
 
+    // Small guideline swatches show RGB clearly; alpha still applies in-game.
+    const guidelinePreviewStyle = (c: Color) => {
+        const channel = (value: unknown, fallback: number) => {
+            const n = Number(value);
+            return Math.round(Math.max(0, Math.min(1, Number.isFinite(n) ? n : fallback)) * 255);
+        };
+        const r = channel(c.r, 0.7);
+        const g = channel(c.g, 0.7);
+        const b = channel(c.b, 1);
+        return { backgroundColor: `rgb(${r},${g},${b})` };
+    };
+
     const presetNumberColor = (active: boolean, hovered: boolean) => {
         if (hovered) {
             return "rgba(255, 255, 255, 1)";
@@ -757,11 +769,13 @@ export const MochiColorPickerPanel = () => {
                                         <div
                                             ref={guidelineLinesPickerRef}
                                             className={`${styles.guidelineColorShell} ${guidelineLinesHovered ? styles.guidelineColorShellHovered : ""}`}
+                                            style={guidelinePreviewStyle(guidelineLinesColor)}
                                             onMouseOver={() => { if (!guidelineLinesHovered) { setGuidelineLinesHovered(true); } updateGuidelineLinesPickerDirection(); }}
                                             onMouseMove={() => { if (!guidelineLinesHovered) { setGuidelineLinesHovered(true); } }}
                                             onMouseLeave={() => setGuidelineLinesHovered(false)}
                                             onMouseDown={updateGuidelineLinesPickerDirection}
                                         >
+                                            {/* Hover only shows the ring; vanilla ColorField opens only on click/select. */}
                                             <ColorField
                                                 focusKey={focusDisabled}
                                                 className={styles.guidelineColorField}
@@ -780,6 +794,11 @@ export const MochiColorPickerPanel = () => {
                                                 }}
                                                 onClosePicker={() => setGuidelineLinesPickerOpen(false)}
                                             />
+                                            <span
+                                                className={styles.guidelineColorPreview}
+                                                style={guidelinePreviewStyle(guidelineLinesColor)}
+                                                aria-hidden="true"
+                                            />
                                             <span className={styles.guidelineColorHoverRing} aria-hidden="true" />
                                         </div>
                                     </Tooltip>
@@ -787,11 +806,13 @@ export const MochiColorPickerPanel = () => {
                                         <div
                                             ref={guidelinePreviewPickerRef}
                                             className={`${styles.guidelineColorShell} ${styles.guidelinePreviewColorShell} ${guidelinePreviewHovered ? styles.guidelineColorShellHovered : ""}`}
+                                            style={guidelinePreviewStyle(guidelinePreviewColor)}
                                             onMouseOver={() => { if (!guidelinePreviewHovered) { setGuidelinePreviewHovered(true); } updateGuidelinePreviewPickerDirection(); }}
                                             onMouseMove={() => { if (!guidelinePreviewHovered) { setGuidelinePreviewHovered(true); } }}
                                             onMouseLeave={() => setGuidelinePreviewHovered(false)}
                                             onMouseDown={updateGuidelinePreviewPickerDirection}
                                         >
+                                            {/* Hover only shows the ring; vanilla ColorField opens only on click/select. */}
                                             <ColorField
                                                 focusKey={focusDisabled}
                                                 className={styles.guidelineColorField}
@@ -809,6 +830,11 @@ export const MochiColorPickerPanel = () => {
                                                     updateGuidelinePreviewPickerDirection();
                                                 }}
                                                 onClosePicker={() => setGuidelinePreviewPickerOpen(false)}
+                                            />
+                                            <span
+                                                className={styles.guidelineColorPreview}
+                                                style={guidelinePreviewStyle(guidelinePreviewColor)}
+                                                aria-hidden="true"
                                             />
                                             <span className={styles.guidelineColorHoverRing} aria-hidden="true" />
                                         </div>
@@ -866,7 +892,7 @@ export const MochiColorPickerPanel = () => {
                                         value={districtColor}
                                         alpha={true}
                                         popupDirection={districtPickerDirection}
-                                        hideHint={false}
+                                        hideHint={true}
                                         hexInput={true}
                                         colorWheel={false}
                                         onChange={handleDistrictColorChange}
