@@ -1,7 +1,7 @@
 // File: Systems/OutlineColorSystem.cs
 // Purpose: Apply user-chosen outline color + fill/outline alpha to the game's selection highlight.
-// Can temporarily override colors while the player is using Bulldoze / Better Bulldozer or
-// Net (road) tools so invisible-alpha settings don't make targets impossible to see.
+// Can temporarily override colors while the player is using Bulldoze / Better Bulldozer,
+// road tools, or detail-style NetTool lanes so invisible-alpha settings don't get in the way.
 //
 // Surfaces written (one color choice covers all of them, two alpha sliders control opacity):
 //   - RenderingSettingsData.m_HoveredColor.RGB   ← Outline RGB (lot-pattern tint on hovered building)
@@ -14,6 +14,7 @@
 // Tool override: controlled by HoverColorsSettings.ToolColorMode.
 //   - Overlapping / invalid placement errors: optional vanilla ErrorColor wins first.
 //   - Recommended: WarningColor for bulldozer, softer vanilla blue for roads.
+//   - Detail NetTools: optional custom color for fences/hedges/lanes from detailing mods.
 //   - Vanilla: captured vanilla hover profile while those tools are active.
 //   - Custom: player color everywhere.
 // The dirty-flag tracks the *effective* values so an idle tool session is still ~free per frame.
@@ -94,7 +95,8 @@ namespace HoverColors.Systems
         {
             None,
             Bulldoze,
-            Net,
+            NetRoad,
+            NetDetailing,
         }
 
         private enum EffectivePalette
@@ -150,8 +152,32 @@ namespace HoverColors.Systems
                 fillA = CapturedFillA;
                 palette = EffectivePalette.RecommendedBulldoze;
             }
+            else if (activeTool == ToolKind.NetDetailing)
+            {
+                if (settings.UseCustomColorsInDetailingTools)
+                {
+                    r = settings.OutlineR;
+                    g = settings.OutlineG;
+                    b = settings.OutlineB;
+                    outlineA = settings.OutlineA;
+                    fillA = settings.FillA;
+                    palette = MatchesCapturedVanillaProfile(r, g, b, outlineA, fillA)
+                        ? EffectivePalette.CapturedVanilla
+                        : EffectivePalette.Custom;
+                }
+                else
+                {
+                    Color hovered = CapturedHoveredColor;
+                    r = hovered.r;
+                    g = hovered.g;
+                    b = hovered.b;
+                    outlineA = CapturedOutlineA;
+                    fillA = CapturedFillA;
+                    palette = EffectivePalette.CapturedVanilla;
+                }
+            }
             else if (settings.ToolColorMode == HoverColorsSettings.ToolColorModeRecommended
-                && activeTool == ToolKind.Net)
+                && activeTool == ToolKind.NetRoad)
             {
                 Color hovered = CapturedHoveredColor;
                 r = hovered.r;
@@ -162,7 +188,7 @@ namespace HoverColors.Systems
                 palette = EffectivePalette.RecommendedNet;
             }
             else if (settings.ToolColorMode == HoverColorsSettings.ToolColorModeVanilla
-                && activeTool != ToolKind.None)
+                && (activeTool == ToolKind.Bulldoze || activeTool == ToolKind.NetRoad))
             {
                 Color hovered = CapturedHoveredColor;
                 r = hovered.r;
@@ -379,7 +405,7 @@ namespace HoverColors.Systems
             return true;
         }
 
-        private static ToolKind GetActiveToolKind(ToolBaseSystem? tool)
+        private ToolKind GetActiveToolKind(ToolBaseSystem? tool)
         {
             if (tool == null)
             {
@@ -391,9 +417,9 @@ namespace HoverColors.Systems
                 return ToolKind.Bulldoze;
             }
 
-            if (tool is NetToolSystem)
+            if (tool is NetToolSystem netTool)
             {
-                return ToolKind.Net;
+                return GetNetToolKind(netTool);
             }
 
             // Better Bulldozer may still drive vanilla BulldozeToolSystem, but this keeps the
@@ -408,6 +434,36 @@ namespace HoverColors.Systems
             }
 
             return ToolKind.None;
+        }
+
+        private ToolKind GetNetToolKind(NetToolSystem netTool)
+        {
+            if (m_PrefabSystem == null)
+            {
+                return ToolKind.NetRoad;
+            }
+
+            PrefabBase? selectedPrefab = netTool.GetPrefab();
+            if (selectedPrefab == null || !m_PrefabSystem.TryGetEntity(selectedPrefab, out Entity prefabEntity))
+            {
+                return ToolKind.NetRoad;
+            }
+
+            if (EntityManager.HasComponent<RoadData>(prefabEntity))
+            {
+                return ToolKind.NetRoad;
+            }
+
+            // EDT fences/hedges/markings and similar detail tools enter through NetTool
+            // as lanes or fence prefabs. Keep this check cheap: selected prefab only.
+            if (selectedPrefab is NetLanePrefab
+                || EntityManager.HasComponent<NetLaneData>(prefabEntity)
+                || EntityManager.HasComponent<FenceData>(prefabEntity))
+            {
+                return ToolKind.NetDetailing;
+            }
+
+            return ToolKind.NetRoad;
         }
 
         private bool HasBlockingToolError(ToolBaseSystem? tool)

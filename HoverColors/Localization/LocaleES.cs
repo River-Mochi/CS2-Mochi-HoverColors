@@ -67,6 +67,14 @@ namespace HoverColors.Localization
                     "Funciona con todos los modos de Bulldozer + carreteras y no sobrescribe tu color personalizado guardado."
                 },
 
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseCustomColorsInDetailingTools)), "Use custom colors in detailing tools" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseCustomColorsInDetailingTools)),
+                    "<Enabled is recommended>\n" +
+                    "Uses your saved custom outline color and transparency while placing detail-style network items, like EDT fences, hedges, lanes, or similar tools.\n\n" +
+                    "Disable this if you want those tools to use the game's vanilla hover color instead.\n" +
+                    "Roads still follow the Bulldozer + Roads setting above. Overlapping error color still wins when enabled."
+                },
+
                 // Darker panel
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)), "Panel más oscuro" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)),

@@ -67,6 +67,14 @@ namespace HoverColors.Localization
                     "Bulldozer + Roads 모든 모드에서 작동하며 저장된 사용자 색상은 덮어쓰지 않습니다."
                 },
 
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseCustomColorsInDetailingTools)), "Use custom colors in detailing tools" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseCustomColorsInDetailingTools)),
+                    "<Enabled is recommended>\n" +
+                    "Uses your saved custom outline color and transparency while placing detail-style network items, like EDT fences, hedges, lanes, or similar tools.\n\n" +
+                    "Disable this if you want those tools to use the game's vanilla hover color instead.\n" +
+                    "Roads still follow the Bulldozer + Roads setting above. Overlapping error color still wins when enabled."
+                },
+
                 // Darker panel
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)), "더 어두운 패널" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)),

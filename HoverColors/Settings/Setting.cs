@@ -198,6 +198,9 @@ namespace HoverColors.Settings
         [SettingsUISection(Actions, ToolColors)]
         public bool UseOverlapWarningColor { get; set; }
 
+        [SettingsUISection(Actions, ToolColors)]
+        public bool UseCustomColorsInDetailingTools { get; set; }
+
         // -----------------------------------------------------------------------
         // Actions tab — Panel readability
         // -----------------------------------------------------------------------
@@ -339,6 +342,7 @@ namespace HoverColors.Settings
             // alpha is very low, without changing their saved custom color.
             ToolColorMode = ToolColorModeRecommended;
             UseOverlapWarningColor = true;
+            UseCustomColorsInDetailingTools = true;
             UseDarkerPanel = false;
 
             // 100 = vanilla default. Lower = more transparent guidelines.
