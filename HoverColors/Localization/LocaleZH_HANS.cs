@@ -1,6 +1,5 @@
 // File: Localization/LocaleZH_HANS.cs
 // Purpose: Simplified Chinese (zh-HANS) strings for the Options UI (ESC -> Options -> Hover Colors).
-// Registered in Mod.OnLoad via GameManager.instance.localizationManager.AddSource("zh-HANS", ...).
 // Strings for the in-city cohtml panel live separately in L10n/lang/zh-HANS.json.
 
 namespace HoverColors.Localization

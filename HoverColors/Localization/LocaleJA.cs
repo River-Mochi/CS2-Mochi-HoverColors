@@ -1,6 +1,5 @@
 // File: Localization/LocaleJA.cs
 // Purpose: Japanese (ja-JP) strings for the Options UI (ESC -> Options -> Hover Colors).
-// Registered in Mod.OnLoad via GameManager.instance.localizationManager.AddSource("ja-JP", ...).
 // Strings for the in-city cohtml panel live separately in L10n/lang/ja-JP.json.
 
 namespace HoverColors.Localization

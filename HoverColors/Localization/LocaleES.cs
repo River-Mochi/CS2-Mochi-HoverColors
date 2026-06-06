@@ -1,6 +1,5 @@
 // File: Localization/LocaleES.cs
 // Purpose: Spanish (es-ES) strings for the Options UI (ESC -> Options -> Hover Colors).
-// Registered in Mod.OnLoad via GameManager.instance.localizationManager.AddSource("es-ES", ...).
 // Strings for the in-city cohtml panel live separately in L10n/lang/es-ES.json.
 
 namespace HoverColors.Localization

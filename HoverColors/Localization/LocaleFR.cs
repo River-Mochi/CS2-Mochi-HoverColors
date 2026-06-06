@@ -1,6 +1,5 @@
 // File: Localization/LocaleFR.cs
 // Purpose: French (fr-FR) strings for the Options UI (ESC -> Options -> Hover Colors).
-// Registered in Mod.OnLoad via GameManager.instance.localizationManager.AddSource("fr-FR", ...).
 // Strings for the in-city cohtml panel live separately in L10n/lang/fr-FR.json.
 
 namespace HoverColors.Localization

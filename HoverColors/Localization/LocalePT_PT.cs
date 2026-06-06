@@ -1,6 +1,5 @@
 // File: Localization/LocalePT_PT.cs
 // Purpose: European Portuguese (pt-PT) strings for the Options UI (ESC -> Options -> Hover Colors).
-// Registered in Mod.OnLoad via GameManager.instance.localizationManager.AddSource("pt-PT", ...).
 // Strings for the in-city cohtml panel live separately in L10n/lang/pt-PT.json.
 
 namespace HoverColors.Localization

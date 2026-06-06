@@ -1,6 +1,5 @@
 // File: Localization/LocaleZH_HANT.cs
 // Purpose: Traditional Chinese (zh-HANT) strings for the Options UI (ESC -> Options -> Hover Colors).
-// Registered in Mod.OnLoad via GameManager.instance.localizationManager.AddSource("zh-HANT", ...).
 // Strings for the in-city cohtml panel live separately in L10n/lang/zh-HANT.json.
 
 namespace HoverColors.Localization

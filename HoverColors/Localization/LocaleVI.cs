@@ -1,6 +1,5 @@
 // File: Localization/LocaleVI.cs
 // Purpose: Vietnamese (vi-VN) strings for the Options UI (ESC -> Options -> Hover Colors).
-// Registered in Mod.OnLoad via GameManager.instance.localizationManager.AddSource("vi-VN", ...).
 // Strings for the in-city cohtml panel live separately in L10n/lang/vi-VN.json.
 
 namespace HoverColors.Localization

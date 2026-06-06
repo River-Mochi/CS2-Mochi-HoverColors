@@ -1,6 +1,5 @@
 // File: Localization/LocaleDE.cs
 // Purpose: German (de-DE) strings for the Options UI (ESC -> Options -> Hover Colors).
-// Registered in Mod.OnLoad via GameManager.instance.localizationManager.AddSource("de-DE", ...).
 // Strings for the in-city cohtml panel live separately in L10n/lang/de-DE.json.
 
 namespace HoverColors.Localization

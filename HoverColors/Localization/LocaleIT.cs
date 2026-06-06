@@ -1,6 +1,5 @@
 // File: Localization/LocaleIT.cs
 // Purpose: Italian (it-IT) strings for the Options UI (ESC -> Options -> Hover Colors).
-// Registered in Mod.OnLoad via GameManager.instance.localizationManager.AddSource("it-IT", ...).
 // Strings for the in-city cohtml panel live separately in L10n/lang/it-IT.json.
 
 namespace HoverColors.Localization
