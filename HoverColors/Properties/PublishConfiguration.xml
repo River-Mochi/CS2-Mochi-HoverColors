@@ -54,8 +54,7 @@ tags: Mochi's blue scrubber, Highlight, border color, remove blue
 	<!--Thumbnail-->
 	<Thumbnail Value="Properties/Thumbnail-building_cyan.jpg" />
 	<!--Screenshot, can be set multiple times-->
-    <Screenshot Value="Properties/10-image-before-after.jpg" />
-    <Screenshot Value="Properties/11-image-before-after.jpg" />
+    <Screenshot Value="Properties/12-image-before-after.jpg" />
 	<Screenshot Value="Properties/15-image-Options.jpg" />
     <Screenshot Value="Properties/20-image-ColorPicker.jpg" />
     <Screenshot Value="Properties/30-image-Guidelines.jpg" />
@@ -76,11 +75,11 @@ tags: Mochi's blue scrubber, Highlight, border color, remove blue
 	<!--Change log for new version. Single line or multi line. Supports minimal markdown subset-->
 <ChangeLog>
 - UI/UX improvements
-- UI/UX improvements
-- added two Guideline color swatches to customize the new road tool (circles with spacing lines and road overlay color).
-- clicking on Guideline icon button resets to vanilla blue colors.
-- added Options menu dropdown list of 4 selectable custom colors for Dashed Guideline (default white).
+- added two Guide line color swatches to customize the new road tool (for circles with spacing lines and road overlay color).
+- clicking on Guideline icon button resets to vanilla blue + owner green colors.
+- added Options menu dropdown list of 4 selectable custom colors for Dashed Guide lines (default white).
 - updated translations.
+- main keybind changed to "J". Now have "J", ""K", and "L" hotkeys - change or remove these in HC Options menu.
 </ChangeLog>
 	<!--External link, can be set multiple times. supported types are "discord", "github", "youtube", "twitch", "x", "paypal", "patreon", "buymeacoffee", "kofi", "crowdin", "gitlab", "gofundme"-->
 	<ExternalLink Type="" Url="" />
