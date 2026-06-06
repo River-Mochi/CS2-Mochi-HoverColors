@@ -34,11 +34,11 @@ namespace HoverColors.Localization
                 { m_Settings.GetSettingsLocaleID(), title },
 
                 // Tabs
-                { m_Settings.GetOptionTabLocaleID(HoverColorsSettings.Actions), "Azioni" },
-                { m_Settings.GetOptionTabLocaleID(HoverColorsSettings.About), "Informazioni" },
+                { m_Settings.GetOptionTabLocaleID(HoverColorsSettings.Actions), "Actions" },
+                { m_Settings.GetOptionTabLocaleID(HoverColorsSettings.About), "Info" },
 
                 // Groups
-                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.ToolColors), "Comportamento colori strumenti" },
+                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.ToolColors), "Comportamento colore strumenti" },
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.Panel), "Pannello" },
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.KeyBindings), "Scorciatoie da tastiera" },
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.Guidelines), "Guide" },
@@ -49,100 +49,59 @@ namespace HoverColors.Localization
 
                 // Tool color behavior
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToolColorMode)), "Bulldozer + strade" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ToolColorMode)),
-                    "Controlla i colori temporanei del contorno quando bulldozer o strumenti strada sono attivi.\n\n" +
-                    "**1. Consigliato** usa il colore di avviso del gioco per le demolizioni e un blu vanilla più morbido per le strade.\n" +
-                    "**2. Colori vanilla degli strumenti** ripristina il normale blu vanilla del gioco mentre questi strumenti sono attivi.\n" +
-                    "**3. Tieni il colore personalizzato** usa ovunque il colore scelto.\n\n" +
-                    "Questo non sovrascrive il colore personalizzato salvato automaticamente nel selettore colore.\n"+
-                    "Alcuni utenti trovano il colore personalizzato difficile da vedere durante le demolizioni e volevano il ritorno automatico di contorni forti durante l’uso degli strumenti."
-                },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ToolColorMode)), "Controlla i colori temporanei del contorno mentre sono attivi il bulldozer o gli strumenti strada.\n\n**1. Consigliato** usa il colore Avviso del gioco (giallo) per la demolizione e un blu vanilla più morbido per le strade.\n**2. Colori vanilla degli strumenti** ripristina il normale blu vanilla del gioco mentre sono attivi bulldozer o strumenti strada.\n**3. Mantieni il mio colore personalizzato** usa ovunque il colore scelto.\n\nScopo: alcuni utenti/tester trovano difficile vedere il proprio colore personalizzato durante la demolizione.\nQueste opzioni offrono colori ad alta visibilità durante l’uso degli strumenti.\nNon sovrascrive il colore personalizzato salvato automaticamente nel selettore colori." },
                 { m_Settings.GetToolColorModeLocaleID("Recommended"), "1. Consigliato" },
                 { m_Settings.GetToolColorModeLocaleID("Vanilla"), "2. Colori vanilla degli strumenti" },
-                { m_Settings.GetToolColorModeLocaleID("Custom"), "3. Tieni il colore personalizzato" },
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseOverlapWarningColor)), "Attiva contorno oggetti sovrapposti" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseOverlapWarningColor)),
-                    "Attiva il comportamento vanilla normale quando piazzi oggetti che si sovrappongono ad altri.\n" +
-                    "Usa il contorno errore del gioco (color salmone) quando provi a sovrapporre.\n\n" +
-                    "Funziona con tutti i modi Bulldozer + strade e non sovrascrive il colore personalizzato salvato."
-                },
+                { m_Settings.GetToolColorModeLocaleID("Custom"), "3. Mantieni il mio colore personalizzato" },
 
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseCustomColorsForNetLanes)), "Allow custom colors for NetLanes" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseCustomColorsForNetLanes)),
-                    "<Enabled is recommended>\n" +
-                    "Use your saved HC color/transparency while placing NetLane detail items such as fences, hedges, markings, and similar lane-based tools. Normal roads still follow the Bulldozer + Roads setting you picked from the drop-down list.\n\n" +
-                    "Disable this if you want those tools to use the game's vanilla hover color instead.\n" +
-                    "Roads still follow the Bulldozer + Roads setting above. Overlapping error color still wins when enabled."
-                },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseOverlapWarningColor)), "Abilita contorno per elementi sovrapposti" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseOverlapWarningColor)), "<Abilitato è consigliato>\nMantiene visibile il contorno vanilla rosso salmone del gioco quando il posizionamento di oggetti o reti è bloccato da elementi sovrapposti.\nI limiti di area, come le guide del raggio delle fattorie dell’Industria specializzata, non vengono modificati.\n\nFunziona con tutti i modi Bulldozer + strade e non sovrascrive il colore personalizzato salvato." },
+
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseCustomColorsForNetLanes)), "Consenti colori personalizzati per NetLanes" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseCustomColorsForNetLanes)), "<Abilitato è consigliato>\nUsa il colore/trasparenza HC salvato mentre posizioni elementi di dettaglio NetLane come recinzioni, siepi, segnaletica e strumenti simili basati sulle corsie.\n\n- Le strade normali seguono comunque l’impostazione Bulldozer + strade scelta dal menu a discesa.\n- Disabilita questa opzione se vuoi che quegli strumenti usino invece il blu vanilla del gioco.\n- Il colore di errore da sovrapposizione ha ancora la priorità quando è abilitato (colore errore vanilla = rosso salmone)." },
 
                 // Darker panel
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)), "Pannello più scuro" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)),
-                    "<Pannello scuro>: pensato per chi usa Legacy UI; va bene anche in UI moderna se preferisci un pannello più scuro.\n" +
-                    "<Pannello standard>: stile traslucido personalizzato di Hover Colors.\n" +
-                    "Aspetto più chiaro e moderno.\n" +
-                    "Ideale per la maggior parte dei giocatori con la nuova UI moderna del gioco.\n" +
-                    "Provali entrambi. Cambia solo lo sfondo di questo pannello del mod, non l’UI del gioco."
-                },
-                
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)), "Abilitato usa <Pannello scuro>: creato per i giocatori con UI legacy; può essere usato anche nella UI moderna se preferisci un pannello più scuro.\nDisabilitato usa <Pannello standard>: stile Hover Colors traslucido personalizzato.\n- Aspetto più chiaro e moderno.\n- Migliore per la maggior parte dei giocatori che usano la nuova UI moderna del gioco.\n\nProvali entrambi e scegli quello che preferisci! Cambia solo lo sfondo di questo pannello del mod, non la UI del gioco." },
+
                 // Dashed alignment guide color
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.GuidelineDashedColorPreset)), "Dashed alignment guide color" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.GuidelineDashedColorPreset)),
-                    "Sets the dashed alignment guide color used for road angles, 90-degree helpers, and connection hints.\n\n" +
-                    "Both opacity sliders are synced: this Options slider and the in-city panel slider control the same dashed guide opacity."
-                },
-                { m_Settings.GetGuidelineDashedColorPresetLocaleID("Vanilla"), "Vanilla white" },
-                { m_Settings.GetGuidelineDashedColorPresetLocaleID("Yellow"), "High visibility yellow" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.GuidelineDashedColorPreset)), "Colore linee guida tratteggiate" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.GuidelineDashedColorPreset)), "Imposta il colore delle guide di allineamento tratteggiate usate per angoli stradali, aiuti a 90 gradi e suggerimenti di connessione.\n\nEntrambi i cursori di opacità sono sincronizzati: questo cursore nelle Opzioni e quello nel pannello in città controllano la stessa opacità delle guide tratteggiate." },
+                { m_Settings.GetGuidelineDashedColorPresetLocaleID("Vanilla"), "Bianco vanilla" },
+                { m_Settings.GetGuidelineDashedColorPresetLocaleID("Yellow"), "Giallo alta visibilità" },
                 { m_Settings.GetGuidelineDashedColorPresetLocaleID("Pink"), "Mochi Pink" },
-                { m_Settings.GetGuidelineDashedColorPresetLocaleID("Green"), "High visibility green" },
+                { m_Settings.GetGuidelineDashedColorPresetLocaleID("Green"), "Verde alta visibilità" },
 
                 // Guidelines opacity slider
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.GuidelineOpacityPercent)), "Opacità guide (alpha)" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.GuidelineOpacityPercent)),
-                    "Regola le guide di gioco (frecce/linee colorate mostrate mentre si piazzano strade, prop, ecc.)\n\n" +
-                    "**100%** mantiene l’aspetto vanilla predefinito.\n" +
-                    "**Più basso** rende le guide più trasparenti.\n" +
-                    "**0%** le nasconde completamente - <Non consigliato>.\n" +           
-                    "Consigliato restare sopra il 15%, altrimenti è difficile capire cosa succede.\n" +
-                    "Lo stesso slider si trova nel pannello del mod in città. I due sono sincronizzati;\n" +
-                    "se questo cambia, cambia anche quello in città."
-                },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.GuidelineOpacityPercent)), "Controlla l’opacità delle guide di allineamento tratteggiate, utile mentre posizioni strade, recinzioni, props, ecc.\n\n**100%** mantiene l’aspetto vanilla predefinito.\n**Più basso** rende le guide più trasparenti.\n**0%** le nasconde completamente - <Non consigliato>.\nSi consiglia di restare sopra il 15%, altrimenti diventa difficile vedere cosa succede.\nLo stesso cursore è nel pannello del mod in città. Sono sincronizzati;\nse cambi questo, cambia anche quello in città." },
 
                 // Keybinds
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.TogglePanelBinding)), "Apri/chiudi pannello principale" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.TogglePanelBinding)),
-                    "Scorciatoia da tastiera per aprire / chiudere il pannello Hover Colors in città." },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.TogglePanelBinding)), "Scorciatoia da tastiera per aprire / chiudere il pannello colore degli oggetti hover in città." },
                 { m_Settings.GetBindingKeyLocaleID(Mod.kTogglePanelActionName), "Attiva/disattiva pannello Hover Colors" },
 
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleSurfaceToolAreasBinding)), "Attiva/disattiva anteprime Surface" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ToggleSurfaceToolAreasBinding)),
-                    "Scorciatoia da tastiera per nascondere o ripristinare le linee di confine attive dello strumento Surface mentre si piazzano superfici." },
-                { m_Settings.GetBindingKeyLocaleID(Mod.kToggleSurfaceToolAreasActionName), "Attiva/disattiva linee Surface" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleSurfaceToolAreasBinding)), "Attiva/disattiva anteprime strumento Superficie" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ToggleSurfaceToolAreasBinding)), "Scorciatoia da tastiera per nascondere o ripristinare le linee di anteprima dei confini attive dello strumento Superficie mentre posizioni superfici." },
+                { m_Settings.GetBindingKeyLocaleID(Mod.kToggleSurfaceToolAreasActionName), "Livello anteprima Superficie On/Off" },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.TogglePresetBinding)), "Alterna preset 1+2" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.TogglePresetBinding)),
-                    "Scorciatoia da tastiera per passare dallo slot preset 1 allo slot 2." },
-                { m_Settings.GetBindingKeyLocaleID(Mod.kTogglePresetActionName),
-                    "Alterna tra preset 1 e 2" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.TogglePresetBinding)), "Scorciatoia da tastiera per passare dallo slot preset 1 allo slot 2." },
+                { m_Settings.GetBindingKeyLocaleID(Mod.kTogglePresetActionName), "Alterna tra preset 1 e 2" },
 
                 // About — name + version
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.NameText)), "Mod" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.NameText)), string.Empty },
 
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.VersionText)), "Versione" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.VersionText)), "Version" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.VersionText)), string.Empty },
 
                 // About — Paradox Mods link button (matches CityWatchdog phrasing)
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.OpenParadox)), "Paradox Mods" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.OpenParadox)), "Apre la pagina Paradox Mods dell’autore." },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.OpenParadox)), "Apri la pagina Paradox Mods dell’autore." },
 
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.MochiDedicationText)),
-                    "In amorevole memoria di Mochi."
-                    },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.MochiDedicationText)),
-                    "Questo mod è dedicato a Mochi. Era una cagnolina amata, adottata all’età di 7 anni,\n" +
-                    "e ha donato 13 anni di amore e gioia. Questo mod non sarebbe stato possibile senza Mochi."
-                    },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.MochiDedicationText)), "In amorevole memoria di Mochi." },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.MochiDedicationText)), "Questo mod è dedicato a Mochi. Era una cagnolina amatissima, adottata all’età di 7 anni,\ne ha donato 13 anni di amore e gioia. Questo mod non sarebbe stato possibile senza Mochi." },
             };
         }
 

@@ -6,7 +6,7 @@
      aria-label="House outline icon">
 
   <g id="house-icon"
-     transform="translate(16 16) rotate(-5) scale(0.95) translate(-16 -16)"
+     transform="translate(16 16.25) scale(0.95) translate(-16 -16)"
      fill="none"
      stroke="#FFFFFF"
      stroke-width="2.35"
@@ -23,7 +23,7 @@
              L4 23.561
              Z"/>
 
-    <!-- Front and right upper edges -->
+    <!-- Upper edges -->
     <path d="M4 9.185
              L16 15.176
              L28.005 9.561"/>
