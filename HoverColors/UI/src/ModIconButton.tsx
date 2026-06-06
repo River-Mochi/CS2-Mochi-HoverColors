@@ -26,7 +26,7 @@ export default () => {
                 <Button
                     variant="floating"
                     src={ModIconPath}                                            // SVG colors render as-is, no tinting
-                    selected={isOpen}                                            // vanilla light-blue overlay when active
+                    // No selected prop: hover lightens, but open panel does not keep the GTL icon tinted.
                     onSelect={() => trigger(CHANNEL, "SetPanelOpen", !isOpen)}   // C# owns the toggle so J hotkey shares state
                 />
             </Tooltip>

@@ -77,10 +77,9 @@ namespace HoverColors.Localization
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseCustomColorsForNetLanes)),
                     "<Enabled is recommended>\n" +
                     "Use your saved HC color/transparency while placing NetLane detail items such as fences, hedges, markings, and similar lane-based tools.\n\n" +
-                    "• Normal roads still follow the Bulldozer + Roads setting you picked from the drop-down list.\n" +
-                    "• Disable this if you want those tools to use the game's vanilla blue outline color instead.\n" +
-                    "• Roads still follow the Bulldozer + Roads setting you choose in drop-down list.\n" +
-                    "• Overlapping error color still wins when enabled (vanilla error =1 salmon red)."
+                    "- Normal roads still follow the Bulldozer + Roads setting you picked from the drop-down list.\n" +
+                    "- Disable this if you want those tools to use the game's vanilla blue outline color instead.\n" +
+                    "- Overlapping error color still wins when enabled (vanilla error color = salmon red)."
                 },
 
                 // Darker panel
@@ -88,8 +87,8 @@ namespace HoverColors.Localization
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)),
                     "Enabled uses <Dark panel>: made for legacy UI players; can also be used in Modern UI if you like a darker panel.\n"+
                     "Disabled uses <Standard panel>: custom translucent Hover Colors style.\n"+
-                    " - Lighter, more modern look.\n" +
-                    " - Best for most players using the new Modern game UI.\n\n" +
+                    "- Lighter, more modern look.\n" +
+                    "- Best for most players using the new Modern game UI.\n\n" +
                     "Try both and see which you prefer! This only changes the background of this mod panel and not the game's UI."
                 },
                 
