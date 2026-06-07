@@ -211,6 +211,24 @@ namespace HoverColors.UI
 
             AddBinding(new TriggerBinding(
                 Mod.ModId,
+                "ResetDistrictToVanilla",
+                () =>
+                {
+                    HoverColorsSettings? settings = Mod.Settings;
+                    if (settings == null) return;
+
+                    UnityEngine.Color district = DistrictColorSystem.CapturedDistrictFillColor;
+                    settings.DistrictColorEnabled = false;
+                    settings.DistrictR = district.r;
+                    settings.DistrictG = district.g;
+                    settings.DistrictB = district.b;
+                    settings.DistrictA = district.a;
+                    settings.ApplyAndSave();
+                    SyncValueBindings();
+                }));
+
+            AddBinding(new TriggerBinding(
+                Mod.ModId,
                 "ResetToVanilla",
                 () =>
                 {
@@ -611,17 +629,21 @@ namespace HoverColors.UI
         private static bool IsVanillaOutlineActive()
         {
             HoverColorsSettings? settings = Mod.Settings;
-            return settings != null
-                && OutlineColorSystem.MatchesCapturedVanillaProfile(
-                    settings.OutlineR,
-                    settings.OutlineG,
-                    settings.OutlineB,
-                    settings.OutlineA,
-                    settings.FillA,
-                    settings.OwnerR,
-                    settings.OwnerG,
-                    settings.OwnerB,
-                    settings.OwnerA);
+            if (settings == null)
+            {
+                return false;
+            }
+
+            UnityEngine.Color hovered = OutlineColorSystem.CapturedHoveredColor;
+            UnityEngine.Color owner = OutlineColorSystem.CapturedOwnerColor;
+            return ApproxEqual(settings.OutlineR, hovered.r)
+                && ApproxEqual(settings.OutlineG, hovered.g)
+                && ApproxEqual(settings.OutlineB, hovered.b)
+                && ApproxEqual(settings.OutlineA, OutlineColorSystem.CapturedOutlineA)
+                && ApproxEqual(settings.OwnerR, owner.r)
+                && ApproxEqual(settings.OwnerG, owner.g)
+                && ApproxEqual(settings.OwnerB, owner.b)
+                && ApproxEqual(settings.OwnerA, owner.a);
         }
 
         // True when the live swatch exactly matches what's stored in that slot.

@@ -79,6 +79,7 @@ tags: Mochi's blue scrubber, Highlight, border color, remove blue
 - clicking on Guideline icon button resets to vanilla blue + owner green colors.
 - added Options menu dropdown list of 4 selectable custom colors for Dashed Guide lines (default white).
 - updated translations.
+- District tool: added reset to vanilla.
 - main keybind changed to "J". Now have "J", ""K", and "L" hotkeys - change or remove these in HC Options menu.
 </ChangeLog>
 	<!--External link, can be set multiple times. supported types are "discord", "github", "youtube", "twitch", "x", "paypal", "patreon", "buymeacoffee", "kofi", "crowdin", "gitlab", "gofundme"-->

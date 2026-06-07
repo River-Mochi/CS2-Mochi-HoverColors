@@ -17,7 +17,7 @@ import { LocaleKey, usePanelLocalization } from "./localization";
 import infoIconSrc from "../images/AdvisorInfoViewWhite.svg";
 import lotToolIconSrc from "../images/LotTool03.svg";
 import surfaceIconSrc from "../images/Districts03.svg";
-import fillIconSrc from "../images/MainElements-Fill2.svg";
+import fillIconSrc from "../images/MainElements-Fill3.svg";
 import outlineIconSrc from "../images/MainElements2_even.svg";
 import guidelinesIconSrc from "../images/GuideLines4.svg";
 import closeIconSrc from "../images/Close.svg";
@@ -458,6 +458,10 @@ export const MochiColorPickerPanel = () => {
     const handleResetGuidelines = () => trigger(CHANNEL, "ResetGuidelines");
     const handleToggleSurfaceToolAreas = () => trigger(CHANNEL, "ToggleSurfaceToolAreas");
     const handleTogglePresetDefaults = () => trigger(CHANNEL, "TogglePresetDefaults");
+    const handleResetDistrict = () => {
+        trigger(CHANNEL, "ResetDistrictToVanilla");
+        setDistrictPickerOpen(false);
+    };
 
     // Preset hold-to-save
     const cancelHold = React.useCallback(() => {
@@ -613,7 +617,7 @@ export const MochiColorPickerPanel = () => {
             backgroundColor: `rgb(${r},${g},${b})`,
             // Inner hover edge keeps all sides visible on tiny Cohtml swatches.
             boxShadow: hovered
-                ? "inset 0 0 0 1.75rem rgba(255, 255, 255, 0.82), inset 0 0 0 3rem rgba(7, 13, 18, 0.30)"
+                ? "inset 0 0 0 1.35rem rgba(255, 255, 255, 0.80), inset 0 0 0 2.6rem rgba(7, 13, 18, 0.28)"
                 : "inset 0 0 0 1rem rgba(7, 13, 18, 0.32)",
         };
     };
@@ -621,7 +625,7 @@ export const MochiColorPickerPanel = () => {
     const guidelineShellStyle = (c: Color, hovered: boolean) => ({
         ...compactSwatchStyle(c),
         boxShadow: hovered
-            ? "inset 0 0 0 1rem rgba(7, 13, 18, 0.32), 0 0 0 2rem rgba(255, 255, 255, 0.76)"
+            ? "inset 0 0 0 1rem rgba(7, 13, 18, 0.32), 0 0 0 1.35rem rgba(255, 255, 255, 0.76)"
             : "inset 0 0 0 1rem rgba(7, 13, 18, 0.32)",
     });
 
@@ -957,9 +961,21 @@ export const MochiColorPickerPanel = () => {
                                     ref={districtPickerRef}
                                     className={`${styles.actionButton} ${styles.surfaceButton} ${styles.buttonGap} ${styles.districtPickerButton} ${districtPickerOpen ? styles.districtPickerButtonActive : ""}`}
                                     onMouseOver={updateDistrictPickerDirection}
+                                    // Modifier/right-click reset avoids another crowded bottom-row button.
+                                    onMouseDownCapture={(event) => {
+                                        if (event.ctrlKey || event.shiftKey) {
+                                            event.preventDefault();
+                                            event.stopPropagation();
+                                            handleResetDistrict();
+                                        }
+                                    }}
                                     onMouseDown={() => {
                                         openAreasToolPanel();
                                         updateDistrictPickerDirection();
+                                    }}
+                                    onContextMenu={(event) => {
+                                        event.preventDefault();
+                                        handleResetDistrict();
                                     }}
                                 >
                                     <img src={surfaceIconSrc} className={`${styles.controlIcon} ${styles.idleIcon} ${styles.districtPickerIcon}`} alt="" />

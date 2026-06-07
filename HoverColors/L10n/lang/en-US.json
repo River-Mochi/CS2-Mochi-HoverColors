@@ -18,5 +18,5 @@
   "HoverColors.UI.Tooltip.Preset1": "Slot 1 — tap to apply, hold 0.8s to overwrite with your current color.\nHotkey K toggles between slot 1 and slot 2.",
   "HoverColors.UI.Tooltip.Preset2": "Slot 2 — tap to apply, hold 0.8s to overwrite with your current color.\nHotkey K toggles between slot 1 and slot 2.",
   "HoverColors.UI.Tooltip.ResetPresets": "↺ 1st click: resets both preset slots to mod defaults.\n↺ 2nd click: restores your previous colors.\nIf already at defaults, does nothing.",
-  "HoverColors.UI.Tooltip.DistrictColors": "Click for District overlay fill and boundary line color/opacity."
+  "HoverColors.UI.Tooltip.DistrictColors": "Click for District overlay fill and boundary line color/opacity.\nCtrl-click, Shift-click, or right-click to reset Districts to vanilla."
 }
