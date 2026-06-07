@@ -411,8 +411,8 @@ namespace HoverColors.Settings
                 },
                 new DropdownItem<int>
                 {
-                    value = GuidelineDashedColorPresetYellow,
-                    displayName = GetGuidelineDashedColorPresetLocaleID("Yellow"),
+                    value = GuidelineDashedColorPresetGreen,
+                    displayName = GetGuidelineDashedColorPresetLocaleID("Green"),
                 },
                 new DropdownItem<int>
                 {
@@ -421,8 +421,8 @@ namespace HoverColors.Settings
                 },
                 new DropdownItem<int>
                 {
-                    value = GuidelineDashedColorPresetGreen,
-                    displayName = GetGuidelineDashedColorPresetLocaleID("Green"),
+                    value = GuidelineDashedColorPresetYellow,
+                    displayName = GetGuidelineDashedColorPresetLocaleID("Yellow"),
                 },
             };
         }

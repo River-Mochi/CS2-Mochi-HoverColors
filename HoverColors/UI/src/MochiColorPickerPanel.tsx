@@ -622,10 +622,12 @@ export const MochiColorPickerPanel = () => {
         };
     };
 
+    // Swatch boxes for guidelines and owner color borders on hover.
     const guidelineShellStyle = (c: Color, hovered: boolean) => ({
         ...compactSwatchStyle(c),
         boxShadow: hovered
-            ? "inset 0 0 0 1rem rgba(7, 13, 18, 0.32), 0 0 0 1.35rem rgba(255, 255, 255, 0.76)"
+            ? "inset 0 0 0 1rem rgba(7, 13, 18, 0.32), 0 0 0 1.15rem rgba(255, 255, 255, 0.76)"
+            // dark inner edge border
             : "inset 0 0 0 1rem rgba(7, 13, 18, 0.32)",
     });
 
@@ -969,6 +971,11 @@ export const MochiColorPickerPanel = () => {
                                             handleResetDistrict();
                                         }
                                     }}
+                                    onContextMenuCapture={(event) => {
+                                        event.preventDefault();
+                                        event.stopPropagation();
+                                        handleResetDistrict();
+                                    }}
                                     onMouseDown={() => {
                                         openAreasToolPanel();
                                         updateDistrictPickerDirection();
@@ -1007,12 +1014,7 @@ export const MochiColorPickerPanel = () => {
                         <div
                             className={`${styles.dragGrip} ${panelDragging ? styles.dragGripActive : ""}`}
                             onMouseDown={handlePanelDragStart}
-                        >
-                            <span className={styles.dragGripDot}></span>
-                            <span className={styles.dragGripDot}></span>
-                            <span className={styles.dragGripDot}></span>
-                            <span className={styles.dragGripDot}></span>
-                        </div>
+                        />
                     </Tooltip>
                 </div>
             </div>

@@ -328,7 +328,7 @@
 .body {
     display: flex;
     flex-direction: column;
-    padding: 10rem 8rem 6rem 8rem;
+    padding: 6rem 8rem 6rem 8rem;
 }
 
 .controlRow {
@@ -906,25 +906,6 @@
     background-color: #1E83AA;
     border-color: #1E83AA;
     box-shadow: none;
-}
-
-.dragGripDot {
-    width: 2rem;
-    height: 2rem;
-    border-radius: 50%;
-    background-color: rgba(254, 255, 255, 0.60);
-    flex: 0 0 2rem;
-    transition: background-color 120ms ease-out;
-}
-
-// Explicit margin is safer than gap in Cohtml.
-.dragGripDot + .dragGripDot {
-    margin-left: 2rem;
-}
-
-.dragGrip:hover .dragGripDot,
-.dragGripActive .dragGripDot {
-    background-color: rgba(254, 255, 255, 0.92);
 }
 
 // Darker panel control overrides only.
