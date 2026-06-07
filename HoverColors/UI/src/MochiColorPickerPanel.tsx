@@ -27,6 +27,8 @@ import styles from "./MochiColorPickerPanel.module.scss";
 const CHANNEL = "HoverColors";
 // Hold time for saving preset slots. Increase if quick taps save too often.
 const PRESET_HOLD_MS = 700;
+// Hold time for District reset. Normal click still opens the picker.
+const DISTRICT_RESET_HOLD_MS = 800;
 
 // Live color bindings
 const outlineR$ = bindValue<number>(CHANNEL, "OutlineR", 0.502);
@@ -218,6 +220,11 @@ export const MochiColorPickerPanel = () => {
     const holdTimerRef = React.useRef<number | null>(null);
     const holdStartRef = React.useRef<number>(0);
     const holdRafRef = React.useRef<number | null>(null);
+    const [districtHoldProgress, setDistrictHoldProgress] = React.useState(0);
+    const districtHoldTimerRef = React.useRef<number | null>(null);
+    const districtHoldStartRef = React.useRef<number>(0);
+    const districtHoldRafRef = React.useRef<number | null>(null);
+    const districtHoldCompletedRef = React.useRef(false);
 
     const outlineSwatchRef = React.useRef<HTMLDivElement | null>(null);
     const ownerSwatchRef = React.useRef<HTMLDivElement | null>(null);
@@ -305,6 +312,14 @@ export const MochiColorPickerPanel = () => {
         if (districtToolSelectRetryRef.current != null) {
             clearTimeout(districtToolSelectRetryRef.current);
             districtToolSelectRetryRef.current = null;
+        }
+        if (districtHoldTimerRef.current != null) {
+            clearTimeout(districtHoldTimerRef.current);
+            districtHoldTimerRef.current = null;
+        }
+        if (districtHoldRafRef.current != null) {
+            cancelAnimationFrame(districtHoldRafRef.current);
+            districtHoldRafRef.current = null;
         }
     }, []);
 
@@ -508,6 +523,72 @@ export const MochiColorPickerPanel = () => {
         if (holdRafRef.current != null) { cancelAnimationFrame(holdRafRef.current); holdRafRef.current = null; }
         setHoldSlot(0);
         setHoldProgress(0);
+    };
+
+    const cancelDistrictHold = React.useCallback(() => {
+        if (districtHoldTimerRef.current != null) {
+            clearTimeout(districtHoldTimerRef.current);
+            districtHoldTimerRef.current = null;
+        }
+        if (districtHoldRafRef.current != null) {
+            cancelAnimationFrame(districtHoldRafRef.current);
+            districtHoldRafRef.current = null;
+        }
+        districtHoldCompletedRef.current = false;
+        setDistrictHoldProgress(0);
+    }, []);
+
+    const handleDistrictMouseDownCapture = (event: React.MouseEvent<HTMLDivElement>) => {
+        if (event.button !== 0) {
+            return;
+        }
+
+        cancelDistrictHold();
+        districtHoldCompletedRef.current = false;
+        districtHoldStartRef.current = performance.now();
+        setDistrictHoldProgress(0);
+
+        const SWEEP_DELAY = 150;
+        const tick = () => {
+            const elapsed = performance.now() - districtHoldStartRef.current;
+            if (elapsed >= SWEEP_DELAY) {
+                const p = Math.min((elapsed - SWEEP_DELAY) / (DISTRICT_RESET_HOLD_MS - SWEEP_DELAY), 1);
+                setDistrictHoldProgress(p);
+                if (p < 1) {
+                    districtHoldRafRef.current = requestAnimationFrame(tick);
+                }
+            } else {
+                districtHoldRafRef.current = requestAnimationFrame(tick);
+            }
+        };
+
+        districtHoldRafRef.current = requestAnimationFrame(tick);
+        districtHoldTimerRef.current = window.setTimeout(() => {
+            districtHoldTimerRef.current = null;
+            if (districtHoldRafRef.current != null) {
+                cancelAnimationFrame(districtHoldRafRef.current);
+                districtHoldRafRef.current = null;
+            }
+            districtHoldCompletedRef.current = true;
+            handleResetDistrict();
+            setDistrictHoldProgress(0);
+        }, DISTRICT_RESET_HOLD_MS);
+    };
+
+    const handleDistrictMouseUpCapture = () => {
+        if (!districtHoldCompletedRef.current) {
+            cancelDistrictHold();
+        }
+    };
+
+    const handleDistrictClickCapture = (event: React.MouseEvent<HTMLDivElement>) => {
+        if (!districtHoldCompletedRef.current) {
+            return;
+        }
+
+        event.preventDefault();
+        event.stopPropagation();
+        districtHoldCompletedRef.current = false;
     };
 
     const updateColorPickerDirection = React.useCallback(() => {
@@ -963,28 +1044,13 @@ export const MochiColorPickerPanel = () => {
                                     ref={districtPickerRef}
                                     className={`${styles.actionButton} ${styles.surfaceButton} ${styles.buttonGap} ${styles.districtPickerButton} ${districtPickerOpen ? styles.districtPickerButtonActive : ""}`}
                                     onMouseOver={updateDistrictPickerDirection}
-                                    // Modifier/right-click reset avoids another crowded bottom-row button.
-                                    onMouseDownCapture={(event) => {
-                                        if (event.ctrlKey || event.shiftKey) {
-                                            event.preventDefault();
-                                            event.stopPropagation();
-                                            handleResetDistrict();
-                                        }
-                                    }}
-                                    onContextMenuCapture={(event) => {
-                                        event.preventDefault();
-                                        event.stopPropagation();
-                                        handleResetDistrict();
-                                    }}
-                                    onMouseDown={() => {
-                                        openAreasToolPanel();
-                                        updateDistrictPickerDirection();
-                                    }}
-                                    onContextMenu={(event) => {
-                                        event.preventDefault();
-                                        handleResetDistrict();
-                                    }}
+                                    // Hold resets District colors; quick click opens the picker.
+                                    onMouseDownCapture={handleDistrictMouseDownCapture}
+                                    onMouseUpCapture={handleDistrictMouseUpCapture}
+                                    onMouseLeave={cancelDistrictHold}
+                                    onClickCapture={handleDistrictClickCapture}
                                 >
+                                    {districtHoldProgress > 0 && <span className={styles.holdBar} style={holdBarStyle(districtHoldProgress)} />}
                                     <img src={surfaceIconSrc} className={`${styles.controlIcon} ${styles.idleIcon} ${styles.districtPickerIcon}`} alt="" />
                                     <ColorField
                                         focusKey={focusDisabled}
