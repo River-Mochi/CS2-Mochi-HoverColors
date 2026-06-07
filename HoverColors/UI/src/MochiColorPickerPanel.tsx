@@ -18,7 +18,7 @@ import infoIconSrc from "../images/AdvisorInfoViewWhite.svg";
 import lotToolIconSrc from "../images/LotTool03.svg";
 import surfaceIconSrc from "../images/Districts03.svg";
 import fillIconSrc from "../images/MainElements-Fill3.svg";
-import outlineIconSrc from "../images/MainElements2_even.svg";
+import outlineIconSrc from "../images/MainElements_short_bigTriangle.svg";
 import guidelinesIconSrc from "../images/GuideLines4.svg";
 import closeIconSrc from "../images/Close.svg";
 import resetIconSrc from "../images/Reset_Button2.svg";
