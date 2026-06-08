@@ -240,6 +240,9 @@ namespace HoverColors.Settings
         [SettingsUIHidden]
         public bool SpecializedIndustryAreasSuppressed { get; set; }
 
+        [SettingsUIHidden]
+        public bool SpecializedIndustryAreasSuppressionInitialized { get; set; }
+
         // -----------------------------------------------------------------------
         // Actions tab — Tool color behavior
         // -----------------------------------------------------------------------
@@ -413,6 +416,7 @@ namespace HoverColors.Settings
             PanelTooltipsEnabled = true;
             SurfaceToolAreasSuppressed = true;
             SpecializedIndustryAreasSuppressed = true;
+            SpecializedIndustryAreasSuppressionInitialized = true;
 
             // Release default: help players see demolition/road targets even if their custom
             // alpha is very low, without changing their saved custom color.
@@ -423,6 +427,16 @@ namespace HoverColors.Settings
 
             // 100 = vanilla default. Lower = more transparent guidelines.
             GuidelineOpacityPercent = DefaultGuidelineOpacityPercent;
+        }
+
+        public void MigrateAfterLoad()
+        {
+            if (!SpecializedIndustryAreasSuppressionInitialized)
+            {
+                SpecializedIndustryAreasSuppressed = true;
+                SpecializedIndustryAreasSuppressionInitialized = true;
+                ApplyAndSave();
+            }
         }
 
         // -----------------------------------------------------------------------

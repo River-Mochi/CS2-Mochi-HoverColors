@@ -15,7 +15,7 @@
   "HoverColors.UI.Tooltip.GuidelinesPreviewColor": "Road/tool preview overlay color + opacity.",
   "HoverColors.UI.Tooltip.GuidelinesOpacity": "Dashed guide line opacity. This city slider is synced with the Options menu slider.",
   "HoverColors.UI.Tooltip.SurfaceToggle": "Hide Surface tool boundary preview fill.",
-  "HoverColors.UI.Tooltip.SpecializedIndustryToggle": "Hide Specialized Industry area preview fill.",
+  "HoverColors.UI.Tooltip.SpecializedIndustryToggle": "Hide Extractor Lot area preview fill.",
   "HoverColors.UI.Tooltip.Preset1": "Slot 1 — tap to apply, hold 0.8s to overwrite with your current color.\nHotkey K toggles between slot 1 and slot 2.",
   "HoverColors.UI.Tooltip.Preset2": "Slot 2 — tap to apply, hold 0.8s to overwrite with your current color.\nHotkey K toggles between slot 1 and slot 2.",
   "HoverColors.UI.Tooltip.ResetPresets": "↺ 1st click: resets both preset slots to mod defaults.\n↺ 2nd click: restores your previous colors.\nIf already at defaults, does nothing.",

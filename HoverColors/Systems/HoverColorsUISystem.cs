@@ -647,6 +647,7 @@ namespace HoverColors.UI
             if (settings != null)
             {
                 settings.SpecializedIndustryAreasSuppressed = enabled;
+                settings.SpecializedIndustryAreasSuppressionInitialized = true;
                 settings.ApplyAndSave();
             }
 
