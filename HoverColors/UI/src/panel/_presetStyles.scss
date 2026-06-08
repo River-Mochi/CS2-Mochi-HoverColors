@@ -1,0 +1,123 @@
+// File: UI/src/panel/_presetStyles.scss
+// Purpose: Preset button styling imported by MochiColorPickerPanel.module.scss.
+
+// ── Preset slot buttons ──────────────────────────────────────────────────────
+// Number first, full-height saved-color sliver second:
+//   [ 1 |█ ] [ 2 |█ ]
+// Size: 30rem x 24rem.
+// Hover and active rings are separate layers:
+//   ::before = white hover ring
+//   ::after  = muted blue selected ring
+.presetSlot {
+    --hc-preset-hover-ring: rgba(254, 255, 255, 0.82);
+    --hc-preset-hover-shadow: rgba(254, 255, 255, 0.18);
+    --hc-preset-active-blue: rgba(30, 131, 170, 0.95);
+    --hc-preset-active-glow: rgba(30, 131, 170, 0.30);
+
+    width: 30rem;
+    min-width: 30rem;
+    height: 24rem;
+    padding: 0;
+    box-sizing: border-box;
+    display: flex;
+    align-items: stretch;
+    justify-content: flex-start;
+    border-radius: 4rem;
+    border: 0;
+    background-color: rgba(26, 39, 48, 0.78) !important;
+    background-image: none !important;
+    overflow: visible;
+    cursor: pointer;
+    position: relative;
+    flex-shrink: 0;
+    transition: background-color 120ms ease-out, box-shadow 120ms ease-out;
+}
+
+// White hover ring. Seperate from active so selected state remains visible.
+.presetSlot::before {
+    content: "";
+    position: absolute;
+    top: -2rem;
+    right: -2rem;
+    bottom: -2rem;
+    left: -2rem;
+    z-index: 8;
+    pointer-events: none;
+    border-radius: 6rem;
+    box-sizing: border-box;
+    border: 2rem solid transparent;
+    box-shadow: none;
+    transition: border-color 120ms ease-out, box-shadow 120ms ease-out;
+}
+
+.presetSlot:hover::before,
+.presetSlot:focus-visible::before {
+    border-color: var(--hc-preset-hover-ring);
+    box-shadow: 0 0 4rem var(--hc-preset-hover-shadow);
+}
+
+// Muted blue selected ring. Uses info-button blue family.
+.presetSlot::after {
+    content: "";
+    position: absolute;
+    top: -1rem;
+    right: -1rem;
+    bottom: -1rem;
+    left: -1rem;
+    z-index: 9;
+    pointer-events: none;
+    border-radius: 5rem;
+    box-sizing: border-box;
+    border: 1.5rem solid transparent;
+    box-shadow: none;
+    transition: border-color 120ms ease-out, box-shadow 120ms ease-out;
+}
+
+.presetSlotActive {
+    background-color: rgba(26, 39, 48, 0.86) !important;
+}
+
+.presetSlotActive::after {
+    border-color: var(--hc-preset-active-blue);
+    box-shadow: 0 0 5rem var(--hc-preset-active-glow);
+}
+
+.presetSlotActive:hover::before,
+.presetSlotActive:focus-visible::before {
+    border-color: rgba(254, 255, 255, 0.55);
+    box-shadow: 0 0 4rem rgba(254, 255, 255, 0.12);
+}
+
+// Number side
+.presetNumber {
+    width: 18rem;
+    min-width: 18rem;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    position: relative;
+    border-radius: 4rem 0 0 4rem;
+    z-index: 5;
+    font-size: 12.5rem;
+    font-weight: 900;
+    line-height: 1;
+    color: rgba(254, 255, 255, 0.82);
+    text-shadow: 0 0 4rem rgba(0, 0, 0, 0.9);
+    transition: background-color 120ms ease-out;
+}
+
+// Saved-color preview sliver.
+.presetSwatch {
+    width: 12rem;
+    min-width: 12rem;
+    height: 100%;
+    display: block;
+    pointer-events: none;
+    position: relative;
+    z-index: 2;
+    border-top-right-radius: 3rem;
+    border-bottom-right-radius: 3rem;
+    box-shadow: none;
+}

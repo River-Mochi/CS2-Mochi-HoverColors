@@ -1,3 +1,6 @@
+@use "./panel/presetStyles";
+@use "./panel/dragGrip";
+
 .panelAnchor {
     position: absolute;
     top: 100%;
@@ -115,25 +118,9 @@
 
 .infoButton,
 .controlIconButton,
-.dragGrip {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 4rem;
-    border: 1rem solid transparent;
-    background-color: rgba(36, 54, 66, 0.58);
-    transition: background-color 120ms ease-out, border-color 120ms ease-out, box-shadow 120ms ease-out;
-    box-shadow: none;
-}
 
 .infoButton:hover,
 .controlIconButton:hover,
-.dragGrip:hover,
-.dragGripActive {
-    background-color: rgba(108, 136, 150, 0.34);
-    border-color: transparent;
-    box-shadow: none;
-}
 
 // Info button — circular like the close button, aligned with the icon column.
 .infoButton {
@@ -791,133 +778,6 @@
     background-color: rgba(84, 215, 255, 1);
 }
 
-// ── Preset slot buttons ──────────────────────────────────────────────────────
-// Number first, full-height saved-color sliver second:
-//   [ 1 |█ ] [ 2 |█ ]
-// Size: 30rem x 24rem.
-// Hover and active rings are separate layers:
-//   ::before = white hover ring
-//   ::after  = muted blue selected ring
-.presetSlot {
-    --hc-preset-hover-ring: rgba(254, 255, 255, 0.82);
-    --hc-preset-hover-shadow: rgba(254, 255, 255, 0.18);
-    --hc-preset-active-blue: rgba(30, 131, 170, 0.95);
-    --hc-preset-active-glow: rgba(30, 131, 170, 0.30);
-    width: 30rem;
-    min-width: 30rem;
-    height: 24rem;
-    padding: 0;
-    box-sizing: border-box;
-    display: flex;
-    align-items: stretch;
-    justify-content: flex-start;
-    border-radius: 4rem;
-    border: 0;
-    background-color: rgba(26, 39, 48, 0.78) !important;
-    background-image: none !important;
-    // Keep visible so the hover/selected rings can sit outside the tiny button
-    // without clipped corners in Cohtml.
-    overflow: visible;
-    cursor: pointer;
-    position: relative;
-    flex-shrink: 0;
-    transition: background-color 120ms ease-out, box-shadow 120ms ease-out;
-}
-
-    // White hover ring. Separate from active so selected state remains visible.
-    .presetSlot::before {
-        content: "";
-        position: absolute;
-        top: -2rem;
-        right: -2rem;
-        bottom: -2rem;
-        left: -2rem;
-        z-index: 8;
-        pointer-events: none;
-        border-radius: 6rem;
-        box-sizing: border-box;
-        border: 2rem solid transparent;
-        box-shadow: none;
-        transition: border-color 120ms ease-out, box-shadow 120ms ease-out;
-    }
-
-    .presetSlot:hover::before,
-    .presetSlot:focus-visible::before {
-        border-color: var(--hc-preset-hover-ring);
-        box-shadow: 0 0 4rem var(--hc-preset-hover-shadow);
-    }
-
-    // Muted blue selected ring. Uses info-button blue family, not bright cyan.
-    .presetSlot::after {
-        content: "";
-        position: absolute;
-        top: -1rem;
-        right: -1rem;
-        bottom: -1rem;
-        left: -1rem;
-        z-index: 9;
-        pointer-events: none;
-        border-radius: 5rem;
-        box-sizing: border-box;
-        border: 1.5rem solid transparent;
-        box-shadow: none;
-        transition: border-color 120ms ease-out, box-shadow 120ms ease-out;
-    }
-
-.presetSlotActive {
-    background-color: rgba(26, 39, 48, 0.86) !important;
-}
-
-    .presetSlotActive::after {
-        border-color: var(--hc-preset-active-blue);
-        box-shadow: 0 0 5rem var(--hc-preset-active-glow);
-    }
-
-    .presetSlotActive:hover::before,
-    .presetSlotActive:focus-visible::before {
-        border-color: rgba(254, 255, 255, 0.55);
-        box-shadow: 0 0 4rem rgba(254, 255, 255, 0.12);
-    }
-
-// Number side.
-.presetNumber {
-    width: 18rem;
-    min-width: 18rem;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    pointer-events: none;
-    position: relative;
-    border-radius: 4rem 0 0 4rem;
-    z-index: 5; // above holdBar
-    font-size: 12.5rem;
-    font-weight: 900;
-    line-height: 1;
-    // TSX sets real active/idle/hover color inline.
-    color: rgba(254, 255, 255, 0.82);
-    text-shadow: 0 0 4rem rgba(0, 0, 0, 0.9);
-    transition: background-color 120ms ease-out;
-}
-
-// Saved-color preview sliver.
-.presetSwatch {
-    width: 12rem;
-    min-width: 12rem;
-    height: 100%;
-    display: block;
-    pointer-events: none;
-    position: relative;
-    z-index: 2;
-    border-top-right-radius: 3rem;
-    border-bottom-right-radius: 3rem;
-    box-shadow: none;
-}
-
-// Preset style notes:
-// - Hover ring is white and visible on both Standard/Dark panels.
-// - Selected ring is muted info-button blue so it is calmer than cyan.
-// - Rings sit outside the button, so the saved-color sliver cannot hide them.
 
 // SVG reset avoids missing glyph boxes in some CJK fonts.
 // Hover uses opacity/filter/transform only.
@@ -991,55 +851,6 @@
     pointer-events: none;
     flex-shrink: 0;
 }
-
-// ─── Drag grip ────────────────────────────────────────────────────────────────
-// Real dots are centered by flex gap. They only appear while the grip is hovered
-// or while the panel is actively being dragged.
-.dragGrip {
-    position: absolute;
-    right: 8rem;
-    bottom: 0.5rem;
-    width: 20rem;
-    // Drag-foot height knob. Current is a small pill shape.
-    height: 11rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0;
-    gap: 2rem;
-    // Idle grip. Raise alpha for more visible, lower for subtler.
-    background-color: rgba(130, 155, 168, 0.34);
-    border: 1rem solid transparent;
-    border-radius: 4rem;
-    box-sizing: border-box;
-    cursor: move;
-    user-select: none;
-    transition: background-color 120ms ease-out, border-color 120ms ease-out, box-shadow 120ms ease-out;
-}
-
-.dragGripDot {
-    width: 2rem;
-    height: 2rem;
-    flex: 0 0 2rem;
-    opacity: 0;
-    border-radius: 50%;
-    background-color: rgba(254, 255, 255, 0.90);
-    pointer-events: none;
-    transition: opacity 120ms ease-out;
-}
-
-// Solid color avoids panel alpha blending.
-.dragGrip:hover,
-.dragGripActive {
-    background-color: #1E83AA;
-    border-color: rgba(254, 255, 255, 0.34);
-    box-shadow: 0 0 3rem rgba(84, 215, 255, 0.20);
-}
-
-    .dragGrip:hover .dragGripDot,
-    .dragGripActive .dragGripDot {
-        opacity: 1;
-    }
 
 
 
