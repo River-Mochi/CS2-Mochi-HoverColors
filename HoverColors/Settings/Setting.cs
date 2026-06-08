@@ -187,6 +187,44 @@ namespace HoverColors.Settings
         [SettingsUIHidden]
         public float GuidelinePreviewA { get; set; }
 
+        // Guidelines icon toggle backup. First click saves S1/S2 here and applies vanilla;
+        // next click restores these values. Dashed guide dropdown/opacity are separate.
+        [SettingsUIHidden]
+        public bool GuidelineVanillaToggleActive { get; set; }
+
+        [SettingsUIHidden]
+        public bool GuidelineVanillaToggleHasBackup { get; set; }
+
+        [SettingsUIHidden]
+        public int GuidelineBackupLinesColorPreset { get; set; }
+
+        [SettingsUIHidden]
+        public float GuidelineBackupLinesR { get; set; }
+
+        [SettingsUIHidden]
+        public float GuidelineBackupLinesG { get; set; }
+
+        [SettingsUIHidden]
+        public float GuidelineBackupLinesB { get; set; }
+
+        [SettingsUIHidden]
+        public float GuidelineBackupLinesA { get; set; }
+
+        [SettingsUIHidden]
+        public int GuidelineBackupPreviewColorPreset { get; set; }
+
+        [SettingsUIHidden]
+        public float GuidelineBackupPreviewR { get; set; }
+
+        [SettingsUIHidden]
+        public float GuidelineBackupPreviewG { get; set; }
+
+        [SettingsUIHidden]
+        public float GuidelineBackupPreviewB { get; set; }
+
+        [SettingsUIHidden]
+        public float GuidelineBackupPreviewA { get; set; }
+
         // In-city info button preference. Hidden from Options UI; persisted here so
         // "tooltips off" survives closing/reopening the panel and game restarts.
         [SettingsUIHidden]
@@ -196,6 +234,11 @@ namespace HoverColors.Settings
         // Default ON because creators mainly use this mod to see layered surfaces clearly.
         [SettingsUIHidden]
         public bool SurfaceToolAreasSuppressed { get; set; }
+
+        // Hidden in-city preference for Specialized Industry area fill previews.
+        // This is AreaTypeMask.Lots, so it must be handled with Surface in one system.
+        [SettingsUIHidden]
+        public bool SpecializedIndustryAreasSuppressed { get; set; }
 
         // -----------------------------------------------------------------------
         // Actions tab — Tool color behavior
@@ -354,9 +397,22 @@ namespace HoverColors.Settings
             GuidelinePreviewG = 0.7f;
             GuidelinePreviewB = 1f;
             GuidelinePreviewA = 1f;
+            GuidelineVanillaToggleActive = false;
+            GuidelineVanillaToggleHasBackup = false;
+            GuidelineBackupLinesColorPreset = GuidelineColorPresetVanilla;
+            GuidelineBackupLinesR = GuidelineLinesR;
+            GuidelineBackupLinesG = GuidelineLinesG;
+            GuidelineBackupLinesB = GuidelineLinesB;
+            GuidelineBackupLinesA = GuidelineLinesA;
+            GuidelineBackupPreviewColorPreset = GuidelineColorPresetVanilla;
+            GuidelineBackupPreviewR = GuidelinePreviewR;
+            GuidelineBackupPreviewG = GuidelinePreviewG;
+            GuidelineBackupPreviewB = GuidelinePreviewB;
+            GuidelineBackupPreviewA = GuidelinePreviewA;
             GuidelineDashedColorPreset = GuidelineDashedColorPresetVanilla;
             PanelTooltipsEnabled = true;
             SurfaceToolAreasSuppressed = true;
+            SpecializedIndustryAreasSuppressed = true;
 
             // Release default: help players see demolition/road targets even if their custom
             // alpha is very low, without changing their saved custom color.

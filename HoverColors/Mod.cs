@@ -182,8 +182,8 @@ namespace HoverColors
             World.DefaultGameObjectInjectionWorld.GetOrCreateSystemManaged<GuidelineColorSystem>();
             updateSystem.UpdateAt<GuidelineColorSystem>(SystemUpdatePhase.Rendering);
 
-            World.DefaultGameObjectInjectionWorld.GetOrCreateSystemManaged<SurfaceToolOverlaySystem>();
-            updateSystem.UpdateAt<SurfaceToolOverlaySystem>(SystemUpdatePhase.Rendering);
+            World.DefaultGameObjectInjectionWorld.GetOrCreateSystemManaged<AreaToolOverlaySystem>();
+            updateSystem.UpdateAt<AreaToolOverlaySystem>(SystemUpdatePhase.Rendering);
 
             World.DefaultGameObjectInjectionWorld.GetOrCreateSystemManaged<DistrictColorSystem>();
             updateSystem.UpdateAt<DistrictColorSystem>(SystemUpdatePhase.Rendering);

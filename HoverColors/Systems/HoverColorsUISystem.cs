@@ -55,6 +55,7 @@ namespace HoverColors.UI
         private ValueBinding<bool> m_PanelTooltipsEnabledBinding = null!;
         private ValueBinding<bool> m_UseDarkerPanelBinding = null!;
         private ValueBinding<bool> m_SurfaceToolAreasSuppressedBinding = null!;
+        private ValueBinding<bool> m_SpecializedIndustryAreasSuppressedBinding = null!;
         private ValueBinding<bool> m_VanillaOutlineActiveBinding = null!;
 
         // Preset slot bindings — panel reads stored colors for swatch previews + active-state dots.
@@ -171,6 +172,7 @@ namespace HoverColors.UI
                     settings.GuidelineLinesG = Math.Max(0f, Math.Min(1f, g));
                     settings.GuidelineLinesB = Math.Max(0f, Math.Min(1f, b));
                     settings.GuidelineLinesA = Math.Max(0f, Math.Min(1f, a));
+                    settings.GuidelineVanillaToggleActive = false;
                     settings.ApplyAndSave();
                     SyncValueBindings();
                 }));
@@ -188,6 +190,7 @@ namespace HoverColors.UI
                     settings.GuidelinePreviewG = Math.Max(0f, Math.Min(1f, g));
                     settings.GuidelinePreviewB = Math.Max(0f, Math.Min(1f, b));
                     settings.GuidelinePreviewA = Math.Max(0f, Math.Min(1f, a));
+                    settings.GuidelineVanillaToggleActive = false;
                     settings.ApplyAndSave();
                     SyncValueBindings();
                 }));
@@ -294,6 +297,11 @@ namespace HoverColors.UI
                 Mod.ModId,
                 "ToggleSurfaceToolAreas",
                 ToggleSurfaceToolAreas));
+
+            AddBinding(new TriggerBinding(
+                Mod.ModId,
+                "ToggleSpecializedIndustryAreas",
+                ToggleSpecializedIndustryAreas));
 
             // Apply a stored preset slot (slot = 1 or 2) — pushes that slot's color to live swatch.
             AddBinding(new TriggerBinding<int>(
@@ -402,7 +410,7 @@ namespace HoverColors.UI
                     SyncValueBindings();
                 }));
 
-            // Reset only the two city swatches. Dashed guide color/opacity are Options preferences.
+            // Toggle only the two city swatches. Dashed guide color/opacity are Options preferences.
             AddBinding(new TriggerBinding(
                 Mod.ModId,
                 "ResetGuidelines",
@@ -411,18 +419,18 @@ namespace HoverColors.UI
                     HoverColorsSettings? settings = Mod.Settings;
                     if (settings == null) return;
 
-                    UnityEngine.Color lines = GuidelineColorSystem.CapturedVanillaGuidelineLinesColor;
-                    UnityEngine.Color preview = GuidelineColorSystem.CapturedVanillaGuidelinePreviewColor;
-                    settings.GuidelineLinesColorPreset = HoverColorsSettings.GuidelineColorPresetVanilla;
-                    settings.GuidelineLinesR = lines.r;
-                    settings.GuidelineLinesG = lines.g;
-                    settings.GuidelineLinesB = lines.b;
-                    settings.GuidelineLinesA = 1f;
-                    settings.GuidelinePreviewColorPreset = HoverColorsSettings.GuidelineColorPresetVanilla;
-                    settings.GuidelinePreviewR = preview.r;
-                    settings.GuidelinePreviewG = preview.g;
-                    settings.GuidelinePreviewB = preview.b;
-                    settings.GuidelinePreviewA = 1f;
+                    if (settings.GuidelineVanillaToggleActive && settings.GuidelineVanillaToggleHasBackup)
+                    {
+                        RestoreGuidelineToggleBackup(settings);
+                        settings.GuidelineVanillaToggleActive = false;
+                    }
+                    else
+                    {
+                        SaveGuidelineToggleBackup(settings);
+                        ApplyVanillaGuidelineSwatches(settings);
+                        settings.GuidelineVanillaToggleActive = true;
+                    }
+
                     settings.ApplyAndSave();
                     SyncValueBindings();
                 }));
@@ -491,7 +499,9 @@ namespace HoverColors.UI
         {
             HoverColorsSettings? settings = Mod.Settings;
             bool suppressSurfaceToolAreas = settings?.SurfaceToolAreasSuppressed ?? true;
-            SurfaceToolOverlaySystem.SetSuppression(suppressSurfaceToolAreas);
+            bool suppressSpecializedIndustryAreas = settings?.SpecializedIndustryAreasSuppressed ?? true;
+            AreaToolOverlaySystem.SetSurfaceSuppression(suppressSurfaceToolAreas);
+            AreaToolOverlaySystem.SetSpecializedIndustrySuppression(suppressSpecializedIndustryAreas);
 
             m_OutlineRBinding = AddValueBinding("OutlineR", settings?.OutlineR ?? 0.502f);
             m_OutlineGBinding = AddValueBinding("OutlineG", settings?.OutlineG ?? 0.869f);
@@ -522,6 +532,7 @@ namespace HoverColors.UI
             m_PanelTooltipsEnabledBinding = AddValueBinding("PanelTooltipsEnabled", settings?.PanelTooltipsEnabled ?? true);
             m_UseDarkerPanelBinding = AddValueBinding("UseDarkerPanel", settings?.UseDarkerPanel ?? false);
             m_SurfaceToolAreasSuppressedBinding = AddValueBinding("SurfaceToolAreasSuppressed", suppressSurfaceToolAreas);
+            m_SpecializedIndustryAreasSuppressedBinding = AddValueBinding("SpecializedIndustryAreasSuppressed", suppressSpecializedIndustryAreas);
             m_VanillaOutlineActiveBinding = AddValueBinding("VanillaOutlineActive", IsVanillaOutlineActive());
 
             // Preset slot stored-color bindings (swatch previews + active-state).
@@ -577,7 +588,8 @@ namespace HoverColors.UI
             UpdateIfChanged(m_PanelOpenBinding, s_PanelOpen);
             UpdateIfChanged(m_PanelTooltipsEnabledBinding, settings?.PanelTooltipsEnabled ?? true);
             UpdateIfChanged(m_UseDarkerPanelBinding, settings?.UseDarkerPanel ?? false);
-            UpdateIfChanged(m_SurfaceToolAreasSuppressedBinding, SurfaceToolOverlaySystem.SuppressSurfaceToolAreas);
+            UpdateIfChanged(m_SurfaceToolAreasSuppressedBinding, AreaToolOverlaySystem.SuppressSurfaceToolAreas);
+            UpdateIfChanged(m_SpecializedIndustryAreasSuppressedBinding, AreaToolOverlaySystem.SuppressSpecializedIndustryToolAreas);
             UpdateIfChanged(m_VanillaOutlineActiveBinding, IsVanillaOutlineActive());
 
             // Preset stored colors + active flags
@@ -613,8 +625,8 @@ namespace HoverColors.UI
 
         private void ToggleSurfaceToolAreas()
         {
-            bool enabled = !SurfaceToolOverlaySystem.SuppressSurfaceToolAreas;
-            SurfaceToolOverlaySystem.SetSuppression(enabled);
+            bool enabled = !AreaToolOverlaySystem.SuppressSurfaceToolAreas;
+            AreaToolOverlaySystem.SetSurfaceSuppression(enabled);
 
             HoverColorsSettings? settings = Mod.Settings;
             if (settings != null)
@@ -623,7 +635,22 @@ namespace HoverColors.UI
                 settings.ApplyAndSave();
             }
 
-            UpdateIfChanged(m_SurfaceToolAreasSuppressedBinding, SurfaceToolOverlaySystem.SuppressSurfaceToolAreas);
+            UpdateIfChanged(m_SurfaceToolAreasSuppressedBinding, AreaToolOverlaySystem.SuppressSurfaceToolAreas);
+        }
+
+        private void ToggleSpecializedIndustryAreas()
+        {
+            bool enabled = !AreaToolOverlaySystem.SuppressSpecializedIndustryToolAreas;
+            AreaToolOverlaySystem.SetSpecializedIndustrySuppression(enabled);
+
+            HoverColorsSettings? settings = Mod.Settings;
+            if (settings != null)
+            {
+                settings.SpecializedIndustryAreasSuppressed = enabled;
+                settings.ApplyAndSave();
+            }
+
+            UpdateIfChanged(m_SpecializedIndustryAreasSuppressedBinding, AreaToolOverlaySystem.SuppressSpecializedIndustryToolAreas);
         }
 
         private static bool IsVanillaOutlineActive()
@@ -685,6 +712,51 @@ namespace HoverColors.UI
                 && ApproxEqual(s.Preset2B, DefaultPreset2B) && ApproxEqual(s.Preset2A, DefaultPreset2A)
                 && ApproxEqual(s.Preset2FillA, DefaultPreset2FillA)
                 && s.Preset2GuidelinePercent == HoverColorsSettings.DefaultGuidelineOpacityPercent;
+        }
+
+        private static void SaveGuidelineToggleBackup(HoverColorsSettings settings)
+        {
+            settings.GuidelineBackupLinesColorPreset = settings.GuidelineLinesColorPreset;
+            settings.GuidelineBackupLinesR = settings.GuidelineLinesR;
+            settings.GuidelineBackupLinesG = settings.GuidelineLinesG;
+            settings.GuidelineBackupLinesB = settings.GuidelineLinesB;
+            settings.GuidelineBackupLinesA = settings.GuidelineLinesA;
+            settings.GuidelineBackupPreviewColorPreset = settings.GuidelinePreviewColorPreset;
+            settings.GuidelineBackupPreviewR = settings.GuidelinePreviewR;
+            settings.GuidelineBackupPreviewG = settings.GuidelinePreviewG;
+            settings.GuidelineBackupPreviewB = settings.GuidelinePreviewB;
+            settings.GuidelineBackupPreviewA = settings.GuidelinePreviewA;
+            settings.GuidelineVanillaToggleHasBackup = true;
+        }
+
+        private static void RestoreGuidelineToggleBackup(HoverColorsSettings settings)
+        {
+            settings.GuidelineLinesColorPreset = settings.GuidelineBackupLinesColorPreset;
+            settings.GuidelineLinesR = settings.GuidelineBackupLinesR;
+            settings.GuidelineLinesG = settings.GuidelineBackupLinesG;
+            settings.GuidelineLinesB = settings.GuidelineBackupLinesB;
+            settings.GuidelineLinesA = settings.GuidelineBackupLinesA;
+            settings.GuidelinePreviewColorPreset = settings.GuidelineBackupPreviewColorPreset;
+            settings.GuidelinePreviewR = settings.GuidelineBackupPreviewR;
+            settings.GuidelinePreviewG = settings.GuidelineBackupPreviewG;
+            settings.GuidelinePreviewB = settings.GuidelineBackupPreviewB;
+            settings.GuidelinePreviewA = settings.GuidelineBackupPreviewA;
+        }
+
+        private static void ApplyVanillaGuidelineSwatches(HoverColorsSettings settings)
+        {
+            UnityEngine.Color lines = GuidelineColorSystem.CapturedVanillaGuidelineLinesColor;
+            UnityEngine.Color preview = GuidelineColorSystem.CapturedVanillaGuidelinePreviewColor;
+            settings.GuidelineLinesColorPreset = HoverColorsSettings.GuidelineColorPresetVanilla;
+            settings.GuidelineLinesR = lines.r;
+            settings.GuidelineLinesG = lines.g;
+            settings.GuidelineLinesB = lines.b;
+            settings.GuidelineLinesA = 1f;
+            settings.GuidelinePreviewColorPreset = HoverColorsSettings.GuidelineColorPresetVanilla;
+            settings.GuidelinePreviewR = preview.r;
+            settings.GuidelinePreviewG = preview.g;
+            settings.GuidelinePreviewB = preview.b;
+            settings.GuidelinePreviewA = 1f;
         }
 
         private void InitializeKeybindActions()

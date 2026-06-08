@@ -32,7 +32,7 @@
 }
 
 .panelStandard {
-    border: 1rem solid rgba(254, 255, 255, 0.18);
+    border: 0;
     border-radius: 12rem;
     background-image: linear-gradient(to bottom, rgba(95, 124, 136, var(--hc-panel-alpha-top)), rgba(58, 78, 88, var(--hc-panel-alpha-bottom)));
     background-color: rgba(58, 78, 88, var(--hc-panel-alpha-bottom));
@@ -120,7 +120,7 @@
     align-items: center;
     justify-content: center;
     border-radius: 4rem;
-    border: 1rem solid rgba(254, 255, 255, 0.35);
+    border: 1rem solid transparent;
     background-color: rgba(36, 54, 66, 0.58);
     transition: background-color 120ms ease-out, border-color 120ms ease-out, box-shadow 120ms ease-out;
     box-shadow: none;
@@ -131,8 +131,8 @@
 .dragGrip:hover,
 .dragGripActive {
     background-color: rgba(108, 136, 150, 0.34);
-    border-color: rgba(254, 255, 255, 0.58);
-    box-shadow: inset 0 0 0 1rem rgba(254, 255, 255, 0.06);
+    border-color: transparent;
+    box-shadow: none;
 }
 
 // Info button — circular like the close button, aligned with the icon column.
@@ -156,7 +156,7 @@
 
 .titleBar .infoButton {
     // Keeps the round info icon from sitting on the lower edge of the hover wash.
-    margin-top: -1rem;
+    margin-top: -2rem;
 }
 
 // Transparent cyan when tooltips are OFF.
@@ -256,7 +256,7 @@
     border-radius: 4rem;
     cursor: pointer;
     background-color: rgb(179, 179, 255);
-    box-shadow: inset 0 0 0 1rem rgba(7, 13, 18, 0.32);
+    box-shadow: none;
     transition: box-shadow 120ms ease-out;
 }
 
@@ -312,7 +312,7 @@
     z-index: 3;
     pointer-events: none;
     border-radius: 4rem;
-    box-shadow: inset 0 0 0 1rem rgba(7, 13, 18, 0.32);
+    box-shadow: none;
     transition: box-shadow 120ms ease-out;
 }
 
@@ -426,8 +426,7 @@
 .outlineFieldShellHovered .outlineFieldHoverRing {
     border-color: rgba(254, 255, 255, 1);
     box-shadow:
-        0 0 0 1rem rgba(8, 15, 20, 0.48),
-        0 0 7rem rgba(254, 255, 255, 0.26);
+        0 0 6rem rgba(254, 255, 255, 0.22);
 }
 
 .outlineFieldShell:hover .outlineField,
@@ -539,7 +538,7 @@
     z-index: 3;
     pointer-events: none;
     border-radius: 4rem;
-    box-shadow: inset 0 0 0 1rem rgba(7, 13, 18, 0.32);
+    box-shadow: none;
     transition: box-shadow 120ms ease-out;
 }
 
@@ -584,11 +583,12 @@
 // ─── Bottom action bar ────────────────────────────────────────────────────────
 
 .actions {
+    position: relative;
     display: flex;
     justify-content: space-between;
     align-items: center;
     // Bottom padding leaves room for drag grip.
-    padding: 5rem 8rem 7rem 8rem;
+    padding: 5rem 8rem 4rem 8rem;
     border-top: 1rem solid rgba(254, 255, 255, 0.12);
 }
 
@@ -607,7 +607,7 @@
     justify-content: center;
     // Use .buttonGap for spacing.
     border-radius: 4rem;
-    border: 1rem solid rgba(254, 255, 255, 0.35);
+    border: 1rem solid transparent;
     background-color: rgba(36, 54, 66, 0.58) !important;
     background-image: none !important;
     box-shadow: none !important;
@@ -628,8 +628,8 @@
     &:focus,
     &:active {
         background-color: rgba(108, 136, 150, 0.34) !important;
-        border-color: rgba(254, 255, 255, 0.58);
-        box-shadow: inset 0 0 0 1rem rgba(254, 255, 255, 0.06) !important;
+        border-color: transparent;
+        box-shadow: none !important;
         color: #ffffff !important;
     }
 }
@@ -661,6 +661,78 @@
     pointer-events: none;
 }
 
+.districtMenu {
+    position: absolute;
+    left: 80rem;
+    top: 5rem;
+    width: 208rem;
+    max-height: 136rem;
+    padding: 6rem;
+    box-sizing: border-box;
+    border-radius: 7rem;
+    background-color: rgba(17, 27, 35, 0.94);
+    box-shadow: 0 7rem 18rem rgba(0, 0, 0, 0.28);
+    z-index: 80;
+    overflow-y: auto;
+}
+
+.districtMenuRow {
+    display: flex;
+    align-items: center;
+    min-height: 28rem;
+}
+
+.districtMenuSwatch {
+    width: 22rem;
+    height: 22rem;
+    flex: 0 0 22rem;
+    position: relative;
+    border-radius: 4rem;
+    cursor: pointer;
+}
+
+.districtMenuSwatchPreview {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    pointer-events: none;
+    border-radius: 4rem;
+}
+
+.districtMenuName {
+    min-width: 0;
+    flex: 1 1 auto;
+    margin-left: 7rem;
+    max-width: 118rem;
+    color: rgba(254, 255, 255, 0.92);
+    font-size: 12rem;
+    font-weight: 650;
+    line-height: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.districtMenuReset {
+    height: 22rem;
+    flex: 0 0 auto;
+    margin-left: 6rem;
+    padding: 0 7rem;
+    border: 1rem solid transparent;
+    border-radius: 4rem;
+    background-color: rgba(36, 54, 66, 0.78);
+    color: rgba(254, 255, 255, 0.88);
+    font-size: 10rem;
+    font-weight: 700;
+    cursor: pointer;
+
+    &:hover,
+    &:focus {
+        background-color: rgba(72, 99, 114, 0.92);
+        color: #ffffff;
+    }
+}
+
 // Hidden ColorField target keeps vanilla popup layout and edge flipping.
 .districtColorField {
     position: absolute;
@@ -672,9 +744,13 @@
     height: 100% !important;
     display: block !important;
     overflow: visible !important;
+    border-radius: 4rem !important;
+    box-shadow: none !important;
+    background-color: transparent !important;
     z-index: 2;
 }
 
+.districtColorField > button,
 .districtColorField button {
     position: absolute !important;
     top: 0 !important;
@@ -685,8 +761,18 @@
     height: 100% !important;
     padding: 0 !important;
     border: 0 !important;
+    border-radius: 4rem !important;
     opacity: 0 !important;
+    box-shadow: none !important;
+    background-color: transparent !important;
     cursor: pointer !important;
+}
+
+.districtColorField button * {
+    border-color: transparent !important;
+    box-shadow: none !important;
+    background-color: transparent !important;
+    opacity: 0 !important;
 }
 
 // Active bar matches .vanillaActiveButton::after.
@@ -722,36 +808,32 @@
     // Saved-color preview stays true-color on .presetSwatch.
     background-color: rgba(26, 39, 48, 0.78) !important;
     background-image: none !important;
-    // Allows active outline to sit outside without shrinking the slot.
-    overflow: visible;
+    // Clips inset hover/active rings so tiny corners stay clean in Cohtml.
+    overflow: hidden;
     cursor: pointer;
     position: relative;
     flex-shrink: 0;
-    transition: background-color 120ms ease-out, border-color 120ms ease-out, box-shadow 120ms ease-out;
-    // Hover tuning: raise background RGB or border alpha.
-    &:hover {
-        background-color: rgba(52, 74, 88, 0.92) !important;
-    }
+    transition: box-shadow 120ms ease-out;
 }
 
-// Draw preset frame above both the number and saved-color sliver.
-// Inset frame avoids overlap between the tiny preset buttons.
+// Active preset ring only. Idle preset slots stay borderless so the saved
+// color sliver does not make slot 1/2 look different sizes.
 .presetSlot::after {
     content: "";
     position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
+    inset: 0;
     z-index: 8;
     pointer-events: none;
     border-radius: 4rem;
-    box-shadow: inset 0 0 0 1rem rgba(254, 255, 255, 0.24);
+    box-sizing: border-box;
+    box-shadow: none;
     transition: box-shadow 120ms ease-out;
 }
 
 .presetSlot:hover::after {
-    box-shadow: inset 0 0 0 1rem rgba(254, 255, 255, 0.58);
+    box-shadow:
+        inset 0 0 0 1rem rgba(254, 255, 255, 0.44),
+        0 0 3rem rgba(254, 255, 255, 0.10);
 }
 
 // Number side.
@@ -764,6 +846,7 @@
     justify-content: center;
     pointer-events: none;
     position: relative;
+    border-radius: 4rem 0 0 4rem;
     z-index: 5; // above holdBar
     font-size: 12.5rem;
     font-weight: 900;
@@ -771,6 +854,13 @@
     // TSX sets real active/idle/hover color inline.
     color: rgba(254, 255, 255, 0.82);
     text-shadow: 0 0 4rem rgba(0, 0, 0, 0.9);
+    transition: background-color 120ms ease-out;
+}
+
+// Hover ring is on the slot; saved-color sliver stays true color.
+.presetSlot:hover .presetNumber {
+    background-color: transparent;
+    border-radius: 4rem 0 0 4rem;
 }
 
 // Saved-color preview sliver.
@@ -789,14 +879,14 @@
 
 .presetSlotActive {
     background-color: rgba(26, 39, 48, 0.86) !important;
-    box-shadow: 0 0 4rem rgba(84, 215, 255, 0.28);
+    box-shadow: 0 0 3rem rgba(84, 215, 255, 0.24);
 }
 
 .presetSlotActive::after {
-    // Active ring wraps number + swatch. Stronger: raise first alpha.
+    // Active ring wraps number + swatch. Stronger: raise first alpha or 1.2rem.
     box-shadow:
-        inset 0 0 0 1.25rem rgba(84, 215, 255, 0.72),
-        0 0 4rem rgba(84, 215, 255, 0.28);
+        inset 0 0 0 1.2rem rgba(84, 215, 255, 0.64),
+        0 0 4rem rgba(84, 215, 255, 0.22);
 }
 
 // Preset style notes:
@@ -883,29 +973,47 @@
 .dragGrip {
     position: absolute;
     right: 8rem;
-    bottom: 0.5rem;
+    bottom: 2rem;
     width: 20rem;
     // Drag-foot height knob. Current is a small pill shape, not a square.
-    height: 11.5rem;
+    height: 11rem;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 0 4rem;
     // Idle grip. Raise alpha for more visible, lower for subtler.
     background-color: rgba(130, 155, 168, 0.34);
-    border-color: rgba(254, 255, 255, 0.14);
+    border: 1rem solid transparent;
     border-radius: 4rem;
+    box-sizing: border-box;
     cursor: move;
     user-select: none;
-    transition: background-color 120ms ease-out, border-color 120ms ease-out;
+    transition: background-color 120ms ease-out, border-color 120ms ease-out, box-shadow 120ms ease-out;
+}
+
+.dragGrip::before {
+    content: "";
+    width: 11rem;
+    height: 3rem;
+    opacity: 0;
+    background-image: radial-gradient(circle, rgba(254, 255, 255, 0.82) 0 1rem, transparent 1.15rem);
+    background-size: 4rem 3rem;
+    background-repeat: repeat-x;
+    pointer-events: none;
+    transition: opacity 120ms ease-out;
 }
 
 // Solid color avoids panel alpha blending.
 .dragGrip:hover,
 .dragGripActive {
     background-color: #1E83AA;
-    border-color: #1E83AA;
-    box-shadow: none;
+    border-color: rgba(254, 255, 255, 0.34);
+    box-shadow: 0 0 3rem rgba(84, 215, 255, 0.20);
+}
+
+.dragGrip:hover::before,
+.dragGripActive::before {
+    opacity: 1;
 }
 
 // Darker panel control overrides only.
@@ -918,8 +1026,23 @@
         border-color: rgba(254, 255, 255, 0.26);
     }
 
+    .controlIconButton:hover,
+    .actionButton:hover,
+    .actionButton:focus,
+    .actionButton:active {
+        border-color: rgba(254, 255, 255, 0.58);
+        box-shadow: inset 0 0 0 1rem rgba(254, 255, 255, 0.06) !important;
+    }
+
+    .guidelineColorShell,
+    .guidelineColorPreview,
+    .ownerColorPreview {
+        box-shadow: inset 0 0 0 1rem rgba(7, 13, 18, 0.32);
+    }
+
     .infoButton {
         background-color: transparent !important;
+        border-color: transparent;
     }
 
     .infoButtonActive {
@@ -938,14 +1061,20 @@
         border-color: rgba(84, 215, 255, 0.98) !important;
     }
 
+    .presetSlotActive::after {
+        box-shadow:
+            inset 0 0 0 1.2rem rgba(84, 215, 255, 0.66),
+            0 0 4rem rgba(84, 215, 255, 0.22);
+    }
+
     .dragGrip {
         background-color: rgba(130, 155, 168, 0.30);
-        border-color: rgba(254, 255, 255, 0.12);
+        border-color: transparent;
     }
 
     .dragGrip:hover,
     .dragGripActive {
         background-color: #1E83AA;
-        border-color: #1E83AA;
+        border-color: rgba(254, 255, 255, 0.34);
     }
 }

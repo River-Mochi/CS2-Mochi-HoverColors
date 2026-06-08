@@ -6,7 +6,7 @@
 //     + preset slots 1/2 (tap=apply, hold 0.7s=save) + preset reset icon
 //   - Fill row: icon-led slider
 //   - Guidelines row: reset icon + 2 compact color swatches + opacity slider
-//   - Bottom: surface overlay toggle + District color picker
+//   - Bottom: Surface/Specialized overlay toggles + District color menu
 
 import React from "react";
 import { Button, Tooltip } from "cs2/ui";
@@ -16,6 +16,7 @@ import { VanillaComponentResolver } from "./utils/vanilla/VanillaComponentResolv
 import { LocaleKey, usePanelLocalization } from "./localization";
 import infoIconSrc from "../images/AdvisorInfoViewWhite.svg";
 import lotToolIconSrc from "../images/LotTool03.svg";
+import specializedIndustryIconSrc from "../images/LotToolSpecializedIndustry.svg";
 import surfaceIconSrc from "../images/Districts03.svg";
 import fillIconSrc from "../images/MainElements-Fill3.svg";
 import outlineIconSrc from "../images/MainElements_short_bigTriangle.svg";
@@ -56,6 +57,7 @@ const guidelineOpacity$ = bindValue<number>(CHANNEL, "GuidelineOpacityPercent", 
 const panelTooltipsEnabled$ = bindValue<boolean>(CHANNEL, "PanelTooltipsEnabled", true);
 const useDarkerPanel$ = bindValue<boolean>(CHANNEL, "UseDarkerPanel", false);
 const surfaceToolAreasSuppressed$ = bindValue<boolean>(CHANNEL, "SurfaceToolAreasSuppressed", true);
+const specializedIndustryAreasSuppressed$ = bindValue<boolean>(CHANNEL, "SpecializedIndustryAreasSuppressed", true);
 const vanillaOutlineActive$ = bindValue<boolean>(CHANNEL, "VanillaOutlineActive", false);
 const AREA_MENU_NAME_TOKENS = ["SERVICES.NAMES[AREAS]", "SERVICES.NAME[AREAS]", "AREAS"];
 const DISTRICT_AREA_NAME_TOKENS = [
@@ -119,6 +121,7 @@ export const MochiColorPickerPanel = () => {
     };
     const useDarkerPanel = useValue(useDarkerPanel$);
     const surfaceToolAreasSuppressed = useValue(surfaceToolAreasSuppressed$);
+    const specializedIndustryAreasSuppressed = useValue(specializedIndustryAreasSuppressed$);
     const vanillaOutlineActive = useValue(vanillaOutlineActive$);
     const preset1Active = useValue(preset1Active$);
     const preset2Active = useValue(preset2Active$);
@@ -181,7 +184,10 @@ export const MochiColorPickerPanel = () => {
             tooltipResetOutline: l("HoverColors.UI.Tooltip.ResetOutline"),
             tooltipResetPresets: l("HoverColors.UI.Tooltip.ResetPresets"),
             tooltipSurfaceToggle: l("HoverColors.UI.Tooltip.SurfaceToggle"),
+            tooltipSpecializedIndustryToggle: l("HoverColors.UI.Tooltip.SpecializedIndustryToggle"),
             tooltipDistrictColors: l("HoverColors.UI.Tooltip.DistrictColors"),
+            districtMenuAllDistricts: l("HoverColors.UI.DistrictMenu.AllDistricts"),
+            districtMenuResetAll: l("HoverColors.UI.DistrictMenu.ResetAll"),
         };
     }, [translatePanel]);
 
@@ -203,12 +209,14 @@ export const MochiColorPickerPanel = () => {
     const [guidelinePreviewPickerOpen, setGuidelinePreviewPickerOpen] = React.useState(false);
     const [ownerPickerOpen, setOwnerPickerOpen] = React.useState(false);
     const [districtPickerOpen, setDistrictPickerOpen] = React.useState(false);
+    const [districtMenuOpen, setDistrictMenuOpen] = React.useState(false);
     const [pendingDistrictToolOpen, setPendingDistrictToolOpen] = React.useState(false);
     // ColorField can swallow hover events; React state keeps the swatch ring reliable.
     const [swatchHovered, setSwatchHovered] = React.useState(false);
     const [ownerSwatchHovered, setOwnerSwatchHovered] = React.useState(false);
     const [guidelineLinesHovered, setGuidelineLinesHovered] = React.useState(false);
     const [guidelinePreviewHovered, setGuidelinePreviewHovered] = React.useState(false);
+    const [districtSwatchHovered, setDistrictSwatchHovered] = React.useState(false);
 
     // Preset numbers use inline color, so hover color also needs React state.
     const [p1Hovered, setP1Hovered] = React.useState(false);
@@ -231,6 +239,8 @@ export const MochiColorPickerPanel = () => {
     const guidelineLinesPickerRef = React.useRef<HTMLDivElement | null>(null);
     const guidelinePreviewPickerRef = React.useRef<HTMLDivElement | null>(null);
     const districtPickerRef = React.useRef<HTMLDivElement | null>(null);
+    const districtMenuRef = React.useRef<HTMLDivElement | null>(null);
+    const districtColorSwatchRef = React.useRef<HTMLDivElement | null>(null);
     const areaPanelOpenTimerRef = React.useRef<number | null>(null);
     const districtToolOpenTimeoutRef = React.useRef<number | null>(null);
     const districtToolSelectRetryRef = React.useRef<number | null>(null);
@@ -278,7 +288,9 @@ export const MochiColorPickerPanel = () => {
             // Vanilla ColorField closes on outside clicks but does not call onClosePicker there,
             // Keep scoped CSS mode in sync without touching picker internals.
             if (
-                districtPickerRef.current?.contains(target)
+                districtMenuRef.current?.contains(target)
+                || districtPickerRef.current?.contains(target)
+                || districtColorSwatchRef.current?.contains(target)
                 || ownerSwatchRef.current?.contains(target)
                 || guidelineLinesPickerRef.current?.contains(target)
                 || guidelinePreviewPickerRef.current?.contains(target)
@@ -299,6 +311,29 @@ export const MochiColorPickerPanel = () => {
             document.body.classList.remove(COMPACT_PICKER_BODY_CLASS);
         };
     }, [districtPickerOpen, guidelineLinesPickerOpen, guidelinePreviewPickerOpen, ownerPickerOpen]);
+
+    React.useEffect(() => {
+        if (!districtMenuOpen || typeof document === "undefined") {
+            return;
+        }
+
+        const onMouseDown = (event: MouseEvent) => {
+            const target = event.target as Element | null;
+            if (
+                target == null
+                || districtPickerRef.current?.contains(target)
+                || districtMenuRef.current?.contains(target)
+                || target.closest(".color-picker-container_Sj5")
+            ) {
+                return;
+            }
+
+            setDistrictMenuOpen(false);
+        };
+
+        document.addEventListener("mousedown", onMouseDown);
+        return () => document.removeEventListener("mousedown", onMouseDown);
+    }, [districtMenuOpen]);
 
     React.useEffect(() => () => {
         if (areaPanelOpenTimerRef.current != null) {
@@ -449,6 +484,7 @@ export const MochiColorPickerPanel = () => {
         trigger(CHANNEL, "SetFillAlpha", value);
     };
     const handleDistrictColorChange = (value: Color) => {
+        cancelDistrictHold();
         setDistrictColor(value);
         trigger(CHANNEL, "SetDistrictColor", value.r, value.g, value.b, value.a);
     };
@@ -472,6 +508,7 @@ export const MochiColorPickerPanel = () => {
     const handleResetFill = () => handleFillAChange(0);
     const handleResetGuidelines = () => trigger(CHANNEL, "ResetGuidelines");
     const handleToggleSurfaceToolAreas = () => trigger(CHANNEL, "ToggleSurfaceToolAreas");
+    const handleToggleSpecializedIndustryAreas = () => trigger(CHANNEL, "ToggleSpecializedIndustryAreas");
     const handleTogglePresetDefaults = () => trigger(CHANNEL, "TogglePresetDefaults");
     const handleResetDistrict = () => {
         trigger(CHANNEL, "ResetDistrictToVanilla");
@@ -583,6 +620,10 @@ export const MochiColorPickerPanel = () => {
 
     const handleDistrictClickCapture = (event: React.MouseEvent<HTMLDivElement>) => {
         if (!districtHoldCompletedRef.current) {
+            event.preventDefault();
+            event.stopPropagation();
+            setDistrictMenuOpen(open => !open);
+            openAreasToolPanel();
             return;
         }
 
@@ -606,7 +647,7 @@ export const MochiColorPickerPanel = () => {
     }, []);
 
     const updateDistrictPickerDirection = React.useCallback(() => {
-        const swatch = districtPickerRef.current;
+        const swatch = districtColorSwatchRef.current ?? districtPickerRef.current;
         if (swatch == null) return;
         const rect = swatch.getBoundingClientRect();
         setDistrictPickerDirection(rect.top + rect.height / 2 < window.innerHeight / 2 ? "down" : "up");
@@ -694,23 +735,19 @@ export const MochiColorPickerPanel = () => {
         const r = channel(c.r, 0.7);
         const g = channel(c.g, 0.7);
         const b = channel(c.b, 1);
+        const idleShadow = useDarkerPanel ? "inset 0 0 0 1rem rgba(7, 13, 18, 0.32)" : "none";
+        const hoverShadow = useDarkerPanel
+            ? "inset 0 0 0 1rem rgba(7, 13, 18, 0.32), 0 0 0 1.15rem rgba(255, 255, 255, 0.76)"
+            : "0 0 0 1.15rem rgba(255, 255, 255, 0.76)";
         return {
             backgroundColor: `rgb(${r},${g},${b})`,
-            // Inner hover edge keeps all sides visible on tiny Cohtml swatches.
-            boxShadow: hovered
-                ? "inset 0 0 0 1.35rem rgba(255, 255, 255, 0.80), inset 0 0 0 2.6rem rgba(7, 13, 18, 0.28)"
-                : "inset 0 0 0 1rem rgba(7, 13, 18, 0.32)",
+            // Standard stays clean; Dark keeps the extra edge for contrast.
+            boxShadow: hovered ? hoverShadow : idleShadow,
         };
     };
 
     // Swatch boxes for guidelines and owner color borders on hover.
-    const guidelineShellStyle = (c: Color, hovered: boolean) => ({
-        ...compactSwatchStyle(c),
-        boxShadow: hovered
-            ? "inset 0 0 0 1rem rgba(7, 13, 18, 0.32), 0 0 0 1.15rem rgba(255, 255, 255, 0.76)"
-            // dark inner edge border
-            : "inset 0 0 0 1rem rgba(7, 13, 18, 0.32)",
-    });
+    const guidelineShellStyle = (c: Color, hovered: boolean) => compactSwatchStyle(c, hovered);
 
     // Compact swatches: hidden vanilla ColorField owns picker; shell/preview own hover.
     const ownerShellStyle = (c: Color, hovered: boolean) => guidelineShellStyle(c, hovered);
@@ -1026,7 +1063,7 @@ export const MochiColorPickerPanel = () => {
 
                     {/* Bottom action bar */}
                     <div className={styles.actions}>
-                        {/* Surface tools: each button has its own active indicator. */}
+                        {/* Area-tool preview toggles: each button has its own active indicator. */}
                         <div className={styles.surfaceActions}>
                             {/* LotTool toggles surface preview suppression. */}
                             <Tooltip tooltip={tt(text.tooltipSurfaceToggle)}>
@@ -1038,13 +1075,23 @@ export const MochiColorPickerPanel = () => {
                                     <img src={lotToolIconSrc} className={`${styles.controlIcon} ${styles.idleIcon}`} alt="" />
                                 </button>
                             </Tooltip>
-                            {/* Districts uses hidden ColorField so vanilla owns the popup. */}
+                            {/* Specialized Industry uses AreaTypeMask.Lots, so it is separate from Surfaces. */}
+                            <Tooltip tooltip={tt(text.tooltipSpecializedIndustryToggle)}>
+                                <button
+                                    type="button"
+                                    className={`${styles.actionButton} ${styles.surfaceButton} ${styles.buttonGap} ${specializedIndustryAreasSuppressed ? styles.surfaceButtonActive : ""}`}
+                                    onClick={handleToggleSpecializedIndustryAreas}
+                                >
+                                    <img src={specializedIndustryIconSrc} className={`${styles.controlIcon} ${styles.idleIcon}`} alt="" />
+                                </button>
+                            </Tooltip>
+                            {/* District button opens a tiny menu; the menu swatch owns the picker. */}
                             <Tooltip tooltip={tt(text.tooltipDistrictColors)}>
                                 <div
                                     ref={districtPickerRef}
-                                    className={`${styles.actionButton} ${styles.surfaceButton} ${styles.buttonGap} ${styles.districtPickerButton} ${districtPickerOpen ? styles.districtPickerButtonActive : ""}`}
+                                    className={`${styles.actionButton} ${styles.surfaceButton} ${styles.buttonGap} ${styles.districtPickerButton} ${districtMenuOpen ? styles.districtPickerButtonActive : ""}`}
                                     onMouseOver={updateDistrictPickerDirection}
-                                    // Hold resets District colors; quick click opens the picker.
+                                    // Hold resets District colors; quick click opens the mini menu.
                                     onMouseDownCapture={handleDistrictMouseDownCapture}
                                     onMouseUpCapture={handleDistrictMouseUpCapture}
                                     onMouseLeave={cancelDistrictHold}
@@ -1052,9 +1099,31 @@ export const MochiColorPickerPanel = () => {
                                 >
                                     {districtHoldProgress > 0 && <span className={styles.holdBar} style={holdBarStyle(districtHoldProgress)} />}
                                     <img src={surfaceIconSrc} className={`${styles.controlIcon} ${styles.idleIcon} ${styles.districtPickerIcon}`} alt="" />
+                                </div>
+                            </Tooltip>
+                        </div>
+
+                        {districtMenuOpen && (
+                            <div ref={districtMenuRef} className={styles.districtMenu}>
+                                <div className={styles.districtMenuRow}>
+                                    <div
+                                        ref={districtColorSwatchRef}
+                                        className={styles.districtMenuSwatch}
+                                        style={guidelineShellStyle(districtColor, districtSwatchHovered)}
+                                        onMouseOver={() => { if (!districtSwatchHovered) { setDistrictSwatchHovered(true); } updateDistrictPickerDirection(); }}
+                                        onMouseMove={() => { if (!districtSwatchHovered) { setDistrictSwatchHovered(true); } }}
+                                        onMouseLeave={() => setDistrictSwatchHovered(false)}
+                                        onMouseDown={updateDistrictPickerDirection}
+                                    >
+                                        {/* Future per-district rows can reuse this swatch + reset pattern. */}
+                                        <span
+                                            className={styles.districtMenuSwatchPreview}
+                                            style={compactSwatchStyle(districtColor, false)}
+                                            aria-hidden="true"
+                                        />
                                     <ColorField
                                         focusKey={focusDisabled}
-                                        className={styles.districtColorField}
+                                            className={styles.districtColorField}
                                         value={districtColor}
                                         alpha={true}
                                         popupDirection={districtPickerDirection}
@@ -1063,15 +1132,25 @@ export const MochiColorPickerPanel = () => {
                                         colorWheel={false}
                                         onChange={handleDistrictColorChange}
                                         onOpenPicker={() => {
+                                            cancelDistrictHold();
                                             setDistrictPickerOpen(true);
                                             openAreasToolPanel();
                                             updateDistrictPickerDirection();
                                         }}
                                         onClosePicker={() => setDistrictPickerOpen(false)}
                                     />
+                                    </div>
+                                    <span className={styles.districtMenuName}>{text.districtMenuAllDistricts}</span>
+                                    <button
+                                        type="button"
+                                        className={styles.districtMenuReset}
+                                        onClick={handleResetDistrict}
+                                    >
+                                        {text.districtMenuResetAll}
+                                    </button>
                                 </div>
-                            </Tooltip>
-                        </div>
+                            </div>
+                        )}
 
                         {/* Reset moved to the outline row. */}
                     </div>
