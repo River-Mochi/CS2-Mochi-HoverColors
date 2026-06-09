@@ -195,6 +195,7 @@ namespace HoverColors.UI
                     SyncValueBindings();
                 }));
 
+
             AddBinding(new TriggerBinding<float, float, float, float>(
                 Mod.ModId,
                 "SetDistrictColor",
@@ -203,32 +204,55 @@ namespace HoverColors.UI
                     HoverColorsSettings? settings = Mod.Settings;
                     if (settings == null) return;
 
+                    bool changed = !settings.DistrictColorEnabled
+                        || !SameColor(
+                            settings.DistrictR, settings.DistrictG, settings.DistrictB, settings.DistrictA,
+                            r, g, b, a);
+
+                    if (!changed)
+                    {
+                        return;
+                    }
+
                     settings.DistrictColorEnabled = true;
                     settings.DistrictR = r;
                     settings.DistrictG = g;
                     settings.DistrictB = b;
                     settings.DistrictA = a;
-                    settings.ApplyAndSave();
-                    SyncValueBindings();
+
+                    ApplySaveAndSync(settings);
                 }));
 
-            AddBinding(new TriggerBinding(
-                Mod.ModId,
-                "ResetDistrictToVanilla",
-                () =>
-                {
-                    HoverColorsSettings? settings = Mod.Settings;
-                    if (settings == null) return;
 
-                    UnityEngine.Color district = DistrictColorSystem.CapturedDistrictFillColor;
-                    settings.DistrictColorEnabled = false;
-                    settings.DistrictR = district.r;
-                    settings.DistrictG = district.g;
-                    settings.DistrictB = district.b;
-                    settings.DistrictA = district.a;
-                    settings.ApplyAndSave();
-                    SyncValueBindings();
-                }));
+AddBinding(new TriggerBinding(
+    Mod.ModId,
+    "ResetDistrictToVanilla",
+    () =>
+    {
+        HoverColorsSettings? settings = Mod.Settings;
+        if (settings == null) return;
+
+        UnityEngine.Color district = DistrictColorSystem.CapturedDistrictFillColor;
+
+        bool changed = settings.DistrictColorEnabled
+            || !SameColor(
+                settings.DistrictR, settings.DistrictG, settings.DistrictB, settings.DistrictA,
+                district.r, district.g, district.b, district.a);
+
+        if (!changed)
+        {
+            return;
+        }
+
+        settings.DistrictColorEnabled = false;
+        settings.DistrictR = district.r;
+        settings.DistrictG = district.g;
+        settings.DistrictB = district.b;
+        settings.DistrictA = district.a;
+
+        ApplySaveAndSync(settings);
+    }));
+
 
             AddBinding(new TriggerBinding(
                 Mod.ModId,
@@ -312,27 +336,58 @@ namespace HoverColors.UI
                     HoverColorsSettings? settings = Mod.Settings;
                     if (settings == null) return;
 
+                    float targetR;
+                    float targetG;
+                    float targetB;
+                    float targetA;
+                    float targetFillA;
+                    int targetGuideline;
+
                     if (slot == 1)
                     {
-                        settings.OutlineR = settings.Preset1R;
-                        settings.OutlineG = settings.Preset1G;
-                        settings.OutlineB = settings.Preset1B;
-                        settings.OutlineA = settings.Preset1A;
-                        settings.FillA = settings.Preset1FillA;
-                        settings.GuidelineOpacityPercent = settings.Preset1GuidelinePercent;
+                        targetR = settings.Preset1R;
+                        targetG = settings.Preset1G;
+                        targetB = settings.Preset1B;
+                        targetA = settings.Preset1A;
+                        targetFillA = settings.Preset1FillA;
+                        targetGuideline = settings.Preset1GuidelinePercent;
+
                     }
                     else if (slot == 2)
                     {
-                        settings.OutlineR = settings.Preset2R;
-                        settings.OutlineG = settings.Preset2G;
-                        settings.OutlineB = settings.Preset2B;
-                        settings.OutlineA = settings.Preset2A;
-                        settings.FillA = settings.Preset2FillA;
-                        settings.GuidelineOpacityPercent = settings.Preset2GuidelinePercent;
+                        targetR = settings.Preset2R;
+                        targetG = settings.Preset2G;
+                        targetB = settings.Preset2B;
+                        targetA = settings.Preset2A;
+                        targetFillA = settings.Preset2FillA;
+                        targetGuideline = settings.Preset2GuidelinePercent;
                     }
 
-                    settings.ApplyAndSave();
-                    SyncValueBindings();
+                    else
+                    {
+                        return;
+                    }
+
+                    bool changed = !SameColor(
+                            settings.OutlineR, settings.OutlineG, settings.OutlineB, settings.OutlineA,
+                            targetR, targetG, targetB, targetA)
+                        || !ApproxEqual(settings.FillA, targetFillA)
+                        || settings.GuidelineOpacityPercent != targetGuideline;
+
+                    if (!changed)
+                    {
+                        return;
+                    }
+
+                    settings.OutlineR = targetR;
+                    settings.OutlineG = targetG;
+                    settings.OutlineB = targetB;
+                    settings.OutlineA = targetA;
+                    settings.FillA = targetFillA;
+                    settings.GuidelineOpacityPercent = targetGuideline;
+
+                    ApplySaveAndSync(settings);
+
                 }));
 
             // Save the current live color into a preset slot. Persisted to .coc automatically.
@@ -702,6 +757,23 @@ namespace HoverColors.UI
         }
 
         private static bool ApproxEqual(float a, float b) => Math.Abs(a - b) < 0.0005f;
+
+        private static bool SameColor(
+            float r1, float g1, float b1, float a1,
+            float r2, float g2, float b2, float a2)
+        {
+            return ApproxEqual(r1, r2)
+                && ApproxEqual(g1, g2)
+                && ApproxEqual(b1, b2)
+                && ApproxEqual(a1, a2);
+        }
+
+        // helper to reduce repetition in some bindings
+        private void ApplySaveAndSync(HoverColorsSettings settings)
+        {
+            settings.ApplyAndSave();
+            SyncValueBindings();
+        }
 
         private static bool PresetsAtDefaults(HoverColorsSettings s)
         {
