@@ -1639,3 +1639,41 @@
 .presetSlotActive .presetNumber {
     background-color: rgba(30, 131, 170, 0.12) !important;
 }
+
+
+/* Final drag-dot nudge: same spacing, shifted slightly left inside the pill. */
+.dragGripDot:nth-child(1) {
+    left: 1.8rem !important;
+}
+
+.dragGripDot:nth-child(2) {
+    left: 6.2rem !important;
+}
+
+.dragGripDot:nth-child(3) {
+    left: 10.6rem !important;
+}
+
+.dragGripDot:nth-child(4) {
+    left: 15.0rem !important;
+}
+
+/* Bottom action row spacing knob.
+   Lower padding-bottom = less empty space under the bottom-row buttons.
+   Lower min-height = panel can shrink closer to the buttons. */
+.actions {
+    padding-bottom: 0rem !important;
+    min-height: 34rem !important;
+}
+
+/* If the drag foot is aligned to bottom row buttons at 9rem, keep this. */
+.dragGrip {
+    bottom: 9rem !important;
+}
+
+/* Softer ON indicator bars for Surface / Specialized toggles.
+   Keep bar shape because bar = toggle ON, dot = selected preset. */
+.surfaceButtonActive::after {
+    background-color: rgba(84, 215, 255, 0.72) !important;
+    height: 2.5rem !important;
+}
