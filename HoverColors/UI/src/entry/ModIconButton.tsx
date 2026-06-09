@@ -1,15 +1,15 @@
-// File: UI/src/ModIconButton.tsx
+// File: UI/src/entry/ModIconButton.tsx
 // GameTopLeft launcher for the Hover Colors in-city panel. Same as CWD + EasyZoning.
 
 import React from "react";
 import { Button, Tooltip } from "cs2/ui";
 import { bindValue, trigger, useValue } from "cs2/api";
-import { usePanelLocalization } from "./localization";
-import { MochiColorPickerPanel } from "./MochiColorPickerPanel";
+import { usePanelLocalization } from "../localization";
+import { MochiColorPickerPanel } from "../MochiColorPickerPanel";
 import styles from "./ModIconButton.module.scss";
 
 // SVG passed via Button.src so its own fills render (single color today, multi-color later).
-import ModIconPath from "../images/MainElements_short_bigTriangle.svg";
+import ModIconPath from "../../images/MainElements_short_bigTriangle.svg";
 
 const CHANNEL = "HoverColors";
 const panelOpen$ = bindValue<boolean>(CHANNEL, "PanelOpen", false);
