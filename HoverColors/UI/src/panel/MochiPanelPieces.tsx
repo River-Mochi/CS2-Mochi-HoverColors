@@ -75,11 +75,6 @@ export const DragGrip = ({ active, tooltip, onMouseDown }: DragGripProps) => (
         <div
             className={`${styles.dragGrip} ${active ? styles.dragGripActive : ""}`}
             onMouseDown={onMouseDown}
-        >
-            <span className={styles.dragGripDot} />
-            <span className={styles.dragGripDot} />
-            <span className={styles.dragGripDot} />
-            <span className={styles.dragGripDot} />
-        </div>
+        />
     </Tooltip>
 );
