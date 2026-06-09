@@ -120,8 +120,7 @@
 // ─── Shared button base ───────────────────────────────────────────────────────
 
 .infoButton,
-.controlIconButton,
-.dragGrip {
+.controlIconButton {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -133,9 +132,7 @@
 }
 
 .infoButton:hover,
-.controlIconButton:hover,
-.dragGrip:hover,
-.dragGripActive {
+.controlIconButton:hover {
     background-color: rgba(108, 136, 150, 0.34);
     border-color: transparent;
     box-shadow: none;
@@ -832,16 +829,6 @@
         background-color: transparent;
         border: 0;
     }
-    .dragGrip {
-        background-color: rgba(130, 155, 168, 0.30);
-        border-color: transparent;
-    }
-
-        .dragGrip:hover,
-        .dragGripActive {
-            background-color: #1E83AA;
-            border-color: rgba(254, 255, 255, 0.34);
-        }
 }
 
 

@@ -19,7 +19,6 @@ import {
     COMPACT_PICKER_BODY_CLASS,
     DISTRICT_AREA_NAME_TOKENS,
     DISTRICT_RESET_HOLD_MS,
-    PRESET_HOLD_MS,
     districtA$,
     districtB$,
     districtG$,
@@ -70,6 +69,7 @@ import {
 } from "./panel/MochiPanelColorUtils";
 import { useMochiPanelText } from "./panel/useMochiPanelText";
 import { usePanelDrag } from "./panel/usePanelDrag";
+import { usePresetHold } from "./panel/usePresetHold";
 import infoIconSrc from "../images/AdvisorInfoViewWhite.svg";
 import lotToolIconSrc from "../images/LotTool03.svg";
 import specializedIndustryIconSrc from "../images/LotToolSpecializedIndustry.svg";
@@ -188,12 +188,14 @@ export const MochiColorPickerPanel = () => {
     const [p1Hovered, setP1Hovered] = React.useState(false);
     const [p2Hovered, setP2Hovered] = React.useState(false);
 
-    // Hold-to-save state for preset buttons
-    const [holdSlot, setHoldSlot] = React.useState<0 | 1 | 2>(0);
-    const [holdProgress, setHoldProgress] = React.useState(0); // 0..1, drives holdBar scaleX
-    const holdTimerRef = React.useRef<number | null>(null);
-    const holdStartRef = React.useRef<number>(0);
-    const holdRafRef = React.useRef<number | null>(null);
+    // Preset hold-to-save: tap applies, hold saves current outline color.
+    const {
+        holdSlot,
+        holdProgress,
+        cancelHold,
+        handlePresetMouseDown,
+        handlePresetMouseUp,
+    } = usePresetHold();
     const [districtHoldProgress, setDistrictHoldProgress] = React.useState(0);
     const districtHoldTimerRef = React.useRef<number | null>(null);
     const districtHoldStartRef = React.useRef<number>(0);
@@ -430,53 +432,6 @@ export const MochiColorPickerPanel = () => {
     const handleResetDistrict = () => {
         trigger(CHANNEL, "ResetDistrictToVanilla");
         setDistrictPickerOpen(false);
-    };
-
-    // Preset hold-to-save
-    const cancelHold = React.useCallback(() => {
-        if (holdTimerRef.current != null) { clearTimeout(holdTimerRef.current); holdTimerRef.current = null; }
-        if (holdRafRef.current != null) { cancelAnimationFrame(holdRafRef.current); holdRafRef.current = null; }
-        setHoldSlot(0);
-        setHoldProgress(0);
-    }, []);
-
-    const handlePresetMouseDown = (slot: 1 | 2) => (e: React.MouseEvent) => {
-        e.preventDefault();
-        cancelHold();
-        holdStartRef.current = performance.now();
-        setHoldSlot(slot);
-        setHoldProgress(0);
-        const SWEEP_DELAY = 150; // avoids a save-sweep flash on quick tap
-        const tick = () => {
-            const elapsed = performance.now() - holdStartRef.current;
-            if (elapsed >= SWEEP_DELAY) {
-                // Sweep uses only the visible portion of the hold window.
-                const p = Math.min((elapsed - SWEEP_DELAY) / (PRESET_HOLD_MS - SWEEP_DELAY), 1);
-                setHoldProgress(p);
-                if (p < 1) holdRafRef.current = requestAnimationFrame(tick);
-            } else {
-                holdRafRef.current = requestAnimationFrame(tick);
-            }
-        };
-        holdRafRef.current = requestAnimationFrame(tick);
-        holdTimerRef.current = window.setTimeout(() => {
-            holdTimerRef.current = null;
-            if (holdRafRef.current != null) { cancelAnimationFrame(holdRafRef.current); holdRafRef.current = null; }
-            trigger(CHANNEL, "SavePreset", slot);
-            setHoldSlot(0);
-            setHoldProgress(0);
-        }, PRESET_HOLD_MS);
-    };
-
-    const handlePresetMouseUp = (slot: 1 | 2) => () => {
-        if (holdTimerRef.current != null) {
-            clearTimeout(holdTimerRef.current);
-            holdTimerRef.current = null;
-            trigger(CHANNEL, "ApplyPreset", slot);
-        }
-        if (holdRafRef.current != null) { cancelAnimationFrame(holdRafRef.current); holdRafRef.current = null; }
-        setHoldSlot(0);
-        setHoldProgress(0);
     };
 
     const cancelDistrictHold = React.useCallback(() => {
@@ -990,7 +945,7 @@ export const MochiColorPickerPanel = () => {
                                         {/* Future per-district rows can reuse this swatch + reset pattern. */}
                                         <span
                                             className={styles.districtMenuSwatchPreview}
-                                            style={compactSwatchStyle(districtColor, false, useDarkerPanel)}
+                                            style={compactSwatchStyle(districtColor, false)}
                                             aria-hidden="true"
                                         />
                                     <ColorField
