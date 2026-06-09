@@ -1230,3 +1230,288 @@
 .dragGripActive .dragGripDot {
     opacity: 1;
 }
+
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   FINAL preset + drag-grip override
+   Paste this at the very bottom of MochiColorPickerPanel.module.scss.
+   This fixes the prior top-left dot problem by avoiding `inset`, which Cohtml
+   can handle inconsistently. Use explicit top/right/bottom/left instead.
+   ───────────────────────────────────────────────────────────────────────────── */
+
+/* Disable old pseudo-element preset rings. */
+.presetSlot::before,
+.presetSlot::after {
+    content: none !important;
+    display: none !important;
+}
+
+/* Keep original compact preset size and clip the ring to the exact button. */
+.presetSlot {
+    position: relative !important;
+    overflow: hidden !important;
+    width: 30rem !important;
+    min-width: 30rem !important;
+    height: 24rem !important;
+    box-shadow: none !important;
+}
+
+/* Keep number and swatch above the hold bar, below ring overlays. */
+.presetNumber {
+    position: relative;
+    z-index: 10;
+}
+
+.presetSwatch {
+    position: relative;
+    z-index: 10;
+}
+
+.holdBar {
+    z-index: 6;
+}
+
+/* Real child hover ring. Explicit offsets, not `inset`, for Cohtml. */
+.presetHoverRing {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 40;
+    display: block;
+    pointer-events: none;
+    border-radius: 4rem;
+    box-sizing: border-box;
+    border-top: 2rem solid rgba(254, 255, 255, 0);
+    border-right: 2rem solid rgba(254, 255, 255, 0);
+    border-bottom: 2rem solid rgba(254, 255, 255, 0);
+    border-left: 2rem solid rgba(254, 255, 255, 0);
+    opacity: 0;
+    background-color: transparent;
+    transition: opacity 120ms ease-out, border-color 120ms ease-out;
+}
+
+/* Real child selected ring. Explicit offsets, not `inset`, for Cohtml. */
+.presetActiveRing {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 41;
+    display: block;
+    pointer-events: none;
+    border-radius: 4rem;
+    box-sizing: border-box;
+    border-top: 2rem solid rgba(84, 215, 255, 0);
+    border-right: 2rem solid rgba(84, 215, 255, 0);
+    border-bottom: 2rem solid rgba(84, 215, 255, 0);
+    border-left: 2rem solid rgba(84, 215, 255, 0);
+    opacity: 0;
+    background-color: transparent;
+    transition: opacity 120ms ease-out, border-color 120ms ease-out;
+}
+
+/* Hover over any preset: white/gray outline around whole button. */
+.presetSlot:hover .presetHoverRing,
+.presetSlot:focus .presetHoverRing,
+.presetSlot:focus-visible .presetHoverRing {
+    opacity: 1;
+    border-top-color: rgba(254, 255, 255, 0.82);
+    border-right-color: rgba(254, 255, 255, 0.82);
+    border-bottom-color: rgba(254, 255, 255, 0.82);
+    border-left-color: rgba(254, 255, 255, 0.82);
+}
+
+/* Selected preset: visible but not neon blue outline. */
+.presetSlotActive .presetActiveRing {
+    opacity: 1;
+    border-top-color: rgba(84, 215, 255, 0.78);
+    border-right-color: rgba(84, 215, 255, 0.78);
+    border-bottom-color: rgba(84, 215, 255, 0.78);
+    border-left-color: rgba(84, 215, 255, 0.78);
+}
+
+/* A little blue tint only behind the number half, never over the true color swatch. */
+.presetSlotActive .presetNumber {
+    background-color: rgba(30, 131, 170, 0.22);
+}
+
+/* Hovering a selected preset: white ring above blue selected ring. */
+.presetSlotActive:hover .presetHoverRing,
+.presetSlotActive:focus .presetHoverRing,
+.presetSlotActive:focus-visible .presetHoverRing {
+    opacity: 1;
+    border-top-color: rgba(254, 255, 255, 0.92);
+    border-right-color: rgba(254, 255, 255, 0.92);
+    border-bottom-color: rgba(254, 255, 255, 0.92);
+    border-left-color: rgba(254, 255, 255, 0.92);
+}
+
+/* Dark panel keeps same exact ring method. */
+.panelDarker .presetSlotActive .presetActiveRing {
+    border-top-color: rgba(84, 215, 255, 0.78);
+    border-right-color: rgba(84, 215, 255, 0.78);
+    border-bottom-color: rgba(84, 215, 255, 0.78);
+    border-left-color: rgba(84, 215, 255, 0.78);
+}
+
+/* Four-dot drag foot: use the older compact width again. */
+.dragGrip {
+    width: 20rem !important;
+    min-width: 20rem !important;
+    height: 11rem !important;
+    gap: 2.5rem !important;
+    padding: 0 !important;
+}
+
+/* Four tiny dots that fit inside 20rem: 4*2 + 3*2.5 = 15.5rem total. */
+.dragGripDot {
+    width: 2rem;
+    height: 2rem;
+    flex: 0 0 2rem;
+    opacity: 0;
+    border-radius: 50%;
+    background-color: rgba(254, 255, 255, 0.88);
+    pointer-events: none;
+    transition: opacity 120ms ease-out;
+}
+
+    .dragGripDot:nth-child(2) {
+        background-color: rgba(254, 255, 255, 0.82);
+    }
+
+    .dragGripDot:nth-child(3) {
+        background-color: rgba(254, 255, 255, 0.76);
+    }
+
+    .dragGripDot:nth-child(4) {
+        background-color: rgba(254, 255, 255, 0.70);
+    }
+
+.dragGrip:hover .dragGripDot,
+.dragGripActive .dragGripDot {
+    opacity: 1;
+}
+
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   Preset + drag tuning override
+   Paste this at the very bottom of MochiColorPickerPanel.module.scss,
+   after the prior preset/drag override blocks.
+   ───────────────────────────────────────────────────────────────────────────── */
+
+/* Compact 20rem drag foot, 4 dots spread wider without widening the pill.
+   Do not rely on `gap`; Cohtml may compress it. */
+.dragGrip {
+    width: 20rem !important;
+    min-width: 20rem !important;
+    height: 11rem !important;
+    gap: 0 !important;
+    padding: 0 !important;
+}
+
+.dragGripDot {
+    width: 2rem !important;
+    height: 2rem !important;
+    flex: 0 0 2rem !important;
+    opacity: 0;
+    border-radius: 50%;
+    background-color: rgba(254, 255, 255, 0.88);
+    pointer-events: none;
+    transition: opacity 120ms ease-out;
+}
+
+    /* Total width = 4*2rem + 3*3.2rem = 17.6rem, leaving 1.2rem each side inside 20rem. */
+    .dragGripDot + .dragGripDot {
+        margin-left: 3.2rem !important;
+    }
+
+    .dragGripDot:nth-child(2) {
+        background-color: rgba(254, 255, 255, 0.82);
+    }
+
+    .dragGripDot:nth-child(3) {
+        background-color: rgba(254, 255, 255, 0.76);
+    }
+
+    .dragGripDot:nth-child(4) {
+        background-color: rgba(254, 255, 255, 0.70);
+    }
+
+.dragGrip:hover .dragGripDot,
+.dragGripActive .dragGripDot {
+    opacity: 1;
+}
+
+/* Thinner, less bright preset hover outline. */
+.presetHoverRing {
+    border-top-width: 1rem !important;
+    border-right-width: 1rem !important;
+    border-bottom-width: 1rem !important;
+    border-left-width: 1rem !important;
+}
+
+.presetSlot:hover .presetHoverRing,
+.presetSlot:focus .presetHoverRing,
+.presetSlot:focus-visible .presetHoverRing,
+.presetSlotActive:hover .presetHoverRing,
+.presetSlotActive:focus .presetHoverRing,
+.presetSlotActive:focus-visible .presetHoverRing {
+    opacity: 1;
+    border-top-color: rgba(254, 255, 255, 0.62) !important;
+    border-right-color: rgba(254, 255, 255, 0.62) !important;
+    border-bottom-color: rgba(254, 255, 255, 0.62) !important;
+    border-left-color: rgba(254, 255, 255, 0.62) !important;
+}
+
+/* Selected preset: use blue number + number-half tint + small dot.
+   No always-on full blue border. */
+.presetActiveRing {
+    top: 2rem !important;
+    right: auto !important;
+    bottom: auto !important;
+    left: 2rem !important;
+    width: 4rem !important;
+    height: 4rem !important;
+    z-index: 41;
+    border: 0 !important;
+    border-radius: 50% !important;
+    box-sizing: border-box;
+    background-color: rgba(84, 215, 255, 0);
+    opacity: 0;
+    pointer-events: none;
+}
+
+.presetSlotActive .presetActiveRing,
+.panelDarker .presetSlotActive .presetActiveRing {
+    opacity: 1;
+    background-color: rgba(84, 215, 255, 0.86);
+    box-shadow: 0 0 3rem rgba(30, 131, 170, 0.34);
+}
+
+/* Keep a subtle blue tint only on the number half. */
+.presetSlotActive .presetNumber {
+    background-color: rgba(30, 131, 170, 0.22);
+}
+
+/* Hold-to-save sweep: draw across both halves while holding.
+   This temporarily tints the true swatch during the hold animation only. */
+.holdBar {
+    z-index: 35 !important;
+    background-color: rgba(84, 215, 255, 0.42);
+}
+
+.presetNumber,
+.presetSwatch {
+    z-index: 10;
+}
+
+.presetHoverRing {
+    z-index: 40;
+}
+
+.presetActiveRing {
+    z-index: 41;
+}
