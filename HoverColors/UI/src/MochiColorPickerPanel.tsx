@@ -13,7 +13,6 @@ import { Button, Tooltip } from "cs2/ui";
 import { Color, toolbar } from "cs2/bindings";
 import { trigger, useMapValue, useValue } from "cs2/api";
 import { VanillaComponentResolver } from "./utils/vanilla/VanillaComponentResolver";
-import { LocaleKey, usePanelLocalization } from "./localization";
 import {
     AREA_MENU_NAME_TOKENS,
     CHANNEL,
@@ -62,6 +61,15 @@ import {
 } from "./panel/MochiPanelBindings";
 
 import { DragGrip, PresetSlotButton } from "./panel/MochiPanelPieces";
+import {
+    compactSwatchStyle,
+    holdBarStyle,
+    normalizeColorFieldValue,
+    presetNumberColor,
+    presetPreviewStyle,
+} from "./panel/MochiPanelColorUtils";
+import { useMochiPanelText } from "./panel/useMochiPanelText";
+import { usePanelDrag } from "./panel/usePanelDrag";
 import infoIconSrc from "../images/AdvisorInfoViewWhite.svg";
 import lotToolIconSrc from "../images/LotTool03.svg";
 import specializedIndustryIconSrc from "../images/LotToolSpecializedIndustry.svg";
@@ -141,7 +149,7 @@ export const MochiColorPickerPanel = () => {
     const p1: Color = { r: useValue(preset1R$), g: useValue(preset1G$), b: useValue(preset1B$), a: useValue(preset1A$) };
     const p2: Color = { r: useValue(preset2R$), g: useValue(preset2G$), b: useValue(preset2B$), a: useValue(preset2A$) };
 
-    const translatePanel = usePanelLocalization();
+    const text = useMochiPanelText();
 
     // Tooltip toggle is persisted in ModsSettings/HoverColors/HoverColors.coc via HoverColorsUISystem.
     const tooltipsEnabled = useValue(panelTooltipsEnabled$);
@@ -151,34 +159,6 @@ export const MochiColorPickerPanel = () => {
         [tooltipsEnabled],
     );
 
-    const text = React.useMemo(() => {
-        const l = (key: LocaleKey) => translatePanel(key);
-        return {
-            ariaClosePanel: l("HoverColors.UI.Aria.ClosePanel"),
-            title: l("HoverColors.UI.Title"),
-            tooltipClose: l("HoverColors.UI.Tooltip.Close"),
-            tooltipDraggable: l("HoverColors.UI.Tooltip.Draggable"),
-            tooltipFillOpacity: l("HoverColors.UI.Tooltip.FillOpacity"),
-            tooltipGuidelinesColor: l("HoverColors.UI.Tooltip.GuidelinesColor"),
-            tooltipGuidelinesPreviewColor: l("HoverColors.UI.Tooltip.GuidelinesPreviewColor"),
-            tooltipGuidelinesOpacity: l("HoverColors.UI.Tooltip.GuidelinesOpacity"),
-            tooltipInfo: l("HoverColors.UI.Tooltip.Info"),
-            tooltipOutlineSwatch: l("HoverColors.UI.Tooltip.OutlineSwatch"),
-            tooltipOwnerSwatch: l("HoverColors.UI.Tooltip.OwnerSwatch"),
-            tooltipPreset1: l("HoverColors.UI.Tooltip.Preset1"),
-            tooltipPreset2: l("HoverColors.UI.Tooltip.Preset2"),
-            tooltipResetFill: l("HoverColors.UI.Tooltip.ResetFill"),
-            tooltipResetGuidelines: l("HoverColors.UI.Tooltip.ResetGuidelines"),
-            tooltipResetOutline: l("HoverColors.UI.Tooltip.ResetOutline"),
-            tooltipResetPresets: l("HoverColors.UI.Tooltip.ResetPresets"),
-            tooltipSurfaceToggle: l("HoverColors.UI.Tooltip.SurfaceToggle"),
-            tooltipSpecializedIndustryToggle: l("HoverColors.UI.Tooltip.SpecializedIndustryToggle"),
-            tooltipDistrictColors: l("HoverColors.UI.Tooltip.DistrictColors"),
-            districtMenuAllDistricts: l("HoverColors.UI.DistrictMenu.AllDistricts"),
-            districtMenuResetAll: l("HoverColors.UI.DistrictMenu.ResetAll"),
-        };
-    }, [translatePanel]);
-
     const [outline, setOutline] = React.useState<Color>(boundOutline);
     const [ownerColor, setOwnerColor] = React.useState<Color>(boundOwner);
     const [fillA, setFillA] = React.useState<number>(boundFillA);
@@ -186,8 +166,6 @@ export const MochiColorPickerPanel = () => {
     const [guidelineLinesColor, setGuidelineLinesColor] = React.useState<Color>(boundGuidelineLinesColor);
     const [guidelinePreviewColor, setGuidelinePreviewColor] = React.useState<Color>(boundGuidelinePreviewColor);
     const [guidelineOpacity, setGuidelineOpacity] = React.useState<number>(boundGuideline);
-    const [panelOffset, setPanelOffset] = React.useState({ x: 0, y: 0 });
-    const [panelDragging, setPanelDragging] = React.useState(false);
     const [colorPickerDirection, setColorPickerDirection] = React.useState<"up" | "down">("down");
     const [ownerPickerDirection, setOwnerPickerDirection] = React.useState<"up" | "down">("down");
     const [guidelineLinesPickerDirection, setGuidelineLinesPickerDirection] = React.useState<"up" | "down">("up");
@@ -232,15 +210,12 @@ export const MochiColorPickerPanel = () => {
     const areaPanelOpenTimerRef = React.useRef<number | null>(null);
     const districtToolOpenTimeoutRef = React.useRef<number | null>(null);
     const districtToolSelectRetryRef = React.useRef<number | null>(null);
-    const panelElementRef = React.useRef<HTMLDivElement | null>(null);
-    const panelDragFrameRef = React.useRef<number | null>(null);
-    const panelDragPendingOffsetRef = React.useRef(panelOffset);
-    const panelDragRef = React.useRef<{
-        pointerX: number; pointerY: number;
-        originX: number; originY: number;
-        originLeft: number; originTop: number;
-        originWidth: number; originHeight: number;
-    } | null>(null);
+    const {
+        panelOffset,
+        panelDragging,
+        panelElementRef,
+        handlePanelDragStart,
+    } = usePanelDrag();
 
     React.useEffect(() => { setOutline(boundOutline); },
         [boundOutline.r, boundOutline.g, boundOutline.b, boundOutline.a]);
@@ -409,52 +384,6 @@ export const MochiColorPickerPanel = () => {
         selectedAssetCategory,
         selectedAssetMenu,
     ]);
-
-    // Panel drag
-    React.useEffect(() => {
-        if (!panelDragging) return;
-        const onMove = (e: MouseEvent) => {
-            const d = panelDragRef.current;
-            if (d == null) return;
-            const dx = e.clientX - d.pointerX;
-            const dy = e.clientY - d.pointerY;
-            let nx = d.originX + dx;
-            let ny = d.originY + dy;
-            const nl = d.originLeft + dx, nt = d.originTop + dy;
-            const nr = nl + d.originWidth, nb = nt + d.originHeight;
-            if (nl < 0) nx -= nl;
-            if (nt < 0) ny -= nt;
-            if (nr > window.innerWidth) nx -= nr - window.innerWidth;
-            if (nb > window.innerHeight) ny -= nb - window.innerHeight;
-            panelDragPendingOffsetRef.current = { x: nx, y: ny };
-            if (panelDragFrameRef.current == null) {
-                panelDragFrameRef.current = window.requestAnimationFrame(() => {
-                    panelDragFrameRef.current = null;
-                    setPanelOffset(panelDragPendingOffsetRef.current);
-                });
-            }
-        };
-        const onUp = () => {
-            if (panelDragFrameRef.current != null) {
-                window.cancelAnimationFrame(panelDragFrameRef.current);
-                panelDragFrameRef.current = null;
-            }
-            panelDragRef.current = null;
-            setPanelDragging(false);
-            setPanelOffset(panelDragPendingOffsetRef.current);
-        };
-        window.addEventListener("mousemove", onMove);
-        window.addEventListener("mouseup", onUp);
-        return () => { window.removeEventListener("mousemove", onMove); window.removeEventListener("mouseup", onUp); };
-    }, [panelDragging]);
-
-    const normalizeColorFieldValue = (value: Color) => {
-        const alpha = typeof value.a === "number" && Number.isFinite(value.a) ? value.a : 1;
-        return {
-            ...value,
-            a: Math.max(0, Math.min(1, alpha)),
-        };
-    };
 
     // Live color handlers
     const handleOutlineChange = (value: Color) => {
@@ -680,19 +609,6 @@ export const MochiColorPickerPanel = () => {
         }, 1500);
     }, []);
 
-    const handlePanelDragStart = (e: React.MouseEvent<HTMLDivElement>) => {
-        e.preventDefault(); e.stopPropagation();
-        const rect = panelElementRef.current?.getBoundingClientRect();
-        panelDragPendingOffsetRef.current = panelOffset;
-        panelDragRef.current = {
-            pointerX: e.clientX, pointerY: e.clientY,
-            originX: panelOffset.x, originY: panelOffset.y,
-            originLeft: rect?.left ?? 0, originTop: rect?.top ?? 0,
-            originWidth: rect?.width ?? 0, originHeight: rect?.height ?? 0,
-        };
-        setPanelDragging(true);
-    };
-
     const resolver = VanillaComponentResolver.instance;
     const ColorField = resolver.ColorField;
     const Slider = resolver.Slider;
@@ -709,47 +625,11 @@ export const MochiColorPickerPanel = () => {
     const panelSurfaceClass = useDarkerPanel ? styles.panelDarker : styles.panelStandard;
     const panelContentClass = `${panelTheme.content ?? "content_XD5 content_AD7 child-opacity-transition_nkS"} ${infoviewMenuTheme.content ?? "content_Hzl"} ${styles.panelContent} ${panelSurfaceClass}`;
 
-    // Preview ignores alpha for legibility; saved preset still applies alpha in-game.
-    const presetPreviewStyle = (c: Color) => ({
-        backgroundColor: `rgb(${Math.round(c.r * 255)},${Math.round(c.g * 255)},${Math.round(c.b * 255)})`,
-    });
-
-    // Small swatches show RGB clearly; alpha still applies in-game.
-    const compactSwatchStyle = (c: Color, hovered = false) => {
-        const channel = (value: unknown, fallback: number) => {
-            const n = Number(value);
-            return Math.round(Math.max(0, Math.min(1, Number.isFinite(n) ? n : fallback)) * 255);
-        };
-        const r = channel(c.r, 0.7);
-        const g = channel(c.g, 0.7);
-        const b = channel(c.b, 1);
-        const idleShadow = useDarkerPanel ? "inset 0 0 0 1rem rgba(7, 13, 18, 0.32)" : "none";
-        const hoverShadow = useDarkerPanel
-            ? "inset 0 0 0 1rem rgba(7, 13, 18, 0.32), 0 0 0 1.15rem rgba(255, 255, 255, 0.76)"
-            : "0 0 0 1.15rem rgba(255, 255, 255, 0.76)";
-        return {
-            backgroundColor: `rgb(${r},${g},${b})`,
-            // Standard stays clean; Dark keeps the extra edge for contrast.
-            boxShadow: hovered ? hoverShadow : idleShadow,
-        };
-    };
-
     // Swatch boxes for guidelines and owner color borders on hover.
-    const guidelineShellStyle = (c: Color, hovered: boolean) => compactSwatchStyle(c, hovered);
+    const guidelineShellStyle = (c: Color, hovered: boolean) => compactSwatchStyle(c, hovered, useDarkerPanel);
 
     // Compact swatches: hidden vanilla ColorField owns picker; shell/preview own hover.
     const ownerShellStyle = (c: Color, hovered: boolean) => guidelineShellStyle(c, hovered);
-
-    const presetNumberColor = (active: boolean, hovered: boolean) => {
-        if (hovered) {
-            return "rgba(255, 255, 255, 1)";
-        }
-        // Active number stays opaque; softer cyan comes from RGB, not alpha.
-        return active ? "rgba(150, 235, 255, 0.96)" : "rgba(255, 255, 255, 0.78)";
-    };
-
-    // scaleX keeps hold progress independent of button width.
-    const holdBarStyle = (progress: number) => ({ transform: `scaleX(${progress})` });
 
     return (
         <div
@@ -866,7 +746,7 @@ export const MochiColorPickerPanel = () => {
                                             />
                                             <span
                                                 className={styles.ownerColorPreview}
-                                                style={compactSwatchStyle(ownerColor, ownerSwatchHovered)}
+                                                style={compactSwatchStyle(ownerColor, ownerSwatchHovered, useDarkerPanel)}
                                                 aria-hidden="true"
                                             />
                                         </div>
@@ -993,7 +873,7 @@ export const MochiColorPickerPanel = () => {
                                             />
                                             <span
                                                 className={styles.guidelineColorPreview}
-                                                style={compactSwatchStyle(guidelineLinesColor, guidelineLinesHovered)}
+                                                style={compactSwatchStyle(guidelineLinesColor, guidelineLinesHovered, useDarkerPanel)}
                                                 aria-hidden="true"
                                             />
                                         </div>
@@ -1027,7 +907,7 @@ export const MochiColorPickerPanel = () => {
                                             />
                                             <span
                                                 className={styles.guidelineColorPreview}
-                                                style={compactSwatchStyle(guidelinePreviewColor, guidelinePreviewHovered)}
+                                                style={compactSwatchStyle(guidelinePreviewColor, guidelinePreviewHovered, useDarkerPanel)}
                                                 aria-hidden="true"
                                             />
                                         </div>
@@ -1110,7 +990,7 @@ export const MochiColorPickerPanel = () => {
                                         {/* Future per-district rows can reuse this swatch + reset pattern. */}
                                         <span
                                             className={styles.districtMenuSwatchPreview}
-                                            style={compactSwatchStyle(districtColor, false)}
+                                            style={compactSwatchStyle(districtColor, false, useDarkerPanel)}
                                             aria-hidden="true"
                                         />
                                     <ColorField
