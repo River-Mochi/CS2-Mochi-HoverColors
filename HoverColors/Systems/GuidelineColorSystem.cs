@@ -18,11 +18,15 @@
 namespace HoverColors.Systems
 {
     using CS2Shared.RiverMochi;
+
     using Game;
     using Game.Prefabs;
+
     using HoverColors.Localization;
     using HoverColors.Settings;
+
     using Unity.Entities;
+
     using UnityEngine;
 
     public partial class GuidelineColorSystem : GameSystemBase
@@ -30,28 +34,28 @@ namespace HoverColors.Systems
         private EntityQuery m_Query;
 
         // Vanilla prefab fallbacks from Game.Prefabs.GuideLineSettings. Runtime capture wins.
-        private static readonly Color FallbackVeryLowGuidelineColor = new(0.7f, 0.7f, 1f, 0.025f);
-        private static readonly Color FallbackLowGuidelineColor = new(0.7f, 0.7f, 1f, 0.05f);
-        private static readonly Color FallbackMediumGuidelineColor = new(0.7f, 0.7f, 1f, 0.1f);
-        private static readonly Color FallbackHighGuidelineColor = new(0.7f, 0.7f, 1f, 0.2f);
-        private static readonly Color FallbackPositiveGuidelineColor = new(0.5f, 1f, 0.5f, 0.1f);
-        private static readonly Color HighVisibilityYellowGuidelineColor = new(1f, 0.92f, 0.2f, 1f);
-        private static readonly Color HighVisibilityGreenGuidelineColor = new(0.28f, 1f, 0.35f, 1f);
-        private static readonly Color MochiBlueGuidelineColor = new(0.137f, 1f, 0.973f, 1f); // #23FFF8
-        private static readonly Color CyanBlueGuidelineColor = new(0.329f, 0.843f, 1f, 1f); // #54D7FF
+        private static readonly Color s_FallbackVeryLowGuidelineColor = new(0.7f, 0.7f, 1f, 0.025f);
+        private static readonly Color s_FallbackLowGuidelineColor = new(0.7f, 0.7f, 1f, 0.05f);
+        private static readonly Color s_FallbackMediumGuidelineColor = new(0.7f, 0.7f, 1f, 0.1f);
+        private static readonly Color s_FallbackHighGuidelineColor = new(0.7f, 0.7f, 1f, 0.2f);
+        private static readonly Color s_FallbackPositiveGuidelineColor = new(0.5f, 1f, 0.5f, 0.1f);
+        private static readonly Color s_HighVisibilityYellowGuidelineColor = new(1f, 0.92f, 0.2f, 1f);
+        private static readonly Color s_HighVisibilityGreenGuidelineColor = new(0.28f, 1f, 0.35f, 1f);
+        private static readonly Color s_MochiBlueGuidelineColor = new(0.137f, 1f, 0.973f, 1f); // #23FFF8
+        private static readonly Color s_CyanBlueGuidelineColor = new(0.329f, 0.843f, 1f, 1f); // #54D7FF
 
         // Snapshot of the game's default colors. Opacity scales default alphas.
-        private Color m_DefVeryLow = FallbackVeryLowGuidelineColor;
-        private Color m_DefLow = FallbackLowGuidelineColor;
-        private Color m_DefMedium = FallbackMediumGuidelineColor;
-        private Color m_DefHigh = FallbackHighGuidelineColor;
-        private Color m_DefPositive = FallbackPositiveGuidelineColor;
+        private Color m_DefVeryLow = s_FallbackVeryLowGuidelineColor;
+        private Color m_DefLow = s_FallbackLowGuidelineColor;
+        private Color m_DefMedium = s_FallbackMediumGuidelineColor;
+        private Color m_DefHigh = s_FallbackHighGuidelineColor;
+        private Color m_DefPositive = s_FallbackPositiveGuidelineColor;
         private bool m_DefaultsCaptured;
         private Entity m_LastEntity = Entity.Null;
 
-        public static Color CapturedVanillaGuidelineLinesColor { get; private set; } = WithoutAlpha(FallbackLowGuidelineColor);
-        public static Color CapturedVanillaGuidelinePreviewColor { get; private set; } = WithoutAlpha(FallbackMediumGuidelineColor);
-        public static Color CapturedVanillaGuidelineDashedColor { get; private set; } = WithoutAlpha(FallbackHighGuidelineColor);
+        public static Color CapturedVanillaGuidelineLinesColor { get; private set; } = WithoutAlpha(s_FallbackLowGuidelineColor);
+        public static Color CapturedVanillaGuidelinePreviewColor { get; private set; } = WithoutAlpha(s_FallbackMediumGuidelineColor);
+        public static Color CapturedVanillaGuidelineDashedColor { get; private set; } = WithoutAlpha(s_FallbackHighGuidelineColor);
 
         // Last applied values. NaN/int sentinels ensure the first apply always runs.
         private float m_LastOpacity = float.NaN;
@@ -211,10 +215,10 @@ namespace HoverColors.Systems
 
             return settings.GuidelineDashedColorPreset switch
             {
-                HoverColorsSettings.GuidelineDashedColorPresetYellow => HighVisibilityYellowGuidelineColor,
-                HoverColorsSettings.GuidelineDashedColorPresetMochiBlue => MochiBlueGuidelineColor,
-                HoverColorsSettings.GuidelineDashedColorPresetCyanBlue => CyanBlueGuidelineColor,
-                HoverColorsSettings.GuidelineDashedColorPresetGreen => HighVisibilityGreenGuidelineColor,
+                HoverColorsSettings.kGuidelineDashedColorPresetYellow => s_HighVisibilityYellowGuidelineColor,
+                HoverColorsSettings.kGuidelineDashedColorPresetMochiBlue => s_MochiBlueGuidelineColor,
+                HoverColorsSettings.kGuidelineDashedColorPresetCyanBlue => s_CyanBlueGuidelineColor,
+                HoverColorsSettings.kGuidelineDashedColorPresetGreen => s_HighVisibilityGreenGuidelineColor,
                 _ => CapturedVanillaGuidelineDashedColor,
             };
         }
@@ -223,7 +227,7 @@ namespace HoverColors.Systems
         {
             return preset switch
             {
-                HoverColorsSettings.GuidelineColorPresetCustom => new Color(
+                HoverColorsSettings.kGuidelineColorPresetCustom => new Color(
                     Mathf.Clamp01(r),
                     Mathf.Clamp01(g),
                     Mathf.Clamp01(b),

@@ -147,7 +147,7 @@ namespace HoverColors.Systems
                 ownerA = CapturedOwnerColor.a;
                 palette = EffectivePalette.VanillaToolError;
             }
-            else if (settings.ToolColorMode == HoverColorsSettings.ToolColorModeRecommended
+            else if (settings.ToolColorMode == HoverColorsSettings.kToolColorModeRecommended
                 && activeTool == ToolKind.Bulldoze)
             {
                 Color warning = CapturedWarningColor;
@@ -194,7 +194,7 @@ namespace HoverColors.Systems
                     palette = EffectivePalette.CapturedVanilla;
                 }
             }
-            else if (settings.ToolColorMode == HoverColorsSettings.ToolColorModeRecommended
+            else if (settings.ToolColorMode == HoverColorsSettings.kToolColorModeRecommended
                 && activeTool == ToolKind.NetRoad)
             {
                 Color hovered = CapturedHoveredColor;
@@ -209,7 +209,7 @@ namespace HoverColors.Systems
                 ownerA = Mathf.Min(CapturedOwnerColor.a, outlineA);
                 palette = EffectivePalette.RecommendedNet;
             }
-            else if (settings.ToolColorMode == HoverColorsSettings.ToolColorModeVanilla
+            else if (settings.ToolColorMode == HoverColorsSettings.kToolColorModeVanilla
                 && (activeTool == ToolKind.Bulldoze || activeTool == ToolKind.NetRoad))
             {
                 Color hovered = CapturedHoveredColor;

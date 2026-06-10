@@ -36,14 +36,14 @@ namespace HoverColors.Localization
                 { m_Settings.GetOptionTabLocaleID(HoverColorsSettings.About), "Giới thiệu" },
 
                 // Groups
-                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.ToolColors), "Cách hoạt động màu công cụ" },
-                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.Panel), "Bảng điều khiển" },
-                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.KeyBindings), "Phím tắt" },
-                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.Guidelines), "Đường dẫn hướng" },
+                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kToolColors), "Cách hoạt động màu công cụ" },
+                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kPanel), "Bảng điều khiển" },
+                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kKeyBindings), "Phím tắt" },
+                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kGuidelines), "Đường dẫn hướng" },
                 // AboutInfo + AboutLinks intentionally have empty group headers.
-                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.AboutInfo), string.Empty },
-                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.AboutLinks), string.Empty },
-                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.AboutDedication), "Tưởng nhớ" },
+                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kAboutInfo), string.Empty },
+                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kAboutLinks), string.Empty },
+                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kAboutDedication), "Tưởng nhớ" },
 
                 // Tool color behavior
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToolColorMode)), "Bulldozer + Đường" },

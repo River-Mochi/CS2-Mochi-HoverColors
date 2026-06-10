@@ -36,14 +36,14 @@ namespace HoverColors.Localization
                 { m_Settings.GetOptionTabLocaleID(HoverColorsSettings.About), "情報" },
 
                 // Groups
-                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.ToolColors), "ツール色の動作" },
-                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.Panel), "パネル" },
-                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.KeyBindings), "キー割り当て" },
-                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.Guidelines), "ガイドライン" },
+                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kToolColors), "ツール色の動作" },
+                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kPanel), "パネル" },
+                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kKeyBindings), "キー割り当て" },
+                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kGuidelines), "ガイドライン" },
                 // AboutInfo + AboutLinks intentionally have empty group headers.
-                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.AboutInfo), string.Empty },
-                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.AboutLinks), string.Empty },
-                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.AboutDedication), "捧げる言葉" },
+                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kAboutInfo), string.Empty },
+                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kAboutLinks), string.Empty },
+                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kAboutDedication), "捧げる言葉" },
 
                 // Tool color behavior
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToolColorMode)), "ブルドーザー + 道路" },

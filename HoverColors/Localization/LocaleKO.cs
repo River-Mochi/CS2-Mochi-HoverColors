@@ -36,14 +36,14 @@ namespace HoverColors.Localization
                 { m_Settings.GetOptionTabLocaleID(HoverColorsSettings.About), "정보" },
 
                 // Groups
-                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.ToolColors), "도구 색상 동작" },
-                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.Panel), "패널" },
-                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.KeyBindings), "키 바인딩" },
-                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.Guidelines), "가이드라인" },
+                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kToolColors), "도구 색상 동작" },
+                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kPanel), "패널" },
+                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kKeyBindings), "키 바인딩" },
+                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kGuidelines), "가이드라인" },
                 // AboutInfo + AboutLinks intentionally have empty group headers.
-                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.AboutInfo), string.Empty },
-                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.AboutLinks), string.Empty },
-                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.AboutDedication), "헌정" },
+                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kAboutInfo), string.Empty },
+                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kAboutLinks), string.Empty },
+                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kAboutDedication), "헌정" },
 
                 // Tool color behavior
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToolColorMode)), "불도저 + 도로" },

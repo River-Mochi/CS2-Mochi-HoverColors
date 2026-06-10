@@ -36,14 +36,14 @@ namespace HoverColors.Localization
                 { m_Settings.GetOptionTabLocaleID(HoverColorsSettings.About), "Sobre" },
 
                 // Groups
-                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.ToolColors), "Comportamento das cores das ferramentas" },
-                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.Panel), "Painel" },
-                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.KeyBindings), "Atalhos de teclado" },
-                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.Guidelines), "Guias" },
+                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kToolColors), "Comportamento das cores das ferramentas" },
+                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kPanel), "Painel" },
+                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kKeyBindings), "Atalhos de teclado" },
+                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kGuidelines), "Guias" },
                 // AboutInfo + AboutLinks intentionally have empty group headers.
-                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.AboutInfo), string.Empty },
-                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.AboutLinks), string.Empty },
-                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.AboutDedication), "Dedicação" },
+                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kAboutInfo), string.Empty },
+                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kAboutLinks), string.Empty },
+                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kAboutDedication), "Dedicação" },
 
                 // Tool color behavior
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToolColorMode)), "Bulldozer + estradas" },

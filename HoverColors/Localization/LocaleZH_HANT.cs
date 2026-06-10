@@ -36,14 +36,14 @@ namespace HoverColors.Localization
                 { m_Settings.GetOptionTabLocaleID(HoverColorsSettings.About), "關於" },
 
                 // Groups
-                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.ToolColors), "工具顏色行為" },
-                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.Panel), "面板" },
-                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.KeyBindings), "按鍵綁定" },
-                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.Guidelines), "輔助線" },
+                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kToolColors), "工具顏色行為" },
+                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kPanel), "面板" },
+                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kKeyBindings), "按鍵綁定" },
+                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kGuidelines), "輔助線" },
                 // AboutInfo + AboutLinks intentionally have empty group headers.
-                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.AboutInfo), string.Empty },
-                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.AboutLinks), string.Empty },
-                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.AboutDedication), "獻詞" },
+                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kAboutInfo), string.Empty },
+                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kAboutLinks), string.Empty },
+                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kAboutDedication), "獻詞" },
 
                 // Tool color behavior
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToolColorMode)), "推土機 + 道路" },

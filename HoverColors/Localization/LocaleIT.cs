@@ -36,14 +36,14 @@ namespace HoverColors.Localization
                 { m_Settings.GetOptionTabLocaleID(HoverColorsSettings.About), "Info" },
 
                 // Groups
-                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.ToolColors), "Comportamento colore strumenti" },
-                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.Panel), "Pannello" },
-                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.KeyBindings), "Scorciatoie da tastiera" },
-                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.Guidelines), "Guide" },
+                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kToolColors), "Comportamento colore strumenti" },
+                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kPanel), "Pannello" },
+                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kKeyBindings), "Scorciatoie da tastiera" },
+                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kGuidelines), "Guide" },
                 // AboutInfo + AboutLinks intentionally have empty group headers.
-                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.AboutInfo), string.Empty },
-                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.AboutLinks), string.Empty },
-                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.AboutDedication), "Dedica" },
+                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kAboutInfo), string.Empty },
+                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kAboutLinks), string.Empty },
+                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kAboutDedication), "Dedica" },
 
                 // Tool color behavior
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToolColorMode)), "Bulldozer + strade" },

@@ -107,7 +107,7 @@ namespace HoverColors.UI
             b = Clamp01(b);
             a = Clamp01(a);
 
-            bool changed = settings.GuidelineLinesColorPreset != HoverColorsSettings.GuidelineColorPresetCustom
+            bool changed = settings.GuidelineLinesColorPreset != HoverColorsSettings.kGuidelineColorPresetCustom
                 || settings.GuidelineVanillaToggleActive
                 || !SameColor(settings.GuidelineLinesR, settings.GuidelineLinesG, settings.GuidelineLinesB, settings.GuidelineLinesA, r, g, b, a);
 
@@ -116,7 +116,7 @@ namespace HoverColors.UI
                 return;
             }
 
-            settings.GuidelineLinesColorPreset = HoverColorsSettings.GuidelineColorPresetCustom;
+            settings.GuidelineLinesColorPreset = HoverColorsSettings.kGuidelineColorPresetCustom;
             settings.GuidelineLinesR = r;
             settings.GuidelineLinesG = g;
             settings.GuidelineLinesB = b;
@@ -135,7 +135,7 @@ namespace HoverColors.UI
             b = Clamp01(b);
             a = Clamp01(a);
 
-            bool changed = settings.GuidelinePreviewColorPreset != HoverColorsSettings.GuidelineColorPresetCustom
+            bool changed = settings.GuidelinePreviewColorPreset != HoverColorsSettings.kGuidelineColorPresetCustom
                 || settings.GuidelineVanillaToggleActive
                 || !SameColor(settings.GuidelinePreviewR, settings.GuidelinePreviewG, settings.GuidelinePreviewB, settings.GuidelinePreviewA, r, g, b, a);
 
@@ -144,7 +144,7 @@ namespace HoverColors.UI
                 return;
             }
 
-            settings.GuidelinePreviewColorPreset = HoverColorsSettings.GuidelineColorPresetCustom;
+            settings.GuidelinePreviewColorPreset = HoverColorsSettings.kGuidelineColorPresetCustom;
             settings.GuidelinePreviewR = r;
             settings.GuidelinePreviewG = g;
             settings.GuidelinePreviewB = b;
@@ -415,10 +415,10 @@ namespace HoverColors.UI
 
                 settings.Preset1R = DefaultPreset1R; settings.Preset1G = DefaultPreset1G; settings.Preset1B = DefaultPreset1B;
                 settings.Preset1A = DefaultPreset1A; settings.Preset1FillA = DefaultPreset1FillA;
-                settings.Preset1GuidelinePercent = HoverColorsSettings.DefaultGuidelineOpacityPercent;
+                settings.Preset1GuidelinePercent = HoverColorsSettings.kDefaultGuidelineOpacityPercent;
                 settings.Preset2R = DefaultPreset2R; settings.Preset2G = DefaultPreset2G; settings.Preset2B = DefaultPreset2B;
                 settings.Preset2A = DefaultPreset2A; settings.Preset2FillA = DefaultPreset2FillA;
-                settings.Preset2GuidelinePercent = HoverColorsSettings.DefaultGuidelineOpacityPercent;
+                settings.Preset2GuidelinePercent = HoverColorsSettings.kDefaultGuidelineOpacityPercent;
                 changed = true;
             }
             else if (m_PresetBackupExists)

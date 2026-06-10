@@ -37,14 +37,14 @@ namespace HoverColors.Localization
                 { m_Settings.GetOptionTabLocaleID(HoverColorsSettings.About), "Über" },
 
                 // Groups
-                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.ToolColors), "Werkzeug-Farbverhalten" },
-                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.Panel), "Panel" },
-                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.KeyBindings), "Tastenbelegungen" },
-                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.Guidelines), "Hilfslinien" },
+                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kToolColors), "Werkzeug-Farbverhalten" },
+                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kPanel), "Panel" },
+                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kKeyBindings), "Tastenbelegungen" },
+                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kGuidelines), "Hilfslinien" },
                 // AboutInfo + AboutLinks intentionally have empty group headers.
-                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.AboutInfo), string.Empty },
-                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.AboutLinks), string.Empty },
-                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.AboutDedication), "Widmung" },
+                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kAboutInfo), string.Empty },
+                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kAboutLinks), string.Empty },
+                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kAboutDedication), "Widmung" },
 
                 // Tool color behavior
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToolColorMode)), "Bulldozer + Straßen" },

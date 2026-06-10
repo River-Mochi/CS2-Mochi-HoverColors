@@ -4,17 +4,21 @@
 
 namespace HoverColors.UI
 {
+    using System;
+    using System.Collections.Generic;
+
     using Colossal.UI.Binding;
+
     using CS2Shared.RiverMochi;
+
     using Game;
     using Game.Input;
     using Game.SceneFlow;
     using Game.UI;
+
     using HoverColors.Localization;
     using HoverColors.Settings;
     using HoverColors.Systems;
-    using System;
-    using System.Collections.Generic;
     public partial class HoverColorsUISystem : UISystemBase
     {
         private static bool s_PanelOpen;
@@ -167,8 +171,8 @@ namespace HoverColors.UI
             m_GuidelinePreviewColorGBinding = AddValueBinding("GuidelinePreviewColorG", guidelinePreviewColor.g);
             m_GuidelinePreviewColorBBinding = AddValueBinding("GuidelinePreviewColorB", guidelinePreviewColor.b);
             m_GuidelinePreviewColorABinding = AddValueBinding("GuidelinePreviewColorA", settings?.GuidelinePreviewA ?? 1f);
-            m_GuidelineOpacityBinding = AddValueBinding("GuidelineOpacityPercent", settings?.GuidelineOpacityPercent ?? HoverColorsSettings.DefaultGuidelineOpacityPercent);
-            m_GuidelineDefaultBinding = AddValueBinding("GuidelineDefaultPercent", settings?.GuidelineDefaultPercent ?? HoverColorsSettings.DefaultGuidelineOpacityPercent);
+            m_GuidelineOpacityBinding = AddValueBinding("GuidelineOpacityPercent", settings?.GuidelineOpacityPercent ?? HoverColorsSettings.kDefaultGuidelineOpacityPercent);
+            m_GuidelineDefaultBinding = AddValueBinding("GuidelineDefaultPercent", settings?.GuidelineDefaultPercent ?? HoverColorsSettings.kDefaultGuidelineOpacityPercent);
             m_PanelOpenBinding = AddValueBinding("PanelOpen", s_PanelOpen);
             m_PanelTooltipsEnabledBinding = AddValueBinding("PanelTooltipsEnabled", settings?.PanelTooltipsEnabled ?? true);
             m_UseDarkerPanelBinding = AddValueBinding("UseDarkerPanel", settings?.UseDarkerPanel ?? false);
@@ -224,8 +228,8 @@ namespace HoverColors.UI
             UpdateIfChanged(m_GuidelinePreviewColorGBinding, guidelinePreviewColor.g);
             UpdateIfChanged(m_GuidelinePreviewColorBBinding, guidelinePreviewColor.b);
             UpdateIfChanged(m_GuidelinePreviewColorABinding, settings?.GuidelinePreviewA ?? 1f);
-            UpdateIfChanged(m_GuidelineOpacityBinding, settings?.GuidelineOpacityPercent ?? HoverColorsSettings.DefaultGuidelineOpacityPercent);
-            UpdateIfChanged(m_GuidelineDefaultBinding, settings?.GuidelineDefaultPercent ?? HoverColorsSettings.DefaultGuidelineOpacityPercent);
+            UpdateIfChanged(m_GuidelineOpacityBinding, settings?.GuidelineOpacityPercent ?? HoverColorsSettings.kDefaultGuidelineOpacityPercent);
+            UpdateIfChanged(m_GuidelineDefaultBinding, settings?.GuidelineDefaultPercent ?? HoverColorsSettings.kDefaultGuidelineOpacityPercent);
             UpdateIfChanged(m_PanelOpenBinding, s_PanelOpen);
             UpdateIfChanged(m_PanelTooltipsEnabledBinding, settings?.PanelTooltipsEnabled ?? true);
             UpdateIfChanged(m_UseDarkerPanelBinding, settings?.UseDarkerPanel ?? false);

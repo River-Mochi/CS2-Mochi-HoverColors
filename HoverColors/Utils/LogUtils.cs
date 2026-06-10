@@ -24,10 +24,11 @@
 
 namespace CS2Shared.RiverMochi
 {
-    using Colossal.Logging;
     using System;
     using System.Collections.Generic;
     using System.IO;
+
+    using Colossal.Logging;
 
     public static class LogUtils
     {
@@ -38,7 +39,7 @@ namespace CS2Shared.RiverMochi
         private static readonly HashSet<string> s_WarnOnceKeys =
             new HashSet<string>(StringComparer.Ordinal);
 
-        private const int MaxWarnOnceKeys = 2048;
+        private const int kMaxWarnOnceKeys = 2048;
 
         // Used only if the passed ILog is null or its metadata throws during early startup/shutdown.
         private static string s_FallbackLogName = string.Empty;
@@ -108,7 +109,7 @@ namespace CS2Shared.RiverMochi
 
             lock (s_WarnOnceLock)
             {
-                if (s_WarnOnceKeys.Count >= MaxWarnOnceKeys)
+                if (s_WarnOnceKeys.Count >= kMaxWarnOnceKeys)
                 {
                     s_WarnOnceKeys.Clear();
                 }

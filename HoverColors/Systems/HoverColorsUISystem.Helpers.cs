@@ -92,7 +92,7 @@ namespace HoverColors.UI
             targetB = 0f;
             targetA = 0f;
             targetFillA = 0f;
-            targetGuidelinePercent = HoverColorsSettings.DefaultGuidelineOpacityPercent;
+            targetGuidelinePercent = HoverColorsSettings.kDefaultGuidelineOpacityPercent;
             return false;
         }
 
@@ -115,11 +115,11 @@ namespace HoverColors.UI
             return ApproxEqual(s.Preset1R, DefaultPreset1R) && ApproxEqual(s.Preset1G, DefaultPreset1G)
                 && ApproxEqual(s.Preset1B, DefaultPreset1B) && ApproxEqual(s.Preset1A, DefaultPreset1A)
                 && ApproxEqual(s.Preset1FillA, DefaultPreset1FillA)
-                && s.Preset1GuidelinePercent == HoverColorsSettings.DefaultGuidelineOpacityPercent
+                && s.Preset1GuidelinePercent == HoverColorsSettings.kDefaultGuidelineOpacityPercent
                 && ApproxEqual(s.Preset2R, DefaultPreset2R) && ApproxEqual(s.Preset2G, DefaultPreset2G)
                 && ApproxEqual(s.Preset2B, DefaultPreset2B) && ApproxEqual(s.Preset2A, DefaultPreset2A)
                 && ApproxEqual(s.Preset2FillA, DefaultPreset2FillA)
-                && s.Preset2GuidelinePercent == HoverColorsSettings.DefaultGuidelineOpacityPercent;
+                && s.Preset2GuidelinePercent == HoverColorsSettings.kDefaultGuidelineOpacityPercent;
         }
 
         private static void SaveGuidelineToggleBackup(HoverColorsSettings settings)
@@ -155,12 +155,12 @@ namespace HoverColors.UI
         {
             UnityEngine.Color lines = GuidelineColorSystem.CapturedVanillaGuidelineLinesColor;
             UnityEngine.Color preview = GuidelineColorSystem.CapturedVanillaGuidelinePreviewColor;
-            settings.GuidelineLinesColorPreset = HoverColorsSettings.GuidelineColorPresetVanilla;
+            settings.GuidelineLinesColorPreset = HoverColorsSettings.kGuidelineColorPresetVanilla;
             settings.GuidelineLinesR = lines.r;
             settings.GuidelineLinesG = lines.g;
             settings.GuidelineLinesB = lines.b;
             settings.GuidelineLinesA = 1f;
-            settings.GuidelinePreviewColorPreset = HoverColorsSettings.GuidelineColorPresetVanilla;
+            settings.GuidelinePreviewColorPreset = HoverColorsSettings.kGuidelineColorPresetVanilla;
             settings.GuidelinePreviewR = preview.r;
             settings.GuidelinePreviewG = preview.g;
             settings.GuidelinePreviewB = preview.b;
