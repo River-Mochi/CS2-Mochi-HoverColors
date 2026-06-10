@@ -1,3 +1,5 @@
+// Copyright (c) River Mochi.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // File: Settings/Setting.cs
 // Purpose: Defines Hover Colors settings, persistent storage, and the Options UI surface.
 // Layout: 2 tabs (Actions, About) following CityWatchdog/EasyZoning convention.
