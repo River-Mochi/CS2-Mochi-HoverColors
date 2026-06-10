@@ -1,3 +1,7 @@
+// <copyright file="LogUtils.cs" company="River-Mochi. MIT License">
+// Copyright (c) River-Mochi. MIT License. All rights reserved.
+// </copyright>
+
 // File: Utils/LogUtils.cs
 // Version: 0.6.5 based on River-Mochi shared CS2 utilities.
 // Purpose: popup-safe direct-file logging helpers for CS2 mods.
