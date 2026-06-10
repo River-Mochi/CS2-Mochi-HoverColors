@@ -31,9 +31,9 @@ interface MochiPanelActionBarProps {
     districtSwatchHovered: boolean;
     districtHoldProgress: number;
 
-    districtPickerRef: React.RefObject<HTMLDivElement | null>;
-    districtMenuRef: React.RefObject<HTMLDivElement | null>;
-    districtColorSwatchRef: React.RefObject<HTMLDivElement | null>;
+    districtPickerRef: React.RefObject<HTMLDivElement>;
+    districtMenuRef: React.RefObject<HTMLDivElement>;
+    districtColorSwatchRef: React.RefObject<HTMLDivElement>;
 
     setDistrictPickerOpen: React.Dispatch<React.SetStateAction<boolean>>;
     setDistrictSwatchHovered: React.Dispatch<React.SetStateAction<boolean>>;

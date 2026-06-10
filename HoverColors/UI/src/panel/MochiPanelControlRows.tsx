@@ -72,12 +72,12 @@ interface MochiPanelControlRowsProps {
     holdProgress: number;
     cancelHold: () => void;
     handlePresetMouseDown: (slot: 1 | 2) => React.MouseEventHandler;
-    handlePresetMouseUp: (slot: 1 | 2) => React.MouseEventHandler;
+    handlePresetMouseUp: (slot: 1 | 2) => () => void;
 
-    outlineSwatchRef: React.RefObject<HTMLDivElement | null>;
-    ownerSwatchRef: React.RefObject<HTMLDivElement | null>;
-    guidelineLinesPickerRef: React.RefObject<HTMLDivElement | null>;
-    guidelinePreviewPickerRef: React.RefObject<HTMLDivElement | null>;
+    outlineSwatchRef: React.RefObject<HTMLDivElement>;
+    ownerSwatchRef: React.RefObject<HTMLDivElement>;
+    guidelineLinesPickerRef: React.RefObject<HTMLDivElement>;
+    guidelinePreviewPickerRef: React.RefObject<HTMLDivElement>;
 
     handleOutlineChange: (value: Color) => void;
     handleOwnerColorChange: (value: Color) => void;
