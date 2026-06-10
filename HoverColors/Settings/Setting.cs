@@ -14,6 +14,7 @@ namespace HoverColors.Settings
     using Game.UI;
     using Game.UI.Widgets;
     using System;
+    using System.IO;
     using UnityEngine;
 
     [FileLocation("ModsSettings/HoverColors/HoverColors")]
@@ -349,6 +350,73 @@ namespace HoverColors.Settings
         public HoverColorsSettings(IMod mod) : base(mod)
         {
             SetDefaults();
+        }
+
+        private readonly object m_SaveGate = new object();
+        private bool m_SaveInProgress;
+        private bool m_SaveAgainRequested;
+
+        public override async void ApplyAndSave()
+        {
+            Apply();
+            await SaveSpecificSettingQueuedAsync();
+        }
+
+        private async System.Threading.Tasks.Task SaveSpecificSettingQueuedAsync()
+        {
+            lock (m_SaveGate)
+            {
+                if (m_SaveInProgress)
+                {
+                    m_SaveAgainRequested = true;
+                    return;
+                }
+
+                m_SaveInProgress = true;
+            }
+
+            while (true)
+            {
+                lock (m_SaveGate)
+                {
+                    m_SaveAgainRequested = false;
+                }
+
+                await SaveSpecificSettingWithRetryAsync();
+
+                lock (m_SaveGate)
+                {
+                    if (!m_SaveAgainRequested)
+                    {
+                        m_SaveInProgress = false;
+                        return;
+                    }
+                }
+            }
+        }
+
+        private async System.Threading.Tasks.Task SaveSpecificSettingWithRetryAsync()
+        {
+            const int MaxAttempts = 3;
+
+            for (int attempt = 1; attempt <= MaxAttempts; attempt++)
+            {
+                try
+                {
+                    await AssetDatabase.global.SaveSpecificSetting(GetType().Name);
+                    return;
+                }
+                catch (IOException ex) when (attempt < MaxAttempts)
+                {
+                    LogUtils.Warn(() => $"{Mod.ModTag} Settings save busy; retrying ({attempt}/{MaxAttempts - 1}): {ex.Message}");
+                    await System.Threading.Tasks.Task.Delay(150 * attempt);
+                }
+                catch (Exception ex)
+                {
+                    LogUtils.Error(() => $"{Mod.ModTag} Settings save failed: {ex.GetType().Name}: {ex.Message}", ex);
+                    return;
+                }
+            }
         }
 
         public override void SetDefaults()
