@@ -38,6 +38,7 @@ interface MochiPanelControlRowsProps {
     fillA: number;
     guidelineLinesColor: Color;
     guidelinePreviewColor: Color;
+    guidelineDashedColor: Color;
     guidelineOpacity: number;
     preset1Color: Color;
     preset2Color: Color;
@@ -46,6 +47,7 @@ interface MochiPanelControlRowsProps {
     ownerPickerDirection: PickerDirection;
     guidelineLinesPickerDirection: PickerDirection;
     guidelinePreviewPickerDirection: PickerDirection;
+    guidelineDashedPickerDirection: PickerDirection;
 
     vanillaOutlineActive: boolean;
     preset1Active: boolean;
@@ -55,6 +57,7 @@ interface MochiPanelControlRowsProps {
     ownerSwatchHovered: boolean;
     guidelineLinesHovered: boolean;
     guidelinePreviewHovered: boolean;
+    guidelineDashedHovered: boolean;
     preset1Hovered: boolean;
     preset2Hovered: boolean;
 
@@ -62,11 +65,13 @@ interface MochiPanelControlRowsProps {
     setOwnerSwatchHovered: React.Dispatch<React.SetStateAction<boolean>>;
     setGuidelineLinesHovered: React.Dispatch<React.SetStateAction<boolean>>;
     setGuidelinePreviewHovered: React.Dispatch<React.SetStateAction<boolean>>;
+    setGuidelineDashedHovered: React.Dispatch<React.SetStateAction<boolean>>;
     setPreset1Hovered: React.Dispatch<React.SetStateAction<boolean>>;
     setPreset2Hovered: React.Dispatch<React.SetStateAction<boolean>>;
     setOwnerPickerOpen: React.Dispatch<React.SetStateAction<boolean>>;
     setGuidelineLinesPickerOpen: React.Dispatch<React.SetStateAction<boolean>>;
     setGuidelinePreviewPickerOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    setGuidelineDashedPickerOpen: React.Dispatch<React.SetStateAction<boolean>>;
 
     holdSlot: number | null;
     holdProgress: number;
@@ -78,12 +83,14 @@ interface MochiPanelControlRowsProps {
     ownerSwatchRef: React.RefObject<HTMLDivElement>;
     guidelineLinesPickerRef: React.RefObject<HTMLDivElement>;
     guidelinePreviewPickerRef: React.RefObject<HTMLDivElement>;
+    guidelineDashedPickerRef: React.RefObject<HTMLDivElement>;
 
     handleOutlineChange: (value: Color) => void;
     handleOwnerColorChange: (value: Color) => void;
     handleFillAChange: (value: number) => void;
     handleGuidelineLinesColorChange: (value: Color) => void;
     handleGuidelinePreviewColorChange: (value: Color) => void;
+    handleGuidelineDashedColorChange: (value: Color) => void;
     handleGuidelineChange: (value: number) => void;
     handleResetOutline: () => void;
     handleResetFill: () => void;
@@ -94,6 +101,7 @@ interface MochiPanelControlRowsProps {
     updateOwnerPickerDirection: () => void;
     updateGuidelineLinesPickerDirection: () => void;
     updateGuidelinePreviewPickerDirection: () => void;
+    updateGuidelineDashedPickerDirection: () => void;
 }
 
 export const MochiPanelControlRows = ({
@@ -109,6 +117,7 @@ export const MochiPanelControlRows = ({
     fillA,
     guidelineLinesColor,
     guidelinePreviewColor,
+    guidelineDashedColor,
     guidelineOpacity,
     preset1Color,
     preset2Color,
@@ -116,6 +125,7 @@ export const MochiPanelControlRows = ({
     ownerPickerDirection,
     guidelineLinesPickerDirection,
     guidelinePreviewPickerDirection,
+    guidelineDashedPickerDirection,
     vanillaOutlineActive,
     preset1Active,
     preset2Active,
@@ -123,17 +133,20 @@ export const MochiPanelControlRows = ({
     ownerSwatchHovered,
     guidelineLinesHovered,
     guidelinePreviewHovered,
+    guidelineDashedHovered,
     preset1Hovered,
     preset2Hovered,
     setSwatchHovered,
     setOwnerSwatchHovered,
     setGuidelineLinesHovered,
     setGuidelinePreviewHovered,
+    setGuidelineDashedHovered,
     setPreset1Hovered,
     setPreset2Hovered,
     setOwnerPickerOpen,
     setGuidelineLinesPickerOpen,
     setGuidelinePreviewPickerOpen,
+    setGuidelineDashedPickerOpen,
     holdSlot,
     holdProgress,
     cancelHold,
@@ -143,11 +156,13 @@ export const MochiPanelControlRows = ({
     ownerSwatchRef,
     guidelineLinesPickerRef,
     guidelinePreviewPickerRef,
+    guidelineDashedPickerRef,
     handleOutlineChange,
     handleOwnerColorChange,
     handleFillAChange,
     handleGuidelineLinesColorChange,
     handleGuidelinePreviewColorChange,
+    handleGuidelineDashedColorChange,
     handleGuidelineChange,
     handleResetOutline,
     handleResetFill,
@@ -157,6 +172,7 @@ export const MochiPanelControlRows = ({
     updateOwnerPickerDirection,
     updateGuidelineLinesPickerDirection,
     updateGuidelinePreviewPickerDirection,
+    updateGuidelineDashedPickerDirection,
 }: MochiPanelControlRowsProps) => {
     // These compact swatches use a hidden vanilla ColorField for the popup and a custom preview for hover styling.
     const compactShellStyle = React.useCallback(
@@ -439,6 +455,50 @@ export const MochiPanelControlRows = ({
                                 <span
                                     className={styles.guidelineColorPreview}
                                     style={compactSwatchStyle(guidelinePreviewColor, guidelinePreviewHovered, useDarkerPanel)}
+                                    aria-hidden="true"
+                                />
+                            </div>
+                        </Tooltip>
+
+                        <Tooltip tooltip={tt(text.tooltipGuidelinesDashedColor)}>
+                            <div
+                                ref={guidelineDashedPickerRef}
+                                className={`${styles.guidelineColorShell} ${styles.guidelineDashedColorShell} ${guidelineDashedHovered ? styles.guidelineColorShellHovered : ""}`}
+                                style={compactShellStyle(guidelineDashedColor, guidelineDashedHovered)}
+                                onMouseOver={() => {
+                                    if (!guidelineDashedHovered) {
+                                        setGuidelineDashedHovered(true);
+                                    }
+                                    updateGuidelineDashedPickerDirection();
+                                }}
+                                onMouseMove={() => {
+                                    if (!guidelineDashedHovered) {
+                                        setGuidelineDashedHovered(true);
+                                    }
+                                }}
+                                onMouseLeave={() => setGuidelineDashedHovered(false)}
+                                onMouseDown={updateGuidelineDashedPickerDirection}
+                            >
+                                {/* Dashed guideline color only; opacity stays on the slider. */}
+                                <ColorField
+                                    focusKey={focusDisabled}
+                                    className={styles.guidelineColorField}
+                                    value={guidelineDashedColor}
+                                    alpha={false}
+                                    popupDirection={guidelineDashedPickerDirection}
+                                    hideHint={true}
+                                    hexInput={true}
+                                    colorWheel={false}
+                                    onChange={handleGuidelineDashedColorChange}
+                                    onOpenPicker={() => {
+                                        setGuidelineDashedPickerOpen(true);
+                                        updateGuidelineDashedPickerDirection();
+                                    }}
+                                    onClosePicker={() => setGuidelineDashedPickerOpen(false)}
+                                />
+                                <span
+                                    className={styles.guidelineColorPreview}
+                                    style={compactSwatchStyle(guidelineDashedColor, guidelineDashedHovered, useDarkerPanel)}
                                     aria-hidden="true"
                                 />
                             </div>

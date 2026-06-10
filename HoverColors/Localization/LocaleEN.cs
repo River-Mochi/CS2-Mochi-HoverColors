@@ -4,9 +4,9 @@
 
 namespace HoverColors.Localization
 {
+    using System.Collections.Generic;
     using Colossal;
     using HoverColors.Settings;
-    using System.Collections.Generic;
     public sealed class LocaleEN : IDictionarySource
     {
         private readonly HoverColorsSettings m_Settings;
@@ -87,19 +87,6 @@ namespace HoverColors.Localization
                     "- Best for most players using the new Modern game UI.\n\n" +
                     "Try both and see which you prefer! This only changes the background of this mod panel and not the game's UI."
                 },
-                
-                // Dashed alignment guide color
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.GuidelineDashedColorPreset)), "Dashed guide lines color" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.GuidelineDashedColorPreset)),
-                    "Sets the dashed alignment guide color used for road angles, 90-degree helpers, and connection hints.\n\n" +
-                    "Both opacity sliders are synced: this Options slider and the in-city panel slider control the same dashed guide opacity."
-                },
-                { m_Settings.GetGuidelineDashedColorPresetLocaleID("Vanilla"), "Vanilla white" },
-                { m_Settings.GetGuidelineDashedColorPresetLocaleID("Green"), "High visibility green" },
-                { m_Settings.GetGuidelineDashedColorPresetLocaleID("MochiBlue"), "Mochi Blue" },
-                { m_Settings.GetGuidelineDashedColorPresetLocaleID("CyanBlue"), "Cyan blue" },
-                { m_Settings.GetGuidelineDashedColorPresetLocaleID("Yellow"), "High visibility yellow" },
-
                 // Guidelines opacity slider
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.GuidelineOpacityPercent)), "Guidelines opacity (alpha)" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.GuidelineOpacityPercent)),
@@ -129,14 +116,14 @@ namespace HoverColors.Localization
                 { m_Settings.GetBindingKeyLocaleID(Mod.kTogglePresetActionName),
                     "Toggle between presets 1 and 2" },
 
-                // About — name + version
+                // About name + version
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.NameText)), "Mod" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.NameText)), string.Empty },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.VersionText)), "Version" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.VersionText)), string.Empty },
 
-                // About — Paradox Mods link button (matches CityWatchdog phrasing)
+                // About Paradox Mods link button
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.OpenParadox)), "Paradox Mods" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.OpenParadox)), "Open the author's Paradox Mods page." },
 

@@ -42,6 +42,11 @@ export const guidelinePreviewColorG$ = bindValue<number>(CHANNEL, "GuidelinePrev
 export const guidelinePreviewColorB$ = bindValue<number>(CHANNEL, "GuidelinePreviewColorB", 1);
 export const guidelinePreviewColorA$ = bindValue<number>(CHANNEL, "GuidelinePreviewColorA", 1);
 
+// Dashed alignment guide line RGB. Opacity stays on guidelineOpacity$.
+export const guidelineDashedColorR$ = bindValue<number>(CHANNEL, "GuidelineDashedColorR", 0.7);
+export const guidelineDashedColorG$ = bindValue<number>(CHANNEL, "GuidelineDashedColorG", 0.7);
+export const guidelineDashedColorB$ = bindValue<number>(CHANNEL, "GuidelineDashedColorB", 1);
+
 export const guidelineOpacity$ = bindValue<number>(CHANNEL, "GuidelineOpacityPercent", 30);
 export const panelTooltipsEnabled$ = bindValue<boolean>(CHANNEL, "PanelTooltipsEnabled", true);
 export const useDarkerPanel$ = bindValue<boolean>(CHANNEL, "UseDarkerPanel", false);

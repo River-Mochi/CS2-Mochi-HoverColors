@@ -18,9 +18,10 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 20rem;
+    // Narrower than before so the dashed-line swatch fits before the opacity slider.
+    width: 21rem;
     height: 24rem;
-    flex: 0 0 20rem;
+    flex: 0 0 21rem;
     position: relative;
     overflow: visible;
     border-radius: 4rem;
@@ -30,12 +31,12 @@
     transition: box-shadow 120ms ease-out;
 }
 
-.guidelineDashedColorShell {
-  margin-left: 4rem;
-}
-
 .guidelinePreviewColorShell {
     margin-left: 4rem; // gap between S1/S2 guideline swatches
+}
+
+.guidelineDashedColorShell {
+    margin-left: 4rem; // third swatch: dashed alignment guideline color
 }
 
 .guidelineColorField {

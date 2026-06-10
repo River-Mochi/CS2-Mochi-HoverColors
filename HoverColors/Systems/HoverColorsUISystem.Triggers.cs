@@ -4,7 +4,6 @@
 namespace HoverColors.UI
 {
     using Colossal.UI.Binding;
-    using HoverColors.Localization;
     using HoverColors.Settings;
     using HoverColors.Systems;
     using System;
@@ -19,6 +18,7 @@ namespace HoverColors.UI
             AddBinding(new TriggerBinding<int>(Mod.ModId, "SetGuidelineOpacity", SetGuidelineOpacity));
             AddBinding(new TriggerBinding<float, float, float, float>(Mod.ModId, "SetGuidelineLinesColor", SetGuidelineLinesColor));
             AddBinding(new TriggerBinding<float, float, float, float>(Mod.ModId, "SetGuidelinePreviewColor", SetGuidelinePreviewColor));
+            AddBinding(new TriggerBinding<float, float, float>(Mod.ModId, "SetGuidelineDashedColor", SetGuidelineDashedColor));
             AddBinding(new TriggerBinding<float, float, float, float>(Mod.ModId, "SetDistrictColor", SetDistrictColor));
             AddBinding(new TriggerBinding(Mod.ModId, "ResetDistrictToVanilla", ResetDistrictToVanilla));
             AddBinding(new TriggerBinding(Mod.ModId, "ResetToVanilla", ResetToVanilla));
@@ -150,6 +150,34 @@ namespace HoverColors.UI
             settings.GuidelinePreviewB = b;
             settings.GuidelinePreviewA = a;
             settings.GuidelineVanillaToggleActive = false;
+            ApplySaveAndSync(settings);
+        }
+
+
+        private void SetGuidelineDashedColor(float r, float g, float b)
+        {
+            HoverColorsSettings? settings = Mod.Settings;
+            if (settings == null) return;
+
+            r = Clamp01(r);
+            g = Clamp01(g);
+            b = Clamp01(b);
+
+            bool changed = settings.GuidelineDashedColorPreset != HoverColorsSettings.kGuidelineDashedColorPresetCustom
+                || !ApproxEqual(settings.GuidelineDashedR, r)
+                || !ApproxEqual(settings.GuidelineDashedG, g)
+                || !ApproxEqual(settings.GuidelineDashedB, b);
+
+            if (!changed)
+            {
+                return;
+            }
+
+            // Dashed line opacity is controlled separately by GuidelineOpacityPercent.
+            settings.GuidelineDashedColorPreset = HoverColorsSettings.kGuidelineDashedColorPresetCustom;
+            settings.GuidelineDashedR = r;
+            settings.GuidelineDashedG = g;
+            settings.GuidelineDashedB = b;
             ApplySaveAndSync(settings);
         }
 

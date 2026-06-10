@@ -16,9 +16,9 @@ namespace HoverColors.UI
     using Game.SceneFlow;
     using Game.UI;
 
-    using HoverColors.Localization;
     using HoverColors.Settings;
     using HoverColors.Systems;
+
     public partial class HoverColorsUISystem : UISystemBase
     {
         private static bool s_PanelOpen;
@@ -53,6 +53,9 @@ namespace HoverColors.UI
         private ValueBinding<float> m_GuidelinePreviewColorGBinding = null!;
         private ValueBinding<float> m_GuidelinePreviewColorBBinding = null!;
         private ValueBinding<float> m_GuidelinePreviewColorABinding = null!;
+        private ValueBinding<float> m_GuidelineDashedColorRBinding = null!;
+        private ValueBinding<float> m_GuidelineDashedColorGBinding = null!;
+        private ValueBinding<float> m_GuidelineDashedColorBBinding = null!;
         private ValueBinding<int> m_GuidelineOpacityBinding = null!;
         private ValueBinding<int> m_GuidelineDefaultBinding = null!;
         private ValueBinding<bool> m_PanelOpenBinding = null!;
@@ -99,7 +102,6 @@ namespace HoverColors.UI
             LogUtils.Info(() => $"{Mod.ModTag} HoverColorsUISystem created");
 
             InitializeKeybindActions();
-
             RegisterValueBindings();
             RegisterTriggerBindings();
         }
@@ -139,7 +141,6 @@ namespace HoverColors.UI
             }
         }
 
-
         private void RegisterValueBindings()
         {
             HoverColorsSettings? settings = Mod.Settings;
@@ -161,8 +162,10 @@ namespace HoverColors.UI
             m_DistrictGBinding = AddValueBinding("DistrictG", settings?.DistrictG ?? 128f / 255f);
             m_DistrictBBinding = AddValueBinding("DistrictB", settings?.DistrictB ?? 128f / 255f);
             m_DistrictABinding = AddValueBinding("DistrictA", settings?.DistrictA ?? 64f / 255f);
+
             UnityEngine.Color guidelineLinesColor = GuidelineColorSystem.GetGuidelineLinesColor(settings);
             UnityEngine.Color guidelinePreviewColor = GuidelineColorSystem.GetGuidelinePreviewColor(settings);
+            UnityEngine.Color guidelineDashedColor = GuidelineColorSystem.GetGuidelineDashedColor(settings);
             m_GuidelineLinesColorRBinding = AddValueBinding("GuidelineLinesColorR", guidelineLinesColor.r);
             m_GuidelineLinesColorGBinding = AddValueBinding("GuidelineLinesColorG", guidelineLinesColor.g);
             m_GuidelineLinesColorBBinding = AddValueBinding("GuidelineLinesColorB", guidelineLinesColor.b);
@@ -171,6 +174,9 @@ namespace HoverColors.UI
             m_GuidelinePreviewColorGBinding = AddValueBinding("GuidelinePreviewColorG", guidelinePreviewColor.g);
             m_GuidelinePreviewColorBBinding = AddValueBinding("GuidelinePreviewColorB", guidelinePreviewColor.b);
             m_GuidelinePreviewColorABinding = AddValueBinding("GuidelinePreviewColorA", settings?.GuidelinePreviewA ?? 1f);
+            m_GuidelineDashedColorRBinding = AddValueBinding("GuidelineDashedColorR", guidelineDashedColor.r);
+            m_GuidelineDashedColorGBinding = AddValueBinding("GuidelineDashedColorG", guidelineDashedColor.g);
+            m_GuidelineDashedColorBBinding = AddValueBinding("GuidelineDashedColorB", guidelineDashedColor.b);
             m_GuidelineOpacityBinding = AddValueBinding("GuidelineOpacityPercent", settings?.GuidelineOpacityPercent ?? HoverColorsSettings.kDefaultGuidelineOpacityPercent);
             m_GuidelineDefaultBinding = AddValueBinding("GuidelineDefaultPercent", settings?.GuidelineDefaultPercent ?? HoverColorsSettings.kDefaultGuidelineOpacityPercent);
             m_PanelOpenBinding = AddValueBinding("PanelOpen", s_PanelOpen);
@@ -218,8 +224,10 @@ namespace HoverColors.UI
             UpdateIfChanged(m_DistrictGBinding, settings?.DistrictG ?? 128f / 255f);
             UpdateIfChanged(m_DistrictBBinding, settings?.DistrictB ?? 128f / 255f);
             UpdateIfChanged(m_DistrictABinding, settings?.DistrictA ?? 64f / 255f);
+
             UnityEngine.Color guidelineLinesColor = GuidelineColorSystem.GetGuidelineLinesColor(settings);
             UnityEngine.Color guidelinePreviewColor = GuidelineColorSystem.GetGuidelinePreviewColor(settings);
+            UnityEngine.Color guidelineDashedColor = GuidelineColorSystem.GetGuidelineDashedColor(settings);
             UpdateIfChanged(m_GuidelineLinesColorRBinding, guidelineLinesColor.r);
             UpdateIfChanged(m_GuidelineLinesColorGBinding, guidelineLinesColor.g);
             UpdateIfChanged(m_GuidelineLinesColorBBinding, guidelineLinesColor.b);
@@ -228,6 +236,9 @@ namespace HoverColors.UI
             UpdateIfChanged(m_GuidelinePreviewColorGBinding, guidelinePreviewColor.g);
             UpdateIfChanged(m_GuidelinePreviewColorBBinding, guidelinePreviewColor.b);
             UpdateIfChanged(m_GuidelinePreviewColorABinding, settings?.GuidelinePreviewA ?? 1f);
+            UpdateIfChanged(m_GuidelineDashedColorRBinding, guidelineDashedColor.r);
+            UpdateIfChanged(m_GuidelineDashedColorGBinding, guidelineDashedColor.g);
+            UpdateIfChanged(m_GuidelineDashedColorBBinding, guidelineDashedColor.b);
             UpdateIfChanged(m_GuidelineOpacityBinding, settings?.GuidelineOpacityPercent ?? HoverColorsSettings.kDefaultGuidelineOpacityPercent);
             UpdateIfChanged(m_GuidelineDefaultBinding, settings?.GuidelineDefaultPercent ?? HoverColorsSettings.kDefaultGuidelineOpacityPercent);
             UpdateIfChanged(m_PanelOpenBinding, s_PanelOpen);
@@ -267,7 +278,6 @@ namespace HoverColors.UI
             s_PanelOpen = open;
             UpdateIfChanged(m_PanelOpenBinding, s_PanelOpen);
         }
-
 
         private void InitializeKeybindActions()
         {

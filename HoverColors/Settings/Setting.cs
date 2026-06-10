@@ -8,11 +8,12 @@
 
 namespace HoverColors.Settings
 {
-    using Game.Input; // BindingKeyboard for default J/L/K shortcuts.
-    using Game.Modding; // IMod constructor parameter.
-    using Game.Settings; // ModSetting + Options UI attributes.
-    using Game.UI; // ProxyBinding for Options keybind fields.
-    using Game.UI.Widgets; // Unit.kPercentage for the guideline opacity slider.
+    using Colossal.IO.AssetDatabase; // FileLocation
+    using Game.Input;       // BindingKeyboard
+    using Game.Modding;     // IMod
+    using Game.Settings;    // ModSetting, attributes
+    using Game.UI;          // ProxyBinding
+    using Game.UI.Widgets;  // Unit.kPercentage
 
     [FileLocation("ModsSettings/HoverColors/HoverColors")]
     [SettingsUITabOrder(Actions, About)]
