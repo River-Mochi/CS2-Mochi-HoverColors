@@ -2,13 +2,11 @@
 // Purpose: English (en-US) strings for the Options Menu.
 // Strings for the in-city cohtml panel live separately in L10n/lang/en-US.json.
 
-namespace HoverColors
+namespace HoverColors.Localization
 {
     using Colossal;
+    using HoverColors.Settings;
     using System.Collections.Generic;
-    using System.Threading;
-    using static Game.UI.Editor.AssetImportPanel;
-
     public sealed class LocaleEN : IDictionarySource
     {
         private readonly HoverColorsSettings m_Settings;

@@ -2,11 +2,11 @@
 // Purpose: Japanese (ja-JP) strings for the Options Menu.
 // Strings for the in-city cohtml panel live separately in L10n/lang/ja-JP.json.
 
-namespace HoverColors
+namespace HoverColors.Localization
 {
     using Colossal;
+    using HoverColors.Settings;
     using System.Collections.Generic;
-
     public sealed class LocaleJA : IDictionarySource
     {
         private readonly HoverColorsSettings m_Settings;

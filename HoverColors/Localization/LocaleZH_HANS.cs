@@ -2,11 +2,11 @@
 // Purpose: Simplified Chinese (zh-HANS) strings for the Options Menu.
 // Strings for the in-city cohtml panel live separately in L10n/lang/zh-HANS.json.
 
-namespace HoverColors
+namespace HoverColors.Localization
 {
     using Colossal;
+    using HoverColors.Settings;
     using System.Collections.Generic;
-
     public sealed class LocaleZH_HANS : IDictionarySource
     {
         private readonly HoverColorsSettings m_Settings;

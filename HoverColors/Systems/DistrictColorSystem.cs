@@ -16,6 +16,8 @@ namespace HoverColors.Systems
     using Game.Common;
     using Game.Prefabs;
     using Game.Serialization;
+    using HoverColors.Localization;
+    using HoverColors.Settings;
     using Unity.Entities;
     using UnityEngine;
     using AreaComponent = Game.Areas.Area;

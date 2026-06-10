@@ -11,6 +11,8 @@ namespace HoverColors
     using Game;
     using Game.Modding;
     using Game.SceneFlow;
+    using HoverColors.Localization;
+    using HoverColors.Settings;
     using HoverColors.Systems;
     using HoverColors.UI;
     using System;

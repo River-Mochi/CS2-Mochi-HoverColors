@@ -2,11 +2,11 @@
 // Purpose: Vietnamese (vi-VN) strings for the Options Menu.
 // Strings for the in-city cohtml panel live separately in L10n/lang/vi-VN.json.
 
-namespace HoverColors
+namespace HoverColors.Localization
 {
     using Colossal;
+    using HoverColors.Settings;
     using System.Collections.Generic;
-
     public sealed class LocaleVI : IDictionarySource
     {
         private readonly HoverColorsSettings m_Settings;

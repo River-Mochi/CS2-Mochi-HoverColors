@@ -20,6 +20,8 @@ namespace HoverColors.Systems
     using CS2Shared.RiverMochi;
     using Game;
     using Game.Prefabs;
+    using HoverColors.Localization;
+    using HoverColors.Settings;
     using Unity.Entities;
     using UnityEngine;
 

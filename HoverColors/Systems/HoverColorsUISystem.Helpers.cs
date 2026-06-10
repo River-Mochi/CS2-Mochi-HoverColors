@@ -3,6 +3,8 @@
 
 namespace HoverColors.UI
 {
+    using HoverColors.Localization;
+    using HoverColors.Settings;
     using HoverColors.Systems;
     using System;
 

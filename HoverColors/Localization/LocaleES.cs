@@ -2,9 +2,10 @@
 // Purpose: Spanish (es-ES) strings for the Options Menu.
 // Strings for the in-city cohtml panel live separately in L10n/lang/es-ES.json.
 
-namespace HoverColors
+namespace HoverColors.Localization
 {
     using Colossal;
+    using HoverColors.Settings;
     using System.Collections.Generic;
 
     public sealed class LocaleES : IDictionarySource

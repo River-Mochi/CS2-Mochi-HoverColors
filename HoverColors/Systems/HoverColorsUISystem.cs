@@ -10,10 +10,11 @@ namespace HoverColors.UI
     using Game.Input;
     using Game.SceneFlow;
     using Game.UI;
+    using HoverColors.Localization;
+    using HoverColors.Settings;
     using HoverColors.Systems;
     using System;
     using System.Collections.Generic;
-
     public partial class HoverColorsUISystem : UISystemBase
     {
         private static bool s_PanelOpen;

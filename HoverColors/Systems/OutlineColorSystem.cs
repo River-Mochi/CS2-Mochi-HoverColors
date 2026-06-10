@@ -34,6 +34,8 @@ namespace HoverColors.Systems
     using Game.Prefabs;
     using Game.Rendering;
     using Game.Tools;
+    using HoverColors.Localization;
+    using HoverColors.Settings;
     using System;
     using System.Reflection;
     using Unity.Entities;

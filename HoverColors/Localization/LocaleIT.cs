@@ -2,11 +2,11 @@
 // Purpose: Italian (it-IT) strings for the Options Menu.
 // Strings for the in-city cohtml panel live separately in L10n/lang/it-IT.json.
 
-namespace HoverColors
+namespace HoverColors.Localization
 {
     using Colossal;
+    using HoverColors.Settings;
     using System.Collections.Generic;
-
     public sealed class LocaleIT : IDictionarySource
     {
         private readonly HoverColorsSettings m_Settings;
