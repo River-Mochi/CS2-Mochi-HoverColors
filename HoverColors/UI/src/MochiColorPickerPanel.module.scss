@@ -831,5 +831,27 @@
     }
 }
 
+/* ─── District mini-menu flyout override ────────────────────────────────────── */
+/* Opens the mini District panel to the right of the District button instead of
+   covering the button. Tweak --hc-district-menu-left to move it left/right. */
 
+.actions {
+  position: relative;
+  overflow: visible;
+}
+
+.districtMenu {
+  position: absolute !important;
+  // Position knob:
+  // increase = move menu farther right
+  // decrease = move menu left, closer to the District button
+  left: 118rem !important;
+  // Vertical knob:
+  // increase = move menu up
+  // decrease = move menu down
+  bottom: 8rem !important;
+  z-index: 50;
+  margin: 0 !important;
+  pointer-events: auto;
+}
 

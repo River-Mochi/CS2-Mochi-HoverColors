@@ -10,7 +10,6 @@ namespace HoverColors.UI
     using Game.Input;
     using Game.SceneFlow;
     using Game.UI;
-    using HoverColors.Settings;
     using HoverColors.Systems;
     using System;
     using System.Collections.Generic;

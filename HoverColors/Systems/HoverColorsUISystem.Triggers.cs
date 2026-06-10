@@ -4,7 +4,6 @@
 namespace HoverColors.UI
 {
     using Colossal.UI.Binding;
-    using HoverColors.Settings;
     using HoverColors.Systems;
     using System;
 
