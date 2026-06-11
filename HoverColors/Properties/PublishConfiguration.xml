@@ -58,9 +58,9 @@ tags: Mochi's blue scrubber, Highlight, border color, remove blue, guidelines, d
 
 </LongDescription>
 	<!--Thumbnail-->
-	<Thumbnail Value="Properties/Thumbnail-build_cyan.jpg" />
+	<Thumbnail Value="Properties/Thumbnail-building_cyan.jpg" />
 	<!--Screenshot, can be set multiple times-->
-    <Screenshot Value="Properties/12-image-before-after.jpg" />
+    <Screenshot Value="Properties/10-image-before-after.jpg" />
     <Screenshot Value="Properties/15-image-ColorPicker.jpg" />
 	<Screenshot Value="Properties/20-image-Options.jpg" />
     <Screenshot Value="Properties/30-image-Guidelines.jpg" />
