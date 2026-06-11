@@ -1,12 +1,14 @@
+// Copyright (c) River Mochi.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // File: Systems/HoverColorsUISystem.Helpers.cs
 // Purpose: Shared comparison and preset/guideline helper methods for HoverColorsUISystem.
 
 namespace HoverColors.UI
 {
+    using System;
     using HoverColors.Localization;
     using HoverColors.Settings;
     using HoverColors.Systems;
-    using System;
 
     public partial class HoverColorsUISystem
     {

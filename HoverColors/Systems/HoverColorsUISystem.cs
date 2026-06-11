@@ -1,3 +1,5 @@
+// Copyright (c) River Mochi.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // File: Systems/HoverColorsUISystem.cs
 // Bridges Mod.Settings to cs2/api bindings, owns the shared panel-open flag,
 // and checks cached keybind actions for panel/tool toggles.

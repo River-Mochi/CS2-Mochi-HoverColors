@@ -1,3 +1,7 @@
+// Copyright (c) River Mochi. See LICENSE file in the project root for full license information.
+// <copyright file="Mod.cs" company="River-Mochi. MIT License">
+// </copyright>
+
 // File: Mod.cs
 // Purpose: Mod entrypoint; registers settings, localization, systems, keybindings, and the dedicated mod log.
 

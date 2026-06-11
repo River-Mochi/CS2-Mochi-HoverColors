@@ -1,16 +1,18 @@
+// Copyright (c) River Mochi.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // File: Systems/AreaToolOverlaySystem.cs
 // Purpose: Optional Area-tool overlay suppression. Surface and Specialized Industry both write
 // ToolBaseSystem.requireAreas, so one system owns the combined mask to avoid toggle conflicts.
 
 namespace HoverColors.Systems
 {
+    using System;
+    using System.Reflection;
     using CS2Shared.RiverMochi;
     using Game;
     using Game.Areas;
     using Game.SceneFlow;
     using Game.Tools;
-    using System;
-    using System.Reflection;
     using Unity.Entities;
 
     public partial class AreaToolOverlaySystem : GameSystemBase

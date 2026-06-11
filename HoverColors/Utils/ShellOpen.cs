@@ -1,3 +1,7 @@
+// Copyright (c) River Mochi. See LICENSE file in the project root for full license information.
+// <copyright file="ShellOpen.cs" company="River-Mochi. MIT License">
+// </copyright>
+
 // File: Utils/ShellOpen.cs
 // Version: 0.3.0
 // Purpose: file/folder opening helpers for CS2 Options UI buttons.
@@ -5,10 +9,10 @@
 
 namespace CS2Shared.RiverMochi
 {
-    using Colossal.Logging;
     using System;
     using System.Diagnostics;
     using System.IO;
+    using Colossal.Logging;
     using UnityEngine;
 
     public static class ShellOpen

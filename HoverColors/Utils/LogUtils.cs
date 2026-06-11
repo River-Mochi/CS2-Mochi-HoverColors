@@ -1,5 +1,5 @@
+// Copyright (c) River Mochi. See LICENSE file in the project root for full license information.
 // <copyright file="LogUtils.cs" company="River-Mochi. MIT License">
-// Copyright (c) River-Mochi. MIT License. All rights reserved.
 // </copyright>
 
 // File: Utils/LogUtils.cs

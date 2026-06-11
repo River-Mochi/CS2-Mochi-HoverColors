@@ -1,3 +1,5 @@
+// Copyright (c) River Mochi.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // File: Systems/OutlineColorSystem.cs
 // Purpose: Apply user-chosen outline color + fill/outline alpha to the game's selection highlight.
 // Can temporarily override colors while the player is using Bulldoze / Better Bulldozer,
@@ -29,6 +31,8 @@
 
 namespace HoverColors.Systems
 {
+    using System;
+    using System.Reflection;
     using CS2Shared.RiverMochi;
     using Game;
     using Game.Prefabs;
@@ -36,8 +40,6 @@ namespace HoverColors.Systems
     using Game.Tools;
     using HoverColors.Localization;
     using HoverColors.Settings;
-    using System;
-    using System.Reflection;
     using Unity.Entities;
     using UnityEngine;
     using UnityEngine.Rendering.HighDefinition;

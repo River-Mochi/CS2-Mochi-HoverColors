@@ -1,3 +1,5 @@
+// Copyright (c) River Mochi.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // File: Systems/GuidelineColorSystem.cs
 // Purpose: Apply player guideline color/opacity to vanilla GuideLineSettingsData.
 // The game splits guideline overlays into priority colors. HC exposes the useful

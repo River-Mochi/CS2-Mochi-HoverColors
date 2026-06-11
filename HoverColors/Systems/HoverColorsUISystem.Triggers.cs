@@ -1,12 +1,14 @@
+// Copyright (c) River Mochi.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // File: Systems/HoverColorsUISystem.Triggers.cs
 // Purpose: TriggerBinding registration and C#-side guards for in-city panel actions.
 
 namespace HoverColors.UI
 {
+    using System;
     using Colossal.UI.Binding;
     using HoverColors.Settings;
     using HoverColors.Systems;
-    using System;
 
     public partial class HoverColorsUISystem
     {

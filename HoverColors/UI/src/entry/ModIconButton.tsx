@@ -1,3 +1,6 @@
+// Copyright (c) River Mochi.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
 // File: UI/src/entry/ModIconButton.tsx
 // GameTopLeft launcher for the Hover Colors in-city panel. Same as CWD + EasyZoning.
 

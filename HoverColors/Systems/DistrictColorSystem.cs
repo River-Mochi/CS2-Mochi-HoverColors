@@ -1,3 +1,6 @@
+// Copyright (c) River Mochi.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
 // File: Systems/DistrictColorSystem.cs
 // Purpose: Applies player's District overlay color/opacity to the vanilla District area prefab.
 //
