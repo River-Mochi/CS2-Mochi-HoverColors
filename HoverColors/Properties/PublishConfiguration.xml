@@ -28,6 +28,7 @@
     - Hotkeys are in the Options menu. Read the tooltips or Options Menu 3rd panel if you get lost.
     - Save-game safe and safe to remove any time.
     - No known compatibility issues. No Harmony patches.
+    - Works with Recolor - this mod is for highlights, guidelines, overlays; not object color.
     - Performance Optimized: when the panel is closed, it is not doing active layout work;
     the C# systems mostly sit idle unless a relevant state changes, example, you change a color, mod takes action, then goes back idle.
 
@@ -48,7 +49,7 @@
     - gagaxm - feature idea, testing
     - Dx, Necko1996, BugsyG, ElGendo87, Maestro - testing
     - =Noel= Thumbnail, testing
-- rzzirrah - images consultant
+    - rzzirrah - images consultant
 
     ### 15+ Languages
     - English, Français, Deutsch, Español, Italiano, Polski, 简体中文 , 한국어
