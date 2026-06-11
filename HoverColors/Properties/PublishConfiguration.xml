@@ -72,7 +72,7 @@ tags: Mochi's blue scrubber, Highlight, border color, remove blue, guidelines, d
 	<!--Link to the forum post where the mod can be discussed-->
 	<ForumLink Value="https://forum.paradoxplaza.com/forum/threads/mochis-hover-colors.1925898/" />
 	<!--Version of the mod-->
-	<ModVersion Value="0.9.0" />
+	<ModVersion Value="0.9.1" />
 	<!--Recommended version of the base game to use the mod-->
 	<GameVersion Value="1.5.*" />
 	<!--Dependency for the mod, can be set multiple times-->
@@ -81,12 +81,7 @@ tags: Mochi's blue scrubber, Highlight, border color, remove blue, guidelines, d
 	<RequiredDLC Value="" />
 	<!--Change log for new version. Single line or multi line. Supports minimal markdown subset-->
 <ChangeLog>
-- UI/UX improvements
-- added 3 Guide line color preset swatches to customize the new road tool (for circles with spacing lines and road overlay color).
-- clicking on Guideline icon button resets to vanilla colors all guidelines and road overlays (usually cyan).
-- updated translations.
-- District tool: added reset to vanilla.
-- main keybind changed to "J". Now have "J", ""K", and "L" hotkeys - change or remove these in HC Options menu.
+- Improve owner building outline color composition when sub buildng is selected.
 </ChangeLog>
 	<!--External link, can be set multiple times. supported types are "discord", "github", "youtube", "twitch", "x", "paypal", "patreon", "buymeacoffee", "kofi", "crowdin", "gitlab", "gofundme"-->
 	<ExternalLink Type="" Url="" />
