@@ -58,7 +58,7 @@ tags: Mochi's blue scrubber, Highlight, border color, remove blue, guidelines, d
 
 </LongDescription>
 	<!--Thumbnail-->
-	<Thumbnail Value="Properties/Thumbnail-building_cyan.jpg" />
+	<Thumbnail Value="Properties/Thumbnail-build_cyan.jpg" />
 	<!--Screenshot, can be set multiple times-->
     <Screenshot Value="Properties/12-image-before-after.jpg" />
 	<Screenshot Value="Properties/15-image-Options.jpg" />
@@ -66,6 +66,7 @@ tags: Mochi's blue scrubber, Highlight, border color, remove blue, guidelines, d
     <Screenshot Value="Properties/30-image-Guidelines.jpg" />
     <Screenshot Value="Properties/40-image-DistrictColorPicker.jpg" />
     <Screenshot Value="Properties/50-image-Districts.jpg" />
+    <Screenshot Value="Properties/60-image-Languages.jpg" />
 	<!--Tag, can be set multiple times-->
 	<Tag Value="" />
 	<!--Link to the forum post where the mod can be discussed-->
