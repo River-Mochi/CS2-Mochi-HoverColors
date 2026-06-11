@@ -442,10 +442,15 @@ namespace HoverColors.Systems
                     outer.a = outlineA;
                     inner = CapturedInnerColor;
                     break;
+
                 default:
-                    outer = new Color(r, g, b, outlineA);
-                    inner = new Color(r, g, b, fillA);
+                    outer = CapturedOuterColor;
+                    outer.a = outlineA;
+
+                    inner = CapturedInnerColor;
+                    inner.a = fillA;
                     break;
+
             }
 
             m_OutlineMaterial!.SetColor("_OuterColor", outer);
