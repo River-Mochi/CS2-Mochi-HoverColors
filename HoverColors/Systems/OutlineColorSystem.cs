@@ -487,6 +487,19 @@ namespace HoverColors.Systems
                 return ToolKind.Bulldoze;
             }
 
+            // River-Mochi selection tools (e.g. Road/Rail Speeds' SpeedLimitTool) own their own
+            // multi-segment selection and should stay as high-visibility as the road tools, so a
+            // low-visibility player hover preset can't hide what is currently selected. Matched by
+            // tool id, with the tool's namespace as a backup, so there is no hard reference to the
+            // other mod. Mapping to NetRoad means: Recommended/Vanilla mode -> high-vis vanilla
+            // cyan (the default), Custom mode -> the player's chosen color (power-user override).
+            string toolId = SafeToolId(tool);
+            if (string.Equals(toolId, "SpeedLimitTool", StringComparison.Ordinal)
+                || (tool.GetType().Namespace?.StartsWith("RoadRailSpeeds", StringComparison.Ordinal) ?? false))
+            {
+                return ToolKind.NetRoad;
+            }
+
             return ToolKind.None;
         }
 

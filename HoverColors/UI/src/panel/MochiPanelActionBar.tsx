@@ -88,7 +88,7 @@ export const MochiPanelActionBar = ({
     return (
         <div className={styles.actions}>
             <div className={styles.surfaceActions}>
-                <Tooltip tooltip={tt(text.tooltipSurfaceToggle)}>
+                <Tooltip tooltip={tt(text.tooltipSurfaceToggle)} direction="down">
                     <button
                         type="button"
                         className={`${styles.actionButton} ${styles.surfaceButton} ${surfaceToolAreasSuppressed ? styles.surfaceButtonActive : ""}`}
@@ -98,7 +98,7 @@ export const MochiPanelActionBar = ({
                     </button>
                 </Tooltip>
 
-                <Tooltip tooltip={tt(text.tooltipSpecializedIndustryToggle)}>
+                <Tooltip tooltip={tt(text.tooltipSpecializedIndustryToggle)} direction="down">
                     <button
                         type="button"
                         className={`${styles.actionButton} ${styles.surfaceButton} ${styles.buttonGap} ${specializedIndustryAreasSuppressed ? styles.surfaceButtonActive : ""}`}
@@ -108,7 +108,7 @@ export const MochiPanelActionBar = ({
                     </button>
                 </Tooltip>
 
-                <Tooltip tooltip={tt(text.tooltipDistrictColors)}>
+                <Tooltip tooltip={tt(text.tooltipDistrictColors)} direction="down">
                     <div
                         ref={districtPickerRef}
                         className={`${styles.actionButton} ${styles.surfaceButton} ${styles.buttonGap} ${styles.districtPickerButton} ${districtMenuOpen ? styles.districtPickerButtonActive : ""}`}
@@ -177,7 +177,7 @@ export const MochiPanelActionBar = ({
                             {text.districtMenuAllDistricts}
                         </span>
 
-                        <Tooltip tooltip={tt(text.tooltipResetDistrictColors)}>
+                        <Tooltip tooltip={tt(text.tooltipResetDistrictColors)} direction="right">
                             <button
                                 type="button"
                                 className={styles.districtMenuReset}

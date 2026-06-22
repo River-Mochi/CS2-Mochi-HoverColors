@@ -3,6 +3,7 @@
 
 import React from "react";
 import { Tooltip } from "cs2/ui";
+import type { BalloonDirection } from "cs2/ui";
 import { Color } from "cs2/bindings";
 import styles from "../MochiColorPickerPanel.module.scss";
 
@@ -13,6 +14,7 @@ type PresetSlotButtonProps = {
     holdActive: boolean;
     holdProgress: number;
     tooltip?: React.ReactNode;
+    tooltipDirection?: BalloonDirection;
     marginLeft: string;
     numberColor: string;
     presetPreviewStyle: (color: Color) => React.CSSProperties;
@@ -30,6 +32,7 @@ export const PresetSlotButton = ({
     holdActive,
     holdProgress,
     tooltip,
+    tooltipDirection,
     marginLeft,
     numberColor,
     presetPreviewStyle,
@@ -39,7 +42,7 @@ export const PresetSlotButton = ({
     onMouseUp,
     onMouseLeave,
 }: PresetSlotButtonProps) => (
-    <Tooltip tooltip={tooltip}>
+    <Tooltip tooltip={tooltip} direction={tooltipDirection}>
         <button
             type="button"
             className={`${styles.presetSlot} ${active ? styles.presetSlotActive : ""}`}
@@ -67,11 +70,12 @@ export const PresetSlotButton = ({
 type DragGripProps = {
     active: boolean;
     tooltip?: React.ReactNode;
+    tooltipDirection?: BalloonDirection;
     onMouseDown: (event: React.MouseEvent<HTMLDivElement>) => void;
 };
 
-export const DragGrip = ({ active, tooltip, onMouseDown }: DragGripProps) => (
-    <Tooltip tooltip={tooltip}>
+export const DragGrip = ({ active, tooltip, tooltipDirection, onMouseDown }: DragGripProps) => (
+    <Tooltip tooltip={tooltip} direction={tooltipDirection}>
         <div
             className={`${styles.dragGrip} ${active ? styles.dragGripActive : ""}`}
             onMouseDown={onMouseDown}

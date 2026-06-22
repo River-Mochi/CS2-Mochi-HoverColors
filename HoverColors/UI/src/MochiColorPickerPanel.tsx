@@ -388,7 +388,7 @@ export const MochiColorPickerPanel = () => {
             <div ref={panelElementRef} className={panelFrameClass}>
                 <div className={panelContentClass}>
                     <div className={styles.titleBar}>
-                        <Tooltip tooltip={text.tooltipInfo}>
+                        <Tooltip tooltip={text.tooltipInfo} direction="left">
                             <button
                                 type="button"
                                 className={`${styles.infoButton} ${!tooltipsEnabled ? styles.infoButtonActive : ""}`}
@@ -398,7 +398,7 @@ export const MochiColorPickerPanel = () => {
                             </button>
                         </Tooltip>
 
-                        <Tooltip tooltip={tt(text.tooltipDraggable)}>
+                        <Tooltip tooltip={tt(text.tooltipDraggable)} direction="up">
                             <div
                                 className={`${styles.titleDragHandle} ${panelDragging ? styles.titleDragHandleActive : ""}`}
                                 onMouseDown={handlePanelDragStart}
@@ -407,7 +407,7 @@ export const MochiColorPickerPanel = () => {
                             </div>
                         </Tooltip>
 
-                        <Tooltip tooltip={tt(text.tooltipClose)}>
+                        <Tooltip tooltip={tt(text.tooltipClose)} direction="up">
                             <Button
                                 className={closeButtonClass}
                                 variant="icon"
@@ -524,6 +524,7 @@ export const MochiColorPickerPanel = () => {
                     <DragGrip
                         active={panelDragging}
                         tooltip={tt(text.tooltipDraggable)}
+                        tooltipDirection="down"
                         onMouseDown={handlePanelDragStart}
                     />
                 </div>
