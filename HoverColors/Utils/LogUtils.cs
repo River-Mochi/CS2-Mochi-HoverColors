@@ -7,7 +7,7 @@
 // ================= </copyright> ======================
 
 // File: Utils/LogUtils.cs
-// Version: 0.6.6 based on River-Mochi shared CS2 utilities.
+// Version: 0.6.8 based on River-Mochi shared CS2 utilities.
 // Purpose: popup-safe direct-file logging helpers for CS2 mods.
 // Why: routine Info/Warn/Error are written with .NET FileStream/StreamWriter
 //   instead of sending every message through Colossal's logger write path, which
@@ -15,7 +15,13 @@
 //
 // Setup in Mod.cs:
 //   public static readonly ILog s_Log =
-//       LogManager.GetLogger(ModId).SetShowsErrorsInUI(false);
+//       LogManager.GetLogger(ModId).SetShowsErrorsInUI(
+//   #if DEBUG
+//           true
+//   #else
+//           false
+//   #endif
+//       );
 //
 //   public void OnLoad(UpdateSystem updateSystem)
 //   {
@@ -32,6 +38,8 @@
 // Simple string overloads are easiest to read.
 // Func<string> overloads are lazy: the message is built only after the log level check.
 // Use lazy messages in hot paths such as OnUpdate, rendering, tool hover, or entity loops.
+// Note: Colossal.Logging.Level also defines Critical/Fatal/Emergency/Disabled/All; this helper
+// only wraps the levels CS2 mods actually use (Info/Warn/Error/Debug/Trace/Verbose).
 
 namespace CS2Shared.RiverMochi
 {
@@ -444,10 +452,10 @@ namespace CS2Shared.RiverMochi
             { return "ERROR"; }
 
             if (level == Level.Debug)
-            {    return "DEBUG"; }
+            { return "DEBUG"; }
 
             if (level == Level.Trace)
-            {    return "TRACE"; }
+            { return "TRACE"; }
 
             if (level == Level.Verbose)
             { return "VERBOSE"; }
