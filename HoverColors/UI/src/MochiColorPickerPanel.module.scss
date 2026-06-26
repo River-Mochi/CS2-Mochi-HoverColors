@@ -174,10 +174,22 @@
     margin-top: -2rem;
 }
 
-// Transparent cyan means tooltips are OFF.
-.infoButtonActive {
-    background-color: rgba(30, 131, 170, 0.55) !important;
-    border-color: rgba(84, 215, 255, 0.42) !important;
+// High-visibility yellow means panel tooltips are OFF in Options.
+.infoButtonTooltipsOff {
+    background-color: rgba(160, 118, 20, 0.34) !important;
+    border-color: rgba(255, 221, 84, 0.78) !important;
+    box-shadow: 0 0 8rem rgba(255, 221, 84, 0.30) !important;
+
+    .infoIcon {
+        opacity: 1;
+        filter: brightness(1.35) sepia(1) hue-rotate(2deg) saturate(8) drop-shadow(0 0 4rem rgba(255, 221, 84, 0.72));
+    }
+
+    &:hover {
+        background-color: rgba(255, 221, 84, 0.18) !important;
+        border-color: rgba(255, 255, 255, 0.96) !important;
+        box-shadow: 0 0 12rem rgba(255, 221, 84, 0.42) !important;
+    }
 }
 
 .infoIcon {
@@ -185,7 +197,7 @@
     height: 24rem;
     display: block;
     pointer-events: none;
-    transition: opacity 120ms ease-out, transform 120ms ease-out;
+    transition: opacity 120ms ease-out, transform 120ms ease-out, filter 120ms ease-out;
 }
 
 .infoButton:hover .infoIcon {
