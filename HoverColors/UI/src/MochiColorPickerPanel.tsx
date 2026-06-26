@@ -128,6 +128,11 @@ export const MochiColorPickerPanel = () => {
         [tooltipsEnabled],
     );
 
+    const ttAlways = React.useCallback(
+        (s: string): React.ReactElement => <FormattedParagraphs>{s.split("\n")}</FormattedParagraphs>,
+        [],
+    );
+
     const [outline, setOutline] = React.useState<Color>(boundOutline);
     const [ownerColor, setOwnerColor] = React.useState<Color>(boundOwner);
     const [fillA, setFillA] = React.useState<number>(boundFillA);
@@ -351,6 +356,11 @@ export const MochiColorPickerPanel = () => {
     const handleToggleSurfaceToolAreas = () => trigger(CHANNEL, "ToggleSurfaceToolAreas");
     const handleToggleSpecializedIndustryAreas = () => trigger(CHANNEL, "ToggleSpecializedIndustryAreas");
     const handleTogglePresetDefaults = () => trigger(CHANNEL, "TogglePresetDefaults");
+    const handleInfoButtonClick = () => {
+        if (!tooltipsEnabled) {
+            trigger(CHANNEL, "SetPanelTooltipsEnabled", true);
+        }
+    };
 
     const updatePickerDirection = React.useCallback((element: HTMLElement | null, setDirection: React.Dispatch<React.SetStateAction<"up" | "down">>) => {
         if (element == null) {
@@ -392,11 +402,12 @@ export const MochiColorPickerPanel = () => {
             <div ref={panelElementRef} className={panelFrameClass}>
                 <div className={panelContentClass}>
                     <div className={styles.titleBar}>
-                        <SideTooltip tooltip={text.tooltipInfo} side="left">
+                        <SideTooltip tooltip={ttAlways(text.tooltipInfo)} side="above">
                             <button
                                 type="button"
-                                className={`${styles.infoButton} ${!tooltipsEnabled ? styles.infoButtonActive : ""}`}
-                                onClick={() => trigger(CHANNEL, "SetPanelTooltipsEnabled", !tooltipsEnabled)}
+                                className={`${styles.infoButton} ${!tooltipsEnabled ? styles.infoButtonTooltipsOff : ""}`}
+                                onClick={handleInfoButtonClick}
+                                aria-pressed={!tooltipsEnabled}
                             >
                                 <img src={infoIconSrc} className={`${styles.infoIcon} ${styles.idleIcon}`} alt="" />
                             </button>
