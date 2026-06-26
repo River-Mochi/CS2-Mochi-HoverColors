@@ -180,6 +180,8 @@ export const MochiPanelControlRows = ({
         [useDarkerPanel],
     );
 
+    const outlineSwatchActive = !preset1Active && !preset2Active;
+
     return (
         <div className={styles.body}>
             {/* Outline row: icon resets to vanilla; swatch edits color/alpha; slots apply/save presets. */}
@@ -199,7 +201,7 @@ export const MochiPanelControlRows = ({
                         <SideTooltip tooltip={tt(text.tooltipOutlineSwatch)} side="right">
                             <div
                                 ref={outlineSwatchRef}
-                                className={`${styles.outlineFieldShell} ${swatchHovered ? styles.outlineFieldShellHovered : ""}`}
+                                className={`${styles.outlineFieldShell} ${swatchHovered ? styles.outlineFieldShellHovered : ""} ${outlineSwatchActive ? styles.outlineFieldShellActive : ""}`}
                                 onMouseOver={() => {
                                     if (!swatchHovered) {
                                         setSwatchHovered(true);
@@ -230,6 +232,7 @@ export const MochiPanelControlRows = ({
                                     onOpenPicker={updateColorPickerDirection}
                                 />
                                 <span className={styles.outlineFieldHoverRing} aria-hidden="true" />
+                                <span className={styles.outlineFieldActiveDot} aria-hidden="true" />
                             </div>
                         </SideTooltip>
 
