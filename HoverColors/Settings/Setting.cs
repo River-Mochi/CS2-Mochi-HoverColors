@@ -9,7 +9,7 @@
 // File: Settings/Setting.cs
 // Purpose: Defines Hover Colors settings, persistent storage, and the Options UI surface.
 // Layout: 2 tabs (Actions, About) following CityWatchdog/EasyZoning convention.
-// Note: the in-city panel settings are intentionally NOT decorated for Options UI — they are
+// Note: the in-city panel color settings are intentionally NOT decorated for Options UI — they are
 // persisted here, read by cs2/api bindings, and applied by Systems/HoverColorsUISystem.cs.
 
 namespace HoverColors.Settings
@@ -247,6 +247,7 @@ namespace HoverColors.Settings
 
         [SettingsUIHidden]
         public float GuidelineBackupPreviewA { get; set; }
+
         [SettingsUIHidden]
         public int GuidelineBackupDashedColorPreset { get; set; }
 
@@ -261,23 +262,6 @@ namespace HoverColors.Settings
 
         [SettingsUIHidden]
         public int GuidelineBackupOpacityPercent { get; set; }
-        // In-city info button preference. Hidden from Options UI; persisted here so
-        // "tooltips off" survives closing/reopening the panel and game restarts.
-        [SettingsUIHidden]
-        public bool PanelTooltipsEnabled { get; set; }
-
-        // Hidden in-city preference for the Surface tool button/hotkey.
-        // Default ON because creators mainly use this mod to see layered surfaces clearly.
-        [SettingsUIHidden]
-        public bool SurfaceToolAreasSuppressed { get; set; }
-
-        // Hidden in-city preference for Specialized Industry area fill previews.
-        // This is AreaTypeMask.Lots, so it must be handled with Surface in one system.
-        [SettingsUIHidden]
-        public bool SpecializedIndustryAreasSuppressed { get; set; }
-
-        [SettingsUIHidden]
-        public bool SpecializedIndustryAreasSuppressionInitialized { get; set; }
 
         // -----------------------------------------------------------------------
         // Actions tab — Tool color behavior
@@ -298,12 +282,17 @@ namespace HoverColors.Settings
         public bool UseCustomColorsForNetLanes { get; set; }
 
         // -----------------------------------------------------------------------
-        // Actions tab — Panel readability
+        // Actions tab — Panel readability and help
         // -----------------------------------------------------------------------
+        // PanelTooltipsEnabled is player-facing now so new players do not accidentally
+        // lose tooltip help from a title-bar button. The city info icon can only turn it back ON.
+
+        [SettingsUISection(Actions, kPanel)]
+        public bool PanelTooltipsEnabled { get; set; }
+
         // User-facing label is "Darker panel". LegacyUI's extra transparency exposed
         // the need for this, but Modern UI players can use it too if they prefer
         // stronger panel contrast.
-
         [SettingsUISection(Actions, kPanel)]
         public bool UseDarkerPanel { get; set; }
 
