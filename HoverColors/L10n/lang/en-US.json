@@ -2,7 +2,7 @@
   "HoverColors.UI.Title": "Hover Colors",
   "HoverColors.UI.TopLeft.Tooltip": "Hover Colors - highlights + opacity",
   "HoverColors.UI.Aria.ClosePanel": "Close panel",
-  "HoverColors.UI.Tooltip.Info": "Turn tooltips ON or OFF (this panel).",
+  "HoverColors.UI.Tooltip.Info": "See Options menu to turn off tooltips.",
   "HoverColors.UI.Tooltip.Draggable": "Draggable",
   "HoverColors.UI.Tooltip.Close": "Close panel. Default hotkey: J.\nGame top-left icon also toggles it.",
   "HoverColors.UI.Tooltip.ResetOutline": "OUTLINE - click to reset color + alpha (opacity) to game defaults.",
