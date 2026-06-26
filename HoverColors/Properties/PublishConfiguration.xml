@@ -1,4 +1,4 @@
-﻿<Publish>
+<Publish>
 	<!--Id must be set in order to update existed mod. it is not required for publishing mod for the first time-->
 	<ModId Value="146044" />
 	<!--Name of the mod to display to players-->
@@ -60,9 +60,10 @@ tags: Mochi's blue scrubber, Highlight, border color, remove blue, guidelines, d
 
 </LongDescription>
 	<!--Thumbnail-->
-	<Thumbnail Value="Properties/Thumbnail-building_cyan.jpg" />
+	<Thumbnail Value="Properties/Thumbnail-half_building_cyan.jpg" />
 	<!--Screenshot, can be set multiple times-->
-    <Screenshot Value="Properties/10-image-before-after.jpg" />
+    <Screenshot Value="Properties/01-image-ReleaseTheBlueAlpha.jpg" />
+    <Screenshot Value="Properties/05-image-Before-after-DE-school.jpg" />
     <Screenshot Value="Properties/15-image-ColorPicker.jpg" />
 	<Screenshot Value="Properties/20-image-Options.jpg" />
     <Screenshot Value="Properties/30-image-Guidelines.jpg" />
@@ -74,7 +75,7 @@ tags: Mochi's blue scrubber, Highlight, border color, remove blue, guidelines, d
 	<!--Link to the forum post where the mod can be discussed-->
 	<ForumLink Value="https://forum.paradoxplaza.com/forum/threads/mochis-hover-colors.1925898/" />
 	<!--Version of the mod-->
-	<ModVersion Value="0.9.1" />
+	<ModVersion Value="0.9.2" />
 	<!--Recommended version of the base game to use the mod-->
 	<GameVersion Value="1.5.*" />
 	<!--Dependency for the mod, can be set multiple times-->
@@ -83,7 +84,8 @@ tags: Mochi's blue scrubber, Highlight, border color, remove blue, guidelines, d
 	<RequiredDLC Value="" />
 	<!--Change log for new version. Single line or multi line. Supports minimal markdown subset-->
 <ChangeLog>
-- Improve owner building outline color composition when sub buildng is selected.
+- Update for game patch 1.6
+- Detect if Adjust Road Speed limit - RoadRailSpeed is installed and give highlight colors.
 </ChangeLog>
 	<!--External link, can be set multiple times. supported types are "discord", "github", "youtube", "twitch", "x", "paypal", "patreon", "buymeacoffee", "kofi", "crowdin", "gitlab", "gofundme"-->
 	<ExternalLink Type="" Url="" />
