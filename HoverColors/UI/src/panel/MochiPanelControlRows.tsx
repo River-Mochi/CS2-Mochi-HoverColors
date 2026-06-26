@@ -2,7 +2,7 @@
 // Purpose: Visual rows for Outline, Fill, and Guidelines. Logic/state stays in MochiColorPickerPanel.tsx.
 
 import React from "react";
-import { Tooltip } from "cs2/ui";
+import { SideTooltip } from "./SideTooltip";
 import { Color } from "cs2/bindings";
 import { PresetSlotButton } from "./MochiPanelPieces";
 import {
@@ -184,7 +184,7 @@ export const MochiPanelControlRows = ({
         <div className={styles.body}>
             {/* Outline row: icon resets to vanilla; swatch edits color/alpha; slots apply/save presets. */}
             <div className={`${styles.controlRow} ${styles.outlineRow}`}>
-                <Tooltip tooltip={tt(text.tooltipResetOutline)} direction="left">
+                <SideTooltip tooltip={tt(text.tooltipResetOutline)} side="left">
                     <button
                         type="button"
                         className={`${styles.controlIconButton} ${vanillaOutlineActive ? styles.vanillaActiveButton : ""}`}
@@ -192,11 +192,11 @@ export const MochiPanelControlRows = ({
                     >
                         <img src={outlineIconSrc} className={`${styles.controlIcon} ${styles.idleIcon}`} alt="" />
                     </button>
-                </Tooltip>
+                </SideTooltip>
 
                 <div className={`${styles.controlBody} ${styles.outlineControlBody}`}>
                     <div className={styles.outlineLeft}>
-                        <Tooltip tooltip={tt(text.tooltipOutlineSwatch)} direction="right">
+                        <SideTooltip tooltip={tt(text.tooltipOutlineSwatch)} side="right">
                             <div
                                 ref={outlineSwatchRef}
                                 className={`${styles.outlineFieldShell} ${swatchHovered ? styles.outlineFieldShellHovered : ""}`}
@@ -231,9 +231,9 @@ export const MochiPanelControlRows = ({
                                 />
                                 <span className={styles.outlineFieldHoverRing} aria-hidden="true" />
                             </div>
-                        </Tooltip>
+                        </SideTooltip>
 
-                        <Tooltip tooltip={tt(text.tooltipOwnerSwatch)} direction="right">
+                        <SideTooltip tooltip={tt(text.tooltipOwnerSwatch)} side="right">
                             <div
                                 ref={ownerSwatchRef}
                                 className={`${styles.ownerFieldShell} ${ownerSwatchHovered ? styles.ownerFieldShellHovered : ""}`}
@@ -275,7 +275,7 @@ export const MochiPanelControlRows = ({
                                     aria-hidden="true"
                                 />
                             </div>
-                        </Tooltip>
+                        </SideTooltip>
 
                         <PresetSlotButton
                             slot={1}
@@ -284,7 +284,7 @@ export const MochiPanelControlRows = ({
                             holdActive={holdSlot === 1}
                             holdProgress={holdProgress}
                             tooltip={tt(text.tooltipPreset1)}
-                            tooltipDirection="right"
+                            tooltipSide="right"
                             marginLeft="10rem"
                             numberColor={presetNumberColor(preset1Active, preset1Hovered)}
                             presetPreviewStyle={presetPreviewStyle}
@@ -305,7 +305,7 @@ export const MochiPanelControlRows = ({
                             holdActive={holdSlot === 2}
                             holdProgress={holdProgress}
                             tooltip={tt(text.tooltipPreset2)}
-                            tooltipDirection="right"
+                            tooltipSide="right"
                             marginLeft="5rem"
                             numberColor={presetNumberColor(preset2Active, preset2Hovered)}
                             presetPreviewStyle={presetPreviewStyle}
@@ -321,7 +321,7 @@ export const MochiPanelControlRows = ({
                     </div>
 
                     <div className={styles.outlineRight}>
-                        <Tooltip tooltip={tt(text.tooltipResetPresets)} direction="right">
+                        <SideTooltip tooltip={tt(text.tooltipResetPresets)} side="right">
                             <button
                                 type="button"
                                 className={styles.presetResetBare}
@@ -329,20 +329,20 @@ export const MochiPanelControlRows = ({
                             >
                                 <img src={resetIconSrc} className={styles.resetIcon} alt="" />
                             </button>
-                        </Tooltip>
+                        </SideTooltip>
                     </div>
                 </div>
             </div>
 
             {/* Fill row: icon resets to 0%, slider controls inner fill opacity. */}
             <div className={styles.controlRow}>
-                <Tooltip tooltip={tt(text.tooltipResetFill)} direction="left">
+                <SideTooltip tooltip={tt(text.tooltipResetFill)} side="left">
                     <button type="button" className={styles.controlIconButton} onClick={handleResetFill}>
                         <img src={fillIconSrc} className={`${styles.controlIcon} ${styles.idleIcon}`} alt="" />
                     </button>
-                </Tooltip>
+                </SideTooltip>
 
-                <Tooltip tooltip={tt(text.tooltipFillOpacity)} direction="right">
+                <SideTooltip tooltip={tt(text.tooltipFillOpacity)} side="right">
                     <div className={styles.controlBody}>
                         <div className={styles.sliderRow}>
                             <Slider
@@ -359,12 +359,12 @@ export const MochiPanelControlRows = ({
                             </div>
                         </div>
                     </div>
-                </Tooltip>
+                </SideTooltip>
             </div>
 
             {/* Guidelines row: two compact swatches plus dashed guideline opacity. */}
             <div className={styles.controlRow}>
-                <Tooltip tooltip={tt(text.tooltipResetGuidelines)} direction="left">
+                <SideTooltip tooltip={tt(text.tooltipResetGuidelines)} side="left">
                     <button
                         type="button"
                         className={styles.controlIconButton}
@@ -372,11 +372,11 @@ export const MochiPanelControlRows = ({
                     >
                         <img src={guidelinesIconSrc} className={`${styles.controlIcon} ${styles.idleIcon} ${styles.guidelinesIcon}`} alt="" />
                     </button>
-                </Tooltip>
+                </SideTooltip>
 
                 <div className={`${styles.controlBody} ${styles.guidelineControlBody}`}>
                     <div className={styles.guidelineSwatches}>
-                        <Tooltip tooltip={tt(text.tooltipGuidelinesColor)} direction="right">
+                        <SideTooltip tooltip={tt(text.tooltipGuidelinesColor)} side="right">
                             <div
                                 ref={guidelineLinesPickerRef}
                                 className={`${styles.guidelineColorShell} ${guidelineLinesHovered ? styles.guidelineColorShellHovered : ""}`}
@@ -417,9 +417,9 @@ export const MochiPanelControlRows = ({
                                     aria-hidden="true"
                                 />
                             </div>
-                        </Tooltip>
+                        </SideTooltip>
 
-                        <Tooltip tooltip={tt(text.tooltipGuidelinesPreviewColor)} direction="right">
+                        <SideTooltip tooltip={tt(text.tooltipGuidelinesPreviewColor)} side="right">
                             <div
                                 ref={guidelinePreviewPickerRef}
                                 className={`${styles.guidelineColorShell} ${styles.guidelinePreviewColorShell} ${guidelinePreviewHovered ? styles.guidelineColorShellHovered : ""}`}
@@ -460,9 +460,9 @@ export const MochiPanelControlRows = ({
                                     aria-hidden="true"
                                 />
                             </div>
-                        </Tooltip>
+                        </SideTooltip>
 
-                        <Tooltip tooltip={tt(text.tooltipGuidelinesDashedColor)} direction="right">
+                        <SideTooltip tooltip={tt(text.tooltipGuidelinesDashedColor)} side="right">
                             <div
                                 ref={guidelineDashedPickerRef}
                                 className={`${styles.guidelineColorShell} ${styles.guidelineDashedColorShell} ${guidelineDashedHovered ? styles.guidelineColorShellHovered : ""}`}
@@ -504,10 +504,10 @@ export const MochiPanelControlRows = ({
                                     aria-hidden="true"
                                 />
                             </div>
-                        </Tooltip>
+                        </SideTooltip>
                     </div>
 
-                    <Tooltip tooltip={tt(text.tooltipGuidelinesOpacity)} direction="right">
+                    <SideTooltip tooltip={tt(text.tooltipGuidelinesOpacity)} side="right">
                         <div className={`${styles.sliderRow} ${styles.guidelineSliderRow}`}>
                             <Slider
                                 focusKey={focusDisabled}
@@ -522,7 +522,7 @@ export const MochiPanelControlRows = ({
                                 {`${guidelineOpacity}%`}
                             </div>
                         </div>
-                    </Tooltip>
+                    </SideTooltip>
                 </div>
             </div>
         </div>

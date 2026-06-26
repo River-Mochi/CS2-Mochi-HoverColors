@@ -1,10 +1,14 @@
-// Copyright (c) River Mochi. See LICENSE file in the project root for full license information.
-// <copyright file="ShellOpen.cs" company="River-Mochi. MIT License">
-// </copyright>
+﻿// <copyright file="ShellOpen.cs" company="River-Mochi">
+// Copyright (c) 2026 River-Mochi. All rights reserved.
+// Licensed under the MIT License. You may not use this file except in compliance with this License.
+// See LICENSE file in the project root for full license information.
+// This notice and the MIT License notice must be kept with
+// all copies or substantial portions of this code.
+// ================= </copyright> ======================
 
 // File: Utils/ShellOpen.cs
-// Version: 0.3.0
-// Purpose: file/folder opening helpers for CS2 Options UI buttons.
+// Version: 0.3.1
+// Purpose: File/folder opening helpers for CS2 Options UI buttons.
 // Based on River-Mochi shared CS2 utilities.
 
 namespace CS2Shared.RiverMochi
@@ -28,7 +32,9 @@ namespace CS2Shared.RiverMochi
             if (!string.IsNullOrWhiteSpace(modId))
             {
                 s_ModId = Path.GetFileNameWithoutExtension(modId.Trim());
-                LogUtils.Configure(s_ModId);
+
+                // Also configures LogUtils default logger, so short LogUtils.Info(...) calls work.
+                LogUtils.Configure(s_ModId, log);
             }
 
             if (!string.IsNullOrWhiteSpace(modTag))
@@ -124,7 +130,12 @@ namespace CS2Shared.RiverMochi
                     return;
                 }
 
-                TryOpenWithUnityFileUrl(fullPath, isFolder);
+                if (TryOpenWithUnityFileUrl(fullPath, isFolder))
+                {
+                    return;
+                }
+
+                LogInfo(logLabel, "could not open path: " + fullPath);
             }
             catch (Exception ex)
             {
@@ -202,9 +213,8 @@ namespace CS2Shared.RiverMochi
 
                 return true;
             }
-            catch (Exception ex)
+            catch
             {
-                LogWarn("ShellOpen", "OS shell failed: " + ex.GetType().Name + ": " + ex.Message, ex);
                 return false;
             }
         }

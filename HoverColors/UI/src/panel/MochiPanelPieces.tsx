@@ -2,9 +2,8 @@
 // Purpose: Small reusable pieces for MochiColorPickerPanel.tsx.
 
 import React from "react";
-import { Tooltip } from "cs2/ui";
-import type { BalloonDirection } from "cs2/ui";
 import { Color } from "cs2/bindings";
+import { SideTooltip, type SideTooltipSide } from "./SideTooltip";
 import styles from "../MochiColorPickerPanel.module.scss";
 
 type PresetSlotButtonProps = {
@@ -14,7 +13,7 @@ type PresetSlotButtonProps = {
     holdActive: boolean;
     holdProgress: number;
     tooltip?: React.ReactNode;
-    tooltipDirection?: BalloonDirection;
+    tooltipSide?: SideTooltipSide;
     marginLeft: string;
     numberColor: string;
     presetPreviewStyle: (color: Color) => React.CSSProperties;
@@ -32,7 +31,7 @@ export const PresetSlotButton = ({
     holdActive,
     holdProgress,
     tooltip,
-    tooltipDirection,
+    tooltipSide,
     marginLeft,
     numberColor,
     presetPreviewStyle,
@@ -42,7 +41,7 @@ export const PresetSlotButton = ({
     onMouseUp,
     onMouseLeave,
 }: PresetSlotButtonProps) => (
-    <Tooltip tooltip={tooltip} direction={tooltipDirection}>
+    <SideTooltip tooltip={tooltip} side={tooltipSide ?? "right"}>
         <button
             type="button"
             className={`${styles.presetSlot} ${active ? styles.presetSlotActive : ""}`}
@@ -64,21 +63,21 @@ export const PresetSlotButton = ({
             <span className={styles.presetHoverRing} aria-hidden="true" />
             <span className={styles.presetActiveRing} aria-hidden="true" />
         </button>
-    </Tooltip>
+    </SideTooltip>
 );
 
 type DragGripProps = {
     active: boolean;
     tooltip?: React.ReactNode;
-    tooltipDirection?: BalloonDirection;
+    tooltipSide?: SideTooltipSide;
     onMouseDown: (event: React.MouseEvent<HTMLDivElement>) => void;
 };
 
-export const DragGrip = ({ active, tooltip, tooltipDirection, onMouseDown }: DragGripProps) => (
-    <Tooltip tooltip={tooltip} direction={tooltipDirection}>
+export const DragGrip = ({ active, tooltip, tooltipSide, onMouseDown }: DragGripProps) => (
+    <SideTooltip tooltip={tooltip} side={tooltipSide ?? "below"}>
         <div
             className={`${styles.dragGrip} ${active ? styles.dragGripActive : ""}`}
             onMouseDown={onMouseDown}
         />
-    </Tooltip>
+    </SideTooltip>
 );

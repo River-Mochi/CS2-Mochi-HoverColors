@@ -3,7 +3,7 @@
 // Layout: title bar + color control rows + bottom action bar.
 
 import React from "react";
-import { Button, FormattedParagraphs, Tooltip } from "cs2/ui";
+import { Button, FormattedParagraphs } from "cs2/ui";
 import { Color } from "cs2/bindings";
 import { trigger, useValue } from "cs2/api";
 import { VanillaComponentResolver } from "./utils/vanilla/VanillaComponentResolver";
@@ -59,6 +59,7 @@ import { useDistrictHold } from "./panel/useDistrictHold";
 import { useDistrictToolPanel } from "./panel/useDistrictToolPanel";
 import { useMochiPanelText } from "./panel/useMochiPanelText";
 import { usePanelDrag } from "./panel/usePanelDrag";
+import { SideTooltip, SideTooltipProvider } from "./panel/SideTooltip";
 import { usePresetHold } from "./panel/usePresetHold";
 import infoIconSrc from "../images/AdvisorInfoViewWhite.svg";
 import closeIconSrc from "../images/Close.svg";
@@ -160,6 +161,7 @@ export const MochiColorPickerPanel = () => {
     const [preset1Hovered, setPreset1Hovered] = React.useState(false);
     const [preset2Hovered, setPreset2Hovered] = React.useState(false);
 
+    const panelAnchorRef = React.useRef<HTMLDivElement>(null);
     const outlineSwatchRef = React.useRef<HTMLDivElement>(null);
     const ownerSwatchRef = React.useRef<HTMLDivElement>(null);
     const guidelineLinesPickerRef = React.useRef<HTMLDivElement>(null);
@@ -382,13 +384,15 @@ export const MochiColorPickerPanel = () => {
 
     return (
         <div
+            ref={panelAnchorRef}
             className={styles.panelAnchor}
             style={{ transform: `translate(${panelOffset.x}px, ${panelOffset.y}px)` }}
         >
+            <SideTooltipProvider anchorRef={panelAnchorRef} panelRef={panelElementRef}>
             <div ref={panelElementRef} className={panelFrameClass}>
                 <div className={panelContentClass}>
                     <div className={styles.titleBar}>
-                        <Tooltip tooltip={text.tooltipInfo} direction="left">
+                        <SideTooltip tooltip={text.tooltipInfo} side="left">
                             <button
                                 type="button"
                                 className={`${styles.infoButton} ${!tooltipsEnabled ? styles.infoButtonActive : ""}`}
@@ -396,18 +400,18 @@ export const MochiColorPickerPanel = () => {
                             >
                                 <img src={infoIconSrc} className={`${styles.infoIcon} ${styles.idleIcon}`} alt="" />
                             </button>
-                        </Tooltip>
+                        </SideTooltip>
 
-                        <Tooltip tooltip={tt(text.tooltipDraggable)} direction="up">
+                        <SideTooltip tooltip={tt(text.tooltipDraggable)} side="right">
                             <div
                                 className={`${styles.titleDragHandle} ${panelDragging ? styles.titleDragHandleActive : ""}`}
                                 onMouseDown={handlePanelDragStart}
                             >
                                 <span className={styles.titleText}>{text.title}</span>
                             </div>
-                        </Tooltip>
+                        </SideTooltip>
 
-                        <Tooltip tooltip={tt(text.tooltipClose)} direction="up">
+                        <SideTooltip tooltip={tt(text.tooltipClose)} side="right">
                             <Button
                                 className={closeButtonClass}
                                 variant="icon"
@@ -417,7 +421,7 @@ export const MochiColorPickerPanel = () => {
                             >
                                 <img src={closeIconSrc} className={styles.closeIcon} alt="" />
                             </Button>
-                        </Tooltip>
+                        </SideTooltip>
                     </div>
 
                     <MochiPanelControlRows
@@ -524,11 +528,12 @@ export const MochiColorPickerPanel = () => {
                     <DragGrip
                         active={panelDragging}
                         tooltip={tt(text.tooltipDraggable)}
-                        tooltipDirection="down"
+                        tooltipSide="below"
                         onMouseDown={handlePanelDragStart}
                     />
                 </div>
             </div>
+            </SideTooltipProvider>
         </div>
     );
 };

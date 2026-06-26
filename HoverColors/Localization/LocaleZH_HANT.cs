@@ -1,3 +1,11 @@
+// <copyright file="LocaleZH_HANT.cs" company="River-Mochi">
+// Copyright (c) 2026 River-Mochi. All rights reserved.
+// Licensed under the MIT License. You may not use this file except in compliance with this License.
+// See LICENSE file in the project root for full license information.
+// This notice and the MIT License notice must be kept with
+// all copies or substantial portions of this code.
+// ================= </copyright> ======================
+
 // File: Localization/LocaleZH_HANT.cs
 // Purpose: Traditional Chinese (zh-HANT) strings for the Options Menu.
 // Strings for the in-city cohtml panel live separately in L10n/lang/zh-HANT.json.

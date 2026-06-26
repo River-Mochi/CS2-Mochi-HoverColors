@@ -2,7 +2,7 @@
 // Purpose: Bottom action bar: Surface, Specialized Industry, and District color menu.
 
 import React from "react";
-import { Tooltip } from "cs2/ui";
+import { SideTooltip } from "./SideTooltip";
 import { Color } from "cs2/bindings";
 import { compactSwatchStyle, holdBarStyle } from "./MochiPanelColorUtils";
 import { useMochiPanelText } from "./useMochiPanelText";
@@ -88,7 +88,7 @@ export const MochiPanelActionBar = ({
     return (
         <div className={styles.actions}>
             <div className={styles.surfaceActions}>
-                <Tooltip tooltip={tt(text.tooltipSurfaceToggle)} direction="down">
+                <SideTooltip tooltip={tt(text.tooltipSurfaceToggle)} side="below">
                     <button
                         type="button"
                         className={`${styles.actionButton} ${styles.surfaceButton} ${surfaceToolAreasSuppressed ? styles.surfaceButtonActive : ""}`}
@@ -96,9 +96,9 @@ export const MochiPanelActionBar = ({
                     >
                         <img src={lotToolIconSrc} className={`${styles.controlIcon} ${styles.idleIcon}`} alt="" />
                     </button>
-                </Tooltip>
+                </SideTooltip>
 
-                <Tooltip tooltip={tt(text.tooltipSpecializedIndustryToggle)} direction="down">
+                <SideTooltip tooltip={tt(text.tooltipSpecializedIndustryToggle)} side="below">
                     <button
                         type="button"
                         className={`${styles.actionButton} ${styles.surfaceButton} ${styles.buttonGap} ${specializedIndustryAreasSuppressed ? styles.surfaceButtonActive : ""}`}
@@ -106,9 +106,9 @@ export const MochiPanelActionBar = ({
                     >
                         <img src={specializedIndustryIconSrc} className={`${styles.controlIcon} ${styles.idleIcon}`} alt="" />
                     </button>
-                </Tooltip>
+                </SideTooltip>
 
-                <Tooltip tooltip={tt(text.tooltipDistrictColors)} direction="down">
+                <SideTooltip tooltip={tt(text.tooltipDistrictColors)} side="below">
                     <div
                         ref={districtPickerRef}
                         className={`${styles.actionButton} ${styles.surfaceButton} ${styles.buttonGap} ${styles.districtPickerButton} ${districtMenuOpen ? styles.districtPickerButtonActive : ""}`}
@@ -122,7 +122,7 @@ export const MochiPanelActionBar = ({
                         {districtHoldProgress > 0 && <span className={styles.holdBar} style={holdBarStyle(districtHoldProgress)} />}
                         <img src={surfaceIconSrc} className={`${styles.controlIcon} ${styles.idleIcon} ${styles.districtPickerIcon}`} alt="" />
                     </div>
-                </Tooltip>
+                </SideTooltip>
             </div>
 
             {districtMenuOpen && (
@@ -177,7 +177,7 @@ export const MochiPanelActionBar = ({
                             {text.districtMenuAllDistricts}
                         </span>
 
-                        <Tooltip tooltip={tt(text.tooltipResetDistrictColors)} direction="right">
+                        <SideTooltip tooltip={tt(text.tooltipResetDistrictColors)} side="right">
                             <button
                                 type="button"
                                 className={styles.districtMenuReset}
@@ -185,7 +185,7 @@ export const MochiPanelActionBar = ({
                             >
                                 {text.districtMenuResetAll}
                             </button>
-                        </Tooltip>
+                        </SideTooltip>
                     </div>
                 </div>
             )}
