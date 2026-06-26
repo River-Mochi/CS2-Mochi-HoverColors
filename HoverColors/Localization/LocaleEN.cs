@@ -92,7 +92,13 @@ namespace HoverColors.Localization
                     "- Overlapping error color still wins when enabled (vanilla error color = salmon red)."
                 },
 
-                // Darker panel
+                // Panel
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelTooltipsEnabled)), "Tooltips for Hover Colors" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelTooltipsEnabled)),
+                    "Enabled = show Hover Colors panel help tooltips.\n" +
+                    "Disabled = hide panel tooltips. If disabled, the title-bar info icon turns yellow and can turn them back on."
+                },
+
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)), "Darker panel" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)),
                     "Enabled = <Dark panel>: made for legacy UI players; can also be used in Modern UI if you like a darker panel.\n" +
