@@ -16,6 +16,8 @@
 
         <!-- Paradox Mods publish config -->
         <PublishConfigurationPath>Properties\PublishConfiguration.xml</PublishConfigurationPath>
+        <!-- Path to the PowerShell that syncs PublishConfiguration.xml + mod.json with $(Version). -->
+        <PublishConfigScript>$(MSBuildProjectDirectory)\Scripts\Update-PublishConfig.ps1</PublishConfigScript>
 
         <!-- Only set this if overriding the Managed path is required -->
         <CustomManagedPath></CustomManagedPath>
@@ -35,8 +37,7 @@
         <Product>Hover Colors</Product>
         <Copyright>Copyright © 2026 River-Mochi</Copyright>
 
-        <!-- Path to the PowerShell that syncs PublishConfiguration.xml + mod.json with $(Version). -->
-        <PublishConfigScript>$(MSBuildProjectDirectory)\Scripts\Update-PublishConfig.ps1</PublishConfigScript>
+
 
         <!-- Configurable npm timeouts (ms). Prevents "looks stuck forever" without a hard cap on success. -->
         <HCNpmCiTimeoutMs Condition="'$(HCNpmCiTimeoutMs)'==''">450000</HCNpmCiTimeoutMs>
@@ -135,15 +136,14 @@
     </ItemGroup>
 
     <!-- Repo-root files (LICENSE, README, .editorconfig, .gitignore, .gitattributes) are exposed via
-         a "Solution Items" solution folder in HoverColors.sln — NOT linked under this project.
-         See HoverColors.sln for the SolutionItems entry. -->
+         a "Solution Items" solution folder in HoverColors.sln — NOT linked under this project. -->
 
-    <!-- AUTO UPDATE PublishConfiguration.xml ModVersion + nested mod.json "version" from $(Version). -->
+ <!-- AUTO UPDATE PublishConfiguration.xml GameVersion + ModVersion + nested mod.json "version" from $(Version). -->
     <Target Name="UpdatePublishConfigVersion" BeforeTargets="PrepareForBuild" Condition="Exists('$(PublishConfigScript)') AND Exists('$(MSBuildProjectDirectory)\$(PublishConfigurationPath)')">
 
-        <Message Text="$(AssemblyTitle) PublishConfig: syncing ModVersion + normalizing EOL/BOM + left-aligning blocks..." Importance="high" />
+        <Message Text="$(AssemblyTitle) PublishConfig: syncing ModVersion/GameVersion + normalizing EOL/BOM + left-aligning blocks..." Importance="high" />
 
-        <Exec Command="&quot;$(SystemRoot)\System32\WindowsPowerShell\v1.0\powershell.exe&quot; -NoProfile -ExecutionPolicy Bypass -File &quot;$(PublishConfigScript)&quot; -Path &quot;$(MSBuildProjectDirectory)\$(PublishConfigurationPath)&quot; -Version &quot;$(Version)&quot; -Eol lf -LeftAlignBlocks" />
+        <Exec Command="&quot;$(SystemRoot)\System32\WindowsPowerShell\v1.0\powershell.exe&quot; -NoProfile -ExecutionPolicy Bypass -File &quot;$(PublishConfigScript)&quot; -Path &quot;$(MSBuildProjectDirectory)\$(PublishConfigurationPath)&quot; -Version &quot;$(Version)&quot; -GameVersion &quot;$(GameVersion)&quot; -Eol lf -LeftAlignBlocks" />
     </Target>
 
     <!-- Run npm ci AFTER C# build, only when needed (first time, or package-lock.json changed). -->
