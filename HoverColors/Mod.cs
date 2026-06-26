@@ -39,12 +39,7 @@ namespace HoverColors
         public static readonly string ModVersion =
             Assembly.GetExecutingAssembly().GetName().Version?.ToString(3) ?? "1.0.0";
 
-        public static string BuildFlavor =>
-#if DEBUG
-            "DEBUG";
-#else
-            "RELEASE";
-#endif
+        private static bool s_BannerLogged;
 
         public static readonly ILog s_Log =
             LogManager.GetLogger(ModId).SetShowsErrorsInUI(false);
@@ -54,10 +49,19 @@ namespace HoverColors
         public void OnLoad(UpdateSystem updateSystem)
         {
             LogUtils.Configure(ModId, s_Log);
-            LogUtils.Info($"{ModName} v{ModVersion} {BuildFlavor} loaded");
 
-            GameManager? gameManager = GameManager.instance;
-            if (gameManager == null)
+            if (!s_BannerLogged)
+            {
+                s_BannerLogged = true;
+
+#if DEBUG
+                LogUtils.Info($"{ModName} v{ModVersion} DEBUG loaded");
+#else
+                LogUtils.Info($"{ModName} v{ModVersion} loaded");
+#endif
+            }
+
+            if (GameManager.instance == null)
             {
                 LogUtils.Warn($"{ModTag} GameManager.instance is null; {ModName} cannot initialize.");
                 return;
@@ -68,7 +72,7 @@ namespace HoverColors
 
             try
             {
-                LocalizationManager? localizationManager = gameManager.localizationManager;
+                LocalizationManager? localizationManager = GameManager.instance.localizationManager;
                 if (localizationManager == null)
                 {
                     LogUtils.Warn($"{ModTag} LocalizationManager is null; locale sources were not registered.");
@@ -119,8 +123,6 @@ namespace HoverColors
 
             try
             {
-                // Registers J/L/K ProxyActions from the [SettingsUIKeyboardBinding] attributes.
-                // HoverColorsUISystem fetches/enables them and polls WasReleasedThisFrame().
                 setting.RegisterKeyBindings();
             }
             catch (Exception ex)
@@ -130,16 +132,18 @@ namespace HoverColors
 
             try
             {
-                World.DefaultGameObjectInjectionWorld.GetOrCreateSystemManaged<OutlineColorSystem>();
+                World world = World.DefaultGameObjectInjectionWorld;
+
+                world.GetOrCreateSystemManaged<OutlineColorSystem>();
                 updateSystem.UpdateAt<OutlineColorSystem>(SystemUpdatePhase.Rendering);
 
-                World.DefaultGameObjectInjectionWorld.GetOrCreateSystemManaged<GuidelineColorSystem>();
+                world.GetOrCreateSystemManaged<GuidelineColorSystem>();
                 updateSystem.UpdateAt<GuidelineColorSystem>(SystemUpdatePhase.Rendering);
 
-                World.DefaultGameObjectInjectionWorld.GetOrCreateSystemManaged<AreaToolOverlaySystem>();
+                world.GetOrCreateSystemManaged<AreaToolOverlaySystem>();
                 updateSystem.UpdateAt<AreaToolOverlaySystem>(SystemUpdatePhase.Rendering);
 
-                World.DefaultGameObjectInjectionWorld.GetOrCreateSystemManaged<DistrictColorSystem>();
+                world.GetOrCreateSystemManaged<DistrictColorSystem>();
                 updateSystem.UpdateAt<DistrictColorSystem>(SystemUpdatePhase.Rendering);
 
                 updateSystem.UpdateAt<HoverColorsUISystem>(SystemUpdatePhase.UIUpdate);

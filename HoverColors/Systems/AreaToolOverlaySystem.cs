@@ -64,8 +64,6 @@ namespace HoverColors.Systems
             m_ToolSystem = World.GetOrCreateSystemManaged<ToolSystem>();
             m_AreaToolSystem = World.GetOrCreateSystemManaged<AreaToolSystem>();
             Enabled = true;
-
-            LogUtils.Info(() => $"{Mod.ModTag} AreaToolOverlaySystem created");
         }
 
         protected override void OnDestroy()

@@ -107,7 +107,6 @@ namespace HoverColors.UI
         protected override void OnCreate()
         {
             base.OnCreate();
-            LogUtils.Info(() => $"{Mod.ModTag} HoverColorsUISystem created");
 
             InitializeKeybindActions();
             RegisterValueBindings();

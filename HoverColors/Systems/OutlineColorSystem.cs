@@ -124,7 +124,6 @@ namespace HoverColors.Systems
             m_RenderSettingsQuery = GetEntityQuery(ComponentType.ReadWrite<RenderingSettingsData>());
             m_ToolSystem = World.GetOrCreateSystemManaged<ToolSystem>();
             m_PrefabSystem = World.GetOrCreateSystemManaged<PrefabSystem>();
-            LogUtils.Info(() => $"{Mod.ModTag} OutlineColorSystem created");
         }
 
         protected override void OnUpdate()

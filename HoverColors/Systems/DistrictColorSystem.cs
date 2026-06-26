@@ -73,7 +73,6 @@ namespace HoverColors.Systems
                 .Build();
 
             Enabled = true;
-            LogUtils.Info(() => $"{Mod.ModTag} DistrictColorSystem created");
         }
 
         protected override void OnGameLoadingComplete(Purpose purpose, GameMode mode)

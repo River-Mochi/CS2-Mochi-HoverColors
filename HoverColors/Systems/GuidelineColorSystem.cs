@@ -73,7 +73,6 @@ namespace HoverColors.Systems
         {
             base.OnCreate();
             m_Query = GetEntityQuery(ComponentType.ReadWrite<GuideLineSettingsData>());
-            LogUtils.Info(() => $"{Mod.ModTag} GuidelineColorSystem created");
         }
 
         protected override void OnUpdate()
