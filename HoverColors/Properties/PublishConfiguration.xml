@@ -28,18 +28,16 @@
 - Darker panel option. Good for LegacyUI or players who prefer darker contrast. Try both standard and dark to see what you like!
 - Alpha = transparency; use the last bar on the color picker.
 -   Tap preset 1 or 2 to switch your saved colors.
--   Change presets: select a color swatch box 1/row1, then hold preset 1 or 2 until the fill bar sweeps across - done. Reset button flips between your saved color <-> mod default.
+-   Change presets: select a color swatch box 1/row1, then hold preset 1 or 2 until the fill bar sweeps across - done. Reset button flips between your saved color or mod default.
 - Read the tooltips or Options Menu 3rd panel if you get lost.
 - Save-game safe and safe to remove any time.
 - Works with *Recolor* - HC does highlights, guidelines, overlays; not object color like yen's Recolor mod. Even HC's Color Picker is a vanilla component.
 - Performance Optimized: when the panel is closed, it is not doing active layout work; the C# systems mostly sit idle, example, you change a color, mod takes action, then goes back idle.
 
-
 ### Feedback
 - Please send suggestions, bug reports, or just say hi!
 - This took many months to overcome many obstacles in game code.
 - Please share and Like ! -- River Mochi
-
 
 ## ❤️ Special Thanks
 - ** Huge shout out to everyone who tested or supported the mod on its 7 month journey to release. **
@@ -54,7 +52,6 @@
 ### 12+ Languages
 - English, Français, Deutsch, Español, Italiano, Polski, 简体中文 , 한국어
 - Português Brasil, 繁體中文 , 日本語, Thai ภาษาไทย, Tiếng Việt, Turkish Türkçe, EU Portuguese Português
-
 
 tags: Mochi's blue scrubber, Highlight, border color, remove blue, guidelines, district colors, surface tool, custom colors, transparency.
 
@@ -85,10 +82,9 @@ tags: Mochi's blue scrubber, Highlight, border color, remove blue, guidelines, d
 	<!--Change log for new version. Single line or multi line. Supports minimal markdown subset-->
 <ChangeLog>
 - Update for game patch 1.6
-- Detect if Adjust Road Speed limit - RoadRailSpeed is installed and give highlight colors.
+- Detect if Adjust Speed Limit mod is installed and give highlight color support.
 </ChangeLog>
 	<!--External link, can be set multiple times. supported types are "discord", "github", "youtube", "twitch", "x", "paypal", "patreon", "buymeacoffee", "kofi", "crowdin", "gitlab", "gofundme"-->
-	<ExternalLink Type="" Url="" />
     <ExternalLink Type="github" Url="https://github.com/River-Mochi/CS2-Mochi-HoverColors" />
     <ExternalLink Type="discord" Url="https://discord.gg/gwXgvtyhjc" />
 
