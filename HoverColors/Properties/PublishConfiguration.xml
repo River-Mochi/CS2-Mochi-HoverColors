@@ -40,7 +40,7 @@
 - Please share and Like ! -- River Mochi
 
 ## ❤️ Special Thanks
-- ** Huge shout out to everyone who tested or supported the mod on its 7 month journey to release. **
+- **Huge shout out to everyone who tested or supported the mod on its 7 month journey to release.**
 - Flashbond - collab, tech feedback, testing
 - yenyang - collab, tech feedback, testing
 - StarQ - tech feedback, testing
@@ -57,8 +57,8 @@ tags: Mochi's blue scrubber, Highlight, border color, remove blue, guidelines, d
 
 </LongDescription>
 	<!--Thumbnail-->
-	<Thumbnail Value="Properties/Thumbnail-half_building_cyan.jpg" />
-	<!--Screenshot, can be set multiple times-->
+	<Thumbnail Value="Properties/Thumbnail_half_building_cyan.jpg" />
+    <!--Screenshot, can be set multiple times-->
     <Screenshot Value="Properties/01-image-ReleaseTheBlueAlpha.jpg" />
     <Screenshot Value="Properties/05-image-Before-after-DE-school.jpg" />
     <Screenshot Value="Properties/15-image-ColorPicker.jpg" />
