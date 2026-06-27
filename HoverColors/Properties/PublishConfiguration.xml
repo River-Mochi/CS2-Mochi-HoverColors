@@ -72,7 +72,7 @@ tags: Mochi's blue scrubber, Highlight, border color, remove blue, guidelines, d
 	<!--Link to the forum post where the mod can be discussed-->
 	<ForumLink Value="https://forum.paradoxplaza.com/forum/threads/mochis-hover-colors.1925898/" />
 	<!--Version of the mod-->
-	<ModVersion Value="0.9.2" />
+	<ModVersion Value="1.0.0" />
 	<!--Recommended version of the base game to use the mod-->
 	<GameVersion Value="1.6.*" />
 	<!--Dependency for the mod, can be set multiple times-->
@@ -81,8 +81,9 @@ tags: Mochi's blue scrubber, Highlight, border color, remove blue, guidelines, d
 	<RequiredDLC Value="" />
 	<!--Change log for new version. Single line or multi line. Supports minimal markdown subset-->
 <ChangeLog>
-- Update for game patch 1.6
-- Detect if Adjust Speed Limit mod is installed and give highlight color support.
+- Resize main color outline swatch, add styling and dot indicator
+- Mod Tooltips now can only be turned off from Options menu to prevent player accidental turn off
+- info icon can only turn on tooltip but not off.
 </ChangeLog>
 	<!--External link, can be set multiple times. supported types are "discord", "github", "youtube", "twitch", "x", "paypal", "patreon", "buymeacoffee", "kofi", "crowdin", "gitlab", "gofundme"-->
     <ExternalLink Type="github" Url="https://github.com/River-Mochi/CS2-Mochi-HoverColors" />
