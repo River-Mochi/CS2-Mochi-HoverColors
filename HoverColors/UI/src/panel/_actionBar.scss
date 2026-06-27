@@ -1,17 +1,15 @@
 // File: panel/_actionBar.scss
 // Purpose: Bottom action bar and shared bottom button styles.
 
-// ─── Bottom action bar ────────────────────────────────────────────────────────
-
 .actions {
     position: relative;
     overflow: visible;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: -2rem; // divider line position: raise/lower this margin
-    padding: 5rem 8rem 4rem 8rem; // bottom padding leaves room for drag grip
-    border-top: 1rem solid rgba(254, 255, 255, 0.12);
+    margin-top: -2rem;
+    padding: 5rem 8rem 3rem 8rem;
+    border-top: 1rem solid rgba(254, 255, 255, 0.16);
 }
 
 .surfaceActions,
@@ -20,7 +18,6 @@
     align-items: center;
 }
 
-// Bottom action buttons. !important beats Cohtml ButtonFace background.
 .actionButton {
     height: 32rem;
     padding: 0;
@@ -32,7 +29,7 @@
     background-color: rgba(36, 54, 66, 0.58) !important;
     background-image: none !important;
     box-shadow: none !important;
-    color: rgba(254, 255, 255, 0.96) !important; // Cohtml ButtonText can become black
+    color: rgba(254, 255, 255, 0.96) !important;
     font-size: 12.5rem;
     font-weight: 600;
     line-height: 1;
@@ -55,13 +52,13 @@
 }
 
 .buttonGap {
-    margin-left: 4rem !important; // explicit gap between bottom icon buttons
+    margin-left: 4rem !important;
 }
 
 .surfaceButton {
     width: 32rem;
     min-width: 32rem;
-    overflow: visible !important; // keeps active indicator visible
+    overflow: visible !important;
 }
 
 .districtPickerButton {
@@ -78,4 +75,3 @@
     z-index: 1;
     pointer-events: none;
 }
-
