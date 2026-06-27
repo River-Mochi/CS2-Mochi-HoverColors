@@ -247,7 +247,7 @@
 .body {
     display: flex;
     flex-direction: column;
-    padding: 6rem 8rem 6rem 8rem;
+    padding: 6rem 8rem 5rem 8rem;
 }
 
 .controlRow {
@@ -262,17 +262,18 @@
     margin-top: 2.5rem;
 }
 
-// Separate the whole Guidelines row with full-width hairlines above and below.
+// Separate the whole Guidelines row from the Fill row with a full-width hairline.
+// The bottom divider is the action bar's top border, so do not draw a second line here.
 .body > .controlRow:nth-child(3) {
     margin-top: 5rem;
     padding-top: 5rem;
     padding-bottom: 4rem;
 }
 
-.body > .controlRow:nth-child(3)::before,
-.body > .controlRow:nth-child(3)::after {
+.body > .controlRow:nth-child(3)::before {
     content: "";
     position: absolute;
+    top: 0;
     left: -8rem;
     right: -8rem;
     height: 1rem;
@@ -280,17 +281,12 @@
     pointer-events: none;
 }
 
-.body > .controlRow:nth-child(3)::before {
-    top: 0;
-}
-
-.body > .controlRow:nth-child(3)::after {
-    bottom: -4rem;
-}
-
-.panelDarker .body > .controlRow:nth-child(3)::before,
-.panelDarker .body > .controlRow:nth-child(3)::after {
+.panelDarker .body > .controlRow:nth-child(3)::before {
     background-color: rgba(254, 255, 255, 0.20);
+}
+
+.panelDarker .actions {
+    border-top-color: rgba(254, 255, 255, 0.20);
 }
 
 // Gap between left icon button and right-side controls.
