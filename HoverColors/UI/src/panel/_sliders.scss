@@ -16,10 +16,27 @@
 
     // Vanilla slider variables. Keep the thumb default, but make the track quieter:
     // unused/right side is very subtle, used/left side is soft grey instead of blue.
-    --backgroundColor: rgba(176, 184, 188, 0.08);
-    --sliderRangeColor: rgba(150, 158, 164, 0.42);
-    --sliderRangeColorFocused: rgba(170, 178, 184, 0.50);
+    --backgroundColor: rgba(176, 184, 188, 0.05);
+    --sliderRangeColor: rgba(130, 138, 144, 0.32);
+    --sliderRangeColorFocused: rgba(150, 158, 164, 0.40);
     --trackSize: 3rem;
+}
+
+// The vanilla slider also renders generated class names like track-bounds_* and range_*.
+// Variables alone can leave parts of the bar looking solid, so these override only the bar pieces.
+// Do not style the thumb here.
+.slider [class*="track-bounds"] {
+    height: 3rem !important;
+    border-radius: 999rem !important;
+    background-color: rgba(176, 184, 188, 0.05) !important;
+    background-image: none !important;
+}
+
+.slider [class*="range_"] {
+    height: 3rem !important;
+    border-radius: 999rem !important;
+    background-color: rgba(130, 138, 144, 0.32) !important;
+    background-image: none !important;
 }
 
 .valueField {
