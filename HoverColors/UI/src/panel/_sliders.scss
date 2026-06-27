@@ -15,6 +15,20 @@
     margin-right: 8rem; // gap between slider track and percent box
 }
 
+// Vanilla slider fill is bright blue. Keep the useful filled/unfilled contrast,
+// but make the filled side a soft white so it does not compete with the color swatches.
+.slider [class*="track"] {
+    background-color: rgba(254, 255, 255, 0.36) !important;
+    background-image: none !important;
+}
+
+.slider [class*="fill"],
+.slider [class*="progress"],
+.slider [class*="active"] {
+    background-color: rgba(254, 255, 255, 0.72) !important;
+    background-image: none !important;
+}
+
 .valueField {
     width: 40rem;
     height: 28rem;
