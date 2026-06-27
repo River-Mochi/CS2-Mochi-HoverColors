@@ -14,12 +14,12 @@
     min-width: 0;
     margin-right: 8rem; // gap between slider track and percent box
 
-    // Vanilla slider variables. Keep fill visible, but use quiet greys instead of game blue.
-    // Do not touch the thumb styling here; only recolor and slim the track/range.
-    --backgroundColor: rgba(176, 184, 188, 0.18);
-    --sliderRangeColor: rgba(176, 184, 188, 0.56);
-    --sliderRangeColorFocused: rgba(196, 202, 206, 0.64);
-    --trackSize: 4rem;
+    // Vanilla slider variables. Keep the thumb default, but make the track quieter:
+    // unused/right side is very subtle, used/left side is soft grey instead of blue.
+    --backgroundColor: rgba(176, 184, 188, 0.08);
+    --sliderRangeColor: rgba(150, 158, 164, 0.42);
+    --sliderRangeColorFocused: rgba(170, 178, 184, 0.50);
+    --trackSize: 3rem;
 }
 
 .valueField {
