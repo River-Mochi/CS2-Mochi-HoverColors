@@ -70,7 +70,7 @@ export const SideTooltipProvider = ({ anchorRef, panelRef, children }: ProviderP
                     transform: tip.transform,
                     zIndex: 1000050,
                     pointerEvents: "none",
-                    maxWidth: "260rem",
+                    maxWidth: "240rem",
                     paddingTop: "7rem",
                     paddingRight: "10rem",
                     paddingBottom: "7rem",
@@ -82,7 +82,9 @@ export const SideTooltipProvider = ({ anchorRef, panelRef, children }: ProviderP
                     borderStyle: "solid",
                     borderColor: "rgba(120, 220, 255, 0.45)",
                     fontSize: "13rem",
-                    lineHeight: "1.35"
+                    lineHeight: "1.35",
+                    whiteSpace: "normal",
+                    overflowWrap: "break-word"
                 }}>
                     {tip.content}
                 </div>
