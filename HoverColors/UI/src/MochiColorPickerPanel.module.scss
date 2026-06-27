@@ -174,21 +174,22 @@
     margin-top: -2rem;
 }
 
-// High-visibility yellow means panel tooltips are OFF in Options.
+// Panel tooltips OFF: tint only the icon, using CityWatchdog's softer off-state filter.
+// Do not color the outside ring; that made the title icon look too bright/heavy.
 .infoButtonTooltipsOff {
-    background-color: rgba(160, 118, 20, 0.34) !important;
-    border-color: rgba(255, 221, 84, 0.78) !important;
-    box-shadow: 0 0 8rem rgba(255, 221, 84, 0.30) !important;
+    background-color: transparent !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
 
     .infoIcon {
         opacity: 1;
-        filter: brightness(1.35) sepia(1) hue-rotate(2deg) saturate(8) drop-shadow(0 0 4rem rgba(255, 221, 84, 0.72));
+        filter: brightness(1.4) sepia(1) hue-rotate(-40deg) saturate(6);
     }
 
     &:hover {
-        background-color: rgba(255, 221, 84, 0.18) !important;
-        border-color: rgba(255, 255, 255, 0.96) !important;
-        box-shadow: 0 0 12rem rgba(255, 221, 84, 0.42) !important;
+        background-color: rgba(245, 96, 96, 0.10) !important;
+        border-color: transparent !important;
+        box-shadow: none !important;
     }
 }
 
@@ -259,6 +260,19 @@
 
 .controlRow + .controlRow {
     margin-top: 2.5rem;
+}
+
+// Separate Guidelines from the Fill slider with a very thin row divider.
+.body > .controlRow:nth-child(3) {
+    margin-top: 5rem;
+    padding-top: 5rem;
+    border-top-width: 1rem;
+    border-top-style: solid;
+    border-top-color: rgba(254, 255, 255, 0.16);
+}
+
+.panelDarker .body > .controlRow:nth-child(3) {
+    border-top-color: rgba(254, 255, 255, 0.20);
 }
 
 // Gap between left icon button and right-side controls.
