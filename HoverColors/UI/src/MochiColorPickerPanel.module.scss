@@ -262,17 +262,35 @@
     margin-top: 2.5rem;
 }
 
-// Separate Guidelines from the Fill slider with a very thin row divider.
+// Separate the whole Guidelines row with full-width hairlines above and below.
 .body > .controlRow:nth-child(3) {
     margin-top: 5rem;
     padding-top: 5rem;
-    border-top-width: 1rem;
-    border-top-style: solid;
-    border-top-color: rgba(254, 255, 255, 0.16);
+    padding-bottom: 4rem;
 }
 
-.panelDarker .body > .controlRow:nth-child(3) {
-    border-top-color: rgba(254, 255, 255, 0.20);
+.body > .controlRow:nth-child(3)::before,
+.body > .controlRow:nth-child(3)::after {
+    content: "";
+    position: absolute;
+    left: -8rem;
+    right: -8rem;
+    height: 1rem;
+    background-color: rgba(254, 255, 255, 0.16);
+    pointer-events: none;
+}
+
+.body > .controlRow:nth-child(3)::before {
+    top: 0;
+}
+
+.body > .controlRow:nth-child(3)::after {
+    bottom: -4rem;
+}
+
+.panelDarker .body > .controlRow:nth-child(3)::before,
+.panelDarker .body > .controlRow:nth-child(3)::after {
+    background-color: rgba(254, 255, 255, 0.20);
 }
 
 // Gap between left icon button and right-side controls.
