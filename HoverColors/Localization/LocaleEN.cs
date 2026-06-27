@@ -95,8 +95,10 @@ namespace HoverColors.Localization
                 // Panel
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelTooltipsEnabled)), "Tooltips for Hover Colors" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelTooltipsEnabled)),
-                    "Enabled = show Hover Colors panel help tooltips.\n" +
-                    "Disabled = hide panel tooltips. If disabled, the title-bar info icon turns yellow and can turn them back on."
+                    "<Enabled> = show Hover Colors help tooltips (recommended [x]).\n" +
+                    "<Disabled> = hide tooltips for this mod.\n" +
+                    "Tooltips can only be disabled inside this Options menu.\n" +
+                    "However, you can Enable them back ON in the city; click on the Info (i) button on the title bar."
                 },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)), "Darker panel" },
