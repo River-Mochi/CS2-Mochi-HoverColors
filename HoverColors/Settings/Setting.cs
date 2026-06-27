@@ -290,6 +290,19 @@ namespace HoverColors.Settings
         [SettingsUISection(Actions, kPanel)]
         public bool PanelTooltipsEnabled { get; set; }
 
+        // Hidden in-city preference for the Surface tool button/hotkey.
+        // Default ON because creators mainly use this mod to see layered surfaces clearly.
+        [SettingsUIHidden]
+        public bool SurfaceToolAreasSuppressed { get; set; }
+
+        // Hidden in-city preference for Specialized Industry area fill previews.
+        // This is AreaTypeMask.Lots, so it must be handled with Surface in one system.
+        [SettingsUIHidden]
+        public bool SpecializedIndustryAreasSuppressed { get; set; }
+
+        [SettingsUIHidden]
+        public bool SpecializedIndustryAreasSuppressionInitialized { get; set; }
+
         // User-facing label is "Darker panel". LegacyUI's extra transparency exposed
         // the need for this, but Modern UI players can use it too if they prefer
         // stronger panel contrast.
