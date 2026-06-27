@@ -16,9 +16,9 @@
 
     // Vanilla slider variables. Keep the thumb default, but make the track quieter:
     // unused/right side is very subtle, used/left side is soft grey instead of blue.
-    --backgroundColor: rgba(176, 184, 188, 0.04);
-    --sliderRangeColor: rgba(130, 138, 144, 0.28);
-    --sliderRangeColorFocused: rgba(150, 158, 164, 0.36);
+    --backgroundColor: rgba(176, 184, 188, 0.02);
+    --sliderRangeColor: rgba(130, 138, 144, 0.26);
+    --sliderRangeColorFocused: rgba(150, 158, 164, 0.34);
     --trackSize: 3rem;
 }
 
@@ -27,7 +27,7 @@
 // thumb sizing or manual slider math. These selectors only soften bar colors and keep overflow visible.
 .slider [class*="track-bounds"] {
     border-radius: 999rem !important;
-    background-color: rgba(176, 184, 188, 0.04) !important;
+    background-color: rgba(176, 184, 188, 0.02) !important;
     background-image: none !important;
     overflow: visible !important;
 }
@@ -38,7 +38,7 @@
 
 .slider [class*="range_"] {
     border-radius: 999rem !important;
-    background-color: rgba(130, 138, 144, 0.28) !important;
+    background-color: rgba(130, 138, 144, 0.26) !important;
     background-image: none !important;
 }
 
