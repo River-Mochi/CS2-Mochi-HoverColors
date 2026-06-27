@@ -13,20 +13,12 @@
     flex: 1 1 auto;
     min-width: 0;
     margin-right: 8rem; // gap between slider track and percent box
-}
 
-// Vanilla slider fill is bright blue. Keep the useful filled/unfilled contrast,
-// but make the filled side a soft white so it does not compete with the color swatches.
-.slider [class*="track"] {
-    background-color: rgba(254, 255, 255, 0.36) !important;
-    background-image: none !important;
-}
-
-.slider [class*="fill"],
-.slider [class*="progress"],
-.slider [class*="active"] {
-    background-color: rgba(254, 255, 255, 0.72) !important;
-    background-image: none !important;
+    // Vanilla slider variables. Keep fill visible, but use quiet greys instead of game blue.
+    // Do not touch the thumb styling here; only recolor the track/range.
+    --backgroundColor: rgba(176, 184, 188, 0.34);
+    --sliderRangeColor: rgba(205, 212, 216, 0.76);
+    --sliderRangeColorFocused: rgba(224, 230, 233, 0.84);
 }
 
 .valueField {
