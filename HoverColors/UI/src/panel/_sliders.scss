@@ -14,35 +14,16 @@
     min-width: 0;
     margin-right: 8rem; // gap between slider track and percent box
 
-    // Vanilla slider variables, matching RoadRailSpeeds' palette: quiet greys on both track and
-    // thumb so nothing reads as vanilla blue, plus a transparent focus glow.
-    --backgroundColor: rgba(176, 184, 188, 0.20);
-    --sliderRangeColor: rgba(140, 148, 154, 0.56);
-    --sliderRangeColorFocused: rgba(165, 173, 179, 0.66);
+    // Same approach as RoadRailSpeeds: keep the vanilla CS2 slider component and only
+    // feed it CSS variables. Do not manually restyle generated track/thumb elements.
+    // HC uses a more transparent track than RRS because this panel is smaller and busier.
+    --backgroundColor: rgba(176, 184, 188, 0.04);       // unused/right side of thumb
+    --sliderRangeColor: rgba(140, 148, 154, 0.38);      // used/left side of thumb
+    --sliderRangeColorFocused: rgba(165, 173, 179, 0.46);
     --sliderThumbColor: rgba(235, 237, 239, 1);
     --sliderThumbColorFocused: rgba(255, 255, 255, 1);
-    --trackSize: 8rem;
+    --trackSize: 7rem;
     --focusedColor: transparent;
-}
-
-// The vanilla slider renders generated class names like track-bounds_*, range-bounds_*, and range_*.
-// NetworkTools keeps vanilla slider layout/components intact; we follow that idea here by not changing
-// thumb sizing or manual slider math. These selectors only soften bar colors and keep overflow visible.
-.slider [class*="track-bounds"] {
-    border-radius: 999rem !important;
-    background-color: rgba(176, 184, 188, 0.20) !important;
-    background-image: none !important;
-    overflow: visible !important;
-}
-
-.slider [class*="range-bounds"] {
-    overflow: visible !important;
-}
-
-.slider [class*="range_"] {
-    border-radius: 999rem !important;
-    background-color: rgba(140, 148, 154, 0.56) !important;
-    background-image: none !important;
 }
 
 .valueField {
