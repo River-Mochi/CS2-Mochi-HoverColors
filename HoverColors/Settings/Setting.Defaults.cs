@@ -97,6 +97,7 @@ namespace HoverColors.Settings
             UseOverlapWarningColor = true;
             UseCustomColorsForNetLanes = true;
             UseDarkerPanel = false;
+            PanelCollapsed = false;
 
             // 100 = vanilla default. Lower = more transparent guidelines.
             GuidelineOpacityPercent = kDefaultGuidelineOpacityPercent;

@@ -32,6 +32,7 @@ interface MochiPanelControlRowsProps {
     focusDisabled: any;
     numberFieldClass: string;
     useDarkerPanel: boolean;
+    collapsed: boolean;
 
     outline: Color;
     ownerColor: Color;
@@ -112,6 +113,7 @@ export const MochiPanelControlRows = ({
     focusDisabled,
     numberFieldClass,
     useDarkerPanel,
+    collapsed,
     outline,
     ownerColor,
     fillA,
@@ -183,7 +185,7 @@ export const MochiPanelControlRows = ({
     const outlineSwatchActive = !preset1Active && !preset2Active;
 
     return (
-        <div className={styles.body}>
+        <div className={`${styles.body} ${collapsed ? styles.bodyCollapsed : ""}`}>
             {/* Outline row: icon resets to vanilla; swatch edits color/alpha; slots apply/save presets. */}
             <div className={`${styles.controlRow} ${styles.outlineRow}`}>
                 <SideTooltip tooltip={tt(text.tooltipResetOutline)} side="left">
@@ -337,6 +339,8 @@ export const MochiPanelControlRows = ({
                 </div>
             </div>
 
+            {!collapsed && (
+            <>
             {/* Fill row: icon resets to 0%, slider controls inner fill opacity. */}
             <div className={styles.controlRow}>
                 <SideTooltip tooltip={tt(text.tooltipResetFill)} side="left">
@@ -528,6 +532,8 @@ export const MochiPanelControlRows = ({
                     </SideTooltip>
                 </div>
             </div>
+            </>
+            )}
         </div>
     );
 };

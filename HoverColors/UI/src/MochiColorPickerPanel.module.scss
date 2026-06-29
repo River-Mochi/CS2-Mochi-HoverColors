@@ -130,6 +130,24 @@
     pointer-events: none;
 }
 
+.collapseButton {
+    flex: 0 0 24rem;
+    width: 24rem;
+    height: 24rem;
+    min-width: 24rem;
+    margin-left: 8rem;
+    padding: 0 !important;
+}
+
+// Vanilla Media/Glyphs/*.svg arrows are solid black; invert to a soft white like the close icon.
+.collapseIcon {
+    width: 16rem;
+    height: 16rem;
+    display: block;
+    pointer-events: none;
+    filter: brightness(0) invert(1) opacity(0.95);
+}
+
 // ─── Shared button + icon base ────────────────────────────────────────────────
 
 .infoButton,
@@ -248,6 +266,12 @@
     display: flex;
     flex-direction: column;
     padding: 6rem 8rem 5rem 8rem;
+}
+
+// Collapsed view ends right after the outline row; trim the bottom gap that
+// otherwise leaves room for the action bar/drag grip below.
+.bodyCollapsed {
+    padding-bottom: 3rem;
 }
 
 .controlRow {

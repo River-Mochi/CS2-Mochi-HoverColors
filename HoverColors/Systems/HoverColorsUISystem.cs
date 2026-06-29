@@ -68,6 +68,7 @@ namespace HoverColors.UI
         private ValueBinding<int> m_GuidelineDefaultBinding = null!;
         private ValueBinding<bool> m_PanelOpenBinding = null!;
         private ValueBinding<bool> m_PanelTooltipsEnabledBinding = null!;
+        private ValueBinding<bool> m_PanelCollapsedBinding = null!;
         private ValueBinding<bool> m_UseDarkerPanelBinding = null!;
         private ValueBinding<bool> m_SurfaceToolAreasSuppressedBinding = null!;
         private ValueBinding<bool> m_SpecializedIndustryAreasSuppressedBinding = null!;
@@ -188,6 +189,7 @@ namespace HoverColors.UI
             m_GuidelineDefaultBinding = AddValueBinding("GuidelineDefaultPercent", settings?.GuidelineDefaultPercent ?? HoverColorsSettings.kDefaultGuidelineOpacityPercent);
             m_PanelOpenBinding = AddValueBinding("PanelOpen", s_PanelOpen);
             m_PanelTooltipsEnabledBinding = AddValueBinding("PanelTooltipsEnabled", settings?.PanelTooltipsEnabled ?? true);
+            m_PanelCollapsedBinding = AddValueBinding("PanelCollapsed", settings?.PanelCollapsed ?? false);
             m_UseDarkerPanelBinding = AddValueBinding("UseDarkerPanel", settings?.UseDarkerPanel ?? false);
             m_SurfaceToolAreasSuppressedBinding = AddValueBinding("SurfaceToolAreasSuppressed", suppressSurfaceToolAreas);
             m_SpecializedIndustryAreasSuppressedBinding = AddValueBinding("SpecializedIndustryAreasSuppressed", suppressSpecializedIndustryAreas);
@@ -250,6 +252,7 @@ namespace HoverColors.UI
             UpdateIfChanged(m_GuidelineDefaultBinding, settings?.GuidelineDefaultPercent ?? HoverColorsSettings.kDefaultGuidelineOpacityPercent);
             UpdateIfChanged(m_PanelOpenBinding, s_PanelOpen);
             UpdateIfChanged(m_PanelTooltipsEnabledBinding, settings?.PanelTooltipsEnabled ?? true);
+            UpdateIfChanged(m_PanelCollapsedBinding, settings?.PanelCollapsed ?? false);
             UpdateIfChanged(m_UseDarkerPanelBinding, settings?.UseDarkerPanel ?? false);
             UpdateIfChanged(m_SurfaceToolAreasSuppressedBinding, AreaToolOverlaySystem.SuppressSurfaceToolAreas);
             UpdateIfChanged(m_SpecializedIndustryAreasSuppressedBinding, AreaToolOverlaySystem.SuppressSpecializedIndustryToolAreas);

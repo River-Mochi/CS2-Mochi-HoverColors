@@ -5,6 +5,7 @@
   "HoverColors.UI.Tooltip.Info": "See Options menu to turn off tooltips.",
   "HoverColors.UI.Tooltip.InfoDisabled": "Yellow = tooltips off.\nClick (i) to enable.",
   "HoverColors.UI.Tooltip.Draggable": "Draggable",
+  "HoverColors.UI.Tooltip.CollapsePanel": "Collapse panel to the outline row only.\nClick again to expand the full panel.",
   "HoverColors.UI.Tooltip.Close": "Close panel. Default hotkey: J.\nGame top-left icon also toggles it.",
   "HoverColors.UI.Tooltip.ResetOutline": "OUTLINE - click to reset color + alpha (opacity) to game defaults.",
   "HoverColors.UI.Tooltip.OutlineSwatch": "OUTLINE - click for color + opacity.",

@@ -35,6 +35,7 @@ import {
     ownerB$,
     ownerG$,
     ownerR$,
+    panelCollapsed$,
     panelTooltipsEnabled$,
     preset1A$,
     preset1Active$,
@@ -117,6 +118,7 @@ export const MochiColorPickerPanel = () => {
 
     const text = useMochiPanelText();
     const tooltipsEnabled = useValue(panelTooltipsEnabled$);
+    const panelCollapsed = useValue(panelCollapsed$);
 
     // FormattedParagraphs lets vanilla Tooltip render JSON \n as real line breaks.
     const tt = React.useCallback(
@@ -350,6 +352,7 @@ export const MochiColorPickerPanel = () => {
     };
 
     const handleClosePanel = () => trigger(CHANNEL, "SetPanelOpen", false);
+    const handleToggleCollapse = () => trigger(CHANNEL, "SetPanelCollapsed", !panelCollapsed);
     const handleResetOutline = () => trigger(CHANNEL, "ResetOutlineToVanilla");
     const handleResetFill = () => handleFillAChange(0);
     const handleResetGuidelines = () => trigger(CHANNEL, "ResetGuidelines");
@@ -388,6 +391,7 @@ export const MochiColorPickerPanel = () => {
     const panelTheme = resolver.panelTheme;
     const infoviewMenuTheme = resolver.infoviewMenuTheme;
     const closeButtonClass = `${roundHighlightButtonTheme["button"] ?? ""} ${styles.closeButton}`;
+    const collapseButtonClass = `${roundHighlightButtonTheme["button"] ?? ""} ${styles.collapseButton}`;
     const panelFrameClass = `${panelBaseTheme.panel ?? "panel_YqS"} ${infoviewMenuTheme.menu ?? "menu_O_M"} ${styles.panelFrame}`;
     const panelSurfaceClass = useDarkerPanel ? styles.panelDarker : styles.panelStandard;
     const panelContentClass = `${panelTheme.content ?? "content_XD5 content_AD7 child-opacity-transition_nkS"} ${infoviewMenuTheme.content ?? "content_Hzl"} ${styles.panelContent} ${panelSurfaceClass}`;
@@ -422,6 +426,22 @@ export const MochiColorPickerPanel = () => {
                             </div>
                         </SideTooltip>
 
+                        <SideTooltip tooltip={tt(text.tooltipCollapse)} side="right">
+                            <Button
+                                className={collapseButtonClass}
+                                variant="icon"
+                                onClick={handleToggleCollapse}
+                                focusKey={focusDisabled}
+                                aria-pressed={panelCollapsed}
+                            >
+                                <img
+                                    src={panelCollapsed ? "Media/Glyphs/ThickStrokeArrowRight.svg" : "Media/Glyphs/ThickStrokeArrowDown.svg"}
+                                    className={styles.collapseIcon}
+                                    alt=""
+                                />
+                            </Button>
+                        </SideTooltip>
+
                         <SideTooltip tooltip={tt(text.tooltipClose)} side="right">
                             <Button
                                 className={closeButtonClass}
@@ -443,6 +463,7 @@ export const MochiColorPickerPanel = () => {
                         focusDisabled={focusDisabled}
                         numberFieldClass={numberFieldClass}
                         useDarkerPanel={useDarkerPanel}
+                        collapsed={panelCollapsed}
                         outline={outline}
                         ownerColor={ownerColor}
                         fillA={fillA}
@@ -506,42 +527,46 @@ export const MochiColorPickerPanel = () => {
                         updateGuidelineDashedPickerDirection={updateGuidelineDashedPickerDirection}
                     />
 
-                    <MochiPanelActionBar
-                        text={text}
-                        tt={tt}
-                        ColorField={ColorField}
-                        focusDisabled={focusDisabled}
-                        useDarkerPanel={useDarkerPanel}
-                        surfaceToolAreasSuppressed={surfaceToolAreasSuppressed}
-                        specializedIndustryAreasSuppressed={specializedIndustryAreasSuppressed}
-                        districtMenuOpen={districtMenuOpen}
-                        districtColor={districtColor}
-                        districtPickerDirection={districtPickerDirection}
-                        districtSwatchHovered={districtSwatchHovered}
-                        districtHoldProgress={districtHoldProgress}
-                        districtPickerRef={districtPickerRef}
-                        districtMenuRef={districtMenuRef}
-                        districtColorSwatchRef={districtColorSwatchRef}
-                        setDistrictPickerOpen={setDistrictPickerOpen}
-                        setDistrictSwatchHovered={setDistrictSwatchHovered}
-                        cancelDistrictHold={cancelDistrictHold}
-                        openAreasToolPanel={openAreasToolPanel}
-                        updateDistrictPickerDirection={updateDistrictPickerDirection}
-                        handleToggleSurfaceToolAreas={handleToggleSurfaceToolAreas}
-                        handleToggleSpecializedIndustryAreas={handleToggleSpecializedIndustryAreas}
-                        handleDistrictMouseDownCapture={handleDistrictMouseDownCapture}
-                        handleDistrictMouseUpCapture={handleDistrictMouseUpCapture}
-                        handleDistrictClickCapture={handleDistrictClickCapture}
-                        handleDistrictColorChange={handleDistrictColorChange}
-                        handleResetDistrict={handleResetDistrict}
-                    />
+                    {!panelCollapsed && (
+                        <>
+                            <MochiPanelActionBar
+                                text={text}
+                                tt={tt}
+                                ColorField={ColorField}
+                                focusDisabled={focusDisabled}
+                                useDarkerPanel={useDarkerPanel}
+                                surfaceToolAreasSuppressed={surfaceToolAreasSuppressed}
+                                specializedIndustryAreasSuppressed={specializedIndustryAreasSuppressed}
+                                districtMenuOpen={districtMenuOpen}
+                                districtColor={districtColor}
+                                districtPickerDirection={districtPickerDirection}
+                                districtSwatchHovered={districtSwatchHovered}
+                                districtHoldProgress={districtHoldProgress}
+                                districtPickerRef={districtPickerRef}
+                                districtMenuRef={districtMenuRef}
+                                districtColorSwatchRef={districtColorSwatchRef}
+                                setDistrictPickerOpen={setDistrictPickerOpen}
+                                setDistrictSwatchHovered={setDistrictSwatchHovered}
+                                cancelDistrictHold={cancelDistrictHold}
+                                openAreasToolPanel={openAreasToolPanel}
+                                updateDistrictPickerDirection={updateDistrictPickerDirection}
+                                handleToggleSurfaceToolAreas={handleToggleSurfaceToolAreas}
+                                handleToggleSpecializedIndustryAreas={handleToggleSpecializedIndustryAreas}
+                                handleDistrictMouseDownCapture={handleDistrictMouseDownCapture}
+                                handleDistrictMouseUpCapture={handleDistrictMouseUpCapture}
+                                handleDistrictClickCapture={handleDistrictClickCapture}
+                                handleDistrictColorChange={handleDistrictColorChange}
+                                handleResetDistrict={handleResetDistrict}
+                            />
 
-                    <DragGrip
-                        active={panelDragging}
-                        tooltip={tt(text.tooltipDraggable)}
-                        tooltipSide="below"
-                        onMouseDown={handlePanelDragStart}
-                    />
+                            <DragGrip
+                                active={panelDragging}
+                                tooltip={tt(text.tooltipDraggable)}
+                                tooltipSide="below"
+                                onMouseDown={handlePanelDragStart}
+                            />
+                        </>
+                    )}
                 </div>
             </div>
             </SideTooltipProvider>

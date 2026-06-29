@@ -33,6 +33,7 @@ namespace HoverColors.UI
             AddBinding(new TriggerBinding(Mod.ModId, "ResetOutlineToVanilla", ResetOutlineToVanilla));
             AddBinding(new TriggerBinding<bool>(Mod.ModId, "SetPanelOpen", SetPanelOpen));
             AddBinding(new TriggerBinding<bool>(Mod.ModId, "SetPanelTooltipsEnabled", SetPanelTooltipsEnabled));
+            AddBinding(new TriggerBinding<bool>(Mod.ModId, "SetPanelCollapsed", SetPanelCollapsed));
             AddBinding(new TriggerBinding(Mod.ModId, "ToggleSurfaceToolAreas", ToggleSurfaceToolAreas));
             AddBinding(new TriggerBinding(Mod.ModId, "ToggleSpecializedIndustryAreas", ToggleSpecializedIndustryAreas));
             AddBinding(new TriggerBinding<int>(Mod.ModId, "ApplyPreset", ApplyPreset));
@@ -313,6 +314,18 @@ namespace HoverColors.UI
             }
 
             settings.PanelTooltipsEnabled = enabled;
+            ApplySaveAndSync(settings);
+        }
+
+        private void SetPanelCollapsed(bool collapsed)
+        {
+            HoverColorsSettings? settings = Mod.Settings;
+            if (settings == null || settings.PanelCollapsed == collapsed)
+            {
+                return;
+            }
+
+            settings.PanelCollapsed = collapsed;
             ApplySaveAndSync(settings);
         }
 

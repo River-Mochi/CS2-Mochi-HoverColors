@@ -290,6 +290,11 @@ namespace HoverColors.Settings
         [SettingsUISection(Actions, kPanel)]
         public bool PanelTooltipsEnabled { get; set; }
 
+        // Hidden in-city preference: collapses the panel down to the outline row only.
+        // Title-bar arrow toggles this; Options menu has no control for it.
+        [SettingsUIHidden]
+        public bool PanelCollapsed { get; set; }
+
         // Hidden in-city preference for the Surface tool button/hotkey.
         // Default ON because creators mainly use this mod to see layered surfaces clearly.
         [SettingsUIHidden]
