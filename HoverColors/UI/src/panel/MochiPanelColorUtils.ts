@@ -1,4 +1,4 @@
 // File: UI/src/panel/MochiPanelColorUtils.ts
-// Purpose: Compatibility re-export. Actual color helpers live in panel/utils/.
+// Purpose: Temporary compatibility re-export. Actual panel helper lives in panel/helpers/.
 
-export * from "./utils/MochiPanelColorUtils";
+export * from "./helpers/MochiPanelColorUtils";
