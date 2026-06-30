@@ -89,8 +89,8 @@ namespace HoverColors.UI
         private ValueBinding<bool> m_Preset2ActiveBinding = null!;
 
         // Factory defaults — keep in sync with HoverColorsSettings.SetDefaults().
-        private const float DefaultPreset1R = 140f / 255f, DefaultPreset1G = 140f / 255f, DefaultPreset1B = 171f / 255f;
-        private const float DefaultPreset1A = 0.5f, DefaultPreset1FillA = 0f;
+        private const float DefaultPreset1R = 215f / 255f, DefaultPreset1G = 226f / 255f, DefaultPreset1B = 194f / 255f;
+        private const float DefaultPreset1A = 0.67f, DefaultPreset1FillA = 0f;
         private const float DefaultPreset2R = 0.25f, DefaultPreset2G = 0.15f, DefaultPreset2B = 0.25f;
         private const float DefaultPreset2A = 0.5f, DefaultPreset2FillA = 0f;
 
@@ -170,176 +170,15 @@ namespace HoverColors.UI
             m_DistrictGBinding = AddValueBinding("DistrictG", settings?.DistrictG ?? 128f / 255f);
             m_DistrictBBinding = AddValueBinding("DistrictB", settings?.DistrictB ?? 128f / 255f);
             m_DistrictABinding = AddValueBinding("DistrictA", settings?.DistrictA ?? 64f / 255f);
-
-            UnityEngine.Color guidelineLinesColor = GuidelineColorSystem.GetGuidelineLinesColor(settings);
-            UnityEngine.Color guidelinePreviewColor = GuidelineColorSystem.GetGuidelinePreviewColor(settings);
-            UnityEngine.Color guidelineDashedColor = GuidelineColorSystem.GetGuidelineDashedColor(settings);
-            m_GuidelineLinesColorRBinding = AddValueBinding("GuidelineLinesColorR", guidelineLinesColor.r);
-            m_GuidelineLinesColorGBinding = AddValueBinding("GuidelineLinesColorG", guidelineLinesColor.g);
-            m_GuidelineLinesColorBBinding = AddValueBinding("GuidelineLinesColorB", guidelineLinesColor.b);
+            m_GuidelineLinesColorRBinding = AddValueBinding("GuidelineLinesColorR", settings?.GuidelineLinesR ?? 0.7f);
+            m_GuidelineLinesColorGBinding = AddValueBinding("GuidelineLinesColorG", settings?.GuidelineLinesG ?? 0.7f);
+            m_GuidelineLinesColorBBinding = AddValueBinding("GuidelineLinesColorB", settings?.GuidelineLinesB ?? 1f);
             m_GuidelineLinesColorABinding = AddValueBinding("GuidelineLinesColorA", settings?.GuidelineLinesA ?? 1f);
-            m_GuidelinePreviewColorRBinding = AddValueBinding("GuidelinePreviewColorR", guidelinePreviewColor.r);
-            m_GuidelinePreviewColorGBinding = AddValueBinding("GuidelinePreviewColorG", guidelinePreviewColor.g);
-            m_GuidelinePreviewColorBBinding = AddValueBinding("GuidelinePreviewColorB", guidelinePreviewColor.b);
+            m_GuidelinePreviewColorRBinding = AddValueBinding("GuidelinePreviewColorR", settings?.GuidelinePreviewR ?? 0.7f);
+            m_GuidelinePreviewColorGBinding = AddValueBinding("GuidelinePreviewColorG", settings?.GuidelinePreviewG ?? 0.7f);
+            m_GuidelinePreviewColorBBinding = AddValueBinding("GuidelinePreviewColorB", settings?.GuidelinePreviewB ?? 1f);
             m_GuidelinePreviewColorABinding = AddValueBinding("GuidelinePreviewColorA", settings?.GuidelinePreviewA ?? 1f);
-            m_GuidelineDashedColorRBinding = AddValueBinding("GuidelineDashedColorR", guidelineDashedColor.r);
-            m_GuidelineDashedColorGBinding = AddValueBinding("GuidelineDashedColorG", guidelineDashedColor.g);
-            m_GuidelineDashedColorBBinding = AddValueBinding("GuidelineDashedColorB", guidelineDashedColor.b);
+            m_GuidelineDashedColorRBinding = AddValueBinding("GuidelineDashedColorR", settings?.GuidelineDashedR ?? 0.7f);
+            m_GuidelineDashedColorGBinding = AddValueBinding("GuidelineDashedColorG", settings?.GuidelineDashedG ?? 0.7f);
+            m_GuidelineDashedColorBBinding = AddValueBinding("GuidelineDashedColorB", settings?.GuidelineDashedB ?? 1f);
             m_GuidelineOpacityBinding = AddValueBinding("GuidelineOpacityPercent", settings?.GuidelineOpacityPercent ?? HoverColorsSettings.kDefaultGuidelineOpacityPercent);
-            m_GuidelineDefaultBinding = AddValueBinding("GuidelineDefaultPercent", settings?.GuidelineDefaultPercent ?? HoverColorsSettings.kDefaultGuidelineOpacityPercent);
-            m_PanelOpenBinding = AddValueBinding("PanelOpen", s_PanelOpen);
-            m_PanelTooltipsEnabledBinding = AddValueBinding("PanelTooltipsEnabled", settings?.PanelTooltipsEnabled ?? true);
-            m_PanelCollapsedBinding = AddValueBinding("PanelCollapsed", settings?.PanelCollapsed ?? false);
-            m_UseDarkerPanelBinding = AddValueBinding("UseDarkerPanel", settings?.UseDarkerPanel ?? false);
-            m_SurfaceToolAreasSuppressedBinding = AddValueBinding("SurfaceToolAreasSuppressed", suppressSurfaceToolAreas);
-            m_SpecializedIndustryAreasSuppressedBinding = AddValueBinding("SpecializedIndustryAreasSuppressed", suppressSpecializedIndustryAreas);
-            m_VanillaOutlineActiveBinding = AddValueBinding("VanillaOutlineActive", IsVanillaOutlineActive());
-
-            // Preset slot stored-color bindings (swatch previews + active-state).
-            m_Preset1RBinding = AddValueBinding("Preset1R", settings?.Preset1R ?? 140f / 255f);
-            m_Preset1GBinding = AddValueBinding("Preset1G", settings?.Preset1G ?? 140f / 255f);
-            m_Preset1BBinding = AddValueBinding("Preset1B", settings?.Preset1B ?? 171f / 255f);
-            m_Preset1ABinding = AddValueBinding("Preset1A", settings?.Preset1A ?? 0.5f);
-            m_Preset1FillABinding = AddValueBinding("Preset1FillA", settings?.Preset1FillA ?? 0f);
-            m_Preset2RBinding = AddValueBinding("Preset2R", settings?.Preset2R ?? 0.25f);
-            m_Preset2GBinding = AddValueBinding("Preset2G", settings?.Preset2G ?? 0.15f);
-            m_Preset2BBinding = AddValueBinding("Preset2B", settings?.Preset2B ?? 0.25f);
-            m_Preset2ABinding = AddValueBinding("Preset2A", settings?.Preset2A ?? 0.5f);
-            m_Preset2FillABinding = AddValueBinding("Preset2FillA", settings?.Preset2FillA ?? 0f);
-            m_Preset1ActiveBinding = AddValueBinding("Preset1Active", IsPresetActive(1));
-            m_Preset2ActiveBinding = AddValueBinding("Preset2Active", IsPresetActive(2));
-        }
-
-        private ValueBinding<T> AddValueBinding<T>(string name, T initialValue)
-        {
-            ValueBinding<T> binding = new ValueBinding<T>(Mod.ModId, name, initialValue);
-            AddBinding(binding);
-            return binding;
-        }
-
-        private void SyncValueBindings()
-        {
-            HoverColorsSettings? settings = Mod.Settings;
-            UpdateIfChanged(m_OutlineRBinding, settings?.OutlineR ?? 0.502f);
-            UpdateIfChanged(m_OutlineGBinding, settings?.OutlineG ?? 0.869f);
-            UpdateIfChanged(m_OutlineBBinding, settings?.OutlineB ?? 1f);
-            UpdateIfChanged(m_OutlineABinding, settings?.OutlineA ?? 0.855f);
-            UpdateIfChanged(m_OwnerRBinding, settings?.OwnerR ?? 0.247f);
-            UpdateIfChanged(m_OwnerGBinding, settings?.OwnerG ?? 0.981f);
-            UpdateIfChanged(m_OwnerBBinding, settings?.OwnerB ?? 0.247f);
-            UpdateIfChanged(m_OwnerABinding, settings?.OwnerA ?? 0.702f);
-            UpdateIfChanged(m_FillABinding, settings?.FillA ?? 0f);
-            UpdateIfChanged(m_DistrictRBinding, settings?.DistrictR ?? 128f / 255f);
-            UpdateIfChanged(m_DistrictGBinding, settings?.DistrictG ?? 128f / 255f);
-            UpdateIfChanged(m_DistrictBBinding, settings?.DistrictB ?? 128f / 255f);
-            UpdateIfChanged(m_DistrictABinding, settings?.DistrictA ?? 64f / 255f);
-
-            UnityEngine.Color guidelineLinesColor = GuidelineColorSystem.GetGuidelineLinesColor(settings);
-            UnityEngine.Color guidelinePreviewColor = GuidelineColorSystem.GetGuidelinePreviewColor(settings);
-            UnityEngine.Color guidelineDashedColor = GuidelineColorSystem.GetGuidelineDashedColor(settings);
-            UpdateIfChanged(m_GuidelineLinesColorRBinding, guidelineLinesColor.r);
-            UpdateIfChanged(m_GuidelineLinesColorGBinding, guidelineLinesColor.g);
-            UpdateIfChanged(m_GuidelineLinesColorBBinding, guidelineLinesColor.b);
-            UpdateIfChanged(m_GuidelineLinesColorABinding, settings?.GuidelineLinesA ?? 1f);
-            UpdateIfChanged(m_GuidelinePreviewColorRBinding, guidelinePreviewColor.r);
-            UpdateIfChanged(m_GuidelinePreviewColorGBinding, guidelinePreviewColor.g);
-            UpdateIfChanged(m_GuidelinePreviewColorBBinding, guidelinePreviewColor.b);
-            UpdateIfChanged(m_GuidelinePreviewColorABinding, settings?.GuidelinePreviewA ?? 1f);
-            UpdateIfChanged(m_GuidelineDashedColorRBinding, guidelineDashedColor.r);
-            UpdateIfChanged(m_GuidelineDashedColorGBinding, guidelineDashedColor.g);
-            UpdateIfChanged(m_GuidelineDashedColorBBinding, guidelineDashedColor.b);
-            UpdateIfChanged(m_GuidelineOpacityBinding, settings?.GuidelineOpacityPercent ?? HoverColorsSettings.kDefaultGuidelineOpacityPercent);
-            UpdateIfChanged(m_GuidelineDefaultBinding, settings?.GuidelineDefaultPercent ?? HoverColorsSettings.kDefaultGuidelineOpacityPercent);
-            UpdateIfChanged(m_PanelOpenBinding, s_PanelOpen);
-            UpdateIfChanged(m_PanelTooltipsEnabledBinding, settings?.PanelTooltipsEnabled ?? true);
-            UpdateIfChanged(m_PanelCollapsedBinding, settings?.PanelCollapsed ?? false);
-            UpdateIfChanged(m_UseDarkerPanelBinding, settings?.UseDarkerPanel ?? false);
-            UpdateIfChanged(m_SurfaceToolAreasSuppressedBinding, AreaToolOverlaySystem.SuppressSurfaceToolAreas);
-            UpdateIfChanged(m_SpecializedIndustryAreasSuppressedBinding, AreaToolOverlaySystem.SuppressSpecializedIndustryToolAreas);
-            UpdateIfChanged(m_VanillaOutlineActiveBinding, IsVanillaOutlineActive());
-
-            // Preset stored colors + active flags
-            UpdateIfChanged(m_Preset1RBinding, settings?.Preset1R ?? 140f / 255f);
-            UpdateIfChanged(m_Preset1GBinding, settings?.Preset1G ?? 140f / 255f);
-            UpdateIfChanged(m_Preset1BBinding, settings?.Preset1B ?? 171f / 255f);
-            UpdateIfChanged(m_Preset1ABinding, settings?.Preset1A ?? 0.5f);
-            UpdateIfChanged(m_Preset1FillABinding, settings?.Preset1FillA ?? 0f);
-            UpdateIfChanged(m_Preset2RBinding, settings?.Preset2R ?? 0.25f);
-            UpdateIfChanged(m_Preset2GBinding, settings?.Preset2G ?? 0.15f);
-            UpdateIfChanged(m_Preset2BBinding, settings?.Preset2B ?? 0.25f);
-            UpdateIfChanged(m_Preset2ABinding, settings?.Preset2A ?? 0.5f);
-            UpdateIfChanged(m_Preset2FillABinding, settings?.Preset2FillA ?? 0f);
-            UpdateIfChanged(m_Preset1ActiveBinding, IsPresetActive(1));
-            UpdateIfChanged(m_Preset2ActiveBinding, IsPresetActive(2));
-        }
-
-        private static void UpdateIfChanged<T>(ValueBinding<T> binding, T value)
-        {
-            if (EqualityComparer<T>.Default.Equals(binding.value, value))
-            {
-                return;
-            }
-
-            binding.Update(value);
-        }
-
-        private void SetPanelOpen(bool open)
-        {
-            s_PanelOpen = open;
-            UpdateIfChanged(m_PanelOpenBinding, s_PanelOpen);
-        }
-
-        private void InitializeKeybindActions()
-        {
-            m_TogglePanelAction = EnableAction(Mod.kTogglePanelActionName);
-            m_ToggleSurfaceToolAreasAction = EnableAction(Mod.kToggleSurfaceToolAreasActionName);
-            m_TogglePresetAction = EnableAction(Mod.kTogglePresetActionName);
-        }
-
-        private void RefreshKeybindActions()
-        {
-            if (m_TogglePanelAction == null)
-            {
-                m_TogglePanelAction = EnableAction(Mod.kTogglePanelActionName);
-            }
-
-            if (m_ToggleSurfaceToolAreasAction == null)
-            {
-                m_ToggleSurfaceToolAreasAction = EnableAction(Mod.kToggleSurfaceToolAreasActionName);
-            }
-
-            if (m_TogglePresetAction == null)
-            {
-                m_TogglePresetAction = EnableAction(Mod.kTogglePresetActionName);
-            }
-        }
-
-        // CWD-style: fetch the ProxyAction registered by the [SettingsUIKeyboardBinding] attribute
-        // and flip shouldBeEnabled so it actually receives input. Returns null on miss.
-        private static ProxyAction? EnableAction(string actionName)
-        {
-            try
-            {
-                ProxyAction? action = Mod.Settings?.GetAction(actionName);
-                if (action != null)
-                {
-                    action.shouldBeEnabled = true;
-                }
-                return action;
-            }
-            catch (Exception ex)
-            {
-                LogUtils.WarnOnce(
-                    "missing-keybind-" + actionName,
-                    () => $"{Mod.ModTag} Keybinding '{actionName}' unavailable: {ex.GetType().Name}: {ex.Message}",
-                    ex);
-                return null;
-            }
-        }
-
-        private static bool IsInGame()
-        {
-            return GameManager.instance != null && GameManager.instance.gameMode == GameMode.Game;
-        }
-    }
-}
