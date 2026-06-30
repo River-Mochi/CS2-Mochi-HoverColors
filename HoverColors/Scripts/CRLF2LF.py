@@ -327,3 +327,4 @@ def print_report(changed: list[Path], skipped_binary: list[Path], write_files: b
 
 if __name__ == "__main__":
     raise SystemExit(main())
+    
