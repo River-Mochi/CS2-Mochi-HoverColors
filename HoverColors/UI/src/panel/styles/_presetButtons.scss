@@ -160,7 +160,7 @@
   &:hover {
     background-color: rgba(84, 215, 255, 0.14) !important;
     color: rgba(254, 255, 255, 1) !important;
-    transform: scale(1.12);
+    transform: scale(1.06);
   }
 }
 
@@ -180,7 +180,7 @@
 .presetResetBare:hover .resetIcon {
   opacity: 1;
   filter: brightness(0) invert(1) drop-shadow(0 0 5rem rgba(254, 255, 255, 0.34)) drop-shadow(0 0 4rem rgba(0, 0, 0, 0.65));
-  transform: scaleX(-1) scale(1.28);
+  transform: scaleX(-1) scale(1.16);
 }
 
 .resetButton {
