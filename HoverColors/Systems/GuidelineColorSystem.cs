@@ -38,6 +38,7 @@ namespace HoverColors.Systems
         private static readonly Color s_HighVisibilityGreenGuidelineColor = new(0.28f, 1f, 0.35f, 1f);
         private static readonly Color s_MochiBlueGuidelineColor = new(0.137f, 1f, 0.973f, 1f); // #23FFF8
         private static readonly Color s_CyanBlueGuidelineColor = new(0.329f, 0.843f, 1f, 1f); // #54D7FF
+        private const float kColorTolerance = 0.0005f;
 
         // Snapshot of the game's default colors. Opacity scales default alphas.
         private Color m_DefVeryLow = s_FallbackVeryLowGuidelineColor;
@@ -106,29 +107,6 @@ namespace HoverColors.Systems
 
             Entity entity = m_Query.GetSingletonEntity();
             bool entityChanged = entity != m_LastEntity;
-
-            // Hot-path early-return: defaults captured, same singleton, and no relevant setting changed.
-            if (m_DefaultsCaptured
-                && !entityChanged
-                && dashedOpacity == m_LastOpacity
-                && linesPreset == m_LastLinesPreset
-                && linesR == m_LastLinesR
-                && linesG == m_LastLinesG
-                && linesB == m_LastLinesB
-                && linesA == m_LastLinesA
-                && previewPreset == m_LastPreviewPreset
-                && previewR == m_LastPreviewR
-                && previewG == m_LastPreviewG
-                && previewB == m_LastPreviewB
-                && previewA == m_LastPreviewA
-                && dashedPreset == m_LastDashedPreset
-                && dashedR == m_LastDashedR
-                && dashedG == m_LastDashedG
-                && dashedB == m_LastDashedB)
-            {
-                return;
-            }
-
             GuideLineSettingsData data = EntityManager.GetComponentData<GuideLineSettingsData>(entity);
 
             if (!m_DefaultsCaptured || entityChanged)
@@ -152,14 +130,44 @@ namespace HoverColors.Systems
             Color linesRgb = GetGuidelineLinesColor(settings);
             Color previewRgb = GetGuidelinePreviewColor(settings);
             Color dashedRgb = GetGuidelineDashedColor(settings);
+            Color desiredVeryLow = ApplyGuidelineColor(m_DefVeryLow, linesRgb, linesA);
+            Color desiredLow = ApplyGuidelineColor(m_DefLow, linesRgb, linesA);
+            Color desiredMedium = ApplyGuidelineColor(m_DefMedium, previewRgb, previewA);
+            Color desiredHigh = ApplyGuidelineColor(m_DefHigh, dashedRgb, dashedOpacity);
+
+            bool settingsChanged = entityChanged
+                || dashedOpacity != m_LastOpacity
+                || linesPreset != m_LastLinesPreset
+                || linesR != m_LastLinesR
+                || linesG != m_LastLinesG
+                || linesB != m_LastLinesB
+                || linesA != m_LastLinesA
+                || previewPreset != m_LastPreviewPreset
+                || previewR != m_LastPreviewR
+                || previewG != m_LastPreviewG
+                || previewB != m_LastPreviewB
+                || previewA != m_LastPreviewA
+                || dashedPreset != m_LastDashedPreset
+                || dashedR != m_LastDashedR
+                || dashedG != m_LastDashedG
+                || dashedB != m_LastDashedB;
+
+            // Some tools, including line/curve helpers, can write the shared GuideLineSettingsData
+            // after HC has already applied. If the actual component no longer matches HC's desired
+            // output, reapply even when the HC settings cache did not change.
+            if (!settingsChanged
+                && GuideLineDataMatches(data, desiredVeryLow, desiredLow, desiredMedium, desiredHigh, m_DefPositive))
+            {
+                return;
+            }
 
             // Low/VeryLow are the big road-spacing circles/arcs/guide lines.
             // Swatch alpha scales vanilla alpha so their original ratio stays intact.
-            data.m_VeryLowPriorityColor = ApplyGuidelineColor(m_DefVeryLow, linesRgb, linesA);
-            data.m_LowPriorityColor = ApplyGuidelineColor(m_DefLow, linesRgb, linesA);
-            data.m_MediumPriorityColor = ApplyGuidelineColor(m_DefMedium, previewRgb, previewA);
+            data.m_VeryLowPriorityColor = desiredVeryLow;
+            data.m_LowPriorityColor = desiredLow;
+            data.m_MediumPriorityColor = desiredMedium;
             // High draws dashed alignment/telegraph helpers. RGB comes from the panel; slider scales alpha.
-            data.m_HighPriorityColor = ApplyGuidelineColor(m_DefHigh, dashedRgb, dashedOpacity);
+            data.m_HighPriorityColor = desiredHigh;
 
             // Leave positive placement feedback fully vanilla so valid-placement green stays familiar.
             data.m_PositiveFeedbackColor = m_DefPositive;
@@ -250,6 +258,29 @@ namespace HoverColors.Systems
         private static Color ApplyGuidelineColor(Color defaultColor, Color rgb, float opacity)
         {
             return new Color(rgb.r, rgb.g, rgb.b, defaultColor.a * opacity);
+        }
+
+        private static bool GuideLineDataMatches(
+            GuideLineSettingsData data,
+            Color desiredVeryLow,
+            Color desiredLow,
+            Color desiredMedium,
+            Color desiredHigh,
+            Color desiredPositive)
+        {
+            return ColorMatches(data.m_VeryLowPriorityColor, desiredVeryLow)
+                && ColorMatches(data.m_LowPriorityColor, desiredLow)
+                && ColorMatches(data.m_MediumPriorityColor, desiredMedium)
+                && ColorMatches(data.m_HighPriorityColor, desiredHigh)
+                && ColorMatches(data.m_PositiveFeedbackColor, desiredPositive);
+        }
+
+        private static bool ColorMatches(Color actual, Color expected)
+        {
+            return Mathf.Abs(actual.r - expected.r) < kColorTolerance
+                && Mathf.Abs(actual.g - expected.g) < kColorTolerance
+                && Mathf.Abs(actual.b - expected.b) < kColorTolerance
+                && Mathf.Abs(actual.a - expected.a) < kColorTolerance;
         }
 
         private static Color WithoutAlpha(Color c)
