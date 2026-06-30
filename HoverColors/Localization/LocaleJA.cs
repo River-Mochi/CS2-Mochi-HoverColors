@@ -41,11 +41,9 @@ namespace HoverColors.Localization
             {
                 // Mod title in the left rail of the Options menu.
                 { m_Settings.GetSettingsLocaleID(), title },
-
                 // Tabs
                 { m_Settings.GetOptionTabLocaleID(HoverColorsSettings.Actions), "アクション" },
                 { m_Settings.GetOptionTabLocaleID(HoverColorsSettings.About), "情報" },
-
                 // Groups
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kToolColors), "ツール色の動作" },
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kPanel), "パネル" },
@@ -55,101 +53,44 @@ namespace HoverColors.Localization
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kAboutInfo), string.Empty },
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kAboutLinks), string.Empty },
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kAboutDedication), "献辞" },
-
                 // Tool color behavior
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToolColorMode)), "ブルドーザー + 道路" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ToolColorMode)),
-                    "ブルドーザーまたは道路ツールが有効な間、一時的なアウトライン色を制御します。\n" +
-                    "\n" +
-                    "**1. 推奨** は、解体にはゲームの警告色（黄色）を使い、道路にはやわらかいバニラブルーを使います。\n" +
-                    "**2. バニラのツール色** は、ブルドーザーまたは道路ツールが有効な間、ゲーム通常のバニラブルーに戻します。\n" +
-                    "**3. 自分のカスタム色を使う** は、選んだ色をすべての場面で使います。\n" +
-                    "\n" +
-                    "目的: 一部のユーザー/テスターは、解体中にカスタム色が見づらいと感じています。\n" +
-                    "ツール使用中に視認性の高い色を選べるようにします。\n" +
-                    "カラーピッカーに自動保存されたカスタム色は上書きされません。"
-                },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ToolColorMode)), "ブルドーザーまたは道路ツールが有効な間の一時的なアウトライン色を制御します。\n\n**1. 推奨** は、解体時にゲームの警告色（黄色）、道路では少し柔らかい vanilla ブルーを使います。\n**2. vanilla ツール色** は、ブルドーザーまたは道路ツール中にゲーム通常の vanilla ブルーへ戻します。\n**3. カスタム色を維持** は、選んだ色を常に使います。\n\n目的: 一部のユーザー/テスターは、解体中にカスタム色が見えにくいと感じます。\nこの設定で、ツール使用中の視認性を高められます。\nカラーピッカーに自動保存されたカスタム色は上書きしません。" },
                 { m_Settings.GetToolColorModeLocaleID("Recommended"), "1. 推奨" },
-                { m_Settings.GetToolColorModeLocaleID("Vanilla"), "2. バニラのツール色" },
-                { m_Settings.GetToolColorModeLocaleID("Custom"), "3. 自分のカスタム色を使う" },
-
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseOverlapWarningColor)), "重なったアイテムのアウトラインを有効化" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseOverlapWarningColor)),
-                    "<有効を推奨>\n" +
-                    "オブジェクトまたはネットワークの配置が重なりによってブロックされたとき、ゲームのバニラのサーモンレッドのアウトラインを表示したままにします。\n" +
-                    "特殊産業の農場半径ガイドなどのエリア制限は変更しません。\n" +
-                    "\n" +
-                    "すべてのブルドーザー + 道路モードで動作し、保存済みのカスタム色を上書きしません。"
-                },
-
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseCustomColorsForNetLanes)), "NetLanes にカスタム色を許可" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseCustomColorsForNetLanes)),
-                    "<有効を推奨>\n" +
-                    "フェンス、生け垣、マーキングなど、レーンベースの NetLane 詳細ツールを配置するときに、保存済みの HC 色/透明度を使います。\n" +
-                    "\n" +
-                    "- 通常の道路は、ドロップダウンで選んだブルドーザー + 道路設定に従います。\n" +
-                    "- これらのツールにゲームのバニラブルーを使わせたい場合は無効にしてください。\n" +
-                    "- 有効時は、重なりエラー色が引き続き優先されます（バニラのエラー色 = サーモンレッド）。"
-                },
-
-                // Darker panel
+                { m_Settings.GetToolColorModeLocaleID("Vanilla"), "2. vanilla ツール色" },
+                { m_Settings.GetToolColorModeLocaleID("Custom"), "3. カスタム色を維持" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseOverlapWarningColor)), "重なっている項目のアウトラインを有効化" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseOverlapWarningColor)), "<有効を推奨>\nオブジェクトやネットワークの配置が重なりでブロックされたとき、ゲーム標準のサーモンレッドのアウトラインを表示したままにします。\n特殊産業の農場半径ガイドなどのエリア制限は変更しません。\n\nすべての ブルドーザー + 道路 モードで動作し、保存済みのカスタム色は上書きしません。" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseCustomColorsForNetLanes)), "NetLanes でカスタム色を許可" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseCustomColorsForNetLanes)), "<有効を推奨>\nフェンス、生け垣、マーキングなどの NetLane 詳細アイテムや類似のレーン系ツールを配置するとき、保存済みのホバー色/透明度を使います。\n\n- 通常の道路は、ドロップダウンで選んだ ブルドーザー + 道路 設定に従います。\n- これらのツールにゲームの vanilla ブルーのアウトラインを使わせたい場合は無効にしてください。\n- 重なりエラー色が有効な場合はそちらが優先されます（vanilla エラー色 = サーモンレッド）。" },
+                // Panel
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelTooltipsEnabled)), "ホバー色のツールチップ" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelTooltipsEnabled)), "<有効> = ホバー色のヘルプツールチップを表示します（推奨 [x]）。\n<無効> = この Mod のツールチップを非表示にします。\nツールチップはこのオプションメニュー内でのみ無効化できます。\nただし、都市内ではタイトルバーの Info (i) ボタンをクリックして再度有効にできます。" },
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)), "暗いパネル" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)),
-                    "有効 = <暗いパネル>: Legacy UI プレイヤー向けです。暗いパネルが好みなら Modern UI でも使用できます。\n" +
-                    "無効 = <標準パネル>: Hover Colors 独自の半透明スタイルです。\n" +
-                    "- より明るく、よりモダンな見た目です。\n" +
-                    "- 新しい Modern UI を使う多くのプレイヤーにおすすめです。\n" +
-                    "\n" +
-                    "両方試して好みの方を選んでください！変更されるのはこの Mod パネルの背景だけで、ゲームの UI ではありません。"
-                },
-
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)), "有効 = <暗いパネル>: レガシー UI プレイヤー向け。暗いパネルが好みなら Modern UI でも使えます。\n無効 = <標準パネル>: ホバー色のカスタム半透明スタイル。\n- より軽く、モダンな見た目。\n- 新しい Modern UI を使うほとんどのプレイヤーに最適。\n\n両方試して好みを選んでください。変更されるのはこの Mod パネルの背景だけで、ゲーム UI は変わりません。" },
                 // Guidelines opacity slider
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.GuidelineOpacityPercent)), "ガイドライン不透明度（アルファ）" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.GuidelineOpacityPercent)),
-                    "道路、フェンス、プロップなどを配置するときに便利な、破線の整列ガイドの不透明度を制御します。\n" +
-                    "\n" +
-                    "**100%** はバニラ既定の見た目を維持します。\n" +
-                    "**低くする** とガイドラインがより透明になります。\n" +
-                    "**0%** は完全に非表示にします - <非推奨>。\n" +
-                    "何が起きているか見づらくなるため、15%以上を推奨します。\n" +
-                    "同じスライダーは都市内の Mod パネルにもあります。両方は同期されています。\n" +
-                    "こちらを変更すると、都市内の方も変更されます。"
-                },
-
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.GuidelineOpacityPercent)), "ガイドラインの不透明度（アルファ）" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.GuidelineOpacityPercent)), "道路、フェンス、プロップなどを配置するときに便利な、破線の位置合わせガイドの不透明度を制御します。\n\n**100%** は vanilla の既定表示を保ちます。\n**低く** するとガイドラインがより透明になります。\n**0%** は完全に非表示 - <非推奨>。\n15%以上を推奨します。低すぎると状況が見えにくくなります。\n同じスライダーは都市内の Mod パネルにもあります。両方は同期しています;\nこちらを変えると都市内のスライダーも変わります。" },
                 // Keybinds
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.TogglePanelBinding)), "メインパネルを開く/閉じる" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.TogglePanelBinding)),
-                    "都市内の Hover オブジェクト色パネルを開く / 閉じるキーボードショートカットです。" },
-                { m_Settings.GetBindingKeyLocaleID(Mod.kTogglePanelActionName), "Hover Colors パネルを切り替え" },
-
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleSurfaceToolAreasBinding)), "Surface ツールのプレビューを切り替え" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ToggleSurfaceToolAreasBinding)),
-                    "サーフェス配置中に、Surface ツールのアクティブな境界プレビュー線を非表示または復元するキーボードショートカットです。" },
-                { m_Settings.GetBindingKeyLocaleID(Mod.kToggleSurfaceToolAreasActionName), "Surface プレビューレイヤー On/Off" },
-
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.TogglePresetBinding)), "プリセット 1+2 を切り替え" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.TogglePresetBinding)),
-                    "プリセットスロット 1 と 2 を切り替えるキーボードショートカットです。" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.TogglePanelBinding)), "都市内のホバー対象オブジェクト色パネルを開閉するホットキーです。" },
+                { m_Settings.GetBindingKeyLocaleID(Mod.kTogglePanelActionName), "ホバー色パネルの切り替え" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleSurfaceToolAreasBinding)), "Surface ツールのプレビューをオン/オフ" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ToggleSurfaceToolAreasBinding)), "サーフェス配置中に、Surface ツールの境界プレビュー線を非表示/復元するホットキーです。" },
+                { m_Settings.GetBindingKeyLocaleID(Mod.kToggleSurfaceToolAreasActionName), "Surface ツールプレビューレイヤー On/Off" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.TogglePresetBinding)), "プリセット 1+2 の切り替え" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.TogglePresetBinding)), "プリセットスロット 1 と 2 を切り替えるホットキーです。" },
                 { m_Settings.GetBindingKeyLocaleID(Mod.kTogglePresetActionName), "プリセット 1 と 2 を切り替え" },
-
                 // About name + version
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.NameText)), "Mod" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.NameText)), string.Empty },
-
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.VersionText)), "バージョン" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.VersionText)), string.Empty },
-
                 // About Paradox Mods link button
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.OpenParadox)), "Paradox Mods" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.OpenParadox)), "作者の Paradox Mods ページを開きます。" },
-
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.MochiDedicationText)),
-                    "Mochi の思い出に捧げて。"
-                },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.MochiDedicationText)),
-                    "この Mod は Mochi に捧げます。7歳で迎えられた、愛された犬でした。\n" +
-                    "そして13年間、愛と喜びを与えてくれました。Mochi なしではこの Mod は生まれませんでした。"
-                },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.MochiDedicationText)), "Mochi への愛をこめて。" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.MochiDedicationText)), "この Mod は Mochi に捧げます。7歳で迎えた大切なわんこで、\n13年間たくさんの愛と喜びをくれました。Mochi なしではこの Mod は生まれませんでした。" },
             };
         }
 
