@@ -1,20 +1,9 @@
-// File: UI/src/panel/_presetButtons.scss
-// Purpose: Preset slot, reset, and hold-to-save styles for MochiColorPickerPanel.module.scss.
-//
-// Visual language:
-//   - Hover = thin soft white outline around the preset swatch button.
-//   - Selected = blue number + small blue dot + subtle tint on number half only.
-//   - Saved color swatch stays true color except during the temporary hold-to-save sweep.
-
-// Disable old pseudo-element rings if a stale rule survives elsewhere.
 .presetSlot::before,
 .presetSlot::after {
     content: none !important;
     display: none !important;
 }
 
-// Number first, full-height saved-color sliver second:
-//   [ 1 |█ ] [ 2 |█ ]
 .presetSlot {
     width: 30rem !important;
     min-width: 30rem !important;
@@ -36,7 +25,6 @@
     transition: background-color 120ms ease-out, box-shadow 120ms ease-out;
 }
 
-// Number side. TSX sets active/idle/hover text color inline.
 .presetNumber {
     width: 18rem;
     min-width: 18rem;
@@ -56,8 +44,6 @@
     transition: background-color 120ms ease-out;
 }
 
-// Saved-color preview sliver. Do not tint this in the selected state;
-// it must show the true saved preset color.
 .presetSwatch {
     width: 12rem;
     min-width: 12rem;
@@ -71,14 +57,10 @@
     box-shadow: none;
 }
 
-// A little blue tint only behind the number half, never over the true color swatch.
-// Tweak: lower 0.12 for subtler selected state, or set transparent to remove.
 .presetSlotActive .presetNumber {
     background-color: rgba(30, 131, 170, 0.12) !important;
 }
 
-// Real child hover ring. Explicit offsets instead of `inset` because Cohtml can
-// render `inset` inconsistently.
 .presetHoverRing {
     position: absolute;
     top: 0;
@@ -99,8 +81,6 @@
     transition: opacity 120ms ease-out, border-color 120ms ease-out;
 }
 
-// Hover outline brightness knob: change 0.62 to 0.52 for softer or 0.70 for stronger.
-// No :focus-visible selector because Cohtml logs it as unsupported.
 .presetSlot:hover .presetHoverRing,
 .presetSlot:focus .presetHoverRing,
 .presetSlotActive:hover .presetHoverRing,
@@ -112,8 +92,6 @@
     border-left-color: rgba(254, 255, 255, 0.62) !important;
 }
 
-// Selected preset marker: small blue dot bottom-left.
-// Position knobs: bottom/left. Size knob: width/height.
 .presetActiveRing {
     position: absolute;
     top: auto !important;
@@ -141,8 +119,6 @@
     box-shadow: 0 0 3rem rgba(30, 131, 170, 0.34);
 }
 
-// Preset save sweep across both halves while holding. It temporarily tints the
-// true swatch during the hold animation only.
 .holdBar {
     position: absolute;
     left: 0;
@@ -157,14 +133,12 @@
     z-index: 35;
 }
 
-// SVG reset avoids missing glyph boxes in some CJK fonts.
-// Hover uses opacity/filter/transform only.
 .presetResetBare {
     background: none !important;
     border: none !important;
     box-shadow: none !important;
-    width: 24rem;
-    height: 24rem;
+    width: 26rem;
+    height: 26rem;
     padding: 0;
     cursor: pointer;
     display: flex;
@@ -178,18 +152,17 @@
     &:focus {
         background-color: rgba(84, 215, 255, 0.14) !important;
         color: rgba(254, 255, 255, 1) !important;
-        transform: scale(1.08);
+        transform: scale(1.12);
     }
 }
 
-// Light gray at rest; hover filters to white.
 .resetIcon {
-    width: 14rem;
-    height: 14rem;
+    width: 17rem;
+    height: 17rem;
     pointer-events: none;
     position: relative;
     z-index: 1;
-    opacity: 0.86;
+    opacity: 0.90;
     filter: drop-shadow(0 0 3rem rgba(0, 0, 0, 0.42));
     transform: scaleX(-1);
     transition: filter 120ms ease-out, opacity 120ms ease-out, transform 120ms ease-out;
@@ -198,8 +171,8 @@
 .presetResetBare:hover .resetIcon,
 .presetResetBare:focus .resetIcon {
     opacity: 1;
-    filter: brightness(0) invert(1) drop-shadow(0 0 5rem rgba(254, 255, 255, 0.28)) drop-shadow(0 0 4rem rgba(0, 0, 0, 0.65));
-    transform: scaleX(-1) scale(1.2);
+    filter: brightness(0) invert(1) drop-shadow(0 0 5rem rgba(254, 255, 255, 0.34)) drop-shadow(0 0 4rem rgba(0, 0, 0, 0.65));
+    transform: scaleX(-1) scale(1.28);
 }
 
 .resetButton {
