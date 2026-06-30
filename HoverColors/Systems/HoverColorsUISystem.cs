@@ -96,7 +96,6 @@ namespace HoverColors.UI
         private const float ResetPreset2R = 1f, ResetPreset2G = 1f, ResetPreset2B = 1f;
         private const float ResetPreset2A = 0.65f, ResetPreset2FillA = 0f;
 
-
         // In-memory backup for TogglePresetDefaults (session-only, not persisted to .coc).
         private float m_BkP1R, m_BkP1G, m_BkP1B, m_BkP1A, m_BkP1FillA;
         private int m_BkP1Guideline;
@@ -263,16 +262,16 @@ namespace HoverColors.UI
             UpdateIfChanged(m_VanillaOutlineActiveBinding, IsVanillaOutlineActive());
 
             // Preset stored colors + active flags
-            UpdateIfChanged(m_Preset1RBinding, settings?.Preset1R ?? DefaultPreset1R);
-            UpdateIfChanged(m_Preset1GBinding, settings?.Preset1G ?? DefaultPreset1G);
-            UpdateIfChanged(m_Preset1BBinding, settings?.Preset1B ?? DefaultPreset1B);
-            UpdateIfChanged(m_Preset1ABinding, settings?.Preset1A ?? DefaultPreset1A);
-            UpdateIfChanged(m_Preset1FillABinding, settings?.Preset1FillA ?? DefaultPreset1FillA);
-            UpdateIfChanged(m_Preset2RBinding, settings?.Preset2R ?? DefaultPreset2R);
-            UpdateIfChanged(m_Preset2GBinding, settings?.Preset2G ?? DefaultPreset2G);
-            UpdateIfChanged(m_Preset2BBinding, settings?.Preset2B ?? DefaultPreset2B);
-            UpdateIfChanged(m_Preset2ABinding, settings?.Preset2A ?? DefaultPreset2A);
-            UpdateIfChanged(m_Preset2FillABinding, settings?.Preset2FillA ?? DefaultPreset2FillA);
+            UpdateIfChanged(m_Preset1RBinding, settings?.Preset1R ?? ResetPreset1R);
+            UpdateIfChanged(m_Preset1GBinding, settings?.Preset1G ?? ResetPreset1G);
+            UpdateIfChanged(m_Preset1BBinding, settings?.Preset1B ?? ResetPreset1B);
+            UpdateIfChanged(m_Preset1ABinding, settings?.Preset1A ?? ResetPreset1A);
+            UpdateIfChanged(m_Preset1FillABinding, settings?.Preset1FillA ?? ResetPreset1FillA);
+            UpdateIfChanged(m_Preset2RBinding, settings?.Preset2R ?? ResetPreset2R);
+            UpdateIfChanged(m_Preset2GBinding, settings?.Preset2G ?? ResetPreset2G);
+            UpdateIfChanged(m_Preset2BBinding, settings?.Preset2B ?? ResetPreset2B);
+            UpdateIfChanged(m_Preset2ABinding, settings?.Preset2A ?? ResetPreset2A);
+            UpdateIfChanged(m_Preset2FillABinding, settings?.Preset2FillA ?? ResetPreset2FillA);
             UpdateIfChanged(m_Preset1ActiveBinding, IsPresetActive(1));
             UpdateIfChanged(m_Preset2ActiveBinding, IsPresetActive(2));
         }
