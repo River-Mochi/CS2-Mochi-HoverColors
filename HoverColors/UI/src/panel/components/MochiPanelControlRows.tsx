@@ -4,6 +4,7 @@
 import React from "react";
 import { Color } from "cs2/bindings";
 import { SideTooltip } from "../tooltip/SideTooltip";
+import { MochiSlider } from "./MochiSlider";
 import { PresetSlotButton } from "./MochiPanelPieces";
 import {
     compactSwatchStyle,
@@ -21,14 +22,12 @@ import styles from "../../MochiColorPickerPanel.module.scss";
 type PickerDirection = "up" | "down";
 type TooltipFn = (text: string) => React.ReactElement | undefined;
 type ColorFieldComponent = React.ComponentType<any>;
-type SliderComponent = React.ComponentType<any>;
 type PanelText = ReturnType<typeof useMochiPanelText>;
 
 interface MochiPanelControlRowsProps {
     text: PanelText;
     tt: TooltipFn;
     ColorField: ColorFieldComponent;
-    Slider: SliderComponent;
     focusDisabled: any;
     numberFieldClass: string;
     useDarkerPanel: boolean;
@@ -109,7 +108,6 @@ export const MochiPanelControlRows = ({
     text,
     tt,
     ColorField,
-    Slider,
     focusDisabled,
     numberFieldClass,
     useDarkerPanel,
@@ -349,7 +347,7 @@ export const MochiPanelControlRows = ({
                 <SideTooltip tooltip={tt(text.tooltipFillOpacity)} side="right">
                     <div className={styles.controlBody}>
                         <div className={styles.sliderRow}>
-                            <Slider
+                            <MochiSlider
                                 focusKey={focusDisabled}
                                 className={styles.slider}
                                 value={fillA}
@@ -511,7 +509,7 @@ export const MochiPanelControlRows = ({
 
                     <SideTooltip tooltip={tt(text.tooltipGuidelinesOpacity)} side="right">
                         <div className={`${styles.sliderRow} ${styles.guidelineSliderRow}`}>
-                            <Slider
+                            <MochiSlider
                                 focusKey={focusDisabled}
                                 className={styles.slider}
                                 value={guidelineOpacity}
