@@ -81,11 +81,11 @@ tags: Mochi's blue scrubber, Highlight, border color, remove blue, guidelines, d
 	<RequiredDLC Value="" />
 	<!--Change log for new version. Single line or multi line. Supports minimal markdown subset-->
 <ChangeLog>
-- Resize main color outline swatch, added styling and dot indicator
 - Added Collapsible panel arrow
+- Resize main color outline swatch, added styling and dot indicator
+- Updated Game top left icon to a color palette image.
 - Mod Tooltips now can only be turned off from Options menu to prevent player accidental turn off.
 - title bar info icon can only turn ON tooltips now but not off (see options menu).
-- Updated Game top left icon to a color palette image.
 - added more transparent slider style.
 - Internal refactor and organize
 </ChangeLog>
