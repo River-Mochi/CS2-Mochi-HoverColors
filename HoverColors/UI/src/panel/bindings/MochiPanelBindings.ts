@@ -1,4 +1,4 @@
-// File: UI/src/panel/MochiPanelBindings.ts
+// File: UI/src/panel/bindings/MochiPanelBindings.ts
 // Purpose: Central binding names/defaults for the compact Hover Colors panel.
 
 import { bindValue } from "cs2/api";
@@ -49,6 +49,7 @@ export const guidelineDashedColorB$ = bindValue<number>(CHANNEL, "GuidelineDashe
 
 export const guidelineOpacity$ = bindValue<number>(CHANNEL, "GuidelineOpacityPercent", 30);
 export const panelTooltipsEnabled$ = bindValue<boolean>(CHANNEL, "PanelTooltipsEnabled", true);
+export const panelCollapsed$ = bindValue<boolean>(CHANNEL, "PanelCollapsed", false);
 export const useDarkerPanel$ = bindValue<boolean>(CHANNEL, "UseDarkerPanel", false);
 export const surfaceToolAreasSuppressed$ = bindValue<boolean>(CHANNEL, "SurfaceToolAreasSuppressed", true);
 export const specializedIndustryAreasSuppressed$ = bindValue<boolean>(CHANNEL, "SpecializedIndustryAreasSuppressed", true);

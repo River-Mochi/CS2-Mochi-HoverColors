@@ -39,11 +39,11 @@ namespace HoverColors.Settings
             DistrictA = 64f / 255f;
 
             // Starter presets (players can overwrite these with the panel's Save button).
-            // Slot 1 = Mochi's gentle gray-purple. Slot 2 = yenyang-inspired purple-gray.
-            Preset1R = 140f / 255f;
-            Preset1G = 140f / 255f;
-            Preset1B = 171f / 255f;
-            Preset1A = 0.5f;
+            // Slot 1 = soft D7E2C2 at 67% opacity. Slot 2 = yenyang-inspired purple-gray.
+            Preset1R = 215f / 255f;
+            Preset1G = 226f / 255f;
+            Preset1B = 194f / 255f;
+            Preset1A = 0.67f;
             Preset1FillA = 0f;
 
             Preset2R = 0.25f;
@@ -97,6 +97,7 @@ namespace HoverColors.Settings
             UseOverlapWarningColor = true;
             UseCustomColorsForNetLanes = true;
             UseDarkerPanel = false;
+            PanelCollapsed = false;
 
             // 100 = vanilla default. Lower = more transparent guidelines.
             GuidelineOpacityPercent = kDefaultGuidelineOpacityPercent;

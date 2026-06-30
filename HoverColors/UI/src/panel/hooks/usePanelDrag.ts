@@ -1,5 +1,5 @@
-// File: UI/src/panel/usePanelDrag.ts
-// Keeps the GTL-anchored panel draggable while clamping it inside the game window.
+// File: UI/src/panel/hooks/usePanelDrag.ts
+// Purpose: Keeps the GTL-anchored panel draggable while clamping it inside the game window.
 
 import React from "react";
 

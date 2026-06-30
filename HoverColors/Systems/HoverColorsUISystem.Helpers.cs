@@ -118,15 +118,15 @@ namespace HoverColors.UI
 
         private static float Clamp01(float value) => Math.Max(0f, Math.Min(1f, value));
 
-        private static bool PresetsAtDefaults(HoverColorsSettings s)
+        private static bool PresetsAtResetSet(HoverColorsSettings s)
         {
-            return ApproxEqual(s.Preset1R, DefaultPreset1R) && ApproxEqual(s.Preset1G, DefaultPreset1G)
-                && ApproxEqual(s.Preset1B, DefaultPreset1B) && ApproxEqual(s.Preset1A, DefaultPreset1A)
-                && ApproxEqual(s.Preset1FillA, DefaultPreset1FillA)
+            return ApproxEqual(s.Preset1R, ResetPreset1R) && ApproxEqual(s.Preset1G, ResetPreset1G)
+                && ApproxEqual(s.Preset1B, ResetPreset1B) && ApproxEqual(s.Preset1A, ResetPreset1A)
+                && ApproxEqual(s.Preset1FillA, ResetPreset1FillA)
                 && s.Preset1GuidelinePercent == HoverColorsSettings.kDefaultGuidelineOpacityPercent
-                && ApproxEqual(s.Preset2R, DefaultPreset2R) && ApproxEqual(s.Preset2G, DefaultPreset2G)
-                && ApproxEqual(s.Preset2B, DefaultPreset2B) && ApproxEqual(s.Preset2A, DefaultPreset2A)
-                && ApproxEqual(s.Preset2FillA, DefaultPreset2FillA)
+                && ApproxEqual(s.Preset2R, ResetPreset2R) && ApproxEqual(s.Preset2G, ResetPreset2G)
+                && ApproxEqual(s.Preset2B, ResetPreset2B) && ApproxEqual(s.Preset2A, ResetPreset2A)
+                && ApproxEqual(s.Preset2FillA, ResetPreset2FillA)
                 && s.Preset2GuidelinePercent == HoverColorsSettings.kDefaultGuidelineOpacityPercent;
         }
 

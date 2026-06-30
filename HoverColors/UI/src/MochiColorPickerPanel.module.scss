@@ -1,17 +1,11 @@
-// File: MochiColorPickerPanel.module.scss
-// Purpose: Main shell/layout styles for the compact Hover Colors panel.
-// Most detailed control styles live in panel/*.scss partials so this file stays readable.
-
-@use "./panel/presetButtons";
-@use "./panel/dragGrip";
-@use "./panel/activeIndicators";
-@use "./panel/swatches";
-@use "./panel/sliders";
-@use "./panel/actionBar";
-@use "./panel/districtMenu";
-@use "./panel/panelDarker"; // Dark mode keeps its own button borders; do not merge with Standard.
-
-// ─── Panel shell ──────────────────────────────────────────────────────────────
+@use "./panel/styles/presetButtons";
+@use "./panel/styles/dragGrip";
+@use "./panel/styles/activeIndicators";
+@use "./panel/styles/swatches";
+@use "./panel/styles/sliders";
+@use "./panel/styles/actionBar";
+@use "./panel/styles/districtMenu";
+@use "./panel/styles/panelDarker";
 
 .panelAnchor {
     position: absolute;
@@ -28,19 +22,11 @@
 }
 
 .panelContent {
-    // Width knob for the whole panel.
-    // 246rem fits icon + swatch + owner swatch + preset slots + reset.
     --hc-panel-width: 246rem;
-
-    // Standard panel transparency knobs.
-    // Lower numbers = clearer/more transparent panel. Higher = more gray/opaque.
     --hc-panel-alpha-top: 0.32;
     --hc-panel-alpha-bottom: 0.24;
-
-    // Title text knobs. Keep nowrap on; tune these if the panel width changes.
     --hc-title-font-size: 12rem;
     --hc-title-letter-spacing: 0.80rem;
-
     position: relative;
     overflow: visible;
     width: var(--hc-panel-width);
@@ -57,21 +43,14 @@
     box-shadow: 0 6rem 18rem rgba(0, 0, 0, 0.16);
 }
 
-// Options > Darker panel. Vanilla theme classes own the panel surface here:
-// navy color, LegacyUI shape, and game UI transparency all come from vanilla.
-// IMPORTANT: Dark panel button borders are intentionally different from Standard;
-// keep those unique overrides in panel/_panelDarker.scss.
 .panelDarker {
     --hc-uses-vanilla-panel-surface: 1;
 }
-
-// ─── Title bar ────────────────────────────────────────────────────────────────
 
 .titleBar {
     min-height: 20rem;
     display: flex;
     align-items: center;
-    // Negative top margin makes the hover wash cover the panel's top edge.
     margin: -8rem -1rem 0 -1rem;
     padding: 8rem 6rem 1rem 6rem;
     border-radius: 12rem 12rem 0 0;
@@ -130,7 +109,22 @@
     pointer-events: none;
 }
 
-// ─── Shared button + icon base ────────────────────────────────────────────────
+.collapseButton {
+    flex: 0 0 24rem;
+    width: 24rem;
+    height: 24rem;
+    min-width: 24rem;
+    margin-left: 8rem;
+    padding: 0 !important;
+}
+
+.collapseIcon {
+    width: 16rem;
+    height: 16rem;
+    display: block;
+    pointer-events: none;
+    filter: brightness(0) invert(1) opacity(0.95);
+}
 
 .infoButton,
 .controlIconButton {
@@ -151,12 +145,11 @@
     box-shadow: none;
 }
 
-// Info button: circular and aligned over the left icon column.
 .infoButton {
     width: 24rem;
     height: 24rem;
     flex: 0 0 24rem;
-    margin-left: 6rem; // nudge center over the body icon column
+    margin-left: 6rem;
     border-radius: 50%;
     border-color: transparent;
     background-color: transparent;
@@ -170,14 +163,24 @@
 }
 
 .titleBar .infoButton {
-    // Keeps the round info icon from sitting on the lower edge of the hover wash.
     margin-top: -2rem;
 }
 
-// Transparent cyan means tooltips are OFF.
-.infoButtonActive {
-    background-color: rgba(30, 131, 170, 0.55) !important;
-    border-color: rgba(84, 215, 255, 0.42) !important;
+.infoButtonTooltipsOff {
+    background-color: transparent !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+
+    .infoIcon {
+        opacity: 1;
+        filter: brightness(1.4) sepia(1) hue-rotate(-40deg) saturate(6);
+    }
+
+    &:hover {
+        background-color: rgba(245, 96, 96, 0.10) !important;
+        border-color: transparent !important;
+        box-shadow: none !important;
+    }
 }
 
 .infoIcon {
@@ -185,14 +188,13 @@
     height: 24rem;
     display: block;
     pointer-events: none;
-    transition: opacity 120ms ease-out, transform 120ms ease-out;
+    transition: opacity 120ms ease-out, transform 120ms ease-out, filter 120ms ease-out;
 }
 
 .infoButton:hover .infoIcon {
     transform: scale(1.08);
 }
 
-// 32rem square button shell for row icons: Outline, Fill, Guidelines.
 .controlIconButton {
     width: 32rem;
     height: 32rem;
@@ -213,7 +215,6 @@
     pointer-events: none;
 }
 
-// Idle icons look gray; hover/focus raises opacity to white.
 .idleIcon {
     opacity: 0.80;
     transition: opacity 120ms ease-out, transform 120ms ease-out;
@@ -229,12 +230,18 @@
     transform: none;
 }
 
-// ─── Control row layout ──────────────────────────────────────────────────────
-
 .body {
     display: flex;
     flex-direction: column;
-    padding: 6rem 8rem 6rem 8rem;
+    padding: 6rem 8rem 5rem 8rem;
+}
+
+.bodyCollapsed {
+    padding-bottom: 1rem;
+}
+
+.bodyCollapsed .outlineRow {
+    min-height: 34rem;
 }
 
 .controlRow {
@@ -249,7 +256,31 @@
     margin-top: 2.5rem;
 }
 
-// Gap between left icon button and right-side controls.
+.body > .controlRow:nth-child(3) {
+    margin-top: 5rem;
+    padding-top: 5rem;
+    padding-bottom: 4rem;
+}
+
+.body > .controlRow:nth-child(3)::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -8rem;
+    right: -8rem;
+    height: 1rem;
+    background-color: rgba(254, 255, 255, 0.16);
+    pointer-events: none;
+}
+
+.panelDarker .body > .controlRow:nth-child(3)::before {
+    background-color: rgba(254, 255, 255, 0.20);
+}
+
+.panelDarker .actions {
+    border-top-color: rgba(254, 255, 255, 0.20);
+}
+
 .controlBody {
     flex: 1 1 auto;
     min-width: 0;
@@ -264,8 +295,6 @@
     min-height: 38rem;
 }
 
-// Space-between pushes swatch/presets left and reset icon right.
-// Increase padding-right to move the reset icon left.
 .outlineControlBody {
     justify-content: space-between;
     box-sizing: border-box;
@@ -273,7 +302,6 @@
     padding-right: 6rem;
 }
 
-// Swatch + preset slots. margin-left aligns with slider tracks.
 .outlineLeft {
     display: flex;
     align-items: center;

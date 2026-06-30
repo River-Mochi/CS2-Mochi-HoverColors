@@ -1,5 +1,5 @@
-// File: UI/src/panel/MochiPanelColorUtils.ts
-// Small color/style helpers used by the compact panel controls.
+// File: UI/src/panel/helpers/MochiPanelColorUtils.ts
+// Purpose: Small color/style helpers used by the compact panel controls.
 
 import { Color } from "cs2/bindings";
 

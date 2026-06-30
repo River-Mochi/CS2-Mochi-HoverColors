@@ -1,4 +1,4 @@
-// File: UI/src/panel/useDistrictToolPanel.ts
+// File: UI/src/panel/hooks/useDistrictToolPanel.ts
 // Purpose: Opens the vanilla Areas > District tool after the District color menu is used.
 // Keep this separate from the visual District menu so the panel component stays readable.
 
@@ -9,7 +9,7 @@ import {
   AREA_MENU_NAME_TOKENS,
   DISTRICT_AREA_NAME_TOKENS,
   sameEntity,
-} from "./MochiPanelBindings";
+} from "../bindings/MochiPanelBindings";
 
 export const useDistrictToolPanel = () => {
   const toolbarGroups = useValue(toolbar.toolbarGroups$);
@@ -47,9 +47,7 @@ export const useDistrictToolPanel = () => {
     ?? districtAssets?.[0]
   ), [districtAssets, normalizeToolbarName]);
 
-  // Important:
   // Repeated District button/swatch clicks must not keep reopening the vanilla Areas panel.
-  // If the game is already on Areas > District, the mini panel can open/close by itself.
   const isDistrictToolSelected = React.useMemo(() => (
     areasMenu != null
     && districtCategory != null
@@ -66,8 +64,6 @@ export const useDistrictToolPanel = () => {
     selectedAssetMenu,
   ]);
 
-  // Areas panel is already open if the selected vanilla toolbar menu is Areas.
-  // We still may need to select the District category once, but we should not clear/reopen.
   const isAreasMenuOpen = React.useMemo(() => (
     areasMenu != null
     && sameEntity(selectedAssetMenu, areasMenu.entity)
@@ -134,7 +130,6 @@ export const useDistrictToolPanel = () => {
     }
 
     if (sameEntity(selectedAsset, districtAsset.entity)) {
-      // Already on Areas > District. Do not reselect or flash the vanilla panel.
       clearOpenTimers();
       setPendingDistrictToolOpen(false);
       return;
@@ -153,8 +148,6 @@ export const useDistrictToolPanel = () => {
     const districtCategoryEntity = districtCategory.entity;
     const districtEntity = districtAsset.entity;
 
-    // Vanilla can restore the previous subtool, so retry once.
-    // Do not call clearAssetSelection here; it makes the game Areas panel visibly flash.
     districtToolSelectRetryRef.current = window.setTimeout(() => {
       toolbar.selectAssetMenu(areasMenuEntity);
       toolbar.selectAssetCategory(districtCategoryEntity);
@@ -180,15 +173,12 @@ export const useDistrictToolPanel = () => {
   ]);
 
   const openAreasToolPanel = React.useCallback(() => {
-    // Already on Areas > District: do nothing. This prevents repeated flashing.
     if (isDistrictToolSelected) {
       clearOpenTimers();
       setPendingDistrictToolOpen(false);
       return;
     }
 
-    // Areas > District category is already open. Do not clear/reopen the panel.
-    // The mini panel and ColorField picker can work without forcing vanilla selection again.
     if (isDistrictCategoryOpen) {
       clearOpenTimers();
       setPendingDistrictToolOpen(false);
@@ -197,14 +187,11 @@ export const useDistrictToolPanel = () => {
 
     clearOpenTimers();
 
-    // Defer until after the picker/menu click finishes; toolbar bindings arrive in steps.
     areaPanelOpenTimerRef.current = window.setTimeout(() => {
-      // Do not clear asset selection here. It causes the Areas panel to visibly shrink/flash.
       setPendingDistrictToolOpen(true);
       areaPanelOpenTimerRef.current = null;
     }, 80);
 
-    // Bail out if the expected toolbar data never arrives.
     districtToolOpenTimeoutRef.current = window.setTimeout(() => {
       setPendingDistrictToolOpen(false);
       districtToolOpenTimeoutRef.current = null;

@@ -1,4 +1,4 @@
-// File: panel/_districtMenu.scss
+// File: UI/src/panel/styles/_districtMenu.scss
 // Purpose: District flyout menu, District swatch launcher, and reset button.
 
 // ─── District flyout menu ─────────────────────────────────────────────────────
@@ -49,7 +49,10 @@
 
 .districtMenuSwatchPreview {
     position: absolute;
-    inset: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
     z-index: 3;
     pointer-events: none;
     border-radius: 4rem;

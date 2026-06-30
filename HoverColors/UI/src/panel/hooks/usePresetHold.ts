@@ -1,20 +1,15 @@
-// File: UI/src/panel/usePresetHold.ts
+// File: UI/src/panel/hooks/usePresetHold.ts
 // Purpose: Hold-to-save behavior for the outline preset buttons.
-//
-// Preset interaction model:
-//   - Quick tap: apply saved preset.
-//   - Hold: save current outline color into that preset slot.
-//   - Sweep starts after a short delay so quick taps do not flash the fill bar.
 
 import React from "react";
 import { trigger } from "cs2/api";
-import { CHANNEL, PRESET_HOLD_MS } from "./MochiPanelBindings";
+import { CHANNEL, PRESET_HOLD_MS } from "../bindings/MochiPanelBindings";
 
 export type PresetSlot = 1 | 2;
 
 export const usePresetHold = () => {
     const [holdSlot, setHoldSlot] = React.useState<0 | PresetSlot>(0);
-    const [holdProgress, setHoldProgress] = React.useState(0); // 0..1, drives holdBar scaleX
+    const [holdProgress, setHoldProgress] = React.useState(0);
     const holdTimerRef = React.useRef<number | null>(null);
     const holdStartRef = React.useRef<number>(0);
     const holdRafRef = React.useRef<number | null>(null);
@@ -44,12 +39,11 @@ export const usePresetHold = () => {
         setHoldSlot(slot);
         setHoldProgress(0);
 
-        const sweepDelay = 150; // avoids a save-sweep flash on quick tap
+        const sweepDelay = 150;
         const tick = () => {
             const elapsed = performance.now() - holdStartRef.current;
 
             if (elapsed >= sweepDelay) {
-                // Sweep uses only the visible portion of the hold window.
                 const progress = Math.min((elapsed - sweepDelay) / (PRESET_HOLD_MS - sweepDelay), 1);
                 setHoldProgress(progress);
 

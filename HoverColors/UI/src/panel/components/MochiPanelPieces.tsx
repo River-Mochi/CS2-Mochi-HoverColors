@@ -1,10 +1,10 @@
-// File: UI/src/panel/MochiPanelPieces.tsx
+// File: UI/src/panel/components/MochiPanelPieces.tsx
 // Purpose: Small reusable pieces for MochiColorPickerPanel.tsx.
 
 import React from "react";
 import { Color } from "cs2/bindings";
-import { SideTooltip, type SideTooltipSide } from "./SideTooltip";
-import styles from "../MochiColorPickerPanel.module.scss";
+import { SideTooltip, type SideTooltipSide } from "../tooltip/SideTooltip";
+import styles from "../../MochiColorPickerPanel.module.scss";
 
 type PresetSlotButtonProps = {
     slot: 1 | 2;

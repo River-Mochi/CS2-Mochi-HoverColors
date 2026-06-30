@@ -1,5 +1,5 @@
-// File: UI/src/panel/SideTooltip.tsx
-// Purpose: Panel-anchored tooltips that render OFF the panel (left / right / below), never over it.
+// File: UI/src/panel/tooltip/SideTooltip.tsx
+// Purpose: Panel-anchored tooltips that render OFF the panel (left / right / above / below), never over it.
 // The vanilla cs2/ui Tooltip only centers over the hovered control, so it always covered the panel.
 // This renders a single tooltip layer positioned relative to the panel anchor. Because the panel
 // uses a CSS transform, position:fixed would be broken, so the tooltip is an absolute child of the
@@ -7,7 +7,7 @@
 
 import React, { createContext, useContext, useState, type ReactNode, type RefObject } from "react";
 
-export type SideTooltipSide = "left" | "right" | "below";
+export type SideTooltipSide = "left" | "right" | "above" | "below";
 
 type ShowFn = (side: SideTooltipSide, content: ReactNode, controlRect: DOMRect) => void;
 
@@ -44,13 +44,15 @@ export const SideTooltipProvider = ({ anchorRef, panelRef, children }: ProviderP
 
         // Make everything relative to the anchor so the absolute tooltip moves with the panel.
         const controlMidY = control.top - anchor.top + control.height / 2;
+        const controlMidX = control.left - anchor.left + control.width / 2;
 
         if (side === "right") {
             setTip({ content, left: panel.right - anchor.left + GAP_PX, top: controlMidY, transform: "translateY(-50%)" });
         } else if (side === "left") {
             setTip({ content, left: panel.left - anchor.left - GAP_PX, top: controlMidY, transform: "translate(-100%, -50%)" });
+        } else if (side === "above") {
+            setTip({ content, left: controlMidX, top: panel.top - anchor.top - GAP_PX, transform: "translate(-50%, -100%)" });
         } else {
-            const controlMidX = control.left - anchor.left + control.width / 2;
             setTip({ content, left: controlMidX, top: panel.bottom - anchor.top + GAP_PX, transform: "translateX(-50%)" });
         }
     };
@@ -68,19 +70,21 @@ export const SideTooltipProvider = ({ anchorRef, panelRef, children }: ProviderP
                     transform: tip.transform,
                     zIndex: 1000050,
                     pointerEvents: "none",
-                    maxWidth: "230rem",
-                    paddingTop: "6rem",
-                    paddingRight: "9rem",
-                    paddingBottom: "6rem",
-                    paddingLeft: "9rem",
+                    maxWidth: "240rem",
+                    paddingTop: "7rem",
+                    paddingRight: "10rem",
+                    paddingBottom: "7rem",
+                    paddingLeft: "10rem",
                     backgroundColor: "rgba(20, 23, 28, 0.96)",
-                    color: "rgba(255, 255, 255, 0.94)",
+                    color: "rgba(255, 255, 255, 0.95)",
                     borderRadius: "4rem",
                     borderWidth: "1rem",
                     borderStyle: "solid",
                     borderColor: "rgba(120, 220, 255, 0.45)",
-                    fontSize: "11rem",
-                    lineHeight: "1.3"
+                    fontSize: "13rem",
+                    lineHeight: "1.35",
+                    whiteSpace: "normal",
+                    overflowWrap: "break-word"
                 }}>
                     {tip.content}
                 </div>

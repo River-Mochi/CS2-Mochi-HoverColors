@@ -1,11 +1,11 @@
-// File: UI/src/panel/useDistrictHold.ts
+// File: UI/src/panel/hooks/useDistrictHold.ts
 // Purpose: Quick-click/hold behavior for the bottom District color button.
 //
 // Quick click opens the District mini menu and also nudges the vanilla Areas tool panel open.
 // Hold resets District colors to vanilla. The hold progress is used by the fill-sweep bar.
 
 import React from "react";
-import { DISTRICT_RESET_HOLD_MS } from "./MochiPanelBindings";
+import { DISTRICT_RESET_HOLD_MS } from "../bindings/MochiPanelBindings";
 
 interface UseDistrictHoldOptions {
     onReset: () => void;

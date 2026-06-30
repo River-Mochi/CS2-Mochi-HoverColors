@@ -92,7 +92,15 @@ namespace HoverColors.Localization
                     "- Overlapping error color still wins when enabled (vanilla error color = salmon red)."
                 },
 
-                // Darker panel
+                // Panel
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelTooltipsEnabled)), "Tooltips for Hover Colors" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelTooltipsEnabled)),
+                    "<Enabled> = show Hover Colors help tooltips (recommended [x]).\n" +
+                    "<Disabled> = hide tooltips for this mod.\n" +
+                    "Tooltips can only be disabled inside this Options menu.\n" +
+                    "However, you can Enable them back ON in the city; click on the Info (i) button on the title bar."
+                },
+
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)), "Darker panel" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)),
                     "Enabled = <Dark panel>: made for legacy UI players; can also be used in Modern UI if you like a darker panel.\n" +

@@ -1,37 +1,37 @@
-// File: UI/src/panel/MochiPanelControlRows.tsx
+// File: UI/src/panel/components/MochiPanelControlRows.tsx
 // Purpose: Visual rows for Outline, Fill, and Guidelines. Logic/state stays in MochiColorPickerPanel.tsx.
 
 import React from "react";
-import { SideTooltip } from "./SideTooltip";
 import { Color } from "cs2/bindings";
+import { SideTooltip } from "../tooltip/SideTooltip";
+import { MochiSlider } from "./MochiSlider";
 import { PresetSlotButton } from "./MochiPanelPieces";
 import {
     compactSwatchStyle,
     holdBarStyle,
     presetNumberColor,
     presetPreviewStyle,
-} from "./MochiPanelColorUtils";
-import { useMochiPanelText } from "./useMochiPanelText";
-import fillIconSrc from "../../images/MainElements-Fill3.svg";
-import outlineIconSrc from "../../images/MainElements_short_bigTriangle.svg";
-import guidelinesIconSrc from "../../images/GuideLines4.svg";
-import resetIconSrc from "../../images/Reset_Button2.svg";
-import styles from "../MochiColorPickerPanel.module.scss";
+} from "../helpers/MochiPanelColorUtils";
+import { useMochiPanelText } from "../hooks/useMochiPanelText";
+import fillIconSrc from "../../../images/MainElements-Fill3.svg";
+import outlineIconSrc from "../../../images/MainElements_short_bigTriangle.svg";
+import guidelinesIconSrc from "../../../images/GuideLines4.svg";
+import resetIconSrc from "../../../images/Reset_Button2.svg";
+import styles from "../../MochiColorPickerPanel.module.scss";
 
 type PickerDirection = "up" | "down";
 type TooltipFn = (text: string) => React.ReactElement | undefined;
 type ColorFieldComponent = React.ComponentType<any>;
-type SliderComponent = React.ComponentType<any>;
 type PanelText = ReturnType<typeof useMochiPanelText>;
 
 interface MochiPanelControlRowsProps {
     text: PanelText;
     tt: TooltipFn;
     ColorField: ColorFieldComponent;
-    Slider: SliderComponent;
     focusDisabled: any;
     numberFieldClass: string;
     useDarkerPanel: boolean;
+    collapsed: boolean;
 
     outline: Color;
     ownerColor: Color;
@@ -108,10 +108,10 @@ export const MochiPanelControlRows = ({
     text,
     tt,
     ColorField,
-    Slider,
     focusDisabled,
     numberFieldClass,
     useDarkerPanel,
+    collapsed,
     outline,
     ownerColor,
     fillA,
@@ -174,15 +174,15 @@ export const MochiPanelControlRows = ({
     updateGuidelinePreviewPickerDirection,
     updateGuidelineDashedPickerDirection,
 }: MochiPanelControlRowsProps) => {
-    // These compact swatches use a hidden vanilla ColorField for the popup and a custom preview for hover styling.
     const compactShellStyle = React.useCallback(
         (color: Color, hovered: boolean) => compactSwatchStyle(color, hovered, useDarkerPanel),
         [useDarkerPanel],
     );
 
+    const outlineSwatchActive = !preset1Active && !preset2Active;
+
     return (
-        <div className={styles.body}>
-            {/* Outline row: icon resets to vanilla; swatch edits color/alpha; slots apply/save presets. */}
+        <div className={`${styles.body} ${collapsed ? styles.bodyCollapsed : ""}`}>
             <div className={`${styles.controlRow} ${styles.outlineRow}`}>
                 <SideTooltip tooltip={tt(text.tooltipResetOutline)} side="left">
                     <button
@@ -199,7 +199,7 @@ export const MochiPanelControlRows = ({
                         <SideTooltip tooltip={tt(text.tooltipOutlineSwatch)} side="right">
                             <div
                                 ref={outlineSwatchRef}
-                                className={`${styles.outlineFieldShell} ${swatchHovered ? styles.outlineFieldShellHovered : ""}`}
+                                className={`${styles.outlineFieldShell} ${swatchHovered ? styles.outlineFieldShellHovered : ""} ${outlineSwatchActive ? styles.outlineFieldShellActive : ""}`}
                                 onMouseOver={() => {
                                     if (!swatchHovered) {
                                         setSwatchHovered(true);
@@ -230,6 +230,7 @@ export const MochiPanelControlRows = ({
                                     onOpenPicker={updateColorPickerDirection}
                                 />
                                 <span className={styles.outlineFieldHoverRing} aria-hidden="true" />
+                                <span className={styles.outlineFieldActiveDot} aria-hidden="true" />
                             </div>
                         </SideTooltip>
 
@@ -334,7 +335,8 @@ export const MochiPanelControlRows = ({
                 </div>
             </div>
 
-            {/* Fill row: icon resets to 0%, slider controls inner fill opacity. */}
+            {!collapsed && (
+            <>
             <div className={styles.controlRow}>
                 <SideTooltip tooltip={tt(text.tooltipResetFill)} side="left">
                     <button type="button" className={styles.controlIconButton} onClick={handleResetFill}>
@@ -345,7 +347,7 @@ export const MochiPanelControlRows = ({
                 <SideTooltip tooltip={tt(text.tooltipFillOpacity)} side="right">
                     <div className={styles.controlBody}>
                         <div className={styles.sliderRow}>
-                            <Slider
+                            <MochiSlider
                                 focusKey={focusDisabled}
                                 className={styles.slider}
                                 value={fillA}
@@ -362,7 +364,6 @@ export const MochiPanelControlRows = ({
                 </SideTooltip>
             </div>
 
-            {/* Guidelines row: two compact swatches plus dashed guideline opacity. */}
             <div className={styles.controlRow}>
                 <SideTooltip tooltip={tt(text.tooltipResetGuidelines)} side="left">
                     <button
@@ -481,7 +482,6 @@ export const MochiPanelControlRows = ({
                                 onMouseLeave={() => setGuidelineDashedHovered(false)}
                                 onMouseDown={updateGuidelineDashedPickerDirection}
                             >
-                                {/* Dashed alpha syncs with the guideline opacity slider. */}
                                 <ColorField
                                     focusKey={focusDisabled}
                                     className={styles.guidelineColorField}
@@ -509,7 +509,7 @@ export const MochiPanelControlRows = ({
 
                     <SideTooltip tooltip={tt(text.tooltipGuidelinesOpacity)} side="right">
                         <div className={`${styles.sliderRow} ${styles.guidelineSliderRow}`}>
-                            <Slider
+                            <MochiSlider
                                 focusKey={focusDisabled}
                                 className={styles.slider}
                                 value={guidelineOpacity}
@@ -525,6 +525,8 @@ export const MochiPanelControlRows = ({
                     </SideTooltip>
                 </div>
             </div>
+            </>
+            )}
         </div>
     );
 };

@@ -1,15 +1,15 @@
-// File: UI/src/panel/MochiPanelActionBar.tsx
+// File: UI/src/panel/components/MochiPanelActionBar.tsx
 // Purpose: Bottom action bar: Surface, Specialized Industry, and District color menu.
 
 import React from "react";
-import { SideTooltip } from "./SideTooltip";
 import { Color } from "cs2/bindings";
-import { compactSwatchStyle, holdBarStyle } from "./MochiPanelColorUtils";
-import { useMochiPanelText } from "./useMochiPanelText";
-import lotToolIconSrc from "../../images/LotTool03.svg";
-import specializedIndustryIconSrc from "../../images/LotToolSpecializedIndustry.svg";
-import surfaceIconSrc from "../../images/Districts03.svg";
-import styles from "../MochiColorPickerPanel.module.scss";
+import { SideTooltip } from "../tooltip/SideTooltip";
+import { compactSwatchStyle, holdBarStyle } from "../helpers/MochiPanelColorUtils";
+import { useMochiPanelText } from "../hooks/useMochiPanelText";
+import lotToolIconSrc from "../../../images/LotTool03.svg";
+import specializedIndustryIconSrc from "../../../images/LotToolSpecializedIndustry.svg";
+import surfaceIconSrc from "../../../images/Districts03.svg";
+import styles from "../../MochiColorPickerPanel.module.scss";
 
 type PickerDirection = "up" | "down";
 type TooltipFn = (text: string) => React.ReactNode | undefined;

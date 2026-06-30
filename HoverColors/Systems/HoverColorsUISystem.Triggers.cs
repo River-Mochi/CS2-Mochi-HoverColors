@@ -33,6 +33,7 @@ namespace HoverColors.UI
             AddBinding(new TriggerBinding(Mod.ModId, "ResetOutlineToVanilla", ResetOutlineToVanilla));
             AddBinding(new TriggerBinding<bool>(Mod.ModId, "SetPanelOpen", SetPanelOpen));
             AddBinding(new TriggerBinding<bool>(Mod.ModId, "SetPanelTooltipsEnabled", SetPanelTooltipsEnabled));
+            AddBinding(new TriggerBinding<bool>(Mod.ModId, "SetPanelCollapsed", SetPanelCollapsed));
             AddBinding(new TriggerBinding(Mod.ModId, "ToggleSurfaceToolAreas", ToggleSurfaceToolAreas));
             AddBinding(new TriggerBinding(Mod.ModId, "ToggleSpecializedIndustryAreas", ToggleSpecializedIndustryAreas));
             AddBinding(new TriggerBinding<int>(Mod.ModId, "ApplyPreset", ApplyPreset));
@@ -316,6 +317,18 @@ namespace HoverColors.UI
             ApplySaveAndSync(settings);
         }
 
+        private void SetPanelCollapsed(bool collapsed)
+        {
+            HoverColorsSettings? settings = Mod.Settings;
+            if (settings == null || settings.PanelCollapsed == collapsed)
+            {
+                return;
+            }
+
+            settings.PanelCollapsed = collapsed;
+            ApplySaveAndSync(settings);
+        }
+
         private void ToggleSurfaceToolAreas()
         {
             bool enabled = !AreaToolOverlaySystem.SuppressSurfaceToolAreas;
@@ -445,26 +458,27 @@ namespace HoverColors.UI
             if (settings == null) return;
 
             bool changed;
-            if (!PresetsAtDefaults(settings))
+            if (!PresetsAtResetSet(settings))
             {
-                // Save current player colors then apply defaults.
+                // Save current player colors, then apply the alternate reset set.
+                // First-install P1/P2 are in SetDefaults(); this reset set acts like extra preset colors.
                 m_BkP1R = settings.Preset1R; m_BkP1G = settings.Preset1G; m_BkP1B = settings.Preset1B;
                 m_BkP1A = settings.Preset1A; m_BkP1FillA = settings.Preset1FillA; m_BkP1Guideline = settings.Preset1GuidelinePercent;
                 m_BkP2R = settings.Preset2R; m_BkP2G = settings.Preset2G; m_BkP2B = settings.Preset2B;
                 m_BkP2A = settings.Preset2A; m_BkP2FillA = settings.Preset2FillA; m_BkP2Guideline = settings.Preset2GuidelinePercent;
                 m_PresetBackupExists = true;
 
-                settings.Preset1R = DefaultPreset1R; settings.Preset1G = DefaultPreset1G; settings.Preset1B = DefaultPreset1B;
-                settings.Preset1A = DefaultPreset1A; settings.Preset1FillA = DefaultPreset1FillA;
+                settings.Preset1R = ResetPreset1R; settings.Preset1G = ResetPreset1G; settings.Preset1B = ResetPreset1B;
+                settings.Preset1A = ResetPreset1A; settings.Preset1FillA = ResetPreset1FillA;
                 settings.Preset1GuidelinePercent = HoverColorsSettings.kDefaultGuidelineOpacityPercent;
-                settings.Preset2R = DefaultPreset2R; settings.Preset2G = DefaultPreset2G; settings.Preset2B = DefaultPreset2B;
-                settings.Preset2A = DefaultPreset2A; settings.Preset2FillA = DefaultPreset2FillA;
+                settings.Preset2R = ResetPreset2R; settings.Preset2G = ResetPreset2G; settings.Preset2B = ResetPreset2B;
+                settings.Preset2A = ResetPreset2A; settings.Preset2FillA = ResetPreset2FillA;
                 settings.Preset2GuidelinePercent = HoverColorsSettings.kDefaultGuidelineOpacityPercent;
                 changed = true;
             }
             else if (m_PresetBackupExists)
             {
-                // Restore backup.
+                // Restore the preset slots from before the alternate reset set was applied.
                 settings.Preset1R = m_BkP1R; settings.Preset1G = m_BkP1G; settings.Preset1B = m_BkP1B;
                 settings.Preset1A = m_BkP1A; settings.Preset1FillA = m_BkP1FillA; settings.Preset1GuidelinePercent = m_BkP1Guideline;
                 settings.Preset2R = m_BkP2R; settings.Preset2G = m_BkP2G; settings.Preset2B = m_BkP2B;
@@ -474,7 +488,7 @@ namespace HoverColors.UI
             }
             else
             {
-                // Already at defaults with no backup -> no-op.
+                // Already at the alternate reset set with no session backup.
                 changed = false;
             }
 
@@ -485,6 +499,7 @@ namespace HoverColors.UI
 
             ApplySaveAndSync(settings);
         }
+
 
         private void ResetGuidelines()
         {
