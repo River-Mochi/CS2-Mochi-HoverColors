@@ -100,12 +100,11 @@
 }
 
 // Hover outline brightness knob: change 0.62 to 0.52 for softer or 0.70 for stronger.
+// No :focus-visible selector because Cohtml logs it as unsupported.
 .presetSlot:hover .presetHoverRing,
 .presetSlot:focus .presetHoverRing,
-.presetSlot:focus-visible .presetHoverRing,
 .presetSlotActive:hover .presetHoverRing,
-.presetSlotActive:focus .presetHoverRing,
-.presetSlotActive:focus-visible .presetHoverRing {
+.presetSlotActive:focus .presetHoverRing {
     opacity: 1;
     border-top-color: rgba(254, 255, 255, 0.62) !important;
     border-right-color: rgba(254, 255, 255, 0.62) !important;
