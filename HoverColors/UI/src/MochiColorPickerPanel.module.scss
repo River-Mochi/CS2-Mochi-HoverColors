@@ -268,10 +268,13 @@
     padding: 6rem 8rem 5rem 8rem;
 }
 
-// Collapsed view ends right after the outline row; trim the bottom gap that
-// otherwise leaves room for the action bar/drag grip below.
+// Collapsed view ends right after the outline row; keep it tight.
 .bodyCollapsed {
-    padding-bottom: 3rem;
+    padding-bottom: 1rem;
+}
+
+.bodyCollapsed .outlineRow {
+    min-height: 34rem;
 }
 
 .controlRow {
