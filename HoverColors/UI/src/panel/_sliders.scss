@@ -1,5 +1,5 @@
 // File: panel/_sliders.scss
-// Purpose: Shared slider row and percentage readout styles.
+// Purpose: Shared slider row and percentage readout layout styles.
 
 .sliderRow {
     width: 100%;
@@ -13,17 +13,7 @@
     flex: 1 1 auto;
     min-width: 0;
     margin-right: 8rem; // gap between slider track and percent box
-
-    // Same approach as RoadRailSpeeds: keep the vanilla CS2 slider component and only
-    // feed it CSS variables. Do not manually restyle generated track/thumb elements.
-    // HC uses a more transparent track than RRS because this panel is smaller and busier.
-    --backgroundColor: rgba(176, 184, 188, 0.04);       // unused/right side of thumb
-    --sliderRangeColor: rgba(140, 148, 154, 0.38);      // used/left side of thumb
-    --sliderRangeColorFocused: rgba(165, 173, 179, 0.46);
-    --sliderThumbColor: rgba(235, 237, 239, 1);
-    --sliderThumbColorFocused: rgba(255, 255, 255, 1);
-    --trackSize: 7rem;
-    --focusedColor: transparent;
+    background-color: transparent;
 }
 
 .valueField {
