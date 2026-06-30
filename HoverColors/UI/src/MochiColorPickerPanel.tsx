@@ -51,17 +51,17 @@ import {
     surfaceToolAreasSuppressed$,
     useDarkerPanel$,
     vanillaOutlineActive$,
-} from "./panel/MochiPanelBindings";
-import { DragGrip } from "./panel/MochiPanelPieces";
-import { normalizeColorFieldValue } from "./panel/MochiPanelColorUtils";
-import { MochiPanelActionBar } from "./panel/MochiPanelActionBar";
-import { MochiPanelControlRows } from "./panel/MochiPanelControlRows";
-import { useDistrictHold } from "./panel/useDistrictHold";
-import { useDistrictToolPanel } from "./panel/useDistrictToolPanel";
-import { useMochiPanelText } from "./panel/useMochiPanelText";
-import { usePanelDrag } from "./panel/usePanelDrag";
-import { SideTooltip, SideTooltipProvider } from "./panel/SideTooltip";
-import { usePresetHold } from "./panel/usePresetHold";
+} from "./panel/bindings/MochiPanelBindings";
+import { MochiPanelActionBar } from "./panel/components/MochiPanelActionBar";
+import { MochiPanelControlRows } from "./panel/components/MochiPanelControlRows";
+import { DragGrip } from "./panel/components/MochiPanelPieces";
+import { normalizeColorFieldValue } from "./panel/helpers/MochiPanelColorUtils";
+import { useDistrictHold } from "./panel/hooks/useDistrictHold";
+import { useDistrictToolPanel } from "./panel/hooks/useDistrictToolPanel";
+import { useMochiPanelText } from "./panel/hooks/useMochiPanelText";
+import { usePanelDrag } from "./panel/hooks/usePanelDrag";
+import { usePresetHold } from "./panel/hooks/usePresetHold";
+import { SideTooltip, SideTooltipProvider } from "./panel/tooltip/SideTooltip";
 import infoIconSrc from "../images/AdvisorInfoViewWhite.svg";
 import closeIconSrc from "../images/Close.svg";
 import styles from "./MochiColorPickerPanel.module.scss";
@@ -383,7 +383,6 @@ export const MochiColorPickerPanel = () => {
 
     const resolver = VanillaComponentResolver.instance;
     const ColorField = resolver.ColorField;
-    const Slider = resolver.Slider;
     const focusDisabled = resolver.FOCUS_DISABLED;
     const numberFieldClass = resolver.mouseToolOptionsTheme["number-field"];
     const roundHighlightButtonTheme = resolver.roundHighlightButtonTheme;
@@ -459,7 +458,6 @@ export const MochiColorPickerPanel = () => {
                         text={text}
                         tt={tt}
                         ColorField={ColorField}
-                        Slider={Slider}
                         focusDisabled={focusDisabled}
                         numberFieldClass={numberFieldClass}
                         useDarkerPanel={useDarkerPanel}
