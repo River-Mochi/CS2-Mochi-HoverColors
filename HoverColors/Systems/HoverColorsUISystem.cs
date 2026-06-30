@@ -88,11 +88,14 @@ namespace HoverColors.UI
         private ValueBinding<bool> m_Preset1ActiveBinding = null!;
         private ValueBinding<bool> m_Preset2ActiveBinding = null!;
 
-        // Factory defaults — keep in sync with HoverColorsSettings.SetDefaults().
-        private const float DefaultPreset1R = 215f / 255f, DefaultPreset1G = 226f / 255f, DefaultPreset1B = 194f / 255f;
-        private const float DefaultPreset1A = 0.67f, DefaultPreset1FillA = 0f;
-        private const float DefaultPreset2R = 0.25f, DefaultPreset2G = 0.15f, DefaultPreset2B = 0.25f;
-        private const float DefaultPreset2A = 0.5f, DefaultPreset2FillA = 0f;
+        // Preset reset alternate set.
+        // First-install slots are defined in HoverColorsSettings.SetDefaults().
+        // Reset swaps player slots to this alternate set, then restores previous slots on a second click.
+        private const float ResetPreset1R = 140f / 255f, ResetPreset1G = 140f / 255f, ResetPreset1B = 171f / 255f;
+        private const float ResetPreset1A = 0.5f, ResetPreset1FillA = 0f;
+        private const float ResetPreset2R = 1f, ResetPreset2G = 1f, ResetPreset2B = 1f;
+        private const float ResetPreset2A = 0.65f, ResetPreset2FillA = 0f;
+
 
         // In-memory backup for TogglePresetDefaults (session-only, not persisted to .coc).
         private float m_BkP1R, m_BkP1G, m_BkP1B, m_BkP1A, m_BkP1FillA;
@@ -196,16 +199,17 @@ namespace HoverColors.UI
             m_VanillaOutlineActiveBinding = AddValueBinding("VanillaOutlineActive", IsVanillaOutlineActive());
 
             // Preset slot stored-color bindings (swatch previews + active-state).
-            m_Preset1RBinding = AddValueBinding("Preset1R", settings?.Preset1R ?? DefaultPreset1R);
-            m_Preset1GBinding = AddValueBinding("Preset1G", settings?.Preset1G ?? DefaultPreset1G);
-            m_Preset1BBinding = AddValueBinding("Preset1B", settings?.Preset1B ?? DefaultPreset1B);
-            m_Preset1ABinding = AddValueBinding("Preset1A", settings?.Preset1A ?? DefaultPreset1A);
-            m_Preset1FillABinding = AddValueBinding("Preset1FillA", settings?.Preset1FillA ?? DefaultPreset1FillA);
-            m_Preset2RBinding = AddValueBinding("Preset2R", settings?.Preset2R ?? DefaultPreset2R);
-            m_Preset2GBinding = AddValueBinding("Preset2G", settings?.Preset2G ?? DefaultPreset2G);
-            m_Preset2BBinding = AddValueBinding("Preset2B", settings?.Preset2B ?? DefaultPreset2B);
-            m_Preset2ABinding = AddValueBinding("Preset2A", settings?.Preset2A ?? DefaultPreset2A);
-            m_Preset2FillABinding = AddValueBinding("Preset2FillA", settings?.Preset2FillA ?? DefaultPreset2FillA);
+            m_Preset1RBinding = AddValueBinding("Preset1R", settings?.Preset1R ?? ResetPreset1R);
+            m_Preset1GBinding = AddValueBinding("Preset1G", settings?.Preset1G ?? ResetPreset1G);
+            m_Preset1BBinding = AddValueBinding("Preset1B", settings?.Preset1B ?? ResetPreset1B);
+            m_Preset1ABinding = AddValueBinding("Preset1A", settings?.Preset1A ?? ResetPreset1A);
+            m_Preset1FillABinding = AddValueBinding("Preset1FillA", settings?.Preset1FillA ?? ResetPreset1FillA);
+            m_Preset2RBinding = AddValueBinding("Preset2R", settings?.Preset2R ?? ResetPreset2R);
+            m_Preset2GBinding = AddValueBinding("Preset2G", settings?.Preset2G ?? ResetPreset2G);
+            m_Preset2BBinding = AddValueBinding("Preset2B", settings?.Preset2B ?? ResetPreset2B);
+            m_Preset2ABinding = AddValueBinding("Preset2A", settings?.Preset2A ?? ResetPreset2A);
+            m_Preset2FillABinding = AddValueBinding("Preset2FillA", settings?.Preset2FillA ?? ResetPreset2FillA);
+
             m_Preset1ActiveBinding = AddValueBinding("Preset1Active", IsPresetActive(1));
             m_Preset2ActiveBinding = AddValueBinding("Preset2Active", IsPresetActive(2));
         }
