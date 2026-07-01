@@ -1,11 +1,12 @@
 // File: UI/src/panel/styles/_presetButtons.scss
-// Purpose: Styles for preset slots and the preset-reset button.
+// Purpose: Styles for preset slots and the preset action buttons.
 //
 // Notes:
 // - Preset slots keep focus ring support because they are real buttons.
-// - Preset reset hover-grow is intentionally hover-only, not focus.
-//   Cohtml can keep focus after click, which made the reset icon stay enlarged
+// - Preset action hover-grow is intentionally hover-only, not focus.
+//   Cohtml can keep focus after click, which made reset icons stay enlarged
 //   until the player clicked somewhere else.
+// - Restore defaults uses the CCW icon. Switch Set A/B uses the clockwise icon.
 
 .presetSlot::before,
 .presetSlot::after {
@@ -175,10 +176,14 @@
   transition: filter 120ms ease-out, opacity 120ms ease-out, transform 120ms ease-out;
 }
 
+// Left button: restore all four preset slots to the mod defaults.
+// Uses CCW-looking arrow.
 .resetIconRestore {
   transform: scaleX(-1);
 }
 
+// Right button: switch between preset Set A and Set B.
+// Uses clockwise-looking arrow.
 .resetIconSwitch {
   transform: none;
 }
@@ -187,7 +192,14 @@
 .presetResetBare:hover .resetIcon {
   opacity: 1;
   filter: brightness(0) invert(1) drop-shadow(0 0 5rem rgba(254, 255, 255, 0.34)) drop-shadow(0 0 4rem rgba(0, 0, 0, 0.65));
+}
+
+.presetResetBare:hover .resetIconRestore {
   transform: scaleX(-1) scale(1.16);
+}
+
+.presetResetBare:hover .resetIconSwitch {
+  transform: scale(1.16);
 }
 
 .resetButton {
