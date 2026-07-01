@@ -23,6 +23,7 @@
   "HoverColors.UI.Tooltip.Preset2": "Set 2 — tap to apply. hold 0.5s saves your current color.\nHotkey K toggles between color 1 or 2.",
   "HoverColors.UI.Tooltip.ResetPresets": "⇔ Switch between Set A 1+2 and Set B 1+2.\nEach set has P1 + P2. Hold down P1 or P2 to save over them.",
   "HoverColors.UI.Tooltip.RestorePresetDefaults": "↺ Restore all 4 presets to mod defaults.\nWARNING, this overwrites saved preset 1/2 colors.",
+  "HoverColors.UI.Tooltip.RestorePresetDefaultsConfirm": "Confirm restore defaults?\nClick again to overwrite all 4 saved presets.",
   "HoverColors.UI.Tooltip.DistrictColors": "Click for District overlay fill and boundary line color/opacity.\nHold 0.5s to reset to game color.",
   "HoverColors.UI.Tooltip.ResetDistrictColors": "Reset all districts to the game's default blue.",
   "HoverColors.UI.DistrictMenu.AllDistricts": "All Districts",
