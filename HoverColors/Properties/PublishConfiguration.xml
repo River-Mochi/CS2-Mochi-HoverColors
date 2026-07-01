@@ -83,10 +83,11 @@ tags: Mochi's blue scrubber, Highlight, border color, remove blue, guidelines, d
 <ChangeLog>
 - Added Collapsible panel arrow
 - Resize main color outline swatch, added styling and dot indicator
+- Added Preset system with 4 colore presets and up to 4 player saveable presets. Set A and Set B: flip with the Reset button, hold to save over.
 - Updated Game top left icon to a color palette image.
 - Tooltips can now only be turned off from the Options menu to prevent accidental shutoff.
 - Title bar info icon can only turn tooltips back ON but not off (see options menu for OFF).
-- Added more transparent slider style.
+- More transparent slider style.
 - Improved preset reset behavior and fixed reset button hover/focus sticking.
 - Improved guideline reapply behavior for better compatibility with Advanced Line Tool mod or any mod that changes GuideLineSettingsData.
 - Internal refactor and organization.

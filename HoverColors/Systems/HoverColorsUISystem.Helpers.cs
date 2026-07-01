@@ -63,7 +63,7 @@ namespace HoverColors.UI
                 && ApproxEqual(s.FillA, targetFillA);
         }
 
-            private static bool TryGetPresetTargets(
+        private static bool TryGetPresetTargets(
             HoverColorsSettings settings,
             int slot,
             out float targetR,
@@ -128,7 +128,7 @@ namespace HoverColors.UI
             return false;
         }
 
-                private static void GetPresetBindingValues(
+        private static void GetPresetBindingValues(
             HoverColorsSettings? settings,
             int slot,
             out float targetR,
