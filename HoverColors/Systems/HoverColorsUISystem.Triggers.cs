@@ -38,7 +38,9 @@ namespace HoverColors.UI
             AddBinding(new TriggerBinding(Mod.ModId, "ToggleSpecializedIndustryAreas", ToggleSpecializedIndustryAreas));
             AddBinding(new TriggerBinding<int>(Mod.ModId, "ApplyPreset", ApplyPreset));
             AddBinding(new TriggerBinding<int>(Mod.ModId, "SavePreset", SavePreset));
+
             AddBinding(new TriggerBinding(Mod.ModId, "TogglePresetDefaults", TogglePresetDefaults));
+            AddBinding(new TriggerBinding(Mod.ModId, "RestorePresetDefaults", RestorePresetDefaults));
             AddBinding(new TriggerBinding(Mod.ModId, "ResetGuidelines", ResetGuidelines));
         }
 
@@ -507,10 +509,67 @@ namespace HoverColors.UI
                 return;
             }
 
-            settings.ActivePresetSet = nextSet;
+                        settings.ActivePresetSet = nextSet;
             ApplySaveAndSync(settings);
         }
-        
+
+        private void RestorePresetDefaults()
+        {
+            HoverColorsSettings? settings = Mod.Settings;
+            if (settings == null) return;
+
+            bool changed = !SameColor(settings.Preset1R, settings.Preset1G, settings.Preset1B, settings.Preset1A,
+                    HoverColorsSettings.kPresetA1R, HoverColorsSettings.kPresetA1G, HoverColorsSettings.kPresetA1B, HoverColorsSettings.kPresetA1A)
+                || !ApproxEqual(settings.Preset1FillA, HoverColorsSettings.kPresetA1FillA)
+                || settings.Preset1GuidelinePercent != HoverColorsSettings.kDefaultGuidelineOpacityPercent
+                || !SameColor(settings.Preset2R, settings.Preset2G, settings.Preset2B, settings.Preset2A,
+                    HoverColorsSettings.kPresetA2R, HoverColorsSettings.kPresetA2G, HoverColorsSettings.kPresetA2B, HoverColorsSettings.kPresetA2A)
+                || !ApproxEqual(settings.Preset2FillA, HoverColorsSettings.kPresetA2FillA)
+                || settings.Preset2GuidelinePercent != HoverColorsSettings.kDefaultGuidelineOpacityPercent
+                || !SameColor(settings.PresetAlt1R, settings.PresetAlt1G, settings.PresetAlt1B, settings.PresetAlt1A,
+                    HoverColorsSettings.kPresetB1R, HoverColorsSettings.kPresetB1G, HoverColorsSettings.kPresetB1B, HoverColorsSettings.kPresetB1A)
+                || !ApproxEqual(settings.PresetAlt1FillA, HoverColorsSettings.kPresetB1FillA)
+                || settings.PresetAlt1GuidelinePercent != HoverColorsSettings.kDefaultGuidelineOpacityPercent
+                || !SameColor(settings.PresetAlt2R, settings.PresetAlt2G, settings.PresetAlt2B, settings.PresetAlt2A,
+                    HoverColorsSettings.kPresetB2R, HoverColorsSettings.kPresetB2G, HoverColorsSettings.kPresetB2B, HoverColorsSettings.kPresetB2A)
+                || !ApproxEqual(settings.PresetAlt2FillA, HoverColorsSettings.kPresetB2FillA)
+                || settings.PresetAlt2GuidelinePercent != HoverColorsSettings.kDefaultGuidelineOpacityPercent;
+
+            if (!changed)
+            {
+                return;
+            }
+
+            settings.Preset1R = HoverColorsSettings.kPresetA1R;
+            settings.Preset1G = HoverColorsSettings.kPresetA1G;
+            settings.Preset1B = HoverColorsSettings.kPresetA1B;
+            settings.Preset1A = HoverColorsSettings.kPresetA1A;
+            settings.Preset1FillA = HoverColorsSettings.kPresetA1FillA;
+            settings.Preset1GuidelinePercent = HoverColorsSettings.kDefaultGuidelineOpacityPercent;
+
+            settings.Preset2R = HoverColorsSettings.kPresetA2R;
+            settings.Preset2G = HoverColorsSettings.kPresetA2G;
+            settings.Preset2B = HoverColorsSettings.kPresetA2B;
+            settings.Preset2A = HoverColorsSettings.kPresetA2A;
+            settings.Preset2FillA = HoverColorsSettings.kPresetA2FillA;
+            settings.Preset2GuidelinePercent = HoverColorsSettings.kDefaultGuidelineOpacityPercent;
+
+            settings.PresetAlt1R = HoverColorsSettings.kPresetB1R;
+            settings.PresetAlt1G = HoverColorsSettings.kPresetB1G;
+            settings.PresetAlt1B = HoverColorsSettings.kPresetB1B;
+            settings.PresetAlt1A = HoverColorsSettings.kPresetB1A;
+            settings.PresetAlt1FillA = HoverColorsSettings.kPresetB1FillA;
+            settings.PresetAlt1GuidelinePercent = HoverColorsSettings.kDefaultGuidelineOpacityPercent;
+
+            settings.PresetAlt2R = HoverColorsSettings.kPresetB2R;
+            settings.PresetAlt2G = HoverColorsSettings.kPresetB2G;
+            settings.PresetAlt2B = HoverColorsSettings.kPresetB2B;
+            settings.PresetAlt2A = HoverColorsSettings.kPresetB2A;
+            settings.PresetAlt2FillA = HoverColorsSettings.kPresetB2FillA;
+            settings.PresetAlt2GuidelinePercent = HoverColorsSettings.kDefaultGuidelineOpacityPercent;
+
+            ApplySaveAndSync(settings);
+        }
 
         private void ResetGuidelines()
         {
