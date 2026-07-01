@@ -81,15 +81,15 @@ tags: Mochi's blue scrubber, Highlight, border color, remove blue, guidelines, d
 	<RequiredDLC Value="" />
 	<!--Change log for new version. Single line or multi line. Supports minimal markdown subset-->
 <ChangeLog>
-    - Added Collapsible panel arrow
-    - Resize main color outline swatch, added styling and dot indicator
-    - Updated Game top left icon to a color palette image.
-    - Tooltips can now only be turned off from the Options menu to prevent accidental shutoff.
-    - Title bar info icon can only turn tooltips back ON but not off (see options menu for OFF).
-    - Added more transparent slider style.
-    - Improved preset reset behavior and fixed reset button hover/focus sticking.
-    - Improved guideline reapply behavior for better compatibility with Advanced Line Tool mod or any mod that changes GuideLineSettingsData.
-    - Internal refactor and organization.
+- Added Collapsible panel arrow
+- Resize main color outline swatch, added styling and dot indicator
+- Updated Game top left icon to a color palette image.
+- Tooltips can now only be turned off from the Options menu to prevent accidental shutoff.
+- Title bar info icon can only turn tooltips back ON but not off (see options menu for OFF).
+- Added more transparent slider style.
+- Improved preset reset behavior and fixed reset button hover/focus sticking.
+- Improved guideline reapply behavior for better compatibility with Advanced Line Tool mod or any mod that changes GuideLineSettingsData.
+- Internal refactor and organization.
 </ChangeLog>
 	<!--External link, can be set multiple times. supported types are "discord", "github", "youtube", "twitch", "x", "paypal", "patreon", "buymeacoffee", "kofi", "crowdin", "gitlab", "gofundme"-->
     <ExternalLink Type="github" Url="https://github.com/River-Mochi/CS2-Mochi-HoverColors" />
@@ -98,4 +98,3 @@ tags: Mochi's blue scrubber, Highlight, border color, remove blue, guidelines, d
 	<!--Supported values Public, Private, Unlisted-->
 	<AccessLevel Value="Public" />
 </Publish>
-1
