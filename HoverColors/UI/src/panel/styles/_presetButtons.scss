@@ -146,8 +146,8 @@
   background: none !important;
   border: none !important;
   box-shadow: none !important;
-  width: 26rem;
-  height: 26rem;
+  width: 22rem;
+  height: 22rem;
   padding: 0;
   cursor: pointer;
   display: flex;
@@ -165,15 +165,22 @@
 }
 
 .resetIcon {
-  width: 17rem;
-  height: 17rem;
+  width: 15rem;
+  height: 15rem;
   pointer-events: none;
   position: relative;
   z-index: 1;
   opacity: 0.90;
   filter: drop-shadow(0 0 3rem rgba(0, 0, 0, 0.42));
-  transform: scaleX(-1);
   transition: filter 120ms ease-out, opacity 120ms ease-out, transform 120ms ease-out;
+}
+
+.resetIconRestore {
+  transform: scaleX(-1);
+}
+
+.resetIconSwitch {
+  transform: none;
 }
 
 // Hover-only. Focus can persist in Cohtml after click, so it should not brighten/grow the icon.

@@ -96,6 +96,7 @@ interface MochiPanelControlRowsProps {
     handleResetFill: () => void;
     handleResetGuidelines: () => void;
     handleTogglePresetDefaults: () => void;
+    handleRestorePresetDefaults: () => void;
 
     updateColorPickerDirection: () => void;
     updateOwnerPickerDirection: () => void;
@@ -322,16 +323,27 @@ export const MochiPanelControlRows = ({
                     </div>
 
                     <div className={styles.outlineRight}>
-                        <SideTooltip tooltip={tt(text.tooltipResetPresets)} side="right">
-                            <button
-                                type="button"
-                                className={styles.presetResetBare}
-                                onClick={handleTogglePresetDefaults}
-                            >
-                                <img src={resetIconSrc} className={styles.resetIcon} alt="" />
-                            </button>
-                        </SideTooltip>
+                      <SideTooltip tooltip={tt(text.tooltipRestorePresetDefaults)} side="right">
+                        <button
+                          type="button"
+                          className={styles.presetResetBare}
+                          onClick={handleRestorePresetDefaults}
+                        >
+                          <img src={resetIconSrc} className={`${styles.resetIcon} ${styles.resetIconRestore}`} alt="" />
+                        </button>
+                      </SideTooltip>
+
+                      <SideTooltip tooltip={tt(text.tooltipResetPresets)} side="right">
+                        <button
+                          type="button"
+                          className={styles.presetResetBare}
+                          onClick={handleTogglePresetDefaults}
+                        >
+                          <img src={resetIconSrc} className={`${styles.resetIcon} ${styles.resetIconSwitch}`} alt="" />
+                        </button>
+                      </SideTooltip>
                     </div>
+
                 </div>
             </div>
 

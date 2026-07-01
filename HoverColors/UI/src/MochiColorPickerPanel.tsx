@@ -359,6 +359,7 @@ export const MochiColorPickerPanel = () => {
     const handleToggleSurfaceToolAreas = () => trigger(CHANNEL, "ToggleSurfaceToolAreas");
     const handleToggleSpecializedIndustryAreas = () => trigger(CHANNEL, "ToggleSpecializedIndustryAreas");
     const handleTogglePresetDefaults = () => trigger(CHANNEL, "TogglePresetDefaults");
+    const handleRestorePresetDefaults = () => trigger(CHANNEL, "RestorePresetDefaults");
     const handleInfoButtonClick = () => {
         if (!tooltipsEnabled) {
             trigger(CHANNEL, "SetPanelTooltipsEnabled", true);
@@ -518,6 +519,7 @@ export const MochiColorPickerPanel = () => {
                         handleResetFill={handleResetFill}
                         handleResetGuidelines={handleResetGuidelines}
                         handleTogglePresetDefaults={handleTogglePresetDefaults}
+                        handleRestorePresetDefaults={handleRestorePresetDefaults}
                         updateColorPickerDirection={updateColorPickerDirection}
                         updateOwnerPickerDirection={updateOwnerPickerDirection}
                         updateGuidelineLinesPickerDirection={updateGuidelineLinesPickerDirection}

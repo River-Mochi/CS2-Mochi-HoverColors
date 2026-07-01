@@ -34,6 +34,7 @@ export const useMochiPanelText = () => {
             tooltipResetGuidelines: l("HoverColors.UI.Tooltip.ResetGuidelines"),
             tooltipResetOutline: l("HoverColors.UI.Tooltip.ResetOutline"),
             tooltipResetPresets: l("HoverColors.UI.Tooltip.ResetPresets"),
+            tooltipRestorePresetDefaults: l("HoverColors.UI.Tooltip.RestorePresetDefaults"),
             tooltipSurfaceToggle: l("HoverColors.UI.Tooltip.SurfaceToggle"),
             tooltipSpecializedIndustryToggle: l("HoverColors.UI.Tooltip.SpecializedIndustryToggle"),
             tooltipDistrictColors: l("HoverColors.UI.Tooltip.DistrictColors"),
