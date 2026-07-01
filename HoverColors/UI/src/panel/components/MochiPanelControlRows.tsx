@@ -93,12 +93,11 @@ interface MochiPanelControlRowsProps {
     handleGuidelineDashedColorChange: (value: Color) => void;
     handleGuidelineChange: (value: number) => void;
     handleResetOutline: () => void;
-    handleResetFill: () => void;
-    handleResetGuidelines: () => void;
-    handleTogglePresetDefaults: () => void;
-    handleRestorePresetDefaults: () => void;
-
-    updateColorPickerDirection: () => void;
+    handleResetFill,
+    handleResetGuidelines,
+    handleTogglePresetDefaults,
+    handleRestorePresetDefaults,
+    updateColorPickerDirection,
     updateOwnerPickerDirection: () => void;
     updateGuidelineLinesPickerDirection: () => void;
     updateGuidelinePreviewPickerDirection: () => void;
