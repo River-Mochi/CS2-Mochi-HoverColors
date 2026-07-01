@@ -38,22 +38,43 @@ namespace HoverColors.Settings
             DistrictB = 128f / 255f;
             DistrictA = 64f / 255f;
 
-            // Starter presets (players can overwrite these with the panel's Save button).
-            // Slot 1 = soft D7E2C2 at 67% opacity. Slot 2 = yenyang-inspired purple-gray.
-            Preset1R = 215f / 255f;
-            Preset1G = 226f / 255f;
-            Preset1B = 194f / 255f;
-            Preset1A = 0.67f;
-            Preset1FillA = 0f;
+            // Starter presets. Players can overwrite P1/P2 with the panel's Save button.
+            // Set A is visible first. Reset switches the panel to Set B.
+            // Existing users keep their old P1/P2 as Set A during migration.
+            ActivePresetSet = kPresetSetA;
+            PresetSetsInitialized = true;
 
-            Preset2R = 0.25f;
-            Preset2G = 0.15f;
-            Preset2B = 0.25f;
-            Preset2A = 0.5f;
-            Preset2FillA = 0f;
+            // Set A: P1 = off-white D7E2C2, P2 = original light gray-purple.
+            Preset1R = kPresetA1R;
+            Preset1G = kPresetA1G;
+            Preset1B = kPresetA1B;
+            Preset1A = kPresetA1A;
+            Preset1FillA = kPresetA1FillA;
+
+            Preset2R = kPresetA2R;
+            Preset2G = kPresetA2G;
+            Preset2B = kPresetA2B;
+            Preset2A = kPresetA2A;
+            Preset2FillA = kPresetA2FillA;
+
+            // Set B: P1 = soft white, P2 = original dark purple-gray.
+            PresetAlt1R = kPresetB1R;
+            PresetAlt1G = kPresetB1G;
+            PresetAlt1B = kPresetB1B;
+            PresetAlt1A = kPresetB1A;
+            PresetAlt1FillA = kPresetB1FillA;
+
+            PresetAlt2R = kPresetB2R;
+            PresetAlt2G = kPresetB2G;
+            PresetAlt2B = kPresetB2B;
+            PresetAlt2A = kPresetB2A;
+            PresetAlt2FillA = kPresetB2FillA;
 
             Preset1GuidelinePercent = kDefaultGuidelineOpacityPercent;
             Preset2GuidelinePercent = kDefaultGuidelineOpacityPercent;
+            PresetAlt1GuidelinePercent = kDefaultGuidelineOpacityPercent;
+            PresetAlt2GuidelinePercent = kDefaultGuidelineOpacityPercent;
+
             GuidelineDefaultPercent = kDefaultGuidelineOpacityPercent;
 
             GuidelineLinesColorPreset = kGuidelineColorPresetVanilla;
@@ -105,12 +126,49 @@ namespace HoverColors.Settings
 
         public void MigrateAfterLoad()
         {
+            bool changed = false;
+
             if (!SpecializedIndustryAreasSuppressionInitialized)
             {
                 SpecializedIndustryAreasSuppressed = true;
                 SpecializedIndustryAreasSuppressionInitialized = true;
+                changed = true;
+            }
+
+            if (!PresetSetsInitialized)
+            {
+                // Preserve existing player P1/P2 as Set A. Only initialize Set B.
+                ActivePresetSet = kPresetSetA;
+
+                PresetAlt1R = kPresetB1R;
+                PresetAlt1G = kPresetB1G;
+                PresetAlt1B = kPresetB1B;
+                PresetAlt1A = kPresetB1A;
+                PresetAlt1FillA = kPresetB1FillA;
+                PresetAlt1GuidelinePercent = kDefaultGuidelineOpacityPercent;
+
+                PresetAlt2R = kPresetB2R;
+                PresetAlt2G = kPresetB2G;
+                PresetAlt2B = kPresetB2B;
+                PresetAlt2A = kPresetB2A;
+                PresetAlt2FillA = kPresetB2FillA;
+                PresetAlt2GuidelinePercent = kDefaultGuidelineOpacityPercent;
+
+                PresetSetsInitialized = true;
+                changed = true;
+            }
+
+            if (ActivePresetSet != kPresetSetA && ActivePresetSet != kPresetSetB)
+            {
+                ActivePresetSet = kPresetSetA;
+                changed = true;
+            }
+
+            if (changed)
+            {
                 ApplyAndSave();
             }
         }
+
     }
 }

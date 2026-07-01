@@ -162,12 +162,76 @@ namespace HoverColors.Settings
         [SettingsUIHidden]
         public float Preset2FillA { get; set; }
 
+
+        // Four persisted preset slots shown as two buttons in the in-city panel.
+        // ActivePresetSet 0 = Set A, 1 = Set B. The panel still shows P1/P2 only.
+        // Save P1/P2 writes to the currently active set, so players can keep four colors.
+        internal const int kPresetSetA = 0;
+        internal const int kPresetSetB = 1;
+
+        internal const float kPresetA1R = 215f / 255f, kPresetA1G = 226f / 255f, kPresetA1B = 194f / 255f;
+        internal const float kPresetA1A = 0.67f, kPresetA1FillA = 0f;
+
+        internal const float kPresetA2R = 140f / 255f, kPresetA2G = 140f / 255f, kPresetA2B = 171f / 255f;
+        internal const float kPresetA2A = 0.5f, kPresetA2FillA = 0f;
+
+        internal const float kPresetB1R = 1f, kPresetB1G = 1f, kPresetB1B = 1f;
+        internal const float kPresetB1A = 0.65f, kPresetB1FillA = 0f;
+
+        internal const float kPresetB2R = 0.25f, kPresetB2G = 0.15f, kPresetB2B = 0.25f;
+        internal const float kPresetB2A = 0.5f, kPresetB2FillA = 0f;
+
+        [SettingsUIHidden]
+        public bool PresetSetsInitialized { get; set; }
+
+        [SettingsUIHidden]
+        public int ActivePresetSet { get; set; }
+
+        [SettingsUIHidden]
+        public float PresetAlt1R { get; set; }
+
+        [SettingsUIHidden]
+        public float PresetAlt1G { get; set; }
+
+        [SettingsUIHidden]
+        public float PresetAlt1B { get; set; }
+
+        [SettingsUIHidden]
+        public float PresetAlt1A { get; set; }
+
+        [SettingsUIHidden]
+        public float PresetAlt1FillA { get; set; }
+
+        [SettingsUIHidden]
+        public int PresetAlt1GuidelinePercent { get; set; }
+
+        [SettingsUIHidden]
+        public float PresetAlt2R { get; set; }
+
+        [SettingsUIHidden]
+        public float PresetAlt2G { get; set; }
+
+        [SettingsUIHidden]
+        public float PresetAlt2B { get; set; }
+
+        [SettingsUIHidden]
+        public float PresetAlt2A { get; set; }
+
+        [SettingsUIHidden]
+        public float PresetAlt2FillA { get; set; }
+
+        [SettingsUIHidden]
+        public int PresetAlt2GuidelinePercent { get; set; }
+
+
+
         // Guideline opacity saved per outline preset; guideline colors stay independent.
         [SettingsUIHidden]
         public int Preset1GuidelinePercent { get; set; }
 
         [SettingsUIHidden]
         public int Preset2GuidelinePercent { get; set; }
+
 
         // Large guide circles/spacing lines (GuideLineSettingsData Low + VeryLow).
         // Alpha is independent from the dashed alignment guideline opacity slider.

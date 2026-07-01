@@ -46,24 +46,24 @@ namespace HoverColors.UI
             HoverColorsSettings? s = Mod.Settings;
             if (s == null) return false;
 
-            if (slot == 1)
+            if (!TryGetPresetTargets(
+                    s,
+                    slot,
+                    out float targetR,
+                    out float targetG,
+                    out float targetB,
+                    out float targetA,
+                    out float targetFillA,
+                    out int _))
             {
-                return SameColor(s.OutlineR, s.OutlineG, s.OutlineB, s.OutlineA,
-                        s.Preset1R, s.Preset1G, s.Preset1B, s.Preset1A)
-                    && ApproxEqual(s.FillA, s.Preset1FillA);
+                return false;
             }
 
-            if (slot == 2)
-            {
-                return SameColor(s.OutlineR, s.OutlineG, s.OutlineB, s.OutlineA,
-                        s.Preset2R, s.Preset2G, s.Preset2B, s.Preset2A)
-                    && ApproxEqual(s.FillA, s.Preset2FillA);
-            }
-
-            return false;
+            return SameColor(s.OutlineR, s.OutlineG, s.OutlineB, s.OutlineA, targetR, targetG, targetB, targetA)
+                && ApproxEqual(s.FillA, targetFillA);
         }
 
-        private static bool TryGetPresetTargets(
+            private static bool TryGetPresetTargets(
             HoverColorsSettings settings,
             int slot,
             out float targetR,
@@ -73,6 +73,19 @@ namespace HoverColors.UI
             out float targetFillA,
             out int targetGuidelinePercent)
         {
+            bool useSetB = settings.ActivePresetSet == HoverColorsSettings.kPresetSetB;
+
+            if (slot == 1 && useSetB)
+            {
+                targetR = settings.PresetAlt1R;
+                targetG = settings.PresetAlt1G;
+                targetB = settings.PresetAlt1B;
+                targetA = settings.PresetAlt1A;
+                targetFillA = settings.PresetAlt1FillA;
+                targetGuidelinePercent = settings.PresetAlt1GuidelinePercent;
+                return true;
+            }
+
             if (slot == 1)
             {
                 targetR = settings.Preset1R;
@@ -81,6 +94,17 @@ namespace HoverColors.UI
                 targetA = settings.Preset1A;
                 targetFillA = settings.Preset1FillA;
                 targetGuidelinePercent = settings.Preset1GuidelinePercent;
+                return true;
+            }
+
+            if (slot == 2 && useSetB)
+            {
+                targetR = settings.PresetAlt2R;
+                targetG = settings.PresetAlt2G;
+                targetB = settings.PresetAlt2B;
+                targetA = settings.PresetAlt2A;
+                targetFillA = settings.PresetAlt2FillA;
+                targetGuidelinePercent = settings.PresetAlt2GuidelinePercent;
                 return true;
             }
 
@@ -104,6 +128,47 @@ namespace HoverColors.UI
             return false;
         }
 
+                private static void GetPresetBindingValues(
+            HoverColorsSettings? settings,
+            int slot,
+            out float targetR,
+            out float targetG,
+            out float targetB,
+            out float targetA,
+            out float targetFillA)
+        {
+            if (settings != null
+                && TryGetPresetTargets(
+                    settings,
+                    slot,
+                    out targetR,
+                    out targetG,
+                    out targetB,
+                    out targetA,
+                    out targetFillA,
+                    out int _))
+            {
+                return;
+            }
+
+            if (slot == 2)
+            {
+                targetR = HoverColorsSettings.kPresetA2R;
+                targetG = HoverColorsSettings.kPresetA2G;
+                targetB = HoverColorsSettings.kPresetA2B;
+                targetA = HoverColorsSettings.kPresetA2A;
+                targetFillA = HoverColorsSettings.kPresetA2FillA;
+                return;
+            }
+
+            targetR = HoverColorsSettings.kPresetA1R;
+            targetG = HoverColorsSettings.kPresetA1G;
+            targetB = HoverColorsSettings.kPresetA1B;
+            targetA = HoverColorsSettings.kPresetA1A;
+            targetFillA = HoverColorsSettings.kPresetA1FillA;
+        }
+
+
         private static bool ApproxEqual(float a, float b) => Math.Abs(a - b) < 0.0005f;
 
         private static bool SameColor(
@@ -118,17 +183,6 @@ namespace HoverColors.UI
 
         private static float Clamp01(float value) => Math.Max(0f, Math.Min(1f, value));
 
-        private static bool PresetsAtResetSet(HoverColorsSettings s)
-        {
-            return ApproxEqual(s.Preset1R, ResetPreset1R) && ApproxEqual(s.Preset1G, ResetPreset1G)
-                && ApproxEqual(s.Preset1B, ResetPreset1B) && ApproxEqual(s.Preset1A, ResetPreset1A)
-                && ApproxEqual(s.Preset1FillA, ResetPreset1FillA)
-                && s.Preset1GuidelinePercent == HoverColorsSettings.kDefaultGuidelineOpacityPercent
-                && ApproxEqual(s.Preset2R, ResetPreset2R) && ApproxEqual(s.Preset2G, ResetPreset2G)
-                && ApproxEqual(s.Preset2B, ResetPreset2B) && ApproxEqual(s.Preset2A, ResetPreset2A)
-                && ApproxEqual(s.Preset2FillA, ResetPreset2FillA)
-                && s.Preset2GuidelinePercent == HoverColorsSettings.kDefaultGuidelineOpacityPercent;
-        }
 
         private static void SaveGuidelineToggleBackup(HoverColorsSettings settings)
         {

@@ -401,12 +401,34 @@ namespace HoverColors.UI
             ApplySaveAndSync(settings);
         }
 
+
         private void SavePreset(int slot)
         {
             HoverColorsSettings? settings = Mod.Settings;
             if (settings == null) return;
 
-            if (slot == 1)
+            bool useSetB = settings.ActivePresetSet == HoverColorsSettings.kPresetSetB;
+
+            if (slot == 1 && useSetB)
+            {
+                bool changed = !SameColor(settings.PresetAlt1R, settings.PresetAlt1G, settings.PresetAlt1B, settings.PresetAlt1A,
+                        settings.OutlineR, settings.OutlineG, settings.OutlineB, settings.OutlineA)
+                    || !ApproxEqual(settings.PresetAlt1FillA, settings.FillA)
+                    || settings.PresetAlt1GuidelinePercent != settings.GuidelineOpacityPercent;
+
+                if (!changed)
+                {
+                    return;
+                }
+
+                settings.PresetAlt1R = settings.OutlineR;
+                settings.PresetAlt1G = settings.OutlineG;
+                settings.PresetAlt1B = settings.OutlineB;
+                settings.PresetAlt1A = settings.OutlineA;
+                settings.PresetAlt1FillA = settings.FillA;
+                settings.PresetAlt1GuidelinePercent = settings.GuidelineOpacityPercent;
+            }
+            else if (slot == 1)
             {
                 bool changed = !SameColor(settings.Preset1R, settings.Preset1G, settings.Preset1B, settings.Preset1A,
                         settings.OutlineR, settings.OutlineG, settings.OutlineB, settings.OutlineA)
@@ -424,6 +446,25 @@ namespace HoverColors.UI
                 settings.Preset1A = settings.OutlineA;
                 settings.Preset1FillA = settings.FillA;
                 settings.Preset1GuidelinePercent = settings.GuidelineOpacityPercent;
+            }
+            else if (slot == 2 && useSetB)
+            {
+                bool changed = !SameColor(settings.PresetAlt2R, settings.PresetAlt2G, settings.PresetAlt2B, settings.PresetAlt2A,
+                        settings.OutlineR, settings.OutlineG, settings.OutlineB, settings.OutlineA)
+                    || !ApproxEqual(settings.PresetAlt2FillA, settings.FillA)
+                    || settings.PresetAlt2GuidelinePercent != settings.GuidelineOpacityPercent;
+
+                if (!changed)
+                {
+                    return;
+                }
+
+                settings.PresetAlt2R = settings.OutlineR;
+                settings.PresetAlt2G = settings.OutlineG;
+                settings.PresetAlt2B = settings.OutlineB;
+                settings.PresetAlt2A = settings.OutlineA;
+                settings.PresetAlt2FillA = settings.FillA;
+                settings.PresetAlt2GuidelinePercent = settings.GuidelineOpacityPercent;
             }
             else if (slot == 2)
             {
@@ -457,49 +498,19 @@ namespace HoverColors.UI
             HoverColorsSettings? settings = Mod.Settings;
             if (settings == null) return;
 
-            bool changed;
-            if (!PresetsAtResetSet(settings))
-            {
-                // Save current player colors, then apply the alternate reset set.
-                // First-install P1/P2 are in SetDefaults(); this reset set acts like extra preset colors.
-                m_BkP1R = settings.Preset1R; m_BkP1G = settings.Preset1G; m_BkP1B = settings.Preset1B;
-                m_BkP1A = settings.Preset1A; m_BkP1FillA = settings.Preset1FillA; m_BkP1Guideline = settings.Preset1GuidelinePercent;
-                m_BkP2R = settings.Preset2R; m_BkP2G = settings.Preset2G; m_BkP2B = settings.Preset2B;
-                m_BkP2A = settings.Preset2A; m_BkP2FillA = settings.Preset2FillA; m_BkP2Guideline = settings.Preset2GuidelinePercent;
-                m_PresetBackupExists = true;
+            int nextSet = settings.ActivePresetSet == HoverColorsSettings.kPresetSetB
+                ? HoverColorsSettings.kPresetSetA
+                : HoverColorsSettings.kPresetSetB;
 
-                settings.Preset1R = ResetPreset1R; settings.Preset1G = ResetPreset1G; settings.Preset1B = ResetPreset1B;
-                settings.Preset1A = ResetPreset1A; settings.Preset1FillA = ResetPreset1FillA;
-                settings.Preset1GuidelinePercent = HoverColorsSettings.kDefaultGuidelineOpacityPercent;
-                settings.Preset2R = ResetPreset2R; settings.Preset2G = ResetPreset2G; settings.Preset2B = ResetPreset2B;
-                settings.Preset2A = ResetPreset2A; settings.Preset2FillA = ResetPreset2FillA;
-                settings.Preset2GuidelinePercent = HoverColorsSettings.kDefaultGuidelineOpacityPercent;
-                changed = true;
-            }
-            else if (m_PresetBackupExists)
-            {
-                // Restore the preset slots from before the alternate reset set was applied.
-                settings.Preset1R = m_BkP1R; settings.Preset1G = m_BkP1G; settings.Preset1B = m_BkP1B;
-                settings.Preset1A = m_BkP1A; settings.Preset1FillA = m_BkP1FillA; settings.Preset1GuidelinePercent = m_BkP1Guideline;
-                settings.Preset2R = m_BkP2R; settings.Preset2G = m_BkP2G; settings.Preset2B = m_BkP2B;
-                settings.Preset2A = m_BkP2A; settings.Preset2FillA = m_BkP2FillA; settings.Preset2GuidelinePercent = m_BkP2Guideline;
-                m_PresetBackupExists = false;
-                changed = true;
-            }
-            else
-            {
-                // Already at the alternate reset set with no session backup.
-                changed = false;
-            }
-
-            if (!changed)
+            if (settings.ActivePresetSet == nextSet)
             {
                 return;
             }
 
+            settings.ActivePresetSet = nextSet;
             ApplySaveAndSync(settings);
         }
-
+        
 
         private void ResetGuidelines()
         {
