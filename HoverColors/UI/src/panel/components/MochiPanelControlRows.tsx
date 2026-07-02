@@ -16,7 +16,8 @@ import { useMochiPanelText } from "../hooks/useMochiPanelText";
 import fillIconSrc from "../../../images/MainElements-Fill3.svg";
 import outlineIconSrc from "../../../images/MainElements_short_bigTriangle.svg";
 import guidelinesIconSrc from "../../../images/GuideLines4.svg";
-import resetIconSrc from "../../../images/Reset_Button2.svg";
+import switchIconSrc from "../../../images/icon-dbl-arrows.svg";
+import resetIconSrc from "../../../images/Reset_Button.svg";
 import styles from "../../MochiColorPickerPanel.module.scss";
 
 type PickerDirection = "up" | "down";
@@ -52,6 +53,7 @@ interface MochiPanelControlRowsProps {
   vanillaOutlineActive: boolean;
   preset1Active: boolean;
   preset2Active: boolean;
+  restorePresetsArmed: boolean;
 
   swatchHovered: boolean;
   ownerSwatchHovered: boolean;
@@ -129,6 +131,7 @@ export const MochiPanelControlRows = ({
   vanillaOutlineActive,
   preset1Active,
   preset2Active,
+  restorePresetsArmed,
   swatchHovered,
   ownerSwatchHovered,
   guidelineLinesHovered,
@@ -181,6 +184,9 @@ export const MochiPanelControlRows = ({
   );
 
   const outlineSwatchActive = !preset1Active && !preset2Active;
+  const restorePresetTooltip = restorePresetsArmed
+    ? text.tooltipRestorePresetDefaultsConfirm
+    : text.tooltipRestorePresetDefaults;
 
   return (
     <div className={`${styles.body} ${collapsed ? styles.bodyCollapsed : ""}`}>
@@ -321,28 +327,48 @@ export const MochiPanelControlRows = ({
               }}
             />
           </div>
-
           <div className={styles.outlineRight}>
-            <SideTooltip tooltip={tt(text.tooltipRestorePresetDefaults)} side="right">
-              <button
-                type="button"
-                className={styles.presetResetBare}
-                onClick={handleRestorePresetDefaults}
-              >
-                <img src={resetIconSrc} className={`${styles.resetIcon} ${styles.resetIconRestore}`} alt="" />
-              </button>
-            </SideTooltip>
 
             <SideTooltip tooltip={tt(text.tooltipResetPresets)} side="right">
+
               <button
+
                 type="button"
+
                 className={styles.presetResetBare}
+
                 onClick={handleTogglePresetDefaults}
+
               >
-                <img src={resetIconSrc} className={`${styles.resetIcon} ${styles.resetIconSwitch}`} alt="" />
+
+                <img src={switchIconSrc} className={`${styles.resetIcon} ${styles.resetIconSwitch}`} alt="" />
+
               </button>
+
             </SideTooltip>
+
+
+
+            <SideTooltip tooltip={tt(restorePresetTooltip)} side="right">
+
+              <button
+
+                type="button"
+
+                className={styles.presetResetBare}
+
+                onClick={handleRestorePresetDefaults}
+
+              >
+
+                <img src={resetIconSrc} className={`${styles.resetIcon} ${styles.resetIconRestore}`} alt="" />
+
+              </button>
+
+            </SideTooltip>
+
           </div>
+
 
         </div>
       </div>
