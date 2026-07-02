@@ -3,7 +3,7 @@
 // Layout: title bar + color control rows + bottom action bar.
 
 import React from "react";
-import { Button, FormattedParagraphs } from "cs2/ui";
+import { Button, FormattedParagraphs, UISound } from "cs2/ui";
 import { Color } from "cs2/bindings";
 import { trigger, useValue } from "cs2/api";
 import { VanillaComponentResolver } from "./utils/vanilla/VanillaComponentResolver";
@@ -358,8 +358,15 @@ export const MochiColorPickerPanel = () => {
     const handleResetGuidelines = () => trigger(CHANNEL, "ResetGuidelines");
     const handleToggleSurfaceToolAreas = () => trigger(CHANNEL, "ToggleSurfaceToolAreas");
     const handleToggleSpecializedIndustryAreas = () => trigger(CHANNEL, "ToggleSpecializedIndustryAreas");
-    const handleTogglePresetDefaults = () => trigger(CHANNEL, "TogglePresetDefaults");
-    const handleRestorePresetDefaults = () => trigger(CHANNEL, "RestorePresetDefaults");
+    const playPresetActionSound = () => trigger("audio", "playSound", UISound.selectToggle, 1);
+    const handleTogglePresetDefaults = () => {
+        playPresetActionSound();
+        trigger(CHANNEL, "TogglePresetDefaults");
+    };
+    const handleRestorePresetDefaults = () => {
+        playPresetActionSound();
+        trigger(CHANNEL, "RestorePresetDefaults");
+    };
     const handleInfoButtonClick = () => {
         if (!tooltipsEnabled) {
             trigger(CHANNEL, "SetPanelTooltipsEnabled", true);
