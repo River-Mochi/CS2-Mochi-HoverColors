@@ -167,6 +167,7 @@ export const MochiColorPickerPanel = () => {
     const [districtSwatchHovered, setDistrictSwatchHovered] = React.useState(false);
     const [preset1Hovered, setPreset1Hovered] = React.useState(false);
     const [preset2Hovered, setPreset2Hovered] = React.useState(false);
+    const [restorePresetsArmed, setRestorePresetsArmed] = React.useState(false);
 
     const panelAnchorRef = React.useRef<HTMLDivElement>(null);
     const outlineSwatchRef = React.useRef<HTMLDivElement>(null);
@@ -177,6 +178,7 @@ export const MochiColorPickerPanel = () => {
     const districtPickerRef = React.useRef<HTMLDivElement>(null);
     const districtMenuRef = React.useRef<HTMLDivElement>(null);
     const districtColorSwatchRef = React.useRef<HTMLDivElement>(null);
+    const restorePresetsTimerRef = React.useRef<number | null>(null);
 
     const {
         holdSlot,
@@ -202,6 +204,14 @@ export const MochiColorPickerPanel = () => {
     React.useEffect(() => { setGuidelinePreviewColor(boundGuidelinePreviewColor); }, [boundGuidelinePreviewColor.r, boundGuidelinePreviewColor.g, boundGuidelinePreviewColor.b, boundGuidelinePreviewColor.a]);
     React.useEffect(() => { setGuidelineDashedColor(boundGuidelineDashedColor); }, [boundGuidelineDashedColor.r, boundGuidelineDashedColor.g, boundGuidelineDashedColor.b, boundGuidelineDashedColor.a]);
     React.useEffect(() => { setGuidelineOpacity(boundGuideline); }, [boundGuideline]);
+
+    React.useEffect(() => {
+        return () => {
+            if (restorePresetsTimerRef.current !== null) {
+                window.clearTimeout(restorePresetsTimerRef.current);
+            }
+        };
+    }, []);
 
     React.useEffect(() => {
         if (typeof document === "undefined") {
@@ -358,8 +368,38 @@ export const MochiColorPickerPanel = () => {
     const handleResetGuidelines = () => trigger(CHANNEL, "ResetGuidelines");
     const handleToggleSurfaceToolAreas = () => trigger(CHANNEL, "ToggleSurfaceToolAreas");
     const handleToggleSpecializedIndustryAreas = () => trigger(CHANNEL, "ToggleSpecializedIndustryAreas");
-    const handleTogglePresetDefaults = () => trigger(CHANNEL, "TogglePresetDefaults");
-    const handleRestorePresetDefaults = () => trigger(CHANNEL, "RestorePresetDefaults");
+    const clearRestorePresetConfirm = React.useCallback(() => {
+        if (restorePresetsTimerRef.current !== null) {
+            window.clearTimeout(restorePresetsTimerRef.current);
+            restorePresetsTimerRef.current = null;
+        }
+
+        setRestorePresetsArmed(false);
+    }, []);
+
+    const handleTogglePresetDefaults = React.useCallback(() => {
+        clearRestorePresetConfirm();
+        trigger(CHANNEL, "TogglePresetDefaults");
+    }, [clearRestorePresetConfirm]);
+
+    const handleRestorePresetDefaults = React.useCallback(() => {
+        if (restorePresetsArmed) {
+            clearRestorePresetConfirm();
+            trigger(CHANNEL, "RestorePresetDefaults");
+            return;
+        }
+
+        setRestorePresetsArmed(true);
+
+        if (restorePresetsTimerRef.current !== null) {
+            window.clearTimeout(restorePresetsTimerRef.current);
+        }
+
+        restorePresetsTimerRef.current = window.setTimeout(() => {
+            setRestorePresetsArmed(false);
+            restorePresetsTimerRef.current = null;
+        }, 3000);
+    }, [clearRestorePresetConfirm, restorePresetsArmed]);
     const handleInfoButtonClick = () => {
         if (!tooltipsEnabled) {
             trigger(CHANNEL, "SetPanelTooltipsEnabled", true);
@@ -480,6 +520,7 @@ export const MochiColorPickerPanel = () => {
                         vanillaOutlineActive={vanillaOutlineActive}
                         preset1Active={preset1Active}
                         preset2Active={preset2Active}
+                        restorePresetsArmed={restorePresetsArmed}
                         swatchHovered={swatchHovered}
                         ownerSwatchHovered={ownerSwatchHovered}
                         guidelineLinesHovered={guidelineLinesHovered}
