@@ -241,7 +241,7 @@ namespace HoverColors.UI
             settings.DistrictColorEnabled = false;
             settings.DistrictR = district.r;
             settings.DistrictG = district.g;
-            settings.DistrictB = district.b;
+            settings.DistrictB = district.g;
             settings.DistrictA = district.a;
             ApplySaveAndSync(settings);
         }
@@ -409,6 +409,20 @@ namespace HoverColors.UI
             HoverColorsSettings? settings = Mod.Settings;
             if (settings == null) return;
 
+            // If defaults are being previewed, save into the player's real preset bank.
+            // This keeps the mod default colors as a temporary view instead of letting
+            // players accidentally overwrite the default-preview copy.
+            if (settings.PresetDefaultsToggleActive)
+            {
+                if (settings.PresetDefaultsToggleHasBackup)
+                {
+                    RestorePresetToggleBackup(settings);
+                }
+
+                settings.PresetDefaultsToggleActive = false;
+                settings.PresetDefaultsToggleHasBackup = false;
+            }
+
             bool useSetB = settings.ActivePresetSet == HoverColorsSettings.kPresetSetB;
 
             if (slot == 1 && useSetB)
@@ -509,7 +523,7 @@ namespace HoverColors.UI
                 return;
             }
 
-                        settings.ActivePresetSet = nextSet;
+            settings.ActivePresetSet = nextSet;
             ApplySaveAndSync(settings);
         }
 
@@ -518,28 +532,92 @@ namespace HoverColors.UI
             HoverColorsSettings? settings = Mod.Settings;
             if (settings == null) return;
 
-            bool changed = !SameColor(settings.Preset1R, settings.Preset1G, settings.Preset1B, settings.Preset1A,
-                    HoverColorsSettings.kPresetA1R, HoverColorsSettings.kPresetA1G, HoverColorsSettings.kPresetA1B, HoverColorsSettings.kPresetA1A)
-                || !ApproxEqual(settings.Preset1FillA, HoverColorsSettings.kPresetA1FillA)
-                || settings.Preset1GuidelinePercent != HoverColorsSettings.kDefaultGuidelineOpacityPercent
-                || !SameColor(settings.Preset2R, settings.Preset2G, settings.Preset2B, settings.Preset2A,
-                    HoverColorsSettings.kPresetA2R, HoverColorsSettings.kPresetA2G, HoverColorsSettings.kPresetA2B, HoverColorsSettings.kPresetA2A)
-                || !ApproxEqual(settings.Preset2FillA, HoverColorsSettings.kPresetA2FillA)
-                || settings.Preset2GuidelinePercent != HoverColorsSettings.kDefaultGuidelineOpacityPercent
-                || !SameColor(settings.PresetAlt1R, settings.PresetAlt1G, settings.PresetAlt1B, settings.PresetAlt1A,
-                    HoverColorsSettings.kPresetB1R, HoverColorsSettings.kPresetB1G, HoverColorsSettings.kPresetB1B, HoverColorsSettings.kPresetB1A)
-                || !ApproxEqual(settings.PresetAlt1FillA, HoverColorsSettings.kPresetB1FillA)
-                || settings.PresetAlt1GuidelinePercent != HoverColorsSettings.kDefaultGuidelineOpacityPercent
-                || !SameColor(settings.PresetAlt2R, settings.PresetAlt2G, settings.PresetAlt2B, settings.PresetAlt2A,
-                    HoverColorsSettings.kPresetB2R, HoverColorsSettings.kPresetB2G, HoverColorsSettings.kPresetB2B, HoverColorsSettings.kPresetB2A)
-                || !ApproxEqual(settings.PresetAlt2FillA, HoverColorsSettings.kPresetB2FillA)
-                || settings.PresetAlt2GuidelinePercent != HoverColorsSettings.kDefaultGuidelineOpacityPercent;
-
-            if (!changed)
+            if (settings.PresetDefaultsToggleActive && settings.PresetDefaultsToggleHasBackup)
             {
+                RestorePresetToggleBackup(settings);
+                settings.PresetDefaultsToggleActive = false;
+                settings.PresetDefaultsToggleHasBackup = false;
+                ApplySaveAndSync(settings);
                 return;
             }
 
+            SavePresetToggleBackup(settings);
+            ApplyPresetDefaults(settings);
+            settings.PresetDefaultsToggleActive = true;
+            settings.PresetDefaultsToggleHasBackup = true;
+            ApplySaveAndSync(settings);
+        }
+
+        private static void SavePresetToggleBackup(HoverColorsSettings settings)
+        {
+            settings.PresetDefaultsBackupActiveSet = settings.ActivePresetSet;
+
+            settings.PresetDefaultsBackup1R = settings.Preset1R;
+            settings.PresetDefaultsBackup1G = settings.Preset1G;
+            settings.PresetDefaultsBackup1B = settings.Preset1B;
+            settings.PresetDefaultsBackup1A = settings.Preset1A;
+            settings.PresetDefaultsBackup1FillA = settings.Preset1FillA;
+            settings.PresetDefaultsBackup1GuidelinePercent = settings.Preset1GuidelinePercent;
+
+            settings.PresetDefaultsBackup2R = settings.Preset2R;
+            settings.PresetDefaultsBackup2G = settings.Preset2G;
+            settings.PresetDefaultsBackup2B = settings.Preset2B;
+            settings.PresetDefaultsBackup2A = settings.Preset2A;
+            settings.PresetDefaultsBackup2FillA = settings.Preset2FillA;
+            settings.PresetDefaultsBackup2GuidelinePercent = settings.Preset2GuidelinePercent;
+
+            settings.PresetDefaultsBackupAlt1R = settings.PresetAlt1R;
+            settings.PresetDefaultsBackupAlt1G = settings.PresetAlt1G;
+            settings.PresetDefaultsBackupAlt1B = settings.PresetAlt1B;
+            settings.PresetDefaultsBackupAlt1A = settings.PresetAlt1A;
+            settings.PresetDefaultsBackupAlt1FillA = settings.PresetAlt1FillA;
+            settings.PresetDefaultsBackupAlt1GuidelinePercent = settings.PresetAlt1GuidelinePercent;
+
+            settings.PresetDefaultsBackupAlt2R = settings.PresetAlt2R;
+            settings.PresetDefaultsBackupAlt2G = settings.PresetAlt2G;
+            settings.PresetDefaultsBackupAlt2B = settings.PresetAlt2B;
+            settings.PresetDefaultsBackupAlt2A = settings.PresetAlt2A;
+            settings.PresetDefaultsBackupAlt2FillA = settings.PresetAlt2FillA;
+            settings.PresetDefaultsBackupAlt2GuidelinePercent = settings.PresetAlt2GuidelinePercent;
+        }
+
+        private static void RestorePresetToggleBackup(HoverColorsSettings settings)
+        {
+            settings.ActivePresetSet = settings.PresetDefaultsBackupActiveSet == HoverColorsSettings.kPresetSetB
+                ? HoverColorsSettings.kPresetSetB
+                : HoverColorsSettings.kPresetSetA;
+
+            settings.Preset1R = settings.PresetDefaultsBackup1R;
+            settings.Preset1G = settings.PresetDefaultsBackup1G;
+            settings.Preset1B = settings.PresetDefaultsBackup1B;
+            settings.Preset1A = settings.PresetDefaultsBackup1A;
+            settings.Preset1FillA = settings.PresetDefaultsBackup1FillA;
+            settings.Preset1GuidelinePercent = settings.PresetDefaultsBackup1GuidelinePercent;
+
+            settings.Preset2R = settings.PresetDefaultsBackup2R;
+            settings.Preset2G = settings.PresetDefaultsBackup2G;
+            settings.Preset2B = settings.PresetDefaultsBackup2B;
+            settings.Preset2A = settings.PresetDefaultsBackup2A;
+            settings.Preset2FillA = settings.PresetDefaultsBackup2FillA;
+            settings.Preset2GuidelinePercent = settings.PresetDefaultsBackup2GuidelinePercent;
+
+            settings.PresetAlt1R = settings.PresetDefaultsBackupAlt1R;
+            settings.PresetAlt1G = settings.PresetDefaultsBackupAlt1G;
+            settings.PresetAlt1B = settings.PresetDefaultsBackupAlt1B;
+            settings.PresetAlt1A = settings.PresetDefaultsBackupAlt1A;
+            settings.PresetAlt1FillA = settings.PresetDefaultsBackupAlt1FillA;
+            settings.PresetAlt1GuidelinePercent = settings.PresetDefaultsBackupAlt1GuidelinePercent;
+
+            settings.PresetAlt2R = settings.PresetDefaultsBackupAlt2R;
+            settings.PresetAlt2G = settings.PresetDefaultsBackupAlt2G;
+            settings.PresetAlt2B = settings.PresetDefaultsBackupAlt2B;
+            settings.PresetAlt2A = settings.PresetDefaultsBackupAlt2A;
+            settings.PresetAlt2FillA = settings.PresetDefaultsBackupAlt2FillA;
+            settings.PresetAlt2GuidelinePercent = settings.PresetDefaultsBackupAlt2GuidelinePercent;
+        }
+
+        private static void ApplyPresetDefaults(HoverColorsSettings settings)
+        {
             settings.Preset1R = HoverColorsSettings.kPresetA1R;
             settings.Preset1G = HoverColorsSettings.kPresetA1G;
             settings.Preset1B = HoverColorsSettings.kPresetA1B;
@@ -567,8 +645,6 @@ namespace HoverColors.UI
             settings.PresetAlt2A = HoverColorsSettings.kPresetB2A;
             settings.PresetAlt2FillA = HoverColorsSettings.kPresetB2FillA;
             settings.PresetAlt2GuidelinePercent = HoverColorsSettings.kDefaultGuidelineOpacityPercent;
-
-            ApplySaveAndSync(settings);
         }
 
         private void ResetGuidelines()
