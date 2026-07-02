@@ -241,7 +241,7 @@ namespace HoverColors.UI
             settings.DistrictColorEnabled = false;
             settings.DistrictR = district.r;
             settings.DistrictG = district.g;
-            settings.DistrictB = district.g;
+            settings.DistrictB = district.b;
             settings.DistrictA = district.a;
             ApplySaveAndSync(settings);
         }
