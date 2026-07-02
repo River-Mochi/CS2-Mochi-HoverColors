@@ -28,7 +28,10 @@
 - Darker panel option. Good for LegacyUI or players who prefer darker contrast. Try both standard and dark to see what you like!
 - Alpha = transparency; use the last bar on the color picker.
 -   Tap preset 1 or 2 to switch your saved colors.
--   Change presets: select a color swatch box 1/row1, then hold preset 1 or 2 until the fill bar sweeps across - done. Reset switches between preset Set A and Set B.
+-   Change presets: select a color swatch box 1/row1, then hold preset 1 or 2 until the fill bar sweeps across - done.
+- Switch ⇔ button cycles between preset Set A 1|2 and Set B 1|2 (4 colors total)
+- ↺ Reset/Defaults toggles between mod defaults and your saved custom colors (4 colors in mod defaults, 4 in your saved presets).
+
 - Read the tooltips or Options Menu 3rd panel if you get lost.
 - Save-game safe and safe to remove any time.
 - Works with *Recolor* - HC does highlights, guidelines, overlays; not object color like yen's Recolor mod. Even HC's Color Picker is a vanilla component.
@@ -84,12 +87,12 @@ tags: Mochi's blue scrubber, Highlight, border color, remove blue, guidelines, d
 - Added Collapsible panel arrow
 - Resize main color outline swatch, added styling and dot indicator
 - Added preset Set A / Set B system: P1 and P2 now support 4 saved colors total.
-- Added separate buttons to switch preset sets and restore all preset slots to mod defaults.
+- Added separate buttons [⇔] to switch preset between sets A and B
+- Reset/defaults [↺] button is now non-destructive. Toggles between mod defaults and your saved custom colors (4 colors in each set).
 - Existing saved P1/P2 presets are preserved as Set A when upgrading.
 - Updated Game top left icon to a color palette image, and more transparent slider bar.
 - Tooltips can now only be turned off from the Options menu to prevent accidental shutoff.
 - Title bar info icon can only turn tooltips back ON but not off (see options menu for OFF).
-- Improved preset reset behavior and fixed reset button hover/focus sticking.
 - Improved guideline reapply behavior for better compatibility with Advanced Line Tool mod or any mod that changes GuideLineSettingsData.
 - Internal refactor and organization.
 </ChangeLog>
