@@ -176,17 +176,26 @@
   transition: filter 120ms ease-out, opacity 120ms ease-out, transform 120ms ease-out;
 }
 
-// Left button: restore all four preset slots to the mod defaults.
+
+// left button: switch between preset Set A and Set B.
+// Uses double arrow icon.
+.resetIconSwitch {
+  width: 19rem;
+  height: 17rem;
+  transform: none;
+}
+
+.presetResetBare:hover .resetIconSwitch {
+  transform: scale(1.10);
+}
+
+
+// right button: restore all four preset slots to the mod defaults.
 // Uses CCW-looking arrow.
 .resetIconRestore {
   transform: scaleX(-1);
 }
 
-// Right button: switch between preset Set A and Set B.
-// Uses clockwise-looking arrow.
-.resetIconSwitch {
-  transform: none;
-}
 
 // Hover-only. Focus can persist in Cohtml after click, so it should not brighten/grow the icon.
 .presetResetBare:hover .resetIcon {
