@@ -480,8 +480,7 @@ export const MochiColorPickerPanel = () => {
                         vanillaOutlineActive={vanillaOutlineActive}
                         preset1Active={preset1Active}
                         preset2Active={preset2Active}
-                        restorePresetsArmed={false}
-                        swatchHovered={swatchHovered}                  
+swatchHovered={swatchHovered}                  
                         ownerSwatchHovered={ownerSwatchHovered}
                         guidelineLinesHovered={guidelineLinesHovered}
                         guidelinePreviewHovered={guidelinePreviewHovered}

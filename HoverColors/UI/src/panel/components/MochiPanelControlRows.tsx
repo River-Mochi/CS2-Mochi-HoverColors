@@ -182,10 +182,6 @@ export const MochiPanelControlRows = ({
   );
 
   const outlineSwatchActive = !preset1Active && !preset2Active;
-  const restorePresetTooltip = restorePresetsArmed
-    ? text.tooltipRestorePresetDefaultsConfirm
-    : text.tooltipRestorePresetDefaults;
-
   return (
     <div className={`${styles.body} ${collapsed ? styles.bodyCollapsed : ""}`}>
       <div className={`${styles.controlRow} ${styles.outlineRow}`}>
