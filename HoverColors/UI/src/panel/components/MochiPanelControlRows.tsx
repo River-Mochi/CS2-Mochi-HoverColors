@@ -53,7 +53,6 @@ interface MochiPanelControlRowsProps {
   vanillaOutlineActive: boolean;
   preset1Active: boolean;
   preset2Active: boolean;
-  restorePresetsArmed: boolean;
 
   swatchHovered: boolean;
   ownerSwatchHovered: boolean;
@@ -131,7 +130,6 @@ export const MochiPanelControlRows = ({
   vanillaOutlineActive,
   preset1Active,
   preset2Active,
-  restorePresetsArmed,
   swatchHovered,
   ownerSwatchHovered,
   guidelineLinesHovered,
@@ -349,7 +347,7 @@ export const MochiPanelControlRows = ({
 
 
 
-            <SideTooltip tooltip={tt(restorePresetTooltip)} side="right">
+            <SideTooltip tooltip={tt(text.tooltipRestorePresetDefaults)} side="right">
 
               <button
 
