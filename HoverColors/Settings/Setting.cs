@@ -175,8 +175,9 @@ namespace HoverColors.Settings
         internal const float kPresetA2R = 140f / 255f, kPresetA2G = 140f / 255f, kPresetA2B = 171f / 255f;
         internal const float kPresetA2A = 0.5f, kPresetA2FillA = 0f;
 
-        internal const float kPresetB1R = 1f, kPresetB1G = 1f, kPresetB1B = 1f;
-        internal const float kPresetB1A = 0.65f, kPresetB1FillA = 0f;
+        internal const float kPresetB1R = 121f / 255f, kPresetB1G = 155f / 255f, kPresetB1B = 156f / 255f;
+        internal const float kPresetB1A = 0.70f, kPresetB1FillA = 0f;
+
 
         internal const float kPresetB2R = 0.25f, kPresetB2G = 0.15f, kPresetB2B = 0.25f;
         internal const float kPresetB2A = 0.5f, kPresetB2FillA = 0f;
