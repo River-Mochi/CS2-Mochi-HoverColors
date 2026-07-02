@@ -190,7 +190,7 @@ export const MochiPanelControlRows = ({
           <Button
             className={`${styles.controlIconButton} ${vanillaOutlineActive ? styles.vanillaActiveButton : ""}`}
             variant="icon"
-            onClick={handleResetOutline}
+            onSelect={handleResetOutline}
             focusKey={focusDisabled}
           >
             <img src={outlineIconSrc} className={`${styles.controlIcon} ${styles.idleIcon}`} alt="" />
@@ -332,7 +332,7 @@ export const MochiPanelControlRows = ({
               <Button
                 className={styles.presetResetBare}
                 variant="icon"
-                onClick={handleTogglePresetDefaults}
+                onSelect={handleTogglePresetDefaults}
                 focusKey={focusDisabled}
               >
                 <img src={switchIconSrc} className={`${styles.resetIcon} ${styles.resetIconSwitch}`} alt="" />
@@ -347,7 +347,7 @@ export const MochiPanelControlRows = ({
               <Button
                 className={styles.presetResetBare}
                 variant="icon"
-                onClick={handleRestorePresetDefaults}
+                onSelect={handleRestorePresetDefaults}
                 focusKey={focusDisabled}
               >
                 <img src={resetIconSrc} className={`${styles.resetIcon} ${styles.resetIconRestore}`} alt="" />
@@ -368,7 +368,7 @@ export const MochiPanelControlRows = ({
               <Button
                 className={styles.controlIconButton}
                 variant="icon"
-                onClick={handleResetFill}
+                onSelect={handleResetFill}
                 focusKey={focusDisabled}
               >
                 <img src={fillIconSrc} className={`${styles.controlIcon} ${styles.idleIcon}`} alt="" />
@@ -400,7 +400,7 @@ export const MochiPanelControlRows = ({
               <Button
                 className={styles.controlIconButton}
                 variant="icon"
-                onClick={handleResetGuidelines}
+                onSelect={handleResetGuidelines}
                 focusKey={focusDisabled}
               >
                 <img src={guidelinesIconSrc} className={`${styles.controlIcon} ${styles.idleIcon} ${styles.guidelinesIcon}`} alt="" />

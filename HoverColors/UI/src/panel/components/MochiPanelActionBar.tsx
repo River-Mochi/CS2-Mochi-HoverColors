@@ -93,7 +93,7 @@ export const MochiPanelActionBar = ({
                     <Button
                         className={`${styles.actionButton} ${styles.surfaceButton} ${surfaceToolAreasSuppressed ? styles.surfaceButtonActive : ""}`}
                         variant="icon"
-                        onClick={handleToggleSurfaceToolAreas}
+                        onSelect={handleToggleSurfaceToolAreas}
                         focusKey={focusDisabled}
                     >
                         <img src={lotToolIconSrc} className={`${styles.controlIcon} ${styles.idleIcon}`} alt="" />
@@ -104,7 +104,7 @@ export const MochiPanelActionBar = ({
                     <Button
                         className={`${styles.actionButton} ${styles.surfaceButton} ${styles.buttonGap} ${specializedIndustryAreasSuppressed ? styles.surfaceButtonActive : ""}`}
                         variant="icon"
-                        onClick={handleToggleSpecializedIndustryAreas}
+                        onSelect={handleToggleSpecializedIndustryAreas}
                         focusKey={focusDisabled}
                     >
                         <img src={specializedIndustryIconSrc} className={`${styles.controlIcon} ${styles.idleIcon}`} alt="" />
@@ -186,7 +186,7 @@ export const MochiPanelActionBar = ({
                         <SideTooltip tooltip={tt(text.tooltipResetDistrictColors)} side="right">
                             <Button
                                 className={styles.districtMenuReset}
-                                onClick={handleResetDistrict}
+                                onSelect={handleResetDistrict}
                                 focusKey={focusDisabled}
                             >
                                 {text.districtMenuResetAll}

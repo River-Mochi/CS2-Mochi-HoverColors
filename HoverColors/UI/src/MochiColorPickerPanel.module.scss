@@ -197,7 +197,7 @@
     height: 24rem;
     display: block;
     pointer-events: none;
-    transition: opacity 120ms ease-out, transform 120ms ease-out, filter 120ms ease-out;
+    transition: opacity 120ms ease-out, transform 120ms ease-out;
 }
 
 .infoButton:hover .infoIcon {

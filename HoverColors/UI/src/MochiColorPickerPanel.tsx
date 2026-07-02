@@ -410,7 +410,7 @@ export const MochiColorPickerPanel = () => {
                             <Button
                                 className={`${styles.infoButton} ${!tooltipsEnabled ? styles.infoButtonTooltipsOff : ""}`}
                                 variant="icon"
-                                onClick={handleInfoButtonClick}
+                                onSelect={handleInfoButtonClick}
                                 focusKey={focusDisabled}
                                 aria-pressed={!tooltipsEnabled}
                             >
@@ -431,7 +431,7 @@ export const MochiColorPickerPanel = () => {
                             <Button
                                 className={collapseButtonClass}
                                 variant="icon"
-                                onClick={handleToggleCollapse}
+                                onSelect={handleToggleCollapse}
                                 focusKey={focusDisabled}
                                 aria-pressed={panelCollapsed}
                             >
@@ -447,7 +447,7 @@ export const MochiColorPickerPanel = () => {
                             <Button
                                 className={closeButtonClass}
                                 variant="icon"
-                                onClick={handleClosePanel}
+                                onSelect={handleClosePanel}
                                 focusKey={focusDisabled}
                                 aria-label={text.ariaClosePanel}
                             >
