@@ -110,14 +110,13 @@
     pointer-events: none;
     transform: scale(1);
     transform-origin: center;
-    transition: opacity 120ms ease-out, filter 120ms ease-out, transform 120ms ease-out;
+    transition: opacity 120ms ease-out, transform 120ms ease-out;
 }
 
 .closeButton .closeIcon {
     width: 14rem;
     height: 14rem;
     opacity: 0.70;
-    filter: brightness(0) invert(1);
 }
 
 .closeButton:hover .closeIcon {
@@ -126,16 +125,14 @@
 }
 
 .collapseButton .collapseIcon {
-    width: 16rem;
-    height: 16rem;
-    opacity: 0.86;
-    filter: brightness(0) invert(1) drop-shadow(0.35rem 0 0 rgba(255, 255, 255, 0.55)) drop-shadow(-0.35rem 0 0 rgba(255, 255, 255, 0.55)) drop-shadow(0 0.35rem 0 rgba(255, 255, 255, 0.55)) drop-shadow(0 -0.35rem 0 rgba(255, 255, 255, 0.55));
+    width: 18rem;
+    height: 18rem;
+    opacity: 0.92;
 }
 
 .collapseButton:hover .collapseIcon {
     opacity: 1;
-    transform: scale(1.12);
-    filter: brightness(0) invert(1) drop-shadow(0.35rem 0 0 rgba(255, 255, 255, 0.80)) drop-shadow(-0.35rem 0 0 rgba(255, 255, 255, 0.80)) drop-shadow(0 0.35rem 0 rgba(255, 255, 255, 0.80)) drop-shadow(0 -0.35rem 0 rgba(255, 255, 255, 0.80));
+    transform: scale(1.10);
 }
 
 .infoButton,
@@ -325,5 +322,8 @@
   display: flex;
   align-items: center;
   flex-shrink: 0;
-  gap: 4rem;
+}
+
+.outlineRight > * + * {
+  margin-left: 4rem;
 }

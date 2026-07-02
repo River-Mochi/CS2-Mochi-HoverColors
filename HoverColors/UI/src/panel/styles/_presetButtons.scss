@@ -143,20 +143,50 @@
   z-index: 35;
 }
 
+.presetResetBare::before,
+.presetResetBare::after {
+  content: none !important;
+  display: none !important;
+}
+
 .presetResetBare {
-  background: none !important;
-  border: none !important;
-  box-shadow: none !important;
-  width: 22rem;
-  height: 22rem;
-  padding: 0;
+  width: 22rem !important;
+  min-width: 22rem !important;
+  height: 22rem !important;
+  padding-top: 0 !important;
+  padding-right: 0 !important;
+  padding-bottom: 0 !important;
+  padding-left: 0 !important;
   cursor: pointer;
   display: flex;
+  flex-grow: 0;
+  flex-shrink: 0;
+  flex-basis: 22rem;
   align-items: center;
   justify-content: center;
-  border-radius: 50%;
+  border-top-style: none !important;
+  border-right-style: none !important;
+  border-bottom-style: none !important;
+  border-left-style: none !important;
+  border-top-width: 0 !important;
+  border-right-width: 0 !important;
+  border-bottom-width: 0 !important;
+  border-left-width: 0 !important;
+  border-top-color: transparent !important;
+  border-right-color: transparent !important;
+  border-bottom-color: transparent !important;
+  border-left-color: transparent !important;
+  border-top-left-radius: 50%;
+  border-top-right-radius: 50%;
+  border-bottom-left-radius: 50%;
+  border-bottom-right-radius: 50%;
+  background-color: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
   color: rgba(254, 255, 255, 0.84) !important;
-  transition: background-color 120ms ease-out, color 120ms ease-out, transform 120ms ease-out;
+  transition-property: background-color, color, transform;
+  transition-duration: 120ms, 120ms, 120ms;
+  transition-timing-function: ease-out, ease-out, ease-out;
   // Hover-only. Do not include :focus here or the icon can stay enlarged after click.
   &:hover {
     background-color: rgba(84, 215, 255, 0.14) !important;
@@ -171,9 +201,10 @@
   pointer-events: none;
   position: relative;
   z-index: 1;
-  opacity: 0.90;
-  filter: drop-shadow(0 0 3rem rgba(0, 0, 0, 0.42));
-  transition: filter 120ms ease-out, opacity 120ms ease-out, transform 120ms ease-out;
+  opacity: 0.86;
+  transition-property: opacity, transform;
+  transition-duration: 120ms, 120ms;
+  transition-timing-function: ease-out, ease-out;
 }
 
 
@@ -200,7 +231,6 @@
 // Hover-only. Focus can persist in Cohtml after click, so it should not brighten/grow the icon.
 .presetResetBare:hover .resetIcon {
   opacity: 1;
-  filter: brightness(0) invert(1) drop-shadow(0 0 5rem rgba(254, 255, 255, 0.34)) drop-shadow(0 0 4rem rgba(0, 0, 0, 0.65));
 }
 
 .presetResetBare:hover .resetIconRestore {

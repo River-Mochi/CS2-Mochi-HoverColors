@@ -2,6 +2,7 @@
 // Purpose: Visual rows for Outline, Fill, and Guidelines. Logic/state stays in MochiColorPickerPanel.tsx.
 
 import React from "react";
+import { Button } from "cs2/ui";
 import { Color } from "cs2/bindings";
 import { SideTooltip } from "../tooltip/SideTooltip";
 import { MochiSlider } from "./MochiSlider";
@@ -186,13 +187,14 @@ export const MochiPanelControlRows = ({
     <div className={`${styles.body} ${collapsed ? styles.bodyCollapsed : ""}`}>
       <div className={`${styles.controlRow} ${styles.outlineRow}`}>
         <SideTooltip tooltip={tt(text.tooltipResetOutline)} side="left">
-          <button
-            type="button"
+          <Button
             className={`${styles.controlIconButton} ${vanillaOutlineActive ? styles.vanillaActiveButton : ""}`}
+            variant="icon"
             onClick={handleResetOutline}
+            focusKey={focusDisabled}
           >
             <img src={outlineIconSrc} className={`${styles.controlIcon} ${styles.idleIcon}`} alt="" />
-          </button>
+          </Button>
         </SideTooltip>
 
         <div className={`${styles.controlBody} ${styles.outlineControlBody}`}>
@@ -291,6 +293,7 @@ export const MochiPanelControlRows = ({
               numberColor={presetNumberColor(preset1Active, preset1Hovered)}
               presetPreviewStyle={presetPreviewStyle}
               holdBarStyle={holdBarStyle}
+              focusDisabled={focusDisabled}
               onMouseEnter={() => setPreset1Hovered(true)}
               onMouseDown={handlePresetMouseDown(1)}
               onMouseUp={handlePresetMouseUp(1)}
@@ -312,6 +315,7 @@ export const MochiPanelControlRows = ({
               numberColor={presetNumberColor(preset2Active, preset2Hovered)}
               presetPreviewStyle={presetPreviewStyle}
               holdBarStyle={holdBarStyle}
+              focusDisabled={focusDisabled}
               onMouseEnter={() => setPreset2Hovered(true)}
               onMouseDown={handlePresetMouseDown(2)}
               onMouseUp={handlePresetMouseUp(2)}
@@ -325,19 +329,14 @@ export const MochiPanelControlRows = ({
 
             <SideTooltip tooltip={tt(text.tooltipResetPresets)} side="right">
 
-              <button
-
-                type="button"
-
+              <Button
                 className={styles.presetResetBare}
-
+                variant="icon"
                 onClick={handleTogglePresetDefaults}
-
+                focusKey={focusDisabled}
               >
-
                 <img src={switchIconSrc} className={`${styles.resetIcon} ${styles.resetIconSwitch}`} alt="" />
-
-              </button>
+              </Button>
 
             </SideTooltip>
 
@@ -345,19 +344,14 @@ export const MochiPanelControlRows = ({
 
             <SideTooltip tooltip={tt(text.tooltipRestorePresetDefaults)} side="right">
 
-              <button
-
-                type="button"
-
+              <Button
                 className={styles.presetResetBare}
-
+                variant="icon"
                 onClick={handleRestorePresetDefaults}
-
+                focusKey={focusDisabled}
               >
-
                 <img src={resetIconSrc} className={`${styles.resetIcon} ${styles.resetIconRestore}`} alt="" />
-
-              </button>
+              </Button>
 
             </SideTooltip>
 
@@ -371,9 +365,14 @@ export const MochiPanelControlRows = ({
         <>
           <div className={styles.controlRow}>
             <SideTooltip tooltip={tt(text.tooltipResetFill)} side="left">
-              <button type="button" className={styles.controlIconButton} onClick={handleResetFill}>
+              <Button
+                className={styles.controlIconButton}
+                variant="icon"
+                onClick={handleResetFill}
+                focusKey={focusDisabled}
+              >
                 <img src={fillIconSrc} className={`${styles.controlIcon} ${styles.idleIcon}`} alt="" />
-              </button>
+              </Button>
             </SideTooltip>
 
             <SideTooltip tooltip={tt(text.tooltipFillOpacity)} side="right">
@@ -398,13 +397,14 @@ export const MochiPanelControlRows = ({
 
           <div className={styles.controlRow}>
             <SideTooltip tooltip={tt(text.tooltipResetGuidelines)} side="left">
-              <button
-                type="button"
+              <Button
                 className={styles.controlIconButton}
+                variant="icon"
                 onClick={handleResetGuidelines}
+                focusKey={focusDisabled}
               >
                 <img src={guidelinesIconSrc} className={`${styles.controlIcon} ${styles.idleIcon} ${styles.guidelinesIcon}`} alt="" />
-              </button>
+              </Button>
             </SideTooltip>
 
             <div className={`${styles.controlBody} ${styles.guidelineControlBody}`}>

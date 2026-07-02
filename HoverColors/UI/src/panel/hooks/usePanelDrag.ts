@@ -1,7 +1,7 @@
 // File: UI/src/panel/hooks/usePanelDrag.ts
 // Purpose: Keeps the GTL-anchored panel draggable while clamping it inside the game window.
 
-import React from "react";
+import { useCallback, useEffect, useRef, useState, type MouseEvent as ReactMouseEvent } from "react";
 
 type PanelOffset = {
     x: number;
@@ -19,97 +19,107 @@ type PanelDragState = {
     originHeight: number;
 };
 
+let sessionPanelOffset: PanelOffset = { x: 0, y: 0 };
+
 export const usePanelDrag = () => {
-    const [panelOffset, setPanelOffset] = React.useState<PanelOffset>({ x: 0, y: 0 });
-    const [panelDragging, setPanelDragging] = React.useState(false);
+    const [panelOffset, setPanelOffset] = useState<PanelOffset>(sessionPanelOffset);
+    const [panelDragging, setPanelDragging] = useState(false);
 
-    const panelElementRef = React.useRef<HTMLDivElement | null>(null);
-    const panelDragFrameRef = React.useRef<number | null>(null);
-    const panelDragPendingOffsetRef = React.useRef(panelOffset);
-    const panelDragRef = React.useRef<PanelDragState | null>(null);
+    const panelElementRef = useRef<HTMLDivElement | null>(null);
+    const panelDragFrameRef = useRef<number | null>(null);
+    const panelDragPendingOffsetRef = useRef(panelOffset);
+    const panelDragRef = useRef<PanelDragState | null>(null);
 
-    React.useEffect(() => {
+    useEffect(() => {
         if (!panelDragging) {
             return;
         }
 
-        const onMove = (e: MouseEvent) => {
-            const d = panelDragRef.current;
-            if (d == null) {
+        const onMove = (event: MouseEvent) => {
+            const dragState = panelDragRef.current;
+            if (dragState === null) {
                 return;
             }
 
-            const dx = e.clientX - d.pointerX;
-            const dy = e.clientY - d.pointerY;
-            let nx = d.originX + dx;
-            let ny = d.originY + dy;
-            const nl = d.originLeft + dx;
-            const nt = d.originTop + dy;
-            const nr = nl + d.originWidth;
-            const nb = nt + d.originHeight;
+            const deltaX = event.clientX - dragState.pointerX;
+            const deltaY = event.clientY - dragState.pointerY;
+            let nextX = dragState.originX + deltaX;
+            let nextY = dragState.originY + deltaY;
+            const nextLeft = dragState.originLeft + deltaX;
+            const nextTop = dragState.originTop + deltaY;
+            const nextRight = nextLeft + dragState.originWidth;
+            const nextBottom = nextTop + dragState.originHeight;
 
-            if (nl < 0) {
-                nx -= nl;
+            if (nextLeft < 0) {
+                nextX -= nextLeft;
             }
-            if (nt < 0) {
-                ny -= nt;
+            if (nextTop < 0) {
+                nextY -= nextTop;
             }
-            if (nr > window.innerWidth) {
-                nx -= nr - window.innerWidth;
+            if (nextRight > window.innerWidth) {
+                nextX -= nextRight - window.innerWidth;
             }
-            if (nb > window.innerHeight) {
-                ny -= nb - window.innerHeight;
+            if (nextBottom > window.innerHeight) {
+                nextY -= nextBottom - window.innerHeight;
             }
 
-            panelDragPendingOffsetRef.current = { x: nx, y: ny };
-            if (panelDragFrameRef.current == null) {
+            panelDragPendingOffsetRef.current = { x: nextX, y: nextY };
+            if (panelDragFrameRef.current === null) {
                 panelDragFrameRef.current = window.requestAnimationFrame(() => {
                     panelDragFrameRef.current = null;
+                    sessionPanelOffset = panelDragPendingOffsetRef.current;
                     setPanelOffset(panelDragPendingOffsetRef.current);
                 });
             }
         };
 
         const onUp = () => {
-            if (panelDragFrameRef.current != null) {
+            if (panelDragFrameRef.current !== null) {
                 window.cancelAnimationFrame(panelDragFrameRef.current);
                 panelDragFrameRef.current = null;
             }
+
             panelDragRef.current = null;
             setPanelDragging(false);
+            sessionPanelOffset = panelDragPendingOffsetRef.current;
             setPanelOffset(panelDragPendingOffsetRef.current);
         };
 
         window.addEventListener("mousemove", onMove);
         window.addEventListener("mouseup", onUp);
+
         return () => {
             window.removeEventListener("mousemove", onMove);
             window.removeEventListener("mouseup", onUp);
         };
     }, [panelDragging]);
 
-    React.useEffect(() => () => {
-        if (panelDragFrameRef.current != null) {
+    useEffect(() => () => {
+        if (panelDragFrameRef.current !== null) {
             window.cancelAnimationFrame(panelDragFrameRef.current);
             panelDragFrameRef.current = null;
         }
     }, []);
 
-    const handlePanelDragStart = React.useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-        e.preventDefault();
-        e.stopPropagation();
+    const handlePanelDragStart = useCallback((event: ReactMouseEvent<HTMLDivElement>) => {
+        event.preventDefault();
+        event.stopPropagation();
 
         const rect = panelElementRef.current?.getBoundingClientRect();
+        if (rect === undefined) {
+            return;
+        }
+
         panelDragPendingOffsetRef.current = panelOffset;
         panelDragRef.current = {
-            pointerX: e.clientX,
-            pointerY: e.clientY,
+            pointerX: event.clientX,
+            pointerY: event.clientY,
             originX: panelOffset.x,
             originY: panelOffset.y,
-            originLeft: rect?.left ?? 0,
-            originTop: rect?.top ?? 0,
-            originWidth: rect?.width ?? 0,
-            originHeight: rect?.height ?? 0,
+            originLeft: rect.left,
+            originTop: rect.top,
+            originWidth: rect.width,
+            originHeight: rect.height,
         };
         setPanelDragging(true);
     }, [panelOffset]);

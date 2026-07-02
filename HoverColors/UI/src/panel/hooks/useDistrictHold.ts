@@ -32,7 +32,7 @@ export const useDistrictHold = ({ onReset, onQuickClick }: UseDistrictHoldOption
         setDistrictHoldProgress(0);
     }, []);
 
-    const handleDistrictMouseDownCapture = React.useCallback((event: React.MouseEvent<HTMLDivElement>) => {
+    const handleDistrictMouseDownCapture = React.useCallback((event: React.MouseEvent<HTMLElement>) => {
         if (event.button !== 0) {
             return;
         }
@@ -75,7 +75,7 @@ export const useDistrictHold = ({ onReset, onQuickClick }: UseDistrictHoldOption
         }
     }, [cancelDistrictHold]);
 
-    const handleDistrictClickCapture = React.useCallback((event: React.MouseEvent<HTMLDivElement>) => {
+    const handleDistrictClickCapture = React.useCallback((event: React.MouseEvent<HTMLElement>) => {
         event.preventDefault();
         event.stopPropagation();
 
