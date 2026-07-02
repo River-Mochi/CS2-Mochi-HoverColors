@@ -75,6 +75,11 @@ namespace HoverColors.Settings
             PresetAlt1GuidelinePercent = kDefaultGuidelineOpacityPercent;
             PresetAlt2GuidelinePercent = kDefaultGuidelineOpacityPercent;
 
+
+            PresetDefaultsToggleActive = false;
+            PresetDefaultsToggleHasBackup = false;
+            PresetDefaultsBackupActiveSet = kPresetSetA;
+
             GuidelineDefaultPercent = kDefaultGuidelineOpacityPercent;
 
             GuidelineLinesColorPreset = kGuidelineColorPresetVanilla;
@@ -161,6 +166,19 @@ namespace HoverColors.Settings
             if (ActivePresetSet != kPresetSetA && ActivePresetSet != kPresetSetB)
             {
                 ActivePresetSet = kPresetSetA;
+                changed = true;
+            }
+
+
+            if (PresetDefaultsToggleActive && !PresetDefaultsToggleHasBackup)
+            {
+                PresetDefaultsToggleActive = false;
+                changed = true;
+            }
+
+            if (PresetDefaultsBackupActiveSet != kPresetSetA && PresetDefaultsBackupActiveSet != kPresetSetB)
+            {
+                PresetDefaultsBackupActiveSet = kPresetSetA;
                 changed = true;
             }
 

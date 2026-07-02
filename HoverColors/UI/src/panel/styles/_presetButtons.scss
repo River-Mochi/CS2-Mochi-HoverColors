@@ -180,8 +180,8 @@
 // left button: switch between preset Set A and Set B.
 // Uses double arrow icon.
 .resetIconSwitch {
-  width: 19rem;
-  height: 17rem;
+  width: 21rem;
+  height: 18rem;
   transform: none;
 }
 
@@ -208,7 +208,7 @@
 }
 
 .presetResetBare:hover .resetIconSwitch {
-  transform: scale(1.16);
+  transform: scale(1.10);
 }
 
 .resetButton {

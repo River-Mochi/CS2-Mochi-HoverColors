@@ -225,6 +225,90 @@ namespace HoverColors.Settings
         public int PresetAlt2GuidelinePercent { get; set; }
 
 
+        // Non-destructive preset defaults toggle.
+        // Reset temporarily shows the four mod default colors; second click restores this backup.
+        [SettingsUIHidden]
+        public bool PresetDefaultsToggleActive { get; set; }
+
+        [SettingsUIHidden]
+        public bool PresetDefaultsToggleHasBackup { get; set; }
+
+        [SettingsUIHidden]
+        public int PresetDefaultsBackupActiveSet { get; set; }
+
+        [SettingsUIHidden]
+        public float PresetDefaultsBackup1R { get; set; }
+
+        [SettingsUIHidden]
+        public float PresetDefaultsBackup1G { get; set; }
+
+        [SettingsUIHidden]
+        public float PresetDefaultsBackup1B { get; set; }
+
+        [SettingsUIHidden]
+        public float PresetDefaultsBackup1A { get; set; }
+
+        [SettingsUIHidden]
+        public float PresetDefaultsBackup1FillA { get; set; }
+
+        [SettingsUIHidden]
+        public int PresetDefaultsBackup1GuidelinePercent { get; set; }
+
+        [SettingsUIHidden]
+        public float PresetDefaultsBackup2R { get; set; }
+
+        [SettingsUIHidden]
+        public float PresetDefaultsBackup2G { get; set; }
+
+        [SettingsUIHidden]
+        public float PresetDefaultsBackup2B { get; set; }
+
+        [SettingsUIHidden]
+        public float PresetDefaultsBackup2A { get; set; }
+
+        [SettingsUIHidden]
+        public float PresetDefaultsBackup2FillA { get; set; }
+
+        [SettingsUIHidden]
+        public int PresetDefaultsBackup2GuidelinePercent { get; set; }
+
+        [SettingsUIHidden]
+        public float PresetDefaultsBackupAlt1R { get; set; }
+
+        [SettingsUIHidden]
+        public float PresetDefaultsBackupAlt1G { get; set; }
+
+        [SettingsUIHidden]
+        public float PresetDefaultsBackupAlt1B { get; set; }
+
+        [SettingsUIHidden]
+        public float PresetDefaultsBackupAlt1A { get; set; }
+
+        [SettingsUIHidden]
+        public float PresetDefaultsBackupAlt1FillA { get; set; }
+
+        [SettingsUIHidden]
+        public int PresetDefaultsBackupAlt1GuidelinePercent { get; set; }
+
+        [SettingsUIHidden]
+        public float PresetDefaultsBackupAlt2R { get; set; }
+
+        [SettingsUIHidden]
+        public float PresetDefaultsBackupAlt2G { get; set; }
+
+        [SettingsUIHidden]
+        public float PresetDefaultsBackupAlt2B { get; set; }
+
+        [SettingsUIHidden]
+        public float PresetDefaultsBackupAlt2A { get; set; }
+
+        [SettingsUIHidden]
+        public float PresetDefaultsBackupAlt2FillA { get; set; }
+
+        [SettingsUIHidden]
+        public int PresetDefaultsBackupAlt2GuidelinePercent { get; set; }
+
+
 
         // Guideline opacity saved per outline preset; guideline colors stay independent.
         [SettingsUIHidden]
