@@ -189,7 +189,8 @@
   transition-timing-function: ease-out, ease-out, ease-out;
   // Hover-only. Do not include :focus here or the icon can stay enlarged after click.
   &:hover {
-    background-color: rgba(84, 215, 255, 0.14) !important;
+    // Match the other panel button hover wash; change this to tune Switch/Restore hover color.
+    background-color: rgba(108, 136, 150, 0.34) !important;
     color: rgba(254, 255, 255, 1) !important;
     transform: scale(1.06);
   }
@@ -201,7 +202,8 @@
   pointer-events: none;
   position: relative;
   z-index: 1;
-  opacity: 0.86;
+  // Idle brightness for Switch/Restore; hover below raises this to full white.
+  opacity: 0.76;
   transition-property: opacity, transform;
   transition-duration: 120ms, 120ms;
   transition-timing-function: ease-out, ease-out;

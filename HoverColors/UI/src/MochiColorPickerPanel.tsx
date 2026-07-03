@@ -402,7 +402,7 @@ export const MochiColorPickerPanel = () => {
             className={styles.panelAnchor}
             style={{ transform: `translate(${panelOffset.x}px, ${panelOffset.y}px)` }}
         >
-            <SideTooltipProvider anchorRef={panelAnchorRef} panelRef={panelElementRef}>
+            <SideTooltipProvider anchorRef={panelAnchorRef} panelRef={panelElementRef} disabled={panelDragging}>
             <div ref={panelElementRef} className={panelFrameClass}>
                 <div className={panelContentClass}>
                     <div className={styles.titleBar}>

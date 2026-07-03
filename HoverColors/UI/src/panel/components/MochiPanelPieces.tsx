@@ -21,6 +21,7 @@ type PresetSlotButtonProps = {
     presetPreviewStyle: (color: Color) => React.CSSProperties;
     holdBarStyle: (progress: number) => React.CSSProperties;
     onMouseEnter: () => void;
+    onSelect: () => void;
     onMouseDown: (event: React.MouseEvent<HTMLButtonElement>) => void;
     onMouseUp: () => void;
     onMouseLeave: () => void;
@@ -40,6 +41,7 @@ export const PresetSlotButton = ({
     presetPreviewStyle,
     holdBarStyle,
     onMouseEnter,
+    onSelect,
     onMouseDown,
     onMouseUp,
     onMouseLeave,
@@ -50,6 +52,7 @@ export const PresetSlotButton = ({
             variant="icon"
             style={{ marginLeft }}
             onMouseEnter={onMouseEnter}
+            onSelect={onSelect}
             onMouseDown={onMouseDown}
             onMouseUp={onMouseUp}
             onMouseLeave={onMouseLeave}

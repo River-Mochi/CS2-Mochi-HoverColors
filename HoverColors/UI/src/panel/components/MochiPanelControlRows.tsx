@@ -183,6 +183,8 @@ export const MochiPanelControlRows = ({
   );
 
   const outlineSwatchActive = !preset1Active && !preset2Active;
+  // Gives preset slots native Button sound; apply/save stay on mouse handlers for hold timing.
+  const handlePresetButtonSelect = React.useCallback(() => undefined, []);
   return (
     <div className={`${styles.body} ${collapsed ? styles.bodyCollapsed : ""}`}>
       <div className={`${styles.controlRow} ${styles.outlineRow}`}>
@@ -295,6 +297,7 @@ export const MochiPanelControlRows = ({
               holdBarStyle={holdBarStyle}
               focusDisabled={focusDisabled}
               onMouseEnter={() => setPreset1Hovered(true)}
+              onSelect={handlePresetButtonSelect}
               onMouseDown={handlePresetMouseDown(1)}
               onMouseUp={handlePresetMouseUp(1)}
               onMouseLeave={() => {
@@ -317,6 +320,7 @@ export const MochiPanelControlRows = ({
               holdBarStyle={holdBarStyle}
               focusDisabled={focusDisabled}
               onMouseEnter={() => setPreset2Hovered(true)}
+              onSelect={handlePresetButtonSelect}
               onMouseDown={handlePresetMouseDown(2)}
               onMouseUp={handlePresetMouseUp(2)}
               onMouseLeave={() => {
