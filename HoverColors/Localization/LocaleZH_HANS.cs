@@ -127,7 +127,8 @@ namespace HoverColors.Localization
                 // Keybinds
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.TogglePanelBinding)), "打开/关闭主面板" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.TogglePanelBinding)),
-                    "快捷键：<打开 / 关闭> 城市内悬停物体颜色面板。" },
+                     "用于<打开 / 关闭>城市内颜色面板的快捷键。" },
+     
                 { m_Settings.GetBindingKeyLocaleID(Mod.kTogglePanelActionName), "切换悬停颜色面板" },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleSurfaceToolAreasBinding)), "Surface 工具预览开/关" },

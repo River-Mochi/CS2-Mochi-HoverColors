@@ -127,7 +127,8 @@ namespace HoverColors.Localization
                 // Keybinds
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.TogglePanelBinding)), "เปิด/ปิดแผงหลัก" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.TogglePanelBinding)),
-                    "ปุ่มลัดเพื่อ <เปิด / ปิด> แผงสีวัตถุเมื่อชี้เมาส์ในเมือง" },
+                    "ปุ่มลัดเพื่อ<เปิด / ปิด>แผงสีในเมือง" },
+
                 { m_Settings.GetBindingKeyLocaleID(Mod.kTogglePanelActionName), "สลับแผงสีเมื่อชี้เมาส์" },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleSurfaceToolAreasBinding)), "พรีวิวเครื่องมือ Surface เปิด/ปิด" },

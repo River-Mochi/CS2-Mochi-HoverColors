@@ -127,7 +127,8 @@ namespace HoverColors.Localization
                 // Keybinds
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.TogglePanelBinding)), "Ana paneli aç/kapat" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.TogglePanelBinding)),
-                    "Şehir içi üstüne gelinen nesne renk panelini <aç / kapat> kısayolu." },
+                    "Şehir içi renk panelini <açmak / kapatmak> için kısayol." },
+
                 { m_Settings.GetBindingKeyLocaleID(Mod.kTogglePanelActionName), "Üstüne gelme renk panelini aç/kapat" },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleSurfaceToolAreasBinding)), "Surface aracı önizlemeleri aç/kapat" },

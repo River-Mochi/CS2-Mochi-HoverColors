@@ -127,7 +127,7 @@ namespace HoverColors.Localization
                 // Keybinds
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.TogglePanelBinding)), "Hauptpanel öffnen/schließen" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.TogglePanelBinding)),
-                    "Hotkey zum <Öffnen / Schließen> des Stadt-Panels für Hover-Objektfarben." },
+                    "Kurzbefehl zum <Öffnen / Schließen> des Farbpanels in der Stadt." },
                 { m_Settings.GetBindingKeyLocaleID(Mod.kTogglePanelActionName), "Hover-Farben-Panel umschalten" },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleSurfaceToolAreasBinding)), "Surface-Tool-Vorschau ein/aus" },

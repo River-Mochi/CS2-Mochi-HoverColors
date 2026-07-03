@@ -127,7 +127,8 @@ namespace HoverColors.Localization
                 // Keybinds
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.TogglePanelBinding)), "Apri/chiudi pannello principale" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.TogglePanelBinding)),
-                    "Tasto rapido per <aprire / chiudere> il pannello colori degli oggetti al passaggio in città." },
+                    "Scorciatoia per <aprire / chiudere> il pannello Colori in città." },
+
                 { m_Settings.GetBindingKeyLocaleID(Mod.kTogglePanelActionName), "Attiva pannello colori al passaggio" },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleSurfaceToolAreasBinding)), "Anteprime strumento Surface On/Off" },

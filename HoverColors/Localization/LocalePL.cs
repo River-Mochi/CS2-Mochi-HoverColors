@@ -127,7 +127,7 @@ namespace HoverColors.Localization
                 // Keybinds
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.TogglePanelBinding)), "Otwórz/zamknij panel główny" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.TogglePanelBinding)),
-                    "Skrót do <otwarcia / zamknięcia> panelu kolorów obiektów po najechaniu w mieście." },
+                    "Atalho para <abrir / fechar> o painel de cores na cidade." },
                 { m_Settings.GetBindingKeyLocaleID(Mod.kTogglePanelActionName), "Przełącz panel kolorów po najechaniu" },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleSurfaceToolAreasBinding)), "Podglądy narzędzia Surface wł./wył." },

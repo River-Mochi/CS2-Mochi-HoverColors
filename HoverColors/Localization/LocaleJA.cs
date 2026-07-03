@@ -127,7 +127,8 @@ namespace HoverColors.Localization
                 // Keybinds
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.TogglePanelBinding)), "メインパネルを開く/閉じる" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.TogglePanelBinding)),
-                    "街中のホバー対象カラーパネルを<開く / 閉じる>ショートカット。" },
+                    "街中のカラーパネルを<開く / 閉じる>ショートカット。" },
+
                 { m_Settings.GetBindingKeyLocaleID(Mod.kTogglePanelActionName), "ホバー色パネルを切替" },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleSurfaceToolAreasBinding)), "Surfaceツールのプレビュー On/Off" },
