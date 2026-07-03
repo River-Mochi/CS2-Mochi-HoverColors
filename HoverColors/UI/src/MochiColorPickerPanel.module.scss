@@ -93,22 +93,7 @@
     color: #54d7ff;
 }
 
-.closeButton {
-    flex: 0 0 24rem;
-    width: 24rem;
-    height: 24rem;
-    min-width: 24rem;
-    margin-left: 8rem;
-    padding: 0 !important;
-}
-
-.closeIcon {
-    width: 18rem;
-    height: 18rem;
-    display: block;
-    pointer-events: none;
-}
-
+.closeButton,
 .collapseButton {
     flex: 0 0 24rem;
     width: 24rem;
@@ -116,14 +101,38 @@
     min-width: 24rem;
     margin-left: 8rem;
     padding: 0 !important;
+    overflow: visible;
 }
 
-.collapseIcon {
-    width: 16rem;
-    height: 16rem;
+.closeButton .closeIcon,
+.collapseButton .collapseIcon {
     display: block;
     pointer-events: none;
-    filter: brightness(0) invert(1) opacity(0.95);
+    transform: scale(1);
+    transform-origin: center;
+    transition: opacity 120ms ease-out, transform 120ms ease-out;
+}
+
+.closeButton .closeIcon {
+    width: 14rem;
+    height: 14rem;
+    opacity: 0.70;
+}
+
+.closeButton:hover .closeIcon {
+    opacity: 1;
+    transform: scale(1.18);
+}
+
+.collapseButton .collapseIcon {
+    width: 18rem;
+    height: 18rem;
+    opacity: 0.92;
+}
+
+.collapseButton:hover .collapseIcon {
+    opacity: 1;
+    transform: scale(1.10);
 }
 
 .infoButton,
@@ -188,7 +197,7 @@
     height: 24rem;
     display: block;
     pointer-events: none;
-    transition: opacity 120ms ease-out, transform 120ms ease-out, filter 120ms ease-out;
+    transition: opacity 120ms ease-out, transform 120ms ease-out;
 }
 
 .infoButton:hover .infoIcon {
@@ -299,7 +308,8 @@
     justify-content: space-between;
     box-sizing: border-box;
     padding-left: 0;
-    padding-right: 6rem;
+    // Preset action group position: smaller padding moves Switch/Restore right.
+    padding-right: 2rem;
 }
 
 .outlineLeft {
@@ -310,7 +320,11 @@
 }
 
 .outlineRight {
-    display: flex;
-    align-items: center;
-    flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.outlineRight > * + * {
+  margin-left: 4rem;
 }

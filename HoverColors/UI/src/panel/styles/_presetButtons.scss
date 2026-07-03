@@ -1,11 +1,12 @@
 // File: UI/src/panel/styles/_presetButtons.scss
-// Purpose: Styles for preset slots and the preset-reset button.
+// Purpose: Styles for preset slots and the preset action buttons.
 //
 // Notes:
 // - Preset slots keep focus ring support because they are real buttons.
-// - Preset reset hover-grow is intentionally hover-only, not focus.
-//   Cohtml can keep focus after click, which made the reset icon stay enlarged
+// - Preset action hover-grow is intentionally hover-only, not focus.
+//   Cohtml can keep focus after click, which made reset icons stay enlarged
 //   until the player clicked somewhere else.
+// - Restore defaults uses the CCW icon. Switch Set A/B uses the clockwise icon.
 
 .presetSlot::before,
 .presetSlot::after {
@@ -142,45 +143,104 @@
   z-index: 35;
 }
 
+.presetResetBare::before,
+.presetResetBare::after {
+  content: none !important;
+  display: none !important;
+}
+
 .presetResetBare {
-  background: none !important;
-  border: none !important;
-  box-shadow: none !important;
-  width: 26rem;
-  height: 26rem;
-  padding: 0;
+  width: 22rem !important;
+  min-width: 22rem !important;
+  height: 22rem !important;
+  padding-top: 0 !important;
+  padding-right: 0 !important;
+  padding-bottom: 0 !important;
+  padding-left: 0 !important;
   cursor: pointer;
   display: flex;
+  flex-grow: 0;
+  flex-shrink: 0;
+  flex-basis: 22rem;
   align-items: center;
   justify-content: center;
-  border-radius: 50%;
+  border-top-style: none !important;
+  border-right-style: none !important;
+  border-bottom-style: none !important;
+  border-left-style: none !important;
+  border-top-width: 0 !important;
+  border-right-width: 0 !important;
+  border-bottom-width: 0 !important;
+  border-left-width: 0 !important;
+  border-top-color: transparent !important;
+  border-right-color: transparent !important;
+  border-bottom-color: transparent !important;
+  border-left-color: transparent !important;
+  border-top-left-radius: 50%;
+  border-top-right-radius: 50%;
+  border-bottom-left-radius: 50%;
+  border-bottom-right-radius: 50%;
+  background-color: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
   color: rgba(254, 255, 255, 0.84) !important;
-  transition: background-color 120ms ease-out, color 120ms ease-out, transform 120ms ease-out;
+  transition-property: background-color, color, transform;
+  transition-duration: 120ms, 120ms, 120ms;
+  transition-timing-function: ease-out, ease-out, ease-out;
   // Hover-only. Do not include :focus here or the icon can stay enlarged after click.
   &:hover {
-    background-color: rgba(84, 215, 255, 0.14) !important;
+    // Match the other panel button hover wash; change this to tune Switch/Restore hover color.
+    background-color: rgba(108, 136, 150, 0.34) !important;
     color: rgba(254, 255, 255, 1) !important;
     transform: scale(1.06);
   }
 }
 
 .resetIcon {
-  width: 17rem;
-  height: 17rem;
+  width: 15rem;
+  height: 15rem;
   pointer-events: none;
   position: relative;
   z-index: 1;
-  opacity: 0.90;
-  filter: drop-shadow(0 0 3rem rgba(0, 0, 0, 0.42));
-  transform: scaleX(-1);
-  transition: filter 120ms ease-out, opacity 120ms ease-out, transform 120ms ease-out;
+  // Idle brightness for Switch/Restore; hover below raises this to full white.
+  opacity: 0.76;
+  transition-property: opacity, transform;
+  transition-duration: 120ms, 120ms;
+  transition-timing-function: ease-out, ease-out;
 }
+
+
+// left button: switch between preset Set A and Set B.
+// Uses double arrow icon.
+.resetIconSwitch {
+  width: 21rem;
+  height: 18rem;
+  transform: none;
+}
+
+.presetResetBare:hover .resetIconSwitch {
+  transform: scale(1.10);
+}
+
+
+// right button: restore all four preset slots to the mod defaults.
+// Uses CCW-looking arrow.
+.resetIconRestore {
+  transform: scaleX(-1);
+}
+
 
 // Hover-only. Focus can persist in Cohtml after click, so it should not brighten/grow the icon.
 .presetResetBare:hover .resetIcon {
   opacity: 1;
-  filter: brightness(0) invert(1) drop-shadow(0 0 5rem rgba(254, 255, 255, 0.34)) drop-shadow(0 0 4rem rgba(0, 0, 0, 0.65));
+}
+
+.presetResetBare:hover .resetIconRestore {
   transform: scaleX(-1) scale(1.16);
+}
+
+.presetResetBare:hover .resetIconSwitch {
+  transform: scale(1.10);
 }
 
 .resetButton {

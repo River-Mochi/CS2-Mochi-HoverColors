@@ -2,6 +2,7 @@
 // Purpose: Bottom action bar: Surface, Specialized Industry, and District color menu.
 
 import React from "react";
+import { Button } from "cs2/ui";
 import { Color } from "cs2/bindings";
 import { SideTooltip } from "../tooltip/SideTooltip";
 import { compactSwatchStyle, holdBarStyle } from "../helpers/MochiPanelColorUtils";
@@ -89,38 +90,43 @@ export const MochiPanelActionBar = ({
         <div className={styles.actions}>
             <div className={styles.surfaceActions}>
                 <SideTooltip tooltip={tt(text.tooltipSurfaceToggle)} side="below">
-                    <button
-                        type="button"
+                    <Button
                         className={`${styles.actionButton} ${styles.surfaceButton} ${surfaceToolAreasSuppressed ? styles.surfaceButtonActive : ""}`}
-                        onClick={handleToggleSurfaceToolAreas}
+                        variant="icon"
+                        onSelect={handleToggleSurfaceToolAreas}
+                        focusKey={focusDisabled}
                     >
                         <img src={lotToolIconSrc} className={`${styles.controlIcon} ${styles.idleIcon}`} alt="" />
-                    </button>
+                    </Button>
                 </SideTooltip>
 
                 <SideTooltip tooltip={tt(text.tooltipSpecializedIndustryToggle)} side="below">
-                    <button
-                        type="button"
+                    <Button
                         className={`${styles.actionButton} ${styles.surfaceButton} ${styles.buttonGap} ${specializedIndustryAreasSuppressed ? styles.surfaceButtonActive : ""}`}
-                        onClick={handleToggleSpecializedIndustryAreas}
+                        variant="icon"
+                        onSelect={handleToggleSpecializedIndustryAreas}
+                        focusKey={focusDisabled}
                     >
                         <img src={specializedIndustryIconSrc} className={`${styles.controlIcon} ${styles.idleIcon}`} alt="" />
-                    </button>
+                    </Button>
                 </SideTooltip>
 
                 <SideTooltip tooltip={tt(text.tooltipDistrictColors)} side="below">
-                    <div
-                        ref={districtPickerRef}
-                        className={`${styles.actionButton} ${styles.surfaceButton} ${styles.buttonGap} ${styles.districtPickerButton} ${districtMenuOpen ? styles.districtPickerButtonActive : ""}`}
-                        onMouseOver={updateDistrictPickerDirection}
-                        // Hold resets District colors; quick click opens the mini menu.
-                        onMouseDownCapture={handleDistrictMouseDownCapture}
-                        onMouseUpCapture={handleDistrictMouseUpCapture}
-                        onMouseLeave={cancelDistrictHold}
-                        onClickCapture={handleDistrictClickCapture}
-                    >
-                        {districtHoldProgress > 0 && <span className={styles.holdBar} style={holdBarStyle(districtHoldProgress)} />}
-                        <img src={surfaceIconSrc} className={`${styles.controlIcon} ${styles.idleIcon} ${styles.districtPickerIcon}`} alt="" />
+                    <div ref={districtPickerRef} className={styles.buttonGap}>
+                        <Button
+                            className={`${styles.actionButton} ${styles.surfaceButton} ${styles.districtPickerButton} ${districtMenuOpen ? styles.districtPickerButtonActive : ""}`}
+                            variant="icon"
+                            onMouseOver={updateDistrictPickerDirection}
+                            // Hold resets District colors; quick click opens the mini menu.
+                            onMouseDown={handleDistrictMouseDownCapture}
+                            onMouseUp={handleDistrictMouseUpCapture}
+                            onMouseLeave={cancelDistrictHold}
+                            onClick={handleDistrictClickCapture}
+                            focusKey={focusDisabled}
+                        >
+                            {districtHoldProgress > 0 && <span className={styles.holdBar} style={holdBarStyle(districtHoldProgress)} />}
+                            <img src={surfaceIconSrc} className={`${styles.controlIcon} ${styles.idleIcon} ${styles.districtPickerIcon}`} alt="" />
+                        </Button>
                     </div>
                 </SideTooltip>
             </div>
@@ -178,13 +184,13 @@ export const MochiPanelActionBar = ({
                         </span>
 
                         <SideTooltip tooltip={tt(text.tooltipResetDistrictColors)} side="right">
-                            <button
-                                type="button"
+                            <Button
                                 className={styles.districtMenuReset}
-                                onClick={handleResetDistrict}
+                                onSelect={handleResetDistrict}
+                                focusKey={focusDisabled}
                             >
                                 {text.districtMenuResetAll}
-                            </button>
+                            </Button>
                         </SideTooltip>
                     </div>
                 </div>

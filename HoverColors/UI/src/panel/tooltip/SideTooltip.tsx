@@ -29,13 +29,24 @@ type TipState = {
 type ProviderProps = {
     anchorRef: RefObject<HTMLElement | null>;
     panelRef: RefObject<HTMLElement | null>;
+    disabled?: boolean;
     children: ReactNode;
 };
 
-export const SideTooltipProvider = ({ anchorRef, panelRef, children }: ProviderProps) => {
+export const SideTooltipProvider = ({ anchorRef, panelRef, disabled = false, children }: ProviderProps) => {
     const [tip, setTip] = useState<TipState>(null);
 
+    React.useEffect(() => {
+        if (disabled) {
+            setTip(null);
+        }
+    }, [disabled]);
+
     const show: ShowFn = (side, content, control) => {
+        if (disabled) {
+            return;
+        }
+
         const anchor = anchorRef.current?.getBoundingClientRect();
         const panel = panelRef.current?.getBoundingClientRect() ?? anchor;
         if (content == null || anchor == null || panel == null) {

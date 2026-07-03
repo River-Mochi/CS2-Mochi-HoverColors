@@ -359,6 +359,7 @@ export const MochiColorPickerPanel = () => {
     const handleToggleSurfaceToolAreas = () => trigger(CHANNEL, "ToggleSurfaceToolAreas");
     const handleToggleSpecializedIndustryAreas = () => trigger(CHANNEL, "ToggleSpecializedIndustryAreas");
     const handleTogglePresetDefaults = () => trigger(CHANNEL, "TogglePresetDefaults");
+    const handleRestorePresetDefaults = () => trigger(CHANNEL, "RestorePresetDefaults");
     const handleInfoButtonClick = () => {
         if (!tooltipsEnabled) {
             trigger(CHANNEL, "SetPanelTooltipsEnabled", true);
@@ -401,19 +402,20 @@ export const MochiColorPickerPanel = () => {
             className={styles.panelAnchor}
             style={{ transform: `translate(${panelOffset.x}px, ${panelOffset.y}px)` }}
         >
-            <SideTooltipProvider anchorRef={panelAnchorRef} panelRef={panelElementRef}>
+            <SideTooltipProvider anchorRef={panelAnchorRef} panelRef={panelElementRef} disabled={panelDragging}>
             <div ref={panelElementRef} className={panelFrameClass}>
                 <div className={panelContentClass}>
                     <div className={styles.titleBar}>
                         <SideTooltip tooltip={ttAlways(text.tooltipInfo)} side="above">
-                            <button
-                                type="button"
+                            <Button
                                 className={`${styles.infoButton} ${!tooltipsEnabled ? styles.infoButtonTooltipsOff : ""}`}
-                                onClick={handleInfoButtonClick}
+                                variant="icon"
+                                onSelect={handleInfoButtonClick}
+                                focusKey={focusDisabled}
                                 aria-pressed={!tooltipsEnabled}
                             >
                                 <img src={infoIconSrc} className={`${styles.infoIcon} ${styles.idleIcon}`} alt="" />
-                            </button>
+                            </Button>
                         </SideTooltip>
 
                         <SideTooltip tooltip={tt(text.tooltipDraggable)} side="right">
@@ -429,7 +431,7 @@ export const MochiColorPickerPanel = () => {
                             <Button
                                 className={collapseButtonClass}
                                 variant="icon"
-                                onClick={handleToggleCollapse}
+                                onSelect={handleToggleCollapse}
                                 focusKey={focusDisabled}
                                 aria-pressed={panelCollapsed}
                             >
@@ -445,7 +447,7 @@ export const MochiColorPickerPanel = () => {
                             <Button
                                 className={closeButtonClass}
                                 variant="icon"
-                                onClick={handleClosePanel}
+                                onSelect={handleClosePanel}
                                 focusKey={focusDisabled}
                                 aria-label={text.ariaClosePanel}
                             >
@@ -479,7 +481,7 @@ export const MochiColorPickerPanel = () => {
                         vanillaOutlineActive={vanillaOutlineActive}
                         preset1Active={preset1Active}
                         preset2Active={preset2Active}
-                        swatchHovered={swatchHovered}
+                        swatchHovered={swatchHovered}                  
                         ownerSwatchHovered={ownerSwatchHovered}
                         guidelineLinesHovered={guidelineLinesHovered}
                         guidelinePreviewHovered={guidelinePreviewHovered}
@@ -518,6 +520,7 @@ export const MochiColorPickerPanel = () => {
                         handleResetFill={handleResetFill}
                         handleResetGuidelines={handleResetGuidelines}
                         handleTogglePresetDefaults={handleTogglePresetDefaults}
+                        handleRestorePresetDefaults={handleRestorePresetDefaults}
                         updateColorPickerDirection={updateColorPickerDirection}
                         updateOwnerPickerDirection={updateOwnerPickerDirection}
                         updateGuidelineLinesPickerDirection={updateGuidelineLinesPickerDirection}

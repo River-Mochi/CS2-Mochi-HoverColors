@@ -2,6 +2,7 @@
 // Purpose: Small reusable pieces for MochiColorPickerPanel.tsx.
 
 import React from "react";
+import { Button } from "cs2/ui";
 import { Color } from "cs2/bindings";
 import { SideTooltip, type SideTooltipSide } from "../tooltip/SideTooltip";
 import styles from "../../MochiColorPickerPanel.module.scss";
@@ -12,6 +13,7 @@ type PresetSlotButtonProps = {
     active: boolean;
     holdActive: boolean;
     holdProgress: number;
+    focusDisabled: any;
     tooltip?: React.ReactNode;
     tooltipSide?: SideTooltipSide;
     marginLeft: string;
@@ -19,6 +21,7 @@ type PresetSlotButtonProps = {
     presetPreviewStyle: (color: Color) => React.CSSProperties;
     holdBarStyle: (progress: number) => React.CSSProperties;
     onMouseEnter: () => void;
+    onSelect: () => void;
     onMouseDown: (event: React.MouseEvent<HTMLButtonElement>) => void;
     onMouseUp: () => void;
     onMouseLeave: () => void;
@@ -30,6 +33,7 @@ export const PresetSlotButton = ({
     active,
     holdActive,
     holdProgress,
+    focusDisabled,
     tooltip,
     tooltipSide,
     marginLeft,
@@ -37,19 +41,22 @@ export const PresetSlotButton = ({
     presetPreviewStyle,
     holdBarStyle,
     onMouseEnter,
+    onSelect,
     onMouseDown,
     onMouseUp,
     onMouseLeave,
 }: PresetSlotButtonProps) => (
     <SideTooltip tooltip={tooltip} side={tooltipSide ?? "right"}>
-        <button
-            type="button"
+        <Button
             className={`${styles.presetSlot} ${active ? styles.presetSlotActive : ""}`}
+            variant="icon"
             style={{ marginLeft }}
             onMouseEnter={onMouseEnter}
+            onSelect={onSelect}
             onMouseDown={onMouseDown}
             onMouseUp={onMouseUp}
             onMouseLeave={onMouseLeave}
+            focusKey={focusDisabled}
         >
             {holdActive && holdProgress > 0 && (
                 <span className={styles.holdBar} style={holdBarStyle(holdProgress)} />
@@ -62,7 +69,7 @@ export const PresetSlotButton = ({
             {/* Real child rings are more reliable than pseudo-elements in Cohtml. */}
             <span className={styles.presetHoverRing} aria-hidden="true" />
             <span className={styles.presetActiveRing} aria-hidden="true" />
-        </button>
+        </Button>
     </SideTooltip>
 );
 
