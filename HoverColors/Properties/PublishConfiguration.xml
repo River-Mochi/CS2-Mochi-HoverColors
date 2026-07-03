@@ -27,10 +27,10 @@
 - Turn off mod tooltips - click the Info button, top-left, in-city panel.
 - Darker panel option. Good for LegacyUI or players who prefer darker contrast. Try both standard and dark to see what you like!
 - Alpha = transparency; use the last bar on the color picker.
--   Tap preset 1 or 2 to switch your saved colors.
--   Change presets: select a color swatch box 1/row1, then hold preset 1 or 2 until the fill bar sweeps across - done.
-- Switch ⇔ button cycles between preset Set A 1|2 and Set B 1|2 (4 colors total)
-- ↺ Reset/Defaults toggles between mod defaults and your saved custom colors (4 colors in mod defaults, 4 in your saved presets).
+-   Tap preset 1 or 2 to switch to a different color.
+-   Change presets: select a color swatch box 1/row 1; hold preset 1 or 2 until the fill bar sweeps across - done.
+- Switch [⇔] button cycles between preset Set A 1|2 and Set B 1|2 (4 colors total can be saved)
+- [↺] Restores Defaults toggles between mod default colors and your saved custom colors (8 total colors: 4 mod defaults, 4 if you saved over [1] or [2] buttons).
 
 - Read the tooltips or Options Menu 3rd panel if you get lost.
 - Save-game safe and safe to remove any time.
