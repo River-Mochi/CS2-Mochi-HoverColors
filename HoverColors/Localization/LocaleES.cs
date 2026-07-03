@@ -58,52 +58,109 @@ namespace HoverColors.Localization
 
                 // Tool color behavior
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToolColorMode)), "Bulldozer + carreteras" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ToolColorMode)), "Controla los colores temporales del contorno con el bulldozer o las herramientas de carretera.\n\n**1. Recomendado**: amarillo de aviso para demoler y azul vanilla más suave para carreteras.\n**2. Colores vanilla**: vuelve al azul normal del juego con bulldozer/carreteras.\n**3. Mi color personalizado**: usa tu color en todo.\n\nSirve si tu color personalizado cuesta ver al demoler. No sobrescribe el color guardado." },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ToolColorMode)),
+                    "Controla colores temporales de contorno con bulldozer o herramientas de carretera activas.\n" +
+                    "\n" +
+                    "**1. Recomendado** usa el color de aviso del juego (amarillo) para demoler y un azul vanilla más suave para carreteras.\n" +
+                    "**2. Colores vanilla** restaura el azul vanilla normal del juego con bulldozer o carreteras.\n" +
+                    "**3. Mantener mi color** usa tu color elegido en todo.\n" +
+                    "\n" +
+                    "Objetivo: algunos usuarios/testers ven mal su color al demoler.\n" +
+                    "Ofrece colores muy visibles mientras usas herramientas.\n" +
+                    "No sobrescribe tu color guardado automáticamente en el selector."
+                },
                 { m_Settings.GetToolColorModeLocaleID("Recommended"), "1. Recomendado" },
                 { m_Settings.GetToolColorModeLocaleID("Vanilla"), "2. Colores vanilla" },
-                { m_Settings.GetToolColorModeLocaleID("Custom"), "3. Mi color personalizado" },
+                { m_Settings.GetToolColorModeLocaleID("Custom"), "3. Mantener mi color" },
 
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseOverlapWarningColor)), "Contorno de solapes" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseOverlapWarningColor)), "<Recomendado: activado>\nMantiene visible el contorno rojo salmón del juego cuando un objeto o red no se puede colocar por solape.\nLos límites de área, como radios de granjas de industria especializada, no se tocan.\n\nFunciona con todos los modos Bulldozer + carreteras y no sobrescribe tu color." },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseOverlapWarningColor)), "Activar contorno de objetos superpuestos" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseOverlapWarningColor)),
+                    "<Activado recomendado>\n" +
+                    "Mantiene visible el contorno rojo salmón vanilla cuando una colocación está bloqueada por solapes.\n" +
+                    "Los límites de área, como radios de granjas de Industria especializada, no se cambian.\n" +
+                    "\n" +
+                    "Funciona con todos los modos Bulldozer + carreteras y no sobrescribe tu color guardado."
+                },
 
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseCustomColorsForNetLanes)), "Colores personalizados en NetLanes" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseCustomColorsForNetLanes)), "<Recomendado: activado>\nUsa tu color/transparencia HC para detalles NetLane como vallas, setos, marcas y herramientas parecidas.\n\n- Las carreteras normales siguen el ajuste Bulldozer + carreteras.\n- Desactívalo para usar el azul vanilla del juego.\n- El color de error por solape manda si está activado (rojo salmón vanilla)." },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseCustomColorsForNetLanes)), "Permitir colores propios para NetLanes" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseCustomColorsForNetLanes)),
+                    "<Activado recomendado>\n" +
+                    "Usa tu color/transparencia HC guardado al colocar detalles NetLane como vallas, setos, marcas y similares.\n" +
+                    "\n" +
+                    "- Las carreteras normales siguen el ajuste Bulldozer + carreteras elegido en la lista.\n" +
+                    "- Desactívalo si quieres que esas herramientas usen el azul vanilla del juego.\n" +
+                    "- El color de error por solape sigue ganando si está activo (color vanilla = rojo salmón)."
+                },
 
                 // Panel
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelTooltipsEnabled)), "Tooltips del mod" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelTooltipsEnabled)), "<Activado> = muestra ayuda del mod (recomendado [x]).\n<Desactivado> = oculta los tooltips del mod.\nSolo se desactivan desde este menú de opciones.\nEn la ciudad puedes volver a activarlos con el botón Info (i) de la barra superior." },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelTooltipsEnabled)), "Ayudas para colores al pasar" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelTooltipsEnabled)),
+                    "<Activado> = mostrar ayudas de colores al pasar (recomendado [x]).\n" +
+                    "<Desactivado> = ocultar ayudas de este mod.\n" +
+                    "Las ayudas solo se desactivan en este menú de Opciones.\n" +
+                    "Pero puedes volver a activarlas en la ciudad: pulsa el botón Info (i) de la barra de título."
+                },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)), "Panel más oscuro" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)), "Activado = <Panel oscuro>: para jugadores con UI clásica, o si prefieres algo más oscuro.\nDesactivado = <Panel estándar>: estilo translúcido del mod.\n- Más ligero y moderno.\n- Mejor para la nueva UI moderna.\n\nPrueba ambos. Solo cambia el fondo del panel del mod, no la UI del juego." },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)),
+                    "Activado = <Panel oscuro>: para jugadores de LegacyUI; también vale en Modern UI si quieres más contraste.\n" +
+                    "Desactivado = <Panel estándar>: estilo translúcido propio de colores al pasar.\n" +
+                    "- Aspecto más claro y moderno.\n" +
+                    "- Mejor para la mayoría con la nueva UI moderna.\n" +
+                    "\n" +
+                    "Prueba ambos y elige. Solo cambia el fondo de este panel del mod, no la interfaz del juego."
+                },
 
                 // Guidelines opacity slider
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.GuidelineOpacityPercent)), "Opacidad de guías (alpha)" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.GuidelineOpacityPercent)), "Controla la opacidad de las guías punteadas de alineación para carreteras, vallas, props, etc.\n\n**100%** valor del juego.\n**Menos** más transparente.\n**0%** oculta todo.\nMejor sobre 15 %, o la línea cuesta verla.\nEl mismo control está en el panel de ciudad; ambos se sincronizan." },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.GuidelineOpacityPercent)), "Opacidad de guías (alfa)" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.GuidelineOpacityPercent)),
+                    "Controla la opacidad de guías punteadas de alineación, útil al colocar carreteras, vallas, props, etc.\n" +
+                    "\n" +
+                    "**100%** predeterminado del juego.\n" +
+                    "**Menor** más transparente.\n" +
+                    "**0%** oculta todo.\n" +
+                    "Mantén más de 15% o será difícil ver la línea.\n" +
+                    "Este mismo deslizador está en el panel de ciudad. Ambos se sincronizan.\n" +
+                    "Si cambias este, el del panel de ciudad cambia también."
+                },
 
                 // Keybinds
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.TogglePanelBinding)), "Abrir/cerrar panel principal" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.TogglePanelBinding)), "Atajo para <abrir / cerrar> el panel de color en la ciudad." },
-                { m_Settings.GetBindingKeyLocaleID(Mod.kTogglePanelActionName), "Mostrar/ocultar panel" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.TogglePanelBinding)),
+                    "Atajo para <abrir / cerrar> el panel de color de objetos al pasar en la ciudad." },
+                { m_Settings.GetBindingKeyLocaleID(Mod.kTogglePanelActionName), "Alternar panel de colores al pasar" },
 
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleSurfaceToolAreasBinding)), "Previsualización Surface on/off" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ToggleSurfaceToolAreasBinding)), "Atajo para <ocultar o mostrar> los bordes del área Surface al colocar superficies." },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleSurfaceToolAreasBinding)), "Vista previa de herramienta Surface On/Off" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ToggleSurfaceToolAreasBinding)),
+                    "Atajo para <ocultar o mostrar> líneas de límite activas de Surface al colocar superficies." },
                 { m_Settings.GetBindingKeyLocaleID(Mod.kToggleSurfaceToolAreasActionName), "Capa de vista previa Surface On/Off" },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.TogglePresetBinding)), "Alternar presets 1+2" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.TogglePresetBinding)), "Atajo para cambiar entre\n<slot de preset 1 y slot 2>." },
-                { m_Settings.GetBindingKeyLocaleID(Mod.kTogglePresetActionName), "Alternar entre presets 1 y 2" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.TogglePresetBinding)),
+                    "Atajo para cambiar entre\n" +
+                    "<preset 1 y preset 2>." },
+                { m_Settings.GetBindingKeyLocaleID(Mod.kTogglePresetActionName), "Cambiar entre presets 1 y 2" },
 
                 // About name + version
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.NameText)), "Mod" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.NameText)), string.Empty },
+
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.VersionText)), "Versión" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.VersionText)), string.Empty },
 
                 // About Paradox Mods link button
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.OpenParadox)), "Paradox Mods" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.OpenParadox)), "**Abre la página de Paradox Mods del autor.**" },
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.MochiDedicationText)), "En memoria de Mochi." },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.MochiDedicationText)), "Este mod está dedicado a Mochi.\nFue una perrita muy querida, adoptada a los 7 años,\ny regaló 13 años de amor y alegría.\nEste mod no sería posible sin Mochi." },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.OpenParadox)), "**Abrir la página de Paradox Mods del autor.**" },
+
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.MochiDedicationText)),
+                    "En memoria de Mochi."
+                },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.MochiDedicationText)),
+                    "Este mod está dedicado a Mochi.\n" +
+                    "Fue una perrita muy querida, adoptada con 7 años,\n" +
+                    "y dio 13 años de amor y alegría.\n" +
+                    "Este mod no existiría sin Mochi."
+                },
             };
         }
 
