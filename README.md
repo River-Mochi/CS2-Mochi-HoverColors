@@ -9,19 +9,19 @@ Hover Colors lets you change the default blue hover outline, adjust opacity, cus
 - Change hover outline color and opacity.
 - Change owner / parent-object highlight color and opacity.
 - Adjust hover fill opacity.
-- Save two quick outline presets for fast switching.
+- Save quick color presets for fast switching.
 - Customize guideline colors:
   - S1: guide circles / spacing lines
   - S2: road/tool preview overlay
   - S3: dashed guideline color
-- Adjust guideline opacity separately.
-- Toggle guideline colors between vanilla and your last custom colors.
+- Adjust guideline opacity from the panel or Options menu.
+- Toggle guideline colors between vanilla and your last custom set.
 - Hide Surface tool preview fill so layered surfaces are easier to see.
 - Hide Specialized Industry extractor lot preview fill.
 - Change District overlay and border color / opacity.
 - Reset District colors back to vanilla.
 - Use a darker panel mode for Legacy UI or stronger contrast.
-- Keep safer vanilla-style colors for bulldozer, roads, NetLanes, and placement warnings when desired.
+- Keep vanilla-style warning colors for bulldozer, roads, NetLanes, and placement conflicts when desired.
 - Saves your colors and presets between sessions.
 - No Harmony patches.
 
@@ -41,12 +41,13 @@ You can change or remove hotkeys in the Hover Colors Options menu.
 
 ## Presets
 
-The panel has two quick preset slots.
+Use the preset buttons to quickly swap saved looks.
 
 - Tap preset `1` or `2` to apply it.
-- Hold preset `1` or `2` to overwrite it with your current outline color, outline opacity, fill opacity, and guideline opacity.
+- Hold preset `1` or `2` to save your current outline, fill, and opacity settings.
+- Use the switch button to swap between the extra preset set and your saved set.
 
-Guideline colors have their own controls and are not saved inside outline preset slots.
+Guideline colors have their own controls.
 
 ## Guidelines
 
@@ -58,9 +59,9 @@ S2 = road/tool preview overlay
 S3 = dashed guideline color
 ```
 
-Click the guideline icon button to toggle S1/S2/S3 between vanilla colors and your last custom colors.
+Use these to make road guides, spacing circles, and preview overlays easier to see.
 
-Guideline opacity stays separate and does not change when you toggle guideline colors.
+You can also adjust guideline opacity separately from hover outline opacity.
 
 ## Surface and District Tools
 
@@ -73,7 +74,7 @@ District tool:
 
 - Change District overlay and border color.
 - Adjust District opacity.
-- Reset District colors back to vanilla.
+- Hold the District button to reset District colors back to vanilla.
 
 ## Options Menu
 
@@ -90,16 +91,10 @@ Recommended tool behavior keeps important warning colors visible while preservin
 
 ## Compatibility
 
-- Save-game safe. Safe to remove. No Harmony patches.
+- Save-game safe.
+- Safe to remove.
+- No Harmony patches.
 - Designed to use the game's own vanilla systems where possible.
-
-## Settings Location
-
-Player settings are saved here:
-
-```text
-ModsSettings/HoverColors/HoverColors.coc
-```
 
 ## Supported Languages
 
