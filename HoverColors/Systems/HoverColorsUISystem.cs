@@ -16,9 +16,8 @@ namespace HoverColors.UI
     using System.Collections.Generic;
     using Colossal.UI.Binding;
     using CS2Shared.RiverMochi;
-    using Game;
+    using Game;     // GameMode
     using Game.Input;
-    using Game.SceneFlow;           // GameManager
     using Game.UI;
     using HoverColors.Settings;
     using HoverColors.Systems;

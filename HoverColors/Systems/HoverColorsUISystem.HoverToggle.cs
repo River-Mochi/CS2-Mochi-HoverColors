@@ -7,7 +7,7 @@
 // ================= </copyright> ======================
 
 // File: Systems/HoverColorsUISystem.HoverToggle.cs
-// Eye-button binding + optional unbound hotkey. The OFF state persists in HC settings.
+// Eye-button binding + optional unbound hotkey. OFF state persists in HC settings.
 
 namespace HoverColors.UI
 {
@@ -17,7 +17,7 @@ namespace HoverColors.UI
 
     public partial class HoverColorsUISystem
     {
-        private ProxyAction? m_ToggleHoverHighlightsAction;
+        private ProxyAction? m_ToggleHighlightsAction;
         private ValueBinding<bool> m_HoverHighlightsSuppressedBinding = null!;
 
         private void RegisterHoverToggleBindings()
@@ -28,24 +28,24 @@ namespace HoverColors.UI
                 "HoverHighlightsSuppressed",
                 settings?.HoverHighlightsSuppressed ?? false);
 
-            AddBinding(new TriggerBinding(Mod.ModId, "ToggleHoverHighlights", ToggleHoverHighlights));
-            m_ToggleHoverHighlightsAction = EnableAction(Mod.kToggleHoverHighlightsActionName);
+            AddBinding(new TriggerBinding(Mod.ModId, "ToggleHighlights", ToggleHighlights));
+            m_ToggleHighlightsAction = EnableAction(Mod.kToggleHighlightsActionName);
         }
 
         private void UpdateHoverToggleHotkey()
         {
-            if (m_ToggleHoverHighlightsAction == null)
+            if (m_ToggleHighlightsAction == null)
             {
-                m_ToggleHoverHighlightsAction = EnableAction(Mod.kToggleHoverHighlightsActionName);
+                m_ToggleHighlightsAction = EnableAction(Mod.kToggleHighlightsActionName);
             }
 
-            if (m_ToggleHoverHighlightsAction?.WasReleasedThisFrame() == true)
+            if (m_ToggleHighlightsAction?.WasReleasedThisFrame() == true)
             {
-                ToggleHoverHighlights();
+                ToggleHighlights();
             }
         }
 
-        private void ToggleHoverHighlights()
+        private void ToggleHighlights()
         {
             HoverColorsSettings? settings = Mod.Settings;
             if (settings == null)

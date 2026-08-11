@@ -14,11 +14,11 @@ export const DISTRICT_RESET_HOLD_MS = 800;
 // Body class used by MochiColorPickerPanel.global.scss while compact vanilla pickers are open.
 export const COMPACT_PICKER_BODY_CLASS = "mochiCompactColorPickerOpen";
 
-// Live color bindings
-export const outlineR$ = bindValue<number>(CHANNEL, "OutlineR", 0.502);
-export const outlineG$ = bindValue<number>(CHANNEL, "OutlineG", 0.869);
-export const outlineB$ = bindValue<number>(CHANNEL, "OutlineB", 1);
-export const outlineA$ = bindValue<number>(CHANNEL, "OutlineA", 0.855);
+// Live color bindings. New-install fallback matches Set A / P1.
+export const outlineR$ = bindValue<number>(CHANNEL, "OutlineR", 215 / 255);
+export const outlineG$ = bindValue<number>(CHANNEL, "OutlineG", 226 / 255);
+export const outlineB$ = bindValue<number>(CHANNEL, "OutlineB", 194 / 255);
+export const outlineA$ = bindValue<number>(CHANNEL, "OutlineA", 0.67);
 
 export const ownerR$ = bindValue<number>(CHANNEL, "OwnerR", 0.247);
 export const ownerG$ = bindValue<number>(CHANNEL, "OwnerG", 0.981);
@@ -48,6 +48,7 @@ export const guidelineDashedColorG$ = bindValue<number>(CHANNEL, "GuidelineDashe
 export const guidelineDashedColorB$ = bindValue<number>(CHANNEL, "GuidelineDashedColorB", 1);
 
 export const guidelineOpacity$ = bindValue<number>(CHANNEL, "GuidelineOpacityPercent", 30);
+export const panelOpen$ = bindValue<boolean>(CHANNEL, "PanelOpen", false);
 export const panelTooltipsEnabled$ = bindValue<boolean>(CHANNEL, "PanelTooltipsEnabled", true);
 export const panelCollapsed$ = bindValue<boolean>(CHANNEL, "PanelCollapsed", false);
 export const hoverHighlightsSuppressed$ = bindValue<boolean>(CHANNEL, "HoverHighlightsSuppressed", false);
@@ -57,15 +58,15 @@ export const surfaceToolAreasSuppressed$ = bindValue<boolean>(CHANNEL, "SurfaceT
 export const specializedIndustryAreasSuppressed$ = bindValue<boolean>(CHANNEL, "SpecializedIndustryAreasSuppressed", true);
 export const vanillaOutlineActive$ = bindValue<boolean>(CHANNEL, "VanillaOutlineActive", false);
 
-// Preset stored-color bindings
-export const preset1R$ = bindValue<number>(CHANNEL, "Preset1R", 140 / 255);
-export const preset1G$ = bindValue<number>(CHANNEL, "Preset1G", 140 / 255);
-export const preset1B$ = bindValue<number>(CHANNEL, "Preset1B", 171 / 255);
-export const preset1A$ = bindValue<number>(CHANNEL, "Preset1A", 0.5);
+// Preset stored-color bindings. Set A is shown first.
+export const preset1R$ = bindValue<number>(CHANNEL, "Preset1R", 215 / 255);
+export const preset1G$ = bindValue<number>(CHANNEL, "Preset1G", 226 / 255);
+export const preset1B$ = bindValue<number>(CHANNEL, "Preset1B", 194 / 255);
+export const preset1A$ = bindValue<number>(CHANNEL, "Preset1A", 0.67);
 
-export const preset2R$ = bindValue<number>(CHANNEL, "Preset2R", 0.25);
-export const preset2G$ = bindValue<number>(CHANNEL, "Preset2G", 0.15);
-export const preset2B$ = bindValue<number>(CHANNEL, "Preset2B", 0.25);
+export const preset2R$ = bindValue<number>(CHANNEL, "Preset2R", 140 / 255);
+export const preset2G$ = bindValue<number>(CHANNEL, "Preset2G", 140 / 255);
+export const preset2B$ = bindValue<number>(CHANNEL, "Preset2B", 171 / 255);
 export const preset2A$ = bindValue<number>(CHANNEL, "Preset2A", 0.5);
 
 export const preset1Active$ = bindValue<boolean>(CHANNEL, "Preset1Active", false);

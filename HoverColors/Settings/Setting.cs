@@ -493,7 +493,7 @@ namespace HoverColors.Settings
 
         // Unbound keybind by default so HC cannot collide with other mod/game shortcut.
         [SettingsUISection(Actions, kKeyBindings)]
-        [SettingsUIKeyboardBinding(BindingKeyboard.None, Mod.kToggleHoverHighlightsActionName)]
+        [SettingsUIKeyboardBinding(BindingKeyboard.None, Mod.kToggleHighlightsActionName)]
         public ProxyBinding ToggleHoverHighlightsBinding { get; set; }
 
         [SettingsUISection(Actions, kKeyBindings)]

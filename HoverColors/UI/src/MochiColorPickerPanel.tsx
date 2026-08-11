@@ -15,6 +15,7 @@ import {
     districtG$,
     districtR$,
     fillA$,
+    hoverHighlightsSuppressed$,
     guidelineLinesColorA$,
     guidelineLinesColorB$,
     guidelineLinesColorG$,
@@ -66,7 +67,11 @@ import infoIconSrc from "../images/AdvisorInfoViewWhite.svg";
 import closeIconSrc from "../images/Close.svg";
 import styles from "./MochiColorPickerPanel.module.scss";
 
-export const MochiColorPickerPanel = () => {
+type MochiColorPickerPanelProps = {
+    editorMode?: boolean;
+};
+
+export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPanelProps) => {
     const boundOutline: Color = {
         r: useValue(outlineR$),
         g: useValue(outlineG$),
@@ -119,6 +124,7 @@ export const MochiColorPickerPanel = () => {
     const text = useMochiPanelText();
     const tooltipsEnabled = useValue(panelTooltipsEnabled$);
     const panelCollapsed = useValue(panelCollapsed$);
+    const hoverHighlightsSuppressed = useValue(hoverHighlightsSuppressed$);
 
     // FormattedParagraphs lets vanilla Tooltip render JSON \n as real line breaks.
     const tt = React.useCallback(
@@ -190,7 +196,7 @@ export const MochiColorPickerPanel = () => {
         panelDragging,
         panelElementRef,
         handlePanelDragStart,
-    } = usePanelDrag();
+    } = usePanelDrag(editorMode ? "editor" : "game");
     const { openAreasToolPanel } = useDistrictToolPanel();
 
     // Keep local controls synced when C# settings change through presets, reset buttons, or game reload.
@@ -352,6 +358,7 @@ export const MochiColorPickerPanel = () => {
     };
 
     const handleClosePanel = () => trigger(CHANNEL, "SetPanelOpen", false);
+    const handleToggleHighlights = () => trigger(CHANNEL, "ToggleHighlights");
     const handleToggleCollapse = () => trigger(CHANNEL, "SetPanelCollapsed", !panelCollapsed);
     const handleResetOutline = () => trigger(CHANNEL, "ResetOutlineToVanilla");
     const handleResetFill = () => handleFillAChange(0);
@@ -390,8 +397,9 @@ export const MochiColorPickerPanel = () => {
     const panelBaseTheme = resolver.panelBaseTheme;
     const panelTheme = resolver.panelTheme;
     const infoviewMenuTheme = resolver.infoviewMenuTheme;
-    const closeButtonClass = `${roundHighlightButtonTheme["button"] ?? ""} ${styles.closeButton}`;
+    const eyeButtonClass = `${roundHighlightButtonTheme["button"] ?? ""} ${styles.eyeButton}`;
     const collapseButtonClass = `${roundHighlightButtonTheme["button"] ?? ""} ${styles.collapseButton}`;
+    const closeButtonClass = `${roundHighlightButtonTheme["button"] ?? ""} ${styles.closeButton}`;
     const panelFrameClass = `${panelBaseTheme.panel ?? "panel_YqS"} ${infoviewMenuTheme.menu ?? "menu_O_M"} ${styles.panelFrame}`;
     const panelSurfaceClass = useDarkerPanel ? styles.panelDarker : styles.panelStandard;
     const panelContentClass = `${panelTheme.content ?? "content_XD5 content_AD7 child-opacity-transition_nkS"} ${infoviewMenuTheme.content ?? "content_Hzl"} ${styles.panelContent} ${panelSurfaceClass}`;
@@ -399,7 +407,7 @@ export const MochiColorPickerPanel = () => {
     return (
         <div
             ref={panelAnchorRef}
-            className={styles.panelAnchor}
+            className={`${styles.panelAnchor} ${editorMode ? styles.panelAnchorEditor : ""}`}
             style={{ transform: `translate(${panelOffset.x}px, ${panelOffset.y}px)` }}
         >
             <SideTooltipProvider anchorRef={panelAnchorRef} panelRef={panelElementRef} disabled={panelDragging}>
@@ -425,6 +433,24 @@ export const MochiColorPickerPanel = () => {
                             >
                                 <span className={styles.titleText}>{text.title}</span>
                             </div>
+                        </SideTooltip>
+
+                        <SideTooltip tooltip={tt(text.tooltipHoverToggle)} side="right">
+                            <Button
+                                className={eyeButtonClass}
+                                variant="icon"
+                                onSelect={handleToggleHighlights}
+                                focusKey={focusDisabled}
+                                aria-pressed={hoverHighlightsSuppressed}
+                            >
+                                <img
+                                    src={hoverHighlightsSuppressed
+                                        ? "Media/PhotoMode/HideUIOn.svg"
+                                        : "Media/PhotoMode/HideUIOff.svg"}
+                                    className={styles.eyeIcon}
+                                    alt=""
+                                />
+                            </Button>
                         </SideTooltip>
 
                         <SideTooltip tooltip={tt(text.tooltipCollapse)} side="right">

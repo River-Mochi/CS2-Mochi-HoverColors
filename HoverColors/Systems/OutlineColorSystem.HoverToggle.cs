@@ -24,8 +24,8 @@ namespace HoverColors.Systems
 
         private void InitializeHoverToggle()
         {
-            // Returns vanilla's existing system in the normal game world.
-            m_ToolRaycastSystem = World.GetOrCreateSystemManaged<ToolRaycastSystem>();
+            // Use vanilla's system if it already exists. Never create a raycast system just for HC.
+            m_ToolRaycastSystem = World.GetExistingSystemManaged<ToolRaycastSystem>();
         }
 
         private void ApplyHoverToggle(
@@ -52,19 +52,27 @@ namespace HoverColors.Systems
             fillA = 0f;
             ownerA = 0f;
 
-            // Force the custom write path so zero alpha is respected even if RGB matches vanilla.
+            // Force custom writes so zero alpha is respected even if RGB matches vanilla.
             palette = EffectivePalette.Custom;
         }
 
         private bool IsSelectedUnderPointer()
         {
-            if (m_ToolSystem == null || m_ToolRaycastSystem == null)
+            if (m_ToolSystem == null)
             {
                 return false;
             }
 
             Entity selected = m_ToolSystem.selected;
             if (selected == Entity.Null || !EntityManager.Exists(selected))
+            {
+                return false;
+            }
+
+            // ToolRaycastSystem should already exist in Game/Editor. Retry lookup only if it was
+            // not ready when HC was created; never create or patch it.
+            m_ToolRaycastSystem ??= World.GetExistingSystemManaged<ToolRaycastSystem>();
+            if (m_ToolRaycastSystem == null)
             {
                 return false;
             }

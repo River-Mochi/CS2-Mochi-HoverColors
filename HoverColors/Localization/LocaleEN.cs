@@ -133,7 +133,7 @@ namespace HoverColors.Localization
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleHoverHighlightsBinding)), "Quick Outline + fill On/Off" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ToggleHoverHighlightsBinding)),
                     "Optional hotkey for the title-bar Eyeball button. Ships unbound to avoid key conflicts." },
-                { m_Settings.GetBindingKeyLocaleID(Mod.kToggleHoverHighlightsActionName), "Quick outline + fill On/Off" },
+                { m_Settings.GetBindingKeyLocaleID(Mod.kToggleHighlightsActionName), "Quick outline + fill On/Off" },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleSurfaceToolAreasBinding)), "Toggle Surface tool previews on/off" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ToggleSurfaceToolAreasBinding)),
