@@ -75,15 +75,15 @@ export const preset2Active$ = bindValue<boolean>(CHANNEL, "Preset2Active", false
 export const AREA_MENU_NAME_TOKENS = ["SERVICES.NAMES[AREAS]", "SERVICES.NAME[AREAS]", "AREAS"];
 
 export const DISTRICT_AREA_NAME_TOKENS = [
-    "ASSETS.NAME[DISTRICT AREA]",
-    "ASSETS.DESCRIPTION[DISTRICT AREA]",
-    "DISTRICT AREA",
-    "DISTRICT",
+  "ASSETS.NAME[DISTRICT AREA]",
+  "ASSETS.DESCRIPTION[DISTRICT AREA]",
+  "DISTRICT AREA",
+  "DISTRICT",
 ];
 
 export type ToolbarEntity = { index: number; version: number };
 
 export const sameEntity = (
-    a: ToolbarEntity | null | undefined,
-    b: ToolbarEntity | null | undefined,
+  a: ToolbarEntity | null | undefined,
+  b: ToolbarEntity | null | undefined,
 ) => a != null && b != null && a.index === b.index && a.version === b.version;
