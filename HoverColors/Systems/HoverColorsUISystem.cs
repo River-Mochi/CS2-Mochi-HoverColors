@@ -14,21 +14,18 @@ namespace HoverColors.UI
 {
     using System;
     using System.Collections.Generic;
-
     using Colossal.UI.Binding;
-
     using CS2Shared.RiverMochi;
-
     using Game;
     using Game.Input;
-    using Game.SceneFlow;
+    using Game.SceneFlow;           // GameManager
     using Game.UI;
-
     using HoverColors.Settings;
     using HoverColors.Systems;
 
     public partial class HoverColorsUISystem : UISystemBase
     {
+        public override GameMode gameMode => GameMode.GameOrEditor;
         private static bool s_PanelOpen;
 
         // Toggle target for both the GTL button (via SetPanelOpen trigger) and the J hotkey poll below.
@@ -102,6 +99,7 @@ namespace HoverColors.UI
             InitializeKeybindActions();
             RegisterValueBindings();
             RegisterTriggerBindings();
+            RegisterHoverToggleBindings();  // Behavior: toggle Outlines all off, only click object shows it.
         }
 
         protected override void OnUpdate()
@@ -112,12 +110,7 @@ namespace HoverColors.UI
 
             // Re-fetch if the action wasn't ready at OnCreate (RegisterKeyBindings race) or got dropped.
             RefreshKeybindActions();
-
-            // Don't fire hotkeys in main menu / editor.
-            if (!IsInGame())
-            {
-                return;
-            }
+            
 
             // Read current shared state and flip it — works whether button or previous hotkey set it.
             if (m_TogglePanelAction?.WasReleasedThisFrame() == true)
@@ -125,6 +118,8 @@ namespace HoverColors.UI
                 TogglePanel();
                 SyncValueBindings();
             }
+
+            UpdateHoverToggleHotkey();
 
             if (m_ToggleSurfaceToolAreasAction?.WasReleasedThisFrame() == true)
             {
@@ -335,9 +330,5 @@ namespace HoverColors.UI
             }
         }
 
-        private static bool IsInGame()
-        {
-            return GameManager.instance != null && GameManager.instance.gameMode == GameMode.Game;
-        }
     }
 }

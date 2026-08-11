@@ -36,6 +36,8 @@ namespace HoverColors
         public const string kToggleSurfaceToolAreasActionName = "ToggleSurfaceToolAreas";
         public const string kTogglePresetActionName = "TogglePreset";
 
+        public const string kToggleHoverHighlightsActionName = "ToggleHoverHighlights";
+
         public static readonly string ModVersion =
             Assembly.GetExecutingAssembly().GetName().Version?.ToString(3) ?? "1.0.0";
 

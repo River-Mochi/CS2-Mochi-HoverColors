@@ -50,6 +50,8 @@ export const guidelineDashedColorB$ = bindValue<number>(CHANNEL, "GuidelineDashe
 export const guidelineOpacity$ = bindValue<number>(CHANNEL, "GuidelineOpacityPercent", 30);
 export const panelTooltipsEnabled$ = bindValue<boolean>(CHANNEL, "PanelTooltipsEnabled", true);
 export const panelCollapsed$ = bindValue<boolean>(CHANNEL, "PanelCollapsed", false);
+export const hoverHighlightsSuppressed$ = bindValue<boolean>(CHANNEL, "HoverHighlightsSuppressed", false);
+
 export const useDarkerPanel$ = bindValue<boolean>(CHANNEL, "UseDarkerPanel", false);
 export const surfaceToolAreasSuppressed$ = bindValue<boolean>(CHANNEL, "SurfaceToolAreasSuppressed", true);
 export const specializedIndustryAreasSuppressed$ = bindValue<boolean>(CHANNEL, "SpecializedIndustryAreasSuppressed", true);

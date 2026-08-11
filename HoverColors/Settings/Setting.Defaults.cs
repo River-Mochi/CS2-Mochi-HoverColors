@@ -15,11 +15,12 @@ namespace HoverColors.Settings
     {
         public override void SetDefaults()
         {
-            // Vanilla cyan-blue from the OutlinesWorldUIPass material defaults.
-            OutlineR = 0.502f;
-            OutlineG = 0.869f;
-            OutlineB = 1f;
-            OutlineA = 0.855f;
+            // New installs start on HC's Set A / P1 instead of vanilla cyan-blue.
+            // Existing users keep their saved live color when their .coc loads.
+            OutlineR = kPresetA1R;
+            OutlineG = kPresetA1G;
+            OutlineB = kPresetA1B;
+            OutlineA = kPresetA1A;
 
             // Vanilla parent/owner green used for sub-building placement and owned objects.
             OwnerR = 0.247f;

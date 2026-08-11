@@ -54,6 +54,9 @@ namespace HoverColors.Systems
     {
         // Vanilla cyan defaults applied during Bulldoze / Net tool override.
         // Keep in sync with HoverColorsSettings.SetDefaults().
+
+        // Vanilla cyan fallbacks used by captured/override paths.
+        // New-install live HC color may intentionally be different.
         private const float VanillaR = 0.502f;
         private const float VanillaG = 0.869f;
         private const float VanillaB = 1f;
@@ -124,6 +127,7 @@ namespace HoverColors.Systems
             m_RenderSettingsQuery = GetEntityQuery(ComponentType.ReadWrite<RenderingSettingsData>());
             m_ToolSystem = World.GetOrCreateSystemManaged<ToolSystem>();
             m_PrefabSystem = World.GetOrCreateSystemManaged<PrefabSystem>();
+            InitializeHoverToggle();
         }
 
         protected override void OnUpdate()
@@ -246,6 +250,15 @@ namespace HoverColors.Systems
                     ? EffectivePalette.CapturedVanilla
                     : EffectivePalette.Custom;
             }
+
+
+            ApplyHoverToggle(
+            settings,
+            activeToolSystem,
+            ref outlineA,
+            ref fillA,
+            ref ownerA,
+            ref palette);
 
             // Hot-path: neither effective slider value nor the override flag has shifted.
             if (m_Applied

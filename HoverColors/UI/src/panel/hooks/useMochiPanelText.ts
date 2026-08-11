@@ -23,6 +23,7 @@ export const useMochiPanelText = () => {
             tooltipGuidelinesPreviewColor: l("HoverColors.UI.Tooltip.GuidelinesPreviewColor"),
             tooltipGuidelinesDashedColor: l("HoverColors.UI.Tooltip.GuidelinesDashedColor"),
             tooltipGuidelinesOpacity: l("HoverColors.UI.Tooltip.GuidelinesOpacity"),
+            tooltipHoverToggle: l("HoverColors.UI.Tooltip.HoverToggle"),
             tooltipInfo: tooltipsEnabled
                 ? l("HoverColors.UI.Tooltip.Info")
                 : l("HoverColors.UI.Tooltip.InfoDisabled"),

@@ -11,13 +11,10 @@
 
 namespace HoverColors.Settings
 {
-    using System; // Exception handling for external link open failures.
-
-    using CS2Shared.RiverMochi; // WarnOnce for link failure logging.
-
-    using Game.UI.Widgets; // DropdownItem for Options UI dropdown rows.
-
-    using UnityEngine; // Application.OpenURL.
+    using System;               // Exception handling
+    using CS2Shared.RiverMochi; // LogUtils
+    using Game.UI.Widgets;      // DropdownItem for Options UI
+    using UnityEngine;          // Application.OpenURL
 
     public partial class HoverColorsSettings
     {

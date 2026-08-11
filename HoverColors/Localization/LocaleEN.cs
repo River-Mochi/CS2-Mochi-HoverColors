@@ -130,6 +130,11 @@ namespace HoverColors.Localization
                     "Hotkey shortcut to <open / close> the in-city Color Panel." },
                 { m_Settings.GetBindingKeyLocaleID(Mod.kTogglePanelActionName), "Toggle Hover Colors panel" },
 
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleHoverHighlightsBinding)), "Quick Outline + fill On/Off" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ToggleHoverHighlightsBinding)),
+                    "Optional hotkey for the title-bar Eyeball button. Ships unbound to avoid key conflicts." },
+                { m_Settings.GetBindingKeyLocaleID(Mod.kToggleHoverHighlightsActionName), "Quick outline + fill On/Off" },
+
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleSurfaceToolAreasBinding)), "Toggle Surface tool previews on/off" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ToggleSurfaceToolAreasBinding)),
                     "Hotkey shortcut to <hide or show> active Surface tool boundary preview lines while placing surfaces." },

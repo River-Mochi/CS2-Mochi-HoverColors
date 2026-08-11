@@ -439,18 +439,22 @@ namespace HoverColors.Settings
         [SettingsUISection(Actions, kPanel)]
         public bool PanelTooltipsEnabled { get; set; }
 
-        // Hidden in-city preference: collapses the panel down to the outline row only.
-        // Title-bar arrow toggles this; Options menu has no control for it.
+        // Hidden in-city preference: collapses panel to outline row only.
+        // Title-bar arrow toggle (no Options UI setting for it)
         [SettingsUIHidden]
         public bool PanelCollapsed { get; set; }
 
-        // Hidden in-city preference for the Surface tool button/hotkey.
-        // Default ON because creators mainly use this mod to see layered surfaces clearly.
+        // Eye button state. Keeps player's saved color/alpha untouched while normal hover is hidden.
+        [SettingsUIHidden]
+        public bool HoverHighlightsSuppressed { get; set; }
+
+        // Hidden in-city preference for Surface tool button/hotkey.
+        // Default ON because players mainly use this to see layered surfaces clearly.
         [SettingsUIHidden]
         public bool SurfaceToolAreasSuppressed { get; set; }
 
         // Hidden in-city preference for Specialized Industry area fill previews.
-        // This is AreaTypeMask.Lots, so it must be handled with Surface in one system.
+        // This is AreaTypeMask.Lots, must be handled with Surface in one system.
         [SettingsUIHidden]
         public bool SpecializedIndustryAreasSuppressed { get; set; }
 
@@ -486,6 +490,11 @@ namespace HoverColors.Settings
         [SettingsUISection(Actions, kKeyBindings)]
         [SettingsUIKeyboardBinding(BindingKeyboard.J, Mod.kTogglePanelActionName)]
         public ProxyBinding TogglePanelBinding { get; set; }
+
+        // Unbound keybind by default so HC cannot collide with other mod/game shortcut.
+        [SettingsUISection(Actions, kKeyBindings)]
+        [SettingsUIKeyboardBinding(BindingKeyboard.None, Mod.kToggleHoverHighlightsActionName)]
+        public ProxyBinding ToggleHoverHighlightsBinding { get; set; }
 
         [SettingsUISection(Actions, kKeyBindings)]
         [SettingsUIKeyboardBinding(BindingKeyboard.L, Mod.kToggleSurfaceToolAreasActionName)]

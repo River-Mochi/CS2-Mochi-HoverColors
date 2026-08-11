@@ -16,6 +16,14 @@
     pointer-events: auto;
 }
 
+// Editor has no GameTopLeft anchor, so the same draggable panel starts at a safe viewport position.
+.panelAnchorEditor {
+  position: fixed;
+  top: 64rem;
+  left: 16rem;
+  margin-top: 0;
+}
+
 .panelFrame {
     position: relative;
     overflow: visible;
@@ -25,7 +33,7 @@
     --hc-panel-width: 246rem;
     --hc-panel-alpha-top: 0.32;
     --hc-panel-alpha-bottom: 0.24;
-    --hc-title-font-size: 12rem;
+    --hc-title-font-size: 13rem;
     --hc-title-letter-spacing: 0.80rem;
     position: relative;
     overflow: visible;
@@ -94,24 +102,29 @@
 }
 
 .closeButton,
-.collapseButton {
-    flex: 0 0 24rem;
-    width: 24rem;
-    height: 24rem;
-    min-width: 24rem;
-    margin-left: 8rem;
-    padding: 0 !important;
-    overflow: visible;
+.collapseButton
+.eyeButton {
+  flex: 0 0 24rem;
+  width: 24rem;
+  height: 24rem;
+  min-width: 24rem;
+  margin-left: 6rem;
+  padding: 0 !important;
+  overflow: visible;
+}
+.closeButton {
+  margin-left: 5rem;
 }
 
 .closeButton .closeIcon,
-.collapseButton .collapseIcon {
+.collapseButton .collapseIcon,
+.eyeButton .eyeIcon {
     display: block;
     pointer-events: none;
     transform: scale(1);
     transform-origin: center;
     transition: opacity 120ms ease-out, transform 120ms ease-out;
-}
+  }
 
 .closeButton .closeIcon {
     width: 14rem;
@@ -133,6 +146,16 @@
 .collapseButton:hover .collapseIcon {
     opacity: 1;
     transform: scale(1.10);
+}
+
+.eyeButton .eyeIcon {
+  width: 18rem;
+  height: 18rem;
+  opacity: 0.88;
+}
+.eyeButton:hover .eyeIcon {
+  opacity: 1;
+  transform: scale(1.10);
 }
 
 .infoButton,

@@ -73,8 +73,8 @@ namespace HoverColors.Systems
         }
 
         protected override void OnUpdate()
-        {
-            if (!IsInGame() || m_ToolSystem == null || m_AreaToolSystem == null)
+        {      
+            if (!IsInGameOrEditor() || m_ToolSystem == null || m_AreaToolSystem == null)
             {
                 RestoreIfNeeded();
                 return;
@@ -171,9 +171,10 @@ namespace HoverColors.Systems
             }
         }
 
-        private static bool IsInGame()
+        private static bool IsInGameOrEditor()
         {
-            return GameManager.instance != null && GameManager.instance.gameMode == GameMode.Game;
+            return GameManager.instance != null && GameManager.instance.gameMode.IsGameOrEditor();
         }
+
     }
 }
