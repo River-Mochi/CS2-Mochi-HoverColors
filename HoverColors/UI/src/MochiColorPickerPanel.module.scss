@@ -101,9 +101,9 @@
     color: #54d7ff;
 }
 
-.closeButton,
-.collapseButton
-.eyeButton {
+.eyeButton,
+.collapseButton,
+.closeButton {
   flex: 0 0 24rem;
   width: 24rem;
   height: 24rem;
@@ -116,15 +116,15 @@
   margin-left: 5rem;
 }
 
-.closeButton .closeIcon,
+.eyeButton .eyeIcon,
 .collapseButton .collapseIcon,
-.eyeButton .eyeIcon {
-    display: block;
-    pointer-events: none;
-    transform: scale(1);
-    transform-origin: center;
-    transition: opacity 120ms ease-out, transform 120ms ease-out;
-  }
+.closeButton .closeIcon {
+  display: block;
+  pointer-events: none;
+  transform: scale(1);
+  transform-origin: center;
+  transition: opacity 120ms ease-out, transform 120ms ease-out;
+}
 
 .closeButton .closeIcon {
     width: 14rem;
