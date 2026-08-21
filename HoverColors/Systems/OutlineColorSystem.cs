@@ -27,7 +27,7 @@
 //   - Custom: player color everywhere.
 // The dirty-flag tracks the *effective* values so an idle tool session is still ~free per frame.
 //
-// Performance contract (matters because this system runs every Rendering tick):
+// Performance (matters because this system runs every Rendering tick):
 //   - The HDRP CustomPassVolume / OutlinesWorldUIPass / Material refs are found ONCE and cached.
 //     The fallback scene scan is throttled while loading so we never call
 //     Object.FindObjectsOfType<CustomPassVolume>() every frame.
@@ -505,13 +505,24 @@ namespace HoverColors.Systems
                 return ToolKind.Bulldoze;
             }
 
-            // River-Mochi selection tools (e.g. Road/Rail Speeds' SpeedLimitTool) own their own
-            // multi-segment selection and should stay as high-visibility as the road tools, so a
+            // River-Mochi selection tools (e.g. AllSpeedLimits) own their own
+            // multi-segment selection and should stay as high-visibility as the "road tools", so a
             // low-visibility player hover preset can't hide what is currently selected. Matched by
-            // tool id, with the tool's namespace as a backup, so there is no hard reference to the
-            // other mod. Mapping to NetRoad means: Recommended/Vanilla mode -> high-vis vanilla
+            // tool id, with the tool's namespace as backup so there is no hard reference to the
+            // other mod. Mapping to NetRoad means: options menu, Recommended/Vanilla mode -> high-vis vanilla
             // cyan (the default), Custom mode -> the player's chosen color (power-user override).
             string toolId = SafeToolId(tool);
+
+            // Parking Control mod's No Parking selector behaves like a road upgrade tool for colors.
+            if (string.Equals(
+                    toolId,
+                    "ParkingControl.NoParking",
+                    StringComparison.Ordinal))
+            {
+                return ToolKind.NetRoad;
+            }
+
+            // For compatibility with AllSpeedLimits mod
             if (string.Equals(toolId, "SpeedLimitTool", StringComparison.Ordinal)
                 || (tool.GetType().Namespace?.StartsWith("RoadRailSpeeds", StringComparison.Ordinal) ?? false))
             {
@@ -540,7 +551,7 @@ namespace HoverColors.Systems
             }
 
             // EDT fences/hedges/markings and similar detail tools enter through NetTool
-            // as lanes or fence prefabs. Keep this check cheap: selected prefab only.
+            // as lanes or fence prefabs. To keep this check cheap: selected prefab only.
             if (selectedPrefab is NetLanePrefab
                 || EntityManager.HasComponent<NetLaneData>(prefabEntity)
                 || EntityManager.HasComponent<FenceData>(prefabEntity))
