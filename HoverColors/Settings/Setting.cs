@@ -8,7 +8,6 @@
 
 // File: Settings/Setting.cs
 // Purpose: Defines Hover Colors settings, persistent storage, and the Options UI surface.
-// Layout: 2 tabs (Actions, About) following CityWatchdog/EasyZoning convention.
 // Note: the in-city panel color settings are intentionally NOT decorated for Options UI — they are
 // persisted here, read by cs2/api bindings, and applied by Systems/HoverColorsUISystem.cs.
 
