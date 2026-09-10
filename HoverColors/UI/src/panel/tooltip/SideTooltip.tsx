@@ -11,11 +11,16 @@
 // would not match the width that actually renders. transform does not affect layout, so measured
 // size and final size are always the same.
 //
+// The measure pass hides the layer with opacity, NOT visibility: Cohtml reports an empty rect for a
+// visibility:hidden element, and a zero width made every side look like it fit, so a tooltip whose
+// side did not really fit was placed straight over the panel.
+//
 // Placement is viewport-aware because the panel is draggable: a requested side can run off screen
 // (the left-side reset tooltips once the panel sits near the left edge, the right-side ones once it
 // sits near the right edge). The layer is measured after it mounts, the requested side is kept if it
-// fits, otherwise the first side in its fallback chain that fits wins, and the result is clamped
-// into the window either way.
+// fits, otherwise the first side in its fallback chain that fits wins, and "below the panel" is the
+// last resort. Only the cross axis is ever clamped — clamping a side's own axis is what slides a
+// tooltip back on top of the panel.
 
 import React, { createContext, useContext, useLayoutEffect, useRef, useState, type ReactNode, type RefObject } from "react";
 
@@ -76,39 +81,34 @@ const fitsSide = (side: SideTooltipSide, tip: TipRequest, width: number, height:
     }
 };
 
-// Returns the tooltip's top-left corner in anchor-local pixels, already clamped to the window.
+// Returns the tooltip's top-left corner in anchor-local pixels.
 const placeTip = (tip: TipRequest, width: number, height: number): TipPlacement => {
     const { control, panel, anchorLeft, anchorTop } = tip;
-    const side = FALLBACK_SIDES[tip.side].find(candidate => fitsSide(candidate, tip, width, height)) ?? tip.side;
+    const belowPanel = panel.top + panel.height + GAP_PX;
+
+    // An empty rect means the layer has not laid out yet and nothing can be measured against it.
+    // Park it under the panel, the one spot that cannot cover the control being hovered.
+    if (width <= 0 || height <= 0) {
+        return { x: panel.left, y: belowPanel };
+    }
+
+    const side = FALLBACK_SIDES[tip.side].find(candidate => fitsSide(candidate, tip, width, height)) ?? "below";
 
     const controlMidX = control.left + control.width / 2;
     const controlMidY = control.top + control.height / 2;
+    const clampX = (x: number) => clamp(x, EDGE_PX - anchorLeft, window.innerWidth - EDGE_PX - width - anchorLeft);
+    const clampY = (y: number) => clamp(y, EDGE_PX - anchorTop, window.innerHeight - EDGE_PX - height - anchorTop);
 
-    let x: number;
-    let y: number;
     switch (side) {
         case "left":
-            x = panel.left - GAP_PX - width;
-            y = controlMidY - height / 2;
-            break;
+            return { x: panel.left - GAP_PX - width, y: clampY(controlMidY - height / 2) };
         case "right":
-            x = panel.left + panel.width + GAP_PX;
-            y = controlMidY - height / 2;
-            break;
+            return { x: panel.left + panel.width + GAP_PX, y: clampY(controlMidY - height / 2) };
         case "above":
-            x = controlMidX - width / 2;
-            y = panel.top - GAP_PX - height;
-            break;
+            return { x: clampX(controlMidX - width / 2), y: panel.top - GAP_PX - height };
         default:
-            x = controlMidX - width / 2;
-            y = panel.top + panel.height + GAP_PX;
-            break;
+            return { x: clampX(controlMidX - width / 2), y: belowPanel };
     }
-
-    return {
-        x: clamp(x, EDGE_PX - anchorLeft, window.innerWidth - EDGE_PX - width - anchorLeft),
-        y: clamp(y, EDGE_PX - anchorTop, window.innerHeight - EDGE_PX - height - anchorTop),
-    };
 };
 
 type ProviderProps = {
@@ -192,9 +192,10 @@ export const SideTooltipProvider = ({ anchorRef, panelRef, disabled = false, chi
                     position: "absolute",
                     left: 0,
                     top: 0,
-                    // Measure pass renders un-translated and hidden; useLayoutEffect places it before paint.
+                    // Measure pass renders un-translated and transparent; useLayoutEffect places it
+                    // before paint. opacity (not visibility) so the rect it reports is real.
                     transform: placement == null ? "none" : `translate(${placement.x}px, ${placement.y}px)`,
-                    visibility: placement == null ? "hidden" : "visible",
+                    opacity: placement == null ? 0 : 1,
                     zIndex: 1000050,
                     pointerEvents: "none",
                     boxSizing: "border-box",

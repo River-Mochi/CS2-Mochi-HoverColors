@@ -429,6 +429,9 @@ namespace HoverColors.UI
                     out float targetB,
                     out float targetA,
                     out float targetFillA,
+                    out float targetFillR,
+                    out float targetFillG,
+                    out float targetFillB,
                     out int targetGuidelinePercent))
             {
                 return;
@@ -436,7 +439,8 @@ namespace HoverColors.UI
 
             bool changed = !SameColor(settings.OutlineR, settings.OutlineG, settings.OutlineB, settings.OutlineA,
                     targetR, targetG, targetB, targetA)
-                || !ApproxEqual(settings.FillA, targetFillA)
+                || !SameColor(settings.FillR, settings.FillG, settings.FillB, settings.FillA,
+                    targetFillR, targetFillG, targetFillB, targetFillA)
                 || settings.GuidelineOpacityPercent != targetGuidelinePercent;
 
             if (!changed)
@@ -449,6 +453,10 @@ namespace HoverColors.UI
             settings.OutlineB = targetB;
             settings.OutlineA = targetA;
             settings.FillA = targetFillA;
+            settings.FillR = targetFillR;
+            settings.FillG = targetFillG;
+            settings.FillB = targetFillB;
+            settings.FillColorInitialized = true;
             settings.GuidelineOpacityPercent = targetGuidelinePercent;
             ApplySaveAndSync(settings);
         }
@@ -479,7 +487,8 @@ namespace HoverColors.UI
             {
                 bool changed = !SameColor(settings.PresetAlt1R, settings.PresetAlt1G, settings.PresetAlt1B, settings.PresetAlt1A,
                         settings.OutlineR, settings.OutlineG, settings.OutlineB, settings.OutlineA)
-                    || !ApproxEqual(settings.PresetAlt1FillA, settings.FillA)
+                    || !SameColor(settings.PresetAlt1FillR, settings.PresetAlt1FillG, settings.PresetAlt1FillB, settings.PresetAlt1FillA,
+                        settings.FillR, settings.FillG, settings.FillB, settings.FillA)
                     || settings.PresetAlt1GuidelinePercent != settings.GuidelineOpacityPercent;
 
                 if (!changed)
@@ -492,13 +501,17 @@ namespace HoverColors.UI
                 settings.PresetAlt1B = settings.OutlineB;
                 settings.PresetAlt1A = settings.OutlineA;
                 settings.PresetAlt1FillA = settings.FillA;
+                settings.PresetAlt1FillR = settings.FillR;
+                settings.PresetAlt1FillG = settings.FillG;
+                settings.PresetAlt1FillB = settings.FillB;
                 settings.PresetAlt1GuidelinePercent = settings.GuidelineOpacityPercent;
             }
             else if (slot == 1)
             {
                 bool changed = !SameColor(settings.Preset1R, settings.Preset1G, settings.Preset1B, settings.Preset1A,
                         settings.OutlineR, settings.OutlineG, settings.OutlineB, settings.OutlineA)
-                    || !ApproxEqual(settings.Preset1FillA, settings.FillA)
+                    || !SameColor(settings.Preset1FillR, settings.Preset1FillG, settings.Preset1FillB, settings.Preset1FillA,
+                        settings.FillR, settings.FillG, settings.FillB, settings.FillA)
                     || settings.Preset1GuidelinePercent != settings.GuidelineOpacityPercent;
 
                 if (!changed)
@@ -511,13 +524,17 @@ namespace HoverColors.UI
                 settings.Preset1B = settings.OutlineB;
                 settings.Preset1A = settings.OutlineA;
                 settings.Preset1FillA = settings.FillA;
+                settings.Preset1FillR = settings.FillR;
+                settings.Preset1FillG = settings.FillG;
+                settings.Preset1FillB = settings.FillB;
                 settings.Preset1GuidelinePercent = settings.GuidelineOpacityPercent;
             }
             else if (slot == 2 && useSetB)
             {
                 bool changed = !SameColor(settings.PresetAlt2R, settings.PresetAlt2G, settings.PresetAlt2B, settings.PresetAlt2A,
                         settings.OutlineR, settings.OutlineG, settings.OutlineB, settings.OutlineA)
-                    || !ApproxEqual(settings.PresetAlt2FillA, settings.FillA)
+                    || !SameColor(settings.PresetAlt2FillR, settings.PresetAlt2FillG, settings.PresetAlt2FillB, settings.PresetAlt2FillA,
+                        settings.FillR, settings.FillG, settings.FillB, settings.FillA)
                     || settings.PresetAlt2GuidelinePercent != settings.GuidelineOpacityPercent;
 
                 if (!changed)
@@ -530,13 +547,17 @@ namespace HoverColors.UI
                 settings.PresetAlt2B = settings.OutlineB;
                 settings.PresetAlt2A = settings.OutlineA;
                 settings.PresetAlt2FillA = settings.FillA;
+                settings.PresetAlt2FillR = settings.FillR;
+                settings.PresetAlt2FillG = settings.FillG;
+                settings.PresetAlt2FillB = settings.FillB;
                 settings.PresetAlt2GuidelinePercent = settings.GuidelineOpacityPercent;
             }
             else if (slot == 2)
             {
                 bool changed = !SameColor(settings.Preset2R, settings.Preset2G, settings.Preset2B, settings.Preset2A,
                         settings.OutlineR, settings.OutlineG, settings.OutlineB, settings.OutlineA)
-                    || !ApproxEqual(settings.Preset2FillA, settings.FillA)
+                    || !SameColor(settings.Preset2FillR, settings.Preset2FillG, settings.Preset2FillB, settings.Preset2FillA,
+                        settings.FillR, settings.FillG, settings.FillB, settings.FillA)
                     || settings.Preset2GuidelinePercent != settings.GuidelineOpacityPercent;
 
                 if (!changed)
@@ -549,6 +570,9 @@ namespace HoverColors.UI
                 settings.Preset2B = settings.OutlineB;
                 settings.Preset2A = settings.OutlineA;
                 settings.Preset2FillA = settings.FillA;
+                settings.Preset2FillR = settings.FillR;
+                settings.Preset2FillG = settings.FillG;
+                settings.Preset2FillB = settings.FillB;
                 settings.Preset2GuidelinePercent = settings.GuidelineOpacityPercent;
             }
             else
@@ -607,6 +631,9 @@ namespace HoverColors.UI
             settings.PresetDefaultsBackup1B = settings.Preset1B;
             settings.PresetDefaultsBackup1A = settings.Preset1A;
             settings.PresetDefaultsBackup1FillA = settings.Preset1FillA;
+            settings.PresetDefaultsBackup1FillR = settings.Preset1FillR;
+            settings.PresetDefaultsBackup1FillG = settings.Preset1FillG;
+            settings.PresetDefaultsBackup1FillB = settings.Preset1FillB;
             settings.PresetDefaultsBackup1GuidelinePercent = settings.Preset1GuidelinePercent;
 
             settings.PresetDefaultsBackup2R = settings.Preset2R;
@@ -614,6 +641,9 @@ namespace HoverColors.UI
             settings.PresetDefaultsBackup2B = settings.Preset2B;
             settings.PresetDefaultsBackup2A = settings.Preset2A;
             settings.PresetDefaultsBackup2FillA = settings.Preset2FillA;
+            settings.PresetDefaultsBackup2FillR = settings.Preset2FillR;
+            settings.PresetDefaultsBackup2FillG = settings.Preset2FillG;
+            settings.PresetDefaultsBackup2FillB = settings.Preset2FillB;
             settings.PresetDefaultsBackup2GuidelinePercent = settings.Preset2GuidelinePercent;
 
             settings.PresetDefaultsBackupAlt1R = settings.PresetAlt1R;
@@ -621,6 +651,9 @@ namespace HoverColors.UI
             settings.PresetDefaultsBackupAlt1B = settings.PresetAlt1B;
             settings.PresetDefaultsBackupAlt1A = settings.PresetAlt1A;
             settings.PresetDefaultsBackupAlt1FillA = settings.PresetAlt1FillA;
+            settings.PresetDefaultsBackupAlt1FillR = settings.PresetAlt1FillR;
+            settings.PresetDefaultsBackupAlt1FillG = settings.PresetAlt1FillG;
+            settings.PresetDefaultsBackupAlt1FillB = settings.PresetAlt1FillB;
             settings.PresetDefaultsBackupAlt1GuidelinePercent = settings.PresetAlt1GuidelinePercent;
 
             settings.PresetDefaultsBackupAlt2R = settings.PresetAlt2R;
@@ -628,6 +661,9 @@ namespace HoverColors.UI
             settings.PresetDefaultsBackupAlt2B = settings.PresetAlt2B;
             settings.PresetDefaultsBackupAlt2A = settings.PresetAlt2A;
             settings.PresetDefaultsBackupAlt2FillA = settings.PresetAlt2FillA;
+            settings.PresetDefaultsBackupAlt2FillR = settings.PresetAlt2FillR;
+            settings.PresetDefaultsBackupAlt2FillG = settings.PresetAlt2FillG;
+            settings.PresetDefaultsBackupAlt2FillB = settings.PresetAlt2FillB;
             settings.PresetDefaultsBackupAlt2GuidelinePercent = settings.PresetAlt2GuidelinePercent;
         }
 
@@ -642,6 +678,9 @@ namespace HoverColors.UI
             settings.Preset1B = settings.PresetDefaultsBackup1B;
             settings.Preset1A = settings.PresetDefaultsBackup1A;
             settings.Preset1FillA = settings.PresetDefaultsBackup1FillA;
+            settings.Preset1FillR = settings.PresetDefaultsBackup1FillR;
+            settings.Preset1FillG = settings.PresetDefaultsBackup1FillG;
+            settings.Preset1FillB = settings.PresetDefaultsBackup1FillB;
             settings.Preset1GuidelinePercent = settings.PresetDefaultsBackup1GuidelinePercent;
 
             settings.Preset2R = settings.PresetDefaultsBackup2R;
@@ -649,6 +688,9 @@ namespace HoverColors.UI
             settings.Preset2B = settings.PresetDefaultsBackup2B;
             settings.Preset2A = settings.PresetDefaultsBackup2A;
             settings.Preset2FillA = settings.PresetDefaultsBackup2FillA;
+            settings.Preset2FillR = settings.PresetDefaultsBackup2FillR;
+            settings.Preset2FillG = settings.PresetDefaultsBackup2FillG;
+            settings.Preset2FillB = settings.PresetDefaultsBackup2FillB;
             settings.Preset2GuidelinePercent = settings.PresetDefaultsBackup2GuidelinePercent;
 
             settings.PresetAlt1R = settings.PresetDefaultsBackupAlt1R;
@@ -656,6 +698,9 @@ namespace HoverColors.UI
             settings.PresetAlt1B = settings.PresetDefaultsBackupAlt1B;
             settings.PresetAlt1A = settings.PresetDefaultsBackupAlt1A;
             settings.PresetAlt1FillA = settings.PresetDefaultsBackupAlt1FillA;
+            settings.PresetAlt1FillR = settings.PresetDefaultsBackupAlt1FillR;
+            settings.PresetAlt1FillG = settings.PresetDefaultsBackupAlt1FillG;
+            settings.PresetAlt1FillB = settings.PresetDefaultsBackupAlt1FillB;
             settings.PresetAlt1GuidelinePercent = settings.PresetDefaultsBackupAlt1GuidelinePercent;
 
             settings.PresetAlt2R = settings.PresetDefaultsBackupAlt2R;
@@ -663,6 +708,9 @@ namespace HoverColors.UI
             settings.PresetAlt2B = settings.PresetDefaultsBackupAlt2B;
             settings.PresetAlt2A = settings.PresetDefaultsBackupAlt2A;
             settings.PresetAlt2FillA = settings.PresetDefaultsBackupAlt2FillA;
+            settings.PresetAlt2FillR = settings.PresetDefaultsBackupAlt2FillR;
+            settings.PresetAlt2FillG = settings.PresetDefaultsBackupAlt2FillG;
+            settings.PresetAlt2FillB = settings.PresetDefaultsBackupAlt2FillB;
             settings.PresetAlt2GuidelinePercent = settings.PresetDefaultsBackupAlt2GuidelinePercent;
         }
 
@@ -673,6 +721,9 @@ namespace HoverColors.UI
             settings.Preset1B = HoverColorsSettings.kPresetA1B;
             settings.Preset1A = HoverColorsSettings.kPresetA1A;
             settings.Preset1FillA = HoverColorsSettings.kPresetA1FillA;
+            settings.Preset1FillR = 1f;
+            settings.Preset1FillG = 1f;
+            settings.Preset1FillB = 1f;
             settings.Preset1GuidelinePercent = HoverColorsSettings.kDefaultGuidelineOpacityPercent;
 
             settings.Preset2R = HoverColorsSettings.kPresetA2R;
@@ -680,6 +731,9 @@ namespace HoverColors.UI
             settings.Preset2B = HoverColorsSettings.kPresetA2B;
             settings.Preset2A = HoverColorsSettings.kPresetA2A;
             settings.Preset2FillA = HoverColorsSettings.kPresetA2FillA;
+            settings.Preset2FillR = 1f;
+            settings.Preset2FillG = 1f;
+            settings.Preset2FillB = 1f;
             settings.Preset2GuidelinePercent = HoverColorsSettings.kDefaultGuidelineOpacityPercent;
 
             settings.PresetAlt1R = HoverColorsSettings.kPresetB1R;
@@ -687,6 +741,9 @@ namespace HoverColors.UI
             settings.PresetAlt1B = HoverColorsSettings.kPresetB1B;
             settings.PresetAlt1A = HoverColorsSettings.kPresetB1A;
             settings.PresetAlt1FillA = HoverColorsSettings.kPresetB1FillA;
+            settings.PresetAlt1FillR = 1f;
+            settings.PresetAlt1FillG = 1f;
+            settings.PresetAlt1FillB = 1f;
             settings.PresetAlt1GuidelinePercent = HoverColorsSettings.kDefaultGuidelineOpacityPercent;
 
             settings.PresetAlt2R = HoverColorsSettings.kPresetB2R;
@@ -694,6 +751,9 @@ namespace HoverColors.UI
             settings.PresetAlt2B = HoverColorsSettings.kPresetB2B;
             settings.PresetAlt2A = HoverColorsSettings.kPresetB2A;
             settings.PresetAlt2FillA = HoverColorsSettings.kPresetB2FillA;
+            settings.PresetAlt2FillR = 1f;
+            settings.PresetAlt2FillG = 1f;
+            settings.PresetAlt2FillB = 1f;
             settings.PresetAlt2GuidelinePercent = HoverColorsSettings.kDefaultGuidelineOpacityPercent;
         }
 

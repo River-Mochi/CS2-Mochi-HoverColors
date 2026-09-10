@@ -54,13 +54,16 @@ namespace HoverColors.UI
                     out float targetB,
                     out float targetA,
                     out float targetFillA,
+                    out float targetFillR,
+                    out float targetFillG,
+                    out float targetFillB,
                     out int _))
             {
                 return false;
             }
 
             return SameColor(s.OutlineR, s.OutlineG, s.OutlineB, s.OutlineA, targetR, targetG, targetB, targetA)
-                && ApproxEqual(s.FillA, targetFillA);
+                && SameColor(s.FillR, s.FillG, s.FillB, s.FillA, targetFillR, targetFillG, targetFillB, targetFillA);
         }
 
         private static bool TryGetPresetTargets(
@@ -71,6 +74,9 @@ namespace HoverColors.UI
             out float targetB,
             out float targetA,
             out float targetFillA,
+            out float targetFillR,
+            out float targetFillG,
+            out float targetFillB,
             out int targetGuidelinePercent)
         {
             bool useSetB = settings.ActivePresetSet == HoverColorsSettings.kPresetSetB;
@@ -82,6 +88,9 @@ namespace HoverColors.UI
                 targetB = settings.PresetAlt1B;
                 targetA = settings.PresetAlt1A;
                 targetFillA = settings.PresetAlt1FillA;
+                targetFillR = settings.PresetAlt1FillR;
+                targetFillG = settings.PresetAlt1FillG;
+                targetFillB = settings.PresetAlt1FillB;
                 targetGuidelinePercent = settings.PresetAlt1GuidelinePercent;
                 return true;
             }
@@ -93,6 +102,9 @@ namespace HoverColors.UI
                 targetB = settings.Preset1B;
                 targetA = settings.Preset1A;
                 targetFillA = settings.Preset1FillA;
+                targetFillR = settings.Preset1FillR;
+                targetFillG = settings.Preset1FillG;
+                targetFillB = settings.Preset1FillB;
                 targetGuidelinePercent = settings.Preset1GuidelinePercent;
                 return true;
             }
@@ -104,6 +116,9 @@ namespace HoverColors.UI
                 targetB = settings.PresetAlt2B;
                 targetA = settings.PresetAlt2A;
                 targetFillA = settings.PresetAlt2FillA;
+                targetFillR = settings.PresetAlt2FillR;
+                targetFillG = settings.PresetAlt2FillG;
+                targetFillB = settings.PresetAlt2FillB;
                 targetGuidelinePercent = settings.PresetAlt2GuidelinePercent;
                 return true;
             }
@@ -115,6 +130,9 @@ namespace HoverColors.UI
                 targetB = settings.Preset2B;
                 targetA = settings.Preset2A;
                 targetFillA = settings.Preset2FillA;
+                targetFillR = settings.Preset2FillR;
+                targetFillG = settings.Preset2FillG;
+                targetFillB = settings.Preset2FillB;
                 targetGuidelinePercent = settings.Preset2GuidelinePercent;
                 return true;
             }
@@ -124,6 +142,9 @@ namespace HoverColors.UI
             targetB = 0f;
             targetA = 0f;
             targetFillA = 0f;
+            targetFillR = 1f;
+            targetFillG = 1f;
+            targetFillB = 1f;
             targetGuidelinePercent = HoverColorsSettings.kDefaultGuidelineOpacityPercent;
             return false;
         }
@@ -146,6 +167,9 @@ namespace HoverColors.UI
                     out targetB,
                     out targetA,
                     out targetFillA,
+                    out float _,
+                    out float _,
+                    out float _,
                     out int _))
             {
                 return;

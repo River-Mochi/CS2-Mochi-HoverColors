@@ -142,8 +142,8 @@ namespace HoverColors.Settings
 
         // -----------------------------------------------------------------------
         // Player-editable preset slots (slots 1 + 2 on the in-city panel)
-        // Not decorated for Options UI. Each slot stores the same five values as the
-        // live swatch (Outline RGBA + FillA). The panel's Save button overwrites a slot
+        // Not decorated for Options UI. Each slot stores the same values as the
+        // live swatch (Outline RGBA + Fill RGBA). The panel's Save button overwrites a slot
         // with the current live color; the slot button applies it back. Persisted in the
         // .coc like the live values, so the in-city panel restores them after a reboot.
         // -----------------------------------------------------------------------
@@ -164,6 +164,15 @@ namespace HoverColors.Settings
         public float Preset1FillA { get; set; }
 
         [SettingsUIHidden]
+        public float Preset1FillR { get; set; }
+
+        [SettingsUIHidden]
+        public float Preset1FillG { get; set; }
+
+        [SettingsUIHidden]
+        public float Preset1FillB { get; set; }
+
+        [SettingsUIHidden]
         public float Preset2R { get; set; }
 
         [SettingsUIHidden]
@@ -177,6 +186,15 @@ namespace HoverColors.Settings
 
         [SettingsUIHidden]
         public float Preset2FillA { get; set; }
+
+        [SettingsUIHidden]
+        public float Preset2FillR { get; set; }
+
+        [SettingsUIHidden]
+        public float Preset2FillG { get; set; }
+
+        [SettingsUIHidden]
+        public float Preset2FillB { get; set; }
 
         // Four persisted preset slots shown as two buttons in the in-city panel.
         // ActivePresetSet 0 = Set A, 1 = Set B. The panel still shows P1/P2 only.
@@ -219,6 +237,15 @@ namespace HoverColors.Settings
         public float PresetAlt1FillA { get; set; }
 
         [SettingsUIHidden]
+        public float PresetAlt1FillR { get; set; }
+
+        [SettingsUIHidden]
+        public float PresetAlt1FillG { get; set; }
+
+        [SettingsUIHidden]
+        public float PresetAlt1FillB { get; set; }
+
+        [SettingsUIHidden]
         public int PresetAlt1GuidelinePercent { get; set; }
 
         [SettingsUIHidden]
@@ -235,6 +262,15 @@ namespace HoverColors.Settings
 
         [SettingsUIHidden]
         public float PresetAlt2FillA { get; set; }
+
+        [SettingsUIHidden]
+        public float PresetAlt2FillR { get; set; }
+
+        [SettingsUIHidden]
+        public float PresetAlt2FillG { get; set; }
+
+        [SettingsUIHidden]
+        public float PresetAlt2FillB { get; set; }
 
         [SettingsUIHidden]
         public int PresetAlt2GuidelinePercent { get; set; }
@@ -267,6 +303,15 @@ namespace HoverColors.Settings
         public float PresetDefaultsBackup1FillA { get; set; }
 
         [SettingsUIHidden]
+        public float PresetDefaultsBackup1FillR { get; set; }
+
+        [SettingsUIHidden]
+        public float PresetDefaultsBackup1FillG { get; set; }
+
+        [SettingsUIHidden]
+        public float PresetDefaultsBackup1FillB { get; set; }
+
+        [SettingsUIHidden]
         public int PresetDefaultsBackup1GuidelinePercent { get; set; }
 
         [SettingsUIHidden]
@@ -283,6 +328,15 @@ namespace HoverColors.Settings
 
         [SettingsUIHidden]
         public float PresetDefaultsBackup2FillA { get; set; }
+
+        [SettingsUIHidden]
+        public float PresetDefaultsBackup2FillR { get; set; }
+
+        [SettingsUIHidden]
+        public float PresetDefaultsBackup2FillG { get; set; }
+
+        [SettingsUIHidden]
+        public float PresetDefaultsBackup2FillB { get; set; }
 
         [SettingsUIHidden]
         public int PresetDefaultsBackup2GuidelinePercent { get; set; }
@@ -303,6 +357,15 @@ namespace HoverColors.Settings
         public float PresetDefaultsBackupAlt1FillA { get; set; }
 
         [SettingsUIHidden]
+        public float PresetDefaultsBackupAlt1FillR { get; set; }
+
+        [SettingsUIHidden]
+        public float PresetDefaultsBackupAlt1FillG { get; set; }
+
+        [SettingsUIHidden]
+        public float PresetDefaultsBackupAlt1FillB { get; set; }
+
+        [SettingsUIHidden]
         public int PresetDefaultsBackupAlt1GuidelinePercent { get; set; }
 
         [SettingsUIHidden]
@@ -319,6 +382,15 @@ namespace HoverColors.Settings
 
         [SettingsUIHidden]
         public float PresetDefaultsBackupAlt2FillA { get; set; }
+
+        [SettingsUIHidden]
+        public float PresetDefaultsBackupAlt2FillR { get; set; }
+
+        [SettingsUIHidden]
+        public float PresetDefaultsBackupAlt2FillG { get; set; }
+
+        [SettingsUIHidden]
+        public float PresetDefaultsBackupAlt2FillB { get; set; }
 
         [SettingsUIHidden]
         public int PresetDefaultsBackupAlt2GuidelinePercent { get; set; }

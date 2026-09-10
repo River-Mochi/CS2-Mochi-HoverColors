@@ -58,12 +58,18 @@ namespace HoverColors.Settings
             Preset1B = kPresetA1B;
             Preset1A = kPresetA1A;
             Preset1FillA = kPresetA1FillA;
+            Preset1FillR = 1f;
+            Preset1FillG = 1f;
+            Preset1FillB = 1f;
 
             Preset2R = kPresetA2R;
             Preset2G = kPresetA2G;
             Preset2B = kPresetA2B;
             Preset2A = kPresetA2A;
             Preset2FillA = kPresetA2FillA;
+            Preset2FillR = 1f;
+            Preset2FillG = 1f;
+            Preset2FillB = 1f;
 
             // Set B: P1 = soft white, P2 = original dark purple-gray.
             PresetAlt1R = kPresetB1R;
@@ -71,12 +77,18 @@ namespace HoverColors.Settings
             PresetAlt1B = kPresetB1B;
             PresetAlt1A = kPresetB1A;
             PresetAlt1FillA = kPresetB1FillA;
+            PresetAlt1FillR = 1f;
+            PresetAlt1FillG = 1f;
+            PresetAlt1FillB = 1f;
 
             PresetAlt2R = kPresetB2R;
             PresetAlt2G = kPresetB2G;
             PresetAlt2B = kPresetB2B;
             PresetAlt2A = kPresetB2A;
             PresetAlt2FillA = kPresetB2FillA;
+            PresetAlt2FillR = 1f;
+            PresetAlt2FillG = 1f;
+            PresetAlt2FillB = 1f;
 
             Preset1GuidelinePercent = kDefaultGuidelineOpacityPercent;
             Preset2GuidelinePercent = kDefaultGuidelineOpacityPercent;
@@ -154,6 +166,17 @@ namespace HoverColors.Settings
                 FillR = 1f;
                 FillG = 1f;
                 FillB = 1f;
+
+                Preset1FillR = 1f; Preset1FillG = 1f; Preset1FillB = 1f;
+                Preset2FillR = 1f; Preset2FillG = 1f; Preset2FillB = 1f;
+                PresetAlt1FillR = 1f; PresetAlt1FillG = 1f; PresetAlt1FillB = 1f;
+                PresetAlt2FillR = 1f; PresetAlt2FillG = 1f; PresetAlt2FillB = 1f;
+
+                PresetDefaultsBackup1FillR = 1f; PresetDefaultsBackup1FillG = 1f; PresetDefaultsBackup1FillB = 1f;
+                PresetDefaultsBackup2FillR = 1f; PresetDefaultsBackup2FillG = 1f; PresetDefaultsBackup2FillB = 1f;
+                PresetDefaultsBackupAlt1FillR = 1f; PresetDefaultsBackupAlt1FillG = 1f; PresetDefaultsBackupAlt1FillB = 1f;
+                PresetDefaultsBackupAlt2FillR = 1f; PresetDefaultsBackupAlt2FillG = 1f; PresetDefaultsBackupAlt2FillB = 1f;
+
                 FillColorInitialized = true;
                 changed = true;
             }
@@ -168,6 +191,9 @@ namespace HoverColors.Settings
                 PresetAlt1B = kPresetB1B;
                 PresetAlt1A = kPresetB1A;
                 PresetAlt1FillA = kPresetB1FillA;
+                PresetAlt1FillR = 1f;
+                PresetAlt1FillG = 1f;
+                PresetAlt1FillB = 1f;
                 PresetAlt1GuidelinePercent = kDefaultGuidelineOpacityPercent;
 
                 PresetAlt2R = kPresetB2R;
@@ -175,6 +201,9 @@ namespace HoverColors.Settings
                 PresetAlt2B = kPresetB2B;
                 PresetAlt2A = kPresetB2A;
                 PresetAlt2FillA = kPresetB2FillA;
+                PresetAlt2FillR = 1f;
+                PresetAlt2FillG = 1f;
+                PresetAlt2FillB = 1f;
                 PresetAlt2GuidelinePercent = kDefaultGuidelineOpacityPercent;
 
                 PresetSetsInitialized = true;
