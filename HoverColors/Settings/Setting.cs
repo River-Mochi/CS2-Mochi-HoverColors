@@ -17,7 +17,6 @@ namespace HoverColors.Settings
     using Game.Input;       // BindingKeyboard
     using Game.Modding;     // IMod
     using Game.Settings;    // ModSetting, attributes
-    using Game.UI;          // ProxyBinding
 
     [FileLocation("ModsSettings/HoverColors/HoverColors")]
     [SettingsUITabOrder(Actions, KeyBindings, About)]
