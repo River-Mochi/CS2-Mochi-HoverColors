@@ -50,6 +50,7 @@ namespace HoverColors.Localization
                 // Groups
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kToolColors), "Tool-Farbverhalten" },
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kPanel), "Panel" },
+                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kReset), "Zurücksetzen" },
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kKeyBindings), "Tastenkürzel" },
                 // AboutInfo + AboutLinks intentionally have empty group headers.
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kAboutInfo), string.Empty },
@@ -110,6 +111,19 @@ namespace HoverColors.Localization
                     "\n" +
                     "Probier beides aus! Das ändert nur den Hintergrund dieses Mod-Panels, nicht die Spiel-UI."
                 },
+
+                // Reset button
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ResetGameVisuals)), "Spiel-Optik auf Standard zurücksetzen" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ResetGameVisuals)),
+                    "Setzt alles zurück, was dieser Mod an der Spiel-Optik steuert: Kontur, Besitzer-Hervorhebung, Füllung, Konturstärke, Hilfslinien, Bezirke und Werkzeug-Vorschauflächen.\n" +
+                    "\n" +
+                    "Gespeicherte Presets, Tastenkürzel und Panel-Einstellungen bleiben erhalten.\n" +
+                    "\n" +
+                    "Zum Deinstallieren nicht nötig. Gedacht für einen sauberen Neustart nach dem Ausprobieren."
+                },
+
+                { m_Settings.GetOptionWarningLocaleID(nameof(HoverColorsSettings.ResetGameVisuals)),
+                    "Alles, was dieser Mod an der Spiel-Optik steuert, auf den Spielstandard zurücksetzen?\n\nPresets, Tastenkürzel und Panel-Einstellungen bleiben erhalten." },
 
                 // Keybinds
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.TogglePanelBinding)), "Hauptpanel öffnen/schließen" },

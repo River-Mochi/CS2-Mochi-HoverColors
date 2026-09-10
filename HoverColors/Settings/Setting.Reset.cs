@@ -18,6 +18,7 @@ namespace HoverColors.Settings
     public partial class HoverColorsSettings
     {
         [SettingsUIButton]
+        [SettingsUIConfirmation]
         [SettingsUISection(Actions, kReset)]
         public bool ResetGameVisuals
         {

@@ -50,6 +50,7 @@ namespace HoverColors.Localization
                 // Groups
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kToolColors), "도구 색상 동작" },
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kPanel), "패널" },
+                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kReset), "초기화" },
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kKeyBindings), "키 설정" },
                 // AboutInfo + AboutLinks intentionally have empty group headers.
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kAboutInfo), string.Empty },
@@ -110,6 +111,19 @@ namespace HoverColors.Localization
                     "\n" +
                     "둘 다 써보고 고르세요. 이 모드 패널 배경만 바뀌며 게임 UI는 바뀌지 않습니다."
                 },
+
+                // Reset button
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ResetGameVisuals)), "게임 표시를 기본값으로 되돌리기" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ResetGameVisuals)),
+                    "이 모드가 제어하는 모든 표시를 게임 기본 상태로 되돌립니다: 외곽선, 소유자 강조, 채우기, 외곽선 두께, 안내선, 구역, 도구 미리보기 영역.\n" +
+                    "\n" +
+                    "저장한 프리셋과 단축키, 패널 설정은 그대로 유지됩니다.\n" +
+                    "\n" +
+                    "모드 삭제에는 필요하지 않습니다. 이것저것 시험해 본 뒤 새로 시작할 때 쓰세요."
+                },
+
+                { m_Settings.GetOptionWarningLocaleID(nameof(HoverColorsSettings.ResetGameVisuals)),
+                    "이 모드가 제어하는 모든 표시를 게임 기본 상태로 되돌릴까요?\n\n프리셋과 단축키, 패널 설정은 유지됩니다." },
 
                 // Keybinds
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.TogglePanelBinding)), "메인 패널 열기/닫기" },

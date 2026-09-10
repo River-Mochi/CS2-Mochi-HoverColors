@@ -48,6 +48,7 @@ namespace HoverColors.Localization
                 // Groups
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kToolColors), "Tool Color Behavior" },
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kPanel), "Panel" },
+                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kReset), "Reset" },
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kKeyBindings), "Key bindings" },
                 // AboutInfo + AboutLinks intentionally have empty group headers.
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kAboutInfo), string.Empty },
@@ -108,6 +109,20 @@ namespace HoverColors.Localization
                     "\n" +
                     "Try both and see which you prefer! This only changes the background of this mod panel and not the game's UI."
                 },
+
+                // Reset button
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ResetGameVisuals)), "Reset game visuals to vanilla" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ResetGameVisuals)),
+                    "Puts every visual this mod controls back to the game's own look: hover outline, owner highlight, fill, outline thickness, guidelines, districts and tool preview areas.\n" +
+                    "\n" +
+                    "Your saved presets, hotkeys and panel preferences are kept.\n" +
+                    "\n" +
+                    "This is for starting fresh after experimenting.\n" +
+                    "This mod can be removed without a reset. Highlights/values go back to game defaults."
+                },
+
+                { m_Settings.GetOptionWarningLocaleID(nameof(HoverColorsSettings.ResetGameVisuals)),
+                    "Reset every visual this mod controls back to the game's own look?\n\nPresets, hotkeys and panel settings are kept." },
 
                 // Keybinds
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.TogglePanelBinding)), "Main panel open/close" },

@@ -50,6 +50,7 @@ namespace HoverColors.Localization
                 // Groups
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kToolColors), "Kolory narzędzi" },
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kPanel), "Panel" },
+                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kReset), "Resetowanie" },
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kKeyBindings), "Skróty" },
                 // AboutInfo + AboutLinks intentionally have empty group headers.
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kAboutInfo), string.Empty },
@@ -110,6 +111,19 @@ namespace HoverColors.Localization
                     "\n" +
                     "Wypróbuj oba. Zmienia tylko tło panelu moda, nie interfejs gry."
                 },
+
+                // Reset button
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ResetGameVisuals)), "Przywróć domyślną oprawę gry" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ResetGameVisuals)),
+                    "Przywraca domyślny wygląd wszystkiego, czym steruje ten mod: obrys, podświetlenie właściciela, wypełnienie, grubość obrysu, prowadnice, dzielnice i podglądy obszarów narzędzi.\n" +
+                    "\n" +
+                    "Zapisane zestawy, skróty klawiszowe i ustawienia panelu pozostają bez zmian.\n" +
+                    "\n" +
+                    "Nie jest potrzebne do odinstalowania moda. Służy do zaczęcia od nowa po eksperymentach."
+                },
+
+                { m_Settings.GetOptionWarningLocaleID(nameof(HoverColorsSettings.ResetGameVisuals)),
+                    "Przywrócić domyślny wygląd wszystkiego, czym steruje ten mod?\n\nZestawy, skróty klawiszowe i ustawienia panelu zostaną zachowane." },
 
                 // Keybinds
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.TogglePanelBinding)), "Otwórz/zamknij panel główny" },

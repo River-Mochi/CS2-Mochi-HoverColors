@@ -261,6 +261,7 @@ namespace HoverColors.UI
             UpdateIfChanged(m_SurfaceToolAreasSuppressedBinding, AreaToolOverlaySystem.SuppressSurfaceToolAreas);
             UpdateIfChanged(m_SpecializedIndustryAreasSuppressedBinding, AreaToolOverlaySystem.SuppressSpecializedIndustryToolAreas);
             UpdateIfChanged(m_VanillaOutlineActiveBinding, IsVanillaOutlineActive());
+            SyncHoverToggleBinding();
 
             // Preset stored colors + active flags
             GetPresetBindingValues(settings, 1, out float syncP1R, out float syncP1G, out float syncP1B, out float syncP1A, out float syncP1FillA);

@@ -17,6 +17,7 @@ namespace HoverColors.Settings
     using Game.Input;       // BindingKeyboard
     using Game.Modding;     // IMod
     using Game.Settings;    // ModSetting, attributes
+    using Game.UI;          // ProxyBinding
 
     [FileLocation("ModsSettings/HoverColors/HoverColors")]
     [SettingsUITabOrder(Actions, KeyBindings, About)]
@@ -25,33 +26,33 @@ namespace HoverColors.Settings
     public partial class HoverColorsSettings : ModSetting
     {
         // Tab IDs
-        internal const string Actions = nameof(Actions);
-        internal const string KeyBindings = nameof(KeyBindings);
-        internal const string About = nameof(About);
+        public const string Actions = "Actions";
+        public const string KeyBindings = "KeyBindings";
+        public const string About = "About";
 
         // Group IDs
-        internal const string kToolColors = nameof(kToolColors);
-        internal const string kPanel = nameof(kPanel);
-        internal const string kReset = nameof(kReset);
-        internal const string kKeyBindings = nameof(kKeyBindings);
-        internal const string kAboutInfo = nameof(kAboutInfo);
-        internal const string kAboutLinks = nameof(kAboutLinks);
-        internal const string kAboutDedication = nameof(kAboutDedication);
+        internal const string kToolColors = "kToolColors";
+        internal const string kPanel = "kPanel";
+        internal const string kReset = "kReset";
+        internal const string kKeyBindings = "kKeyBindings";
+        internal const string kAboutInfo = "kAboutInfo";
+        internal const string kAboutLinks = "kAboutLinks";
+        internal const string kAboutDedication = "kAboutDedication";
 
-        public const int kToolColorModeRecommended = 0;
-        public const int kToolColorModeVanilla = 1;
-        public const int kToolColorModeCustom = 2;
+        internal const int kToolColorModeRecommended = 0;
+        internal const int kToolColorModeVanilla = 1;
+        internal const int kToolColorModeCustom = 2;
 
-        public const int kGuidelineColorPresetVanilla = 0;
-        public const int kGuidelineColorPresetCustom = 4;
+        internal const int kGuidelineColorPresetVanilla = 0;
+        internal const int kGuidelineColorPresetCustom = 4;
 
-        public const int kGuidelineDashedColorPresetVanilla = 0;
-        public const int kGuidelineDashedColorPresetYellow = 1;
-        public const int kGuidelineDashedColorPresetGreen = 2;
+        internal const int kGuidelineDashedColorPresetVanilla = 0;
+        internal const int kGuidelineDashedColorPresetYellow = 1;
+        internal const int kGuidelineDashedColorPresetGreen = 2;
         // Value 3 used to be an old test color; now it is Mochi Blue.
-        public const int kGuidelineDashedColorPresetMochiBlue = 3;
-        public const int kGuidelineDashedColorPresetCyanBlue = 4;
-        public const int kGuidelineDashedColorPresetCustom = 5;
+        internal const int kGuidelineDashedColorPresetMochiBlue = 3;
+        internal const int kGuidelineDashedColorPresetCyanBlue = 4;
+        internal const int kGuidelineDashedColorPresetCustom = 5;
 
         // Outline thickness is stored as a multiplier on the vanilla shader width, not as a raw
         // width, so 1.0 always means "whatever this game build's _OutlineWidth actually is".
@@ -61,12 +62,12 @@ namespace HoverColors.Settings
 
         // Centralized default for the guideline opacity slider.
         // Vanilla CS2 is 100; lower = more transparent. Keep TSX fallback bindings in sync.
-        public const int kDefaultGuidelineOpacityPercent = 30;
+        internal const int kDefaultGuidelineOpacityPercent = 30;
 
         // Kept for old local test .coc files. The city icon now resets guidelines to mod defaults.
         public int GuidelineDefaultPercent { get; set; }
 
-        private const string kAboutLinksRow = nameof(kAboutLinksRow);
+        private const string kAboutLinksRow = "kAboutLinksRow";
 
         // Same Paradox URL pattern as CityWatchdog — lands on River-Mochi's author page filtered to CS2.
         private const string kUrlParadox =

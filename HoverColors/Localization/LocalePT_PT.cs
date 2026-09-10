@@ -50,6 +50,7 @@ namespace HoverColors.Localization
                 // Groups
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kToolColors), "Comportamento das cores" },
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kPanel), "Painel" },
+                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kReset), "Repor" },
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kKeyBindings), "Atalhos" },
                 // AboutInfo + AboutLinks intentionally have empty group headers.
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kAboutInfo), string.Empty },
@@ -110,6 +111,19 @@ namespace HoverColors.Localization
                     "\n" +
                     "Experimenta os dois e escolhe. Isto só muda o fundo deste painel do mod, não a UI do jogo."
                 },
+
+                // Reset button
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ResetGameVisuals)), "Repor os visuais do jogo" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ResetGameVisuals)),
+                    "Devolve ao visual original tudo o que este mod controla: contorno, realce do dono, preenchimento, espessura do contorno, guias, distritos e áreas de pré-visualização das ferramentas.\n" +
+                    "\n" +
+                    "As tuas predefinições, atalhos e preferências do painel são mantidos.\n" +
+                    "\n" +
+                    "Não é preciso para desinstalar o mod. Serve para recomeçar do zero depois de experimentares."
+                },
+
+                { m_Settings.GetOptionWarningLocaleID(nameof(HoverColorsSettings.ResetGameVisuals)),
+                    "Devolver ao visual original tudo o que este mod controla?\n\nPredefinições, atalhos e definições do painel são mantidos." },
 
                 // Keybinds
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.TogglePanelBinding)), "Abrir/fechar painel principal" },

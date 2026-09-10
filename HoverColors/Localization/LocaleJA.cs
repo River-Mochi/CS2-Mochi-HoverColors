@@ -50,6 +50,7 @@ namespace HoverColors.Localization
                 // Groups
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kToolColors), "ツール色の動作" },
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kPanel), "パネル" },
+                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kReset), "リセット" },
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kKeyBindings), "キー設定" },
                 // AboutInfo + AboutLinks intentionally have empty group headers.
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kAboutInfo), string.Empty },
@@ -110,6 +111,19 @@ namespace HoverColors.Localization
                     "\n" +
                     "両方試して好みを選んでください。変更されるのはこのMODパネルの背景だけです。"
                 },
+
+                // Reset button
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ResetGameVisuals)), "ゲームの表示をバニラに戻す" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ResetGameVisuals)),
+                    "このMODが制御する見た目をすべてゲーム既定に戻します：アウトライン、オーナー強調、塗りつぶし、アウトラインの太さ、ガイドライン、地区、ツールのプレビュー範囲。\n" +
+                    "\n" +
+                    "保存したプリセット、ホットキー、パネル設定はそのまま残ります。\n" +
+                    "\n" +
+                    "MODのアンインストールには不要です。いろいろ試したあとに仕切り直すためのものです。"
+                },
+
+                { m_Settings.GetOptionWarningLocaleID(nameof(HoverColorsSettings.ResetGameVisuals)),
+                    "このMODが制御する見た目をすべてゲーム既定に戻しますか？\n\nプリセット、ホットキー、パネル設定は残ります。" },
 
                 // Keybinds
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.TogglePanelBinding)), "メインパネルを開く/閉じる" },

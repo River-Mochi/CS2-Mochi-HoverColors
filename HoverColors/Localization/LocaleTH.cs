@@ -50,6 +50,7 @@ namespace HoverColors.Localization
                 // Groups
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kToolColors), "สีของเครื่องมือ" },
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kPanel), "แผง" },
+                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kReset), "รีเซ็ต" },
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kKeyBindings), "ปุ่มลัด" },
                 // AboutInfo + AboutLinks intentionally have empty group headers.
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kAboutInfo), string.Empty },
@@ -110,6 +111,19 @@ namespace HoverColors.Localization
                     "\n" +
                     "ลองทั้งสองแบบแล้วเลือกที่ชอบ การตั้งค่านี้เปลี่ยนเฉพาะพื้นหลังแผงม็อด ไม่ใช่ UI เกม"
                 },
+
+                // Reset button
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ResetGameVisuals)), "คืนภาพในเกมเป็นค่าเริ่มต้น" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ResetGameVisuals)),
+                    "คืนทุกอย่างที่ม็อดนี้ควบคุมกลับเป็นภาพเดิมของเกม: เส้นขอบ เจ้าของ การเติมสี ความหนาเส้นขอบ เส้นนำ เขต และพื้นที่พรีวิวของเครื่องมือ\n" +
+                    "\n" +
+                    "พรีเซ็ต ปุ่มลัด และการตั้งค่าแผงที่บันทึกไว้จะยังอยู่\n" +
+                    "\n" +
+                    "ไม่จำเป็นต้องใช้เพื่อถอนม็อด ใช้สำหรับเริ่มใหม่หลังลองปรับหลาย ๆ ค่า"
+                },
+
+                { m_Settings.GetOptionWarningLocaleID(nameof(HoverColorsSettings.ResetGameVisuals)),
+                    "คืนทุกอย่างที่ม็อดนี้ควบคุมกลับเป็นภาพเดิมของเกมหรือไม่\n\nพรีเซ็ต ปุ่มลัด และการตั้งค่าแผงจะยังอยู่" },
 
                 // Keybinds
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.TogglePanelBinding)), "เปิด/ปิดแผงหลัก" },

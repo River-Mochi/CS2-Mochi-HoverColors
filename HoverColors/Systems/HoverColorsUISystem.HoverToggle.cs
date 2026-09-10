@@ -45,6 +45,13 @@ namespace HoverColors.UI
             }
         }
 
+        // The Options reset button writes HoverHighlightsSuppressed directly, so the panel needs a
+        // sync path that does not go through ToggleHighlights().
+        private void SyncHoverToggleBinding()
+        {
+            UpdateIfChanged(m_HoverHighlightsSuppressedBinding, Mod.Settings?.HoverHighlightsSuppressed ?? false);
+        }
+
         private void ToggleHighlights()
         {
             HoverColorsSettings? settings = Mod.Settings;

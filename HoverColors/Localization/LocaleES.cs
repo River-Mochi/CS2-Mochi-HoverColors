@@ -50,6 +50,7 @@ namespace HoverColors.Localization
                 // Groups
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kToolColors), "Color de herramientas" },
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kPanel), "Panel" },
+                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kReset), "Restablecer" },
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kKeyBindings), "Atajos" },
                 // AboutInfo + AboutLinks intentionally have empty group headers.
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kAboutInfo), string.Empty },
@@ -110,6 +111,19 @@ namespace HoverColors.Localization
                     "\n" +
                     "Prueba ambos y elige. Solo cambia el fondo de este panel del mod, no la interfaz del juego."
                 },
+
+                // Reset button
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ResetGameVisuals)), "Restablecer los visuales del juego" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ResetGameVisuals)),
+                    "Devuelve al aspecto original todo lo que controla este mod: contorno, resaltado del propietario, relleno, grosor del contorno, guías, distritos y áreas de vista previa de herramientas.\n" +
+                    "\n" +
+                    "Tus ajustes preestablecidos, atajos y preferencias del panel se conservan.\n" +
+                    "\n" +
+                    "No hace falta para desinstalar el mod. Sirve para empezar de cero tras experimentar."
+                },
+
+                { m_Settings.GetOptionWarningLocaleID(nameof(HoverColorsSettings.ResetGameVisuals)),
+                    "¿Devolver al aspecto original todo lo que controla este mod?\n\nSe conservan los ajustes preestablecidos, los atajos y la configuración del panel." },
 
                 // Keybinds
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.TogglePanelBinding)), "Abrir/cerrar panel principal" },
