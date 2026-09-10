@@ -2,8 +2,6 @@
     <!--
     HoverColors.csproj   CS2 mod: "Hover Colors" [HC]
     - CS2 toolchain (Mod.props / Mod.targets) supplies TargetFramework, game ref resolution, analyzers.
-    - No LangVersion override: CS2 toolchain stays on the supported C# version.
-    - Nullable enable to match LogUtils + River-Mochi mod defaults.
     - UI build (under UI/) runs after C# build; webpack writes directly into the CS2 Mods folder.
       Release fails hard on npm errors; Debug warns and continues.
     - Version is the single source of truth here; the Scripts/Update-PublishConfig.ps1 target syncs it
@@ -35,7 +33,6 @@
         <RootNamespace>HoverColors</RootNamespace>
         <AssemblyName>HoverColors</AssemblyName>
         <AssemblyTitle>Hover Colors</AssemblyTitle>
-        <Product>Hover Colors</Product>
         <Copyright>Copyright © 2026 River-Mochi</Copyright>
 
 
@@ -116,9 +113,7 @@
         </Exec>
 
         <Error Condition="'$(Configuration)'=='Release' AND '$(NpmCiExit)'!='0'" Text="$(AssemblyTitle) UI: 'npm ci' failed (exit $(NpmCiExit)). Release build aborted." />
-
         <Warning Condition="'$(Configuration)'!='Release' AND '$(NpmCiExit)'!='0'" Text="$(AssemblyTitle) UI: 'npm ci' failed (exit $(NpmCiExit)). Continuing (non-Release)." />
-
         <WriteLinesToFile Condition="'$(NpmCiExit)'=='0'" File="$(ProjectDir)UI\node_modules\.stamp" Lines="ok" Overwrite="true" />
     </Target>
 
@@ -126,13 +121,11 @@
     <Target Name="BuildUI" AfterTargets="Build" DependsOnTargets="NpmInstallIfNeeded" Condition="Exists('$(ProjectDir)UI\package.json')">
 
         <Message Text="$(AssemblyTitle) UI: npm run build ($(Configuration))..." Importance="high" />
-
         <Exec Command="npm run build" WorkingDirectory="$(ProjectDir)UI" IgnoreExitCode="true" Timeout="$(HCNpmBuildTimeoutMs)">
             <Output TaskParameter="ExitCode" PropertyName="NpmBuildExit" />
         </Exec>
 
         <Error Condition="'$(Configuration)'=='Release' AND '$(NpmBuildExit)'!='0'" Text="$(AssemblyTitle) UI: 'npm run build' failed (exit $(NpmBuildExit)). Release build aborted." />
-
         <Warning Condition="'$(Configuration)'!='Release' AND '$(NpmBuildExit)'!='0'" Text="$(AssemblyTitle) UI: 'npm run build' failed (exit $(NpmBuildExit)). Continuing (non-Release)." />
     </Target>
 </Project>
