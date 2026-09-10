@@ -56,12 +56,15 @@
 }
 
 // Idle header sits darker than the body so the title bar reads as its own strip.
+// Padding must stay symmetric: the strip is now visible, so any top/bottom mismatch shows up as the
+// title and its buttons riding low. Everything sizes in rem + border-box so it holds at any UI scale.
 .titleBar {
     min-height: 20rem;
     display: flex;
     align-items: center;
+    box-sizing: border-box;
     margin: -8rem -1rem 0 -1rem;
-    padding: 8rem 6rem 1rem 6rem;
+    padding: 4.5rem 6rem 4.5rem 6rem;
     border-radius: 12rem 12rem 0 0;
     background-color: rgba(6, 14, 19, 0.30);
     transition: background-color 120ms ease-out;
@@ -210,9 +213,7 @@
     }
 }
 
-.titleBar .infoButton {
-    margin-top: -2rem;
-}
+// No nudge here: the title bar centers its own row, so any offset would un-center the (i).
 
 .infoButtonTooltipsOff {
     background-color: transparent !important;

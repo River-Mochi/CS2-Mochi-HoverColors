@@ -44,6 +44,7 @@ namespace HoverColors.Localization
 
                 // Tabs
                 { m_Settings.GetOptionTabLocaleID(HoverColorsSettings.Actions), "동작" },
+                { m_Settings.GetOptionTabLocaleID(HoverColorsSettings.KeyBindings), "키 설정" },
                 { m_Settings.GetOptionTabLocaleID(HoverColorsSettings.About), "정보" },
 
                 // Groups

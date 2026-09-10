@@ -44,6 +44,7 @@ namespace HoverColors.Localization
 
                 // Tabs
                 { m_Settings.GetOptionTabLocaleID(HoverColorsSettings.Actions), "Akcje" },
+                { m_Settings.GetOptionTabLocaleID(HoverColorsSettings.KeyBindings), "Skróty" },
                 { m_Settings.GetOptionTabLocaleID(HoverColorsSettings.About), "O modzie" },
 
                 // Groups

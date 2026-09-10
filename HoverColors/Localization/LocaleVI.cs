@@ -44,6 +44,7 @@ namespace HoverColors.Localization
 
                 // Tabs
                 { m_Settings.GetOptionTabLocaleID(HoverColorsSettings.Actions), "Thao tác" },
+                { m_Settings.GetOptionTabLocaleID(HoverColorsSettings.KeyBindings), "Phím tắt" },
                 { m_Settings.GetOptionTabLocaleID(HoverColorsSettings.About), "Giới thiệu" },
 
                 // Groups

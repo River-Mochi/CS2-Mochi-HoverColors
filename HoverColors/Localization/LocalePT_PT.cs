@@ -44,6 +44,7 @@ namespace HoverColors.Localization
 
                 // Tabs
                 { m_Settings.GetOptionTabLocaleID(HoverColorsSettings.Actions), "Ações" },
+                { m_Settings.GetOptionTabLocaleID(HoverColorsSettings.KeyBindings), "Atalhos" },
                 { m_Settings.GetOptionTabLocaleID(HoverColorsSettings.About), "Sobre" },
 
                 // Groups

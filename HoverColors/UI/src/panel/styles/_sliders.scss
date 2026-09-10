@@ -42,3 +42,18 @@
     padding-left: 0;
     margin-left: 6rem; // gap after three guideline swatches
 }
+
+// Fill row: swatch first, then the opacity slider (same shape as the guidelines row).
+// Scoped to .controlRow so it outranks .controlBody's flex-end no matter what order the
+// partials compile in.
+.controlRow .fillControlBody {
+    justify-content: flex-start;
+    padding-left: 4rem; // lines the swatch up with the Outline swatch one row above
+}
+
+.fillSliderRow {
+    width: auto;
+    flex: 1 1 auto;
+    padding-left: 0;
+    margin-left: 6rem; // gap after the fill swatch
+}

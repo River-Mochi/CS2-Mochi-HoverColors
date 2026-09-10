@@ -16,7 +16,8 @@
 //   - RenderingSettingsData.m_OwnerColor.RGBA    ← Owner color (parent/owned objects while placing)
 //   - Material _OuterColor.RGB                   ← Outline RGB (the visible halo edge color)
 //   - Material _OuterColor.a                     ← OutlineA   (halo edge opacity)
-//   - Material _InnerColor.RGB                   ← Outline RGB (color of fill overlay inside silhouette)
+//   - Material _InnerColor.RGB                   ← Fill RGB (tint of fill overlay inside silhouette;
+//                                                   white = fill takes the per-object hover color)
 //   - Material _InnerColor.a                     ← FillA      (fill overlay opacity)
 //
 // Tool override: controlled by HoverColorsSettings.ToolColorMode.
@@ -94,6 +95,7 @@ namespace HoverColors.Systems
 
         // Last-applied EFFECTIVE values (after tool-override decision).
         private float m_LastR, m_LastG, m_LastB, m_LastOutlineA, m_LastFillA;
+        private float m_LastFillR, m_LastFillG, m_LastFillB;
         private float m_LastOwnerR, m_LastOwnerG, m_LastOwnerB, m_LastOwnerA;
         private EffectivePalette m_LastPalette;
         private bool m_Applied;
@@ -141,6 +143,7 @@ namespace HoverColors.Systems
             TryCaptureVanillaDefaults();
 
             float r, g, b, outlineA, fillA, ownerR, ownerG, ownerB, ownerA;
+            float fillR, fillG, fillB;
             EffectivePalette palette;
             ToolBaseSystem? activeToolSystem = m_ToolSystem?.activeTool;
             ToolKind activeTool = GetActiveToolKind(activeToolSystem);
@@ -152,6 +155,9 @@ namespace HoverColors.Systems
                 b = error.b;
                 outlineA = error.a;
                 fillA = CapturedFillA;
+                fillR = CapturedInnerColor.r;
+                fillG = CapturedInnerColor.g;
+                fillB = CapturedInnerColor.b;
                 ownerR = CapturedOwnerColor.r;
                 ownerG = CapturedOwnerColor.g;
                 ownerB = CapturedOwnerColor.b;
@@ -167,6 +173,9 @@ namespace HoverColors.Systems
                 b = warning.b;
                 outlineA = warning.a;
                 fillA = CapturedFillA;
+                fillR = CapturedInnerColor.r;
+                fillG = CapturedInnerColor.g;
+                fillB = CapturedInnerColor.b;
                 ownerR = warning.r;
                 ownerG = warning.g;
                 ownerB = warning.b;
@@ -182,6 +191,9 @@ namespace HoverColors.Systems
                     b = settings.OutlineB;
                     outlineA = settings.OutlineA;
                     fillA = settings.FillA;
+                    fillR = settings.FillR;
+                    fillG = settings.FillG;
+                    fillB = settings.FillB;
                     ownerR = settings.OwnerR;
                     ownerG = settings.OwnerG;
                     ownerB = settings.OwnerB;
@@ -198,6 +210,9 @@ namespace HoverColors.Systems
                     b = hovered.b;
                     outlineA = CapturedOutlineA;
                     fillA = CapturedFillA;
+                    fillR = CapturedInnerColor.r;
+                    fillG = CapturedInnerColor.g;
+                    fillB = CapturedInnerColor.b;
                     ownerR = CapturedOwnerColor.r;
                     ownerG = CapturedOwnerColor.g;
                     ownerB = CapturedOwnerColor.b;
@@ -214,6 +229,9 @@ namespace HoverColors.Systems
                 b = hovered.b;
                 outlineA = Mathf.Min(CapturedOutlineA, RoadRecommendedOutlineA);
                 fillA = CapturedFillA;
+                fillR = CapturedInnerColor.r;
+                fillG = CapturedInnerColor.g;
+                fillB = CapturedInnerColor.b;
                 ownerR = CapturedOwnerColor.r;
                 ownerG = CapturedOwnerColor.g;
                 ownerB = CapturedOwnerColor.b;
@@ -229,6 +247,9 @@ namespace HoverColors.Systems
                 b = hovered.b;
                 outlineA = CapturedOutlineA;
                 fillA = CapturedFillA;
+                fillR = CapturedInnerColor.r;
+                fillG = CapturedInnerColor.g;
+                fillB = CapturedInnerColor.b;
                 ownerR = CapturedOwnerColor.r;
                 ownerG = CapturedOwnerColor.g;
                 ownerB = CapturedOwnerColor.b;
@@ -242,6 +263,9 @@ namespace HoverColors.Systems
                 b = settings.OutlineB;
                 outlineA = settings.OutlineA;
                 fillA = settings.FillA;
+                fillR = settings.FillR;
+                fillG = settings.FillG;
+                fillB = settings.FillB;
                 ownerR = settings.OwnerR;
                 ownerG = settings.OwnerG;
                 ownerB = settings.OwnerB;
@@ -267,6 +291,9 @@ namespace HoverColors.Systems
                 && b == m_LastB
                 && outlineA == m_LastOutlineA
                 && fillA == m_LastFillA
+                && fillR == m_LastFillR
+                && fillG == m_LastFillG
+                && fillB == m_LastFillB
                 && ownerR == m_LastOwnerR
                 && ownerG == m_LastOwnerG
                 && ownerB == m_LastOwnerB
@@ -277,7 +304,7 @@ namespace HoverColors.Systems
             }
 
             bool ecsOk = ApplyRenderingSettingsColors(r, g, b, outlineA, ownerR, ownerG, ownerB, ownerA, palette);
-            bool matOk = ApplyOutlineMaterialColors(r, g, b, outlineA, fillA, palette);
+            bool matOk = ApplyOutlineMaterialColors(r, g, b, outlineA, fillA, fillR, fillG, fillB, palette);
 
             // Only cache the snapshot when BOTH writes land — otherwise retry next frame.
             if (ecsOk && matOk)
@@ -287,6 +314,9 @@ namespace HoverColors.Systems
                 m_LastB = b;
                 m_LastOutlineA = outlineA;
                 m_LastFillA = fillA;
+                m_LastFillR = fillR;
+                m_LastFillG = fillG;
+                m_LastFillB = fillB;
                 m_LastOwnerR = ownerR;
                 m_LastOwnerG = ownerG;
                 m_LastOwnerB = ownerB;
@@ -431,7 +461,16 @@ namespace HoverColors.Systems
         // and m_OwnerColor. Only the material alpha values are controlled here:
         //   _OuterColor.a = outlineA (halo edge opacity)
         //   _InnerColor.a = fillA    (fill overlay opacity inside the silhouette)
-        private bool ApplyOutlineMaterialColors(float r, float g, float b, float outlineA, float fillA, EffectivePalette palette)
+        private bool ApplyOutlineMaterialColors(
+            float r,
+            float g,
+            float b,
+            float outlineA,
+            float fillA,
+            float fillR,
+            float fillG,
+            float fillB,
+            EffectivePalette palette)
         {
             if (!TryResolveOutlineMaterial())
             {
@@ -466,8 +505,8 @@ namespace HoverColors.Systems
                     outer = CapturedOuterColor;
                     outer.a = outlineA;
 
-                    inner = CapturedInnerColor;
-                    inner.a = fillA;
+                    // White here reproduces the pre-tint behavior, so an untouched save is unchanged.
+                    inner = new Color(fillR, fillG, fillB, fillA);
                     break;
 
             }

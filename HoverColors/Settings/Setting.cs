@@ -21,13 +21,14 @@ namespace HoverColors.Settings
     using Game.UI.Widgets;  // Unit.kPercentage
 
     [FileLocation("ModsSettings/HoverColors/HoverColors")]
-    [SettingsUITabOrder(Actions, About)]
+    [SettingsUITabOrder(Actions, KeyBindings, About)]
     [SettingsUIGroupOrder(kToolColors, kPanel, kGuidelines, kKeyBindings, kAboutInfo, kAboutLinks, kAboutDedication)]
     [SettingsUIShowGroupName(kToolColors, kPanel, kKeyBindings, kGuidelines, kAboutDedication)]
     public partial class HoverColorsSettings : ModSetting
     {
         // Tab IDs
         internal const string Actions = nameof(Actions);
+        internal const string KeyBindings = nameof(KeyBindings);
         internal const string About = nameof(About);
 
         // Group IDs
@@ -75,6 +76,7 @@ namespace HoverColors.Settings
         //   - OwnerR/G/B   → parent/owner highlight color, e.g. main building while placing sub-buildings
         //   - OutlineA     → outline halo edge opacity  (material _OuterColor.a)
         //   - FillA        → fill overlay opacity inside the silhouette (material _InnerColor.a)
+        //   - FillR/G/B    → fill tint inside the silhouette             (material _InnerColor.RGB)
         // -----------------------------------------------------------------------
 
         [SettingsUIHidden]
@@ -103,6 +105,23 @@ namespace HoverColors.Settings
 
         [SettingsUIHidden]
         public float FillA { get; set; }
+
+        // Fill tint. The outline material carries this as _InnerColor.RGB, which the fullscreen
+        // outline pass combines with the per-object hover color, so white reproduces the old
+        // behavior of the fill simply taking the Outline color.
+        [SettingsUIHidden]
+        public float FillR { get; set; }
+
+        [SettingsUIHidden]
+        public float FillG { get; set; }
+
+        [SettingsUIHidden]
+        public float FillB { get; set; }
+
+        // Saves written before the fill tint existed have no FillR/G/B, so they deserialize as
+        // black. This flag lets MigrateAfterLoad hand those saves white instead.
+        [SettingsUIHidden]
+        public bool FillColorInitialized { get; set; }
 
         // District overlay color. Disabled by default so we do not touch vanilla/other-mod
         // district prefabs until the player picks a color from the in-game District picker.
@@ -480,23 +499,23 @@ namespace HoverColors.Settings
         public int GuidelineOpacityPercent { get; set; }
 
         // -----------------------------------------------------------------------
-        // Actions tab — Key bindings
+        // Key Bindings tab
         // -----------------------------------------------------------------------
 
-        [SettingsUISection(Actions, kKeyBindings)]
+        [SettingsUISection(KeyBindings, kKeyBindings)]
         [SettingsUIKeyboardBinding(BindingKeyboard.J, Mod.kTogglePanelActionName)]
         public ProxyBinding TogglePanelBinding { get; set; }
 
         // Unbound keybind by default so HC cannot collide with other mod/game shortcut.
-        [SettingsUISection(Actions, kKeyBindings)]
+        [SettingsUISection(KeyBindings, kKeyBindings)]
         [SettingsUIKeyboardBinding(BindingKeyboard.None, Mod.kToggleHighlightsActionName)]
         public ProxyBinding ToggleHoverHighlightsBinding { get; set; }
 
-        [SettingsUISection(Actions, kKeyBindings)]
+        [SettingsUISection(KeyBindings, kKeyBindings)]
         [SettingsUIKeyboardBinding(BindingKeyboard.L, Mod.kToggleSurfaceToolAreasActionName)]
         public ProxyBinding ToggleSurfaceToolAreasBinding { get; set; }
 
-        [SettingsUISection(Actions, kKeyBindings)]
+        [SettingsUISection(KeyBindings, kKeyBindings)]
         [SettingsUIKeyboardBinding(BindingKeyboard.K, Mod.kTogglePresetActionName)]
         public ProxyBinding TogglePresetBinding { get; set; }
 

@@ -31,6 +31,13 @@ namespace HoverColors.Settings
             // FillA=0 matches vanilla CS2: no extra silhouette overlay until the player turns it up.
             FillA = 0f;
 
+            // White is the neutral tint: the fill renders in the Outline color, same as before the
+            // fill had its own swatch. Matches the vanilla material _InnerColor RGB.
+            FillR = 1f;
+            FillG = 1f;
+            FillB = 1f;
+            FillColorInitialized = true;
+
             // Safe fallback for the District picker until DistrictColorSystem captures the authored
             // default district prefab colors. Not applied unless DistrictColorEnabled is true.
             DistrictColorEnabled = false;
@@ -138,6 +145,16 @@ namespace HoverColors.Settings
             {
                 SpecializedIndustryAreasSuppressed = true;
                 SpecializedIndustryAreasSuppressionInitialized = true;
+                changed = true;
+            }
+
+            // Without this an upgrading player's fill would go black the moment they raise the slider.
+            if (!FillColorInitialized)
+            {
+                FillR = 1f;
+                FillG = 1f;
+                FillB = 1f;
+                FillColorInitialized = true;
                 changed = true;
             }
 

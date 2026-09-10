@@ -44,6 +44,7 @@ namespace HoverColors.Localization
 
                 // Tabs
                 { m_Settings.GetOptionTabLocaleID(HoverColorsSettings.Actions), "操作" },
+                { m_Settings.GetOptionTabLocaleID(HoverColorsSettings.KeyBindings), "快捷键" },
                 { m_Settings.GetOptionTabLocaleID(HoverColorsSettings.About), "关于" },
 
                 // Groups

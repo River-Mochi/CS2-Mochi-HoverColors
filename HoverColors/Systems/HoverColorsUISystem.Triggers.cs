@@ -23,6 +23,8 @@ namespace HoverColors.UI
             AddBinding(new TriggerBinding<float, float, float, float>(Mod.ModId, "SetOutlineColor", SetOutlineColor));
             AddBinding(new TriggerBinding<float, float, float, float>(Mod.ModId, "SetOwnerColor", SetOwnerColor));
             AddBinding(new TriggerBinding<float>(Mod.ModId, "SetFillAlpha", SetFillAlpha));
+            AddBinding(new TriggerBinding<float, float, float, float>(Mod.ModId, "SetFillColor", SetFillColor));
+            AddBinding(new TriggerBinding(Mod.ModId, "ResetFillToVanilla", ResetFillToVanilla));
             AddBinding(new TriggerBinding<int>(Mod.ModId, "SetGuidelineOpacity", SetGuidelineOpacity));
             AddBinding(new TriggerBinding<float, float, float, float>(Mod.ModId, "SetGuidelineLinesColor", SetGuidelineLinesColor));
             AddBinding(new TriggerBinding<float, float, float, float>(Mod.ModId, "SetGuidelinePreviewColor", SetGuidelinePreviewColor));
@@ -90,6 +92,48 @@ namespace HoverColors.UI
             }
 
             settings.FillA = a;
+            ApplySaveAndSync(settings);
+        }
+
+        // The panel's fill swatch owns both the tint and the opacity: the picker's alpha bar and the
+        // fill slider are two views of FillA, the same way the dashed guideline swatch works.
+        private void SetFillColor(float r, float g, float b, float a)
+        {
+            HoverColorsSettings? settings = Mod.Settings;
+            if (settings == null) return;
+
+            a = Clamp01(a);
+            if (SameColor(settings.FillR, settings.FillG, settings.FillB, settings.FillA, r, g, b, a))
+            {
+                return;
+            }
+
+            settings.FillR = r;
+            settings.FillG = g;
+            settings.FillB = b;
+            settings.FillA = a;
+            settings.FillColorInitialized = true;
+            ApplySaveAndSync(settings);
+        }
+
+        // Vanilla fill is the captured material _InnerColor: white at zero opacity.
+        private void ResetFillToVanilla()
+        {
+            HoverColorsSettings? settings = Mod.Settings;
+            if (settings == null) return;
+
+            UnityEngine.Color inner = OutlineColorSystem.CapturedInnerColor;
+            float fillA = OutlineColorSystem.CapturedFillA;
+            if (SameColor(settings.FillR, settings.FillG, settings.FillB, settings.FillA, inner.r, inner.g, inner.b, fillA))
+            {
+                return;
+            }
+
+            settings.FillR = inner.r;
+            settings.FillG = inner.g;
+            settings.FillB = inner.b;
+            settings.FillA = fillA;
+            settings.FillColorInitialized = true;
             ApplySaveAndSync(settings);
         }
 
@@ -253,13 +297,15 @@ namespace HoverColors.UI
 
             UnityEngine.Color hovered = OutlineColorSystem.CapturedHoveredColor;
             UnityEngine.Color owner = OutlineColorSystem.CapturedOwnerColor;
+            UnityEngine.Color inner = OutlineColorSystem.CapturedInnerColor;
             float fillA = OutlineColorSystem.CapturedFillA;
 
             bool changed = !SameColor(settings.OutlineR, settings.OutlineG, settings.OutlineB, settings.OutlineA,
                     hovered.r, hovered.g, hovered.b, OutlineColorSystem.CapturedOutlineA)
                 || !SameColor(settings.OwnerR, settings.OwnerG, settings.OwnerB, settings.OwnerA,
                     owner.r, owner.g, owner.b, owner.a)
-                || !ApproxEqual(settings.FillA, fillA);
+                || !SameColor(settings.FillR, settings.FillG, settings.FillB, settings.FillA,
+                    inner.r, inner.g, inner.b, fillA);
 
             if (!changed)
             {
@@ -274,7 +320,11 @@ namespace HoverColors.UI
             settings.OwnerG = owner.g;
             settings.OwnerB = owner.b;
             settings.OwnerA = owner.a;
+            settings.FillR = inner.r;
+            settings.FillG = inner.g;
+            settings.FillB = inner.b;
             settings.FillA = fillA;
+            settings.FillColorInitialized = true;
             ApplySaveAndSync(settings);
         }
 

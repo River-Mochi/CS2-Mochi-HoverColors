@@ -15,6 +15,9 @@ import {
     districtG$,
     districtR$,
     fillA$,
+    fillB$,
+    fillG$,
+    fillR$,
     hoverHighlightsSuppressed$,
     guidelineLinesColorA$,
     guidelineLinesColorB$,
@@ -105,6 +108,12 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
         a: useValue(guidelinePreviewColorA$),
     };
     const boundFillA = useValue(fillA$);
+    const boundFill: Color = {
+        r: useValue(fillR$),
+        g: useValue(fillG$),
+        b: useValue(fillB$),
+        a: boundFillA,
+    };
     const boundGuideline = useValue(guidelineOpacity$);
     const boundGuidelineDashedColor: Color = {
         r: useValue(guidelineDashedColorR$),
@@ -146,6 +155,7 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
     const [outline, setOutline] = React.useState<Color>(boundOutline);
     const [ownerColor, setOwnerColor] = React.useState<Color>(boundOwner);
     const [fillA, setFillA] = React.useState<number>(boundFillA);
+    const [fillColor, setFillColor] = React.useState<Color>(boundFill);
     const [districtColor, setDistrictColor] = React.useState<Color>(boundDistrict);
     const [guidelineLinesColor, setGuidelineLinesColor] = React.useState<Color>(boundGuidelineLinesColor);
     const [guidelinePreviewColor, setGuidelinePreviewColor] = React.useState<Color>(boundGuidelinePreviewColor);
@@ -153,6 +163,7 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
     const [guidelineOpacity, setGuidelineOpacity] = React.useState<number>(boundGuideline);
 
     const [colorPickerDirection, setColorPickerDirection] = React.useState<"up" | "down">("down");
+    const [fillPickerDirection, setFillPickerDirection] = React.useState<"up" | "down">("down");
     const [ownerPickerDirection, setOwnerPickerDirection] = React.useState<"up" | "down">("down");
     const [guidelineLinesPickerDirection, setGuidelineLinesPickerDirection] = React.useState<"up" | "down">("up");
     const [guidelinePreviewPickerDirection, setGuidelinePreviewPickerDirection] = React.useState<"up" | "down">("up");
@@ -168,6 +179,7 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
 
     // ColorField can swallow hover events; React hover state keeps the visible rings reliable in COHTML.
     const [swatchHovered, setSwatchHovered] = React.useState(false);
+    const [fillSwatchHovered, setFillSwatchHovered] = React.useState(false);
     const [ownerSwatchHovered, setOwnerSwatchHovered] = React.useState(false);
     const [guidelineLinesHovered, setGuidelineLinesHovered] = React.useState(false);
     const [guidelinePreviewHovered, setGuidelinePreviewHovered] = React.useState(false);
@@ -178,6 +190,7 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
 
     const panelAnchorRef = React.useRef<HTMLDivElement>(null);
     const outlineSwatchRef = React.useRef<HTMLDivElement>(null);
+    const fillSwatchRef = React.useRef<HTMLDivElement>(null);
     const ownerSwatchRef = React.useRef<HTMLDivElement>(null);
     const guidelineLinesPickerRef = React.useRef<HTMLDivElement>(null);
     const guidelinePreviewPickerRef = React.useRef<HTMLDivElement>(null);
@@ -205,6 +218,7 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
     React.useEffect(() => { setOutline(boundOutline); }, [boundOutline.r, boundOutline.g, boundOutline.b, boundOutline.a]);
     React.useEffect(() => { setOwnerColor(boundOwner); }, [boundOwner.r, boundOwner.g, boundOwner.b, boundOwner.a]);
     React.useEffect(() => { setFillA(boundFillA); }, [boundFillA]);
+    React.useEffect(() => { setFillColor(boundFill); }, [boundFill.r, boundFill.g, boundFill.b, boundFill.a]);
     React.useEffect(() => { setDistrictColor(boundDistrict); }, [boundDistrict.r, boundDistrict.g, boundDistrict.b, boundDistrict.a]);
     React.useEffect(() => { setGuidelineLinesColor(boundGuidelineLinesColor); }, [boundGuidelineLinesColor.r, boundGuidelineLinesColor.g, boundGuidelineLinesColor.b, boundGuidelineLinesColor.a]);
     React.useEffect(() => { setGuidelinePreviewColor(boundGuidelinePreviewColor); }, [boundGuidelinePreviewColor.r, boundGuidelinePreviewColor.g, boundGuidelinePreviewColor.b, boundGuidelinePreviewColor.a]);
@@ -321,7 +335,18 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
     const handleFillAChange = (v: number) => {
         const value = Math.max(0, Math.min(1, v));
         setFillA(value);
+        setFillColor(prev => ({ ...prev, a: value }));
         trigger(CHANNEL, "SetFillAlpha", value);
+    };
+
+    // Swatch owns tint + opacity; the slider is the same alpha shown a second way.
+    const handleFillColorChange = (value: Color) => {
+        const syncedValue = normalizeColorFieldValue(value);
+        const alpha = Math.max(0, Math.min(1, typeof syncedValue.a === "number" ? syncedValue.a : 1));
+        const fillValue = { ...syncedValue, a: alpha };
+        setFillColor(fillValue);
+        setFillA(alpha);
+        trigger(CHANNEL, "SetFillColor", fillValue.r, fillValue.g, fillValue.b, alpha);
     };
 
     const handleDistrictColorChange = (value: Color) => {
@@ -363,7 +388,7 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
     const handleToggleHighlights = () => trigger(CHANNEL, "ToggleHighlights");
     const handleToggleCollapse = () => trigger(CHANNEL, "SetPanelCollapsed", !panelCollapsed);
     const handleResetOutline = () => trigger(CHANNEL, "ResetOutlineToVanilla");
-    const handleResetFill = () => handleFillAChange(0);
+    const handleResetFill = () => trigger(CHANNEL, "ResetFillToVanilla");
     const handleResetGuidelines = () => trigger(CHANNEL, "ResetGuidelines");
     const handleToggleSurfaceToolAreas = () => trigger(CHANNEL, "ToggleSurfaceToolAreas");
     const handleToggleSpecializedIndustryAreas = () => trigger(CHANNEL, "ToggleSpecializedIndustryAreas");
@@ -385,6 +410,7 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
     }, []);
 
     const updateColorPickerDirection = React.useCallback(() => updatePickerDirection(outlineSwatchRef.current, setColorPickerDirection), [updatePickerDirection]);
+    const updateFillPickerDirection = React.useCallback(() => updatePickerDirection(fillSwatchRef.current, setFillPickerDirection), [updatePickerDirection]);
     const updateOwnerPickerDirection = React.useCallback(() => updatePickerDirection(ownerSwatchRef.current, setOwnerPickerDirection), [updatePickerDirection]);
     const updateDistrictPickerDirection = React.useCallback(() => updatePickerDirection(districtColorSwatchRef.current ?? districtPickerRef.current, setDistrictPickerDirection), [updatePickerDirection]);
     const updateGuidelineLinesPickerDirection = React.useCallback(() => updatePickerDirection(guidelineLinesPickerRef.current, setGuidelineLinesPickerDirection), [updatePickerDirection]);
@@ -495,6 +521,7 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
                         outline={outline}
                         ownerColor={ownerColor}
                         fillA={fillA}
+                        fillColor={fillColor}
                         guidelineLinesColor={guidelineLinesColor}
                         guidelinePreviewColor={guidelinePreviewColor}
                         guidelineDashedColor={guidelineDashedColor}
@@ -502,6 +529,7 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
                         preset1Color={preset1Color}
                         preset2Color={preset2Color}
                         colorPickerDirection={colorPickerDirection}
+                        fillPickerDirection={fillPickerDirection}
                         ownerPickerDirection={ownerPickerDirection}
                         guidelineLinesPickerDirection={guidelineLinesPickerDirection}
                         guidelinePreviewPickerDirection={guidelinePreviewPickerDirection}
@@ -510,6 +538,7 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
                         preset1Active={preset1Active}
                         preset2Active={preset2Active}
                         swatchHovered={swatchHovered}                  
+                        fillSwatchHovered={fillSwatchHovered}
                         ownerSwatchHovered={ownerSwatchHovered}
                         guidelineLinesHovered={guidelineLinesHovered}
                         guidelinePreviewHovered={guidelinePreviewHovered}
@@ -517,6 +546,7 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
                         preset1Hovered={preset1Hovered}
                         preset2Hovered={preset2Hovered}
                         setSwatchHovered={setSwatchHovered}
+                        setFillSwatchHovered={setFillSwatchHovered}
                         setOwnerSwatchHovered={setOwnerSwatchHovered}
                         setGuidelineLinesHovered={setGuidelineLinesHovered}
                         setGuidelinePreviewHovered={setGuidelinePreviewHovered}
@@ -533,6 +563,7 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
                         handlePresetMouseDown={handlePresetMouseDown}
                         handlePresetMouseUp={handlePresetMouseUp}
                         outlineSwatchRef={outlineSwatchRef}
+                        fillSwatchRef={fillSwatchRef}
                         ownerSwatchRef={ownerSwatchRef}
                         guidelineLinesPickerRef={guidelineLinesPickerRef}
                         guidelinePreviewPickerRef={guidelinePreviewPickerRef}
@@ -540,6 +571,7 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
                         handleOutlineChange={handleOutlineChange}
                         handleOwnerColorChange={handleOwnerColorChange}
                         handleFillAChange={handleFillAChange}
+                        handleFillColorChange={handleFillColorChange}
                         handleGuidelineLinesColorChange={handleGuidelineLinesColorChange}
                         handleGuidelinePreviewColorChange={handleGuidelinePreviewColorChange}
                         handleGuidelineDashedColorChange={handleGuidelineDashedColorChange}
@@ -550,6 +582,7 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
                         handleTogglePresetDefaults={handleTogglePresetDefaults}
                         handleRestorePresetDefaults={handleRestorePresetDefaults}
                         updateColorPickerDirection={updateColorPickerDirection}
+                        updateFillPickerDirection={updateFillPickerDirection}
                         updateOwnerPickerDirection={updateOwnerPickerDirection}
                         updateGuidelineLinesPickerDirection={updateGuidelineLinesPickerDirection}
                         updateGuidelinePreviewPickerDirection={updateGuidelinePreviewPickerDirection}

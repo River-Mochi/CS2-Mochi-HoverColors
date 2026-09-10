@@ -5,10 +5,17 @@
 // uses a CSS transform, position:fixed would be broken, so the tooltip is an absolute child of the
 // (transformed) anchor and is positioned with anchor-relative coordinates measured on hover.
 //
-// Placement is viewport-aware: the panel is draggable, so a requested side can run off screen
-// (e.g. the left-side reset tooltips once the panel sits near the left edge). The layer is measured
-// after it mounts, then the requested side is kept if it fits, otherwise the first side in its
-// fallback chain that does fit is used. The cross axis is clamped so long tooltips stay on screen.
+// Positioning is transform-only on purpose. The layer stays at left:0/top:0 so its shrink-to-fit
+// width is always measured against the full anchor width; moving it with `left` instead would let
+// the remaining space in the containing block re-wrap the text, so the width used for the fit tests
+// would not match the width that actually renders. transform does not affect layout, so measured
+// size and final size are always the same.
+//
+// Placement is viewport-aware because the panel is draggable: a requested side can run off screen
+// (the left-side reset tooltips once the panel sits near the left edge, the right-side ones once it
+// sits near the right edge). The layer is measured after it mounts, the requested side is kept if it
+// fits, otherwise the first side in its fallback chain that fits wins, and the result is clamped
+// into the window either way.
 
 import React, { createContext, useContext, useLayoutEffect, useRef, useState, type ReactNode, type RefObject } from "react";
 
@@ -27,7 +34,8 @@ const GAP_PX = 8;
 // Minimum pixels kept between the tooltip and the game window edge.
 const EDGE_PX = 8;
 
-// First side that fits wins. "below" comes before "above" because the panel normally sits high.
+// First side that fits wins. "below" comes before the opposite side because the panel normally sits
+// high on screen, and dropping under the panel is what the bottom-bar tooltips already do.
 const FALLBACK_SIDES: Record<SideTooltipSide, SideTooltipSide[]> = {
     left: ["left", "below", "right", "above"],
     right: ["right", "below", "left", "above"],
@@ -47,61 +55,60 @@ type TipRequest = {
     anchorTop: number;
 };
 
-type TipPlacement = { left: number; top: number; transform: string };
+type TipPlacement = { x: number; y: number };
 
 const clamp = (value: number, min: number, max: number) => (min > max ? min : Math.min(Math.max(value, min), max));
 
 const fitsSide = (side: SideTooltipSide, tip: TipRequest, width: number, height: number) => {
     const { panel, anchorLeft, anchorTop } = tip;
     const panelLeft = anchorLeft + panel.left;
-    const panelRight = panelLeft + panel.width;
     const panelTop = anchorTop + panel.top;
-    const panelBottom = panelTop + panel.height;
 
     switch (side) {
         case "left":
             return panelLeft - GAP_PX - width >= EDGE_PX;
         case "right":
-            return panelRight + GAP_PX + width <= window.innerWidth - EDGE_PX;
+            return panelLeft + panel.width + GAP_PX + width <= window.innerWidth - EDGE_PX;
         case "above":
             return panelTop - GAP_PX - height >= EDGE_PX;
         default:
-            return panelBottom + GAP_PX + height <= window.innerHeight - EDGE_PX;
+            return panelTop + panel.height + GAP_PX + height <= window.innerHeight - EDGE_PX;
     }
 };
 
+// Returns the tooltip's top-left corner in anchor-local pixels, already clamped to the window.
 const placeTip = (tip: TipRequest, width: number, height: number): TipPlacement => {
     const { control, panel, anchorLeft, anchorTop } = tip;
     const side = FALLBACK_SIDES[tip.side].find(candidate => fitsSide(candidate, tip, width, height)) ?? tip.side;
 
     const controlMidX = control.left + control.width / 2;
     const controlMidY = control.top + control.height / 2;
-    const panelRight = panel.left + panel.width;
-    const panelBottom = panel.top + panel.height;
 
-    // Cross-axis clamp keeps the centered edge inside the window; the tooltip can slide along the
-    // panel edge but never past it.
-    if (side === "left" || side === "right") {
-        const top = clamp(
-            controlMidY,
-            EDGE_PX + height / 2 - anchorTop,
-            window.innerHeight - EDGE_PX - height / 2 - anchorTop,
-        );
-
-        return side === "left"
-            ? { left: panel.left - GAP_PX, top, transform: "translate(-100%, -50%)" }
-            : { left: panelRight + GAP_PX, top, transform: "translateY(-50%)" };
+    let x: number;
+    let y: number;
+    switch (side) {
+        case "left":
+            x = panel.left - GAP_PX - width;
+            y = controlMidY - height / 2;
+            break;
+        case "right":
+            x = panel.left + panel.width + GAP_PX;
+            y = controlMidY - height / 2;
+            break;
+        case "above":
+            x = controlMidX - width / 2;
+            y = panel.top - GAP_PX - height;
+            break;
+        default:
+            x = controlMidX - width / 2;
+            y = panel.top + panel.height + GAP_PX;
+            break;
     }
 
-    const left = clamp(
-        controlMidX,
-        EDGE_PX + width / 2 - anchorLeft,
-        window.innerWidth - EDGE_PX - width / 2 - anchorLeft,
-    );
-
-    return side === "above"
-        ? { left, top: panel.top - GAP_PX, transform: "translate(-50%, -100%)" }
-        : { left, top: panelBottom + GAP_PX, transform: "translateX(-50%)" };
+    return {
+        x: clamp(x, EDGE_PX - anchorLeft, window.innerWidth - EDGE_PX - width - anchorLeft),
+        y: clamp(y, EDGE_PX - anchorTop, window.innerHeight - EDGE_PX - height - anchorTop),
+    };
 };
 
 type ProviderProps = {
@@ -183,12 +190,14 @@ export const SideTooltipProvider = ({ anchorRef, panelRef, disabled = false, chi
             {tip && (
                 <div ref={tipRef} style={{
                     position: "absolute",
-                    left: `${placement?.left ?? 0}px`,
-                    top: `${placement?.top ?? 0}px`,
-                    transform: placement?.transform ?? "none",
+                    left: 0,
+                    top: 0,
+                    // Measure pass renders un-translated and hidden; useLayoutEffect places it before paint.
+                    transform: placement == null ? "none" : `translate(${placement.x}px, ${placement.y}px)`,
                     visibility: placement == null ? "hidden" : "visible",
                     zIndex: 1000050,
                     pointerEvents: "none",
+                    boxSizing: "border-box",
                     maxWidth: "240rem",
                     paddingTop: "7rem",
                     paddingRight: "10rem",

@@ -44,6 +44,7 @@ namespace HoverColors.Localization
 
                 // Tabs
                 { m_Settings.GetOptionTabLocaleID(HoverColorsSettings.Actions), "การทำงาน" },
+                { m_Settings.GetOptionTabLocaleID(HoverColorsSettings.KeyBindings), "ปุ่มลัด" },
                 { m_Settings.GetOptionTabLocaleID(HoverColorsSettings.About), "เกี่ยวกับ" },
 
                 // Groups

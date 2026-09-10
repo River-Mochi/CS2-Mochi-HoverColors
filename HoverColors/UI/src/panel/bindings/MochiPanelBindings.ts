@@ -27,6 +27,11 @@ export const ownerA$ = bindValue<number>(CHANNEL, "OwnerA", 0.702);
 
 export const fillA$ = bindValue<number>(CHANNEL, "FillA", 0);
 
+// Fill tint. White is neutral: the fill renders in the Outline color, as it did before the swatch.
+export const fillR$ = bindValue<number>(CHANNEL, "FillR", 1);
+export const fillG$ = bindValue<number>(CHANNEL, "FillG", 1);
+export const fillB$ = bindValue<number>(CHANNEL, "FillB", 1);
+
 export const districtR$ = bindValue<number>(CHANNEL, "DistrictR", 128 / 255);
 export const districtG$ = bindValue<number>(CHANNEL, "DistrictG", 128 / 255);
 export const districtB$ = bindValue<number>(CHANNEL, "DistrictB", 128 / 255);

@@ -44,6 +44,7 @@ namespace HoverColors.Localization
 
                 // Tabs
                 { m_Settings.GetOptionTabLocaleID(HoverColorsSettings.Actions), "Eylemler" },
+                { m_Settings.GetOptionTabLocaleID(HoverColorsSettings.KeyBindings), "Kısayollar" },
                 { m_Settings.GetOptionTabLocaleID(HoverColorsSettings.About), "Hakkında" },
 
                 // Groups
