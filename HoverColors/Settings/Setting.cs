@@ -75,8 +75,6 @@ namespace HoverColors.Settings
         //   - OwnerR/G/B   → parent/owner highlight color, e.g. main building while placing sub-buildings
         //   - OutlineA     → outline halo edge opacity  (material _OuterColor.a)
         //   - FillA        → fill overlay opacity inside the silhouette (material _InnerColor.a)
-        // The dropped OutlineInner*/OutlineOuter* fields from the early alpha are gone — their
-        // saved values from the .coc file are ignored and replaced by SetDefaults() on next load.
         // -----------------------------------------------------------------------
 
         [SettingsUIHidden]
@@ -160,7 +158,6 @@ namespace HoverColors.Settings
 
         [SettingsUIHidden]
         public float Preset2FillA { get; set; }
-
 
         // Four persisted preset slots shown as two buttons in the in-city panel.
         // ActivePresetSet 0 = Set A, 1 = Set B. The panel still shows P1/P2 only.

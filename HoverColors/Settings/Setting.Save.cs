@@ -21,7 +21,7 @@ namespace HoverColors.Settings
 
     public partial class HoverColorsSettings
     {
-        private readonly object m_SaveGate = new object();
+        private readonly object m_SaveGate = new();
         private bool m_SaveInProgress;
         private bool m_SaveAgainRequested;
 

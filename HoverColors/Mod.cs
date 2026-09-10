@@ -69,7 +69,7 @@ namespace HoverColors
                 return;
             }
 
-            HoverColorsSettings setting = new HoverColorsSettings(this);
+            HoverColorsSettings setting = new(this);
             Settings = setting;
 
             try

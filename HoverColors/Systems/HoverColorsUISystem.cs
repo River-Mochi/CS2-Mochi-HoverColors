@@ -200,7 +200,7 @@ namespace HoverColors.UI
 
         private ValueBinding<T> AddValueBinding<T>(string name, T initialValue)
         {
-            ValueBinding<T> binding = new ValueBinding<T>(Mod.ModId, name, initialValue);
+            ValueBinding<T> binding = new(Mod.ModId, name, initialValue);
             AddBinding(binding);
             return binding;
         }
