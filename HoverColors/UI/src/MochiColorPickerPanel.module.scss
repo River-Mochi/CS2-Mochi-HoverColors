@@ -55,6 +55,7 @@
     --hc-uses-vanilla-panel-surface: 1;
 }
 
+// Idle header sits darker than the body so the title bar reads as its own strip.
 .titleBar {
     min-height: 20rem;
     display: flex;
@@ -62,11 +63,20 @@
     margin: -8rem -1rem 0 -1rem;
     padding: 8rem 6rem 1rem 6rem;
     border-radius: 12rem 12rem 0 0;
-    background-color: transparent;
+    background-color: rgba(6, 14, 19, 0.30);
     transition: background-color 120ms ease-out;
 
     &:hover {
         background-color: rgba(254, 255, 255, 0.08);
+    }
+}
+
+// Vanilla panel surface is already dark, so the same overlay would disappear into it.
+.panelDarker .titleBar {
+    background-color: rgba(0, 0, 0, 0.24);
+
+    &:hover {
+        background-color: rgba(254, 255, 255, 0.10);
     }
 }
 
@@ -85,8 +95,9 @@
     user-select: none;
 }
 
+// Idle title is blue; hover/drag flips it to white (reverse of the original pair).
 .titleText {
-    color: rgba(254, 255, 255, 0.96);
+    color: #54d7ff;
     font-size: var(--hc-title-font-size);
     font-weight: 600;
     letter-spacing: var(--hc-title-letter-spacing);
@@ -98,7 +109,7 @@
 
 .titleBar:hover .titleText,
 .titleDragHandleActive .titleText {
-    color: #54d7ff;
+    color: rgba(254, 255, 255, 0.96);
 }
 
 .eyeButton,
@@ -156,6 +167,11 @@
 .eyeButton:hover .eyeIcon {
   opacity: 1;
   transform: scale(1.10);
+}
+
+// Highlights OFF: keep the red slash at full strength so the state is obvious.
+.eyeButton .eyeIconOff {
+  opacity: 1;
 }
 
 .infoButton,

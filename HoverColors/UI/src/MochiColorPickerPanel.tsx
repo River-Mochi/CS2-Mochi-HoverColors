@@ -65,6 +65,8 @@ import { usePresetHold } from "./panel/hooks/usePresetHold";
 import { SideTooltip, SideTooltipProvider } from "./panel/tooltip/SideTooltip";
 import infoIconSrc from "../images/AdvisorInfoViewWhite.svg";
 import closeIconSrc from "../images/Close.svg";
+// Highlights-OFF eye: mod icon so the slash can be red. ON state keeps the vanilla eye.
+import eyeOffIconSrc from "../images/EyeOffRedSlash.svg";
 import styles from "./MochiColorPickerPanel.module.scss";
 
 type MochiColorPickerPanelProps = {
@@ -445,9 +447,9 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
                             >
                                 <img
                                     src={hoverHighlightsSuppressed
-                                        ? "Media/PhotoMode/HideUIOn.svg"
+                                        ? eyeOffIconSrc
                                         : "Media/PhotoMode/HideUIOff.svg"}
-                                    className={styles.eyeIcon}
+                                    className={`${styles.eyeIcon} ${hoverHighlightsSuppressed ? styles.eyeIconOff : ""}`}
                                     alt=""
                                 />
                             </Button>
