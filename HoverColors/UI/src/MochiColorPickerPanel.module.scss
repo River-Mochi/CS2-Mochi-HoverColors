@@ -162,10 +162,11 @@
     transform: scale(1.10);
 }
 
+// Deliberately the largest header glyph: it is the one state indicator players scan for.
 .eyeButton .eyeIcon {
-  width: 18rem;
-  height: 18rem;
-  opacity: 0.88;
+  width: 22rem;
+  height: 22rem;
+  opacity: 0.95;
 }
 .eyeButton:hover .eyeIcon {
   opacity: 1;

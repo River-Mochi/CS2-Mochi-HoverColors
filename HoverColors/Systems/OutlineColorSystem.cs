@@ -47,7 +47,6 @@ namespace HoverColors.Systems
     using Game.Prefabs;
     using Game.Rendering;
     using Game.Tools;
-    using HoverColors.Localization;
     using HoverColors.Settings;
     using Unity.Entities;
     using UnityEngine;
@@ -60,31 +59,31 @@ namespace HoverColors.Systems
 
         // Vanilla cyan fallbacks used by captured/override paths.
         // New-install live HC color may intentionally be different.
-        private const float VanillaR = 0.502f;
-        private const float VanillaG = 0.869f;
-        private const float VanillaB = 1f;
-        private const float VanillaOutlineA = 0.855f;
-        private const float VanillaFillA = 0f;
-        private const float VanillaOwnerR = 0.247f;
-        private const float VanillaOwnerG = 0.981f;
-        private const float VanillaOwnerB = 0.247f;
-        private const float VanillaOwnerA = 0.702f;
-        private const float RoadRecommendedOutlineA = 0.75f;
-        private const float MaterialResolveRetrySeconds = 0.5f;
+        private const float kVanillaR = 0.502f;
+        private const float kVanillaG = 0.869f;
+        private const float kVanillaB = 1f;
+        private const float kVanillaOutlineA = 0.855f;
+        private const float kVanillaFillA = 0f;
+        private const float kVanillaOwnerR = 0.247f;
+        private const float kVanillaOwnerG = 0.981f;
+        private const float kVanillaOwnerB = 0.247f;
+        private const float kVanillaOwnerA = 0.702f;
+        private const float kRoadRecommendedOutlineA = 0.75f;
+        private const float kMaterialResolveRetrySeconds = 0.5f;
 
         // Cached so the per-frame path never re-hashes the property name.
         private static readonly int s_OutlineWidthProperty = Shader.PropertyToID("_OutlineWidth");
 
-        public static Color CapturedHoveredColor { get; private set; } = new Color(VanillaR, VanillaG, VanillaB, VanillaOutlineA);
-        public static Color CapturedOwnerColor { get; private set; } = new Color(VanillaOwnerR, VanillaOwnerG, VanillaOwnerB, VanillaOwnerA);
-        public static Color CapturedOuterColor { get; private set; } = new Color(1f, 1f, 1f, VanillaOutlineA);
-        public static Color CapturedInnerColor { get; private set; } = new Color(1f, 1f, 1f, VanillaFillA);
+        public static Color CapturedHoveredColor { get; private set; } = new Color(kVanillaR, kVanillaG, kVanillaB, kVanillaOutlineA);
+        public static Color CapturedOwnerColor { get; private set; } = new Color(kVanillaOwnerR, kVanillaOwnerG, kVanillaOwnerB, kVanillaOwnerA);
+        public static Color CapturedOuterColor { get; private set; } = new Color(1f, 1f, 1f, kVanillaOutlineA);
+        public static Color CapturedInnerColor { get; private set; } = new Color(1f, 1f, 1f, kVanillaFillA);
         public static Color CapturedWarningColor { get; private set; } = new Color(1f, 1f, 0.5f, 0.447058827f);
         public static Color CapturedErrorColor { get; private set; } = new Color(1f, 0.5f, 0.5f, 0.447058827f);
         // Placeholder until the real runtime width is read; nothing is written before that happens.
         public static float CapturedOutlineWidth { get; private set; } = 1f;
-        public static float CapturedOutlineA { get; private set; } = VanillaOutlineA;
-        public static float CapturedFillA { get; private set; } = VanillaFillA;
+        public static float CapturedOutlineA { get; private set; } = kVanillaOutlineA;
+        public static float CapturedFillA { get; private set; } = kVanillaFillA;
         public static bool HasCapturedVanillaDefaults { get; private set; }
 
         private EntityQuery m_RenderSettingsQuery;
@@ -100,10 +99,15 @@ namespace HoverColors.Systems
         private bool m_MaterialDefaultsCaptured;
         private bool m_CaptureLogged;
 
+        // Tracks that m_OutlineMaterial once held a live reference, so a later null can be told
+        // apart from "never resolved" - Unity reports a destroyed Material as null.
+        private bool m_OutlineMaterialResolved;
+
         // Thickness capture is deliberately independent of m_MaterialDefaultsCaptured: if a future
         // game build drops _OutlineWidth, colors and alpha must keep working untouched.
         private bool m_OutlineWidthCaptured;
-        private bool m_OutlineWidthUnavailable;
+        private bool m_OutlineWidthMissing;
+        private bool m_OutlineThicknessApplied;
         private bool m_HasWrittenOutlineWidth;
         private float m_LastWrittenOutlineWidth;
 
@@ -161,6 +165,7 @@ namespace HoverColors.Systems
                 return;
             }
 
+            InvalidateCacheIfMaterialDestroyed();
             TryCaptureVanillaDefaults();
 
             float r, g, b, outlineA, fillA, ownerR, ownerG, ownerB, ownerA;
@@ -252,7 +257,7 @@ namespace HoverColors.Systems
                 r = hovered.r;
                 g = hovered.g;
                 b = hovered.b;
-                outlineA = Mathf.Min(CapturedOutlineA, RoadRecommendedOutlineA);
+                outlineA = Mathf.Min(CapturedOutlineA, kRoadRecommendedOutlineA);
                 fillA = CapturedFillA;
                 fillR = CapturedInnerColor.r;
                 fillG = CapturedInnerColor.g;
@@ -309,49 +314,89 @@ namespace HoverColors.Systems
             ref ownerA,
             ref palette);
 
-            // Hot-path: neither effective slider value nor the override flag has shifted.
-            if (m_Applied
-                && r == m_LastR
-                && g == m_LastG
-                && b == m_LastB
-                && outlineA == m_LastOutlineA
-                && fillA == m_LastFillA
-                && fillR == m_LastFillR
-                && fillG == m_LastFillG
-                && fillB == m_LastFillB
-                && thicknessScale == m_LastOutlineThicknessScale
-                && ownerR == m_LastOwnerR
-                && ownerG == m_LastOwnerG
-                && ownerB == m_LastOwnerB
-                && ownerA == m_LastOwnerA
-                && palette == m_LastPalette)
+            // Two independent dirty states. m_Applied predates thickness and means only that the
+            // effective color/palette landed; a shader with no _OutlineWidth must never leave the
+            // color path looking dirty forever, and vice versa.
+            bool colorsNeedApply = !m_Applied
+                || r != m_LastR
+                || g != m_LastG
+                || b != m_LastB
+                || outlineA != m_LastOutlineA
+                || fillA != m_LastFillA
+                || fillR != m_LastFillR
+                || fillG != m_LastFillG
+                || fillB != m_LastFillB
+                || ownerR != m_LastOwnerR
+                || ownerG != m_LastOwnerG
+                || ownerB != m_LastOwnerB
+                || ownerA != m_LastOwnerA
+                || palette != m_LastPalette;
+
+            bool thicknessNeedsApply = !m_OutlineThicknessApplied
+                || !ApproximatelyEqual(thicknessScale, m_LastOutlineThicknessScale);
+
+            if (!colorsNeedApply && !thicknessNeedsApply)
             {
                 return;
             }
 
-            bool ecsOk = ApplyRenderingSettingsColors(r, g, b, outlineA, ownerR, ownerG, ownerB, ownerA, palette);
-            bool matOk = ApplyOutlineMaterialColors(r, g, b, outlineA, fillA, fillR, fillG, fillB, palette);
-            ApplyOutlineWidth(thicknessScale);
-
-            // Only cache the snapshot when BOTH writes land — otherwise retry next frame.
-            if (ecsOk && matOk)
+            if (colorsNeedApply)
             {
-                m_LastR = r;
-                m_LastG = g;
-                m_LastB = b;
-                m_LastOutlineA = outlineA;
-                m_LastFillA = fillA;
-                m_LastFillR = fillR;
-                m_LastFillG = fillG;
-                m_LastFillB = fillB;
-                m_LastOutlineThicknessScale = thicknessScale;
-                m_LastOwnerR = ownerR;
-                m_LastOwnerG = ownerG;
-                m_LastOwnerB = ownerB;
-                m_LastOwnerA = ownerA;
-                m_LastPalette = palette;
-                m_Applied = true;
+                bool ecsOk = ApplyRenderingSettingsColors(r, g, b, outlineA, ownerR, ownerG, ownerB, ownerA, palette);
+                bool matOk = ApplyOutlineMaterialColors(r, g, b, outlineA, fillA, fillR, fillG, fillB, palette);
+
+                // Only cache the snapshot when BOTH writes land - otherwise retry next frame.
+                if (ecsOk && matOk)
+                {
+                    m_LastR = r;
+                    m_LastG = g;
+                    m_LastB = b;
+                    m_LastOutlineA = outlineA;
+                    m_LastFillA = fillA;
+                    m_LastFillR = fillR;
+                    m_LastFillG = fillG;
+                    m_LastFillB = fillB;
+                    m_LastOwnerR = ownerR;
+                    m_LastOwnerG = ownerG;
+                    m_LastOwnerB = ownerB;
+                    m_LastOwnerA = ownerA;
+                    m_LastPalette = palette;
+                    m_Applied = true;
+                }
             }
+
+            // Snapshot the scale only when a write actually reached the shader, so an unresolved
+            // material can never be remembered as "thickness applied".
+            if (thicknessNeedsApply && ApplyOutlineWidth(thicknessScale))
+            {
+                m_LastOutlineThicknessScale = thicknessScale;
+                m_OutlineThicknessApplied = true;
+            }
+        }
+
+        // Unity's operator== reports a destroyed Material as null while the reference is still set.
+        // A scene or render-pipeline reload therefore hands us a brand new material, and every
+        // captured vanilla value belongs to the old one.
+        private void InvalidateCacheIfMaterialDestroyed()
+        {
+            if (!m_OutlineMaterialResolved || m_OutlineMaterial != null)
+            {
+                return;
+            }
+
+            m_OutlineMaterialResolved = false;
+            m_MaterialDefaultsCaptured = false;
+            m_OutlineWidthCaptured = false;
+            m_OutlineWidthMissing = false;
+            m_OutlineThicknessApplied = false;
+
+            // The instance HC wrote to is gone, so there is nothing left to restore on it.
+            m_HasWrittenOutlineWidth = false;
+
+            // Force the color path to rewrite once the replacement material has been captured.
+            m_Applied = false;
+
+            LogUtils.Info(() => $"{Mod.ModTag} Outline material was destroyed; re-acquiring and re-capturing vanilla values.");
         }
 
         private void TryCaptureVanillaDefaults()
@@ -396,7 +441,7 @@ namespace HoverColors.Systems
                 m_MaterialDefaultsCaptured = true;
             }
 
-            if (!m_OutlineWidthCaptured && !m_OutlineWidthUnavailable && TryResolveOutlineMaterial())
+            if (!m_OutlineWidthCaptured && !m_OutlineWidthMissing && TryResolveOutlineMaterial())
             {
                 if (m_OutlineMaterial!.HasProperty(s_OutlineWidthProperty))
                 {
@@ -406,7 +451,9 @@ namespace HoverColors.Systems
                 }
                 else
                 {
-                    m_OutlineWidthUnavailable = true;
+                    // Scoped to this material instance, not the session: a replacement material is
+                    // checked again once InvalidateCacheIfMaterialDestroyed clears this.
+                    m_OutlineWidthMissing = true;
                     LogUtils.WarnOnce(
                         "outline-width-property-missing",
                         () => $"{Mod.ModTag} Outline material has no _OutlineWidth; thickness control is disabled. Colors and opacity are unaffected.");
@@ -563,17 +610,20 @@ namespace HoverColors.Systems
 
         // Optional extra on the same cached material. Runs only when OnUpdate already decided
         // something changed, so this is not a per-frame reassert and does not fight other mods.
-        private void ApplyOutlineWidth(float thicknessScale)
+        private bool ApplyOutlineWidth(float thicknessScale)
         {
+            // CapturedOutlineWidth is only trustworthy once it has been read off the material that
+            // is live right now, so no width is written before that happens.
             if (!m_OutlineWidthCaptured || m_OutlineMaterial == null)
             {
-                return;
+                return false;
             }
 
             float desiredWidth = CapturedOutlineWidth * thicknessScale;
             m_OutlineMaterial.SetFloat(s_OutlineWidthProperty, desiredWidth);
             m_LastWrittenOutlineWidth = desiredWidth;
             m_HasWrittenOutlineWidth = true;
+            return true;
         }
 
         // Only give the width back if it still holds the value HC last wrote. If another mod has
@@ -802,7 +852,7 @@ namespace HoverColors.Systems
                 return false;
             }
 
-            m_NextMaterialResolveTime = now + MaterialResolveRetrySeconds;
+            m_NextMaterialResolveTime = now + kMaterialResolveRetrySeconds;
 
             CustomPassVolume[] volumes = UnityEngine.Object.FindObjectsOfType<CustomPassVolume>();
             for (int i = 0; i < volumes.Length; i++)
@@ -818,6 +868,7 @@ namespace HoverColors.Systems
                     if (volume.customPasses[j] is OutlinesWorldUIPass pass && pass.m_FullscreenOutline != null)
                     {
                         m_OutlineMaterial = pass.m_FullscreenOutline;
+                        m_OutlineMaterialResolved = true;
                         LogUtils.Info(() => $"{Mod.ModTag} OutlinesWorldUIPass material cached");
                         return true;
                     }

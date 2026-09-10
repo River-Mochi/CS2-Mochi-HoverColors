@@ -12,7 +12,6 @@
 namespace HoverColors.UI
 {
     using System;
-    using HoverColors.Localization;
     using HoverColors.Settings;
     using HoverColors.Systems;
 
@@ -34,10 +33,13 @@ namespace HoverColors.UI
 
             UnityEngine.Color hovered = OutlineColorSystem.CapturedHoveredColor;
             UnityEngine.Color owner = OutlineColorSystem.CapturedOwnerColor;
+            // Thickness counts here because the Outline reset button also restores it, so the
+            // indicator would otherwise claim "vanilla" while the button still had work to do.
             return SameColor(settings.OutlineR, settings.OutlineG, settings.OutlineB, settings.OutlineA,
                     hovered.r, hovered.g, hovered.b, OutlineColorSystem.CapturedOutlineA)
                 && SameColor(settings.OwnerR, settings.OwnerG, settings.OwnerB, settings.OwnerA,
-                    owner.r, owner.g, owner.b, owner.a);
+                    owner.r, owner.g, owner.b, owner.a)
+                && IsVanillaOutlineThickness(settings);
         }
 
         // True when the live swatch exactly matches what's stored in that slot.

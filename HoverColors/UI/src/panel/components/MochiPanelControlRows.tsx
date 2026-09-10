@@ -409,7 +409,6 @@ export const MochiPanelControlRows = ({
                     value={outlineThicknessScale}
                     start={0}
                     end={2}
-                    step={0.1}
                     gamepadStep={0.1}
                     onChange={handleOutlineThicknessChange}
                   />

@@ -5,24 +5,27 @@
 // uses a CSS transform, position:fixed would be broken, so the tooltip is an absolute child of the
 // (transformed) anchor and is positioned with anchor-relative coordinates measured on hover.
 //
-// Positioning is transform-only on purpose. The layer stays at left:0/top:0 so its shrink-to-fit
-// width is always measured against the full anchor width; moving it with `left` instead would let
-// the remaining space in the containing block re-wrap the text, so the width used for the fit tests
-// would not match the width that actually renders. transform does not affect layout, so measured
-// size and final size are always the same.
+// NOTHING about the tooltip itself is measured, on purpose. Earlier versions measured the layer
+// after mounting it and placed it from that; in Cohtml a getBoundingClientRect() taken in the same
+// frame the content changed is not reliable, so identical hovers produced different placements and
+// tooltips sometimes landed on top of the control. Every number here comes from the anchor, panel
+// and control rects, which are stable because those elements were laid out long before the hover.
 //
-// The measure pass hides the layer with opacity, NOT visibility: Cohtml reports an empty rect for a
-// visibility:hidden element, and a zero width made every side look like it fit, so a tooltip whose
-// side did not really fit was placed straight over the panel.
+// Instead of a measured size the layer is capped at the panel's own width, and the edges the layout
+// needs are produced by CSS transforms (-100% to right-align, -50% to centre) rather than by
+// arithmetic. That makes placement a pure function of the panel's position:
 //
-// Placement is viewport-aware because the panel is draggable: a requested side can run off screen
-// (the left-side reset tooltips once the panel sits near the left edge, the right-side ones once it
-// sits near the right edge). The layer is measured after it mounts, the requested side is kept if it
-// fits, otherwise the first side in its fallback chain that fits wins, and "below the panel" is the
-// last resort. Only the cross axis is ever clamped — clamping a side's own axis is what slides a
-// tooltip back on top of the panel.
+//   left   right edge on the panel's left edge,  vertically centred on the control
+//   right  left edge on the panel's right edge,  vertically centred on the control
+//   above  bottom edge on the panel's top edge,  left edge flush with the panel
+//   below  top edge on the panel's bottom edge,  left edge flush with the panel
+//
+// Because the cap equals the panel width, an above/below tooltip can never stick out past the panel,
+// and a left/right one can never reach back over it. Only the horizontal sides can run out of room,
+// so only those fall back (to "below"); above/below never flip, which is what keeps the title-bar
+// tooltip reliably above the panel.
 
-import React, { createContext, useContext, useLayoutEffect, useRef, useState, type ReactNode, type RefObject } from "react";
+import React, { createContext, useContext, useState, type ReactNode, type RefObject } from "react";
 
 export type SideTooltipSide = "left" | "right" | "above" | "below";
 
@@ -39,77 +42,13 @@ const GAP_PX = 8;
 // Minimum pixels kept between the tooltip and the game window edge.
 const EDGE_PX = 8;
 
-// First side that fits wins. "below" comes before the opposite side because the panel normally sits
-// high on screen, and dropping under the panel is what the bottom-bar tooltips already do.
-const FALLBACK_SIDES: Record<SideTooltipSide, SideTooltipSide[]> = {
-    left: ["left", "below", "right", "above"],
-    right: ["right", "below", "left", "above"],
-    above: ["above", "below", "right", "left"],
-    below: ["below", "above", "right", "left"],
-};
-
-type Box = { left: number; top: number; width: number; height: number };
-
-// Anchor-relative geometry plus the anchor origin, which is what makes the viewport tests possible.
-type TipRequest = {
+type TipState = {
     content: ReactNode;
-    side: SideTooltipSide;
-    control: Box;
-    panel: Box;
-    anchorLeft: number;
-    anchorTop: number;
-};
-
-type TipPlacement = { x: number; y: number };
-
-const clamp = (value: number, min: number, max: number) => (min > max ? min : Math.min(Math.max(value, min), max));
-
-const fitsSide = (side: SideTooltipSide, tip: TipRequest, width: number, height: number) => {
-    const { panel, anchorLeft, anchorTop } = tip;
-    const panelLeft = anchorLeft + panel.left;
-    const panelTop = anchorTop + panel.top;
-
-    switch (side) {
-        case "left":
-            return panelLeft - GAP_PX - width >= EDGE_PX;
-        case "right":
-            return panelLeft + panel.width + GAP_PX + width <= window.innerWidth - EDGE_PX;
-        case "above":
-            return panelTop - GAP_PX - height >= EDGE_PX;
-        default:
-            return panelTop + panel.height + GAP_PX + height <= window.innerHeight - EDGE_PX;
-    }
-};
-
-// Returns the tooltip's top-left corner in anchor-local pixels.
-const placeTip = (tip: TipRequest, width: number, height: number): TipPlacement => {
-    const { control, panel, anchorLeft, anchorTop } = tip;
-    const belowPanel = panel.top + panel.height + GAP_PX;
-
-    // An empty rect means the layer has not laid out yet and nothing can be measured against it.
-    // Park it under the panel, the one spot that cannot cover the control being hovered.
-    if (width <= 0 || height <= 0) {
-        return { x: panel.left, y: belowPanel };
-    }
-
-    const side = FALLBACK_SIDES[tip.side].find(candidate => fitsSide(candidate, tip, width, height)) ?? "below";
-
-    const controlMidX = control.left + control.width / 2;
-    const controlMidY = control.top + control.height / 2;
-    const clampX = (x: number) => clamp(x, EDGE_PX - anchorLeft, window.innerWidth - EDGE_PX - width - anchorLeft);
-    const clampY = (y: number) => clamp(y, EDGE_PX - anchorTop, window.innerHeight - EDGE_PX - height - anchorTop);
-
-    switch (side) {
-        case "left":
-            return { x: panel.left - GAP_PX - width, y: clampY(controlMidY - height / 2) };
-        case "right":
-            return { x: panel.left + panel.width + GAP_PX, y: clampY(controlMidY - height / 2) };
-        case "above":
-            return { x: clampX(controlMidX - width / 2), y: panel.top - GAP_PX - height };
-        default:
-            return { x: clampX(controlMidX - width / 2), y: belowPanel };
-    }
-};
+    left: number;
+    top: number;
+    transform: string;
+    maxWidth: number;
+} | null;
 
 type ProviderProps = {
     anchorRef: RefObject<HTMLElement | null>;
@@ -119,32 +58,13 @@ type ProviderProps = {
 };
 
 export const SideTooltipProvider = ({ anchorRef, panelRef, disabled = false, children }: ProviderProps) => {
-    const [tip, setTip] = useState<TipRequest | null>(null);
-    const [placement, setPlacement] = useState<TipPlacement | null>(null);
-    const tipRef = useRef<HTMLDivElement>(null);
+    const [tip, setTip] = useState<TipState>(null);
 
     React.useEffect(() => {
         if (disabled) {
             setTip(null);
-            setPlacement(null);
         }
     }, [disabled]);
-
-    // Runs before paint, so the un-placed first render is never visible.
-    useLayoutEffect(() => {
-        if (tip == null) {
-            setPlacement(null);
-            return;
-        }
-
-        const element = tipRef.current;
-        if (element == null) {
-            return;
-        }
-
-        const rect = element.getBoundingClientRect();
-        setPlacement(placeTip(tip, rect.width, rect.height));
-    }, [tip]);
 
     const show: ShowFn = (side, content, control) => {
         if (disabled) {
@@ -157,49 +77,48 @@ export const SideTooltipProvider = ({ anchorRef, panelRef, disabled = false, chi
             return;
         }
 
-        // Make everything relative to the anchor so the absolute tooltip moves with the panel.
-        setPlacement(null);
-        setTip({
-            content,
-            side,
-            control: {
-                left: control.left - anchor.left,
-                top: control.top - anchor.top,
-                width: control.width,
-                height: control.height,
-            },
-            panel: {
-                left: panel.left - anchor.left,
-                top: panel.top - anchor.top,
-                width: panel.width,
-                height: panel.height,
-            },
-            anchorLeft: anchor.left,
-            anchorTop: anchor.top,
-        });
+        // Anchor-relative so the absolute tooltip travels with the dragged panel.
+        const panelLeft = panel.left - anchor.left;
+        const panelTop = panel.top - anchor.top;
+        const controlMidY = control.top - anchor.top + control.height / 2;
+
+        // The layer is never wider than the panel, so the panel's own width is a safe stand-in for
+        // the tooltip's width in the fit tests below.
+        const maxWidth = panel.width;
+
+        let placed = side;
+        if (side === "left" && panel.left - GAP_PX - maxWidth < EDGE_PX) {
+            placed = "below";
+        } else if (side === "right" && panel.right + GAP_PX + maxWidth > window.innerWidth - EDGE_PX) {
+            placed = "below";
+        }
+
+        if (placed === "left") {
+            setTip({ content, left: panelLeft - GAP_PX, top: controlMidY, transform: "translate(-100%, -50%)", maxWidth });
+        } else if (placed === "right") {
+            setTip({ content, left: panelLeft + panel.width + GAP_PX, top: controlMidY, transform: "translateY(-50%)", maxWidth });
+        } else if (placed === "above") {
+            setTip({ content, left: panelLeft, top: panelTop - GAP_PX, transform: "translateY(-100%)", maxWidth });
+        } else {
+            setTip({ content, left: panelLeft, top: panelTop + panel.height + GAP_PX, transform: "none", maxWidth });
+        }
     };
 
-    const hide = () => {
-        setTip(null);
-        setPlacement(null);
-    };
+    const hide = () => setTip(null);
 
     return (
         <SideTooltipContext.Provider value={{ show, hide }}>
             {children}
             {tip && (
-                <div ref={tipRef} style={{
+                <div style={{
                     position: "absolute",
-                    left: 0,
-                    top: 0,
-                    // Measure pass renders un-translated and transparent; useLayoutEffect places it
-                    // before paint. opacity (not visibility) so the rect it reports is real.
-                    transform: placement == null ? "none" : `translate(${placement.x}px, ${placement.y}px)`,
-                    opacity: placement == null ? 0 : 1,
+                    left: `${tip.left}px`,
+                    top: `${tip.top}px`,
+                    transform: tip.transform,
                     zIndex: 1000050,
                     pointerEvents: "none",
                     boxSizing: "border-box",
-                    maxWidth: "240rem",
+                    maxWidth: `${tip.maxWidth}px`,
                     paddingTop: "7rem",
                     paddingRight: "10rem",
                     paddingBottom: "7rem",
