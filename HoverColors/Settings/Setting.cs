@@ -17,13 +17,11 @@ namespace HoverColors.Settings
     using Game.Input;       // BindingKeyboard
     using Game.Modding;     // IMod
     using Game.Settings;    // ModSetting, attributes
-    using Game.UI;          // ProxyBinding
-    using Game.UI.Widgets;  // Unit.kPercentage
 
     [FileLocation("ModsSettings/HoverColors/HoverColors")]
     [SettingsUITabOrder(Actions, KeyBindings, About)]
-    [SettingsUIGroupOrder(kToolColors, kPanel, kKeyBindings, kAboutInfo, kAboutLinks, kAboutDedication)]
-    [SettingsUIShowGroupName(kToolColors, kPanel, kKeyBindings, kAboutDedication)]
+    [SettingsUIGroupOrder(kToolColors, kPanel, kReset, kKeyBindings, kAboutInfo, kAboutLinks, kAboutDedication)]
+    [SettingsUIShowGroupName(kToolColors, kPanel, kReset, kKeyBindings, kAboutDedication)]
     public partial class HoverColorsSettings : ModSetting
     {
         // Tab IDs
@@ -34,6 +32,7 @@ namespace HoverColors.Settings
         // Group IDs
         internal const string kToolColors = nameof(kToolColors);
         internal const string kPanel = nameof(kPanel);
+        internal const string kReset = nameof(kReset);
         internal const string kKeyBindings = nameof(kKeyBindings);
         internal const string kAboutInfo = nameof(kAboutInfo);
         internal const string kAboutLinks = nameof(kAboutLinks);

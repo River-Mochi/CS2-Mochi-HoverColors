@@ -13,9 +13,7 @@
 namespace HoverColors.Localization
 {
     using System.Collections.Generic;
-
     using Colossal;
-
     using HoverColors.Settings;
 
     public sealed class LocaleEN : IDictionarySource
