@@ -51,7 +51,6 @@ namespace HoverColors.Localization
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kToolColors), "Kolory narzędzi" },
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kPanel), "Panel" },
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kKeyBindings), "Skróty" },
-                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kGuidelines), "Linie pomocnicze" },
                 // AboutInfo + AboutLinks intentionally have empty group headers.
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kAboutInfo), string.Empty },
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kAboutLinks), string.Empty },
@@ -110,19 +109,6 @@ namespace HoverColors.Localization
                     "- Najlepsze dla większości graczy z nowym Modern UI.\n" +
                     "\n" +
                     "Wypróbuj oba. Zmienia tylko tło panelu moda, nie interfejs gry."
-                },
-
-                // Guidelines opacity slider
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.GuidelineOpacityPercent)), "Krycie linii pomocniczych (alpha)" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.GuidelineOpacityPercent)),
-                    "Steruje kryciem przerywanej linii wyrównania, przydatne przy drogach, płotach, propach itd.\n" +
-                    "\n" +
-                    "**100%** domyślne gry.\n" +
-                    "**Niżej** bardziej przezroczyste.\n" +
-                    "**0%** ukrywa wszystko.\n" +
-                    "Zostań powyżej 15%, bo linia będzie słabo widoczna.\n" +
-                    "Ten sam suwak jest w panelu miasta. Oba są zsynchronizowane.\n" +
-                    "Zmiana tutaj wygodnie zmienia też suwak w panelu miasta."
                 },
 
                 // Keybinds

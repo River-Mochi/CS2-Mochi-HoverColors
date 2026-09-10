@@ -51,7 +51,6 @@ namespace HoverColors.Localization
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kToolColors), "工具颜色行为" },
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kPanel), "面板" },
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kKeyBindings), "快捷键" },
-                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kGuidelines), "辅助线" },
                 // AboutInfo + AboutLinks intentionally have empty group headers.
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kAboutInfo), string.Empty },
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kAboutLinks), string.Empty },
@@ -110,19 +109,6 @@ namespace HoverColors.Localization
                     "- 最适合使用新版 Modern UI 的大多数玩家。\n" +
                     "\n" +
                     "两个都试试。这里只改变此 mod 面板背景，不改变游戏 UI。"
-                },
-
-                // Guidelines opacity slider
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.GuidelineOpacityPercent)), "辅助线不透明度 (alpha)" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.GuidelineOpacityPercent)),
-                    "控制虚线对齐辅助线不透明度，放置道路、围栏、道具等时有用。\n" +
-                    "\n" +
-                    "**100%** 游戏默认。\n" +
-                    "**更低** 更透明。\n" +
-                    "**0%** 隐藏所有内容。\n" +
-                    "建议保持在15%以上，否则线很难看见。\n" +
-                    "城市 mod 面板里也有同一个滑条。两者同步变化。\n" +
-                    "改这里，城市面板中的滑条也会一起变化。"
                 },
 
                 // Keybinds

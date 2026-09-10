@@ -51,7 +51,6 @@ namespace HoverColors.Localization
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kToolColors), "ツール色の動作" },
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kPanel), "パネル" },
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kKeyBindings), "キー設定" },
-                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kGuidelines), "ガイド" },
                 // AboutInfo + AboutLinks intentionally have empty group headers.
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kAboutInfo), string.Empty },
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kAboutLinks), string.Empty },
@@ -110,19 +109,6 @@ namespace HoverColors.Localization
                     "- 新しいModern UIを使う多くのプレイヤー向け。\n" +
                     "\n" +
                     "両方試して好みを選んでください。変更されるのはこのMODパネルの背景だけです。"
-                },
-
-                // Guidelines opacity slider
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.GuidelineOpacityPercent)), "ガイドの不透明度 (alpha)" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.GuidelineOpacityPercent)),
-                    "道路、フェンス、プロップ配置に便利な、破線の整列ガイドの不透明度を制御します。\n" +
-                    "\n" +
-                    "**100%** ゲーム標準。\n" +
-                    "**低いほど** 透明。\n" +
-                    "**0%** すべて非表示。\n" +
-                    "15%以上がおすすめです。低すぎると線が見えません。\n" +
-                    "同じスライダーが街のMODパネルにもあります。両方同期します。\n" +
-                    "こちらを変えると、街のパネル側も変わります。"
                 },
 
                 // Keybinds

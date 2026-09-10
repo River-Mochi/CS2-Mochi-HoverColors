@@ -51,7 +51,6 @@ namespace HoverColors.Localization
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kToolColors), "도구 색상 동작" },
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kPanel), "패널" },
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kKeyBindings), "키 설정" },
-                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kGuidelines), "가이드" },
                 // AboutInfo + AboutLinks intentionally have empty group headers.
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kAboutInfo), string.Empty },
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kAboutLinks), string.Empty },
@@ -110,19 +109,6 @@ namespace HoverColors.Localization
                     "- 새 Modern UI를 쓰는 대부분의 플레이어에게 좋습니다.\n" +
                     "\n" +
                     "둘 다 써보고 고르세요. 이 모드 패널 배경만 바뀌며 게임 UI는 바뀌지 않습니다."
-                },
-
-                // Guidelines opacity slider
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.GuidelineOpacityPercent)), "가이드 불투명도 (alpha)" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.GuidelineOpacityPercent)),
-                    "도로, 울타리, 프롭 배치 등에 유용한 점선 정렬 가이드 불투명도를 제어합니다.\n" +
-                    "\n" +
-                    "**100%** 게임 기본값.\n" +
-                    "**낮을수록** 더 투명.\n" +
-                    "**0%** 모두 숨김.\n" +
-                    "15% 이상이 좋습니다. 너무 낮으면 선이 잘 안 보입니다.\n" +
-                    "같은 슬라이더가 도시 모드 패널에도 있습니다. 둘 다 동기화됩니다.\n" +
-                    "이 값을 바꾸면 도시 패널의 값도 함께 바뀝니다."
                 },
 
                 // Keybinds

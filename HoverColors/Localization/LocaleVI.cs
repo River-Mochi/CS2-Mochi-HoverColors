@@ -51,7 +51,6 @@ namespace HoverColors.Localization
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kToolColors), "Màu công cụ" },
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kPanel), "Bảng" },
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kKeyBindings), "Phím tắt" },
-                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kGuidelines), "Đường dẫn" },
                 // AboutInfo + AboutLinks intentionally have empty group headers.
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kAboutInfo), string.Empty },
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kAboutLinks), string.Empty },
@@ -110,19 +109,6 @@ namespace HoverColors.Localization
                     "- Hợp với đa số người chơi dùng Modern UI mới.\n" +
                     "\n" +
                     "Thử cả hai để chọn. Chỉ đổi nền bảng mod này, không đổi UI của game."
-                },
-
-                // Guidelines opacity slider
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.GuidelineOpacityPercent)), "Độ đục đường dẫn (alpha)" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.GuidelineOpacityPercent)),
-                    "Điều khiển độ đục của đường căn chỉnh nét đứt, hữu ích khi đặt đường, hàng rào, prop, v.v.\n" +
-                    "\n" +
-                    "**100%** mặc định game.\n" +
-                    "**Thấp hơn** trong suốt hơn.\n" +
-                    "**0%** ẩn tất cả.\n" +
-                    "Nên trên 15% để còn dễ thấy đường." +
-                    "Thanh trượt này cũng ở bảng mod trong thành phố. Cả hai đồng bộ.\n" +
-                    "Đổi cái này thì cái trong bảng thành phố cũng đổi theo."
                 },
 
                 // Keybinds

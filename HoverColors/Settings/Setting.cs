@@ -22,8 +22,8 @@ namespace HoverColors.Settings
 
     [FileLocation("ModsSettings/HoverColors/HoverColors")]
     [SettingsUITabOrder(Actions, KeyBindings, About)]
-    [SettingsUIGroupOrder(kToolColors, kPanel, kGuidelines, kKeyBindings, kAboutInfo, kAboutLinks, kAboutDedication)]
-    [SettingsUIShowGroupName(kToolColors, kPanel, kKeyBindings, kGuidelines, kAboutDedication)]
+    [SettingsUIGroupOrder(kToolColors, kPanel, kKeyBindings, kAboutInfo, kAboutLinks, kAboutDedication)]
+    [SettingsUIShowGroupName(kToolColors, kPanel, kKeyBindings, kAboutDedication)]
     public partial class HoverColorsSettings : ModSetting
     {
         // Tab IDs
@@ -34,7 +34,6 @@ namespace HoverColors.Settings
         // Group IDs
         internal const string kToolColors = nameof(kToolColors);
         internal const string kPanel = nameof(kPanel);
-        internal const string kGuidelines = nameof(kGuidelines);
         internal const string kKeyBindings = nameof(kKeyBindings);
         internal const string kAboutInfo = nameof(kAboutInfo);
         internal const string kAboutLinks = nameof(kAboutLinks);
@@ -535,9 +534,17 @@ namespace HoverColors.Settings
         // -----------------------------------------------------------------------
         // Actions tab — Panel readability and help
         // -----------------------------------------------------------------------
+        // Options UI lists a group in declaration order, so Darker panel is declared first to
+        // put it above the tooltips toggle.
+
+        // User-facing label is "Darker panel". LegacyUI's extra transparency exposed
+        // the need for this, but Modern UI players can use it too if they prefer
+        // stronger panel contrast.
+        [SettingsUISection(Actions, kPanel)]
+        public bool UseDarkerPanel { get; set; }
+
         // PanelTooltipsEnabled is player-facing now so new players do not accidentally
         // lose tooltip help from a title-bar button. The city info icon can only turn it back ON.
-
         [SettingsUISection(Actions, kPanel)]
         public bool PanelTooltipsEnabled { get; set; }
 
@@ -563,17 +570,11 @@ namespace HoverColors.Settings
         [SettingsUIHidden]
         public bool SpecializedIndustryAreasSuppressionInitialized { get; set; }
 
-        // User-facing label is "Darker panel". LegacyUI's extra transparency exposed
-        // the need for this, but Modern UI players can use it too if they prefer
-        // stronger panel contrast.
-        [SettingsUISection(Actions, kPanel)]
-        public bool UseDarkerPanel { get; set; }
-
         // -----------------------------------------------------------------------
-        // Actions tab — Guidelines
+        // Guidelines (in-city panel only)
         // -----------------------------------------------------------------------
-        // Only opacity stays in Options. Dashed guide color moved to the in-city panel
-        // so players can use the same color picker pattern as the other guideline colors.
+        // All guideline controls live on the city panel now, so none of these appear in Options.
+        // They are still persisted here and still read by the cs2/api bindings.
 
         [SettingsUIHidden]
         public int GuidelineLinesColorPreset { get; set; }
@@ -581,8 +582,7 @@ namespace HoverColors.Settings
         [SettingsUIHidden]
         public int GuidelinePreviewColorPreset { get; set; }
 
-        [SettingsUISlider(min = 0, max = 100, step = 5, scalarMultiplier = 1, unit = Unit.kPercentage)]
-        [SettingsUISection(Actions, kGuidelines)]
+        [SettingsUIHidden]
         public int GuidelineOpacityPercent { get; set; }
 
         // -----------------------------------------------------------------------
@@ -599,12 +599,12 @@ namespace HoverColors.Settings
         public ProxyBinding ToggleHoverHighlightsBinding { get; set; }
 
         [SettingsUISection(KeyBindings, kKeyBindings)]
-        [SettingsUIKeyboardBinding(BindingKeyboard.L, Mod.kToggleSurfaceToolAreasActionName)]
-        public ProxyBinding ToggleSurfaceToolAreasBinding { get; set; }
-
-        [SettingsUISection(KeyBindings, kKeyBindings)]
         [SettingsUIKeyboardBinding(BindingKeyboard.K, Mod.kTogglePresetActionName)]
         public ProxyBinding TogglePresetBinding { get; set; }
+
+        [SettingsUISection(KeyBindings, kKeyBindings)]
+        [SettingsUIKeyboardBinding(BindingKeyboard.L, Mod.kToggleSurfaceToolAreasActionName)]
+        public ProxyBinding ToggleSurfaceToolAreasBinding { get; set; }
 
         // -----------------------------------------------------------------------
         // About tab

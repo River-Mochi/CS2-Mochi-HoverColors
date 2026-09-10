@@ -51,7 +51,6 @@ namespace HoverColors.Localization
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kToolColors), "สีของเครื่องมือ" },
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kPanel), "แผง" },
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kKeyBindings), "ปุ่มลัด" },
-                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kGuidelines), "เส้นไกด์" },
                 // AboutInfo + AboutLinks intentionally have empty group headers.
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kAboutInfo), string.Empty },
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kAboutLinks), string.Empty },
@@ -110,19 +109,6 @@ namespace HoverColors.Localization
                     "- เหมาะกับผู้เล่นส่วนใหญ่ที่ใช้ Modern UI ใหม่\n" +
                     "\n" +
                     "ลองทั้งสองแบบแล้วเลือกที่ชอบ การตั้งค่านี้เปลี่ยนเฉพาะพื้นหลังแผงม็อด ไม่ใช่ UI เกม"
-                },
-
-                // Guidelines opacity slider
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.GuidelineOpacityPercent)), "ความทึบของเส้นไกด์ (alpha)" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.GuidelineOpacityPercent)),
-                    "ควบคุมความทึบของเส้นไกด์จัดแนวแบบประ ใช้ดีตอนวางถนน รั้ว prop ฯลฯ\n" +
-                    "\n" +
-                    "**100%** ค่าเกมเดิม\n" +
-                    "**ต่ำลง** โปร่งใสมากขึ้น\n" +
-                    "**0%** ซ่อนทั้งหมด\n" +
-                    "ควรเกิน 15% ไม่งั้นมองเส้นยาก\n" +
-                    "สไลเดอร์เดียวกันอยู่ในแผงเมือง ทั้งสองซิงก์กัน\n" +
-                    "ถ้าเปลี่ยนอันนี้ อันในแผงเมืองก็เปลี่ยนตาม"
                 },
 
                 // Keybinds

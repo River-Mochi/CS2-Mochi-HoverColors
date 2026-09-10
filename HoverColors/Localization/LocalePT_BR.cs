@@ -51,7 +51,6 @@ namespace HoverColors.Localization
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kToolColors), "Comportamento das cores" },
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kPanel), "Painel" },
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kKeyBindings), "Atalhos" },
-                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kGuidelines), "Guias" },
                 // AboutInfo + AboutLinks intentionally have empty group headers.
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kAboutInfo), string.Empty },
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kAboutLinks), string.Empty },
@@ -110,19 +109,6 @@ namespace HoverColors.Localization
                     "- Melhor para a maioria dos jogadores usando a nova UI moderna.\n" +
                     "\n" +
                     "Teste os dois e escolha. Isso só muda o fundo deste painel do mod, não a UI do jogo."
-                },
-
-                // Guidelines opacity slider
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.GuidelineOpacityPercent)), "Opacidade das guias (alpha)" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.GuidelineOpacityPercent)),
-                    "Controla a opacidade da guia tracejada de alinhamento, útil ao colocar estradas, cercas, props etc.\n" +
-                    "\n" +
-                    "**100%** padrão do jogo.\n" +
-                    "**Menor** mais transparente.\n" +
-                    "**0%** oculta tudo.\n" +
-                    "Fique acima de 15% ou a linha fica difícil de ver.\n" +
-                    "O mesmo controle fica no painel da cidade. Ambos ficam sincronizados.\n" +
-                    "Se você mudar este, o do painel da cidade muda junto."
                 },
 
                 // Keybinds

@@ -51,7 +51,6 @@ namespace HoverColors.Localization
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kToolColors), "Tool-Farbverhalten" },
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kPanel), "Panel" },
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kKeyBindings), "Tastenkürzel" },
-                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kGuidelines), "Hilfslinien" },
                 // AboutInfo + AboutLinks intentionally have empty group headers.
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kAboutInfo), string.Empty },
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kAboutLinks), string.Empty },
@@ -110,19 +109,6 @@ namespace HoverColors.Localization
                     "- Am besten für die meisten Spieler mit der neuen Modern UI.\n" +
                     "\n" +
                     "Probier beides aus! Das ändert nur den Hintergrund dieses Mod-Panels, nicht die Spiel-UI."
-                },
-
-                // Guidelines opacity slider
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.GuidelineOpacityPercent)), "Hilfslinien-Deckkraft (Alpha)" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.GuidelineOpacityPercent)),
-                    "Steuert die Deckkraft der gestrichelten Ausrichtungslinie, nützlich bei Straßen, Zäunen, Props usw.\n" +
-                    "\n" +
-                    "**100%** Spielstandard.\n" +
-                    "**Niedriger** transparenter.\n" +
-                    "**0%** blendet alles aus.\n" +
-                    "Bleib über 15%, sonst ist die Linie schwer zu sehen.\n" +
-                    "Derselbe Regler ist im Stadt-Panel. Beide sind synchron.\n" +
-                    "Änderst du diesen, ändert sich der im Stadt-Panel gleich mit."
                 },
 
                 // Keybinds

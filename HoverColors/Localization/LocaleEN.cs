@@ -51,7 +51,6 @@ namespace HoverColors.Localization
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kToolColors), "Tool Color Behavior" },
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kPanel), "Panel" },
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kKeyBindings), "Key bindings" },
-                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kGuidelines), "Guidelines" },
                 // AboutInfo + AboutLinks intentionally have empty group headers.
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kAboutInfo), string.Empty },
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kAboutLinks), string.Empty },
@@ -112,29 +111,17 @@ namespace HoverColors.Localization
                     "Try both and see which you prefer! This only changes the background of this mod panel and not the game's UI."
                 },
 
-                // Guidelines opacity slider
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.GuidelineOpacityPercent)), "Guidelines opacity (alpha)" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.GuidelineOpacityPercent)),
-                    "Controls dashed alignment guide opacity, useful while placing roads, fences, props, etc.\n" +
-                    "\n" +
-                    "**100%** game default.\n" +
-                    "**Lower** more transparent.\n" +
-                    "**0%** hides everything.\n" +
-                    "Stay above 15% or it's hard to see the line.\n" +
-                    "This same slider lives on the city mod panel. Both synced and change together.\n" +
-                    "if you change this one, the one in the city panel conveniently changes."
-                },
-
                 // Keybinds
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.TogglePanelBinding)), "Main panel open/close" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.TogglePanelBinding)),
                     "Hotkey shortcut to <open / close> the in-city Color Panel." },
                 { m_Settings.GetBindingKeyLocaleID(Mod.kTogglePanelActionName), "Toggle Hover Colors panel" },
 
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleHoverHighlightsBinding)), "Quick Outline + fill On/Off" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleHoverHighlightsBinding)), "Quick Eyeball On/Off" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ToggleHoverHighlightsBinding)),
-                    "Optional hotkey for the title-bar Eyeball button. Ships unbound to avoid key conflicts." },
-                { m_Settings.GetBindingKeyLocaleID(Mod.kToggleHighlightsActionName), "Quick outline + fill On/Off" },
+                    "Optional hotkey for the title-bar Eyeball button: instant Highlight + Fill color Off/On.\n" +
+                    "Ships unbound to avoid key conflicts." },
+                { m_Settings.GetBindingKeyLocaleID(Mod.kToggleHighlightsActionName), "Quick Eyeball On/Off" },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleSurfaceToolAreasBinding)), "Toggle Surface tool previews on/off" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ToggleSurfaceToolAreasBinding)),

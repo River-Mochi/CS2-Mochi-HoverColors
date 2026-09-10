@@ -51,7 +51,6 @@ namespace HoverColors.Localization
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kToolColors), "Araç rengi davranışı" },
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kPanel), "Panel" },
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kKeyBindings), "Kısayollar" },
-                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kGuidelines), "Kılavuzlar" },
                 // AboutInfo + AboutLinks intentionally have empty group headers.
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kAboutInfo), string.Empty },
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kAboutLinks), string.Empty },
@@ -110,19 +109,6 @@ namespace HoverColors.Localization
                     "- Yeni Modern UI kullanan çoğu oyuncu için en iyisi.\n" +
                     "\n" +
                     "İkisini de dene. Bu yalnızca bu mod panelinin arka planını değiştirir, oyun UI'sını değil."
-                },
-
-                // Guidelines opacity slider
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.GuidelineOpacityPercent)), "Kılavuz opaklığı (alpha)" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.GuidelineOpacityPercent)),
-                    "Yol, çit, prop vb. yerleştirirken yararlı olan kesik hizalama kılavuzu opaklığını kontrol eder.\n" +
-                    "\n" +
-                    "**100%** oyun varsayılanı.\n" +
-                    "**Daha düşük** daha şeffaf.\n" +
-                    "**0%** her şeyi gizler.\n" +
-                    "15% üstünde kal, yoksa çizgi zor görünür.\n" +
-                    "Aynı kaydırıcı şehir mod panelinde de var. İkisi senkron değişir.\n" +
-                    "Bunu değiştirirsen şehir panelindeki de değişir."
                 },
 
                 // Keybinds

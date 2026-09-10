@@ -25,8 +25,9 @@
         <Nullable>enable</Nullable>
 
         <!-- Versioning: single source of truth -->
+        <Version>1.1.0</Version>
 		<GameVersion>1.6.*</GameVersion>
-        <Version>1.0.2</Version>
+
         <AssemblyVersion>$(Version).0</AssemblyVersion>
         <FileVersion>$(Version).0</FileVersion>
 
@@ -36,7 +37,6 @@
         <AssemblyTitle>Hover Colors</AssemblyTitle>
         <Product>Hover Colors</Product>
         <Copyright>Copyright © 2026 River-Mochi</Copyright>
-
 
 
         <!-- Configurable npm timeouts (ms). Prevents "looks stuck forever" without a hard cap on success. -->
