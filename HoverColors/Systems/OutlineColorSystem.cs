@@ -375,7 +375,7 @@ namespace HoverColors.Systems
         }
 
         // Unity's operator== reports a destroyed Material as null while the reference is still set.
-        // A scene or render-pipeline reload therefore hands us a brand new material, and every
+        // Scene or render-pipeline reload therefore hands us a brand new material, and every
         // captured vanilla value belongs to the old one.
         private void InvalidateCacheIfMaterialDestroyed()
         {
@@ -518,7 +518,7 @@ namespace HoverColors.Systems
                 case EffectivePalette.VanillaToolError:
                     // Blocking placement errors already carry Game.Tools.Error; vanilla render
                     // paths color those objects from m_ErrorColor. Keep the rest of the hover
-                    // profile vanilla so the final salmon matches the game's own composition.
+                    // profile vanilla so the final salmon matches the game's own colors.
                     data.m_HoveredColor = CapturedHoveredColor;
                     data.m_OwnerColor = CapturedOwnerColor;
                     data.m_WarningColor = CapturedWarningColor;
@@ -675,11 +675,11 @@ namespace HoverColors.Systems
                 return ToolKind.Bulldoze;
             }
 
-            // River-Mochi selection tools (e.g. AllSpeedLimits) own their own
+            // Mod Selection tools (e.g. AllSpeedLimits) own their own
             // multi-segment selection and should stay as high-visibility as the "road tools", so a
             // low-visibility player hover preset can't hide what is currently selected. Matched by
-            // tool id, with the tool's namespace as backup so there is no hard reference to the
-            // other mod. Mapping to NetRoad means: options menu, Recommended/Vanilla mode -> high-vis vanilla
+            // tool id, with the tool's namespace as backup so there is no hard reference to the other mod.
+            // Mapping to NetRoad means: options menu, Recommended/Vanilla mode -> high-vis vanilla
             // cyan (the default), Custom mode -> the player's chosen color (power-user override).
             string toolId = SafeToolId(tool);
 
@@ -843,8 +843,8 @@ namespace HoverColors.Systems
                 return true;
             }
 
-            // Scene load can briefly run before the outline pass exists. Throttle the expensive
-            // Unity object scan; once the material is found, the cached reference handles all
+            // Scene load can briefly run before outline pass exists. Throttle expensive
+            // Unity object scan; once the material is found, a cached reference handles all
             // future frames until Unity destroys it on scene reload.
             float now = UnityEngine.Time.realtimeSinceStartup;
             if (now < m_NextMaterialResolveTime)
