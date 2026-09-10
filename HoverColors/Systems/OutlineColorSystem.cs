@@ -19,6 +19,8 @@
 //   - Material _InnerColor.RGB                   ← Fill RGB (tint of fill overlay inside silhouette;
 //                                                   white = fill takes the per-object hover color)
 //   - Material _InnerColor.a                     ← FillA      (fill overlay opacity)
+//   - Material _OutlineWidth                     ← captured vanilla width x OutlineThicknessScale
+//                                                  (optional: skipped if the shader lacks it)
 //
 // Tool override: controlled by HoverColorsSettings.ToolColorMode.
 //   - Object/network placement errors: optional vanilla ErrorColor wins first.
@@ -70,12 +72,17 @@ namespace HoverColors.Systems
         private const float RoadRecommendedOutlineA = 0.75f;
         private const float MaterialResolveRetrySeconds = 0.5f;
 
+        // Cached so the per-frame path never re-hashes the property name.
+        private static readonly int s_OutlineWidthProperty = Shader.PropertyToID("_OutlineWidth");
+
         public static Color CapturedHoveredColor { get; private set; } = new Color(VanillaR, VanillaG, VanillaB, VanillaOutlineA);
         public static Color CapturedOwnerColor { get; private set; } = new Color(VanillaOwnerR, VanillaOwnerG, VanillaOwnerB, VanillaOwnerA);
         public static Color CapturedOuterColor { get; private set; } = new Color(1f, 1f, 1f, VanillaOutlineA);
         public static Color CapturedInnerColor { get; private set; } = new Color(1f, 1f, 1f, VanillaFillA);
         public static Color CapturedWarningColor { get; private set; } = new Color(1f, 1f, 0.5f, 0.447058827f);
         public static Color CapturedErrorColor { get; private set; } = new Color(1f, 0.5f, 0.5f, 0.447058827f);
+        // Placeholder until the real runtime width is read; nothing is written before that happens.
+        public static float CapturedOutlineWidth { get; private set; } = 1f;
         public static float CapturedOutlineA { get; private set; } = VanillaOutlineA;
         public static float CapturedFillA { get; private set; } = VanillaFillA;
         public static bool HasCapturedVanillaDefaults { get; private set; }
@@ -93,9 +100,17 @@ namespace HoverColors.Systems
         private bool m_MaterialDefaultsCaptured;
         private bool m_CaptureLogged;
 
+        // Thickness capture is deliberately independent of m_MaterialDefaultsCaptured: if a future
+        // game build drops _OutlineWidth, colors and alpha must keep working untouched.
+        private bool m_OutlineWidthCaptured;
+        private bool m_OutlineWidthUnavailable;
+        private bool m_HasWrittenOutlineWidth;
+        private float m_LastWrittenOutlineWidth;
+
         // Last-applied EFFECTIVE values (after tool-override decision).
         private float m_LastR, m_LastG, m_LastB, m_LastOutlineA, m_LastFillA;
         private float m_LastFillR, m_LastFillG, m_LastFillB;
+        private float m_LastOutlineThicknessScale;
         private float m_LastOwnerR, m_LastOwnerG, m_LastOwnerB, m_LastOwnerA;
         private EffectivePalette m_LastPalette;
         private bool m_Applied;
@@ -132,6 +147,12 @@ namespace HoverColors.Systems
             InitializeHoverToggle();
         }
 
+        protected override void OnDestroy()
+        {
+            RestoreOutlineWidth();
+            base.OnDestroy();
+        }
+
         protected override void OnUpdate()
         {
             HoverColorsSettings? settings = Mod.Settings;
@@ -144,6 +165,10 @@ namespace HoverColors.Systems
 
             float r, g, b, outlineA, fillA, ownerR, ownerG, ownerB, ownerA;
             float fillR, fillG, fillB;
+            float thicknessScale = Mathf.Clamp(
+                settings.OutlineThicknessScale,
+                HoverColorsSettings.kMinOutlineThicknessScale,
+                HoverColorsSettings.kMaxOutlineThicknessScale);
             EffectivePalette palette;
             ToolBaseSystem? activeToolSystem = m_ToolSystem?.activeTool;
             ToolKind activeTool = GetActiveToolKind(activeToolSystem);
@@ -294,6 +319,7 @@ namespace HoverColors.Systems
                 && fillR == m_LastFillR
                 && fillG == m_LastFillG
                 && fillB == m_LastFillB
+                && thicknessScale == m_LastOutlineThicknessScale
                 && ownerR == m_LastOwnerR
                 && ownerG == m_LastOwnerG
                 && ownerB == m_LastOwnerB
@@ -305,6 +331,7 @@ namespace HoverColors.Systems
 
             bool ecsOk = ApplyRenderingSettingsColors(r, g, b, outlineA, ownerR, ownerG, ownerB, ownerA, palette);
             bool matOk = ApplyOutlineMaterialColors(r, g, b, outlineA, fillA, fillR, fillG, fillB, palette);
+            ApplyOutlineWidth(thicknessScale);
 
             // Only cache the snapshot when BOTH writes land — otherwise retry next frame.
             if (ecsOk && matOk)
@@ -317,6 +344,7 @@ namespace HoverColors.Systems
                 m_LastFillR = fillR;
                 m_LastFillG = fillG;
                 m_LastFillB = fillB;
+                m_LastOutlineThicknessScale = thicknessScale;
                 m_LastOwnerR = ownerR;
                 m_LastOwnerG = ownerG;
                 m_LastOwnerB = ownerB;
@@ -366,6 +394,23 @@ namespace HoverColors.Systems
                 CapturedOutlineA = outer.a;
                 CapturedFillA = inner.a;
                 m_MaterialDefaultsCaptured = true;
+            }
+
+            if (!m_OutlineWidthCaptured && !m_OutlineWidthUnavailable && TryResolveOutlineMaterial())
+            {
+                if (m_OutlineMaterial!.HasProperty(s_OutlineWidthProperty))
+                {
+                    CapturedOutlineWidth = m_OutlineMaterial.GetFloat(s_OutlineWidthProperty);
+                    m_OutlineWidthCaptured = true;
+                    LogUtils.Info(() => $"{Mod.ModTag} Captured vanilla outline width: {CapturedOutlineWidth:F3}");
+                }
+                else
+                {
+                    m_OutlineWidthUnavailable = true;
+                    LogUtils.WarnOnce(
+                        "outline-width-property-missing",
+                        () => $"{Mod.ModTag} Outline material has no _OutlineWidth; thickness control is disabled. Colors and opacity are unaffected.");
+                }
             }
 
             if (!HasCapturedVanillaDefaults && m_RenderingDefaultsCaptured && m_MaterialDefaultsCaptured)
@@ -514,6 +559,42 @@ namespace HoverColors.Systems
             m_OutlineMaterial!.SetColor("_OuterColor", outer);
             m_OutlineMaterial.SetColor("_InnerColor", inner);
             return true;
+        }
+
+        // Optional extra on the same cached material. Runs only when OnUpdate already decided
+        // something changed, so this is not a per-frame reassert and does not fight other mods.
+        private void ApplyOutlineWidth(float thicknessScale)
+        {
+            if (!m_OutlineWidthCaptured || m_OutlineMaterial == null)
+            {
+                return;
+            }
+
+            float desiredWidth = CapturedOutlineWidth * thicknessScale;
+            m_OutlineMaterial.SetFloat(s_OutlineWidthProperty, desiredWidth);
+            m_LastWrittenOutlineWidth = desiredWidth;
+            m_HasWrittenOutlineWidth = true;
+        }
+
+        // Only give the width back if it still holds the value HC last wrote. If another mod has
+        // set it since, that value is newer and stays.
+        private void RestoreOutlineWidth()
+        {
+            if (!m_HasWrittenOutlineWidth
+                || !m_OutlineWidthCaptured
+                || m_OutlineMaterial == null
+                || !m_OutlineMaterial.HasProperty(s_OutlineWidthProperty))
+            {
+                return;
+            }
+
+            float current = m_OutlineMaterial.GetFloat(s_OutlineWidthProperty);
+            if (ApproximatelyEqual(current, m_LastWrittenOutlineWidth))
+            {
+                m_OutlineMaterial.SetFloat(s_OutlineWidthProperty, CapturedOutlineWidth);
+            }
+
+            m_HasWrittenOutlineWidth = false;
         }
 
         private ToolKind GetActiveToolKind(ToolBaseSystem? tool)

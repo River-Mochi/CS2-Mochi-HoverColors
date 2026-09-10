@@ -55,6 +55,12 @@ namespace HoverColors.Settings
         public const int kGuidelineDashedColorPresetCyanBlue = 4;
         public const int kGuidelineDashedColorPresetCustom = 5;
 
+        // Outline thickness is stored as a multiplier on the vanilla shader width, not as a raw
+        // width, so 1.0 always means "whatever this game build's _OutlineWidth actually is".
+        internal const float kMinOutlineThicknessScale = 0f;
+        internal const float kDefaultOutlineThicknessScale = 1f;
+        internal const float kMaxOutlineThicknessScale = 2f;
+
         // Centralized default for the guideline opacity slider.
         // Vanilla CS2 is 100; lower = more transparent. Keep TSX fallback bindings in sync.
         public const int kDefaultGuidelineOpacityPercent = 30;
@@ -77,6 +83,7 @@ namespace HoverColors.Settings
         //   - OutlineA     → outline halo edge opacity  (material _OuterColor.a)
         //   - FillA        → fill overlay opacity inside the silhouette (material _InnerColor.a)
         //   - FillR/G/B    → fill tint inside the silhouette             (material _InnerColor.RGB)
+        //   - OutlineThicknessScale → multiplier on the captured vanilla material _OutlineWidth
         // -----------------------------------------------------------------------
 
         [SettingsUIHidden]
@@ -122,6 +129,14 @@ namespace HoverColors.Settings
         // black. This flag lets MigrateAfterLoad hand those saves white instead.
         [SettingsUIHidden]
         public bool FillColorInitialized { get; set; }
+
+        [SettingsUIHidden]
+        public float OutlineThicknessScale { get; set; }
+
+        // 0 is a legitimate player choice here, so the migration needs its own marker rather than
+        // treating an unset value as zero.
+        [SettingsUIHidden]
+        public bool OutlineThicknessInitialized { get; set; }
 
         // District overlay color. Disabled by default so we do not touch vanilla/other-mod
         // district prefabs until the player picks a color from the in-game District picker.

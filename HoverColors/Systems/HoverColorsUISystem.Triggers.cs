@@ -25,6 +25,8 @@ namespace HoverColors.UI
             AddBinding(new TriggerBinding<float>(Mod.ModId, "SetFillAlpha", SetFillAlpha));
             AddBinding(new TriggerBinding<float, float, float, float>(Mod.ModId, "SetFillColor", SetFillColor));
             AddBinding(new TriggerBinding(Mod.ModId, "ResetFillToVanilla", ResetFillToVanilla));
+            AddBinding(new TriggerBinding<float>(Mod.ModId, "SetOutlineThickness", SetOutlineThickness));
+            AddBinding(new TriggerBinding(Mod.ModId, "ResetOutlineThickness", ResetOutlineThickness));
             AddBinding(new TriggerBinding<int>(Mod.ModId, "SetGuidelineOpacity", SetGuidelineOpacity));
             AddBinding(new TriggerBinding<float, float, float, float>(Mod.ModId, "SetGuidelineLinesColor", SetGuidelineLinesColor));
             AddBinding(new TriggerBinding<float, float, float, float>(Mod.ModId, "SetGuidelinePreviewColor", SetGuidelinePreviewColor));
@@ -135,6 +137,55 @@ namespace HoverColors.UI
             settings.FillA = fillA;
             settings.FillColorInitialized = true;
             ApplySaveAndSync(settings);
+        }
+
+        // Scale on the captured vanilla shader width, so 1.0 is vanilla on any game build.
+        private void SetOutlineThickness(float scale)
+        {
+            HoverColorsSettings? settings = Mod.Settings;
+            if (settings == null) return;
+
+            scale = SnapOutlineThickness(scale);
+            if (ApproxEqual(settings.OutlineThicknessScale, scale) && settings.OutlineThicknessInitialized)
+            {
+                return;
+            }
+
+            settings.OutlineThicknessScale = scale;
+            settings.OutlineThicknessInitialized = true;
+            ApplySaveAndSync(settings);
+        }
+
+        private void ResetOutlineThickness()
+        {
+            HoverColorsSettings? settings = Mod.Settings;
+            if (settings == null) return;
+
+            if (ApproxEqual(settings.OutlineThicknessScale, HoverColorsSettings.kDefaultOutlineThicknessScale)
+                && settings.OutlineThicknessInitialized)
+            {
+                return;
+            }
+
+            settings.OutlineThicknessScale = HoverColorsSettings.kDefaultOutlineThicknessScale;
+            settings.OutlineThicknessInitialized = true;
+            ApplySaveAndSync(settings);
+        }
+
+        private static bool IsVanillaOutlineThickness(HoverColorsSettings settings)
+        {
+            return settings.OutlineThicknessInitialized
+                && ApproxEqual(settings.OutlineThicknessScale, HoverColorsSettings.kDefaultOutlineThicknessScale);
+        }
+
+        private static float SnapOutlineThickness(float scale)
+        {
+            float clamped = Math.Max(
+                HoverColorsSettings.kMinOutlineThicknessScale,
+                Math.Min(HoverColorsSettings.kMaxOutlineThicknessScale, scale));
+
+            // Keep the stored value on the slider's 0.1 grid so the readout never shows drift.
+            return (float)Math.Round(clamped * 10.0) / 10f;
         }
 
         private void SetGuidelineOpacity(int percent)
@@ -305,13 +356,16 @@ namespace HoverColors.UI
                 || !SameColor(settings.OwnerR, settings.OwnerG, settings.OwnerB, settings.OwnerA,
                     owner.r, owner.g, owner.b, owner.a)
                 || !SameColor(settings.FillR, settings.FillG, settings.FillB, settings.FillA,
-                    inner.r, inner.g, inner.b, fillA);
+                    inner.r, inner.g, inner.b, fillA)
+                || !IsVanillaOutlineThickness(settings);
 
             if (!changed)
             {
                 return;
             }
 
+            settings.OutlineThicknessScale = HoverColorsSettings.kDefaultOutlineThicknessScale;
+            settings.OutlineThicknessInitialized = true;
             settings.OutlineR = hovered.r;
             settings.OutlineG = hovered.g;
             settings.OutlineB = hovered.b;
@@ -339,13 +393,16 @@ namespace HoverColors.UI
             bool changed = !SameColor(settings.OutlineR, settings.OutlineG, settings.OutlineB, settings.OutlineA,
                     hovered.r, hovered.g, hovered.b, OutlineColorSystem.CapturedOutlineA)
                 || !SameColor(settings.OwnerR, settings.OwnerG, settings.OwnerB, settings.OwnerA,
-                    owner.r, owner.g, owner.b, owner.a);
+                    owner.r, owner.g, owner.b, owner.a)
+                || !IsVanillaOutlineThickness(settings);
 
             if (!changed)
             {
                 return;
             }
 
+            settings.OutlineThicknessScale = HoverColorsSettings.kDefaultOutlineThicknessScale;
+            settings.OutlineThicknessInitialized = true;
             settings.OutlineR = hovered.r;
             settings.OutlineG = hovered.g;
             settings.OutlineB = hovered.b;

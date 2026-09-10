@@ -38,6 +38,10 @@ namespace HoverColors.Settings
             FillB = 1f;
             FillColorInitialized = true;
 
+            // 1.0 = the vanilla shader width captured at runtime, whatever that build's value is.
+            OutlineThicknessScale = kDefaultOutlineThicknessScale;
+            OutlineThicknessInitialized = true;
+
             // Safe fallback for the District picker until DistrictColorSystem captures the authored
             // default district prefab colors. Not applied unless DistrictColorEnabled is true.
             DistrictColorEnabled = false;
@@ -178,6 +182,13 @@ namespace HoverColors.Settings
                 PresetDefaultsBackupAlt2FillR = 1f; PresetDefaultsBackupAlt2FillG = 1f; PresetDefaultsBackupAlt2FillB = 1f;
 
                 FillColorInitialized = true;
+                changed = true;
+            }
+
+            if (!OutlineThicknessInitialized)
+            {
+                OutlineThicknessScale = kDefaultOutlineThicknessScale;
+                OutlineThicknessInitialized = true;
                 changed = true;
             }
 

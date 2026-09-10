@@ -29,6 +29,8 @@ export const useMochiPanelText = () => {
                 ? l("HoverColors.UI.Tooltip.Info")
                 : l("HoverColors.UI.Tooltip.InfoDisabled"),
             tooltipOutlineSwatch: l("HoverColors.UI.Tooltip.OutlineSwatch"),
+            tooltipOutlineThickness: l("HoverColors.UI.Tooltip.OutlineThickness"),
+            tooltipResetOutlineThickness: l("HoverColors.UI.Tooltip.ResetOutlineThickness"),
             tooltipOwnerSwatch: l("HoverColors.UI.Tooltip.OwnerSwatch"),
             tooltipPreset1: l("HoverColors.UI.Tooltip.Preset1"),
             tooltipPreset2: l("HoverColors.UI.Tooltip.Preset2"),

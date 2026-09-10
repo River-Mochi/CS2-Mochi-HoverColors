@@ -48,6 +48,7 @@ namespace HoverColors.UI
         private ValueBinding<float> m_FillRBinding = null!;
         private ValueBinding<float> m_FillGBinding = null!;
         private ValueBinding<float> m_FillBBinding = null!;
+        private ValueBinding<float> m_OutlineThicknessScaleBinding = null!;
         private ValueBinding<float> m_DistrictRBinding = null!;
         private ValueBinding<float> m_DistrictGBinding = null!;
         private ValueBinding<float> m_DistrictBBinding = null!;
@@ -156,6 +157,9 @@ namespace HoverColors.UI
             m_FillRBinding = AddValueBinding("FillR", settings?.FillR ?? 1f);
             m_FillGBinding = AddValueBinding("FillG", settings?.FillG ?? 1f);
             m_FillBBinding = AddValueBinding("FillB", settings?.FillB ?? 1f);
+            m_OutlineThicknessScaleBinding = AddValueBinding(
+                "OutlineThicknessScale",
+                settings?.OutlineThicknessScale ?? HoverColorsSettings.kDefaultOutlineThicknessScale);
             m_DistrictRBinding = AddValueBinding("DistrictR", settings?.DistrictR ?? 128f / 255f);
             m_DistrictGBinding = AddValueBinding("DistrictG", settings?.DistrictG ?? 128f / 255f);
             m_DistrictBBinding = AddValueBinding("DistrictB", settings?.DistrictB ?? 128f / 255f);
@@ -226,6 +230,9 @@ namespace HoverColors.UI
             UpdateIfChanged(m_FillRBinding, settings?.FillR ?? 1f);
             UpdateIfChanged(m_FillGBinding, settings?.FillG ?? 1f);
             UpdateIfChanged(m_FillBBinding, settings?.FillB ?? 1f);
+            UpdateIfChanged(
+                m_OutlineThicknessScaleBinding,
+                settings?.OutlineThicknessScale ?? HoverColorsSettings.kDefaultOutlineThicknessScale);
             UpdateIfChanged(m_DistrictRBinding, settings?.DistrictR ?? 128f / 255f);
             UpdateIfChanged(m_DistrictGBinding, settings?.DistrictG ?? 128f / 255f);
             UpdateIfChanged(m_DistrictBBinding, settings?.DistrictB ?? 128f / 255f);

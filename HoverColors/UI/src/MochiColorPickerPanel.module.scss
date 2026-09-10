@@ -305,13 +305,16 @@
     margin-top: 2.5rem;
 }
 
-.body > .controlRow:nth-child(3) {
+// Divider above the Guidelines row. Selected by class, not child index, so inserting rows above it
+// cannot move the line onto the wrong row. Kept at the old selector's weight so the
+// `.controlRow + .controlRow` margin still loses to it.
+.body > .controlRow.guidelinesRow {
     margin-top: 5rem;
     padding-top: 5rem;
     padding-bottom: 4rem;
 }
 
-.body > .controlRow:nth-child(3)::before {
+.body > .controlRow.guidelinesRow::before {
     content: "";
     position: absolute;
     top: 0;
@@ -322,7 +325,7 @@
     pointer-events: none;
 }
 
-.panelDarker .body > .controlRow:nth-child(3)::before {
+.panelDarker .body > .controlRow.guidelinesRow::before {
     background-color: rgba(254, 255, 255, 0.20);
 }
 

@@ -32,6 +32,9 @@ export const fillR$ = bindValue<number>(CHANNEL, "FillR", 1);
 export const fillG$ = bindValue<number>(CHANNEL, "FillG", 1);
 export const fillB$ = bindValue<number>(CHANNEL, "FillB", 1);
 
+// Multiplier on the game's captured vanilla outline width. 1 = vanilla on any build.
+export const outlineThicknessScale$ = bindValue<number>(CHANNEL, "OutlineThicknessScale", 1);
+
 export const districtR$ = bindValue<number>(CHANNEL, "DistrictR", 128 / 255);
 export const districtG$ = bindValue<number>(CHANNEL, "DistrictG", 128 / 255);
 export const districtB$ = bindValue<number>(CHANNEL, "DistrictB", 128 / 255);

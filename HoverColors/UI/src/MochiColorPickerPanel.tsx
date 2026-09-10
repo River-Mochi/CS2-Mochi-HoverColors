@@ -32,6 +32,7 @@ import {
     guidelinePreviewColorG$,
     guidelinePreviewColorR$,
     outlineA$,
+    outlineThicknessScale$,
     outlineB$,
     outlineG$,
     outlineR$,
@@ -114,6 +115,7 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
         b: useValue(fillB$),
         a: boundFillA,
     };
+    const boundOutlineThicknessScale = useValue(outlineThicknessScale$);
     const boundGuideline = useValue(guidelineOpacity$);
     const boundGuidelineDashedColor: Color = {
         r: useValue(guidelineDashedColorR$),
@@ -156,6 +158,7 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
     const [ownerColor, setOwnerColor] = React.useState<Color>(boundOwner);
     const [fillA, setFillA] = React.useState<number>(boundFillA);
     const [fillColor, setFillColor] = React.useState<Color>(boundFill);
+    const [outlineThicknessScale, setOutlineThicknessScale] = React.useState<number>(boundOutlineThicknessScale);
     const [districtColor, setDistrictColor] = React.useState<Color>(boundDistrict);
     const [guidelineLinesColor, setGuidelineLinesColor] = React.useState<Color>(boundGuidelineLinesColor);
     const [guidelinePreviewColor, setGuidelinePreviewColor] = React.useState<Color>(boundGuidelinePreviewColor);
@@ -219,6 +222,7 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
     React.useEffect(() => { setOwnerColor(boundOwner); }, [boundOwner.r, boundOwner.g, boundOwner.b, boundOwner.a]);
     React.useEffect(() => { setFillA(boundFillA); }, [boundFillA]);
     React.useEffect(() => { setFillColor(boundFill); }, [boundFill.r, boundFill.g, boundFill.b, boundFill.a]);
+    React.useEffect(() => { setOutlineThicknessScale(boundOutlineThicknessScale); }, [boundOutlineThicknessScale]);
     React.useEffect(() => { setDistrictColor(boundDistrict); }, [boundDistrict.r, boundDistrict.g, boundDistrict.b, boundDistrict.a]);
     React.useEffect(() => { setGuidelineLinesColor(boundGuidelineLinesColor); }, [boundGuidelineLinesColor.r, boundGuidelineLinesColor.g, boundGuidelineLinesColor.b, boundGuidelineLinesColor.a]);
     React.useEffect(() => { setGuidelinePreviewColor(boundGuidelinePreviewColor); }, [boundGuidelinePreviewColor.r, boundGuidelinePreviewColor.g, boundGuidelinePreviewColor.b, boundGuidelinePreviewColor.a]);
@@ -339,6 +343,13 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
         trigger(CHANNEL, "SetFillAlpha", value);
     };
 
+    // Slider steps in 0.1; rounding here keeps the readout off floating-point drift.
+    const handleOutlineThicknessChange = (v: number) => {
+        const value = Math.round(Math.max(0, Math.min(2, v)) * 10) / 10;
+        setOutlineThicknessScale(value);
+        trigger(CHANNEL, "SetOutlineThickness", value);
+    };
+
     // Swatch owns tint + opacity; the slider is the same alpha shown a second way.
     const handleFillColorChange = (value: Color) => {
         const syncedValue = normalizeColorFieldValue(value);
@@ -389,6 +400,7 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
     const handleToggleCollapse = () => trigger(CHANNEL, "SetPanelCollapsed", !panelCollapsed);
     const handleResetOutline = () => trigger(CHANNEL, "ResetOutlineToVanilla");
     const handleResetFill = () => trigger(CHANNEL, "ResetFillToVanilla");
+    const handleResetOutlineThickness = () => trigger(CHANNEL, "ResetOutlineThickness");
     const handleResetGuidelines = () => trigger(CHANNEL, "ResetGuidelines");
     const handleToggleSurfaceToolAreas = () => trigger(CHANNEL, "ToggleSurfaceToolAreas");
     const handleToggleSpecializedIndustryAreas = () => trigger(CHANNEL, "ToggleSpecializedIndustryAreas");
@@ -522,6 +534,7 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
                         ownerColor={ownerColor}
                         fillA={fillA}
                         fillColor={fillColor}
+                        outlineThicknessScale={outlineThicknessScale}
                         guidelineLinesColor={guidelineLinesColor}
                         guidelinePreviewColor={guidelinePreviewColor}
                         guidelineDashedColor={guidelineDashedColor}
@@ -572,6 +585,8 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
                         handleOwnerColorChange={handleOwnerColorChange}
                         handleFillAChange={handleFillAChange}
                         handleFillColorChange={handleFillColorChange}
+                        handleOutlineThicknessChange={handleOutlineThicknessChange}
+                        handleResetOutlineThickness={handleResetOutlineThickness}
                         handleGuidelineLinesColorChange={handleGuidelineLinesColorChange}
                         handleGuidelinePreviewColorChange={handleGuidelinePreviewColorChange}
                         handleGuidelineDashedColorChange={handleGuidelineDashedColorChange}

@@ -10,6 +10,8 @@
   "HoverColors.UI.Tooltip.Close": "Close panel. Default hotkey: J.\nGame top-left icon On/Off.",
   "HoverColors.UI.Tooltip.ResetOutline": "Outline, click to reset to Game Default color",
   "HoverColors.UI.Tooltip.OutlineSwatch": "OUTLINE - click for color + opacity.",
+  "HoverColors.UI.Tooltip.ResetOutlineThickness": "Reset outline thickness to vanilla.",
+  "HoverColors.UI.Tooltip.OutlineThickness": "Outline thickness. 1.0 is vanilla; lower is thinner, higher is thicker.",
   "HoverColors.UI.Tooltip.OwnerSwatch": "Owner parent building highlight color. Example bus depot, green is game default",
   "HoverColors.UI.Tooltip.ResetFill": "Fill, click to reset to Game Default",
   "HoverColors.UI.Tooltip.FillSwatch": "Fill color inside the highlight.\nWhite = same color as the Outline.\nThe picker's alpha bar is the opacity slider.",

@@ -15,6 +15,7 @@ import {
 } from "../helpers/MochiPanelColorUtils";
 import { useMochiPanelText } from "../hooks/useMochiPanelText";
 import fillIconSrc from "../../../images/MainElements-Fill3.svg";
+import outlineThicknessIconSrc from "../../../images/outline-thickness.svg";
 import outlineIconSrc from "../../../images/MainElements_short_bigTriangle.svg";
 import guidelinesIconSrc from "../../../images/GuideLines4.svg";
 import switchIconSrc from "../../../images/icon-dbl-arrows.svg";
@@ -39,6 +40,7 @@ interface MochiPanelControlRowsProps {
   ownerColor: Color;
   fillA: number;
   fillColor: Color;
+  outlineThicknessScale: number;
   guidelineLinesColor: Color;
   guidelinePreviewColor: Color;
   guidelineDashedColor: Color;
@@ -96,6 +98,8 @@ interface MochiPanelControlRowsProps {
   handleOwnerColorChange: (value: Color) => void;
   handleFillAChange: (value: number) => void;
   handleFillColorChange: (value: Color) => void;
+  handleOutlineThicknessChange: (value: number) => void;
+  handleResetOutlineThickness: () => void;
   handleGuidelineLinesColorChange: (value: Color) => void;
   handleGuidelinePreviewColorChange: (value: Color) => void;
   handleGuidelineDashedColorChange: (value: Color) => void;
@@ -125,6 +129,7 @@ export const MochiPanelControlRows = ({
   ownerColor,
   fillA,
   fillColor,
+  outlineThicknessScale,
   guidelineLinesColor,
   guidelinePreviewColor,
   guidelineDashedColor,
@@ -175,6 +180,8 @@ export const MochiPanelControlRows = ({
   handleOwnerColorChange,
   handleFillAChange,
   handleFillColorChange,
+  handleOutlineThicknessChange,
+  handleResetOutlineThickness,
   handleGuidelineLinesColorChange,
   handleGuidelinePreviewColorChange,
   handleGuidelineDashedColorChange,
@@ -382,6 +389,39 @@ export const MochiPanelControlRows = ({
       {!collapsed && (
         <>
           <div className={styles.controlRow}>
+            <SideTooltip tooltip={tt(text.tooltipResetOutlineThickness)} side="left">
+              <Button
+                className={styles.controlIconButton}
+                variant="icon"
+                onSelect={handleResetOutlineThickness}
+                focusKey={focusDisabled}
+              >
+                <img src={outlineThicknessIconSrc} className={`${styles.controlIcon} ${styles.idleIcon}`} alt="" />
+              </Button>
+            </SideTooltip>
+
+            <SideTooltip tooltip={tt(text.tooltipOutlineThickness)} side="right">
+              <div className={styles.controlBody}>
+                <div className={styles.sliderRow}>
+                  <MochiSlider
+                    focusKey={focusDisabled}
+                    className={styles.slider}
+                    value={outlineThicknessScale}
+                    start={0}
+                    end={2}
+                    step={0.1}
+                    gamepadStep={0.1}
+                    onChange={handleOutlineThicknessChange}
+                  />
+                  <div className={`${styles.valueField} ${numberFieldClass}`}>
+                    {outlineThicknessScale.toFixed(1)}
+                  </div>
+                </div>
+              </div>
+            </SideTooltip>
+          </div>
+
+          <div className={styles.controlRow}>
             <SideTooltip tooltip={tt(text.tooltipResetFill)} side="left">
               <Button
                 className={styles.controlIconButton}
@@ -450,7 +490,7 @@ export const MochiPanelControlRows = ({
             </div>
           </div>
 
-          <div className={styles.controlRow}>
+          <div className={`${styles.controlRow} ${styles.guidelinesRow}`}>
             <SideTooltip tooltip={tt(text.tooltipResetGuidelines)} side="left">
               <Button
                 className={styles.controlIconButton}
