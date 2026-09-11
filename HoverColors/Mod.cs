@@ -32,11 +32,11 @@ namespace HoverColors
         public const string ModId = "HoverColors";
         public const string ModTag = "[HC]";
 
-        public const string kTogglePanelActionName = "TogglePanel";
-        public const string kToggleSurfaceToolAreasActionName = "ToggleSurfaceToolAreas";
-        public const string kTogglePresetActionName = "TogglePreset";
+        internal const string kTogglePanelActionName = "TogglePanel";
+        internal const string kToggleSurfaceToolAreasActionName = "ToggleSurfaceToolAreas";
+        internal const string kTogglePresetActionName = "TogglePreset";
 
-        public const string kToggleHighlightsActionName = "ToggleHoverHighlights";
+        internal const string kToggleHighlightsActionName = "ToggleHoverHighlights";
 
         public static readonly string ModVersion =
             Assembly.GetExecutingAssembly().GetName().Version?.ToString(3) ?? "1.0.0";

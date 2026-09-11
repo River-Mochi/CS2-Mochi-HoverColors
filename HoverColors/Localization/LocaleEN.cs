@@ -72,7 +72,7 @@ namespace HoverColors.Localization
                 { m_Settings.GetToolColorModeLocaleID("Vanilla"), "2. Vanilla tool colors" },
                 { m_Settings.GetToolColorModeLocaleID("Custom"), "3. Keep my custom color" },
 
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseOverlapWarningColor)), "Enable Overlapping items outline" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseOverlapWarningColor)), "▪ Enable Overlapping items outline" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseOverlapWarningColor)),
                     "<Enabled is recommended>\n" +
                     "Keeps the game's vanilla salmon red outline visible when object or network placement is blocked by overlapping items.\n" +
@@ -81,7 +81,7 @@ namespace HoverColors.Localization
                     "Works with all Bulldozer + Roads modes and does not overwrite your saved custom color."
                 },
 
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseCustomColorsForNetLanes)), "Allow custom colors for NetLanes" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseCustomColorsForNetLanes)), "▪ Allow custom colors for NetLanes" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseCustomColorsForNetLanes)),
                     "<Enabled is recommended>\n" +
                     "Use your saved HC color/transparency while placing NetLane detail items such as fences, hedges, markings, and similar lane-based tools.\n" +
@@ -92,15 +92,7 @@ namespace HoverColors.Localization
                 },
 
                 // Panel
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelTooltipsEnabled)), "Tooltips for Hover Colors" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelTooltipsEnabled)),
-                    "<Enabled> = show Hover Colors help tooltips (recommended [x]).\n" +
-                    "<Disabled> = hide tooltips for this mod.\n" +
-                    "Tooltips can only be disabled inside this Options menu.\n" +
-                    "However, you can Enable them back ON in the city; click on the Info (i) button on the title bar."
-                },
-
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)), "Darker panel" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)), "▪ Darker panel" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)),
                     "Enabled = <Dark panel>: made for legacy UI players; can also be used in Modern UI if you like a darker panel.\n" +
                     "Disabled = <Standard panel>: custom translucent Hover Colors style.\n" +
@@ -110,15 +102,24 @@ namespace HoverColors.Localization
                     "Try both and see which you prefer! This only changes the background of this mod panel and not the game's UI."
                 },
 
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelTooltipsEnabled)), "▪ Tooltips for Hover Colors" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelTooltipsEnabled)),
+                    "<ENABLED [x]> is highly recommended" +
+                    "<Enabled> = show Hover Colors help tooltips (Recommended).\n" +
+                    "<Disabled> = hide tooltips for this mod.\n" +
+                    "Tooltips can only be disabled inside this Options menu.\n" +
+                    "However, you can Enable them back ON in the city; click on the Info (i) button on the title bar."
+                },
+
                 // Reset button
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ResetGameVisuals)), "Reset game visuals to vanilla" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ResetGameVisuals)), "Fresh Start Reset" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ResetGameVisuals)),
                     "Puts every visual this mod controls back to the game's own look: hover outline, owner highlight, fill, outline thickness, guidelines, districts and tool preview areas.\n" +
                     "\n" +
-                    "Your saved presets, hotkeys and panel preferences are kept.\n" +
+                    "- Your saved presets, hotkeys and panel preferences are kept.\n" +
                     "\n" +
-                    "This is for starting fresh after experimenting.\n" +
-                    "This mod can be removed without a reset. Highlights/values go back to game defaults."
+                    "- This is for starting fresh after experimenting.\n" +
+                    "To be clear, this mod can be removed without a reset. Highlights/values simply go back to game defaults."
                 },
 
                 { m_Settings.GetOptionWarningLocaleID(nameof(HoverColorsSettings.ResetGameVisuals)),

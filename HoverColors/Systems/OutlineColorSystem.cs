@@ -554,9 +554,6 @@ namespace HoverColors.Systems
         //   _OuterColor.a = outlineA (halo edge opacity)
         //   _InnerColor.a = fillA    (fill overlay opacity inside the silhouette)
         private bool ApplyOutlineMaterialColors(
-            float r,
-            float g,
-            float b,
             float outlineA,
             float fillA,
             float fillR,
