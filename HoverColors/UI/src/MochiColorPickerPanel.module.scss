@@ -482,107 +482,115 @@
 // Panel background opacity, driven by the Options slider (30-100 step 5).
 // The percent IS the alpha, the way City Watchdog does it, so 100% is genuinely solid.
 // Only background alpha changes, so text, icons, sliders and swatches stay fully readable.
+//
+// The bottom stop trails the top one by City Watchdog's own 0.917 ratio, which is what gives
+// the body its slight fade. That ratio is eased back out towards the top of the range so the
+// last step lands on a true 1.0 rather than 0.917 - at 100% the label promises solid, and the
+// bottom edge staying faintly see-through was the one place it did not deliver.
+//
+// Title hover stays deliberately lighter than the idle header at every step: that see-through
+// lift on hover is the City Watchdog behaviour, not a rounding artefact.
 .panelOpacity30 {
     --hc-panel-alpha-top: 0.3;
-    --hc-panel-alpha-bottom: 0.275;
+    --hc-panel-alpha-bottom: 0.2826;
     --hc-title-alpha: 0.3;
-    --hc-title-alpha-hover: 0.192;
+    --hc-title-alpha-hover: 0.1917;
 }
 
 .panelOpacity35 {
     --hc-panel-alpha-top: 0.35;
-    --hc-panel-alpha-bottom: 0.321;
+    --hc-panel-alpha-bottom: 0.3311;
     --hc-title-alpha: 0.35;
-    --hc-title-alpha-hover: 0.224;
+    --hc-title-alpha-hover: 0.2236;
 }
 
 .panelOpacity40 {
     --hc-panel-alpha-top: 0.4;
-    --hc-panel-alpha-bottom: 0.367;
+    --hc-panel-alpha-bottom: 0.3801;
     --hc-title-alpha: 0.4;
-    --hc-title-alpha-hover: 0.256;
+    --hc-title-alpha-hover: 0.2556;
 }
 
 .panelOpacity45 {
     --hc-panel-alpha-top: 0.45;
-    --hc-panel-alpha-bottom: 0.413;
+    --hc-panel-alpha-bottom: 0.4295;
     --hc-title-alpha: 0.45;
-    --hc-title-alpha-hover: 0.288;
+    --hc-title-alpha-hover: 0.2876;
 }
 
 .panelOpacity50 {
     --hc-panel-alpha-top: 0.5;
-    --hc-panel-alpha-bottom: 0.459;
+    --hc-panel-alpha-bottom: 0.4793;
     --hc-title-alpha: 0.5;
-    --hc-title-alpha-hover: 0.32;
+    --hc-title-alpha-hover: 0.3195;
 }
 
 .panelOpacity55 {
     --hc-panel-alpha-top: 0.55;
-    --hc-panel-alpha-bottom: 0.504;
+    --hc-panel-alpha-bottom: 0.5295;
     --hc-title-alpha: 0.55;
-    --hc-title-alpha-hover: 0.351;
+    --hc-title-alpha-hover: 0.3515;
 }
 
 .panelOpacity60 {
     --hc-panel-alpha-top: 0.6;
-    --hc-panel-alpha-bottom: 0.55;
+    --hc-panel-alpha-bottom: 0.5801;
     --hc-title-alpha: 0.6;
-    --hc-title-alpha-hover: 0.383;
+    --hc-title-alpha-hover: 0.3834;
 }
 
 .panelOpacity65 {
     --hc-panel-alpha-top: 0.65;
-    --hc-panel-alpha-bottom: 0.596;
+    --hc-panel-alpha-bottom: 0.6311;
     --hc-title-alpha: 0.65;
-    --hc-title-alpha-hover: 0.415;
+    --hc-title-alpha-hover: 0.4153;
 }
 
 .panelOpacity70 {
     --hc-panel-alpha-top: 0.7;
-    --hc-panel-alpha-bottom: 0.642;
+    --hc-panel-alpha-bottom: 0.6826;
     --hc-title-alpha: 0.7;
-    --hc-title-alpha-hover: 0.447;
+    --hc-title-alpha-hover: 0.4473;
 }
 
 .panelOpacity75 {
     --hc-panel-alpha-top: 0.75;
-    --hc-panel-alpha-bottom: 0.688;
+    --hc-panel-alpha-bottom: 0.7344;
     --hc-title-alpha: 0.75;
-    --hc-title-alpha-hover: 0.479;
+    --hc-title-alpha-hover: 0.4793;
 }
 
 .panelOpacity80 {
     --hc-panel-alpha-top: 0.8;
-    --hc-panel-alpha-bottom: 0.734;
+    --hc-panel-alpha-bottom: 0.7867;
     --hc-title-alpha: 0.8;
-    --hc-title-alpha-hover: 0.511;
+    --hc-title-alpha-hover: 0.5112;
 }
 
 .panelOpacity85 {
     --hc-panel-alpha-top: 0.85;
-    --hc-panel-alpha-bottom: 0.779;
+    --hc-panel-alpha-bottom: 0.8394;
     --hc-title-alpha: 0.85;
-    --hc-title-alpha-hover: 0.543;
+    --hc-title-alpha-hover: 0.5432;
 }
 
 .panelOpacity90 {
     --hc-panel-alpha-top: 0.9;
-    --hc-panel-alpha-bottom: 0.825;
+    --hc-panel-alpha-bottom: 0.8925;
     --hc-title-alpha: 0.9;
-    --hc-title-alpha-hover: 0.575;
+    --hc-title-alpha-hover: 0.5751;
 }
 
 .panelOpacity95 {
     --hc-panel-alpha-top: 0.95;
-    --hc-panel-alpha-bottom: 0.871;
+    --hc-panel-alpha-bottom: 0.9461;
     --hc-title-alpha: 0.95;
     --hc-title-alpha-hover: 0.607;
 }
 
 .panelOpacity100 {
     --hc-panel-alpha-top: 1.0;
-    --hc-panel-alpha-bottom: 0.917;
+    --hc-panel-alpha-bottom: 1.0;
     --hc-title-alpha: 1.0;
     --hc-title-alpha-hover: 0.639;
 }

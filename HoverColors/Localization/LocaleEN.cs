@@ -1,4 +1,4 @@
-// <copyright file="LocaleEN.cs" company="River-Mochi">
+﻿// <copyright file="LocaleEN.cs" company="River-Mochi">
 // Copyright (c) 2026 River-Mochi. All rights reserved.
 // Licensed under the MIT License. You may not use this file except in compliance with this License.
 // See LICENSE file in the project root for full license information.
@@ -106,8 +106,8 @@ namespace HoverColors
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)),
                     "How solid the in-city panel background is.\n" +
                     "\n" +
-                    "**Lower** lets more of the city show through.\n" +
-                    "**100%** fully solid.\n" +
+                    "**30% Glass** is the most see-through and clear look.\n" +
+                    "**100%** is more solid with slight transparency.\n" +
                     "\n" +
                     "Only the background changes. Text, icons and swatches stay fully readable at every setting.\n" +
                     "\n" +
