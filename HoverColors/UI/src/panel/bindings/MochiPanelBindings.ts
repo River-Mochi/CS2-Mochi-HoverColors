@@ -14,6 +14,9 @@ export const DISTRICT_RESET_HOLD_MS = 800;
 // Body class used by MochiColorPickerPanel.global.scss while compact vanilla pickers are open.
 export const COMPACT_PICKER_BODY_CLASS = "mochiCompactColorPickerOpen";
 
+// Set while ANY panel picker is open. Used to lift the vanilla balloon layer above the panel.
+export const PICKER_OPEN_BODY_CLASS = "mochiColorPickerOpen";
+
 // Live color bindings. New-install fallback matches Set A / P1.
 export const outlineR$ = bindValue<number>(CHANNEL, "OutlineR", 215 / 255);
 export const outlineG$ = bindValue<number>(CHANNEL, "OutlineG", 226 / 255);

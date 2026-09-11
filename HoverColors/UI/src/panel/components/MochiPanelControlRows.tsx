@@ -76,6 +76,8 @@ interface MochiPanelControlRowsProps {
   setGuidelineDashedHovered: React.Dispatch<React.SetStateAction<boolean>>;
   setPreset1Hovered: React.Dispatch<React.SetStateAction<boolean>>;
   setPreset2Hovered: React.Dispatch<React.SetStateAction<boolean>>;
+  setOutlinePickerOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setFillPickerOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setOwnerPickerOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setGuidelineLinesPickerOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setGuidelinePreviewPickerOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -161,6 +163,8 @@ export const MochiPanelControlRows = ({
   setGuidelineDashedHovered,
   setPreset1Hovered,
   setPreset2Hovered,
+  setOutlinePickerOpen,
+  setFillPickerOpen,
   setOwnerPickerOpen,
   setGuidelineLinesPickerOpen,
   setGuidelinePreviewPickerOpen,
@@ -253,7 +257,11 @@ export const MochiPanelControlRows = ({
                   onMouseEnter={() => setSwatchHovered(true)}
                   onMouseLeave={() => setSwatchHovered(false)}
                   onChange={handleOutlineChange}
-                  onOpenPicker={updateColorPickerDirection}
+                  onOpenPicker={() => {
+                    setOutlinePickerOpen(true);
+                    updateColorPickerDirection();
+                  }}
+                  onClosePicker={() => setOutlinePickerOpen(false)}
                 />
                 <span className={styles.outlineFieldHoverRing} aria-hidden="true" />
                 <span className={styles.outlineFieldActiveDot} aria-hidden="true" />
@@ -464,7 +472,11 @@ export const MochiPanelControlRows = ({
                     onMouseEnter={() => setFillSwatchHovered(true)}
                     onMouseLeave={() => setFillSwatchHovered(false)}
                     onChange={handleFillColorChange}
-                    onOpenPicker={updateFillPickerDirection}
+                    onOpenPicker={() => {
+                      setFillPickerOpen(true);
+                      updateFillPickerDirection();
+                    }}
+                    onClosePicker={() => setFillPickerOpen(false)}
                   />
                   <span className={styles.outlineFieldHoverRing} aria-hidden="true" />
                 </div>

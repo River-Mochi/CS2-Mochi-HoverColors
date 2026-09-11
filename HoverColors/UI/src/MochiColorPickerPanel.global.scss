@@ -8,3 +8,12 @@
 body.mochiCompactColorPickerOpen .color-picker-container_Sj5 .hex_c98 {
     margin-top: 8rem !important;
 }
+
+// Vanilla color-picker popups render on the game's anchored-balloon layer, which takes its
+// z-index from body's --tooltipIndex (20 by default). This panel sits at z-index 10000, so in the
+// Editor the popup ends up behind it and its sliders cannot be reached. 10020 is the same value
+// the game assigns while a modal backdrop is showing, so the popup clears the panel without
+// inventing a new stacking level. Only applied while a Hover Colors picker is open.
+body.mochiColorPickerOpen {
+    --tooltipIndex: 10020;
+}

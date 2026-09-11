@@ -103,11 +103,10 @@ namespace HoverColors
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelTooltipsEnabled)), "▪ Show Tooltips (recommended)" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelTooltipsEnabled)),
-                    "<ENABLED [x]> is highly recommended for Hover Colors" +
-                    "<Enabled> = show help tooltips (Recommended).\n" +
-                    "<Disabled> = hide tooltips for this mod.\n" +
-                    "Tooltips can only be disabled inside this Options menu.\n" +
-                    "However, you can Enable them back ON in the city; click on the Info (i) button on the title bar."
+                    "<Keep this ON> is recommended for most players.\n" +
+                    "Shows short help when hovering Hover Colors buttons.\n" +
+                    "If disabled, click the title-bar Info (i) button to turn them back on. Or this checkbox at any time for tooltips on." +
+                    "To prevent mishaps: tooltips can only be disabled inside this Options menu.\n"
                 },
 
                 // Reset button

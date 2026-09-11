@@ -10,6 +10,7 @@ import { VanillaComponentResolver } from "./utils/vanilla/VanillaComponentResolv
 import {
     CHANNEL,
     COMPACT_PICKER_BODY_CLASS,
+    PICKER_OPEN_BODY_CLASS,
     districtA$,
     districtB$,
     districtG$,
@@ -173,6 +174,8 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
     const [guidelineDashedPickerDirection, setGuidelineDashedPickerDirection] = React.useState<"up" | "down">("up");
     const [districtPickerDirection, setDistrictPickerDirection] = React.useState<"up" | "down">("up");
 
+    const [outlinePickerOpen, setOutlinePickerOpen] = React.useState(false);
+    const [fillPickerOpen, setFillPickerOpen] = React.useState(false);
     const [ownerPickerOpen, setOwnerPickerOpen] = React.useState(false);
     const [districtPickerOpen, setDistrictPickerOpen] = React.useState(false);
     const [districtMenuOpen, setDistrictMenuOpen] = React.useState(false);
@@ -229,6 +232,36 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
     React.useEffect(() => { setGuidelineDashedColor(boundGuidelineDashedColor); }, [boundGuidelineDashedColor.r, boundGuidelineDashedColor.g, boundGuidelineDashedColor.b, boundGuidelineDashedColor.a]);
     React.useEffect(() => { setGuidelineOpacity(boundGuideline); }, [boundGuideline]);
 
+    // The vanilla picker popup rides the game's anchored-balloon layer, whose z-index is
+    // var(--tooltipIndex) = 20 by default, while this panel sits at 10000. In the city the panel is
+    // nested inside GameTopLeft's stacking context so the balloon still wins, but in the Editor the
+    // panel outranks it and covers the picker. Raising --tooltipIndex to the value the game itself
+    // uses behind a modal backdrop puts the popup above the panel in both modes.
+    React.useEffect(() => {
+        if (typeof document === "undefined") {
+            return;
+        }
+
+        const anyPickerOpen = outlinePickerOpen
+            || fillPickerOpen
+            || ownerPickerOpen
+            || districtPickerOpen
+            || guidelineLinesPickerOpen
+            || guidelinePreviewPickerOpen
+            || guidelineDashedPickerOpen;
+
+        document.body.classList.toggle(PICKER_OPEN_BODY_CLASS, anyPickerOpen);
+        return () => document.body.classList.remove(PICKER_OPEN_BODY_CLASS);
+    }, [
+        districtPickerOpen,
+        fillPickerOpen,
+        guidelineDashedPickerOpen,
+        guidelineLinesPickerOpen,
+        guidelinePreviewPickerOpen,
+        outlinePickerOpen,
+        ownerPickerOpen,
+    ]);
+
     React.useEffect(() => {
         if (typeof document === "undefined") {
             return;
@@ -261,6 +294,8 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
                 return;
             }
 
+            setOutlinePickerOpen(false);
+            setFillPickerOpen(false);
             setDistrictPickerOpen(false);
             setOwnerPickerOpen(false);
             setGuidelineLinesPickerOpen(false);
@@ -566,6 +601,8 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
                         setGuidelineDashedHovered={setGuidelineDashedHovered}
                         setPreset1Hovered={setPreset1Hovered}
                         setPreset2Hovered={setPreset2Hovered}
+                        setOutlinePickerOpen={setOutlinePickerOpen}
+                        setFillPickerOpen={setFillPickerOpen}
                         setOwnerPickerOpen={setOwnerPickerOpen}
                         setGuidelineLinesPickerOpen={setGuidelineLinesPickerOpen}
                         setGuidelinePreviewPickerOpen={setGuidelinePreviewPickerOpen}
