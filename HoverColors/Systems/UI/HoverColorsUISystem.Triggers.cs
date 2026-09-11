@@ -13,6 +13,7 @@ namespace HoverColors.UI
 {
     using System;
     using Colossal.UI.Binding;
+    using CS2Shared.RiverMochi;
     using HoverColors.Systems;
 
     public partial class HoverColorsUISystem
@@ -45,6 +46,19 @@ namespace HoverColors.UI
             AddBinding(new TriggerBinding(Mod.ModId, "TogglePresetDefaults", TogglePresetDefaults));
             AddBinding(new TriggerBinding(Mod.ModId, "RestorePresetDefaults", RestorePresetDefaults));
             AddBinding(new TriggerBinding(Mod.ModId, "ResetGuidelines", ResetGuidelines));
+            AddBinding(new TriggerBinding<string>(Mod.ModId, "LogDebug", LogDebug));
+        }
+
+        // Diagnostic sink for the panel. Keeps mod troubleshooting in HoverColors.log instead of
+        // UI.log, which every mod's console output shares.
+        private static void LogDebug(string message)
+        {
+            if (string.IsNullOrEmpty(message))
+            {
+                return;
+            }
+
+            LogUtils.Info(() => $"{Mod.ModTag} {message}");
         }
 
         private void SetOutlineColor(float r, float g, float b, float a)

@@ -1,4 +1,4 @@
-<Publish>
+﻿<Publish>
 	<!--Id must be set in order to update existed mod. it is not required for publishing mod for the first time-->
 	<ModId Value="146044" />
 	<!--Name of the mod to display to players-->
@@ -46,7 +46,7 @@
 ## ❤️ Special Thanks
 - **Huge shout out to everyone who tested or supported the mod on its 7 month journey to release.**
 - Flashbond - collab, tech feedback, testing
-- yenyang - collab, tech feedback, testing
+- yenyang (Recolor mod) - collab, tech feedback, testing
 - StarQ - tech feedback, testing
 - gagaxm - feature idea, testing
 - Dx, Necko1996, BugsyG, ElGendo87, Maestro - testing
@@ -87,17 +87,6 @@ tags: Mochi's blue scrubber, Highlight, border color, remove blue, guidelines, d
 	<RequiredDLC Value="" />
 	<!--Change log for new version. Single line or multi line. Supports minimal markdown subset-->
 <ChangeLog>
-- 1.0.2 is same as 1.0.1 but PDX didn't update so trying again.
-- Added Collapsible panel arrow
-- Resize main color outline swatch, added styling and dot indicator
-- Added preset Set A / Set B system: P1 and P2 now support 4 saved colors total.
-- Added separate buttons [⇔] to switch preset between sets A and B
-- Reset/defaults [↺] button is now non-destructive. Toggles between mod defaults and your saved custom colors (4 colors in each set).
-- Existing saved P1/P2 presets are preserved as Set A when upgrading.
-- Updated Game top left icon to a color palette image, and more transparent slider bar.
-- Tooltips can now only be turned off from the Options menu to prevent accidental shutoff.
-- Title bar info icon can only turn tooltips back ON but not off (see options menu for OFF).
-- Improved guideline reapply behavior for better compatibility with Advanced Line Tool mod or any mod that changes GuideLineSettingsData.
 - Internal refactor and organization.
 </ChangeLog>
 	<!--External link, can be set multiple times. supported types are "discord", "github", "youtube", "twitch", "x", "paypal", "patreon", "buymeacoffee", "kofi", "crowdin", "gitlab", "gofundme"-->

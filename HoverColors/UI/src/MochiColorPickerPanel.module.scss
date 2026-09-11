@@ -17,11 +17,19 @@
 }
 
 // Editor has no GameTopLeft anchor, so the same draggable panel starts at a safe viewport position.
+//
+// z-index is deliberately cleared here. In the city the panel is nested inside GameTopLeft, so its
+// 10000 stays boxed in and the vanilla color-picker balloon (z-index var(--tooltipIndex), 20 by
+// default) still paints on top. Appended straight to the Editor root that 10000 competes with the
+// balloon and wins, which is what buried the picker behind the panel. Yenyang's Recolor mounts its
+// editor panel the same way and sets no z-index at all; matching that fixes the picker. The inline
+// drag transform still gives this element its own stacking context, so tooltips stay contained.
 .panelAnchorEditor {
   position: fixed;
   top: 64rem;
   left: 16rem;
   margin-top: 0;
+  z-index: auto;
 }
 
 .panelFrame {
