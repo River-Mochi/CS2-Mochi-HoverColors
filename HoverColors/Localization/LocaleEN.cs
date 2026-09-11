@@ -15,7 +15,7 @@ namespace HoverColors
     using System.Collections.Generic;
     using Colossal;
 
-    public sealed class LocaleEN : IDictionarySource
+    public class LocaleEN : IDictionarySource
     {
         private readonly HoverColorsSettings m_Settings;
 
@@ -101,10 +101,10 @@ namespace HoverColors
                     "Try both and see which you prefer! This only changes the background of this mod panel and not the game's UI."
                 },
 
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelTooltipsEnabled)), "▪ Tooltips for Hover Colors" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelTooltipsEnabled)), "▪ Show Tooltips (recommended)" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelTooltipsEnabled)),
-                    "<ENABLED [x]> is highly recommended" +
-                    "<Enabled> = show Hover Colors help tooltips (Recommended).\n" +
+                    "<ENABLED [x]> is highly recommended for Hover Colors" +
+                    "<Enabled> = show help tooltips (Recommended).\n" +
                     "<Disabled> = hide tooltips for this mod.\n" +
                     "Tooltips can only be disabled inside this Options menu.\n" +
                     "However, you can Enable them back ON in the city; click on the Info (i) button on the title bar."

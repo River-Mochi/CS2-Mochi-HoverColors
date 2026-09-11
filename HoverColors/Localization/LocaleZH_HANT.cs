@@ -15,7 +15,7 @@ namespace HoverColors
     using System.Collections.Generic;
 
     using Colossal;
-    public sealed class LocaleZH_HANT : IDictionarySource
+    public class LocaleZH_HANT : IDictionarySource
     {
         private readonly HoverColorsSettings m_Settings;
 

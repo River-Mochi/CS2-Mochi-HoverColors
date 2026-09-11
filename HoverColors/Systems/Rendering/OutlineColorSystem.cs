@@ -47,7 +47,6 @@ namespace HoverColors.Systems
     using Game.Prefabs;
     using Game.Rendering;
     using Game.Tools;
-    using HoverColors;
     using Unity.Entities;
     using UnityEngine;
     using UnityEngine.Rendering.HighDefinition;
@@ -343,7 +342,7 @@ namespace HoverColors.Systems
             if (colorsNeedApply)
             {
                 bool ecsOk = ApplyRenderingSettingsColors(r, g, b, outlineA, ownerR, ownerG, ownerB, ownerA, palette);
-                bool matOk = ApplyOutlineMaterialColors(r, g, b, outlineA, fillA, fillR, fillG, fillB, palette);
+                bool matOk = ApplyOutlineMaterialColors(outlineA, fillA, fillR, fillG, fillB, palette);
 
                 // Only cache the snapshot when BOTH writes land - otherwise retry next frame.
                 if (ecsOk && matOk)

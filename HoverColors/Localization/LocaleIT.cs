@@ -16,7 +16,7 @@ namespace HoverColors
 
     using Colossal;
 
-    public sealed class LocaleIT : IDictionarySource
+    public class LocaleIT : IDictionarySource
     {
         private readonly HoverColorsSettings m_Settings;
 
