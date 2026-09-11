@@ -42,7 +42,12 @@
     // Overwritten by the .panelOpacityNN classes below. These are the 80% defaults.
     --hc-panel-alpha-top: 0.32;
     --hc-panel-alpha-bottom: 0.24;
-    --hc-title-alpha: 0.30;
+    --hc-title-alpha: 0.72;
+    --hc-title-alpha-hover: 0.47;
+    // Height of the title strip. The Standard panel background is held back by this much so the
+    // header's own alpha is the only layer there and the city shows through it, the way City
+    // Watchdog's header does. Nudge if the header height changes.
+    --hc-title-height: 33rem;
     --hc-title-font-size: 13rem;
     --hc-title-letter-spacing: 0.80rem;
     position: relative;
@@ -56,8 +61,16 @@
 .panelStandard {
     border: 0;
     border-radius: 12rem;
-    background-image: linear-gradient(to bottom, rgba(95, 124, 136, var(--hc-panel-alpha-top)), rgba(58, 78, 88, var(--hc-panel-alpha-bottom)));
-    background-color: rgba(58, 78, 88, var(--hc-panel-alpha-bottom));
+    // Hard stop at the header height: above it the panel paints nothing, so .titleBar's own alpha
+    // is all that stands between the player and the city behind the panel.
+    background-color: transparent;
+    background-image: linear-gradient(
+        to bottom,
+        rgba(95, 124, 136, 0) 0,
+        rgba(95, 124, 136, 0) var(--hc-title-height),
+        rgba(95, 124, 136, var(--hc-panel-alpha-top)) var(--hc-title-height),
+        rgba(58, 78, 88, var(--hc-panel-alpha-bottom)) 100%
+    );
     box-shadow: 0 6rem 18rem rgba(0, 0, 0, 0.16);
 }
 
@@ -79,15 +92,10 @@
     background-color: rgba(36, 54, 66, var(--hc-title-alpha));
     transition: background-color 120ms ease-out;
 
+    // Hover goes lighter AND thinner, so the header opens up instead of gaining a white film.
+    // Same pair City Watchdog uses on its own header.
     &:hover {
-        background-color: rgba(254, 255, 255, 0.08);
-    }
-}
-
-// Vanilla panel surface is already dark, so the hover lift needs to be a touch stronger.
-.panelDarker .titleBar {
-    &:hover {
-        background-color: rgba(254, 255, 255, 0.10);
+        background-color: rgba(76, 98, 112, var(--hc-title-alpha-hover));
     }
 }
 
@@ -386,89 +394,104 @@
 .panelOpacity30 {
     --hc-panel-alpha-top: 0.12;
     --hc-panel-alpha-bottom: 0.09;
-    --hc-title-alpha: 0.1125;
+    --hc-title-alpha: 0.27;
+    --hc-title-alpha-hover: 0.1755;
 }
 
 .panelOpacity35 {
     --hc-panel-alpha-top: 0.14;
     --hc-panel-alpha-bottom: 0.105;
-    --hc-title-alpha: 0.1312;
+    --hc-title-alpha: 0.315;
+    --hc-title-alpha-hover: 0.2047;
 }
 
 .panelOpacity40 {
     --hc-panel-alpha-top: 0.16;
     --hc-panel-alpha-bottom: 0.12;
-    --hc-title-alpha: 0.15;
+    --hc-title-alpha: 0.36;
+    --hc-title-alpha-hover: 0.234;
 }
 
 .panelOpacity45 {
     --hc-panel-alpha-top: 0.18;
     --hc-panel-alpha-bottom: 0.135;
-    --hc-title-alpha: 0.1688;
+    --hc-title-alpha: 0.405;
+    --hc-title-alpha-hover: 0.2632;
 }
 
 .panelOpacity50 {
     --hc-panel-alpha-top: 0.2;
     --hc-panel-alpha-bottom: 0.15;
-    --hc-title-alpha: 0.1875;
+    --hc-title-alpha: 0.45;
+    --hc-title-alpha-hover: 0.2925;
 }
 
 .panelOpacity55 {
     --hc-panel-alpha-top: 0.22;
     --hc-panel-alpha-bottom: 0.165;
-    --hc-title-alpha: 0.2063;
+    --hc-title-alpha: 0.495;
+    --hc-title-alpha-hover: 0.3217;
 }
 
 .panelOpacity60 {
     --hc-panel-alpha-top: 0.24;
     --hc-panel-alpha-bottom: 0.18;
-    --hc-title-alpha: 0.225;
+    --hc-title-alpha: 0.54;
+    --hc-title-alpha-hover: 0.351;
 }
 
 .panelOpacity65 {
     --hc-panel-alpha-top: 0.26;
     --hc-panel-alpha-bottom: 0.195;
-    --hc-title-alpha: 0.2438;
+    --hc-title-alpha: 0.585;
+    --hc-title-alpha-hover: 0.3802;
 }
 
 .panelOpacity70 {
     --hc-panel-alpha-top: 0.28;
     --hc-panel-alpha-bottom: 0.21;
-    --hc-title-alpha: 0.2625;
+    --hc-title-alpha: 0.63;
+    --hc-title-alpha-hover: 0.4095;
 }
 
 .panelOpacity75 {
     --hc-panel-alpha-top: 0.3;
     --hc-panel-alpha-bottom: 0.225;
-    --hc-title-alpha: 0.2812;
+    --hc-title-alpha: 0.675;
+    --hc-title-alpha-hover: 0.4387;
 }
 
 .panelOpacity80 {
     --hc-panel-alpha-top: 0.32;
     --hc-panel-alpha-bottom: 0.24;
-    --hc-title-alpha: 0.3;
+    --hc-title-alpha: 0.72;
+    --hc-title-alpha-hover: 0.468;
 }
 
 .panelOpacity85 {
     --hc-panel-alpha-top: 0.34;
     --hc-panel-alpha-bottom: 0.255;
-    --hc-title-alpha: 0.3187;
+    --hc-title-alpha: 0.765;
+    --hc-title-alpha-hover: 0.4972;
 }
 
 .panelOpacity90 {
     --hc-panel-alpha-top: 0.36;
     --hc-panel-alpha-bottom: 0.27;
-    --hc-title-alpha: 0.3375;
+    --hc-title-alpha: 0.81;
+    --hc-title-alpha-hover: 0.5265;
 }
 
 .panelOpacity95 {
     --hc-panel-alpha-top: 0.38;
     --hc-panel-alpha-bottom: 0.285;
-    --hc-title-alpha: 0.3562;
+    --hc-title-alpha: 0.855;
+    --hc-title-alpha-hover: 0.5557;
 }
 
 .panelOpacity100 {
     --hc-panel-alpha-top: 0.4;
     --hc-panel-alpha-bottom: 0.3;
-    --hc-title-alpha: 0.375;
+    --hc-title-alpha: 0.9;
+    --hc-title-alpha-hover: 0.585;
 }

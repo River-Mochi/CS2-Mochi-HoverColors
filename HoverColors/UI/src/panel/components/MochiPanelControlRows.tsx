@@ -468,7 +468,9 @@ export const MochiPanelControlRows = ({
                     popupDirection={fillPickerDirection}
                     hideHint={true}
                     hexInput={true}
-                    colorWheel={true}
+                    // Compact picker, same as Owner and the guideline swatches. Only Outline gets
+                    // the full wheel.
+                    colorWheel={false}
                     onMouseEnter={() => setFillSwatchHovered(true)}
                     onMouseLeave={() => setFillSwatchHovered(false)}
                     onChange={handleFillColorChange}

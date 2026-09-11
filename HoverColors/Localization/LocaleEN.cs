@@ -117,7 +117,8 @@ namespace HoverColors
                     "\n" +
                     "**This also wipes your saved presets (Set A and Set B).**\n" +
                     "\n" +
-                    "Keybindings are not affected."
+                    "Keybindings are not affected.\n" +
+                    "This is like installing Hover Colors for the first time."
                 },
                 { m_Settings.GetOptionWarningLocaleID(nameof(HoverColorsSettings.ResetModDefaults)),
                     "Reset every Hover Colors setting to a fresh install?\n\nYour saved presets (Set A and Set B) will be erased." },
@@ -128,7 +129,8 @@ namespace HoverColors
                     "\n" +
                     "Everything else stays as you set it - Bulldozer/Roads behavior, tool preview areas, saved presets, panel options and keybindings.\n" +
                     "\n" +
-                    "This mod can be removed without a reset. Highlights go back to game defaults on their own."
+                    "Note: this mod can be removed without any reset. Highlights go back to game defaults on their own.\n"+
+                    "This is just a Quick Reset button to game color defaults."
                 },
                 { m_Settings.GetOptionWarningLocaleID(nameof(HoverColorsSettings.ResetColorsToVanilla)),
                     "Reset the colors this mod controls back to the game's own look?\n\nPresets, tool behavior and panel options are kept." },

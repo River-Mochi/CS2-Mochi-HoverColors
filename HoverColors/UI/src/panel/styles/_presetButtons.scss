@@ -224,8 +224,11 @@
 
 
 // right button: restore all four preset slots to the mod defaults.
-// Uses CCW-looking arrow.
+// Uses CCW-looking arrow. Sized to match .resetIconSwitch next to it: both carry the same 0.76
+// idle opacity, so the smaller glyph was the only reason it read dimmer.
 .resetIconRestore {
+  width: 19rem;
+  height: 19rem;
   transform: scaleX(-1);
 }
 

@@ -284,10 +284,12 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
             return;
         }
 
-        const compactPickerOpen = ownerPickerOpen || districtPickerOpen || guidelineLinesPickerOpen || guidelinePreviewPickerOpen || guidelineDashedPickerOpen;
+        // Fill is a compact (colorWheel=false) picker too, so it needs the hex spacing fix.
+        const compactPickerOpen = fillPickerOpen || ownerPickerOpen || districtPickerOpen || guidelineLinesPickerOpen || guidelinePreviewPickerOpen || guidelineDashedPickerOpen;
         document.body.classList.toggle(COMPACT_PICKER_BODY_CLASS, compactPickerOpen);
 
-        if (!compactPickerOpen) {
+        // The Outline picker is full-size, but it still has to close on an outside click.
+        if (!compactPickerOpen && !outlinePickerOpen) {
             return () => document.body.classList.remove(COMPACT_PICKER_BODY_CLASS);
         }
 
@@ -325,7 +327,7 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
             document.removeEventListener("mousedown", onMouseDown);
             document.body.classList.remove(COMPACT_PICKER_BODY_CLASS);
         };
-    }, [districtPickerOpen, guidelineDashedPickerOpen, guidelineLinesPickerOpen, guidelinePreviewPickerOpen, ownerPickerOpen]);
+    }, [districtPickerOpen, fillPickerOpen, guidelineDashedPickerOpen, guidelineLinesPickerOpen, guidelinePreviewPickerOpen, outlinePickerOpen, ownerPickerOpen]);
 
     React.useEffect(() => {
         if (!districtMenuOpen || typeof document === "undefined") {
