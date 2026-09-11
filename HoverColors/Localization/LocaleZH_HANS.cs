@@ -110,18 +110,6 @@ namespace HoverColors
                     "两个都试试。这里只改变此 mod 面板背景，不改变游戏 UI。"
                 },
 
-                // Reset button
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ResetGameVisuals)), "将游戏显示恢复为原版" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ResetGameVisuals)),
-                    "把本模组控制的所有显示恢复为游戏原版：轮廓、所属高亮、填充、轮廓粗细、参考线、区域和工具预览范围。\n" +
-                    "\n" +
-                    "已保存的预设、快捷键和面板偏好都会保留。\n" +
-                    "\n" +
-                    "卸载模组并不需要用到它，这是给你折腾之后重新开始用的。"
-                },
-
-                { m_Settings.GetOptionWarningLocaleID(nameof(HoverColorsSettings.ResetGameVisuals)),
-                    "将本模组控制的所有显示恢复为游戏原版？\n\n预设、快捷键和面板设置都会保留。" },
 
                 // Keybinds
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.TogglePanelBinding)), "打开/关闭主面板" },

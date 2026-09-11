@@ -39,8 +39,10 @@ namespace HoverColors
             FillColorInitialized = true;
 
             // 1.0 = the vanilla shader width captured at runtime, whatever that build's value is.
-            OutlineThicknessScale = kDefaultOutlineThicknessScale;
+            OutlineThicknessScale = kModDefaultOutlineThicknessScale;
             OutlineThicknessInitialized = true;
+
+            PanelOpacityPercent = kDefaultPanelOpacityPercent;
 
             // Safe fallback for the District picker until DistrictColorSystem captures the authored
             // default district prefab colors. Not applied unless DistrictColorEnabled is true.
@@ -187,7 +189,7 @@ namespace HoverColors
 
             if (!OutlineThicknessInitialized)
             {
-                OutlineThicknessScale = kDefaultOutlineThicknessScale;
+                OutlineThicknessScale = kModDefaultOutlineThicknessScale;
                 OutlineThicknessInitialized = true;
                 changed = true;
             }

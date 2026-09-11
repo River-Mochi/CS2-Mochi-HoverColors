@@ -110,18 +110,6 @@ namespace HoverColors
                     "İkisini de dene. Bu yalnızca bu mod panelinin arka planını değiştirir, oyun UI'sını değil."
                 },
 
-                // Reset button
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ResetGameVisuals)), "Oyun görsellerini varsayılana döndür" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ResetGameVisuals)),
-                    "Bu modun kontrol ettiği her görseli oyunun kendi haline döndürür: dış çizgi, sahip vurgusu, dolgu, dış çizgi kalınlığı, kılavuzlar, bölgeler ve araç önizleme alanları.\n" +
-                    "\n" +
-                    "Kayıtlı ön ayarların, kısayolların ve panel tercihlerin korunur.\n" +
-                    "\n" +
-                    "Modu kaldırmak için gerekli değildir. Denemelerden sonra sıfırdan başlamak içindir."
-                },
-
-                { m_Settings.GetOptionWarningLocaleID(nameof(HoverColorsSettings.ResetGameVisuals)),
-                    "Bu modun kontrol ettiği her görsel oyunun kendi haline döndürülsün mü?\n\nÖn ayarlar, kısayollar ve panel ayarları korunur." },
 
                 // Keybinds
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.TogglePanelBinding)), "Ana paneli aç/kapat" },

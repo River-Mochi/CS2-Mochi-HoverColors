@@ -17,6 +17,7 @@ namespace HoverColors
     using Game.Input;       // BindingKeyboard
     using Game.Modding;     // IMod
     using Game.Settings;    // ModSetting, attributes
+    using Game.UI;          // Unit.kPercentage
 
     [FileLocation("ModsSettings/HoverColors/HoverColors")]
     [SettingsUITabOrder(Actions, KeyBindings, About)]
@@ -38,6 +39,18 @@ namespace HoverColors
         internal const string kAboutLinks = "kAboutLinks";
         internal const string kAboutDedication = "kAboutDedication";
 
+        internal const int kMinPanelOpacityPercent = 30;
+        internal const int kMaxPanelOpacityPercent = 100;
+        internal const int kDefaultPanelOpacityPercent = 80;
+
+        private int m_PanelOpacityPercent = kDefaultPanelOpacityPercent;
+
+        internal static int ClampPanelOpacity(int value)
+        {
+            int snapped = (int)System.Math.Round(value / 5.0) * 5;
+            return System.Math.Max(kMinPanelOpacityPercent, System.Math.Min(kMaxPanelOpacityPercent, snapped));
+        }
+
         internal const int kToolColorModeRecommended = 0;
         internal const int kToolColorModeVanilla = 1;
         internal const int kToolColorModeCustom = 2;
@@ -56,8 +69,13 @@ namespace HoverColors
         // Outline thickness is stored as a multiplier on the vanilla shader width, not as a raw
         // width, so 1.0 always means "whatever this game build's _OutlineWidth actually is".
         internal const float kMinOutlineThicknessScale = 0f;
-        internal const float kDefaultOutlineThicknessScale = 1f;
         internal const float kMaxOutlineThicknessScale = 2f;
+
+        // Two distinct meanings that used to share one constant:
+        //   mod default  - what a fresh install / never-initialized save starts on
+        //   vanilla      - the captured runtime _OutlineWidth, i.e. "no change vs the game"
+        internal const float kModDefaultOutlineThicknessScale = 0.8f;
+        internal const float kVanillaOutlineThicknessScale = 1f;
 
         // Centralized default for the guideline opacity slider.
         // Vanilla CS2 is 100; lower = more transparent. Keep TSX fallback bindings in sync.
@@ -67,6 +85,7 @@ namespace HoverColors
         public int GuidelineDefaultPercent { get; set; }
 
         private const string kAboutLinksRow = "kAboutLinksRow";
+        internal const string kResetRow = "kResetRow";
 
         // Same Paradox URL pattern as CityWatchdog — lands on River-Mochi's author page filtered to CS2.
         private const string kUrlParadox =
@@ -127,6 +146,17 @@ namespace HoverColors
         // black. This flag lets MigrateAfterLoad hand those saves white instead.
         [SettingsUIHidden]
         public bool FillColorInitialized { get; set; }
+
+        // Background alpha for the in-city panel, 30-100 in steps of 5. Applied as discrete
+        // background classes in SCSS; CSS opacity is deliberately not used because it would fade
+        // the text, icons and swatches too.
+        [SettingsUISlider(min = kMinPanelOpacityPercent, max = kMaxPanelOpacityPercent, step = 5, scalarMultiplier = 1, unit = Unit.kPercentage)]
+        [SettingsUISection(Actions, kPanel)]
+        public int PanelOpacityPercent
+        {
+            get => m_PanelOpacityPercent;
+            set => m_PanelOpacityPercent = ClampPanelOpacity(value);
+        }
 
         [SettingsUIHidden]
         public float OutlineThicknessScale { get; set; }

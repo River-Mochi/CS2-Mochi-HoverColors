@@ -105,23 +105,44 @@ namespace HoverColors
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelTooltipsEnabled)),
                     "<Keep this ON> is recommended for most players.\n" +
                     "Shows short help when hovering Hover Colors buttons.\n" +
-                    "If disabled, click the title-bar Info (i) button to turn them back on. Or this checkbox at any time for tooltips on." +
-                    "To prevent mishaps: tooltips can only be disabled inside this Options menu.\n"
+                    "If disabled, click the title-bar Info (i) button to turn them back on. Or this checkbox at any time for tooltips on.\n" +
+                    "To prevent mishaps: tooltips can only be disabled inside this Options menu."
                 },
 
-                // Reset button
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ResetGameVisuals)), "Game visual colors reset" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ResetGameVisuals)),
-                    "Puts every visual this mod controls back to the game's own look: hover outline, owner highlight, fill, outline thickness, guidelines, districts and tool preview areas.\n" +
-                    "\n" +
-                    "- Your saved presets, hotkeys and panel preferences are kept.\n" +
-                    "\n" +
-                    "- This is for starting fresh after experimenting.\n" +
-                    "To be clear, this mod can be removed without a reset. Highlights/values simply go back to game defaults."
-                },
 
-                { m_Settings.GetOptionWarningLocaleID(nameof(HoverColorsSettings.ResetGameVisuals)),
-                    "Reset every visual this mod controls back to the game's own look?\n\nPresets, hotkeys and panel settings are kept." },
+                // Reset buttons
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ResetModDefaults)), "Reset to Mod Defaults" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ResetModDefaults)),
+                    "Puts every Hover Colors setting back to a fresh install: colors, outline thickness, tool color behavior, guidelines, panel options and tooltips.\n" +
+                    "\n" +
+                    "**This also wipes your saved presets (Set A and Set B).**\n" +
+                    "\n" +
+                    "Keybindings are not affected."
+                },
+                { m_Settings.GetOptionWarningLocaleID(nameof(HoverColorsSettings.ResetModDefaults)),
+                    "Reset every Hover Colors setting to a fresh install?\n\nYour saved presets (Set A and Set B) will be erased." },
+
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ResetColorsToVanilla)), "Reset Colors to Vanilla" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ResetColorsToVanilla)),
+                    "Hands the game its own look back: outline, owner highlight, fill, outline thickness, guidelines and districts.\n" +
+                    "\n" +
+                    "Everything else stays as you set it - Bulldozer/Roads behavior, tool preview areas, saved presets, panel options and keybindings.\n" +
+                    "\n" +
+                    "This mod can be removed without a reset. Highlights go back to game defaults on their own."
+                },
+                { m_Settings.GetOptionWarningLocaleID(nameof(HoverColorsSettings.ResetColorsToVanilla)),
+                    "Reset the colors this mod controls back to the game's own look?\n\nPresets, tool behavior and panel options are kept." },
+
+                // Panel opacity
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)), "Panel opacity" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)),
+                    "How solid the in-city panel background is.\n" +
+                    "\n" +
+                    "**100%** fully solid.\n" +
+                    "**Lower** lets more of the city show through.\n" +
+                    "\n" +
+                    "Only the background changes. Text, icons and swatches stay fully readable at every setting."
+                },
 
                 // Keybinds
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.TogglePanelBinding)), "Main panel open/close" },

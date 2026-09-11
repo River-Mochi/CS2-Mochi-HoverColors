@@ -42,6 +42,7 @@ import {
     ownerG$,
     ownerR$,
     panelCollapsed$,
+    panelOpacityPercent$,
     panelTooltipsEnabled$,
     preset1A$,
     preset1Active$,
@@ -72,7 +73,15 @@ import infoIconSrc from "../images/AdvisorInfoViewWhite.svg";
 import closeIconSrc from "../images/Close.svg";
 // Highlights-OFF eye: mod icon so the slash can be red. ON state keeps the vanilla eye.
 import eyeOffIconSrc from "../images/EyeOffRedSlash.svg";
+import { probePickerStacking } from "./panel/debug/pickerStackingProbe";
 import styles from "./MochiColorPickerPanel.module.scss";
+
+// Snaps to the 5-step grid the Options slider produces and looks up the matching background
+// class. CSS opacity is deliberately avoided: it would fade text, icons, sliders and swatches too.
+const panelOpacityClassFor = (value: number) => {
+    const normalized = Math.round(Math.min(100, Math.max(30, Number.isFinite(value) ? value : 80)) / 5) * 5;
+    return styles[`panelOpacity${normalized}`] ?? styles.panelOpacity80;
+};
 
 type MochiColorPickerPanelProps = {
     editorMode?: boolean;
@@ -125,6 +134,7 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
         a: Math.max(0, Math.min(1, boundGuideline / 100)),
     };
     const useDarkerPanel = useValue(useDarkerPanel$);
+    const panelOpacityPercent = useValue(panelOpacityPercent$);
     const surfaceToolAreasSuppressed = useValue(surfaceToolAreasSuppressed$);
     const specializedIndustryAreasSuppressed = useValue(specializedIndustryAreasSuppressed$);
     const vanillaOutlineActive = useValue(vanillaOutlineActive$);
@@ -251,6 +261,11 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
             || guidelineDashedPickerOpen;
 
         document.body.classList.toggle(PICKER_OPEN_BODY_CLASS, anyPickerOpen);
+
+        if (anyPickerOpen) {
+            probePickerStacking(panelElementRef.current, editorMode);
+        }
+
         return () => document.body.classList.remove(PICKER_OPEN_BODY_CLASS);
     }, [
         districtPickerOpen,
@@ -260,6 +275,8 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
         guidelinePreviewPickerOpen,
         outlinePickerOpen,
         ownerPickerOpen,
+        editorMode,
+        panelElementRef,
     ]);
 
     React.useEffect(() => {
@@ -477,7 +494,8 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
     const closeButtonClass = `${roundHighlightButtonTheme["button"] ?? ""} ${styles.closeButton}`;
     const panelFrameClass = `${panelBaseTheme.panel ?? "panel_YqS"} ${infoviewMenuTheme.menu ?? "menu_O_M"} ${styles.panelFrame}`;
     const panelSurfaceClass = useDarkerPanel ? styles.panelDarker : styles.panelStandard;
-    const panelContentClass = `${panelTheme.content ?? "content_XD5 content_AD7 child-opacity-transition_nkS"} ${infoviewMenuTheme.content ?? "content_Hzl"} ${styles.panelContent} ${panelSurfaceClass}`;
+    const panelOpacityClass = panelOpacityClassFor(panelOpacityPercent);
+    const panelContentClass = `${panelTheme.content ?? "content_XD5 content_AD7 child-opacity-transition_nkS"} ${infoviewMenuTheme.content ?? "content_Hzl"} ${styles.panelContent} ${panelSurfaceClass} ${panelOpacityClass}`;
 
     return (
         <div
@@ -501,7 +519,7 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
                             </Button>
                         </SideTooltip>
 
-                        <SideTooltip tooltip={tt(text.tooltipDraggable)} side="right">
+                        <SideTooltip tooltip={tt(text.tooltipDraggable)} side="above" align="center">
                             <div
                                 className={`${styles.titleDragHandle} ${panelDragging ? styles.titleDragHandleActive : ""}`}
                                 onMouseDown={handlePanelDragStart}

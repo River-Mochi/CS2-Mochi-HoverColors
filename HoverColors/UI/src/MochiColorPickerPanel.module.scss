@@ -31,8 +31,10 @@
 
 .panelContent {
     --hc-panel-width: 246rem;
+    // Overwritten by the .panelOpacityNN classes below. These are the 80% defaults.
     --hc-panel-alpha-top: 0.32;
     --hc-panel-alpha-bottom: 0.24;
+    --hc-title-alpha: 0.30;
     --hc-title-font-size: 13rem;
     --hc-title-letter-spacing: 0.80rem;
     position: relative;
@@ -66,7 +68,7 @@
     margin: -8rem -1rem 0 -1rem;
     padding: 4.5rem 6rem 4.5rem 6rem;
     border-radius: 12rem 12rem 0 0;
-    background-color: rgba(6, 14, 19, 0.30);
+    background-color: rgba(36, 54, 66, var(--hc-title-alpha));
     transition: background-color 120ms ease-out;
 
     &:hover {
@@ -74,10 +76,8 @@
     }
 }
 
-// Vanilla panel surface is already dark, so the same overlay would disappear into it.
+// Vanilla panel surface is already dark, so the hover lift needs to be a touch stronger.
 .panelDarker .titleBar {
-    background-color: rgba(0, 0, 0, 0.24);
-
     &:hover {
         background-color: rgba(254, 255, 255, 0.10);
     }
@@ -371,4 +371,96 @@
 
 .outlineRight > * + * {
   margin-left: 4rem;
+}
+
+// Panel background opacity, driven by the Options slider (30-100 step 5).
+// Only background alpha changes, so text, icons, sliders and swatches stay fully readable.
+.panelOpacity30 {
+    --hc-panel-alpha-top: 0.12;
+    --hc-panel-alpha-bottom: 0.09;
+    --hc-title-alpha: 0.1125;
+}
+
+.panelOpacity35 {
+    --hc-panel-alpha-top: 0.14;
+    --hc-panel-alpha-bottom: 0.105;
+    --hc-title-alpha: 0.1312;
+}
+
+.panelOpacity40 {
+    --hc-panel-alpha-top: 0.16;
+    --hc-panel-alpha-bottom: 0.12;
+    --hc-title-alpha: 0.15;
+}
+
+.panelOpacity45 {
+    --hc-panel-alpha-top: 0.18;
+    --hc-panel-alpha-bottom: 0.135;
+    --hc-title-alpha: 0.1688;
+}
+
+.panelOpacity50 {
+    --hc-panel-alpha-top: 0.2;
+    --hc-panel-alpha-bottom: 0.15;
+    --hc-title-alpha: 0.1875;
+}
+
+.panelOpacity55 {
+    --hc-panel-alpha-top: 0.22;
+    --hc-panel-alpha-bottom: 0.165;
+    --hc-title-alpha: 0.2063;
+}
+
+.panelOpacity60 {
+    --hc-panel-alpha-top: 0.24;
+    --hc-panel-alpha-bottom: 0.18;
+    --hc-title-alpha: 0.225;
+}
+
+.panelOpacity65 {
+    --hc-panel-alpha-top: 0.26;
+    --hc-panel-alpha-bottom: 0.195;
+    --hc-title-alpha: 0.2438;
+}
+
+.panelOpacity70 {
+    --hc-panel-alpha-top: 0.28;
+    --hc-panel-alpha-bottom: 0.21;
+    --hc-title-alpha: 0.2625;
+}
+
+.panelOpacity75 {
+    --hc-panel-alpha-top: 0.3;
+    --hc-panel-alpha-bottom: 0.225;
+    --hc-title-alpha: 0.2812;
+}
+
+.panelOpacity80 {
+    --hc-panel-alpha-top: 0.32;
+    --hc-panel-alpha-bottom: 0.24;
+    --hc-title-alpha: 0.3;
+}
+
+.panelOpacity85 {
+    --hc-panel-alpha-top: 0.34;
+    --hc-panel-alpha-bottom: 0.255;
+    --hc-title-alpha: 0.3187;
+}
+
+.panelOpacity90 {
+    --hc-panel-alpha-top: 0.36;
+    --hc-panel-alpha-bottom: 0.27;
+    --hc-title-alpha: 0.3375;
+}
+
+.panelOpacity95 {
+    --hc-panel-alpha-top: 0.38;
+    --hc-panel-alpha-bottom: 0.285;
+    --hc-title-alpha: 0.3562;
+}
+
+.panelOpacity100 {
+    --hc-panel-alpha-top: 0.4;
+    --hc-panel-alpha-bottom: 0.3;
+    --hc-title-alpha: 0.375;
 }

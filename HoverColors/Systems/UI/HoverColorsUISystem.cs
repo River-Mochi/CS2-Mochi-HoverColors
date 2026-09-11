@@ -48,6 +48,7 @@ namespace HoverColors.UI
         private ValueBinding<float> m_FillGBinding = null!;
         private ValueBinding<float> m_FillBBinding = null!;
         private ValueBinding<float> m_OutlineThicknessScaleBinding = null!;
+        private ValueBinding<int> m_PanelOpacityPercentBinding = null!;
         private ValueBinding<float> m_DistrictRBinding = null!;
         private ValueBinding<float> m_DistrictGBinding = null!;
         private ValueBinding<float> m_DistrictBBinding = null!;
@@ -158,7 +159,10 @@ namespace HoverColors.UI
             m_FillBBinding = AddValueBinding("FillB", settings?.FillB ?? 1f);
             m_OutlineThicknessScaleBinding = AddValueBinding(
                 "OutlineThicknessScale",
-                settings?.OutlineThicknessScale ?? HoverColorsSettings.kDefaultOutlineThicknessScale);
+                settings?.OutlineThicknessScale ?? HoverColorsSettings.kModDefaultOutlineThicknessScale);
+            m_PanelOpacityPercentBinding = AddValueBinding(
+                "PanelOpacityPercent",
+                settings?.PanelOpacityPercent ?? HoverColorsSettings.kDefaultPanelOpacityPercent);
             m_DistrictRBinding = AddValueBinding("DistrictR", settings?.DistrictR ?? 128f / 255f);
             m_DistrictGBinding = AddValueBinding("DistrictG", settings?.DistrictG ?? 128f / 255f);
             m_DistrictBBinding = AddValueBinding("DistrictB", settings?.DistrictB ?? 128f / 255f);
@@ -231,7 +235,10 @@ namespace HoverColors.UI
             UpdateIfChanged(m_FillBBinding, settings?.FillB ?? 1f);
             UpdateIfChanged(
                 m_OutlineThicknessScaleBinding,
-                settings?.OutlineThicknessScale ?? HoverColorsSettings.kDefaultOutlineThicknessScale);
+                settings?.OutlineThicknessScale ?? HoverColorsSettings.kModDefaultOutlineThicknessScale);
+            UpdateIfChanged(
+                m_PanelOpacityPercentBinding,
+                settings?.PanelOpacityPercent ?? HoverColorsSettings.kDefaultPanelOpacityPercent);
             UpdateIfChanged(m_DistrictRBinding, settings?.DistrictR ?? 128f / 255f);
             UpdateIfChanged(m_DistrictGBinding, settings?.DistrictG ?? 128f / 255f);
             UpdateIfChanged(m_DistrictBBinding, settings?.DistrictB ?? 128f / 255f);

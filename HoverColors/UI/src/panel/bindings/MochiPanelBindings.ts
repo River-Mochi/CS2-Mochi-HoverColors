@@ -65,6 +65,9 @@ export const panelCollapsed$ = bindValue<boolean>(CHANNEL, "PanelCollapsed", fal
 export const hoverHighlightsSuppressed$ = bindValue<boolean>(CHANNEL, "HoverHighlightsSuppressed", false);
 
 export const useDarkerPanel$ = bindValue<boolean>(CHANNEL, "UseDarkerPanel", false);
+
+// Panel background alpha, 30-100 in steps of 5. Keep in sync with kDefaultPanelOpacityPercent.
+export const panelOpacityPercent$ = bindValue<number>(CHANNEL, "PanelOpacityPercent", 80);
 export const surfaceToolAreasSuppressed$ = bindValue<boolean>(CHANNEL, "SurfaceToolAreasSuppressed", true);
 export const specializedIndustryAreasSuppressed$ = bindValue<boolean>(CHANNEL, "SpecializedIndustryAreasSuppressed", true);
 export const vanillaOutlineActive$ = bindValue<boolean>(CHANNEL, "VanillaOutlineActive", false);

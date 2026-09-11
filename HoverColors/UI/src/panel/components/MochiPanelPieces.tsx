@@ -81,7 +81,9 @@ type DragGripProps = {
 };
 
 export const DragGrip = ({ active, tooltip, tooltipSide, onMouseDown }: DragGripProps) => (
-    <SideTooltip tooltip={tooltip} side={tooltipSide ?? "below"}>
+    // Always centred under the panel: the grip sits bottom-right, so a left-flush tooltip looked
+    // detached from it.
+    <SideTooltip tooltip={tooltip} side={tooltipSide ?? "below"} align="center">
         <div
             className={`${styles.dragGrip} ${active ? styles.dragGripActive : ""}`}
             onMouseDown={onMouseDown}

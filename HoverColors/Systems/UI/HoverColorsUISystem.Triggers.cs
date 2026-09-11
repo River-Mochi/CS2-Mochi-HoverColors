@@ -160,13 +160,13 @@ namespace HoverColors.UI
             HoverColorsSettings? settings = Mod.Settings;
             if (settings == null) return;
 
-            if (ApproxEqual(settings.OutlineThicknessScale, HoverColorsSettings.kDefaultOutlineThicknessScale)
+            if (ApproxEqual(settings.OutlineThicknessScale, HoverColorsSettings.kVanillaOutlineThicknessScale)
                 && settings.OutlineThicknessInitialized)
             {
                 return;
             }
 
-            settings.OutlineThicknessScale = HoverColorsSettings.kDefaultOutlineThicknessScale;
+            settings.OutlineThicknessScale = HoverColorsSettings.kVanillaOutlineThicknessScale;
             settings.OutlineThicknessInitialized = true;
             ApplySaveAndSync(settings);
         }
@@ -174,7 +174,7 @@ namespace HoverColors.UI
         private static bool IsVanillaOutlineThickness(HoverColorsSettings settings)
         {
             return settings.OutlineThicknessInitialized
-                && ApproxEqual(settings.OutlineThicknessScale, HoverColorsSettings.kDefaultOutlineThicknessScale);
+                && ApproxEqual(settings.OutlineThicknessScale, HoverColorsSettings.kVanillaOutlineThicknessScale);
         }
 
         private static float SnapOutlineThickness(float scale)
@@ -363,7 +363,7 @@ namespace HoverColors.UI
                 return;
             }
 
-            settings.OutlineThicknessScale = HoverColorsSettings.kDefaultOutlineThicknessScale;
+            settings.OutlineThicknessScale = HoverColorsSettings.kVanillaOutlineThicknessScale;
             settings.OutlineThicknessInitialized = true;
             settings.OutlineR = hovered.r;
             settings.OutlineG = hovered.g;
@@ -400,7 +400,7 @@ namespace HoverColors.UI
                 return;
             }
 
-            settings.OutlineThicknessScale = HoverColorsSettings.kDefaultOutlineThicknessScale;
+            settings.OutlineThicknessScale = HoverColorsSettings.kVanillaOutlineThicknessScale;
             settings.OutlineThicknessInitialized = true;
             settings.OutlineR = hovered.r;
             settings.OutlineG = hovered.g;

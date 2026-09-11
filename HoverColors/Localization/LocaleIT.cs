@@ -110,18 +110,6 @@ namespace HoverColors
                     "Prova entrambi! Cambia solo lo sfondo di questo pannello del mod, non l'UI del gioco."
                 },
 
-                // Reset button
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ResetGameVisuals)), "Ripristina la grafica del gioco" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ResetGameVisuals)),
-                    "Riporta all'aspetto originale tutto ciò che questa mod controlla: contorno, evidenziazione del proprietario, riempimento, spessore del contorno, guide, distretti e aree di anteprima degli strumenti.\n" +
-                    "\n" +
-                    "I tuoi preset, i tasti rapidi e le preferenze del pannello vengono mantenuti.\n" +
-                    "\n" +
-                    "Non serve per disinstallare la mod. Serve a ripartire da zero dopo aver sperimentato."
-                },
-
-                { m_Settings.GetOptionWarningLocaleID(nameof(HoverColorsSettings.ResetGameVisuals)),
-                    "Riportare all'aspetto originale tutto ciò che questa mod controlla?\n\nPreset, tasti rapidi e impostazioni del pannello vengono mantenuti." },
 
                 // Keybinds
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.TogglePanelBinding)), "Apri/chiudi pannello principale" },

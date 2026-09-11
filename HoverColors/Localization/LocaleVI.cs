@@ -110,18 +110,6 @@ namespace HoverColors
                     "Thử cả hai để chọn. Chỉ đổi nền bảng mod này, không đổi UI của game."
                 },
 
-                // Reset button
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ResetGameVisuals)), "Trả hiển thị trong game về mặc định" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ResetGameVisuals)),
-                    "Trả mọi thứ mod này điều khiển về hiển thị gốc của game: viền, tô sáng chủ sở hữu, tô nền, độ dày viền, đường dẫn hướng, quận và vùng xem trước của công cụ.\n" +
-                    "\n" +
-                    "Các thiết lập sẵn đã lưu, phím tắt và tùy chọn bảng điều khiển vẫn được giữ.\n" +
-                    "\n" +
-                    "Không cần dùng để gỡ mod. Đây là để bắt đầu lại sau khi thử nghiệm."
-                },
-
-                { m_Settings.GetOptionWarningLocaleID(nameof(HoverColorsSettings.ResetGameVisuals)),
-                    "Trả mọi thứ mod này điều khiển về hiển thị gốc của game?\n\nThiết lập sẵn, phím tắt và tùy chọn bảng điều khiển vẫn được giữ." },
 
                 // Keybinds
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.TogglePanelBinding)), "Mở/đóng bảng chính" },

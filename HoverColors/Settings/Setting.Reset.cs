@@ -7,7 +7,7 @@
 // ================= </copyright> ======================
 
 // File: Settings/Setting.Reset.cs
-// Purpose: Options UI action for restoring HC-controlled game visuals to vanilla.
+// Purpose: Options UI reset actions - full mod defaults, and a visuals-only vanilla restore.
 
 namespace HoverColors
 {
@@ -17,10 +17,12 @@ namespace HoverColors
 
     public partial class HoverColorsSettings
     {
+        // Fresh-install reset: everything SetDefaults() produces, saved presets included.
+        [SettingsUIButtonGroup(kResetRow)]
         [SettingsUIButton]
         [SettingsUIConfirmation]
         [SettingsUISection(Actions, kReset)]
-        public bool ResetGameVisuals
+        public bool ResetModDefaults
         {
             set
             {
@@ -29,11 +31,36 @@ namespace HoverColors
                     return;
                 }
 
-                ResetGameVisualsToVanilla();
+                SetDefaults();
+
+                // AreaToolOverlaySystem keeps its own static switches, so they need the new values.
+                AreaToolOverlaySystem.SetSurfaceSuppression(SurfaceToolAreasSuppressed);
+                AreaToolOverlaySystem.SetSpecializedIndustrySuppression(SpecializedIndustryAreasSuppressed);
+
+                ApplyAndSave();
             }
         }
 
-        private void ResetGameVisualsToVanilla()
+        // Visual-only reset: hands the game's own look back without touching how the player has
+        // configured tool behavior, area previews, presets, panel or keybindings.
+        [SettingsUIButtonGroup(kResetRow)]
+        [SettingsUIButton]
+        [SettingsUIConfirmation]
+        [SettingsUISection(Actions, kReset)]
+        public bool ResetColorsToVanilla
+        {
+            set
+            {
+                if (!value)
+                {
+                    return;
+                }
+
+                ResetColorsToVanillaInternal();
+            }
+        }
+
+        private void ResetColorsToVanillaInternal()
         {
             // Hover outline, owner highlight, fill, and thickness.
             UnityEngine.Color hovered = OutlineColorSystem.CapturedHoveredColor;
@@ -56,16 +83,11 @@ namespace HoverColors
             FillA = OutlineColorSystem.CapturedFillA;
             FillColorInitialized = true;
 
-            OutlineThicknessScale = kDefaultOutlineThicknessScale;
+            OutlineThicknessScale = kVanillaOutlineThicknessScale;
             OutlineThicknessInitialized = true;
 
             // Global Eye toggle: vanilla behavior is normal hover highlights visible.
             HoverHighlightsSuppressed = false;
-
-            // Tool-specific colors back to normal game behavior.
-            ToolColorMode = kToolColorModeVanilla;
-            UseOverlapWarningColor = true;
-            UseCustomColorsForNetLanes = false;
 
             // Guidelines: vanilla colors and full vanilla opacity.
             UnityEngine.Color guidelineLines =
@@ -110,15 +132,6 @@ namespace HoverColors
             DistrictG = district.g;
             DistrictB = district.b;
             DistrictA = district.a;
-
-            // Vanilla Area-tool behavior shows these preview areas.
-            SurfaceToolAreasSuppressed = false;
-            SpecializedIndustryAreasSuppressed = false;
-            SpecializedIndustryAreasSuppressionInitialized = true;
-
-            // These two switches live outside the settings values, so update them immediately too.
-            AreaToolOverlaySystem.SetSurfaceSuppression(false);
-            AreaToolOverlaySystem.SetSpecializedIndustrySuppression(false);
 
             ApplyAndSave();
         }
