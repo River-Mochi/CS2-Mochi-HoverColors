@@ -130,13 +130,46 @@
     box-shadow: 0 6rem 18rem rgba(0, 0, 0, 0.16);
 }
 
-// Darker paints nothing: the vanilla Panel/Menu surface shows through, so it matches whatever
-// skin the player is on and follows the game's own Interface Opacity slider. HC's opacity slider
-// is intentionally inert here - two controls over one surface was the confusing part.
+// Darker used to paint nothing and let the vanilla Panel surface show through. That gave players
+// the vanilla look they wanted but dragged three things along with it: vanilla's backdrop-filter
+// blur, the game's Interface Opacity driving the panel instead of ours, and a surface that changed
+// shape with the skin. It now paints the same colours itself.
+//
+// The top colour is not a vanilla-ish guess - it is --panelColorDark from index.css, the value the
+// game paints its own dark panel surfaces with. So Darker still looks like a vanilla panel; it just
+// answers to the Hover Colors slider and costs nothing to composite.
+//
+// An earlier pass used --gradientDarkBlueStart/End here (the legacy panel gradient, which is also
+// what Zone Tools copies). Those are mid-tone blues from the same family City Watchdog derived
+// Standard's palette from, so the two styles collapsed into each other: near-identical at the top
+// of the gradient, and at the bottom the option named "Darker panel" was actually the lighter of
+// the two. The dark variable is the one that makes the toggle mean something at every slider step.
+//
+// Alphas come from the --hc-dark-* set rather than Standard's, because the two want different tops:
+// Standard is the glass one and stops at 0.95 so a trace of the city always shows, while someone
+// who picks Darker at 100% wants an actually solid panel.
 .panelDarker {
-    // Surface deliberately left to vanilla. Control styling lives in panel/styles/_panelDarker.scss.
-    // A real declaration keeps this class in the CSS-module exports even though the rule is bare.
+    --menuPanel1: transparent;
+    --menuPanel2: transparent;
+    --panelColorDark: transparent;
+    --panelColorNormal: transparent;
+    --sectionHeaderColor: transparent;
+    --panelBlur: none;
     position: relative;
+    background-color: transparent;
+    border: 0;
+    border-radius: 12rem;
+    // Same offset trick as .panelStandard: no length-positioned colour stops, which Gameface drops.
+    // Same !important, for the same `.overwrite-legacy .content_XD5` two-class rule in Legacy UI.
+    background-image: linear-gradient(
+        to bottom,
+        rgba(24, 33, 51, var(--hc-dark-alpha-top)),
+        rgba(13, 18, 32, var(--hc-dark-alpha-bottom))
+    ) !important;
+    background-repeat: no-repeat;
+    background-position: 0rem 33rem;
+    background-size: 100% 100%;
+    box-shadow: 0 6rem 18rem rgba(0, 0, 0, 0.22);
 }
 
 // Idle header sits darker than the body so the title bar reads as its own strip.
@@ -171,21 +204,20 @@
     }
 }
 
-// Darker: a plain darkening over the vanilla surface. Fixed alphas, so the HC opacity slider does
-// not reach it and the header keeps matching the vanilla panel underneath.
+// Darker header: a darker sibling of the body's top colour, on the same slider.
 //
-// The corner radius has to track the skin, not our own 12rem. Vanilla paints the panel background
-// with .content_XD5, which has NO radius, while the rounding lives on .panel_YqS as
-// var(--panelRadius) - a value that is 12rem in some skins and 0, 4, 5, 6 or 14rem in others. Where
-// ours was rounded more than the panel, the top corners were left showing the translucent vanilla
-// background instead of the header, which is the wedge that appears on hover.
+// The radius is back to a flat 12rem. It had to track var(--panelRadius) only while we were sitting
+// on the vanilla surface - where our corners were rounded more than the panel's, the difference
+// showed as translucent wedges on hover. Now that this panel paints its own background there is no
+// surface underneath to peek through, so it can match .panelStandard again.
+//
+// Hover lightens but keeps the idle alpha, unlike Standard which also thins out. Darker exists for
+// players who want a solid panel; going see-through under the cursor would undo that at 100%.
 .panelDarker .titleBar {
-    border-top-left-radius: var(--panelRadius);
-    border-top-right-radius: var(--panelRadius);
-    background-color: rgba(0, 0, 0, 0.24);
+    background-color: rgba(16, 21, 33, var(--hc-dark-title-alpha));
 
     &:hover {
-        background-color: rgba(254, 255, 255, 0.10);
+        background-color: rgba(45, 58, 86, var(--hc-dark-title-alpha));
     }
 }
 
@@ -480,117 +512,165 @@
 }
 
 // Panel background opacity, driven by the Options slider (30-100 step 5).
-// The percent IS the alpha, the way City Watchdog does it, so 100% is genuinely solid.
+// The percent maps straight onto alpha, the way City Watchdog does it.
 // Only background alpha changes, so text, icons, sliders and swatches stay fully readable.
 //
-// The bottom stop trails the top one by City Watchdog's own 0.917 ratio, which is what gives
-// the body its slight fade. That ratio is eased back out towards the top of the range so the
-// last step lands on a true 1.0 rather than 0.917 - at 100% the label promises solid, and the
-// bottom edge staying faintly see-through was the one place it did not deliver.
+// Two sets, because the two surfaces want different tops. Standard is the glass one and stops
+// at 0.95, so even at maximum a trace of the city shows through. Darker goes all the way to
+// 1.0: someone who picks it at 100% is asking for a solid panel, not a nearly-solid one.
 //
-// Title hover stays deliberately lighter than the idle header at every step: that see-through
-// lift on hover is the City Watchdog behaviour, not a rounding artefact.
+// The bottom stop trails the top by City Watchdog's 0.917 ratio, which is what gives the body
+// its slight fade. The ratio eases back out towards the top of the range so the last step is
+// flat across the whole body instead of having a bottom edge lighter than the top.
+//
+// Standard's title lifts see-through on hover (City Watchdog's behaviour) so it has its own
+// hover alpha; Darker's header lightens without thinning, so it needs no hover value.
 .panelOpacity30 {
-    --hc-panel-alpha-top: 0.3;
-    --hc-panel-alpha-bottom: 0.2826;
-    --hc-title-alpha: 0.3;
-    --hc-title-alpha-hover: 0.1917;
+    --hc-panel-alpha-top: 0.285;
+    --hc-panel-alpha-bottom: 0.2684;
+    --hc-title-alpha: 0.285;
+    --hc-title-alpha-hover: 0.1821;
+    --hc-dark-alpha-top: 0.3;
+    --hc-dark-alpha-bottom: 0.2826;
+    --hc-dark-title-alpha: 0.3;
 }
 
 .panelOpacity35 {
-    --hc-panel-alpha-top: 0.35;
-    --hc-panel-alpha-bottom: 0.3311;
-    --hc-title-alpha: 0.35;
-    --hc-title-alpha-hover: 0.2236;
+    --hc-panel-alpha-top: 0.3325;
+    --hc-panel-alpha-bottom: 0.3146;
+    --hc-title-alpha: 0.3325;
+    --hc-title-alpha-hover: 0.2125;
+    --hc-dark-alpha-top: 0.35;
+    --hc-dark-alpha-bottom: 0.3311;
+    --hc-dark-title-alpha: 0.35;
 }
 
 .panelOpacity40 {
-    --hc-panel-alpha-top: 0.4;
-    --hc-panel-alpha-bottom: 0.3801;
-    --hc-title-alpha: 0.4;
-    --hc-title-alpha-hover: 0.2556;
+    --hc-panel-alpha-top: 0.38;
+    --hc-panel-alpha-bottom: 0.3611;
+    --hc-title-alpha: 0.38;
+    --hc-title-alpha-hover: 0.2428;
+    --hc-dark-alpha-top: 0.4;
+    --hc-dark-alpha-bottom: 0.3801;
+    --hc-dark-title-alpha: 0.4;
 }
 
 .panelOpacity45 {
-    --hc-panel-alpha-top: 0.45;
-    --hc-panel-alpha-bottom: 0.4295;
-    --hc-title-alpha: 0.45;
-    --hc-title-alpha-hover: 0.2876;
+    --hc-panel-alpha-top: 0.4275;
+    --hc-panel-alpha-bottom: 0.408;
+    --hc-title-alpha: 0.4275;
+    --hc-title-alpha-hover: 0.2732;
+    --hc-dark-alpha-top: 0.45;
+    --hc-dark-alpha-bottom: 0.4295;
+    --hc-dark-title-alpha: 0.45;
 }
 
 .panelOpacity50 {
-    --hc-panel-alpha-top: 0.5;
-    --hc-panel-alpha-bottom: 0.4793;
-    --hc-title-alpha: 0.5;
-    --hc-title-alpha-hover: 0.3195;
+    --hc-panel-alpha-top: 0.475;
+    --hc-panel-alpha-bottom: 0.4553;
+    --hc-title-alpha: 0.475;
+    --hc-title-alpha-hover: 0.3035;
+    --hc-dark-alpha-top: 0.5;
+    --hc-dark-alpha-bottom: 0.4793;
+    --hc-dark-title-alpha: 0.5;
 }
 
 .panelOpacity55 {
-    --hc-panel-alpha-top: 0.55;
-    --hc-panel-alpha-bottom: 0.5295;
-    --hc-title-alpha: 0.55;
-    --hc-title-alpha-hover: 0.3515;
+    --hc-panel-alpha-top: 0.5225;
+    --hc-panel-alpha-bottom: 0.503;
+    --hc-title-alpha: 0.5225;
+    --hc-title-alpha-hover: 0.3339;
+    --hc-dark-alpha-top: 0.55;
+    --hc-dark-alpha-bottom: 0.5295;
+    --hc-dark-title-alpha: 0.55;
 }
 
 .panelOpacity60 {
-    --hc-panel-alpha-top: 0.6;
-    --hc-panel-alpha-bottom: 0.5801;
-    --hc-title-alpha: 0.6;
-    --hc-title-alpha-hover: 0.3834;
+    --hc-panel-alpha-top: 0.57;
+    --hc-panel-alpha-bottom: 0.5511;
+    --hc-title-alpha: 0.57;
+    --hc-title-alpha-hover: 0.3642;
+    --hc-dark-alpha-top: 0.6;
+    --hc-dark-alpha-bottom: 0.5801;
+    --hc-dark-title-alpha: 0.6;
 }
 
 .panelOpacity65 {
-    --hc-panel-alpha-top: 0.65;
-    --hc-panel-alpha-bottom: 0.6311;
-    --hc-title-alpha: 0.65;
-    --hc-title-alpha-hover: 0.4153;
+    --hc-panel-alpha-top: 0.6175;
+    --hc-panel-alpha-bottom: 0.5996;
+    --hc-title-alpha: 0.6175;
+    --hc-title-alpha-hover: 0.3946;
+    --hc-dark-alpha-top: 0.65;
+    --hc-dark-alpha-bottom: 0.6311;
+    --hc-dark-title-alpha: 0.65;
 }
 
 .panelOpacity70 {
-    --hc-panel-alpha-top: 0.7;
-    --hc-panel-alpha-bottom: 0.6826;
-    --hc-title-alpha: 0.7;
-    --hc-title-alpha-hover: 0.4473;
+    --hc-panel-alpha-top: 0.665;
+    --hc-panel-alpha-bottom: 0.6484;
+    --hc-title-alpha: 0.665;
+    --hc-title-alpha-hover: 0.4249;
+    --hc-dark-alpha-top: 0.7;
+    --hc-dark-alpha-bottom: 0.6826;
+    --hc-dark-title-alpha: 0.7;
 }
 
 .panelOpacity75 {
-    --hc-panel-alpha-top: 0.75;
-    --hc-panel-alpha-bottom: 0.7344;
-    --hc-title-alpha: 0.75;
-    --hc-title-alpha-hover: 0.4793;
+    --hc-panel-alpha-top: 0.7125;
+    --hc-panel-alpha-bottom: 0.6977;
+    --hc-title-alpha: 0.7125;
+    --hc-title-alpha-hover: 0.4553;
+    --hc-dark-alpha-top: 0.75;
+    --hc-dark-alpha-bottom: 0.7344;
+    --hc-dark-title-alpha: 0.75;
 }
 
 .panelOpacity80 {
-    --hc-panel-alpha-top: 0.8;
-    --hc-panel-alpha-bottom: 0.7867;
-    --hc-title-alpha: 0.8;
-    --hc-title-alpha-hover: 0.5112;
+    --hc-panel-alpha-top: 0.76;
+    --hc-panel-alpha-bottom: 0.7474;
+    --hc-title-alpha: 0.76;
+    --hc-title-alpha-hover: 0.4856;
+    --hc-dark-alpha-top: 0.8;
+    --hc-dark-alpha-bottom: 0.7867;
+    --hc-dark-title-alpha: 0.8;
 }
 
 .panelOpacity85 {
-    --hc-panel-alpha-top: 0.85;
-    --hc-panel-alpha-bottom: 0.8394;
-    --hc-title-alpha: 0.85;
-    --hc-title-alpha-hover: 0.5432;
+    --hc-panel-alpha-top: 0.8075;
+    --hc-panel-alpha-bottom: 0.7974;
+    --hc-title-alpha: 0.8075;
+    --hc-title-alpha-hover: 0.516;
+    --hc-dark-alpha-top: 0.85;
+    --hc-dark-alpha-bottom: 0.8394;
+    --hc-dark-title-alpha: 0.85;
 }
 
 .panelOpacity90 {
-    --hc-panel-alpha-top: 0.9;
-    --hc-panel-alpha-bottom: 0.8925;
-    --hc-title-alpha: 0.9;
-    --hc-title-alpha-hover: 0.5751;
+    --hc-panel-alpha-top: 0.855;
+    --hc-panel-alpha-bottom: 0.8479;
+    --hc-title-alpha: 0.855;
+    --hc-title-alpha-hover: 0.5463;
+    --hc-dark-alpha-top: 0.9;
+    --hc-dark-alpha-bottom: 0.8925;
+    --hc-dark-title-alpha: 0.9;
 }
 
 .panelOpacity95 {
-    --hc-panel-alpha-top: 0.95;
-    --hc-panel-alpha-bottom: 0.9461;
-    --hc-title-alpha: 0.95;
-    --hc-title-alpha-hover: 0.607;
+    --hc-panel-alpha-top: 0.9025;
+    --hc-panel-alpha-bottom: 0.8988;
+    --hc-title-alpha: 0.9025;
+    --hc-title-alpha-hover: 0.5767;
+    --hc-dark-alpha-top: 0.95;
+    --hc-dark-alpha-bottom: 0.9461;
+    --hc-dark-title-alpha: 0.95;
 }
 
 .panelOpacity100 {
-    --hc-panel-alpha-top: 1.0;
-    --hc-panel-alpha-bottom: 1.0;
-    --hc-title-alpha: 1.0;
-    --hc-title-alpha-hover: 0.639;
+    --hc-panel-alpha-top: 0.95;
+    --hc-panel-alpha-bottom: 0.95;
+    --hc-title-alpha: 0.95;
+    --hc-title-alpha-hover: 0.607;
+    --hc-dark-alpha-top: 1.0;
+    --hc-dark-alpha-bottom: 1.0;
+    --hc-dark-title-alpha: 1.0;
 }

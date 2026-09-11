@@ -90,29 +90,30 @@ namespace HoverColors
                     "- El color de error por solape sigue teniendo prioridad si está activo (vanilla = rojo salmón)."
                 },
 
+                // Panel
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)), "▪ Panel más oscuro" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)),
+                    "Activado = <Panel oscuro>: usa los colores de panel del propio juego para combinar con los paneles vanilla.\n" +
+                    "- Totalmente sólido al 100%.\n" +
+                    "Desactivado = <Panel estándar>: estilo Hover Colors más claro y translúcido.\n" +
+                    "- Aspecto de cristal; incluso al 100% deja ver un poco la ciudad.\n" +
+                    "\n" +
+                    "Ambos estilos usan el deslizador de opacidad de abajo y se ven igual en Modern UI y Legacy UI.\n" +
+                    "\n" +
+                    "¡Prueba ambos! Solo cambia el fondo de este panel del mod, no la interfaz del juego."
+                },
+
                 // Panel opacity
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)), "▪ Opacidad del panel" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)),
                     "Controla qué tan sólido es el fondo del panel en la ciudad.\n" +
                     "\n" +
-                    "**Más bajo** deja ver más de la ciudad.\n" +
-                    "**100%** totalmente sólido.\n" +
+                    "**30% Cristal** es el aspecto más transparente y limpio.\n" +
+                    "**100%** es totalmente sólido en el panel oscuro y casi sólido en el estándar.\n" +
                     "\n" +
-                    "Solo cambia el fondo. El texto, los iconos y las muestras de color siguen siendo totalmente legibles con cualquier ajuste.\n" +
+                    "Solo cambia el fondo. El texto, los iconos y las muestras de color siguen siendo totalmente legibles.\n" +
                     "\n" +
-                    "**El deslizador solo funciona con el panel estándar.** El panel oscuro usa la superficie de panel del juego y sigue la opción de opacidad de la interfaz del juego.\n" +
-                    "El panel oscuro funciona bien con Legacy o Modern UI. El estándar funciona mejor con Modern UI."
-                },
-
-                // Panel
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)), "▪ Panel más oscuro" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)),
-                    "Activado = <Panel oscuro>: pensado para Legacy UI; también sirve en Modern UI si prefieres un panel más oscuro.\n" +
-                    "Desactivado = <Panel estándar>: estilo translúcido propio de Hover Colors.\n" +
-                    "- Aspecto más claro y moderno.\n" +
-                    "- Mejor para la mayoría con la nueva Modern UI.\n" +
-                    "\n" +
-                    "Prueba ambos y elige. Solo cambia el fondo de este panel del mod, no la interfaz del juego."
+                    "**Funciona con ambos estilos de panel.** La opacidad de interfaz del juego ya no afecta este panel."
                 },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelTooltipsEnabled)), "▪ Mostrar ayudas (recomendado)" },

@@ -90,29 +90,30 @@ namespace HoverColors
                     "- สีข้อผิดพลาดการซ้อนทับยังมีผลก่อนเสมอเมื่อเปิด (สี vanilla = แดงแซลมอน)"
                 },
 
+                // Panel
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)), "▪ แผงมืดขึ้น" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)),
+                    "เปิด = <แผงมืด>: ใช้สีแผงของเกมเอง จึงเข้ากับแผงแบบ vanilla ของเกม\n" +
+                    "- ทึบเต็มที่ที่ 100%\n" +
+                    "ปิด = <แผงมาตรฐาน>: สไตล์ Hover Colors ที่สว่างและโปร่งใสกว่า\n" +
+                    "- ลุคแบบกระจก แม้ที่ 100% ก็ยังเห็นเมืองด้านหลังเล็กน้อย\n" +
+                    "\n" +
+                    "แผงทั้งสองแบบใช้สไลเดอร์ความทึบด้านล่าง และดูเหมือนกันทั้ง Modern UI และ Legacy UI\n" +
+                    "\n" +
+                    "ลองทั้งสองแบบแล้วเลือกที่ชอบ! เปลี่ยนเฉพาะพื้นหลังของแผงม็อดนี้ ไม่เปลี่ยน UI ของเกม"
+                },
+
                 // Panel opacity
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)), "▪ ความทึบของแผง" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)),
                     "ปรับความทึบของพื้นหลังแผงในเมือง\n" +
                     "\n" +
-                    "**ค่าต่ำลง** จะเห็นเมืองด้านหลังมากขึ้น\n" +
-                    "**100%** ทึบเต็มที่\n" +
+                    "**30% กระจก** โปร่งใสและดูโล่งที่สุด\n" +
+                    "**100%** ทึบเต็มที่สำหรับแผงมืด และเกือบทึบเต็มที่สำหรับแผงมาตรฐาน\n" +
                     "\n" +
-                    "เปลี่ยนเฉพาะพื้นหลัง ข้อความ ไอคอน และช่องสีจะยังอ่านได้ชัดเจนทุกระดับ\n" +
+                    "เปลี่ยนเฉพาะพื้นหลัง ข้อความ ไอคอน และช่องสียังอ่านได้ชัดเจนทุกระดับ\n" +
                     "\n" +
-                    "**สไลเดอร์ใช้ได้เฉพาะแผงมาตรฐาน** แผงมืดใช้พื้นผิวแผงของเกม จึงใช้ค่าความทึบของ Interface ของเกมแทน\n" +
-                    "แผงมืดใช้ได้ดีกับทั้ง Legacy และ Modern UI ส่วนแผงมาตรฐานเหมาะกับ Modern UI ที่สุด"
-                },
-
-                // Panel
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)), "▪ แผงมืดขึ้น" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)),
-                    "เปิด = <แผงมืด>: สำหรับ Legacy UI; ใช้กับ Modern UI ได้ถ้าชอบแผงที่มืดกว่า\n" +
-                    "ปิด = <แผงมาตรฐาน>: สไตล์โปร่งแสงของ Hover Colors\n" +
-                    "- ดูสว่างและทันสมัยขึ้น\n" +
-                    "- เหมาะกับผู้เล่นส่วนใหญ่ที่ใช้ Modern UI ใหม่\n" +
-                    "\n" +
-                    "ลองทั้งสองแบบแล้วเลือกที่ชอบ การตั้งค่านี้เปลี่ยนเฉพาะพื้นหลังแผงม็อด ไม่ใช่ UI เกม"
+                    "**ใช้ได้กับแผงทั้งสองแบบ** การตั้งค่าความทึบของ Interface ในเกมจะไม่ส่งผลกับแผงนี้อีกต่อไป"
                 },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelTooltipsEnabled)), "▪ แสดงทูลทิป (แนะนำ)" },

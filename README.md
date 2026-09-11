@@ -1,57 +1,49 @@
-# Hover Colors [HC]
+# Hover Colors + Highlights [HC]
 
-Recolor hover highlights, reduce visual clutter, and make area tools easier to see in Cities: Skylines II.
+Hover Colors helps you **change, dim, or hide the game's bright hover highlights** and makes Guidelines, Surface, Specialized Industry, and District tools easier to see.
 
-Hover Colors lets you change the default blue hover outline, adjust opacity, customize guideline colors, and make Surface and District tools easier to work with.
+You can change the hover outline color, opacity, and thickness, give the fill its own color, save quick presets, and temporarily hide normal highlights while panning around the city.
 
-## Features
+## Key things it does
 
-- Change hover outline color and opacity.
-- Change owner / parent-object highlight color and opacity.
-- Adjust hover fill opacity.
-- Save quick color presets for fast switching.
-- Customize guideline colors:
-  - S1: guide circles / spacing lines
-  - S2: road/tool preview overlay
-  - S3: dashed guideline color
-- Adjust guideline opacity from the panel or Options menu.
-- Toggle guideline colors between vanilla and your last custom set.
-- Hide Surface tool preview fill so layered surfaces are easier to see.
-- Hide Specialized Industry extractor lot preview fill.
-- Change District overlay and border color / opacity.
-- Reset District colors back to vanilla.
-- Use a darker panel mode for Legacy UI or stronger contrast.
-- Keep vanilla-style warning colors for bulldozer, roads, NetLanes, and placement conflicts when desired.
-- Saves your colors and presets between sessions.
-- No Harmony patches.
+| In-city feature | What it helps with |
+|-----------------|-------------------|
+| **Outline color + opacity** | Replace the default blue highlight with any color and transparency |
+| **Outline thickness** | Make hover outlines thinner or thicker; `1.0` = vanilla |
+| **Separate Fill color** | Give the inside of the highlight its own color and opacity |
+| **Eye button** | 1-click hide/show normal hover outline + fill without changing your saved colors |
+| **Presets** | Save and switch between 4 custom color setups |
+| **Guidelines** | Change guide circles, road/tool previews, dashed guide colors, and guideline opacity |
+| **Surface tool** | Hide the cloudy Surface preview fill so the real ground is easier to see |
+| **Specialized Industry** | Hide extractor lot preview fill while drawing industry areas |
+| **Districts** | Change District overlay + border color/opacity, or reset to vanilla |
+| **Panel controls** | Standard or darker panel, adjustable Standard-panel opacity, and optional tooltips |
 
-## How to Use
+## Quick Start
 
-Open the Hover Colors panel from the game top-left button, or use the panel hotkey.
+Open the Hover Colors panel from the game top-left palette icon, or use the panel hotkey.
 
-Default hotkeys:
+Start with the first row:
 
-```text
-J = open / close Hover Colors panel
-K = toggle preset 1 / preset 2
-L = toggle Surface preview fill
-```
+- Click the **Outline** color box to choose any color or opacity.
+- Use **Thickness** to make the outline thinner or thicker.
+- Click the **Fill** color box to give the inside of the highlight its own color.
+- Click the **Eye** button to temporarily hide/show normal hover highlights.
 
-You can change or remove hotkeys in the Hover Colors Options menu.
+The panel tooltips explain the rest as you hover over controls.
 
 ## Presets
 
-Use the preset buttons to quickly swap saved looks.
+Hover Colors has 4 saved custom color setups:
 
-- Tap preset `1` or `2` to apply it.
-- Hold preset `1` or `2` to save your current outline, fill, and opacity settings.
-- Use the switch button to swap between the extra preset set and your saved set.
-
-Guideline colors have their own controls.
+- Tap **1** or **2** to apply a preset.
+- Hold **1** or **2** for 0.5s to save your current colors.
+- **[⇔]** switches between Set A and Set B.
+- **[↺]** switches between Hover Colors defaults and your saved custom colors.
 
 ## Guidelines
 
-The guideline row has three color swatches:
+The Guideline row has three color swatches plus its own opacity slider:
 
 ```text
 S1 = guide circles / spacing lines
@@ -61,50 +53,70 @@ S3 = dashed guideline color
 
 Use these to make road guides, spacing circles, and preview overlays easier to see.
 
-You can also adjust guideline opacity separately from hover outline opacity.
+**Guideline opacity is controlled from the in-city panel, not the Options menu.**
 
-## Surface and District Tools
+## Surface, Industry, and District Tools
 
-Surface tool:
-
+**Surface**
 - Hide the cloudy Surface preview fill while placing or editing surfaces.
-- This helps you see the actual ground and layered surface colors.
+- Useful when layering surfaces because you can see the real ground underneath.
 
-District tool:
+**Specialized Industry**
+- Hide extractor lot preview fill for farms, forestry, oil, ore, and similar industry areas.
 
+**Districts**
 - Change District overlay and border color.
 - Adjust District opacity.
 - Hold the District button to reset District colors back to vanilla.
 
 ## Options Menu
 
-Check the Hover Colors Options menu for:
+The Hover Colors Options menu includes:
 
-- Tool color behavior for bulldozer and roads.
-- NetLanes behavior.
-- Overlap / placement warning behavior.
-- Darker panel mode.
-- Guideline opacity.
+- Bulldozer + Road tool color behavior.
+- NetLane detail-tool color behavior.
+- Overlap / placement warning colors.
+- Standard or Darker panel.
+- **Panel opacity for the Standard panel: 30%–100%.**
+- Tooltips on/off.
+- **Reset to Mod Defaults** — fresh Hover Colors setup.
+- **Reset Colors to Vanilla** — restore the game's visual colors without changing your tool behavior or saved presets.
 - Hotkeys.
 
-Recommended tool behavior keeps important warning colors visible while preserving your saved custom colors.
+The Darker panel uses the game's own panel surface, so it follows the game's **Interface Opacity** setting instead of the Hover Colors panel-opacity slider.
+
+## Hotkeys
+
+Default hotkeys:
+
+- **J** — open / close Hover Colors panel
+- **K** — toggle preset 1 / preset 2
+- **L** — hide / show Surface preview fill
+- **Quick Eye** — unbound by default to avoid key conflicts
+
+Any hotkey can be changed in the game Options menu.
+
+## Editor Mode
+
+Hover Colors also works in Editor mode.
+
+Use the **Open / Close panel** hotkey (default **J**) to open the Hover Colors panel in the Editor.
 
 ## Compatibility
 
 - Save-game safe.
 - Safe to remove.
 - No Harmony patches.
-- Designed to use the game's own vanilla systems where possible.
+- Uses the game's own rendering/settings systems where possible.
+- Works alongside **Recolor**: Hover Colors changes highlights, guidelines, overlays, and previews; Recolor changes the actual object colors.
 
 ## Supported Languages
 
-- English, Français, Deutsch, Español, Italiano
-- Polski, Português Brasil, Português Portugal, 简体中文
-- 繁體中文, 日本語, 한국어, ภาษาไทย, Tiếng Việt, Türkçe
+English, Français, Deutsch, Español, Italiano, Polski, Português Brasil, Português Portugal, 日本語, 한국어, 简体中文, 繁體中文, ภาษาไทย, Tiếng Việt, Türkçe
 
 ## Feedback
 
-Suggestions and bug reports are welcome.
+Suggestions and bug reports are welcome through GitHub or Discord.
 
 ## License
 

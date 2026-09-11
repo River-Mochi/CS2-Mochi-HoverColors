@@ -90,29 +90,30 @@ namespace HoverColors
                     "- La couleur d'erreur de chevauchement reste prioritaire si activée (vanilla = rouge saumon)."
                 },
 
+                // Panel
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)), "▪ Panneau plus sombre" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)),
+                    "Activé = <Panneau sombre> : utilise les couleurs de panneau du jeu pour correspondre aux panneaux vanilla.\n" +
+                    "- Totalement opaque à 100%.\n" +
+                    "Désactivé = <Panneau standard> : style Hover Colors plus clair et translucide.\n" +
+                    "- Effet verre ; même à 100%, la ville reste légèrement visible.\n" +
+                    "\n" +
+                    "Les deux styles utilisent le curseur d'opacité ci-dessous et ont le même rendu en Modern UI et Legacy UI.\n" +
+                    "\n" +
+                    "Essayez les deux ! Cela change uniquement le fond de ce panneau du mod, pas l'interface du jeu."
+                },
+
                 // Panel opacity
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)), "▪ Opacité du panneau" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)),
                     "Règle l'opacité du fond du panneau en ville.\n" +
                     "\n" +
-                    "**Plus bas** laisse davantage voir la ville.\n" +
-                    "**100%** totalement opaque.\n" +
+                    "**30% Verre** est le rendu le plus transparent et clair.\n" +
+                    "**100%** est totalement opaque sur le panneau sombre et presque opaque sur le panneau standard.\n" +
                     "\n" +
-                    "Seul le fond change. Le texte, les icônes et les échantillons restent parfaitement lisibles avec tous les réglages.\n" +
+                    "Seul le fond change. Le texte, les icônes et les échantillons restent parfaitement lisibles.\n" +
                     "\n" +
-                    "**Le curseur fonctionne uniquement avec le panneau standard.** Le panneau sombre utilise la surface de panneau du jeu et suit donc le réglage d'opacité de l'interface du jeu.\n" +
-                    "Le panneau sombre fonctionne bien avec Legacy ou Modern UI. Le panneau standard convient mieux à Modern UI."
-                },
-
-                // Panel
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)), "▪ Panneau plus sombre" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)),
-                    "Activé = <Panneau sombre> : pensé pour Legacy UI ; fonctionne aussi en Modern UI si vous préférez plus sombre.\n" +
-                    "Désactivé = <Panneau standard> : style translucide personnalisé Hover Colors.\n" +
-                    "- Aspect plus clair et moderne.\n" +
-                    "- Idéal pour la plupart des joueurs avec la nouvelle Modern UI.\n" +
-                    "\n" +
-                    "Essayez les deux ! Cela change seulement le fond de ce panneau, pas l’interface du jeu."
+                    "**Fonctionne avec les deux styles de panneau.** Le réglage d'opacité de l'interface du jeu n'affecte plus ce panneau."
                 },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelTooltipsEnabled)), "▪ Afficher les infobulles (recommandé)" },

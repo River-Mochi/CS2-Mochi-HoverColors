@@ -90,29 +90,30 @@ namespace HoverColors
                     "- Màu lỗi chồng lấn vẫn ưu tiên khi bật (màu lỗi vanilla = đỏ cá hồi)."
                 },
 
-                // Panel opacity
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)), "▪ Độ đục của bảng" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)),
-                    "Điều chỉnh độ đặc của nền bảng trong thành phố.\n" +
-                    "\n" +
-                    "**Thấp hơn** cho phép nhìn thấy thành phố phía sau nhiều hơn.\n" +
-                    "**100%** hoàn toàn đặc.\n" +
-                    "\n" +
-                    "Chỉ nền thay đổi. Chữ, biểu tượng và ô màu vẫn luôn dễ đọc ở mọi mức.\n" +
-                    "\n" +
-                    "**Thanh trượt chỉ hoạt động với bảng Tiêu chuẩn.** Bảng Tối dùng bề mặt bảng của game nên sẽ theo cài đặt Độ mờ Giao diện của game.\n" +
-                    "Bảng Tối hoạt động tốt với Legacy hoặc Modern UI. Bảng Tiêu chuẩn phù hợp nhất với Modern UI."
-                },
-
                 // Panel
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)), "▪ Bảng tối hơn" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)),
-                    "Bật = <Bảng tối>: dành cho Legacy UI; cũng dùng được trong Modern UI nếu bạn thích nền tối hơn.\n" +
-                    "Tắt = <Bảng chuẩn>: kiểu trong mờ riêng của Hover Colors.\n" +
-                    "- Sáng hơn, hiện đại hơn.\n" +
-                    "- Hợp với đa số người chơi dùng Modern UI mới.\n" +
+                    "Bật = <Bảng Tối>: dùng màu bảng của chính game để giống các bảng vanilla.\n" +
+                    "- Hoàn toàn đặc ở 100%.\n" +
+                    "Tắt = <Bảng Tiêu chuẩn>: kiểu Hover Colors sáng và trong hơn.\n" +
+                    "- Hiệu ứng kính; ngay cả ở 100% vẫn nhìn thấy một chút thành phố phía sau.\n" +
                     "\n" +
-                    "Thử cả hai để chọn. Chỉ đổi nền bảng mod này, không đổi UI của game."
+                    "Cả hai kiểu bảng đều dùng thanh độ đục bên dưới và hiển thị giống nhau trong Modern UI và Legacy UI.\n" +
+                    "\n" +
+                    "Hãy thử cả hai và chọn kiểu bạn thích! Chỉ nền của bảng mod này thay đổi, không ảnh hưởng UI của game."
+                },
+
+                // Panel opacity
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)), "▪ Độ mờ bảng" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)),
+                    "Điều chỉnh độ đặc của nền bảng trong thành phố.\n" +
+                    "\n" +
+                    "**30% Kính** là kiểu trong suốt và thoáng nhất.\n" +
+                    "**100%** hoàn toàn đặc với Bảng Tối và gần như đặc hoàn toàn với Bảng Tiêu chuẩn.\n" +
+                    "\n" +
+                    "Chỉ nền thay đổi. Chữ, biểu tượng và ô màu vẫn luôn dễ đọc ở mọi mức.\n" +
+                    "\n" +
+                    "**Hoạt động với cả hai kiểu bảng.** Cài đặt Độ mờ Giao diện của game không còn ảnh hưởng đến bảng này."
                 },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelTooltipsEnabled)), "▪ Hiện mẹo (khuyên dùng)" },

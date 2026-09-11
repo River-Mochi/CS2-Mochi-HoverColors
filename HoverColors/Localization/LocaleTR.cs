@@ -90,29 +90,30 @@ namespace HoverColors
                     "- Etkinse çakışma hata rengi yine önceliklidir (vanilla hata rengi = somon kırmızı)."
                 },
 
+                // Panel
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)), "▪ Daha koyu panel" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)),
+                    "Açık = <Koyu panel>: oyunun kendi panel renklerini kullanır ve vanilla panellerle uyumlu görünür.\n" +
+                    "- 100%'de tamamen opaktır.\n" +
+                    "Kapalı = <Standart panel>: daha açık ve yarı saydam Hover Colors stili.\n" +
+                    "- Cam görünümü; 100%'de bile şehrin biraz görünmesini sağlar.\n" +
+                    "\n" +
+                    "Her iki panel stili de aşağıdaki opaklık kaydırıcısını kullanır ve Modern UI ile Legacy UI'da aynı görünür.\n" +
+                    "\n" +
+                    "İkisini de dene ve hangisini sevdiğini seç! Bu yalnızca mod panelinin arka planını değiştirir, oyun arayüzünü değil."
+                },
+
                 // Panel opacity
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)), "▪ Panel opaklığı" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)),
                     "Şehir içindeki panel arka planının ne kadar opak olduğunu ayarlar.\n" +
                     "\n" +
-                    "**Daha düşük** değerler şehrin daha fazla görünmesini sağlar.\n" +
-                    "**100%** tamamen opaktır.\n" +
+                    "**30% Cam** en şeffaf ve temiz görünümdür.\n" +
+                    "**100%** koyu panelde tamamen, standart panelde ise neredeyse tamamen opaktır.\n" +
                     "\n" +
                     "Yalnızca arka plan değişir. Metin, simgeler ve renk örnekleri her ayarda tamamen okunabilir kalır.\n" +
                     "\n" +
-                    "**Kaydırıcı yalnızca Standart panelde çalışır.** Koyu panel oyunun kendi panel yüzeyini kullanır, bu yüzden oyunun Arayüz Opaklığı ayarını takip eder.\n" +
-                    "Koyu panel Legacy veya Modern UI ile iyi çalışır. Standart panel Modern UI ile en iyi çalışır."
-                },
-
-                // Panel
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)), "▪ Daha koyu panel" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)),
-                    "Etkin = <Koyu panel>: Legacy UI için; daha koyu panel seviyorsan Modern UI'da da kullanılabilir.\n" +
-                    "Kapalı = <Standart panel>: Hover Colors için özel yarı saydam stil.\n" +
-                    "- Daha açık, daha modern görünüm.\n" +
-                    "- Yeni Modern UI kullanan çoğu oyuncu için en iyisi.\n" +
-                    "\n" +
-                    "İkisini de dene. Bu yalnızca bu mod panelinin arka planını değiştirir, oyun UI'sını değil."
+                    "**Her iki panel stilinde de çalışır.** Oyunun Arayüz Opaklığı ayarı artık bu paneli etkilemez."
                 },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelTooltipsEnabled)), "▪ İpuçlarını göster (önerilen)" },

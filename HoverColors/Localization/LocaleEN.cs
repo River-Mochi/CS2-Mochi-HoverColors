@@ -93,10 +93,12 @@ namespace HoverColors
                 // Panel
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)), "▪ Darker panel" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)),
-                    "Enabled = <Dark panel>: made for Legacy UI players; can also be used in Modern UI if you like a darker panel.\n" +
-                    "Disabled = <Standard panel>: custom translucent Hover Colors style.\n" +
-                    "- Lighter, more modern look.\n" +
-                    "- Best for most players using the new Modern game UI.\n" +
+                    "Enabled = <Dark panel>: uses the game's own panel colors, for a look that matches vanilla panels.\n" +
+                    "- Reaches fully solid at 100%.\n" +
+                    "Disabled = <Standard panel>: lighter translucent Hover Colors style.\n" +
+                    "- Glass look; keeps a trace of the city showing even at 100%.\n" +
+                    "\n" +
+                    "Both panel styles use the Panel opacity slider below, and both look the same in Modern and Legacy UI.\n" +
                     "\n" +
                     "Try both and see which you prefer! This only changes the background of this mod panel and not the game's UI."
                 },
@@ -107,12 +109,11 @@ namespace HoverColors
                     "How solid the in-city panel background is.\n" +
                     "\n" +
                     "**30% Glass** is the most see-through and clear look.\n" +
-                    "**100%** is more solid with slight transparency.\n" +
+                    "**100%** is solid on the Dark panel, and nearly solid on the Standard panel.\n" +
                     "\n" +
                     "Only the background changes. Text, icons and swatches stay fully readable at every setting.\n" +
                     "\n" +
-                    "**Slider works for Standard panel only.** Dark panel uses the game's own panel surface, so it follows the game's Interface Opacity setting instead.\n" +
-                    "Dark works well in Legacy or Modern UI. Standard works best in Modern UI."
+                    "**Works for both panel styles.** The game's own Interface Opacity setting no longer affects this panel."
                 },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelTooltipsEnabled)), "▪ Show Tooltips (recommended)" },

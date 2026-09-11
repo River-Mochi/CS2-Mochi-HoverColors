@@ -90,29 +90,30 @@ namespace HoverColors
                     "- A cor de erro por sobreposição ainda tem prioridade quando ativada (vanilla = vermelho salmão)."
                 },
 
+                // Panel
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)), "▪ Painel mais escuro" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)),
+                    "Ativado = <Painel escuro>: usa as cores de painel do próprio jogo para combinar com os painéis vanilla.\n" +
+                    "- Fica totalmente sólido em 100%.\n" +
+                    "Desativado = <Painel padrão>: estilo Hover Colors mais claro e translúcido.\n" +
+                    "- Visual de vidro; mesmo em 100% ainda deixa um pouco da cidade aparecer.\n" +
+                    "\n" +
+                    "Os dois estilos usam o controle de opacidade abaixo e ficam iguais na Modern UI e Legacy UI.\n" +
+                    "\n" +
+                    "Experimente os dois! Isso muda apenas o fundo deste painel do mod, não a interface do jogo."
+                },
+
                 // Panel opacity
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)), "▪ Opacidade do painel" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)),
                     "Controla o quanto o fundo do painel na cidade é sólido.\n" +
                     "\n" +
-                    "**Menor** deixa aparecer mais da cidade.\n" +
-                    "**100%** totalmente sólido.\n" +
+                    "**30% Vidro** é o visual mais transparente e limpo.\n" +
+                    "**100%** fica totalmente sólido no painel escuro e quase sólido no painel padrão.\n" +
                     "\n" +
                     "Só o fundo muda. Texto, ícones e amostras de cor continuam totalmente legíveis em qualquer ajuste.\n" +
                     "\n" +
-                    "**O controle funciona apenas no painel padrão.** O painel escuro usa a superfície de painel do próprio jogo e segue a configuração de Opacidade da Interface do jogo.\n" +
-                    "O painel escuro funciona bem com Legacy ou Modern UI. O padrão funciona melhor com Modern UI."
-                },
-
-                // Panel
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)), "▪ Painel mais escuro" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)),
-                    "Ativado = <Painel escuro>: feito para Legacy UI; também serve na Modern UI se você preferir um painel mais escuro.\n" +
-                    "Desativado = <Painel padrão>: estilo translúcido personalizado do Hover Colors.\n" +
-                    "- Visual mais claro e moderno.\n" +
-                    "- Melhor para a maioria dos jogadores usando a nova Modern UI.\n" +
-                    "\n" +
-                    "Teste os dois e escolha. Isso só muda o fundo deste painel do mod, não a UI do jogo."
+                    "**Funciona nos dois estilos de painel.** A configuração de Opacidade da Interface do jogo não afeta mais este painel."
                 },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelTooltipsEnabled)), "▪ Mostrar dicas (recomendado)" },

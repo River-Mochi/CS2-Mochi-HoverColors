@@ -90,29 +90,30 @@ namespace HoverColors
                     "- 啟用時，重疊錯誤顏色仍優先（原版錯誤色 = 鮭紅）。"
                 },
 
+                // Panel
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)), "▪ 更暗面板" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)),
+                    "啟用 = <暗色面板>：使用遊戲自己的面板顏色，與原版面板風格一致。\n" +
+                    "- 100% 時完全不透明。\n" +
+                    "停用 = <標準面板>：更明亮、半透明的 Hover Colors 風格。\n" +
+                    "- 玻璃效果；即使在 100% 時仍能稍微看到後面的城市。\n" +
+                    "\n" +
+                    "兩種面板都使用下方的不透明度滑桿，並且在 Modern UI 和 Legacy UI 中顯示相同。\n" +
+                    "\n" +
+                    "兩種都試試，選擇你喜歡的！這只會改變本模組面板的背景，不影響遊戲 UI。"
+                },
+
                 // Panel opacity
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)), "▪ 面板不透明度" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)),
                     "調整城市內面板背景的實心程度。\n" +
                     "\n" +
-                    "**數值越低**，越能看到後面的城市。\n" +
-                    "**100%** 完全不透明。\n" +
+                    "**30% 玻璃** 最透明、最清爽。\n" +
+                    "**100%** 時暗色面板完全不透明，標準面板接近完全不透明。\n" +
                     "\n" +
                     "只改變背景。文字、圖示和色塊在任何設定下都保持清楚可讀。\n" +
                     "\n" +
-                    "**滑桿僅適用於標準面板。** 暗色面板使用遊戲自己的面板表面，因此會跟隨遊戲的介面不透明度設定。\n" +
-                    "暗色面板適合 Legacy 和 Modern UI。標準面板最適合 Modern UI。"
-                },
-
-                // Panel
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)), "▪ 更暗面板" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)),
-                    "啟用 = <暗色面板>：為 Legacy UI 玩家設計；喜歡更暗的話 Modern UI 也可用。\n" +
-                    "停用 = <標準面板>：Hover Colors 自訂半透明風格。\n" +
-                    "- 更亮、更現代的外觀。\n" +
-                    "- 最適合使用新版 Modern UI 的多數玩家。\n" +
-                    "\n" +
-                    "兩個都試試。這裡只改變此 mod 面板背景，不改變遊戲 UI。"
+                    "**兩種面板樣式都有效。** 遊戲的介面不透明度設定不再影響此面板。"
                 },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelTooltipsEnabled)), "▪ 顯示提示（推薦）" },

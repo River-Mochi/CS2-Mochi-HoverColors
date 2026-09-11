@@ -90,29 +90,30 @@ namespace HoverColors
                     "- Kolor błędu nakładania nadal ma pierwszeństwo, gdy jest włączony (vanilla = łososiowy)."
                 },
 
-                // Panel opacity
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)), "▪ Krycie panelu" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)),
-                    "Określa, jak nieprzezroczyste jest tło panelu w mieście.\n" +
-                    "\n" +
-                    "**Niższa wartość** pokazuje więcej miasta pod panelem.\n" +
-                    "**100%** oznacza pełne krycie.\n" +
-                    "\n" +
-                    "Zmienia się tylko tło. Tekst, ikony i próbki kolorów pozostają czytelne przy każdym ustawieniu.\n" +
-                    "\n" +
-                    "**Suwak działa tylko dla panelu standardowego.** Ciemny panel używa własnej powierzchni panelu gry, więc zamiast tego korzysta z ustawienia przezroczystości interfejsu gry.\n" +
-                    "Ciemny panel dobrze działa z Legacy i Modern UI. Standardowy najlepiej pasuje do Modern UI."
-                },
-
                 // Panel
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)), "▪ Ciemniejszy panel" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)),
-                    "Włączone = <Ciemny panel>: dla Legacy UI; działa też w Modern UI, jeśli wolisz ciemniejszy panel.\n" +
-                    "Wyłączone = <Panel standardowy>: własny półprzezroczysty styl Hover Colors.\n" +
-                    "- Jaśniejszy, nowocześniejszy wygląd.\n" +
-                    "- Najlepsze dla większości graczy z nowym Modern UI.\n" +
+                    "Włączone = <Ciemny panel>: używa kolorów panelu gry, dzięki czemu pasuje do paneli vanilla.\n" +
+                    "- Przy 100% jest całkowicie nieprzezroczysty.\n" +
+                    "Wyłączone = <Standardowy panel>: jaśniejszy, półprzezroczysty styl Hover Colors.\n" +
+                    "- Efekt szkła; nawet przy 100% trochę miasta pozostaje widoczne.\n" +
                     "\n" +
-                    "Wypróbuj oba. Zmienia tylko tło panelu moda, nie interfejs gry."
+                    "Oba style używają suwaka krycia poniżej i wyglądają tak samo w Modern UI i Legacy UI.\n" +
+                    "\n" +
+                    "Wypróbuj oba! Zmienia się tylko tło tego panelu moda, a nie interfejs gry."
+                },
+
+                // Panel opacity
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)), "▪ Krycie panelu" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)),
+                    "Określa krycie tła panelu w mieście.\n" +
+                    "\n" +
+                    "**30% Szkło** daje najbardziej przezroczysty i czysty wygląd.\n" +
+                    "**100%** oznacza pełne krycie ciemnego panelu i prawie pełne krycie standardowego.\n" +
+                    "\n" +
+                    "Zmienia się tylko tło. Tekst, ikony i próbki kolorów pozostają zawsze czytelne.\n" +
+                    "\n" +
+                    "**Działa z oboma stylami panelu.** Ustawienie krycia interfejsu gry nie wpływa już na ten panel."
                 },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelTooltipsEnabled)), "▪ Pokaż dymki (zalecane)" },

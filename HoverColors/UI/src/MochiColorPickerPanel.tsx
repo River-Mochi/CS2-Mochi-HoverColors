@@ -494,8 +494,8 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
     const eyeButtonClass = `${roundHighlightButtonTheme["button"] ?? ""} ${styles.eyeButton}`;
     const collapseButtonClass = `${roundHighlightButtonTheme["button"] ?? ""} ${styles.collapseButton}`;
     const closeButtonClass = `${roundHighlightButtonTheme["button"] ?? ""} ${styles.closeButton}`;
-    // Standard strips the vanilla fill off the frame; Darker keeps it so the panel matches the skin.
-    const panelFrameClass = `${panelBaseTheme.panel ?? "panel_YqS"} ${infoviewMenuTheme.menu ?? "menu_O_M"} ${styles.panelFrame} ${useDarkerPanel ? "" : styles.panelFrameCustom}`;
+    // Both surfaces paint themselves now, so the vanilla fill comes off the frame either way.
+    const panelFrameClass = `${panelBaseTheme.panel ?? "panel_YqS"} ${infoviewMenuTheme.menu ?? "menu_O_M"} ${styles.panelFrame} ${styles.panelFrameCustom}`;
     const panelSurfaceClass = useDarkerPanel ? styles.panelDarker : styles.panelStandard;
     const panelOpacityClass = panelOpacityClassFor(panelOpacityPercent);
     const panelContentClass = `${panelTheme.content ?? "content_XD5 content_AD7 child-opacity-transition_nkS"} ${infoviewMenuTheme.content ?? "content_Hzl"} ${styles.panelContent} ${panelSurfaceClass} ${panelOpacityClass}`;

@@ -90,29 +90,30 @@ namespace HoverColors
                     "- 켜져 있으면 겹침 오류색이 항상 우선합니다 (기본 오류색 = 연어색)."
                 },
 
+                // Panel
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)), "▪ 더 어두운 패널" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)),
+                    "활성화 = <어두운 패널>: 게임 자체 패널 색상을 사용해 바닐라 패널과 어울립니다.\n" +
+                    "- 100%에서는 완전히 불투명합니다.\n" +
+                    "비활성화 = <표준 패널>: 더 밝고 반투명한 Hover Colors 스타일입니다.\n" +
+                    "- 유리 느낌이며 100%에서도 도시가 약간 비칩니다.\n" +
+                    "\n" +
+                    "두 패널 모두 아래의 불투명도 슬라이더를 사용하며 Modern UI와 Legacy UI에서 같은 모습입니다.\n" +
+                    "\n" +
+                    "둘 다 사용해 보고 마음에 드는 쪽을 선택하세요! 이 모드 패널의 배경만 바뀌며 게임 UI에는 영향을 주지 않습니다."
+                },
+
                 // Panel opacity
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)), "▪ 패널 불투명도" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)),
                     "도시 내 패널 배경의 불투명도를 조절합니다.\n" +
                     "\n" +
-                    "**낮을수록** 도시가 더 많이 비칩니다.\n" +
-                    "**100%** 완전 불투명입니다.\n" +
+                    "**30% 유리** 가 가장 투명하고 깔끔한 모습입니다.\n" +
+                    "**100%**에서는 어두운 패널은 완전 불투명, 표준 패널은 거의 불투명합니다.\n" +
                     "\n" +
                     "배경만 바뀝니다. 텍스트, 아이콘, 색상 견본은 모든 설정에서 선명하게 유지됩니다.\n" +
                     "\n" +
-                    "**슬라이더는 표준 패널에서만 작동합니다.** 어두운 패널은 게임 자체 패널 표면을 사용하므로 게임의 인터페이스 불투명도 설정을 따릅니다.\n" +
-                    "어두운 패널은 Legacy 또는 Modern UI 모두에서 잘 작동합니다. 표준 패널은 Modern UI에 가장 적합합니다."
-                },
-
-                // Panel
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)), "▪ 더 어두운 패널" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)),
-                    "켜기 = <어두운 패널>: Legacy UI용. Modern UI에서도 더 어두운 배경을 원하면 사용할 수 있습니다.\n" +
-                    "끄기 = <표준 패널>: Hover Colors의 반투명 스타일.\n" +
-                    "- 더 밝고 현대적인 느낌.\n" +
-                    "- 새 Modern UI를 쓰는 대부분의 플레이어에게 좋습니다.\n" +
-                    "\n" +
-                    "둘 다 써보고 고르세요. 이 모드 패널 배경만 바뀌며 게임 UI는 바뀌지 않습니다."
+                    "**두 패널 스타일 모두 작동합니다.** 게임의 인터페이스 불투명도 설정은 더 이상 이 패널에 영향을 주지 않습니다."
                 },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelTooltipsEnabled)), "▪ 툴팁 표시 (추천)" },

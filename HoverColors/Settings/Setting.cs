@@ -45,10 +45,6 @@ namespace HoverColors
 
         private int m_PanelOpacityPercent = kDefaultPanelOpacityPercent;
 
-        // Darker hands the surface to the vanilla panel, so this slider has nothing to act on there.
-        // Greying it out is clearer than leaving a control that silently does nothing.
-        public bool IsDarkerPanelActive() => UseDarkerPanel;
-
         internal static int ClampPanelOpacity(int value)
         {
             int snapped = (int)System.Math.Round(value / 5.0) * 5;
@@ -559,17 +555,18 @@ namespace HoverColors
         // Options UI lists a group in declaration order, so this block is ordered the way it should
         // read on screen: Darker panel, then Panel opacity, then Tooltips.
 
-        // User-facing label is "Darker panel". LegacyUI's extra transparency exposed
-        // the need for this, but Modern UI players can use it too if they prefer
-        // stronger panel contrast.
+        // User-facing label is "Darker panel". Both styles are painted by Hover Colors and both
+        // follow the opacity slider; the difference is the palette. Darker uses the game's own
+        // panel gradient colours and reaches a fully solid 100%, Standard is the lighter glass one.
+        // Neither follows the game's Interface Opacity, and neither changes with the UI skin.
         [SettingsUISection(Actions, kPanel)]
         public bool UseDarkerPanel { get; set; }
 
         // Background alpha for the in-city panel, 30-100 in steps of 5. Applied as discrete
         // background classes in SCSS; CSS opacity is deliberately not used because it would fade
-        // the text, icons and swatches too. Sits under Darker panel because Darker disables it.
+        // the text, icons and swatches too. Drives both panel styles: Darker paints its own surface
+        // now rather than borrowing the vanilla one, so there is nothing left to grey this out for.
         [SettingsUISlider(min = kMinPanelOpacityPercent, max = kMaxPanelOpacityPercent, step = 5, scalarMultiplier = 1, unit = Unit.kPercentage)]
-        [SettingsUIDisableByCondition(typeof(HoverColorsSettings), nameof(IsDarkerPanelActive))]
         [SettingsUISection(Actions, kPanel)]
         public int PanelOpacityPercent
         {

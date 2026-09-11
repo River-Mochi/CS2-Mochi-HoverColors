@@ -90,29 +90,30 @@ namespace HoverColors
                     "- Die Überlappungs-Fehlerfarbe hat bei Aktivierung weiter Vorrang (Vanilla-Fehlerfarbe = Lachsrot)."
                 },
 
+                // Panel
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)), "▪ Dunkleres Panel" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)),
+                    "Aktiviert = <Dunkles Panel>: nutzt die eigenen Panel-Farben des Spiels und passt damit zu Vanilla-Panels.\n" +
+                    "- Bei 100% vollständig deckend.\n" +
+                    "Deaktiviert = <Standard-Panel>: hellerer, transparenter Hover-Colors-Stil.\n" +
+                    "- Glas-Look; selbst bei 100% bleibt etwas von der Stadt sichtbar.\n" +
+                    "\n" +
+                    "Beide Panel-Stile nutzen den Deckkraft-Regler unten und sehen in Modern UI und Legacy UI gleich aus.\n" +
+                    "\n" +
+                    "Probier beide aus! Dies ändert nur den Hintergrund dieses Mod-Panels, nicht die Spiel-UI."
+                },
+
                 // Panel opacity
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)), "▪ Panel-Deckkraft" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)),
                     "Bestimmt, wie deckend der Hintergrund des Panels in der Stadt ist.\n" +
                     "\n" +
-                    "**Niedriger** lässt mehr von der Stadt durchscheinen.\n" +
-                    "**100%** vollständig deckend.\n" +
+                    "**30% Glas** ist am transparentesten und klarsten.\n" +
+                    "**100%** ist beim dunklen Panel vollständig und beim Standard-Panel fast vollständig deckend.\n" +
                     "\n" +
                     "Nur der Hintergrund ändert sich. Text, Symbole und Farbfelder bleiben bei jeder Einstellung gut lesbar.\n" +
                     "\n" +
-                    "**Der Regler funktioniert nur beim Standard-Panel.** Das dunkle Panel nutzt die eigene Panel-Oberfläche des Spiels und folgt stattdessen der Deckkraft-Einstellung der Spieloberfläche.\n" +
-                    "Dunkel funktioniert gut mit Legacy oder Modern UI. Standard funktioniert am besten mit Modern UI."
-                },
-
-                // Panel
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)), "▪ Dunkleres Panel" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)),
-                    "Aktiviert = <Dunkles Panel>: für Legacy-UI-Spieler; auch in Modern UI nutzbar, wenn du ein dunkleres Panel magst.\n" +
-                    "Deaktiviert = <Standard-Panel>: eigener transparenter Hover-Colors-Stil.\n" +
-                    "- Hellerer, moderner Look.\n" +
-                    "- Am besten für die meisten Spieler mit der neuen Modern UI.\n" +
-                    "\n" +
-                    "Probier beides aus! Das ändert nur den Hintergrund dieses Mod-Panels, nicht die Spiel-UI."
+                    "**Funktioniert mit beiden Panel-Stilen.** Die Interface-Deckkraft des Spiels beeinflusst dieses Panel nicht mehr."
                 },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelTooltipsEnabled)), "▪ Tooltips anzeigen (empfohlen)" },
