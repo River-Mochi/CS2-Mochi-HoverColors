@@ -1,4 +1,4 @@
-// <copyright file="LocaleDE.cs" company="River-Mochi">
+﻿// <copyright file="LocaleDE.cs" company="River-Mochi">
 // Copyright (c) 2026 River-Mochi. All rights reserved.
 // Licensed under the MIT License. You may not use this file except in compliance with this License.
 // See LICENSE file in the project root for full license information.
@@ -93,14 +93,15 @@ namespace HoverColors
                 // Panel opacity
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)), "▪ Panel-Deckkraft" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)),
-                    "Legt fest, wie deckend der Panel-Hintergrund in der Stadt ist.\n" +
+                    "Bestimmt, wie deckend der Hintergrund des Panels in der Stadt ist.\n" +
                     "\n" +
-                    "**100%** = vollständig deckend.\n" +
-                    "**Niedriger** = mehr Stadt scheint durch.\n" +
+                    "**Niedriger** lässt mehr von der Stadt durchscheinen.\n" +
+                    "**100%** vollständig deckend.\n" +
                     "\n" +
-                    "Nur der Hintergrund ändert sich. Text, Symbole und Farbfelder bleiben immer voll sichtbar.\n" +
+                    "Nur der Hintergrund ändert sich. Text, Symbole und Farbfelder bleiben bei jeder Einstellung gut lesbar.\n" +
                     "\n" +
-                    "**Nur Standard-Panel.** Das dunklere Panel nutzt die eigene Panel-Oberfläche des Spiels und folgt daher der Interface-Deckkraft des Spiels."
+                    "**Der Regler funktioniert nur beim Standard-Panel.** Das dunkle Panel nutzt die eigene Panel-Oberfläche des Spiels und folgt stattdessen der Deckkraft-Einstellung der Spieloberfläche.\n" +
+                    "Dunkel funktioniert gut mit Legacy oder Modern UI. Standard funktioniert am besten mit Modern UI."
                 },
 
                 // Panel

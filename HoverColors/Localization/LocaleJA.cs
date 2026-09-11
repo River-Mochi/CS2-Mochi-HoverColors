@@ -1,4 +1,4 @@
-// <copyright file="LocaleJA.cs" company="River-Mochi">
+﻿// <copyright file="LocaleJA.cs" company="River-Mochi">
 // Copyright (c) 2026 River-Mochi. All rights reserved.
 // Licensed under the MIT License. You may not use this file except in compliance with this License.
 // See LICENSE file in the project root for full license information.
@@ -91,16 +91,17 @@ namespace HoverColors
                 },
 
                 // Panel opacity
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)), "▪ パネル不透明度" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)), "▪ パネルの不透明度" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)),
-                    "街中パネルの背景の濃さを調整します。\n" +
+                    "街中のパネル背景の濃さを調整します。\n" +
                     "\n" +
-                    "**100%** = 完全に不透明。\n" +
-                    "**低い値** = 背景の街がより見えます。\n" +
+                    "**低くする**ほど街が透けて見えます。\n" +
+                    "**100%** で完全に不透明です。\n" +
                     "\n" +
-                    "変わるのは背景だけです。文字、アイコン、色見本は常に見やすいままです。\n" +
+                    "変わるのは背景だけです。文字、アイコン、カラースウォッチはどの設定でも読みやすいままです。\n" +
                     "\n" +
-                    "**標準パネルのみ。** 暗いパネルはゲーム標準のパネルを使うため、ゲームのUI不透明度設定に従います。"
+                    "**スライダーは標準パネルでのみ機能します。** 暗いパネルはゲーム標準のパネル表面を使うため、ゲームのインターフェース不透明度設定に従います。\n" +
+                    "暗いパネルはLegacy UIとModern UIの両方で使えます。標準パネルはModern UIに最適です。"
                 },
 
                 // Panel

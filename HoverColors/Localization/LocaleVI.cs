@@ -1,4 +1,4 @@
-// <copyright file="LocaleVI.cs" company="River-Mochi">
+﻿// <copyright file="LocaleVI.cs" company="River-Mochi">
 // Copyright (c) 2026 River-Mochi. All rights reserved.
 // Licensed under the MIT License. You may not use this file except in compliance with this License.
 // See LICENSE file in the project root for full license information.
@@ -91,16 +91,17 @@ namespace HoverColors
                 },
 
                 // Panel opacity
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)), "▪ Độ mờ bảng" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)), "▪ Độ đục của bảng" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)),
-                    "Chỉnh độ đậm của nền bảng trong thành phố.\n" +
+                    "Điều chỉnh độ đặc của nền bảng trong thành phố.\n" +
                     "\n" +
-                    "**100%** = hoàn toàn đục.\n" +
-                    "**Thấp hơn** = thấy thành phố phía sau nhiều hơn.\n" +
+                    "**Thấp hơn** cho phép nhìn thấy thành phố phía sau nhiều hơn.\n" +
+                    "**100%** hoàn toàn đặc.\n" +
                     "\n" +
-                    "Chỉ nền thay đổi. Chữ, biểu tượng và mẫu màu vẫn luôn rõ.\n" +
+                    "Chỉ nền thay đổi. Chữ, biểu tượng và ô màu vẫn luôn dễ đọc ở mọi mức.\n" +
                     "\n" +
-                    "**Chỉ bảng chuẩn.** Bảng tối dùng bề mặt bảng của game nên theo cài đặt Độ mờ giao diện của game."
+                    "**Thanh trượt chỉ hoạt động với bảng Tiêu chuẩn.** Bảng Tối dùng bề mặt bảng của game nên sẽ theo cài đặt Độ mờ Giao diện của game.\n" +
+                    "Bảng Tối hoạt động tốt với Legacy hoặc Modern UI. Bảng Tiêu chuẩn phù hợp nhất với Modern UI."
                 },
 
                 // Panel

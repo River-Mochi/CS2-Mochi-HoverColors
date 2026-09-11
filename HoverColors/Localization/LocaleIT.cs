@@ -1,4 +1,4 @@
-// <copyright file="LocaleIT.cs" company="River-Mochi">
+﻿// <copyright file="LocaleIT.cs" company="River-Mochi">
 // Copyright (c) 2026 River-Mochi. All rights reserved.
 // Licensed under the MIT License. You may not use this file except in compliance with this License.
 // See LICENSE file in the project root for full license information.
@@ -93,14 +93,15 @@ namespace HoverColors
                 // Panel opacity
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)), "▪ Opacità pannello" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)),
-                    "Regola quanto è opaco lo sfondo del pannello in città.\n" +
+                    "Regola quanto è solido lo sfondo del pannello in città.\n" +
                     "\n" +
-                    "**100%** = completamente opaco.\n" +
-                    "**Più basso** = lascia vedere di più la città.\n" +
+                    "**Più basso** lascia vedere di più la città.\n" +
+                    "**100%** completamente solido.\n" +
                     "\n" +
-                    "Cambia solo lo sfondo. Testo, icone e campioni restano sempre leggibili.\n" +
+                    "Cambia solo lo sfondo. Testo, icone e campioni di colore restano sempre ben leggibili.\n" +
                     "\n" +
-                    "**Solo pannello standard.** Il pannello scuro usa la superficie del gioco e segue quindi l’opacità interfaccia del gioco."
+                    "**Il cursore funziona solo con il pannello standard.** Il pannello scuro usa la superficie del pannello del gioco e segue invece l'impostazione Opacità interfaccia del gioco.\n" +
+                    "Il pannello scuro funziona bene con Legacy o Modern UI. Quello standard funziona meglio con Modern UI."
                 },
 
                 // Panel

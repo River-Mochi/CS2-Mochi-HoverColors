@@ -1,4 +1,4 @@
-// <copyright file="LocalePL.cs" company="River-Mochi">
+﻿// <copyright file="LocalePL.cs" company="River-Mochi">
 // Copyright (c) 2026 River-Mochi. All rights reserved.
 // Licensed under the MIT License. You may not use this file except in compliance with this License.
 // See LICENSE file in the project root for full license information.
@@ -93,14 +93,15 @@ namespace HoverColors
                 // Panel opacity
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)), "▪ Krycie panelu" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)),
-                    "Ustawia krycie tła panelu w mieście.\n" +
+                    "Określa, jak nieprzezroczyste jest tło panelu w mieście.\n" +
                     "\n" +
-                    "**100%** = całkowicie kryjące.\n" +
-                    "**Niżej** = więcej miasta prześwituje.\n" +
+                    "**Niższa wartość** pokazuje więcej miasta pod panelem.\n" +
+                    "**100%** oznacza pełne krycie.\n" +
                     "\n" +
-                    "Zmienia się tylko tło. Tekst, ikony i próbki kolorów pozostają czytelne.\n" +
+                    "Zmienia się tylko tło. Tekst, ikony i próbki kolorów pozostają czytelne przy każdym ustawieniu.\n" +
                     "\n" +
-                    "**Tylko panel standardowy.** Ciemny panel używa powierzchni panelu gry i podlega ustawieniu krycia interfejsu gry."
+                    "**Suwak działa tylko dla panelu standardowego.** Ciemny panel używa własnej powierzchni panelu gry, więc zamiast tego korzysta z ustawienia przezroczystości interfejsu gry.\n" +
+                    "Ciemny panel dobrze działa z Legacy i Modern UI. Standardowy najlepiej pasuje do Modern UI."
                 },
 
                 // Panel

@@ -1,4 +1,4 @@
-// <copyright file="LocaleTR.cs" company="River-Mochi">
+﻿// <copyright file="LocaleTR.cs" company="River-Mochi">
 // Copyright (c) 2026 River-Mochi. All rights reserved.
 // Licensed under the MIT License. You may not use this file except in compliance with this License.
 // See LICENSE file in the project root for full license information.
@@ -93,14 +93,15 @@ namespace HoverColors
                 // Panel opacity
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)), "▪ Panel opaklığı" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)),
-                    "Şehir içi panel arka planının ne kadar opak olduğunu ayarlar.\n" +
+                    "Şehir içindeki panel arka planının ne kadar opak olduğunu ayarlar.\n" +
                     "\n" +
-                    "**100%** = tamamen opak.\n" +
-                    "**Daha düşük** = şehir daha fazla görünür.\n" +
+                    "**Daha düşük** değerler şehrin daha fazla görünmesini sağlar.\n" +
+                    "**100%** tamamen opaktır.\n" +
                     "\n" +
-                    "Yalnızca arka plan değişir. Metin, simgeler ve renk örnekleri her zaman net kalır.\n" +
+                    "Yalnızca arka plan değişir. Metin, simgeler ve renk örnekleri her ayarda tamamen okunabilir kalır.\n" +
                     "\n" +
-                    "**Yalnızca standart panel.** Koyu panel oyunun kendi panel yüzeyini kullanır ve oyun arayüz opaklığı ayarını izler."
+                    "**Kaydırıcı yalnızca Standart panelde çalışır.** Koyu panel oyunun kendi panel yüzeyini kullanır, bu yüzden oyunun Arayüz Opaklığı ayarını takip eder.\n" +
+                    "Koyu panel Legacy veya Modern UI ile iyi çalışır. Standart panel Modern UI ile en iyi çalışır."
                 },
 
                 // Panel

@@ -1,4 +1,4 @@
-// <copyright file="LocaleTH.cs" company="River-Mochi">
+﻿// <copyright file="LocaleTH.cs" company="River-Mochi">
 // Copyright (c) 2026 River-Mochi. All rights reserved.
 // Licensed under the MIT License. You may not use this file except in compliance with this License.
 // See LICENSE file in the project root for full license information.
@@ -95,12 +95,13 @@ namespace HoverColors
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)),
                     "ปรับความทึบของพื้นหลังแผงในเมือง\n" +
                     "\n" +
-                    "**100%** = ทึบเต็มที่\n" +
-                    "**ค่าต่ำกว่า** = เห็นเมืองด้านหลังมากขึ้น\n" +
+                    "**ค่าต่ำลง** จะเห็นเมืองด้านหลังมากขึ้น\n" +
+                    "**100%** ทึบเต็มที่\n" +
                     "\n" +
-                    "เปลี่ยนเฉพาะพื้นหลัง ข้อความ ไอคอน และช่องสีจะยังชัดเจนเสมอ\n" +
+                    "เปลี่ยนเฉพาะพื้นหลัง ข้อความ ไอคอน และช่องสีจะยังอ่านได้ชัดเจนทุกระดับ\n" +
                     "\n" +
-                    "**เฉพาะแผงมาตรฐาน** แผงมืดใช้พื้นผิวแผงของเกม จึงใช้ค่าความทึบ Interface ของเกมแทน"
+                    "**สไลเดอร์ใช้ได้เฉพาะแผงมาตรฐาน** แผงมืดใช้พื้นผิวแผงของเกม จึงใช้ค่าความทึบของ Interface ของเกมแทน\n" +
+                    "แผงมืดใช้ได้ดีกับทั้ง Legacy และ Modern UI ส่วนแผงมาตรฐานเหมาะกับ Modern UI ที่สุด"
                 },
 
                 // Panel

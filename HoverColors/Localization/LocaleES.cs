@@ -1,4 +1,4 @@
-// <copyright file="LocaleES.cs" company="River-Mochi">
+﻿// <copyright file="LocaleES.cs" company="River-Mochi">
 // Copyright (c) 2026 River-Mochi. All rights reserved.
 // Licensed under the MIT License. You may not use this file except in compliance with this License.
 // See LICENSE file in the project root for full license information.
@@ -93,14 +93,15 @@ namespace HoverColors
                 // Panel opacity
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)), "▪ Opacidad del panel" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)),
-                    "Ajusta lo sólido que se ve el fondo del panel en la ciudad.\n" +
+                    "Controla qué tan sólido es el fondo del panel en la ciudad.\n" +
                     "\n" +
-                    "**100%** = totalmente sólido.\n" +
-                    "**Menos** deja ver más la ciudad.\n" +
+                    "**Más bajo** deja ver más de la ciudad.\n" +
+                    "**100%** totalmente sólido.\n" +
                     "\n" +
-                    "Solo cambia el fondo. Texto, iconos y muestras siguen totalmente legibles.\n" +
+                    "Solo cambia el fondo. El texto, los iconos y las muestras de color siguen siendo totalmente legibles con cualquier ajuste.\n" +
                     "\n" +
-                    "**Solo panel estándar.** El panel oscuro usa la superficie del propio juego y sigue la Opacidad de interfaz del juego."
+                    "**El deslizador solo funciona con el panel estándar.** El panel oscuro usa la superficie de panel del juego y sigue la opción de opacidad de la interfaz del juego.\n" +
+                    "El panel oscuro funciona bien con Legacy o Modern UI. El estándar funciona mejor con Modern UI."
                 },
 
                 // Panel

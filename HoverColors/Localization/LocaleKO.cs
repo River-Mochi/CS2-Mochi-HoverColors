@@ -1,4 +1,4 @@
-// <copyright file="LocaleKO.cs" company="River-Mochi">
+﻿// <copyright file="LocaleKO.cs" company="River-Mochi">
 // Copyright (c) 2026 River-Mochi. All rights reserved.
 // Licensed under the MIT License. You may not use this file except in compliance with this License.
 // See LICENSE file in the project root for full license information.
@@ -93,14 +93,15 @@ namespace HoverColors
                 // Panel opacity
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)), "▪ 패널 불투명도" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)),
-                    "도시 패널 배경의 진하기를 조절합니다.\n" +
+                    "도시 내 패널 배경의 불투명도를 조절합니다.\n" +
                     "\n" +
-                    "**100%** = 완전 불투명.\n" +
-                    "**낮을수록** 도시가 더 비쳐 보입니다.\n" +
+                    "**낮을수록** 도시가 더 많이 비칩니다.\n" +
+                    "**100%** 완전 불투명입니다.\n" +
                     "\n" +
-                    "배경만 바뀝니다. 글자, 아이콘, 색상칸은 항상 선명합니다.\n" +
+                    "배경만 바뀝니다. 텍스트, 아이콘, 색상 견본은 모든 설정에서 선명하게 유지됩니다.\n" +
                     "\n" +
-                    "**표준 패널만 적용.** 어두운 패널은 게임 자체 패널을 사용하므로 게임의 인터페이스 불투명도 설정을 따릅니다."
+                    "**슬라이더는 표준 패널에서만 작동합니다.** 어두운 패널은 게임 자체 패널 표면을 사용하므로 게임의 인터페이스 불투명도 설정을 따릅니다.\n" +
+                    "어두운 패널은 Legacy 또는 Modern UI 모두에서 잘 작동합니다. 표준 패널은 Modern UI에 가장 적합합니다."
                 },
 
                 // Panel

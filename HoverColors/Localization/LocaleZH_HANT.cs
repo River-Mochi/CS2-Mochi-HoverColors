@@ -1,4 +1,4 @@
-// <copyright file="LocaleZH_HANT.cs" company="River-Mochi">
+﻿// <copyright file="LocaleZH_HANT.cs" company="River-Mochi">
 // Copyright (c) 2026 River-Mochi. All rights reserved.
 // Licensed under the MIT License. You may not use this file except in compliance with this License.
 // See LICENSE file in the project root for full license information.
@@ -93,14 +93,15 @@ namespace HoverColors
                 // Panel opacity
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)), "▪ 面板不透明度" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)),
-                    "調整城市內面板背景的不透明度。\n" +
+                    "調整城市內面板背景的實心程度。\n" +
                     "\n" +
-                    "**100%** = 完全不透明。\n" +
-                    "**較低** = 能看到更多後面的城市。\n" +
+                    "**數值越低**，越能看到後面的城市。\n" +
+                    "**100%** 完全不透明。\n" +
                     "\n" +
-                    "只改變背景。文字、圖示和色塊始終保持清楚。\n" +
+                    "只改變背景。文字、圖示和色塊在任何設定下都保持清楚可讀。\n" +
                     "\n" +
-                    "**僅標準面板。** 深色面板使用遊戲自己的面板表面，因此會跟隨遊戲的介面不透明度設定。"
+                    "**滑桿僅適用於標準面板。** 暗色面板使用遊戲自己的面板表面，因此會跟隨遊戲的介面不透明度設定。\n" +
+                    "暗色面板適合 Legacy 和 Modern UI。標準面板最適合 Modern UI。"
                 },
 
                 // Panel

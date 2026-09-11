@@ -1,4 +1,4 @@
-// <copyright file="LocaleFR.cs" company="River-Mochi">
+﻿// <copyright file="LocaleFR.cs" company="River-Mochi">
 // Copyright (c) 2026 River-Mochi. All rights reserved.
 // Licensed under the MIT License. You may not use this file except in compliance with this License.
 // See LICENSE file in the project root for full license information.
@@ -93,14 +93,15 @@ namespace HoverColors
                 // Panel opacity
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)), "▪ Opacité du panneau" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)),
-                    "Règle la transparence du fond du panneau en ville.\n" +
+                    "Règle l'opacité du fond du panneau en ville.\n" +
                     "\n" +
-                    "**100%** = totalement opaque.\n" +
-                    "**Plus bas** = la ville reste plus visible.\n" +
+                    "**Plus bas** laisse davantage voir la ville.\n" +
+                    "**100%** totalement opaque.\n" +
                     "\n" +
-                    "Seul le fond change. Texte, icônes et couleurs restent parfaitement lisibles.\n" +
+                    "Seul le fond change. Le texte, les icônes et les échantillons restent parfaitement lisibles avec tous les réglages.\n" +
                     "\n" +
-                    "**Panneau standard uniquement.** Le panneau sombre utilise la surface du jeu et suit donc le réglage d'opacité de l'interface."
+                    "**Le curseur fonctionne uniquement avec le panneau standard.** Le panneau sombre utilise la surface de panneau du jeu et suit donc le réglage d'opacité de l'interface du jeu.\n" +
+                    "Le panneau sombre fonctionne bien avec Legacy ou Modern UI. Le panneau standard convient mieux à Modern UI."
                 },
 
                 // Panel

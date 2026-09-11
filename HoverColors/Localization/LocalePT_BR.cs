@@ -1,4 +1,4 @@
-// <copyright file="LocalePT_BR.cs" company="River-Mochi">
+﻿// <copyright file="LocalePT_BR.cs" company="River-Mochi">
 // Copyright (c) 2026 River-Mochi. All rights reserved.
 // Licensed under the MIT License. You may not use this file except in compliance with this License.
 // See LICENSE file in the project root for full license information.
@@ -93,14 +93,15 @@ namespace HoverColors
                 // Panel opacity
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)), "▪ Opacidade do painel" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)),
-                    "Ajusta o quanto o fundo do painel na cidade é sólido.\n" +
+                    "Controla o quanto o fundo do painel na cidade é sólido.\n" +
                     "\n" +
-                    "**100%** = totalmente sólido.\n" +
-                    "**Menor** = deixa mais da cidade aparecer.\n" +
+                    "**Menor** deixa aparecer mais da cidade.\n" +
+                    "**100%** totalmente sólido.\n" +
                     "\n" +
-                    "Só o fundo muda. Texto, ícones e amostras continuam totalmente legíveis.\n" +
+                    "Só o fundo muda. Texto, ícones e amostras de cor continuam totalmente legíveis em qualquer ajuste.\n" +
                     "\n" +
-                    "**Somente painel padrão.** O painel escuro usa a superfície do próprio jogo e segue a Opacidade da Interface do jogo."
+                    "**O controle funciona apenas no painel padrão.** O painel escuro usa a superfície de painel do próprio jogo e segue a configuração de Opacidade da Interface do jogo.\n" +
+                    "O painel escuro funciona bem com Legacy ou Modern UI. O padrão funciona melhor com Modern UI."
                 },
 
                 // Panel
