@@ -1,23 +1,23 @@
-<Publish>
+﻿<Publish>
 <!--Id must be set in order to update existed mod. it is not required for publishing mod for the first time-->
 <ModId Value="146044" />
 <!--Name of the mod to display to players-->
 <DisplayName Value="Hover Colors + Highlights" />
 <!--Short description of the mod-->
-<ShortDescription Value="Change blue highlights to Any color, opacity stregth or thickness. Fill color, Guidelines, Hide Surface layers, add District colors."/>
+<ShortDescription Value="Change blue highlights to Any color, opacity strength or thickness. Fill color, Guidelines, Hide Surface layers, add District colors."/>
 <!--Long description of the mod. Single line or multi line. Supports minimal markdown subset-->
 <LongDescription>
 ## Mochi's Hover Colors
 
 Want to change the bright blue highlights?
 
-**Easy tool to Dim, Hide, or Change highlights to any color, opacity stregth, or line thickness.**
+**Easy tool to Dim, Hide, or Change highlights to any color, opacity strength, or line thickness.**
 
 ### Highlights
 
 - 1-click change highlight color + transparency.
 - **NEW: Change outline thickness** from thin to thick.
-- **NEW: Fill color from outline color are separate.
+- **NEW: Fill color** and outline color are now separate.
 - Full color picker — click on any color or exact HEX value.
 - Works on buildings, cars, trees, citizens, props, roads, and more.
 - **1-Click Eye button** to hide/show highlights anytime.
@@ -107,7 +107,7 @@ tags: hover colors, remove blue, disable hover, highlight color, outline thickne
 - NEW: Outline Thickness slider.
 - NEW: 1-click Eyeball button to hide/show highlights - you can pan the whole city without triggering any bright Highlights.
 - NEW: Options menu sliders and better tooltips.
-- Updated all translatins and performance tweaks.
+- Updated all translations and performance tweaks.
 </ChangeLog>
 <!--External link, can be set multiple times. supported types are "discord", "github", "youtube", "twitch", "x", "paypal", "patreon", "buymeacoffee", "kofi", "crowdin", "gitlab", "gofundme"-->
 <ExternalLink Type="github" Url="https://github.com/River-Mochi/CS2-Mochi-HoverColors" />
