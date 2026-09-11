@@ -35,15 +35,27 @@
 .panelFrame {
     position: relative;
     overflow: visible;
+
+    // Kill the vanilla Panel/Menu fill so only Hover Colors paints this panel. Without this the
+    // vanilla surface sits behind the title bar and nothing the title bar does with alpha can
+    // reveal the city, and the panel also follows the game's Interface Opacity slider instead of
+    // our own. Same approach City Watchdog uses on its panel shell.
+    --menuPanel1: transparent;
+    --menuPanel2: transparent;
+    --panelColorDark: transparent;
+    --panelColorNormal: transparent;
+    --sectionHeaderColor: transparent;
+    background-color: transparent;
+    background-image: none;
 }
 
 .panelContent {
     --hc-panel-width: 246rem;
     // Overwritten by the .panelOpacityNN classes below. These are the 80% defaults.
-    --hc-panel-alpha-top: 0.32;
-    --hc-panel-alpha-bottom: 0.24;
-    --hc-title-alpha: 0.72;
-    --hc-title-alpha-hover: 0.47;
+    --hc-panel-alpha-top: 0.8;
+    --hc-panel-alpha-bottom: 0.734;
+    --hc-title-alpha: 0.8;
+    --hc-title-alpha-hover: 0.511;
     // Height of the title strip. The Standard panel background is held back by this much so the
     // header's own alpha is the only layer there and the city shows through it, the way City
     // Watchdog's header does. Nudge if the header height changes.
@@ -52,6 +64,16 @@
     --hc-title-letter-spacing: 0.80rem;
     position: relative;
     overflow: visible;
+
+    // Same reason as .panelFrame: the vanilla content wrapper is on this element too.
+    --menuPanel1: transparent;
+    --menuPanel2: transparent;
+    --panelColorDark: transparent;
+    --panelColorNormal: transparent;
+    --sectionHeaderColor: transparent;
+    background-color: transparent;
+    background-image: none;
+
     width: var(--hc-panel-width);
     min-width: var(--hc-panel-width);
     max-width: var(--hc-panel-width);
@@ -67,15 +89,27 @@
     background-image: linear-gradient(
         to bottom,
         rgba(95, 124, 136, 0) 0,
-        rgba(95, 124, 136, 0) var(--hc-title-height),
-        rgba(95, 124, 136, var(--hc-panel-alpha-top)) var(--hc-title-height),
+        rgba(95, 124, 136, 0) 33rem,
+        rgba(95, 124, 136, var(--hc-panel-alpha-top)) 33rem,
         rgba(58, 78, 88, var(--hc-panel-alpha-bottom)) 100%
     );
     box-shadow: 0 6rem 18rem rgba(0, 0, 0, 0.16);
 }
 
+// Darker is now its own painted palette rather than the vanilla surface, so both panel styles
+// answer to the Hover Colors opacity slider and neither follows the game's Interface Opacity.
 .panelDarker {
-    --hc-uses-vanilla-panel-surface: 1;
+    border: 0;
+    border-radius: 12rem;
+    background-color: transparent;
+    background-image: linear-gradient(
+        to bottom,
+        rgba(32, 48, 58, 0) 0,
+        rgba(32, 48, 58, 0) 33rem,
+        rgba(32, 48, 58, var(--hc-panel-alpha-top)) 33rem,
+        rgba(15, 25, 38, var(--hc-panel-alpha-bottom)) 100%
+    );
+    box-shadow: 0 6rem 18rem rgba(0, 0, 0, 0.22);
 }
 
 // Idle header sits darker than the body so the title bar reads as its own strip.
@@ -390,108 +424,109 @@
 }
 
 // Panel background opacity, driven by the Options slider (30-100 step 5).
+// The percent IS the alpha, the way City Watchdog does it, so 100% is genuinely solid.
 // Only background alpha changes, so text, icons, sliders and swatches stay fully readable.
 .panelOpacity30 {
-    --hc-panel-alpha-top: 0.12;
-    --hc-panel-alpha-bottom: 0.09;
-    --hc-title-alpha: 0.27;
-    --hc-title-alpha-hover: 0.1755;
+    --hc-panel-alpha-top: 0.3;
+    --hc-panel-alpha-bottom: 0.275;
+    --hc-title-alpha: 0.3;
+    --hc-title-alpha-hover: 0.192;
 }
 
 .panelOpacity35 {
-    --hc-panel-alpha-top: 0.14;
-    --hc-panel-alpha-bottom: 0.105;
-    --hc-title-alpha: 0.315;
-    --hc-title-alpha-hover: 0.2047;
+    --hc-panel-alpha-top: 0.35;
+    --hc-panel-alpha-bottom: 0.321;
+    --hc-title-alpha: 0.35;
+    --hc-title-alpha-hover: 0.224;
 }
 
 .panelOpacity40 {
-    --hc-panel-alpha-top: 0.16;
-    --hc-panel-alpha-bottom: 0.12;
-    --hc-title-alpha: 0.36;
-    --hc-title-alpha-hover: 0.234;
+    --hc-panel-alpha-top: 0.4;
+    --hc-panel-alpha-bottom: 0.367;
+    --hc-title-alpha: 0.4;
+    --hc-title-alpha-hover: 0.256;
 }
 
 .panelOpacity45 {
-    --hc-panel-alpha-top: 0.18;
-    --hc-panel-alpha-bottom: 0.135;
-    --hc-title-alpha: 0.405;
-    --hc-title-alpha-hover: 0.2632;
+    --hc-panel-alpha-top: 0.45;
+    --hc-panel-alpha-bottom: 0.413;
+    --hc-title-alpha: 0.45;
+    --hc-title-alpha-hover: 0.288;
 }
 
 .panelOpacity50 {
-    --hc-panel-alpha-top: 0.2;
-    --hc-panel-alpha-bottom: 0.15;
-    --hc-title-alpha: 0.45;
-    --hc-title-alpha-hover: 0.2925;
+    --hc-panel-alpha-top: 0.5;
+    --hc-panel-alpha-bottom: 0.459;
+    --hc-title-alpha: 0.5;
+    --hc-title-alpha-hover: 0.32;
 }
 
 .panelOpacity55 {
-    --hc-panel-alpha-top: 0.22;
-    --hc-panel-alpha-bottom: 0.165;
-    --hc-title-alpha: 0.495;
-    --hc-title-alpha-hover: 0.3217;
-}
-
-.panelOpacity60 {
-    --hc-panel-alpha-top: 0.24;
-    --hc-panel-alpha-bottom: 0.18;
-    --hc-title-alpha: 0.54;
+    --hc-panel-alpha-top: 0.55;
+    --hc-panel-alpha-bottom: 0.504;
+    --hc-title-alpha: 0.55;
     --hc-title-alpha-hover: 0.351;
 }
 
+.panelOpacity60 {
+    --hc-panel-alpha-top: 0.6;
+    --hc-panel-alpha-bottom: 0.55;
+    --hc-title-alpha: 0.6;
+    --hc-title-alpha-hover: 0.383;
+}
+
 .panelOpacity65 {
-    --hc-panel-alpha-top: 0.26;
-    --hc-panel-alpha-bottom: 0.195;
-    --hc-title-alpha: 0.585;
-    --hc-title-alpha-hover: 0.3802;
+    --hc-panel-alpha-top: 0.65;
+    --hc-panel-alpha-bottom: 0.596;
+    --hc-title-alpha: 0.65;
+    --hc-title-alpha-hover: 0.415;
 }
 
 .panelOpacity70 {
-    --hc-panel-alpha-top: 0.28;
-    --hc-panel-alpha-bottom: 0.21;
-    --hc-title-alpha: 0.63;
-    --hc-title-alpha-hover: 0.4095;
+    --hc-panel-alpha-top: 0.7;
+    --hc-panel-alpha-bottom: 0.642;
+    --hc-title-alpha: 0.7;
+    --hc-title-alpha-hover: 0.447;
 }
 
 .panelOpacity75 {
-    --hc-panel-alpha-top: 0.3;
-    --hc-panel-alpha-bottom: 0.225;
-    --hc-title-alpha: 0.675;
-    --hc-title-alpha-hover: 0.4387;
+    --hc-panel-alpha-top: 0.75;
+    --hc-panel-alpha-bottom: 0.688;
+    --hc-title-alpha: 0.75;
+    --hc-title-alpha-hover: 0.479;
 }
 
 .panelOpacity80 {
-    --hc-panel-alpha-top: 0.32;
-    --hc-panel-alpha-bottom: 0.24;
-    --hc-title-alpha: 0.72;
-    --hc-title-alpha-hover: 0.468;
+    --hc-panel-alpha-top: 0.8;
+    --hc-panel-alpha-bottom: 0.734;
+    --hc-title-alpha: 0.8;
+    --hc-title-alpha-hover: 0.511;
 }
 
 .panelOpacity85 {
-    --hc-panel-alpha-top: 0.34;
-    --hc-panel-alpha-bottom: 0.255;
-    --hc-title-alpha: 0.765;
-    --hc-title-alpha-hover: 0.4972;
+    --hc-panel-alpha-top: 0.85;
+    --hc-panel-alpha-bottom: 0.779;
+    --hc-title-alpha: 0.85;
+    --hc-title-alpha-hover: 0.543;
 }
 
 .panelOpacity90 {
-    --hc-panel-alpha-top: 0.36;
-    --hc-panel-alpha-bottom: 0.27;
-    --hc-title-alpha: 0.81;
-    --hc-title-alpha-hover: 0.5265;
+    --hc-panel-alpha-top: 0.9;
+    --hc-panel-alpha-bottom: 0.825;
+    --hc-title-alpha: 0.9;
+    --hc-title-alpha-hover: 0.575;
 }
 
 .panelOpacity95 {
-    --hc-panel-alpha-top: 0.38;
-    --hc-panel-alpha-bottom: 0.285;
-    --hc-title-alpha: 0.855;
-    --hc-title-alpha-hover: 0.5557;
+    --hc-panel-alpha-top: 0.95;
+    --hc-panel-alpha-bottom: 0.871;
+    --hc-title-alpha: 0.95;
+    --hc-title-alpha-hover: 0.607;
 }
 
 .panelOpacity100 {
-    --hc-panel-alpha-top: 0.4;
-    --hc-panel-alpha-bottom: 0.3;
-    --hc-title-alpha: 0.9;
-    --hc-title-alpha-hover: 0.585;
+    --hc-panel-alpha-top: 1.0;
+    --hc-panel-alpha-bottom: 0.917;
+    --hc-title-alpha: 1.0;
+    --hc-title-alpha-hover: 0.639;
 }
