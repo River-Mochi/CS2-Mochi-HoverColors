@@ -4,7 +4,7 @@
 	<!--Name of the mod to display to players-->
 	<DisplayName Value="Hover Colors + Highlights" />
 	<!--Short description of the mod-->
-    <ShortDescription Value="Change blue outlines to Any color or transparency. Surface layers on/off, District colors."/>
+    <ShortDescription Value="Change blue highlights to Any color, opacity stregth or thickness. Fill color, Guidelines, Hide Surface layers, add District colors."/>
     <!--Long description of the mod. Single line or multi line. Supports minimal markdown subset-->
 <LongDescription>
 ## Mochi's Hover Colors
@@ -61,18 +61,17 @@ tags: Mochi's blue scrubber, Highlight, border color, remove blue, guidelines, d
 
 </LongDescription>
 	<!--Thumbnail-->
-	<Thumbnail Value="Properties/Thumbnail_half_building_cyan.jpg" />
+	<Thumbnail Value="Properties/Thumbnail_half_school_cyan.jpg" />
     <!--Screenshot, can be set multiple times-->
-    <Screenshot Value="Properties/01-image-ReleaseTheBlueAlpha.jpg" />
-    <Screenshot Value="Properties/05-image-Before-after-DE-school.jpg" />
-    <Screenshot Value="Properties/12-image-Panels.jpg" />
-    <Screenshot Value="Properties/15-image-Guidelines.jpg" />
-	<Screenshot Value="Properties/20-image-Options.jpg" />
-    <Screenshot Value="Properties/30-image-Guidelines.jpg" />
-    <Screenshot Value="Properties/35-image-AreaLots.jpg" />
-    <Screenshot Value="Properties/40-image-DistrictColorPicker.jpg" />
-    <Screenshot Value="Properties/55-image-Fence.jpg" />
-    <Screenshot Value="Properties/60-image-Languages.jpg" />
+	<Screenshot Value="Properties/10-image-Before-after-DE-school.jpg" />
+	<Screenshot Value="Properties/20-image-Panels.jpg" />
+	<Screenshot Value="Properties/22-image-AreaLots.jpg" />
+	<Screenshot Value="Properties/25-image-Guidelines.jpg" />
+	<Screenshot Value="Properties/30-image-Guidelines.jpg" />
+	<Screenshot Value="Properties/35-image-Fence.jpg" />
+	<Screenshot Value="Properties/40-image-DistrictColorPicker.jpg" />
+	<Screenshot Value="Properties/45-image-Options.jpg" />
+	<Screenshot Value="Properties/55-image-ReleaseTheBlueAlpha.jpg" />
 	<!--Tag, can be set multiple times-->
 	<Tag Value="" />
 	<!--Link to the forum post where the mod can be discussed-->
@@ -87,7 +86,12 @@ tags: Mochi's blue scrubber, Highlight, border color, remove blue, guidelines, d
 	<RequiredDLC Value="" />
 	<!--Change log for new version. Single line or multi line. Supports minimal markdown subset-->
 <ChangeLog>
-- Internal refactor and organization.
+	- Added separate Fill color swatch + transparency controls.
+	- Added line thickness control (HC default 0.8).
+	- Added 1-click Eyeball button to instant hide/show outlines - so you can pan the whole city without triggering any bright Highlights.
+	- Added Options menu: panel opacity control and better tooltips.
+	- Added separate Reset to Mod Defaults and Reset Colors to Vanilla buttons.
+	- Improved rendering reliability and internal organization.
 </ChangeLog>
 	<!--External link, can be set multiple times. supported types are "discord", "github", "youtube", "twitch", "x", "paypal", "patreon", "buymeacoffee", "kofi", "crowdin", "gitlab", "gofundme"-->
     <ExternalLink Type="github" Url="https://github.com/River-Mochi/CS2-Mochi-HoverColors" />

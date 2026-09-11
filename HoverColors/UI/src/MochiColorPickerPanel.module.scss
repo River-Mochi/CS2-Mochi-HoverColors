@@ -56,10 +56,6 @@
     --hc-panel-alpha-bottom: 0.734;
     --hc-title-alpha: 0.8;
     --hc-title-alpha-hover: 0.511;
-    // Height of the title strip. The Standard panel background is held back by this much so the
-    // header's own alpha is the only layer there and the city shows through it, the way City
-    // Watchdog's header does. Nudge if the header height changes.
-    --hc-title-height: 33rem;
     --hc-title-font-size: 13rem;
     --hc-title-letter-spacing: 0.80rem;
     position: relative;
@@ -83,14 +79,17 @@
 .panelStandard {
     border: 0;
     border-radius: 12rem;
-    // Hard stop at the header height: above it the panel paints nothing, so .titleBar's own alpha
-    // is all that stands between the player and the city behind the panel.
+    // Hard stop just above the title bar's bottom edge: the panel paints nothing up there, so
+    // .titleBar's own alpha is all that stands between the player and the city behind the panel.
+    // 25rem, not the full 33rem header height, because the vanilla content wrapper's padding-top
+    // differs between Modern and Legacy UI. Legacy sits the header ~8rem higher, and a stop past
+    // its bottom edge left an unpainted band - the gap between header and row 1 when collapsed.
     background-color: transparent;
     background-image: linear-gradient(
         to bottom,
         rgba(95, 124, 136, 0) 0,
-        rgba(95, 124, 136, 0) 33rem,
-        rgba(95, 124, 136, var(--hc-panel-alpha-top)) 33rem,
+        rgba(95, 124, 136, 0) 25rem,
+        rgba(95, 124, 136, var(--hc-panel-alpha-top)) 25rem,
         rgba(58, 78, 88, var(--hc-panel-alpha-bottom)) 100%
     );
     box-shadow: 0 6rem 18rem rgba(0, 0, 0, 0.16);
@@ -105,8 +104,8 @@
     background-image: linear-gradient(
         to bottom,
         rgba(32, 48, 58, 0) 0,
-        rgba(32, 48, 58, 0) 33rem,
-        rgba(32, 48, 58, var(--hc-panel-alpha-top)) 33rem,
+        rgba(32, 48, 58, 0) 25rem,
+        rgba(32, 48, 58, var(--hc-panel-alpha-top)) 25rem,
         rgba(15, 25, 38, var(--hc-panel-alpha-bottom)) 100%
     );
     box-shadow: 0 6rem 18rem rgba(0, 0, 0, 0.22);

@@ -55,7 +55,7 @@ namespace HoverColors
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kAboutDedication), "Dedication" },
 
                 // Tool color behavior
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToolColorMode)), "Bulldozer + Roads" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToolColorMode)), "▪ Bulldozer + Roads" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ToolColorMode)),
                     "Controls temporary outline colors while bulldozer or road tools are active.\n" +
                     "\n" +
@@ -88,6 +88,17 @@ namespace HoverColors
                     "- Normal roads still follow the Bulldozer + Roads setting you picked from the drop-down list.\n" +
                     "- Disable this if you want those tools to use the game's vanilla blue outline color instead.\n" +
                     "- Overlapping error color still wins when enabled (vanilla error color = salmon red)."
+                },
+
+                // Panel opacity
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)), "▪ Panel opacity" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)),
+                    "How solid the in-city panel background is.\n" +
+                    "\n" +
+                    "**100%** fully solid.\n" +
+                    "**Lower** lets more of the city show through.\n" +
+                    "\n" +
+                    "Only the background changes. Text, icons and swatches stay fully readable at every setting."
                 },
 
                 // Panel
@@ -134,17 +145,6 @@ namespace HoverColors
                 },
                 { m_Settings.GetOptionWarningLocaleID(nameof(HoverColorsSettings.ResetColorsToVanilla)),
                     "Reset the colors this mod controls back to the game's own look?\n\nPresets, tool behavior and panel options are kept." },
-
-                // Panel opacity
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)), "Panel opacity" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)),
-                    "How solid the in-city panel background is.\n" +
-                    "\n" +
-                    "**100%** fully solid.\n" +
-                    "**Lower** lets more of the city show through.\n" +
-                    "\n" +
-                    "Only the background changes. Text, icons and swatches stay fully readable at every setting."
-                },
 
                 // Keybinds
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.TogglePanelBinding)), "Main panel open/close" },
