@@ -13,7 +13,6 @@
 namespace HoverColors
 {
     using System.Collections.Generic;
-
     using Colossal;
 
     public class LocaleTR : IDictionarySource
@@ -56,7 +55,7 @@ namespace HoverColors
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kAboutDedication), "İthaf" },
 
                 // Tool color behavior
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToolColorMode)), "Bulldozer + yollar" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToolColorMode)), "▪ Bulldozer + yollar" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ToolColorMode)),
                     "Bulldozer veya yol araçları aktifken geçici dış çizgi renklerini kontrol eder.\n" +
                     "\n" +
@@ -65,14 +64,14 @@ namespace HoverColors
                     "**3. Özel rengimi koru** seçtiğin rengi her yerde kullanır.\n" +
                     "\n" +
                     "Amaç: bazı kullanıcı/testçiler yıkımda özel renklerini zor görüyor.\n" +
-                    "Araç kullanırken yüksek görünürlük renkleri sunar.\n" +
+                    "Araç kullanırken daha görünür renkler sunar.\n" +
                     "Renk seçicide otomatik kaydedilen özel renginin üzerine yazmaz."
                 },
                 { m_Settings.GetToolColorModeLocaleID("Recommended"), "1. Önerilen" },
                 { m_Settings.GetToolColorModeLocaleID("Vanilla"), "2. Vanilla araç renkleri" },
                 { m_Settings.GetToolColorModeLocaleID("Custom"), "3. Özel rengimi koru" },
 
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseOverlapWarningColor)), "Çakışan öğe dış çizgisini etkinleştir" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseOverlapWarningColor)), "▪ Çakışan öğe dış çizgisini etkinleştir" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseOverlapWarningColor)),
                     "<Etkin önerilir>\n" +
                     "Nesne veya ağ yerleşimi çakışma yüzünden engellenince oyunun vanilla somon kırmızı dış çizgisini görünür tutar.\n" +
@@ -81,7 +80,7 @@ namespace HoverColors
                     "Tüm Bulldozer + yollar modlarıyla çalışır ve kayıtlı özel renginin üzerine yazmaz."
                 },
 
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseCustomColorsForNetLanes)), "NetLanes için özel renklere izin ver" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseCustomColorsForNetLanes)), "▪ NetLanes için özel renklere izin ver" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseCustomColorsForNetLanes)),
                     "<Etkin önerilir>\n" +
                     "Çit, çalı, işaretleme ve benzeri NetLane detaylarını yerleştirirken kayıtlı HC renk/şeffaflığını kullanır.\n" +
@@ -91,37 +90,80 @@ namespace HoverColors
                     "- Etkinse çakışma hata rengi yine önceliklidir (vanilla hata rengi = somon kırmızı)."
                 },
 
-                // Panel
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelTooltipsEnabled)), "Üstüne gelme renk ipuçları" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelTooltipsEnabled)),
-                    "<Etkin> = üstüne gelme renk yardım ipuçlarını göster (önerilen [x]).\n" +
-                    "<Kapalı> = bu modun ipuçlarını gizle.\n" +
-                    "İpuçları yalnızca bu Seçenekler menüsünden kapatılabilir.\n" +
-                    "Şehirde tekrar açabilirsin: başlık çubuğundaki Info (i) düğmesine tıkla."
+                // Panel opacity
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)), "▪ Panel opaklığı" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)),
+                    "Şehir içi panel arka planının ne kadar opak olduğunu ayarlar.\n" +
+                    "\n" +
+                    "**100%** = tamamen opak.\n" +
+                    "**Daha düşük** = şehir daha fazla görünür.\n" +
+                    "\n" +
+                    "Yalnızca arka plan değişir. Metin, simgeler ve renk örnekleri her zaman net kalır.\n" +
+                    "\n" +
+                    "**Yalnızca standart panel.** Koyu panel oyunun kendi panel yüzeyini kullanır ve oyun arayüz opaklığı ayarını izler."
                 },
 
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)), "Daha koyu panel" },
+                // Panel
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)), "▪ Daha koyu panel" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)),
-                    "Etkin = <Koyu panel>: LegacyUI oyuncuları için; Modern UI'da daha güçlü kontrast istersen de kullanılabilir.\n" +
-                    "Kapalı = <Standart panel>: üstüne gelme renkleri için özel yarı saydam stil.\n" +
+                    "Etkin = <Koyu panel>: Legacy UI için; daha koyu panel seviyorsan Modern UI'da da kullanılabilir.\n" +
+                    "Kapalı = <Standart panel>: Hover Colors için özel yarı saydam stil.\n" +
                     "- Daha açık, daha modern görünüm.\n" +
                     "- Yeni Modern UI kullanan çoğu oyuncu için en iyisi.\n" +
                     "\n" +
                     "İkisini de dene. Bu yalnızca bu mod panelinin arka planını değiştirir, oyun UI'sını değil."
                 },
 
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelTooltipsEnabled)), "▪ İpuçlarını göster (önerilen)" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelTooltipsEnabled)),
+                    "Çoğu oyuncu için <açık bırakmak> önerilir.\n" +
+                    "Hover Colors düğmelerinin üstüne gelince kısa yardım gösterir.\n" +
+                    "Kapattıysan başlık çubuğundaki Info (i) düğmesiyle veya bu seçenekle tekrar açabilirsin.\n" +
+                    "Yanlışlıkla kapanmaması için ipuçları yalnızca bu Seçenekler menüsünden kapatılabilir."
+                },
+
+
+                // Reset buttons
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ResetModDefaults)), "Mod varsayılanlarına sıfırla" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ResetModDefaults)),
+                    "Tüm Hover Colors ayarlarını yeni kurulum durumuna döndürür: renkler, dış çizgi kalınlığı, araç renkleri, kılavuzlar, panel ve ipuçları.\n" +
+                    "\n" +
+                    "**Kayıtlı presetlerin de (Set A ve Set B) silinir.**\n" +
+                    "\n" +
+                    "Kısayollar etkilenmez.\n" +
+                    "Hover Colors ilk kez kurulmuş gibi olur."
+                },
+                { m_Settings.GetOptionWarningLocaleID(nameof(HoverColorsSettings.ResetModDefaults)),
+                    "Tüm Hover Colors ayarları yeni kurulum durumuna sıfırlansın mı?\n\nKayıtlı presetler (Set A ve Set B) silinecek." },
+
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ResetColorsToVanilla)), "Renkleri vanilla olarak sıfırla" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ResetColorsToVanilla)),
+                    "Oyunun kendi görünümünü geri getirir: dış çizgi, sahip vurgusu, dolgu, kalınlık, kılavuzlar ve bölgeler.\n" +
+                    "\n" +
+                    "Diğer her şey ayarladığın gibi kalır: Bulldozer/yollar, araç önizlemeleri, presetler, panel ve kısayollar.\n" +
+                    "\n" +
+                    "Not: mod sıfırlama yapmadan kaldırılabilir. Vurgular kendiliğinden oyun varsayılanlarına döner.\n"+
+                    "Bu yalnızca oyun renk varsayılanlarına hızlı sıfırlama düğmesidir."
+                },
+                { m_Settings.GetOptionWarningLocaleID(nameof(HoverColorsSettings.ResetColorsToVanilla)),
+                    "Modun kontrol ettiği renkler oyunun kendi görünümüne dönsün mü?\n\nPresetler, araç davranışı ve panel seçenekleri korunur." },
 
                 // Keybinds
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.TogglePanelBinding)), "Ana paneli aç/kapat" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.TogglePanelBinding)),
                     "Şehir içi renk panelini <açmak / kapatmak> için kısayol." },
+                { m_Settings.GetBindingKeyLocaleID(Mod.kTogglePanelActionName), "Hover Colors panelini aç/kapat" },
 
-                { m_Settings.GetBindingKeyLocaleID(Mod.kTogglePanelActionName), "Üstüne gelme renk panelini aç/kapat" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleHoverHighlightsBinding)), "Hızlı göz Aç/Kapat" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ToggleHoverHighlightsBinding)),
+                    "Başlık çubuğundaki göz düğmesi için isteğe bağlı kısayol: Vurgu + Dolguyu anında Aç/Kapat.\n" +
+                    "Tuş çakışmalarını önlemek için varsayılan olarak atanmamıştır." },
+                { m_Settings.GetBindingKeyLocaleID(Mod.kToggleHighlightsActionName), "Hızlı göz Aç/Kapat" },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleSurfaceToolAreasBinding)), "Surface aracı önizlemeleri aç/kapat" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ToggleSurfaceToolAreasBinding)),
-                    "Yüzey yerleştirirken aktif Surface araç sınır önizleme çizgilerini <gizle veya göster> kısayolu." },
-                { m_Settings.GetBindingKeyLocaleID(Mod.kToggleSurfaceToolAreasActionName), "Surface araç önizleme katmanı aç/kapat" },
+                    "Yüzey yerleştirirken aktif Surface sınır önizleme çizgilerini <gizle veya göster> kısayolu." },
+                { m_Settings.GetBindingKeyLocaleID(Mod.kToggleSurfaceToolAreasActionName), "Surface önizleme katmanı aç/kapat" },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.TogglePresetBinding)), "Preset 1+2 değiştir" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.TogglePresetBinding)),
@@ -137,7 +179,7 @@ namespace HoverColors
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.VersionText)), string.Empty },
 
                 // About Paradox Mods link button
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.OpenParadox)), "Paradox Mods" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.OpenParadox)), "Mochi'nin Paradox Mods'u" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.OpenParadox)), "**Yazarın Paradox Mods sayfasını aç.**" },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.MochiDedicationText)),

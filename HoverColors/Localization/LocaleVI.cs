@@ -13,7 +13,6 @@
 namespace HoverColors
 {
     using System.Collections.Generic;
-
     using Colossal;
 
     public class LocaleVI : IDictionarySource
@@ -56,7 +55,7 @@ namespace HoverColors
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kAboutDedication), "Tưởng nhớ" },
 
                 // Tool color behavior
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToolColorMode)), "Bulldozer + đường" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToolColorMode)), "▪ Bulldozer + đường" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ToolColorMode)),
                     "Điều khiển màu viền tạm thời khi dùng bulldozer hoặc công cụ đường.\n" +
                     "\n" +
@@ -72,7 +71,7 @@ namespace HoverColors
                 { m_Settings.GetToolColorModeLocaleID("Vanilla"), "2. Màu công cụ vanilla" },
                 { m_Settings.GetToolColorModeLocaleID("Custom"), "3. Giữ màu của tôi" },
 
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseOverlapWarningColor)), "Bật viền vật thể bị chồng lấn" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseOverlapWarningColor)), "▪ Bật viền vật thể bị chồng lấn" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseOverlapWarningColor)),
                     "<Nên bật>\n" +
                     "Giữ viền đỏ cá hồi vanilla của game khi đặt vật thể hoặc mạng bị chặn do chồng lấn.\n" +
@@ -81,7 +80,7 @@ namespace HoverColors
                     "Hoạt động với mọi chế độ Bulldozer + đường và không ghi đè màu đã lưu."
                 },
 
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseCustomColorsForNetLanes)), "Cho phép màu riêng cho NetLanes" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseCustomColorsForNetLanes)), "▪ Cho phép màu riêng cho NetLanes" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseCustomColorsForNetLanes)),
                     "<Nên bật>\n" +
                     "Dùng màu/độ trong suốt HC đã lưu khi đặt chi tiết NetLane như hàng rào, bụi cây, vạch kẻ và tương tự.\n" +
@@ -91,36 +90,79 @@ namespace HoverColors
                     "- Màu lỗi chồng lấn vẫn ưu tiên khi bật (màu lỗi vanilla = đỏ cá hồi)."
                 },
 
-                // Panel
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelTooltipsEnabled)), "Mẹo màu khi rê chuột" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelTooltipsEnabled)),
-                    "<Bật> = hiện mẹo trợ giúp màu khi rê chuột (khuyên dùng [x]).\n" +
-                    "<Tắt> = ẩn mẹo của mod này.\n" +
-                    "Chỉ có thể tắt mẹo trong menu Tùy chọn này.\n" +
-                    "Bạn có thể bật lại trong thành phố: bấm nút Info (i) trên thanh tiêu đề."
+                // Panel opacity
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)), "▪ Độ mờ bảng" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)),
+                    "Chỉnh độ đậm của nền bảng trong thành phố.\n" +
+                    "\n" +
+                    "**100%** = hoàn toàn đục.\n" +
+                    "**Thấp hơn** = thấy thành phố phía sau nhiều hơn.\n" +
+                    "\n" +
+                    "Chỉ nền thay đổi. Chữ, biểu tượng và mẫu màu vẫn luôn rõ.\n" +
+                    "\n" +
+                    "**Chỉ bảng chuẩn.** Bảng tối dùng bề mặt bảng của game nên theo cài đặt Độ mờ giao diện của game."
                 },
 
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)), "Bảng tối hơn" },
+                // Panel
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)), "▪ Bảng tối hơn" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)),
-                    "Bật = <Bảng tối>: dành cho người dùng LegacyUI; cũng dùng được trong Modern UI nếu bạn thích tương phản mạnh hơn.\n" +
-                    "Tắt = <Bảng chuẩn>: kiểu trong mờ riêng cho màu khi rê chuột.\n" +
+                    "Bật = <Bảng tối>: dành cho Legacy UI; cũng dùng được trong Modern UI nếu bạn thích nền tối hơn.\n" +
+                    "Tắt = <Bảng chuẩn>: kiểu trong mờ riêng của Hover Colors.\n" +
                     "- Sáng hơn, hiện đại hơn.\n" +
                     "- Hợp với đa số người chơi dùng Modern UI mới.\n" +
                     "\n" +
                     "Thử cả hai để chọn. Chỉ đổi nền bảng mod này, không đổi UI của game."
                 },
 
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelTooltipsEnabled)), "▪ Hiện mẹo (khuyên dùng)" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelTooltipsEnabled)),
+                    "Đa số người chơi nên <để bật>.\n" +
+                    "Hiện trợ giúp ngắn khi rê chuột lên các nút Hover Colors.\n" +
+                    "Nếu tắt, bấm Info (i) trên thanh tiêu đề hoặc bật lại ô này.\n" +
+                    "Để tránh tắt nhầm, mẹo chỉ có thể tắt trong menu Tùy chọn này."
+                },
+
+
+                // Reset buttons
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ResetModDefaults)), "Đặt lại mặc định mod" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ResetModDefaults)),
+                    "Đưa mọi cài đặt Hover Colors về như mới cài: màu, độ dày viền, màu công cụ, đường hướng dẫn, bảng và mẹo.\n" +
+                    "\n" +
+                    "**Preset đã lưu (Set A và Set B) cũng sẽ bị xóa.**\n" +
+                    "\n" +
+                    "Phím tắt không bị thay đổi.\n" +
+                    "Giống như cài Hover Colors lần đầu."
+                },
+                { m_Settings.GetOptionWarningLocaleID(nameof(HoverColorsSettings.ResetModDefaults)),
+                    "Đặt lại mọi cài đặt Hover Colors như mới cài?\n\nPreset đã lưu (Set A và Set B) sẽ bị xóa." },
+
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ResetColorsToVanilla)), "Đặt lại màu vanilla" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ResetColorsToVanilla)),
+                    "Trả lại giao diện gốc của game: viền, tô sáng chủ sở hữu, fill, độ dày, hướng dẫn và quận.\n" +
+                    "\n" +
+                    "Mọi thứ khác giữ nguyên: Bulldozer/đường, xem trước công cụ, preset, bảng và phím tắt.\n" +
+                    "\n" +
+                    "Lưu ý: có thể gỡ mod mà không cần reset. Highlight tự trở về mặc định của game.\n"+
+                    "Đây chỉ là nút reset nhanh về màu mặc định của game."
+                },
+                { m_Settings.GetOptionWarningLocaleID(nameof(HoverColorsSettings.ResetColorsToVanilla)),
+                    "Đặt lại các màu do mod kiểm soát về giao diện gốc của game?\n\nPreset, hành vi công cụ và tùy chọn bảng vẫn được giữ." },
 
                 // Keybinds
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.TogglePanelBinding)), "Mở/đóng bảng chính" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.TogglePanelBinding)),
                     "Phím tắt để <mở / đóng> bảng màu trong thành phố." },
-               
-                { m_Settings.GetBindingKeyLocaleID(Mod.kTogglePanelActionName), "Bật/tắt bảng màu khi rê chuột" },
+                { m_Settings.GetBindingKeyLocaleID(Mod.kTogglePanelActionName), "Bật/tắt bảng Hover Colors" },
 
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleSurfaceToolAreasBinding)), "Xem trước công cụ Surface bật/tắt" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleHoverHighlightsBinding)), "Mắt nhanh Bật/Tắt" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ToggleHoverHighlightsBinding)),
+                    "Phím tắt tùy chọn cho nút Mắt: bật/tắt ngay Highlight + Fill.\n" +
+                    "Mặc định chưa gán phím để tránh xung đột." },
+                { m_Settings.GetBindingKeyLocaleID(Mod.kToggleHighlightsActionName), "Mắt nhanh Bật/Tắt" },
+
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleSurfaceToolAreasBinding)), "Xem trước Surface bật/tắt" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ToggleSurfaceToolAreasBinding)),
-                    "Phím tắt để <ẩn hoặc hiện> đường ranh Surface đang hoạt động khi đặt bề mặt." },
+                    "Phím tắt để <ẩn hoặc hiện> đường ranh Surface khi đặt bề mặt." },
                 { m_Settings.GetBindingKeyLocaleID(Mod.kToggleSurfaceToolAreasActionName), "Lớp xem trước Surface bật/tắt" },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.TogglePresetBinding)), "Đổi preset 1+2" },
@@ -137,7 +179,7 @@ namespace HoverColors
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.VersionText)), string.Empty },
 
                 // About Paradox Mods link button
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.OpenParadox)), "Paradox Mods" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.OpenParadox)), "Paradox Mods của Mochi" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.OpenParadox)), "**Mở trang Paradox Mods của tác giả.**" },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.MochiDedicationText)),

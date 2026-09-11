@@ -151,18 +151,6 @@ namespace HoverColors
         [SettingsUIHidden]
         public bool FillColorInitialized { get; set; }
 
-        // Background alpha for the in-city panel, 30-100 in steps of 5. Applied as discrete
-        // background classes in SCSS; CSS opacity is deliberately not used because it would fade
-        // the text, icons and swatches too.
-        [SettingsUISlider(min = kMinPanelOpacityPercent, max = kMaxPanelOpacityPercent, step = 5, scalarMultiplier = 1, unit = Unit.kPercentage)]
-        [SettingsUIDisableByCondition(typeof(HoverColorsSettings), nameof(IsDarkerPanelActive))]
-        [SettingsUISection(Actions, kPanel)]
-        public int PanelOpacityPercent
-        {
-            get => m_PanelOpacityPercent;
-            set => m_PanelOpacityPercent = ClampPanelOpacity(value);
-        }
-
         [SettingsUIHidden]
         public float OutlineThicknessScale { get; set; }
 
@@ -568,14 +556,26 @@ namespace HoverColors
         // -----------------------------------------------------------------------
         // Actions tab — Panel readability and help
         // -----------------------------------------------------------------------
-        // Options UI lists a group in declaration order, so Darker panel is declared first to
-        // put it above the tooltips toggle.
+        // Options UI lists a group in declaration order, so this block is ordered the way it should
+        // read on screen: Darker panel, then Panel opacity, then Tooltips.
 
         // User-facing label is "Darker panel". LegacyUI's extra transparency exposed
         // the need for this, but Modern UI players can use it too if they prefer
         // stronger panel contrast.
         [SettingsUISection(Actions, kPanel)]
         public bool UseDarkerPanel { get; set; }
+
+        // Background alpha for the in-city panel, 30-100 in steps of 5. Applied as discrete
+        // background classes in SCSS; CSS opacity is deliberately not used because it would fade
+        // the text, icons and swatches too. Sits under Darker panel because Darker disables it.
+        [SettingsUISlider(min = kMinPanelOpacityPercent, max = kMaxPanelOpacityPercent, step = 5, scalarMultiplier = 1, unit = Unit.kPercentage)]
+        [SettingsUIDisableByCondition(typeof(HoverColorsSettings), nameof(IsDarkerPanelActive))]
+        [SettingsUISection(Actions, kPanel)]
+        public int PanelOpacityPercent
+        {
+            get => m_PanelOpacityPercent;
+            set => m_PanelOpacityPercent = ClampPanelOpacity(value);
+        }
 
         // PanelTooltipsEnabled is player-facing now so new players do not accidentally
         // lose tooltip help from a title-bar button. The city info icon can only turn it back ON.

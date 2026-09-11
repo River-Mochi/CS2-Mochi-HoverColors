@@ -13,7 +13,6 @@
 namespace HoverColors
 {
     using System.Collections.Generic;
-
     using Colossal;
 
     public class LocaleDE : IDictionarySource
@@ -56,15 +55,15 @@ namespace HoverColors
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kAboutDedication), "Widmung" },
 
                 // Tool color behavior
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToolColorMode)), "Bulldozer + Straßen" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToolColorMode)), "▪ Bulldozer + Straßen" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ToolColorMode)),
                     "Steuert temporäre Umrissfarben, wenn Bulldozer- oder Straßen-Tools aktiv sind.\n" +
                     "\n" +
                     "**1. Empfohlen** nutzt die Warnfarbe des Spiels (Gelb) für Abriss und ein weicheres Vanilla-Blau für Straßen.\n" +
                     "**2. Vanilla-Toolfarben** stellt das normale Vanilla-Blau des Spiels bei Bulldozer- oder Straßen-Tools wieder her.\n" +
-                    "**3. Meine eigene Farbe behalten** nutzt deine gewählte Farbe überall.\n" +
+                    "**3. Eigene Farbe behalten** nutzt deine gewählte Farbe überall.\n" +
                     "\n" +
-                    "Zweck: manche Nutzer/Tester sehen ihre eigene Farbe beim Bulldozern schlecht.\n" +
+                    "Zweck: Manche Nutzer/Tester sehen ihre eigene Farbe beim Bulldozern schlecht.\n" +
                     "Das bietet gut sichtbare Farben während der Tool-Nutzung.\n" +
                     "Deine automatisch gespeicherte Farbe im Farbwähler wird nicht überschrieben."
                 },
@@ -72,55 +71,99 @@ namespace HoverColors
                 { m_Settings.GetToolColorModeLocaleID("Vanilla"), "2. Vanilla-Toolfarben" },
                 { m_Settings.GetToolColorModeLocaleID("Custom"), "3. Eigene Farbe behalten" },
 
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseOverlapWarningColor)), "Umriss für überlappende Objekte aktivieren" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseOverlapWarningColor)), "▪ Umriss für überlappende Objekte aktivieren" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseOverlapWarningColor)),
                     "<Aktiviert empfohlen>\n" +
-                    "Behält den vanilla lachsroten Umriss sichtbar, wenn Objekt- oder Netzwerkplatzierung blockiert ist.\n" +
+                    "Behält den Vanilla-Lachsrot-Umriss sichtbar, wenn Objekt- oder Netzwerkplatzierung durch Überlappungen blockiert ist.\n" +
                     "Bereichsgrenzen, z. B. Farmradius-Guides der Spezialindustrie, bleiben unberührt.\n" +
                     "\n" +
                     "Funktioniert mit allen Bulldozer + Straßen-Modi und überschreibt deine gespeicherte Farbe nicht."
                 },
 
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseCustomColorsForNetLanes)), "Eigene Farben für NetLanes erlauben" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseCustomColorsForNetLanes)), "▪ Eigene Farben für NetLanes erlauben" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseCustomColorsForNetLanes)),
                     "<Aktiviert empfohlen>\n" +
-                    "Nutzt deine gespeicherte HC-Farbe/Transparenz beim Platzieren von NetLane-Details wie Zäunen, Hecken, Markierungen usw.\n" +
+                    "Nutzt deine gespeicherte HC-Farbe/Transparenz beim Platzieren von NetLane-Details wie Zäunen, Hecken, Markierungen und ähnlichen lane-basierten Tools.\n" +
                     "\n" +
                     "- Normale Straßen folgen weiter der Bulldozer + Straßen-Auswahl aus dem Dropdown.\n" +
                     "- Deaktivieren, wenn diese Tools stattdessen das Vanilla-Blau des Spiels nutzen sollen.\n" +
-                    "- Überlappungsfehlerfarbe gewinnt bei Aktivierung immer (Vanilla-Fehlerfarbe = Lachsrot)."
+                    "- Die Überlappungs-Fehlerfarbe hat bei Aktivierung weiter Vorrang (Vanilla-Fehlerfarbe = Lachsrot)."
+                },
+
+                // Panel opacity
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)), "▪ Panel-Deckkraft" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)),
+                    "Legt fest, wie deckend der Panel-Hintergrund in der Stadt ist.\n" +
+                    "\n" +
+                    "**100%** = vollständig deckend.\n" +
+                    "**Niedriger** = mehr Stadt scheint durch.\n" +
+                    "\n" +
+                    "Nur der Hintergrund ändert sich. Text, Symbole und Farbfelder bleiben immer voll sichtbar.\n" +
+                    "\n" +
+                    "**Nur Standard-Panel.** Das dunklere Panel nutzt die eigene Panel-Oberfläche des Spiels und folgt daher der Interface-Deckkraft des Spiels."
                 },
 
                 // Panel
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelTooltipsEnabled)), "Tooltips für Hover-Farben" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelTooltipsEnabled)),
-                    "<Aktiviert> = Hilfetooltips für Hover-Farben anzeigen (empfohlen [x]).\n" +
-                    "<Deaktiviert> = Tooltips für diesen Mod ausblenden.\n" +
-                    "Tooltips können nur in diesem Optionsmenü deaktiviert werden.\n" +
-                    "In der Stadt kannst du sie wieder einschalten: klicke auf das Info-(i) in der Titelleiste."
-                },
-
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)), "Dunkleres Panel" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)), "▪ Dunkleres Panel" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)),
-                    "Aktiviert = <Dunkles Panel>: für LegacyUI-Spieler; auch in Modern UI nutzbar, wenn du mehr Kontrast magst.\n" +
-                    "Deaktiviert = <Standard-Panel>: eigener transparenter Stil für Hover-Farben.\n" +
+                    "Aktiviert = <Dunkles Panel>: für Legacy-UI-Spieler; auch in Modern UI nutzbar, wenn du ein dunkleres Panel magst.\n" +
+                    "Deaktiviert = <Standard-Panel>: eigener transparenter Hover-Colors-Stil.\n" +
                     "- Hellerer, moderner Look.\n" +
                     "- Am besten für die meisten Spieler mit der neuen Modern UI.\n" +
                     "\n" +
                     "Probier beides aus! Das ändert nur den Hintergrund dieses Mod-Panels, nicht die Spiel-UI."
                 },
 
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelTooltipsEnabled)), "▪ Tooltips anzeigen (empfohlen)" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelTooltipsEnabled)),
+                    "<Eingeschaltet lassen> wird für die meisten Spieler empfohlen.\n" +
+                    "Zeigt kurze Hilfe beim Überfahren von Hover-Colors-Schaltflächen.\n" +
+                    "Wenn deaktiviert, klicke auf Info (i) in der Titelleiste oder aktiviere diese Option wieder.\n" +
+                    "Damit nichts versehentlich verschwindet, können Tooltips nur in diesem Optionsmenü deaktiviert werden."
+                },
+
+
+                // Reset buttons
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ResetModDefaults)), "Auf Mod-Standard zurücksetzen" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ResetModDefaults)),
+                    "Setzt alle Hover-Colors-Einstellungen wie bei einer Neuinstallation zurück: Farben, Umrissdicke, Tool-Farben, Guidelines, Panel und Tooltips.\n" +
+                    "\n" +
+                    "**Dabei werden auch deine gespeicherten Presets (Set A und Set B) gelöscht.**\n" +
+                    "\n" +
+                    "Tastenkürzel bleiben unverändert.\n" +
+                    "Das entspricht einer frischen Hover-Colors-Installation."
+                },
+                { m_Settings.GetOptionWarningLocaleID(nameof(HoverColorsSettings.ResetModDefaults)),
+                    "Alle Hover-Colors-Einstellungen wie bei einer Neuinstallation zurücksetzen?\n\nDeine gespeicherten Presets (Set A und Set B) werden gelöscht." },
+
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ResetColorsToVanilla)), "Farben auf Vanilla zurücksetzen" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ResetColorsToVanilla)),
+                    "Stellt den Spiel-Look wieder her: Umriss, Besitzer-Hervorhebung, Füllung, Umrissdicke, Guidelines und Bezirke.\n" +
+                    "\n" +
+                    "Alles andere bleibt wie eingestellt – Bulldozer/Straßen-Verhalten, Tool-Vorschauen, Presets, Panel-Optionen und Tastenkürzel.\n" +
+                    "\n" +
+                    "Hinweis: Der Mod kann ohne Reset entfernt werden. Hervorhebungen kehren automatisch zu den Spielstandards zurück.\n"+
+                    "Dies ist nur ein Schnell-Reset auf die Standardfarben des Spiels."
+                },
+                { m_Settings.GetOptionWarningLocaleID(nameof(HoverColorsSettings.ResetColorsToVanilla)),
+                    "Die vom Mod gesteuerten Farben auf den Spiel-Look zurücksetzen?\n\nPresets, Tool-Verhalten und Panel-Optionen bleiben erhalten." },
 
                 // Keybinds
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.TogglePanelBinding)), "Hauptpanel öffnen/schließen" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.TogglePanelBinding)),
-                    "Kurzbefehl zum <Öffnen / Schließen> des Farbpanels in der Stadt." },
-                { m_Settings.GetBindingKeyLocaleID(Mod.kTogglePanelActionName), "Hover-Farben-Panel umschalten" },
+                    "Hotkey zum <Öffnen / Schließen> des Farbpanels in der Stadt." },
+                { m_Settings.GetBindingKeyLocaleID(Mod.kTogglePanelActionName), "Hover-Colors-Panel umschalten" },
+
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleHoverHighlightsBinding)), "Schnelles Auge Ein/Aus" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ToggleHoverHighlightsBinding)),
+                    "Optionaler Hotkey für das Auge in der Titelleiste: Hervorhebung + Füllfarbe sofort Aus/Ein.\n" +
+                    "Standardmäßig unbelegt, um Tastenkonflikte zu vermeiden." },
+                { m_Settings.GetBindingKeyLocaleID(Mod.kToggleHighlightsActionName), "Schnelles Auge Ein/Aus" },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleSurfaceToolAreasBinding)), "Surface-Tool-Vorschau ein/aus" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ToggleSurfaceToolAreasBinding)),
-                    "Hotkey zum <Ausblenden oder Anzeigen> aktiver Surface-Tool-Grenzvorschauen beim Platzieren von Flächen." },
-                { m_Settings.GetBindingKeyLocaleID(Mod.kToggleSurfaceToolAreasActionName), "Surface-Tool-Vorschau Ein/Aus" },
+                    "Hotkey zum <Ausblenden oder Anzeigen> aktiver Surface-Grenzvorschauen beim Platzieren von Flächen." },
+                { m_Settings.GetBindingKeyLocaleID(Mod.kToggleSurfaceToolAreasActionName), "Surface-Vorschauebene Ein/Aus" },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.TogglePresetBinding)), "Presets 1+2 umschalten" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.TogglePresetBinding)),
@@ -136,7 +179,7 @@ namespace HoverColors
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.VersionText)), string.Empty },
 
                 // About Paradox Mods link button
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.OpenParadox)), "Paradox Mods" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.OpenParadox)), "Mochis Paradox Mods" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.OpenParadox)), "**Paradox-Mods-Seite des Autors öffnen.**" },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.MochiDedicationText)),

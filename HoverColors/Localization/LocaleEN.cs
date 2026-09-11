@@ -90,30 +90,29 @@ namespace HoverColors
                     "- Overlapping error color still wins when enabled (vanilla error color = salmon red)."
                 },
 
-                // Panel opacity
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)), "▪ Panel opacity" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)),
-                    "How solid the in-city panel background is.\n" +
-                    "\n" +
-                    "**100%** fully solid.\n" +
-                    "**Lower** lets more of the city show through.\n" +
-                    "\n" +
-                    "Only the background changes. Text, icons and swatches stay fully readable at every setting.
-" +
-                    "
-" +
-                    "**Standard panel only.** Darker panel uses the game's own panel surface, so it follows the game's Interface Opacity setting instead."
-                },
-
                 // Panel
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)), "▪ Darker panel" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)),
-                    "Enabled = <Dark panel>: made for legacy UI players; can also be used in Modern UI if you like a darker panel.\n" +
+                    "Enabled = <Dark panel>: made for Legacy UI players; can also be used in Modern UI if you like a darker panel.\n" +
                     "Disabled = <Standard panel>: custom translucent Hover Colors style.\n" +
                     "- Lighter, more modern look.\n" +
                     "- Best for most players using the new Modern game UI.\n" +
                     "\n" +
                     "Try both and see which you prefer! This only changes the background of this mod panel and not the game's UI."
+                },
+
+                // Panel opacity
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)), "▪ Panel opacity" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)),
+                    "How solid the in-city panel background is.\n" +
+                    "\n" +
+                    "**Lower** lets more of the city show through.\n" +
+                    "**100%** fully solid.\n" +
+                    "\n" +
+                    "Only the background changes. Text, icons and swatches stay fully readable at every setting.\n" +
+                    "\n" +
+                    "**Slider works for Standard panel only.** Dark panel uses the game's own panel surface, so it follows the game's Interface Opacity setting instead.\n" +
+                    "Dark works well in Legacy or Modern UI. Standard works best in Modern UI."
                 },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelTooltipsEnabled)), "▪ Show Tooltips (recommended)" },
