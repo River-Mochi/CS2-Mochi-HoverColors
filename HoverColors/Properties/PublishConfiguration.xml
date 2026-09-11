@@ -7,73 +7,73 @@
 <ShortDescription Value="Change blue highlights to Any color, opacity stregth or thickness. Fill color, Guidelines, Hide Surface layers, add District colors."/>
 <!--Long description of the mod. Single line or multi line. Supports minimal markdown subset-->
 <LongDescription>
-	## Mochi's Hover Colors
+## Mochi's Hover Colors
 
-	Want to change the bright blue highlights?
+Want to change the bright blue highlights?
 
-	**Easy tool to Dim, Hide, or Change highlights to any color, opacity stregth, or line thickness.**
+**Easy tool to Dim, Hide, or Change highlights to any color, opacity stregth, or line thickness.**
 
-	### Highlights
+### Highlights
 
-	- 1-click change highlight color + transparency.
-	- **NEW: Change outline thickness** from thin to thick.
-	- **NEW: Fill color from outline color are separate.
-	- Full color picker — click on any color or exact HEX value.
-	- Works on buildings, cars, trees, citizens, props, roads, and more.
-	- **1-Click Eye button** to hide/show highlights anytime.
-	- Hover over buttons for quick tooltip help.
-	- Restore vanilla colors anytime with 1-click.
+- 1-click change highlight color + transparency.
+- **NEW: Change outline thickness** from thin to thick.
+- **NEW: Fill color from outline color are separate.
+- Full color picker — click on any color or exact HEX value.
+- Works on buildings, cars, trees, citizens, props, roads, and more.
+- **1-Click Eye button** to hide/show highlights anytime.
+- Hover over buttons for quick tooltip help.
+- Restore vanilla colors anytime with 1-click.
 
-	### Guidelines + Area Tools
+### Guidelines + Area Tools
 
-	- **Guidelines:** change colors and opacity for roads, spacing lines, and previews.
-	- **Surfaces:** hide the cloudy preview fill so you can see the real ground.
-	- **Specialized Industry:** hide lot previews while drawing farms, forestry, oil, ore, and other industry areas.
-	- **Districts:** change border + overlay color and opacity.
+- **Guidelines:** change colors and opacity for roads, spacing lines, and previews.
+- **Surfaces:** hide the cloudy preview fill so you can see the real ground.
+- **Specialized Industry:** hide lot previews while drawing farms, forestry, oil, ore, and other industry areas.
+- **Districts:** change border + overlay color and opacity.
 
-	### Panel + Options
-	- Bulldozer + Road tool color choices are in the Options menu.
-	- NEW: works in Editor Mode: use the main panel hotkey to open the panel (default J).
+### Panel + Options
+- Bulldozer + Road tool color choices are in the Options menu.
+- NEW: works in Editor Mode: use the main panel hotkey to open the panel (default J).
 
-	## Good to Know
+## Good to Know
 
-	- **To start:** click the Hover Colors palette icon (top-left icon).
-	- **Works with Recolor:** Hover Colors changes highlights, guidelines, overlays, and previews. Recolor changes the actual objects.
-	- **Lightweight:** no Harmony patches and Safe to remove anytime.
-	- Alpha = transparency. Click any color box, a full color picker opens. Use the last bar.
-	- Performance friendly: HC applies changes when needed, then stays idle.
+- **To start:** click the Hover Colors palette icon (top-left icon).
+- **Works with Recolor:** Hover Colors changes highlights, guidelines, overlays, and previews. Recolor changes the actual objects.
+- **Lightweight:** no Harmony patches and Safe to remove anytime.
+- Alpha = transparency. Click any color box, a full color picker opens. Use the last bar.
+- Performance friendly: HC applies changes when needed, then stays idle.
 
-	### Support + Feedback
+### Support + Feedback
 
-	- Enjoy and the easiest way to support is clicking the Like 👍 button (top right) — no donations requested.
-	- Feedback: use the GitHub or Discord links (icons right side).
-	- MIT open source.
+- Enjoy and the easiest way to support is clicking the Like 👍 button (top right) — no donations requested.
+- Feedback: use the GitHub or Discord links (icons right side).
+- MIT open source.
 
-	### ❤️ Credits and Thanks
+### ❤️ Credits and Thanks
 
-	**Huge thanks to everyone who helped test and support.**
+**Huge thanks to everyone who helped test and support.**
 
-	- River-Mochi - mod author
-	- Flashbond - collab, tech feedback, testing
-	- yenyang (Recolor, Anarchy) - collab, tech feedback, testing
-	- StarQ - tech feedback, testing
-	- gagaxm, Mayor Cheeks - surface-hide requests and testing
-	- Dx, BugsyG, Necko1996, ElGendo87, Maestro - testing
-	- =Noel= - images and testing
-	- rzzirrah - image consultant
+- River-Mochi - mod author
+- Flashbond - collab, tech feedback, testing
+- yenyang (Recolor, Anarchy) - collab, tech feedback, testing
+- StarQ - tech feedback, testing
+- gagaxm, Mayor Cheeks - surface-hide requests and testing
+- Dx, BugsyG, Necko1996, ElGendo87, Maestro - testing
+- =Noel= - images and testing
+- rzzirrah - image consultant
 
-	### Presets
+### Presets
 
-	- Tap **1** or **2** to switch presets.
-	- Hold **1** or **2** for 0.5s to save your current colors.
-	- **[⇔]** switches between Set A and Set B = **4 saved custom presets**.
-	- **[↺]** switches between HC defaults and your saved colors.
+- Tap **1** or **2** to switch presets.
+- Hold **1** or **2** for 0.5s to save your current colors.
+- **[⇔]** switches between Set A and Set B = **4 saved custom presets**.
+- **[↺]** switches between HC defaults and your saved colors.
 
-	### 15 Languages
+### 15 Languages
 
-	English, Français, Deutsch, Español, Italiano, Polski, Português Brasil, Português Portugal, 日本語, 한국어, 简体中文, 繁體中文, ภาษาไทย, Tiếng Việt, Türkçe
+English, Français, Deutsch, Español, Italiano, Polski, Português Brasil, Português Portugal, 日本語, 한국어, 简体中文, 繁體中文, ภาษาไทย, Tiếng Việt, Türkçe
 
-	tags: hover colors, remove blue, disable hover, highlight color, outline thickness, fill color, guidelines, districts, surface tool, transparent overlays, industry surfaces
+tags: hover colors, remove blue, disable hover, highlight color, outline thickness, fill color, guidelines, districts, surface tool, transparent overlays, industry surfaces
 </LongDescription>
 
 
