@@ -1,4 +1,4 @@
-// <copyright file="Setting.Reset.cs" company="River-Mochi">
+﻿// <copyright file="Setting.Reset.cs" company="River-Mochi">
 // Copyright (c) 2026 River-Mochi. All rights reserved.
 // Licensed under the MIT License. You may not use this file except in compliance with this License.
 // See LICENSE file in the project root for full license information.
@@ -9,7 +9,7 @@
 // File: Settings/Setting.Reset.cs
 // Purpose: Options UI action for restoring HC-controlled game visuals to vanilla.
 
-namespace HoverColors.Settings
+namespace HoverColors
 {
     using Game.Settings;
 

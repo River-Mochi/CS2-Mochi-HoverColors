@@ -1,4 +1,4 @@
-// <copyright file="DistrictColorSystem.cs" company="River-Mochi">
+﻿// <copyright file="DistrictColorSystem.cs" company="River-Mochi">
 // Copyright (c) 2026 River-Mochi. All rights reserved.
 // Licensed under the MIT License. You may not use this file except in compliance with this License.
 // See LICENSE file in the project root for full license information.
@@ -23,9 +23,7 @@ namespace HoverColors.Systems
     using Game;
     using Game.Common;
     using Game.Prefabs;
-   // using Game.Serialization;
-    // using HoverColors.Localization;
-    using HoverColors.Settings;
+
     using Unity.Entities;
     using UnityEngine;
     using AreaComponent = Game.Areas.Area;

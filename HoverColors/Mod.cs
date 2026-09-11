@@ -1,4 +1,4 @@
-// <copyright file="Mod.cs" company="River-Mochi">
+﻿// <copyright file="Mod.cs" company="River-Mochi">
 // Copyright (c) 2026 River-Mochi. All rights reserved.
 // Licensed under the MIT License. You may not use this file except in compliance with this License.
 // See LICENSE file in the project root for full license information.
@@ -20,8 +20,6 @@ namespace HoverColors
     using Game;
     using Game.Modding;
     using Game.SceneFlow;
-    using HoverColors.Localization;
-    using HoverColors.Settings;
     using HoverColors.Systems;
     using HoverColors.UI;
     using Unity.Entities;

@@ -1,4 +1,4 @@
-// <copyright file="Setting.cs" company="River-Mochi">
+﻿// <copyright file="Setting.cs" company="River-Mochi">
 // Copyright (c) 2026 River-Mochi. All rights reserved.
 // Licensed under the MIT License. You may not use this file except in compliance with this License.
 // See LICENSE file in the project root for full license information.
@@ -11,7 +11,7 @@
 // Note: the in-city panel color settings are intentionally NOT decorated for Options UI — they are
 // persisted here, read by cs2/api bindings, and applied by Systems/HoverColorsUISystem.cs.
 
-namespace HoverColors.Settings
+namespace HoverColors
 {
     using Colossal.IO.AssetDatabase; // FileLocation
     using Game.Input;       // BindingKeyboard

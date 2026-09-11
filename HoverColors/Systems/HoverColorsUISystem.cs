@@ -1,4 +1,4 @@
-// <copyright file="HoverColorsUISystem.cs" company="River-Mochi">
+﻿// <copyright file="HoverColorsUISystem.cs" company="River-Mochi">
 // Copyright (c) 2026 River-Mochi. All rights reserved.
 // Licensed under the MIT License. You may not use this file except in compliance with this License.
 // See LICENSE file in the project root for full license information.
@@ -19,7 +19,6 @@ namespace HoverColors.UI
     using Game;     // GameMode
     using Game.Input;
     using Game.UI;
-    using HoverColors.Settings;
     using HoverColors.Systems;
 
     public partial class HoverColorsUISystem : UISystemBase

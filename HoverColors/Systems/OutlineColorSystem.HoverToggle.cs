@@ -1,4 +1,4 @@
-// <copyright file="OutlineColorSystem.HoverToggle.cs" company="River-Mochi">
+﻿// <copyright file="OutlineColorSystem.HoverToggle.cs" company="River-Mochi">
 // Copyright (c) 2026 River-Mochi. All rights reserved.
 // Licensed under the MIT License. You may not use this file except in compliance with this License.
 // See LICENSE file in the project root for full license information.
@@ -13,7 +13,7 @@ namespace HoverColors.Systems
 {
     using Game.Common;
     using Game.Tools;
-    using HoverColors.Settings;
+    using HoverColors;
     using Unity.Entities;
 
     public partial class OutlineColorSystem

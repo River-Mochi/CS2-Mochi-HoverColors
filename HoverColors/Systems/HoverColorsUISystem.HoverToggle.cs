@@ -1,4 +1,4 @@
-// <copyright file="HoverColorsUISystem.HoverToggle.cs" company="River-Mochi">
+﻿// <copyright file="HoverColorsUISystem.HoverToggle.cs" company="River-Mochi">
 // Copyright (c) 2026 River-Mochi. All rights reserved.
 // Licensed under the MIT License. You may not use this file except in compliance with this License.
 // See LICENSE file in the project root for full license information.
@@ -13,7 +13,6 @@ namespace HoverColors.UI
 {
     using Colossal.UI.Binding;
     using Game.Input;
-    using HoverColors.Settings;
 
     public partial class HoverColorsUISystem
     {

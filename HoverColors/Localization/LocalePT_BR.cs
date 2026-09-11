@@ -1,4 +1,4 @@
-// <copyright file="LocalePT_BR.cs" company="River-Mochi">
+﻿// <copyright file="LocalePT_BR.cs" company="River-Mochi">
 // Copyright (c) 2026 River-Mochi. All rights reserved.
 // Licensed under the MIT License. You may not use this file except in compliance with this License.
 // See LICENSE file in the project root for full license information.
@@ -10,13 +10,11 @@
 // Purpose: Brazilian Portuguese (pt-BR) strings for the Options Menu.
 // Strings for the in-city cohtml panel live separately in L10n/lang/pt-BR.json.
 
-namespace HoverColors.Localization
+namespace HoverColors
 {
     using System.Collections.Generic;
 
     using Colossal;
-
-    using HoverColors.Settings;
 
     public sealed class LocalePT_BR : IDictionarySource
     {
