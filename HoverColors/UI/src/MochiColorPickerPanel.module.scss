@@ -36,10 +36,13 @@
     position: relative;
     overflow: visible;
 
-    // Kill the vanilla Panel/Menu fill so only Hover Colors paints this panel. Without this the
-    // vanilla surface sits behind the title bar and nothing the title bar does with alpha can
-    // reveal the city, and the panel also follows the game's Interface Opacity slider instead of
-    // our own. Same approach City Watchdog uses on its panel shell.
+}
+
+// Standard only. Removes the vanilla Panel/Menu fill so Hover Colors is the sole painter, which is
+// what lets the title bar be genuinely see-through and puts the panel under HC's opacity slider
+// instead of the game's Interface Opacity. Darker deliberately does NOT get this: it keeps the
+// vanilla surface so it matches the player's game skin and follows the game's slider.
+.panelFrameCustom {
     --menuPanel1: transparent;
     --menuPanel2: transparent;
     --panelColorDark: transparent;
@@ -61,14 +64,13 @@
     position: relative;
     overflow: visible;
 
-    // Same reason as .panelFrame: the vanilla content wrapper is on this element too.
-    --menuPanel1: transparent;
-    --menuPanel2: transparent;
-    --panelColorDark: transparent;
-    --panelColorNormal: transparent;
-    --sectionHeaderColor: transparent;
-    background-color: transparent;
-    background-image: none;
+    // The vanilla content wrapper's padding differs between Modern and Legacy UI, and every
+    // negative-margin hack in this file existed to cancel it. Zeroing it once makes the layout
+    // skin-independent: .body and .actions already carry their own padding.
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
 
     width: var(--hc-panel-width);
     min-width: var(--hc-panel-width);
@@ -77,38 +79,35 @@
 }
 
 .panelStandard {
+    --menuPanel1: transparent;
+    --menuPanel2: transparent;
+    --panelColorDark: transparent;
+    --panelColorNormal: transparent;
+    --sectionHeaderColor: transparent;
+    background-color: transparent;
+    background-image: none;
     border: 0;
     border-radius: 12rem;
-    // Hard stop just above the title bar's bottom edge: the panel paints nothing up there, so
-    // .titleBar's own alpha is all that stands between the player and the city behind the panel.
-    // 25rem, not the full 33rem header height, because the vanilla content wrapper's padding-top
-    // differs between Modern and Legacy UI. Legacy sits the header ~8rem higher, and a stop past
-    // its bottom edge left an unpainted band - the gap between header and row 1 when collapsed.
-    background-color: transparent;
+    // Hard stop exactly at the title bar's bottom edge. Now that .panelContent has no padding the
+    // header starts at y=0, so 33rem (4.5 + 24 + 4.5) is exact in every skin - no gap, and no
+    // panel showing through behind the header.
     background-image: linear-gradient(
         to bottom,
         rgba(95, 124, 136, 0) 0,
-        rgba(95, 124, 136, 0) 25rem,
-        rgba(95, 124, 136, var(--hc-panel-alpha-top)) 25rem,
+        rgba(95, 124, 136, 0) 33rem,
+        rgba(95, 124, 136, var(--hc-panel-alpha-top)) 33rem,
         rgba(58, 78, 88, var(--hc-panel-alpha-bottom)) 100%
     );
     box-shadow: 0 6rem 18rem rgba(0, 0, 0, 0.16);
 }
 
-// Darker is now its own painted palette rather than the vanilla surface, so both panel styles
-// answer to the Hover Colors opacity slider and neither follows the game's Interface Opacity.
+// Darker paints nothing: the vanilla Panel/Menu surface shows through, so it matches whatever
+// skin the player is on and follows the game's own Interface Opacity slider. HC's opacity slider
+// is intentionally inert here - two controls over one surface was the confusing part.
 .panelDarker {
-    border: 0;
-    border-radius: 12rem;
-    background-color: transparent;
-    background-image: linear-gradient(
-        to bottom,
-        rgba(32, 48, 58, 0) 0,
-        rgba(32, 48, 58, 0) 25rem,
-        rgba(32, 48, 58, var(--hc-panel-alpha-top)) 25rem,
-        rgba(15, 25, 38, var(--hc-panel-alpha-bottom)) 100%
-    );
-    box-shadow: 0 6rem 18rem rgba(0, 0, 0, 0.22);
+    // Surface deliberately left to vanilla. Control styling lives in panel/styles/_panelDarker.scss.
+    // A real declaration keeps this class in the CSS-module exports even though the rule is bare.
+    position: relative;
 }
 
 // Idle header sits darker than the body so the title bar reads as its own strip.
@@ -119,16 +118,45 @@
     display: flex;
     align-items: center;
     box-sizing: border-box;
-    margin: -8rem -1rem 0 -1rem;
+    // Zero margins: .panelContent no longer has padding to cancel, so the header spans exactly the
+    // panel width in every skin instead of overhanging it.
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
     padding: 4.5rem 6rem 4.5rem 6rem;
-    border-radius: 12rem 12rem 0 0;
-    background-color: rgba(36, 54, 66, var(--hc-title-alpha));
+    border-top-left-radius: 12rem;
+    border-top-right-radius: 12rem;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
     transition: background-color 120ms ease-out;
+}
 
-    // Hover goes lighter AND thinner, so the header opens up instead of gaining a white film.
-    // Same pair City Watchdog uses on its own header.
+// Standard: see-through header. Hover goes lighter AND thinner so it opens up rather than
+// gaining a white film.
+.panelStandard .titleBar {
+    background-color: rgba(36, 54, 66, var(--hc-title-alpha));
+
     &:hover {
         background-color: rgba(76, 98, 112, var(--hc-title-alpha-hover));
+    }
+}
+
+// Darker: a plain darkening over the vanilla surface. Fixed alphas, so the HC opacity slider does
+// not reach it and the header keeps matching the vanilla panel underneath.
+//
+// The corner radius has to track the skin, not our own 12rem. Vanilla paints the panel background
+// with .content_XD5, which has NO radius, while the rounding lives on .panel_YqS as
+// var(--panelRadius) - a value that is 12rem in some skins and 0, 4, 5, 6 or 14rem in others. Where
+// ours was rounded more than the panel, the top corners were left showing the translucent vanilla
+// background instead of the header, which is the wedge that appears on hover.
+.panelDarker .titleBar {
+    border-top-left-radius: var(--panelRadius);
+    border-top-right-radius: var(--panelRadius);
+    background-color: rgba(0, 0, 0, 0.24);
+
+    &:hover {
+        background-color: rgba(254, 255, 255, 0.10);
     }
 }
 

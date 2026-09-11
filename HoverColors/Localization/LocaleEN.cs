@@ -98,7 +98,11 @@ namespace HoverColors
                     "**100%** fully solid.\n" +
                     "**Lower** lets more of the city show through.\n" +
                     "\n" +
-                    "Only the background changes. Text, icons and swatches stay fully readable at every setting."
+                    "Only the background changes. Text, icons and swatches stay fully readable at every setting.
+" +
+                    "
+" +
+                    "**Standard panel only.** Darker panel uses the game's own panel surface, so it follows the game's Interface Opacity setting instead."
                 },
 
                 // Panel

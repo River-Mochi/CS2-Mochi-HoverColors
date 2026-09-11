@@ -45,6 +45,10 @@ namespace HoverColors
 
         private int m_PanelOpacityPercent = kDefaultPanelOpacityPercent;
 
+        // Darker hands the surface to the vanilla panel, so this slider has nothing to act on there.
+        // Greying it out is clearer than leaving a control that silently does nothing.
+        public bool IsDarkerPanelActive() => UseDarkerPanel;
+
         internal static int ClampPanelOpacity(int value)
         {
             int snapped = (int)System.Math.Round(value / 5.0) * 5;
@@ -151,6 +155,7 @@ namespace HoverColors
         // background classes in SCSS; CSS opacity is deliberately not used because it would fade
         // the text, icons and swatches too.
         [SettingsUISlider(min = kMinPanelOpacityPercent, max = kMaxPanelOpacityPercent, step = 5, scalarMultiplier = 1, unit = Unit.kPercentage)]
+        [SettingsUIDisableByCondition(typeof(HoverColorsSettings), nameof(IsDarkerPanelActive))]
         [SettingsUISection(Actions, kPanel)]
         public int PanelOpacityPercent
         {
