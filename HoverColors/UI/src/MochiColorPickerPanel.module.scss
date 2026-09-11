@@ -135,9 +135,15 @@
 // blur, the game's Interface Opacity driving the panel instead of ours, and a surface that changed
 // shape with the skin. It now paints the same colours itself.
 //
-// The top colour is not a vanilla-ish guess - it is --panelColorDark from index.css, the value the
-// game paints its own dark panel surfaces with. So Darker still looks like a vanilla panel; it just
-// answers to the Hover Colors slider and costs nothing to composite.
+// The palette is anchored to a real vanilla value: --panelColorDark from index.css, rgb(24, 33, 51),
+// the colour the game paints its own dark panel surfaces with. That exact value is the title bar
+// (see .panelDarker .titleBar), and the body is a lighter navy of the same hue sitting above it.
+// So Darker still looks like a vanilla panel; it just answers to the Hover Colors slider and costs
+// nothing to composite.
+//
+// The body was briefly --panelColorDark itself, which at a solid 100% read as near-black. Lifting
+// the body and keeping the vanilla value on the header holds the hue while giving the panel
+// somewhere to be dark: the header still reads as its own strip against the body above it.
 //
 // An earlier pass used --gradientDarkBlueStart/End here (the legacy panel gradient, which is also
 // what Zone Tools copies). Those are mid-tone blues from the same family City Watchdog derived
@@ -163,8 +169,8 @@
     // Same !important, for the same `.overwrite-legacy .content_XD5` two-class rule in Legacy UI.
     background-image: linear-gradient(
         to bottom,
-        rgba(24, 33, 51, var(--hc-dark-alpha-top)),
-        rgba(13, 18, 32, var(--hc-dark-alpha-bottom))
+        rgba(36, 49, 75, var(--hc-dark-alpha-top)),
+        rgba(20, 27, 47, var(--hc-dark-alpha-bottom))
     ) !important;
     background-repeat: no-repeat;
     background-position: 0rem 33rem;
@@ -214,10 +220,10 @@
 // Hover lightens but keeps the idle alpha, unlike Standard which also thins out. Darker exists for
 // players who want a solid panel; going see-through under the cursor would undo that at 100%.
 .panelDarker .titleBar {
-    background-color: rgba(16, 21, 33, var(--hc-dark-title-alpha));
+    background-color: rgba(24, 33, 51, var(--hc-dark-title-alpha));
 
     &:hover {
-        background-color: rgba(45, 58, 86, var(--hc-dark-title-alpha));
+        background-color: rgba(56, 72, 104, var(--hc-dark-title-alpha));
     }
 }
 
