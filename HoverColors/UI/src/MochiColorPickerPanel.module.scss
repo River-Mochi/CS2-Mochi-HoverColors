@@ -84,20 +84,49 @@
     --panelColorDark: transparent;
     --panelColorNormal: transparent;
     --sectionHeaderColor: transparent;
+    // Vanilla's .content_XD5 also carries `backdrop-filter: var(--panelBlur)`, which is blur(5px)
+    // in both skins. Nulling the colour variables never touched it, so the city behind the panel
+    // stayed frosted and the body read as solid however far down the opacity slider went.
+    // Declared on this element, so it beats the inherited html/.style--* value and leaves every
+    // other vanilla panel's blur alone.
+    --panelBlur: none;
     background-color: transparent;
-    background-image: none;
     border: 0;
     border-radius: 12rem;
-    // Hard stop exactly at the title bar's bottom edge. Now that .panelContent has no padding the
-    // header starts at y=0, so 33rem (4.5 + 24 + 4.5) is exact in every skin - no gap, and no
-    // panel showing through behind the header.
+
+    // The header must stay unpainted so .titleBar's own alpha is the only thing between the player
+    // and the city. That used to be done with `rgba(...) 33rem` colour stops - but Gameface does
+    // not support a length-positioned gradient stop (vanilla's index.css has zero of them; every
+    // stop it ships is a % or bare). The whole background-image declaration was therefore invalid
+    // and dropped, which is why the opacity slider appeared to drive only the title bar while the
+    // body kept answering to the game's own Interface Opacity.
+    //
+    // Offsetting a plain two-stop gradient does the same job with constructs vanilla itself uses:
+    // background-position in rem and background-size. calc(100% - 33rem) is deliberately avoided -
+    // vanilla never mixes % and length inside calc, so it is not worth betting the panel on.
+    // Size stays 100%, so the gradient simply runs 33rem past the bottom edge and the last sliver
+    // of the end colour is clipped; at panel heights that is not a visible difference.
+    //
+    // !important is load-bearing. Legacy UI adds `.overwrite-legacy .content_XD5`, a two-class
+    // selector that sets background-image from the vanilla legacy gradient and so outranks this
+    // single class. Without it Legacy painted the body with vanilla's blue-grey instead of ours:
+    // the HC slider barely moved, the game's Interface Opacity still reached the panel through
+    // var(--uiOpacity), and the body clashed with our title bar. Same override City Watchdog uses.
+    //
+    // Body palette is City Watchdog's, which is also what EasyZoning copied for its own panel. It
+    // has to be this pair and not a lighter one: .titleBar already uses CWD's header colour
+    // rgb(36, 54, 66), and that header only reads as part of the same panel when the body sits in
+    // the same family. The previous rgb(95, 124, 136) top was from an older palette and turned the
+    // body into a pale grey at full opacity while the header stayed dark - the two looked like
+    // pieces of different panels. Low slider values hid it because alpha did all the work.
     background-image: linear-gradient(
         to bottom,
-        rgba(95, 124, 136, 0) 0,
-        rgba(95, 124, 136, 0) 33rem,
-        rgba(95, 124, 136, var(--hc-panel-alpha-top)) 33rem,
-        rgba(58, 78, 88, var(--hc-panel-alpha-bottom)) 100%
-    );
+        rgba(55, 82, 96, var(--hc-panel-alpha-top)),
+        rgba(31, 45, 60, var(--hc-panel-alpha-bottom))
+    ) !important;
+    background-repeat: no-repeat;
+    background-position: 0rem 33rem;
+    background-size: 100% 100%;
     box-shadow: 0 6rem 18rem rgba(0, 0, 0, 0.16);
 }
 
