@@ -1,4 +1,4 @@
-{
+﻿{
   "HoverColors.UI.Title": "Hover Colors",
   "HoverColors.UI.TopLeft.Tooltip": "Hover Colors - highlights + opacity",
   "HoverColors.UI.Aria.ClosePanel": "Close panel",
@@ -11,7 +11,7 @@
   "HoverColors.UI.Tooltip.ResetOutline": "Outline, click to reset to Game Default color",
   "HoverColors.UI.Tooltip.OutlineSwatch": "OUTLINE - click for color + opacity.",
   "HoverColors.UI.Tooltip.ResetOutlineThickness": "Reset outline thickness to vanilla.",
-  "HoverColors.UI.Tooltip.OutlineThickness": "Outline thickness.\n1.0 = vanilla. Lower thinner, higher thicker.",
+  "HoverColors.UI.Tooltip.OutlineThickness": "Thickness of outlines.\n1.0 = vanilla. Lower thinner, higher thicker.",
   "HoverColors.UI.Tooltip.OwnerSwatch": "Owner/parent building highlight.\nExample: bus depot. Green is game default.",
   "HoverColors.UI.Tooltip.ResetFill": "Fill, click to reset to Game Default",
   "HoverColors.UI.Tooltip.FillSwatch": "Fill color inside the highlight.\nWhite = same as the Outline.\nPicker's alpha bar sets opacity.",
@@ -25,7 +25,7 @@
   "HoverColors.UI.Tooltip.SpecializedIndustryToggle": "Hide Extractor Lot area preview fill.",
   "HoverColors.UI.Tooltip.Preset1": "Set 1 - tap to use, hold 0.5s to save.\nHotkey K switches 1 or 2.",
   "HoverColors.UI.Tooltip.Preset2": "Set 2 - tap to use, hold 0.5s to save.\nHotkey K switches 1 or 2.",
-  "HoverColors.UI.Tooltip.ResetPresets": "⇔ Switch Set A (1+2) and Set B (1+2).\n4 sets total. Hold 1 or 2 to save.",
+  "HoverColors.UI.Tooltip.ResetPresets": "⇔ Switch Set A (1+2) and Set B (1+2).\n4 custom presets. Hold 1 or 2 to save.",
   "HoverColors.UI.Tooltip.RestorePresetDefaults": "↺ Swap between mod default presets and your saved colors.\n8 slots: 4 defaults, 4 yours.",
   "HoverColors.UI.Tooltip.DistrictColors": "District overlay + border color/opacity.\nHold 0.5s to reset to game color.",
   "HoverColors.UI.Tooltip.ResetDistrictColors": "Reset all districts to the game's default blue.",

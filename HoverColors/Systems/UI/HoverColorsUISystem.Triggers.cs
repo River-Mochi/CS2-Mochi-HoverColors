@@ -51,6 +51,12 @@ namespace HoverColors.UI
 
         // Diagnostic sink for the panel. Keeps mod troubleshooting in HoverColors.log instead of
         // UI.log, which every mod's console output shares.
+        //
+        // Intentionally has no caller in the shipped UI - this is the reusable half of a debug probe
+        // whose throwaway half was removed. Kept because the alternative from the panel is
+        // console.log, which only reaches the shared UI.log. Reach for it when a game patch changes
+        // a vanilla class or variable the panel depends on and you need to see what it resolved,
+        // without shipping a debug build. Do not prune as dead code.
         private static void LogDebug(string message)
         {
             if (string.IsNullOrEmpty(message))
