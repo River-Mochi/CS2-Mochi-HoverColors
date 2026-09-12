@@ -84,12 +84,16 @@
     --panelColorDark: transparent;
     --panelColorNormal: transparent;
     --sectionHeaderColor: transparent;
-    // Vanilla's .content_XD5 also carries `backdrop-filter: var(--panelBlur)`, which is blur(5px)
-    // in both skins. Nulling the colour variables never touched it, so the city behind the panel
-    // stayed frosted and the body read as solid however far down the opacity slider went.
-    // Declared on this element, so it beats the inherited html/.style--* value and leaves every
-    // other vanilla panel's blur alone.
-    --panelBlur: none;
+    // Vanilla's .content_XD5 carries `backdrop-filter: var(--panelBlur)` - blur(5px) - and it is
+    // deliberately left in place. It blurs the city behind the panel and our translucent gradient
+    // then paints over that blurred result, which is what actually makes this read as frosted glass.
+    //
+    // It was briefly nulled here on performance grounds. That was the wrong trade: the blur is not
+    // ours to save, the game already pays it on the toolbar and every vanilla panel on screen, and
+    // suppressing it on one small panel wins nothing measurable. What it cost was legibility - at a
+    // low opacity setting the sharp background showed straight through, and thin controls like the
+    // sliders lost their edges against high-contrast ground like crosswalks and signage. Blur
+    // removes that detail; a tint alone only lightens it, so no colour choice substitutes for this.
     background-color: transparent;
     border: 0;
     border-radius: 12rem;
@@ -160,7 +164,7 @@
     --panelColorDark: transparent;
     --panelColorNormal: transparent;
     --sectionHeaderColor: transparent;
-    --panelBlur: none;
+    // Vanilla's blur is kept here for the same reason as .panelStandard - see the note there.
     position: relative;
     background-color: transparent;
     border: 0;
