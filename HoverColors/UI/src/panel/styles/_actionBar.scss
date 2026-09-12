@@ -8,9 +8,11 @@
     justify-content: space-between;
     align-items: center;
     margin-top: -2rem;
-    // Bottom is deliberately larger than the top: the surface-tool row sat almost on the panel
-    // edge, which read as a clipped panel rather than a deliberate margin.
-    padding: 5rem 8rem 6rem 8rem;
+    // Bottom is deliberately much larger than the top. The buttons sat almost on the panel edge,
+    // which read as a clipped panel rather than a deliberate margin - most obvious on the collapsed
+    // panel, where this row is the last thing before the bottom corner. The row moves up 1rem and
+    // gains another 1rem underneath.
+    padding: 4rem 8rem 7rem 8rem;
     border-top: 1rem solid rgba(254, 255, 255, 0.16);
 }
 

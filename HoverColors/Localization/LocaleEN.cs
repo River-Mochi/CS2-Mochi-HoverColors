@@ -97,19 +97,19 @@ namespace HoverColors
                     "- Matches your Legacy or Modern UI skin automatically.\n" +
                     "- Follows the game's own Interface Opacity setting.\n" +
                     "\n" +
-                    "**Standard (Glass)** uses the lighter Hover Colors glass surface.\n" +
+                    "**Glass (Custom)** uses the lighter Hover Colors glass surface.\n" +
                     "- Keeps a trace of the city showing even at 100%.\n" +
                     "- Adds a Panel opacity slider below.\n" +
                     "\n" +
                     "Try both and see which you prefer! This only changes the background of this mod panel and not the game's UI."
                 },
                 { m_Settings.GetPanelStyleLocaleID("Dark"), "Dark (Vanilla)" },
-                { m_Settings.GetPanelStyleLocaleID("Standard"), "Standard (Glass)" },
+                { m_Settings.GetPanelStyleLocaleID("Glass"), "Glass (Custom)" },
 
                 // Panel opacity
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)), "▪ Panel opacity" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)),
-                    "Background opacity for the **Standard (Glass)** panel.\n" +
+                    "Background opacity for the **Glass (Custom)** panel.\n" +
                     "\n" +
                     "**30%** is the most see-through and clear look.\n" +
                     "**100%** is nearly solid, keeping a trace of the city showing.\n" +

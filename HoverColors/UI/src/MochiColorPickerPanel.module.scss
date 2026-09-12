@@ -191,7 +191,14 @@
     }
 }
 
-// Dark header: a light wash over the vanilla surface, so the panel underneath still reads through.
+// Dark header: var(--panelColorDark), which is the exact variable vanilla paints its own panel
+// headers with (see .header_emp and .header_Quv in the game's index.css). Using the variable rather
+// than a colour of our own means the header is near-black like every other panel header, tracks the
+// Legacy/Modern skin on its own, and fades with the game's Interface Opacity through
+// --panelOpacityDark - all without a line of code on our side.
+//
+// It was briefly transparent, which left the header the same colour as the body and made the panel
+// read as one flat slab with no title strip.
 //
 // The radius has to track the skin rather than our own 12rem. Vanilla paints the panel background
 // with .content_XD5, which has NO radius, while the rounding lives on .panel_YqS as
@@ -201,10 +208,12 @@
 .panelDarker .titleBar {
     border-top-left-radius: var(--panelRadius);
     border-top-right-radius: var(--panelRadius);
-    background-color: transparent;
+    background-color: var(--panelColorDark);
 
+    // Hover drops the dark backing for a light wash, so the whole strip lifts the way vanilla
+    // headers do instead of just gaining a film over an already-dark bar.
     &:hover {
-        background-color: rgba(254, 255, 255, 0.08);
+        background-color: rgba(254, 255, 255, 0.12);
     }
 }
 

@@ -52,7 +52,7 @@ namespace HoverColors
                 new DropdownItem<int>
                 {
                     value = kPanelStyleStandard,
-                    displayName = GetPanelStyleLocaleID("Standard"),
+                    displayName = GetPanelStyleLocaleID("Glass"),
                 },
             };
         }
