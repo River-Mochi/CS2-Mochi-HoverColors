@@ -187,7 +187,9 @@ namespace HoverColors.UI
             m_PanelOpenBinding = AddValueBinding("PanelOpen", s_PanelOpen);
             m_PanelTooltipsEnabledBinding = AddValueBinding("PanelTooltipsEnabled", settings?.PanelTooltipsEnabled ?? true);
             m_PanelCollapsedBinding = AddValueBinding("PanelCollapsed", settings?.PanelCollapsed ?? false);
-            m_UseDarkerPanelBinding = AddValueBinding("UseDarkerPanel", settings?.UseDarkerPanel ?? false);
+            // Read PanelStyle, not the legacy bool: PanelStyle is the value Options writes, and a
+            // missing settings object should fall back to Dark, the default style.
+            m_UseDarkerPanelBinding = AddValueBinding("UseDarkerPanel", settings == null || settings.PanelStyle == HoverColorsSettings.kPanelStyleDark);
             m_SurfaceToolAreasSuppressedBinding = AddValueBinding("SurfaceToolAreasSuppressed", suppressSurfaceToolAreas);
             m_SpecializedIndustryAreasSuppressedBinding = AddValueBinding("SpecializedIndustryAreasSuppressed", suppressSpecializedIndustryAreas);
             m_VanillaOutlineActiveBinding = AddValueBinding("VanillaOutlineActive", IsVanillaOutlineActive());
@@ -263,7 +265,7 @@ namespace HoverColors.UI
             UpdateIfChanged(m_PanelOpenBinding, s_PanelOpen);
             UpdateIfChanged(m_PanelTooltipsEnabledBinding, settings?.PanelTooltipsEnabled ?? true);
             UpdateIfChanged(m_PanelCollapsedBinding, settings?.PanelCollapsed ?? false);
-            UpdateIfChanged(m_UseDarkerPanelBinding, settings?.UseDarkerPanel ?? false);
+            UpdateIfChanged(m_UseDarkerPanelBinding, settings == null || settings.PanelStyle == HoverColorsSettings.kPanelStyleDark);
             UpdateIfChanged(m_SurfaceToolAreasSuppressedBinding, AreaToolOverlaySystem.SuppressSurfaceToolAreas);
             UpdateIfChanged(m_SpecializedIndustryAreasSuppressedBinding, AreaToolOverlaySystem.SuppressSpecializedIndustryToolAreas);
             UpdateIfChanged(m_VanillaOutlineActiveBinding, IsVanillaOutlineActive());

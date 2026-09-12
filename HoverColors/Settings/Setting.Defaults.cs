@@ -148,7 +148,11 @@ namespace HoverColors
             ToolColorMode = kToolColorModeRecommended;
             UseOverlapWarningColor = true;
             UseCustomColorsForNetLanes = true;
-            UseDarkerPanel = false;
+            // Dark for fresh installs and for Reset to Mod Defaults: it is the game's own panel
+            // surface, so it matches whatever UI skin the player already runs. The setter keeps the
+            // legacy UseDarkerPanel field in step.
+            PanelStyle = kPanelStyleDark;
+            PanelStyleInitialized = true;
             PanelCollapsed = false;
 
             // 100 = vanilla default. Lower = more transparent guidelines.
@@ -158,6 +162,16 @@ namespace HoverColors
         public void MigrateAfterLoad()
         {
             bool changed = false;
+
+            // Saves written before the Panel style dropdown carry only the old Darker panel bool.
+            // Seed the dropdown from it, so a player who deliberately chose Standard is not silently
+            // moved to Dark just because Dark became the fresh-install default.
+            if (!PanelStyleInitialized)
+            {
+                PanelStyle = UseDarkerPanel ? kPanelStyleDark : kPanelStyleStandard;
+                PanelStyleInitialized = true;
+                changed = true;
+            }
 
             if (!SpecializedIndustryAreasSuppressionInitialized)
             {

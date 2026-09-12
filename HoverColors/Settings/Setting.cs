@@ -39,6 +39,14 @@ namespace HoverColors
         internal const string kAboutLinks = "kAboutLinks";
         internal const string kAboutDedication = "kAboutDedication";
 
+        // Panel style is an int dropdown rather than a bool so the two options can be named on
+        // screen. Dark is 0 and the default, which is what a new player should meet first: it is the
+        // game's own panel surface and therefore already matches whatever skin they run.
+        internal const int kPanelStyleDark = 0;
+        internal const int kPanelStyleStandard = 1;
+
+        private int m_PanelStyle = kPanelStyleDark;
+
         internal const int kMinPanelOpacityPercent = 30;
         internal const int kMaxPanelOpacityPercent = 100;
         internal const int kDefaultPanelOpacityPercent = 80;
@@ -553,20 +561,46 @@ namespace HoverColors
         // Actions tab — Panel readability and help
         // -----------------------------------------------------------------------
         // Options UI lists a group in declaration order, so this block is ordered the way it should
-        // read on screen: Darker panel, then Panel opacity, then Tooltips.
+        // read on screen: Panel style, then Panel opacity, then Tooltips.
 
-        // User-facing label is "Darker panel". Both styles are painted by Hover Colors and both
-        // follow the opacity slider; the difference is the palette. Darker uses the game's own
-        // panel gradient colours and reaches a fully solid 100%, Standard is the lighter glass one.
-        // Neither follows the game's Interface Opacity, and neither changes with the UI skin.
-        [SettingsUISection(Actions, kPanel)]
+        // Superseded by PanelStyle. Kept as a persisted field so an upgrading player's existing
+        // choice survives, and kept in sync by the PanelStyle setter so anything still reading it
+        // (the UI binding, presets) sees the same answer. Hidden, never shown in Options again.
+        [SettingsUIHidden]
         public bool UseDarkerPanel { get; set; }
+
+        // False on saves written before the dropdown existed, which is how MigrateAfterLoad knows to
+        // seed PanelStyle from UseDarkerPanel instead of letting the new Dark default overwrite it.
+        [SettingsUIHidden]
+        public bool PanelStyleInitialized { get; set; }
+
+        // Dark hands the surface to the vanilla panel: it follows the game's Legacy/Modern skin and
+        // the game's own Interface Opacity. Standard is the Hover Colors glass surface and is the
+        // only one the opacity slider below applies to.
+        [SettingsUIDropdown(typeof(HoverColorsSettings), nameof(GetPanelStyleItems))]
+        [SettingsUISection(Actions, kPanel)]
+        public int PanelStyle
+        {
+            get => m_PanelStyle;
+            set
+            {
+                m_PanelStyle = value == kPanelStyleStandard ? kPanelStyleStandard : kPanelStyleDark;
+                UseDarkerPanel = m_PanelStyle == kPanelStyleDark;
+            }
+        }
+
+        // Drives SettingsUIHideByCondition on the opacity slider below.
+        public bool IsDarkPanel() => PanelStyle == kPanelStyleDark;
 
         // Background alpha for the in-city panel, 30-100 in steps of 5. Applied as discrete
         // background classes in SCSS; CSS opacity is deliberately not used because it would fade
-        // the text, icons and swatches too. Drives both panel styles: Darker paints its own surface
-        // now rather than borrowing the vanilla one, so there is nothing left to grey this out for.
+        // the text, icons and swatches too.
+        //
+        // Hidden rather than greyed out when Dark is selected. Dark is painted by the game, so this
+        // slider has nothing to act on there, and a disabled control still invites the question of
+        // why it does nothing - the previous greyed-out version was the confusing part.
         [SettingsUISlider(min = kMinPanelOpacityPercent, max = kMaxPanelOpacityPercent, step = 5, scalarMultiplier = 1, unit = Unit.kPercentage)]
+        [SettingsUIHideByCondition(typeof(HoverColorsSettings), nameof(IsDarkPanel))]
         [SettingsUISection(Actions, kPanel)]
         public int PanelOpacityPercent
         {

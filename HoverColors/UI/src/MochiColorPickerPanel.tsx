@@ -86,6 +86,39 @@ type MochiColorPickerPanelProps = {
     editorMode?: boolean;
 };
 
+type PanelOrigin = { left: number; top: number };
+
+// Used when the launcher cannot be measured. Deliberately the same corner the Editor panel opens in,
+// so a panel that lands here still looks placed rather than lost.
+const FALLBACK_ORIGIN: PanelOrigin = { left: 16, top: 64 };
+
+// Gap between the launcher button and the top of the panel, matching the old margin-top: 6rem.
+const LAUNCHER_GAP_PX = 6;
+
+// The panel no longer lives inside the launcher, so it has to find out where the launcher is. This
+// is the one measurement in the panel, and it is the well-behaved case: the button has been laid out
+// since the game UI loaded, so unlike a freshly mutated tooltip its rect is settled by the time this
+// runs. A 0x0 rect still means Gameface had nothing useful to report - a hidden or not-yet-laid-out
+// element reads that way - so that answer is rejected rather than trusted, and the panel falls back
+// to a fixed corner. Read only: nothing here mutates the DOM.
+const getGamePanelOrigin = (): PanelOrigin => {
+    if (typeof document === "undefined") {
+        return FALLBACK_ORIGIN;
+    }
+
+    const launcher = document.querySelector("[data-hc-launcher='true']");
+    if (launcher == null) {
+        return FALLBACK_ORIGIN;
+    }
+
+    const rect = (launcher as HTMLElement).getBoundingClientRect();
+    if (rect.width === 0 && rect.height === 0) {
+        return FALLBACK_ORIGIN;
+    }
+
+    return { left: rect.left, top: rect.bottom + LAUNCHER_GAP_PX };
+};
+
 export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPanelProps) => {
     const boundOutline: Color = {
         r: useValue(outlineR$),
@@ -227,6 +260,16 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
         panelElementRef,
         handlePanelDragStart,
     } = usePanelDrag(editorMode ? "editor" : "game");
+
+    // Re-measured on open rather than once at module load, so the origin is right even when the
+    // launcher has shifted - another mod added a GameTopLeft button above it, or the UI rescaled.
+    const [gamePanelOrigin, setGamePanelOrigin] = React.useState<PanelOrigin>(getGamePanelOrigin);
+
+    React.useLayoutEffect(() => {
+        if (!editorMode) {
+            setGamePanelOrigin(getGamePanelOrigin());
+        }
+    }, [editorMode]);
     const { openAreasToolPanel } = useDistrictToolPanel();
 
     // Keep local controls synced when C# settings change through presets, reset buttons, or game reload.
@@ -242,10 +285,10 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
     React.useEffect(() => { setGuidelineOpacity(boundGuideline); }, [boundGuideline]);
 
     // The vanilla picker popup rides the game's anchored-balloon layer, whose z-index is
-    // var(--tooltipIndex) = 20 by default, while this panel sits at 10000. In the city the panel is
-    // nested inside GameTopLeft's stacking context so the balloon still wins, but in the Editor the
-    // panel outranks it and covers the picker. Raising --tooltipIndex to the value the game itself
-    // uses behind a modal backdrop puts the popup above the panel in both modes.
+    // var(--tooltipIndex) = 20 by default. The panel carries no z-index of its own any more, but it
+    // is mounted at a UI root and so paints after the balloon on document order alone. Raising
+    // --tooltipIndex to the value the game itself uses behind a modal backdrop puts the popup back
+    // above the panel, in the city and in the Editor alike.
     React.useEffect(() => {
         if (typeof document === "undefined") {
             return;
@@ -487,17 +530,23 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
     const eyeButtonClass = `${roundHighlightButtonTheme["button"] ?? ""} ${styles.eyeButton}`;
     const collapseButtonClass = `${roundHighlightButtonTheme["button"] ?? ""} ${styles.collapseButton}`;
     const closeButtonClass = `${roundHighlightButtonTheme["button"] ?? ""} ${styles.closeButton}`;
-    // Both surfaces paint themselves now, so the vanilla fill comes off the frame either way.
-    const panelFrameClass = `${panelBaseTheme.panel ?? "panel_YqS"} ${infoviewMenuTheme.menu ?? "menu_O_M"} ${styles.panelFrame} ${styles.panelFrameCustom}`;
+    // Standard strips the vanilla fill so Hover Colors is the only painter. Dark keeps it: the
+    // vanilla surface is the whole reason to pick that style, so the HC opacity class is left off
+    // too and the panel follows the game's Interface Opacity instead.
+    const panelFrameClass = `${panelBaseTheme.panel ?? "panel_YqS"} ${infoviewMenuTheme.menu ?? "menu_O_M"} ${styles.panelFrame} ${useDarkerPanel ? "" : styles.panelFrameCustom}`;
     const panelSurfaceClass = useDarkerPanel ? styles.panelDarker : styles.panelStandard;
-    const panelOpacityClass = panelOpacityClassFor(panelOpacityPercent);
+    const panelOpacityClass = useDarkerPanel ? "" : panelOpacityClassFor(panelOpacityPercent);
     const panelContentClass = `${panelTheme.content ?? "content_XD5 content_AD7 child-opacity-transition_nkS"} ${infoviewMenuTheme.content ?? "content_Hzl"} ${styles.panelContent} ${panelSurfaceClass} ${panelOpacityClass}`;
 
     return (
         <div
             ref={panelAnchorRef}
-            className={`${styles.panelAnchor} ${editorMode ? styles.panelAnchorEditor : ""}`}
-            style={{ transform: `translate(${panelOffset.x}px, ${panelOffset.y}px)` }}
+            className={`${styles.panelAnchor} ${editorMode ? styles.panelAnchorEditor : styles.panelAnchorGame}`}
+            style={{
+                left: editorMode ? undefined : `${gamePanelOrigin.left}px`,
+                top: editorMode ? undefined : `${gamePanelOrigin.top}px`,
+                transform: `translate(${panelOffset.x}px, ${panelOffset.y}px)`,
+            }}
         >
             <SideTooltipProvider anchorRef={panelAnchorRef} panelRef={panelElementRef} disabled={panelDragging}>
             <div ref={panelElementRef} className={panelFrameClass}>

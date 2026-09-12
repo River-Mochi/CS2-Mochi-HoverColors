@@ -7,7 +7,6 @@
 import { trigger, useValue } from "cs2/api";
 import { Button, Tooltip } from "cs2/ui";
 import { usePanelLocalization } from "../localization";
-import { MochiColorPickerPanel } from "../MochiColorPickerPanel";
 import { CHANNEL, panelOpen$ } from "../panel/bindings/MochiPanelBindings";
 import styles from "./ModIconButton.module.scss";
 
@@ -20,8 +19,10 @@ export default () => {
   const tooltip = translatePanel("HoverColors.UI.TopLeft.Tooltip");
 
   return (
-    // .anchor is position:relative only — lets the panel below absolute-position under the button.
-    <div className={styles.anchor}>
+    // The panel itself mounts at the "Game" root, not here, so it is not trapped in this
+    // container's stacking context. data-hc-launcher is how the panel finds this button to open
+    // underneath it; the attribute is read only, never written to.
+    <div className={styles.anchor} data-hc-launcher="true">
       <Tooltip tooltip={tooltip}>
         <Button
           variant="floating"
@@ -30,8 +31,6 @@ export default () => {
           onSelect={() => trigger(CHANNEL, "SetPanelOpen", !isOpen)}
         />
       </Tooltip>
-
-      {isOpen && <MochiColorPickerPanel />}
     </div>
   );
 };

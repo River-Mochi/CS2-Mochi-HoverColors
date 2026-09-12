@@ -40,6 +40,28 @@ namespace HoverColors
             };
         }
 
+        public DropdownItem<int>[] GetPanelStyleItems()
+        {
+            return new[]
+            {
+                new DropdownItem<int>
+                {
+                    value = kPanelStyleDark,
+                    displayName = GetPanelStyleLocaleID("Dark"),
+                },
+                new DropdownItem<int>
+                {
+                    value = kPanelStyleStandard,
+                    displayName = GetPanelStyleLocaleID("Standard"),
+                },
+            };
+        }
+
+        public string GetPanelStyleLocaleID(string valueName)
+        {
+            return "Options[" + id + ".PanelStyle." + valueName + "]";
+        }
+
         public string GetToolColorModeLocaleID(string valueName)
         {
             return "Options[" + id + ".ToolColorMode." + valueName + "]";

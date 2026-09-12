@@ -7,29 +7,41 @@
 @use "./panel/styles/districtMenu";
 @use "./panel/styles/panelDarker";
 
+// Position comes from inline left/top now (the game panel measures its launcher; the Editor panel
+// uses the fixed corner below), because this element is mounted at a UI root instead of inside the
+// launcher button.
+//
+// No z-index. The old 10000 was an attempt to climb out of the GameTopLeft stacking context and it
+// could not - only root mounting fixes that. Left on, it would now outrank the vanilla colour-picker
+// balloon and the tooltips, which is the bug it caused in Editor mode. Document order already puts a
+// mod appended to the root above the vanilla panels, which is all this needs. All Speed Limits' own
+// root-mounted window carries no panel z-index either.
 .panelAnchor {
     position: absolute;
-    top: 100%;
-    left: 0;
-    margin-top: 6rem;
-    z-index: 10000;
+    z-index: auto;
     pointer-events: auto;
 }
 
-// Editor has no GameTopLeft anchor, so the same draggable panel starts at a safe viewport position.
+// Nothing to declare: the game panel's position is the inline left/top measured from the launcher.
+// The rule exists so the class survives into the CSS-module exports, same as .panelDarker.
+.panelAnchorGame {
+    margin-top: 0;
+}
+
+// Editor has no GameTopLeft launcher to measure, so the same draggable panel starts at a fixed
+// viewport position instead. position: fixed rather than absolute, because the Editor root is not a
+// positioned ancestor.
 //
-// z-index is deliberately cleared here. In the city the panel is nested inside GameTopLeft, so its
-// 10000 stays boxed in and the vanilla color-picker balloon (z-index var(--tooltipIndex), 20 by
-// default) still paints on top. Appended straight to the Editor root that 10000 competes with the
-// balloon and wins, which is what buried the picker behind the panel. Yenyang's Recolor mounts its
-// editor panel the same way and sets no z-index at all; matching that fixes the picker. The inline
-// drag transform still gives this element its own stacking context, so tooltips stay contained.
+// Carries no z-index, like .panelAnchor. A z-index here outranks the vanilla colour-picker balloon
+// (z-index var(--tooltipIndex), 20 by default), which is what buried the picker behind the panel in
+// Editor mode. Yenyang's Recolor mounts its editor panel the same way and sets none either. The
+// inline drag transform still gives this element its own stacking context, so tooltips stay
+// contained.
 .panelAnchorEditor {
   position: fixed;
   top: 64rem;
   left: 16rem;
   margin-top: 0;
-  z-index: auto;
 }
 
 .panelFrame {
@@ -134,52 +146,17 @@
     box-shadow: 0 6rem 18rem rgba(0, 0, 0, 0.16);
 }
 
-// Darker used to paint nothing and let the vanilla Panel surface show through. That gave players
-// the vanilla look they wanted but dragged three things along with it: vanilla's backdrop-filter
-// blur, the game's Interface Opacity driving the panel instead of ours, and a surface that changed
-// shape with the skin. It now paints the same colours itself.
+// Dark deliberately paints no Hover Colors surface. The resolved vanilla panel/menu classes on this
+// element supply the background, the Legacy/Modern skin, the blur, and the game's own Interface
+// Opacity - which is exactly what players pick this style for.
 //
-// The palette is anchored to a real vanilla value: --panelColorDark from index.css, rgb(24, 33, 51),
-// the colour the game paints its own dark panel surfaces with. That exact value is the title bar
-// (see .panelDarker .titleBar), and the body is a lighter navy of the same hue sitting above it.
-// So Darker still looks like a vanilla panel; it just answers to the Hover Colors slider and costs
-// nothing to composite.
+// It was briefly repainted by Hover Colors so that the opacity slider could drive it. That made the
+// two styles fight over one surface and left Dark looking like neither the game nor Standard, so the
+// surface went back to vanilla and the slider is now hidden entirely when Dark is selected.
 //
-// The body was briefly --panelColorDark itself, which at a solid 100% read as near-black. Lifting
-// the body and keeping the vanilla value on the header holds the hue while giving the panel
-// somewhere to be dark: the header still reads as its own strip against the body above it.
-//
-// An earlier pass used --gradientDarkBlueStart/End here (the legacy panel gradient, which is also
-// what Zone Tools copies). Those are mid-tone blues from the same family City Watchdog derived
-// Standard's palette from, so the two styles collapsed into each other: near-identical at the top
-// of the gradient, and at the bottom the option named "Darker panel" was actually the lighter of
-// the two. The dark variable is the one that makes the toggle mean something at every slider step.
-//
-// Alphas come from the --hc-dark-* set rather than Standard's, because the two want different tops:
-// Standard is the glass one and stops at 0.95 so a trace of the city always shows, while someone
-// who picks Darker at 100% wants an actually solid panel.
+// Control styling still lives in panel/styles/_panelDarker.scss.
 .panelDarker {
-    --menuPanel1: transparent;
-    --menuPanel2: transparent;
-    --panelColorDark: transparent;
-    --panelColorNormal: transparent;
-    --sectionHeaderColor: transparent;
-    // Vanilla's blur is kept here for the same reason as .panelStandard - see the note there.
-    position: relative;
-    background-color: transparent;
-    border: 0;
-    border-radius: 12rem;
-    // Same offset trick as .panelStandard: no length-positioned colour stops, which Gameface drops.
-    // Same !important, for the same `.overwrite-legacy .content_XD5` two-class rule in Legacy UI.
-    background-image: linear-gradient(
-        to bottom,
-        rgba(36, 49, 75, var(--hc-dark-alpha-top)),
-        rgba(20, 27, 47, var(--hc-dark-alpha-bottom))
-    ) !important;
-    background-repeat: no-repeat;
-    background-position: 0rem 33rem;
-    background-size: 100% 100%;
-    box-shadow: 0 6rem 18rem rgba(0, 0, 0, 0.22);
+    --hc-uses-vanilla-panel-surface: 1;
 }
 
 // Idle header sits darker than the body so the title bar reads as its own strip.
@@ -214,20 +191,20 @@
     }
 }
 
-// Darker header: a darker sibling of the body's top colour, on the same slider.
+// Dark header: a light wash over the vanilla surface, so the panel underneath still reads through.
 //
-// The radius is back to a flat 12rem. It had to track var(--panelRadius) only while we were sitting
-// on the vanilla surface - where our corners were rounded more than the panel's, the difference
-// showed as translucent wedges on hover. Now that this panel paints its own background there is no
-// surface underneath to peek through, so it can match .panelStandard again.
-//
-// Hover lightens but keeps the idle alpha, unlike Standard which also thins out. Darker exists for
-// players who want a solid panel; going see-through under the cursor would undo that at 100%.
+// The radius has to track the skin rather than our own 12rem. Vanilla paints the panel background
+// with .content_XD5, which has NO radius, while the rounding lives on .panel_YqS as
+// var(--panelRadius) - 12rem in some skins, 0, 4, 5, 6 or 14rem in others. Where ours was rounded
+// more than the panel, the top corners showed the translucent vanilla background instead of the
+// header: the wedges that appear on hover.
 .panelDarker .titleBar {
-    background-color: rgba(24, 33, 51, var(--hc-dark-title-alpha));
+    border-top-left-radius: var(--panelRadius);
+    border-top-right-radius: var(--panelRadius);
+    background-color: transparent;
 
     &:hover {
-        background-color: rgba(56, 72, 104, var(--hc-dark-title-alpha));
+        background-color: rgba(254, 255, 255, 0.08);
     }
 }
 
@@ -522,27 +499,22 @@
 }
 
 // Panel background opacity, driven by the Options slider (30-100 step 5).
-// The percent maps straight onto alpha, the way City Watchdog does it.
+// Standard only: Dark uses the vanilla surface and the game's own Interface Opacity, and the
+// Options slider is hidden outright when Dark is selected rather than sitting there inert.
+//
+// The percent maps straight onto alpha, the way City Watchdog does it, scaled so the top of the
+// slider lands on 0.95 rather than 1.0. A glass panel that never goes fully opaque keeps a trace
+// of the city behind it even at maximum, which is the point of this style.
 // Only background alpha changes, so text, icons, sliders and swatches stay fully readable.
 //
-// Two sets, because the two surfaces want different tops. Standard is the glass one and stops
-// at 0.95, so even at maximum a trace of the city shows through. Darker goes all the way to
-// 1.0: someone who picks it at 100% is asking for a solid panel, not a nearly-solid one.
-//
-// The bottom stop trails the top by City Watchdog's 0.917 ratio, which is what gives the body
-// its slight fade. The ratio eases back out towards the top of the range so the last step is
-// flat across the whole body instead of having a bottom edge lighter than the top.
-//
-// Standard's title lifts see-through on hover (City Watchdog's behaviour) so it has its own
-// hover alpha; Darker's header lightens without thinning, so it needs no hover value.
+// The bottom stop trails the top by City Watchdog's 0.917 ratio, which is what gives the body its
+// slight fade. The ratio eases back out towards the top of the range so the last step is flat
+// across the whole body instead of having a bottom edge lighter than the top.
 .panelOpacity30 {
     --hc-panel-alpha-top: 0.285;
     --hc-panel-alpha-bottom: 0.2684;
     --hc-title-alpha: 0.285;
     --hc-title-alpha-hover: 0.1821;
-    --hc-dark-alpha-top: 0.3;
-    --hc-dark-alpha-bottom: 0.2826;
-    --hc-dark-title-alpha: 0.3;
 }
 
 .panelOpacity35 {
@@ -550,9 +522,6 @@
     --hc-panel-alpha-bottom: 0.3146;
     --hc-title-alpha: 0.3325;
     --hc-title-alpha-hover: 0.2125;
-    --hc-dark-alpha-top: 0.35;
-    --hc-dark-alpha-bottom: 0.3311;
-    --hc-dark-title-alpha: 0.35;
 }
 
 .panelOpacity40 {
@@ -560,9 +529,6 @@
     --hc-panel-alpha-bottom: 0.3611;
     --hc-title-alpha: 0.38;
     --hc-title-alpha-hover: 0.2428;
-    --hc-dark-alpha-top: 0.4;
-    --hc-dark-alpha-bottom: 0.3801;
-    --hc-dark-title-alpha: 0.4;
 }
 
 .panelOpacity45 {
@@ -570,9 +536,6 @@
     --hc-panel-alpha-bottom: 0.408;
     --hc-title-alpha: 0.4275;
     --hc-title-alpha-hover: 0.2732;
-    --hc-dark-alpha-top: 0.45;
-    --hc-dark-alpha-bottom: 0.4295;
-    --hc-dark-title-alpha: 0.45;
 }
 
 .panelOpacity50 {
@@ -580,9 +543,6 @@
     --hc-panel-alpha-bottom: 0.4553;
     --hc-title-alpha: 0.475;
     --hc-title-alpha-hover: 0.3035;
-    --hc-dark-alpha-top: 0.5;
-    --hc-dark-alpha-bottom: 0.4793;
-    --hc-dark-title-alpha: 0.5;
 }
 
 .panelOpacity55 {
@@ -590,9 +550,6 @@
     --hc-panel-alpha-bottom: 0.503;
     --hc-title-alpha: 0.5225;
     --hc-title-alpha-hover: 0.3339;
-    --hc-dark-alpha-top: 0.55;
-    --hc-dark-alpha-bottom: 0.5295;
-    --hc-dark-title-alpha: 0.55;
 }
 
 .panelOpacity60 {
@@ -600,9 +557,6 @@
     --hc-panel-alpha-bottom: 0.5511;
     --hc-title-alpha: 0.57;
     --hc-title-alpha-hover: 0.3642;
-    --hc-dark-alpha-top: 0.6;
-    --hc-dark-alpha-bottom: 0.5801;
-    --hc-dark-title-alpha: 0.6;
 }
 
 .panelOpacity65 {
@@ -610,9 +564,6 @@
     --hc-panel-alpha-bottom: 0.5996;
     --hc-title-alpha: 0.6175;
     --hc-title-alpha-hover: 0.3946;
-    --hc-dark-alpha-top: 0.65;
-    --hc-dark-alpha-bottom: 0.6311;
-    --hc-dark-title-alpha: 0.65;
 }
 
 .panelOpacity70 {
@@ -620,9 +571,6 @@
     --hc-panel-alpha-bottom: 0.6484;
     --hc-title-alpha: 0.665;
     --hc-title-alpha-hover: 0.4249;
-    --hc-dark-alpha-top: 0.7;
-    --hc-dark-alpha-bottom: 0.6826;
-    --hc-dark-title-alpha: 0.7;
 }
 
 .panelOpacity75 {
@@ -630,9 +578,6 @@
     --hc-panel-alpha-bottom: 0.6977;
     --hc-title-alpha: 0.7125;
     --hc-title-alpha-hover: 0.4553;
-    --hc-dark-alpha-top: 0.75;
-    --hc-dark-alpha-bottom: 0.7344;
-    --hc-dark-title-alpha: 0.75;
 }
 
 .panelOpacity80 {
@@ -640,9 +585,6 @@
     --hc-panel-alpha-bottom: 0.7474;
     --hc-title-alpha: 0.76;
     --hc-title-alpha-hover: 0.4856;
-    --hc-dark-alpha-top: 0.8;
-    --hc-dark-alpha-bottom: 0.7867;
-    --hc-dark-title-alpha: 0.8;
 }
 
 .panelOpacity85 {
@@ -650,9 +592,6 @@
     --hc-panel-alpha-bottom: 0.7974;
     --hc-title-alpha: 0.8075;
     --hc-title-alpha-hover: 0.516;
-    --hc-dark-alpha-top: 0.85;
-    --hc-dark-alpha-bottom: 0.8394;
-    --hc-dark-title-alpha: 0.85;
 }
 
 .panelOpacity90 {
@@ -660,9 +599,6 @@
     --hc-panel-alpha-bottom: 0.8479;
     --hc-title-alpha: 0.855;
     --hc-title-alpha-hover: 0.5463;
-    --hc-dark-alpha-top: 0.9;
-    --hc-dark-alpha-bottom: 0.8925;
-    --hc-dark-title-alpha: 0.9;
 }
 
 .panelOpacity95 {
@@ -670,9 +606,6 @@
     --hc-panel-alpha-bottom: 0.8988;
     --hc-title-alpha: 0.9025;
     --hc-title-alpha-hover: 0.5767;
-    --hc-dark-alpha-top: 0.95;
-    --hc-dark-alpha-bottom: 0.9461;
-    --hc-dark-title-alpha: 0.95;
 }
 
 .panelOpacity100 {
@@ -680,7 +613,4 @@
     --hc-panel-alpha-bottom: 0.95;
     --hc-title-alpha: 0.95;
     --hc-title-alpha-hover: 0.607;
-    --hc-dark-alpha-top: 1.0;
-    --hc-dark-alpha-bottom: 1.0;
-    --hc-dark-title-alpha: 1.0;
 }

@@ -13,6 +13,15 @@ import "./MochiColorPickerPanel.global.scss";
 
 import ModIconButton from "./entry/ModIconButton";
 
+// The panel mounts at the "Game" root rather than inside the GameTopLeft launcher. Nested in
+// GameTopLeft it shared that container's stacking context, so vanilla panels the player dragged over
+// it painted on top no matter what z-index the panel carried. All Speed Limits appends its own
+// window to "Game" for the same reason. The launcher keeps only the button.
+const GamePanelEntry = () => {
+  const isOpen = useValue(panelOpen$);
+  return isOpen ? <MochiColorPickerPanel /> : null;
+};
+
 const EditorPanelEntry = () => {
   const isOpen = useValue(panelOpen$);
   return isOpen ? <MochiColorPickerPanel editorMode /> : null;
@@ -24,6 +33,11 @@ const register: ModRegistrar = (moduleRegistry) => {
   moduleRegistry.append(
     "GameTopLeft",
     ModIconButton
+  );
+
+  moduleRegistry.append(
+    "Game",
+    GamePanelEntry
   );
 
   moduleRegistry.append(

@@ -64,7 +64,9 @@ export const panelTooltipsEnabled$ = bindValue<boolean>(CHANNEL, "PanelTooltipsE
 export const panelCollapsed$ = bindValue<boolean>(CHANNEL, "PanelCollapsed", false);
 export const hoverHighlightsSuppressed$ = bindValue<boolean>(CHANNEL, "HoverHighlightsSuppressed", false);
 
-export const useDarkerPanel$ = bindValue<boolean>(CHANNEL, "UseDarkerPanel", false);
+// Defaults to true so a fresh load never flashes the Standard glass panel before the real
+// setting arrives. Dark is also the default panel style for new installs.
+export const useDarkerPanel$ = bindValue<boolean>(CHANNEL, "UseDarkerPanel", true);
 
 // Panel background alpha, 30-100 in steps of 5. Keep in sync with kDefaultPanelOpacityPercent.
 export const panelOpacityPercent$ = bindValue<number>(CHANNEL, "PanelOpacityPercent", 80);
