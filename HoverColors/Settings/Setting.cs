@@ -49,7 +49,9 @@ namespace HoverColors
 
         internal const int kMinPanelOpacityPercent = 30;
         internal const int kMaxPanelOpacityPercent = 100;
-        internal const int kDefaultPanelOpacityPercent = 80;
+
+        // Glass Custom panel new install slider opacity setting 70% as a little transparent starter since player should see instant difference from Dark panel.
+        internal const int kDefaultPanelOpacityPercent = 70;
 
         private int m_PanelOpacityPercent = kDefaultPanelOpacityPercent;
 

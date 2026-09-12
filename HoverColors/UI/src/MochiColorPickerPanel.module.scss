@@ -425,10 +425,15 @@
 }
 
 // Collapsed hides the action bar entirely, so this padding is the only thing between the outline
-// row's buttons and the bottom edge of the panel - 1rem left the first icon looking like the panel
-// had been cut off. Matched to .body's 6rem top so the collapsed panel reads as evenly padded.
+// row's buttons and the bottom edge of the panel - the original 1rem left the first icon looking
+// like the panel had been cut off.
+//
+// Both sides are set here rather than inheriting .body's 6rem/5rem. Collapsed is a compact view and
+// carries a single row, so it takes 1rem off each side: enough clearance that the row is not touching
+// an edge, without the roomy padding that suits the full panel.
 .bodyCollapsed {
-    padding-bottom: 6rem;
+    padding-top: 5rem;
+    padding-bottom: 5rem;
 }
 
 .bodyCollapsed .outlineRow {
