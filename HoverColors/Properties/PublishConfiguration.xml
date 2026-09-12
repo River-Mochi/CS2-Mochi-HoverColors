@@ -106,8 +106,9 @@ tags: hover colors, remove blue, disable hover, highlight color, outline thickne
 - NEW: separate Fill color from Outline color.
 - NEW: Outline Thickness slider.
 - NEW: 1-click Eyeball button to hide/show highlights - you can pan the whole city without triggering any bright Highlights.
-- NEW: Options menu sliders and better tooltips.
-- Updated all translations and performance tweaks.
+- NEW: Editor Mode support.
+- Added separate Mod Defaults + Vanilla color reset buttons.
+- Updated all translations and various UI fixes.
 </ChangeLog>
 <!--External link, can be set multiple times. supported types are "discord", "github", "youtube", "twitch", "x", "paypal", "patreon", "buymeacoffee", "kofi", "crowdin", "gitlab", "gofundme"-->
 <ExternalLink Type="github" Url="https://github.com/River-Mochi/CS2-Mochi-HoverColors" />

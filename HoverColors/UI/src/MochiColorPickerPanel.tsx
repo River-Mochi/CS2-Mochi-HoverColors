@@ -73,7 +73,6 @@ import infoIconSrc from "../images/AdvisorInfoViewWhite.svg";
 import closeIconSrc from "../images/Close.svg";
 // Highlights-OFF eye: mod icon so the slash can be red. ON state keeps the vanilla eye.
 import eyeOffIconSrc from "../images/EyeOffRedSlash.svg";
-import { probePickerStacking } from "./panel/debug/pickerStackingProbe";
 import styles from "./MochiColorPickerPanel.module.scss";
 
 // Snaps to the 5-step grid the Options slider produces and looks up the matching background
@@ -262,10 +261,6 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
 
         document.body.classList.toggle(PICKER_OPEN_BODY_CLASS, anyPickerOpen);
 
-        if (anyPickerOpen) {
-            probePickerStacking(panelElementRef.current, editorMode);
-        }
-
         return () => document.body.classList.remove(PICKER_OPEN_BODY_CLASS);
     }, [
         districtPickerOpen,
@@ -275,8 +270,6 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
         guidelinePreviewPickerOpen,
         outlinePickerOpen,
         ownerPickerOpen,
-        editorMode,
-        panelElementRef,
     ]);
 
     React.useEffect(() => {
