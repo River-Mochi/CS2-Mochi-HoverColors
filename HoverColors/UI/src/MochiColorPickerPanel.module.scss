@@ -210,10 +210,14 @@
     border-top-right-radius: var(--panelRadius);
     background-color: var(--panelColorDark);
 
-    // Hover drops the dark backing for a light wash, so the whole strip lifts the way vanilla
-    // headers do instead of just gaining a film over an already-dark bar.
+    // Hover steps from vanilla's dark panel colour to its normal one - the same pair the game uses
+    // between a panel's header and its body. That is lighter in colour AND lower in alpha
+    // (--panelOpacityNormal 0.55 against --panelOpacityDark 0.71), so the strip lifts and turns a
+    // little see-through at once, without a white film painted over it. A custom rgba wash was
+    // tried first and read far too bright; this one also tracks the skin and the game's Interface
+    // Opacity on its own, because both variables already do.
     &:hover {
-        background-color: rgba(254, 255, 255, 0.12);
+        background-color: var(--panelColorNormal);
     }
 }
 
@@ -420,8 +424,11 @@
     padding: 6rem 8rem 5rem 8rem;
 }
 
+// Collapsed hides the action bar entirely, so this padding is the only thing between the outline
+// row's buttons and the bottom edge of the panel - 1rem left the first icon looking like the panel
+// had been cut off. Matched to .body's 6rem top so the collapsed panel reads as evenly padded.
 .bodyCollapsed {
-    padding-bottom: 1rem;
+    padding-bottom: 6rem;
 }
 
 .bodyCollapsed .outlineRow {

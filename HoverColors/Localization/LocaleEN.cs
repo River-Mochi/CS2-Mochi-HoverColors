@@ -101,7 +101,9 @@ namespace HoverColors
                     "- Keeps a trace of the city showing even at 100%.\n" +
                     "- Adds a Panel opacity slider below.\n" +
                     "\n" +
-                    "Try both and see which you prefer! This only changes the background of this mod panel and not the game's UI."
+                    "Try both and see which you prefer! This only changes the background of this mod panel and not the game's UI.\n" +
+                    "\n" +
+                    "Tip: the game blurs what is behind every panel, which helps buttons and sliders stand out. Setting the game's own Interface Transparency to 0% turns that blur off for all panels, including this one. 1% or higher keeps it."
                 },
                 { m_Settings.GetPanelStyleLocaleID("Dark"), "Dark (Vanilla)" },
                 { m_Settings.GetPanelStyleLocaleID("Glass"), "Glass (Custom)" },
