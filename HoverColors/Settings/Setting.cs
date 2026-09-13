@@ -152,16 +152,22 @@ namespace HoverColors
         [SettingsUIHidden]
         public float FillB { get; set; }
 
-        // Written when the fill colour is set, but nothing reads it. Kept because it is already a
-        // serialized key in shipped saves; removing it would drop that key from every .coc.
+        // Inert. SetDefaults() sets this true and nothing in the mod ever clears it, so it is always
+        // true: it never differs from the default instance and is therefore never written to the
+        // .coc, and the few `&& ...Initialized` reads in Triggers.cs always evaluate to true.
+        //
+        // These five flags were meant to tell an upgrading save from a fresh install. They cannot -
+        // see Setting.Defaults.cs and docs for why. Removing them and simplifying their reads is
+        // safe and is a candidate for a quiet release; it is left alone here to keep the settings
+        // load path untouched before a publish.
         [SettingsUIHidden]
         public bool FillColorInitialized { get; set; }
 
         [SettingsUIHidden]
         public float OutlineThicknessScale { get; set; }
 
-        // 0 is a legitimate thickness, so an unset value cannot be detected by comparing to zero.
-        // Triggers.cs reads this to tell "never set" apart from "deliberately set to 0".
+        // Inert, like FillColorInitialized. Triggers.cs reads it in three places, but it is always
+        // true so `&& OutlineThicknessInitialized` never changes the result.
         [SettingsUIHidden]
         public bool OutlineThicknessInitialized { get; set; }
 
@@ -257,7 +263,7 @@ namespace HoverColors
         internal const float kPresetB2R = 0.25f, kPresetB2G = 0.15f, kPresetB2B = 0.25f;
         internal const float kPresetB2A = 0.5f, kPresetB2FillA = 0f;
 
-        // Written but never read. Kept because it is already a serialized key in shipped saves.
+        // Inert, like FillColorInitialized. Never read.
         [SettingsUIHidden]
         public bool PresetSetsInitialized { get; set; }
 
@@ -572,8 +578,8 @@ namespace HoverColors
         [SettingsUIHidden]
         public bool UseDarkerPanel { get; set; }
 
-        // Written but never read. Kept alongside the legacy UseDarkerPanel field, which PanelStyle's
-        // setter mirrors so anything still reading that bool agrees with the dropdown.
+        // Inert, like FillColorInitialized. Never read. The legacy UseDarkerPanel field below is a
+        // separate matter: PanelStyle's setter mirrors into it so both agree.
         [SettingsUIHidden]
         public bool PanelStyleInitialized { get; set; }
 
@@ -635,6 +641,7 @@ namespace HoverColors
         [SettingsUIHidden]
         public bool SpecializedIndustryAreasSuppressed { get; set; }
 
+        // Inert, like FillColorInitialized. Triggers.cs reads it once, where it is always true.
         [SettingsUIHidden]
         public bool SpecializedIndustryAreasSuppressionInitialized { get; set; }
 
