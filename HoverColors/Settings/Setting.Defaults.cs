@@ -7,7 +7,7 @@
 // ================= </copyright> ======================
 
 // File: Settings/Setting.Defaults.cs
-// Purpose: Defaults and one-time migration helpers for HoverColorsSettings.
+// Purpose: Default values for HoverColorsSettings.
 
 namespace HoverColors
 {
@@ -54,7 +54,8 @@ namespace HoverColors
 
             // Starter presets. Players can overwrite P1/P2 with the panel's Save button.
             // Set A is visible first. Reset switches the panel to Set B.
-            // Existing users keep their old P1/P2 as Set A during migration.
+            // An upgrading save keeps its existing P1/P2 as Set A: those keys load unchanged and
+            // only the Set B keys are new.
             ActivePresetSet = kPresetSetA;
             PresetSetsInitialized = true;
 
@@ -158,46 +159,5 @@ namespace HoverColors
             // 100 = vanilla default. Lower = more transparent guidelines.
             GuidelineOpacityPercent = kDefaultGuidelineOpacityPercent;
         }
-
-        /// <summary>
-        /// Repairs saved preset values that fall outside the range the code expects, so a corrupt or
-        /// hand-edited .coc cannot leave the preset state inconsistent. Runs once per load.
-        /// </summary>
-        public void SanitizeAfterLoad()
-        {
-            bool changed = false;
-
-            // Belt and braces, not a safety net. Every consumer of these values already fails safe:
-            // ActivePresetSet and PresetDefaultsBackupActiveSet are only ever read as binary
-            // "== kPresetSetB" tests, never as indexes, so an out-of-range value already behaves as
-            // Set A; and the restore path already requires ToggleActive && HasBackup together.
-            //
-            // What they add is correcting the saved file itself, which a player can edit by hand.
-            // Removal candidate.
-            if (ActivePresetSet != kPresetSetA && ActivePresetSet != kPresetSetB)
-            {
-                ActivePresetSet = kPresetSetA;
-                changed = true;
-            }
-
-
-            if (PresetDefaultsToggleActive && !PresetDefaultsToggleHasBackup)
-            {
-                PresetDefaultsToggleActive = false;
-                changed = true;
-            }
-
-            if (PresetDefaultsBackupActiveSet != kPresetSetA && PresetDefaultsBackupActiveSet != kPresetSetB)
-            {
-                PresetDefaultsBackupActiveSet = kPresetSetA;
-                changed = true;
-            }
-
-            if (changed)
-            {
-                ApplyAndSave();
-            }
-        }
-
     }
 }

@@ -152,16 +152,16 @@ namespace HoverColors
         [SettingsUIHidden]
         public float FillB { get; set; }
 
-        // Marks the fill colour as explicitly set. Triggers.cs reads it so the first write always
-        // persists even when the chosen value happens to equal the current one.
+        // Written when the fill colour is set, but nothing reads it. Kept because it is already a
+        // serialized key in shipped saves; removing it would drop that key from every .coc.
         [SettingsUIHidden]
         public bool FillColorInitialized { get; set; }
 
         [SettingsUIHidden]
         public float OutlineThicknessScale { get; set; }
 
-        // 0 is a legitimate player choice here, so the migration needs its own marker rather than
-        // treating an unset value as zero.
+        // 0 is a legitimate thickness, so an unset value cannot be detected by comparing to zero.
+        // Triggers.cs reads this to tell "never set" apart from "deliberately set to 0".
         [SettingsUIHidden]
         public bool OutlineThicknessInitialized { get; set; }
 
@@ -257,6 +257,7 @@ namespace HoverColors
         internal const float kPresetB2R = 0.25f, kPresetB2G = 0.15f, kPresetB2B = 0.25f;
         internal const float kPresetB2A = 0.5f, kPresetB2FillA = 0f;
 
+        // Written but never read. Kept because it is already a serialized key in shipped saves.
         [SettingsUIHidden]
         public bool PresetSetsInitialized { get; set; }
 
@@ -571,8 +572,8 @@ namespace HoverColors
         [SettingsUIHidden]
         public bool UseDarkerPanel { get; set; }
 
-        // Marks the panel style as explicitly set. Kept alongside the legacy UseDarkerPanel field;
-        // see docs/Internals.md, "Migration flags", for why neither is removed.
+        // Written but never read. Kept alongside the legacy UseDarkerPanel field, which PanelStyle's
+        // setter mirrors so anything still reading that bool agrees with the dropdown.
         [SettingsUIHidden]
         public bool PanelStyleInitialized { get; set; }
 

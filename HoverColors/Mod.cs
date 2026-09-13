@@ -105,7 +105,6 @@ namespace HoverColors
             try
             {
                 AssetDatabase.global.LoadSettings(ModId, setting, new HoverColorsSettings(this));
-                setting.SanitizeAfterLoad();
             }
             catch (Exception ex)
             {
