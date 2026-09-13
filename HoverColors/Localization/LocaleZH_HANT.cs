@@ -1,4 +1,4 @@
-﻿// <copyright file="LocaleZH_HANT.cs" company="River-Mochi">
+// <copyright file="LocaleZH_HANT.cs" company="River-Mochi">
 // Copyright (C) 2026 River-Mochi.
 // Licensed under the GNU General Public License v3.0 or later,
 // with the Cities: Skylines II Linking Exception.
