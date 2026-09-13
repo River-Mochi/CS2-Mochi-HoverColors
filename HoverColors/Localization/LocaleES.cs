@@ -90,30 +90,35 @@ namespace HoverColors
                     "- El color de error por solape sigue teniendo prioridad si está activo (vanilla = rojo salmón)."
                 },
 
-                // Panel
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)), "▪ Panel más oscuro" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)),
-                    "Activado = <Panel oscuro>: usa los colores de panel del propio juego para combinar con los paneles vanilla.\n" +
-                    "- Totalmente sólido al 100%.\n" +
-                    "Desactivado = <Panel estándar>: estilo Hover Colors más claro y translúcido.\n" +
-                    "- Aspecto de cristal; incluso al 100% deja ver un poco la ciudad.\n" +
+                // Panel style
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelStyle)), "▪ Estilo del panel" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelStyle)),
+                    "**Oscuro (Vanilla)** usa la superficie de panel del propio juego.\n" +
+                    "- Se adapta automáticamente a Legacy UI o Modern UI.\n" +
+                    "- Sigue la transparencia de interfaz del juego.\n" +
                     "\n" +
-                    "Ambos estilos usan el deslizador de opacidad de abajo y se ven igual en Modern UI y Legacy UI.\n" +
+                    "**Cristal (Personalizado)** usa la superficie de cristal más clara de Hover Colors.\n" +
+                    "- Incluso al 100% deja ver un poco la ciudad.\n" +
+                    "- Añade abajo un deslizador de opacidad del panel.\n" +
                     "\n" +
-                    "¡Prueba ambos! Solo cambia el fondo de este panel del mod, no la interfaz del juego."
+                    "¡Prueba ambos! Solo cambia el fondo de este panel del mod, no la interfaz del juego.\n" +
+                    "\n" +
+                    "Consejo: el juego desenfoca lo que hay detrás de cada panel para que botones y deslizadores destaquen. Con Transparencia de interfaz al 0% se desactiva ese desenfoque en todos los paneles. Con 1% o más se mantiene."
                 },
+                { m_Settings.GetPanelStyleLocaleID("Dark"), "Oscuro (Vanilla)" },
+                { m_Settings.GetPanelStyleLocaleID("Glass"), "Cristal (Personalizado)" },
 
                 // Panel opacity
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)), "▪ Opacidad del panel" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)),
-                    "Controla qué tan sólido es el fondo del panel en la ciudad.\n" +
+                    "Opacidad del fondo del panel **Cristal (Personalizado)**.\n" +
                     "\n" +
-                    "**30% Cristal** es el aspecto más transparente y limpio.\n" +
-                    "**100%** es totalmente sólido en el panel oscuro y casi sólido en el estándar.\n" +
+                    "**30%** es el aspecto más transparente y limpio.\n" +
+                    "**100%** es casi sólido, pero aún deja ver un poco la ciudad.\n" +
                     "\n" +
-                    "Solo cambia el fondo. El texto, los iconos y las muestras de color siguen siendo totalmente legibles.\n" +
+                    "Solo cambia el fondo. El texto, los iconos y las muestras de color siguen siendo legibles.\n" +
                     "\n" +
-                    "**Funciona con ambos estilos de panel.** La opacidad de interfaz del juego ya no afecta este panel."
+                    "**Oscuro (Vanilla)** sigue la transparencia de interfaz del juego, así que este deslizador se oculta al elegirlo."
                 },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelTooltipsEnabled)), "▪ Mostrar ayudas (recomendado)" },

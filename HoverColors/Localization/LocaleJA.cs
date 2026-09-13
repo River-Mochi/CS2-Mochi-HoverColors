@@ -90,30 +90,35 @@ namespace HoverColors
                     "- 有効時は重なりエラー色が優先されます（バニラのエラー色 = サーモン赤）。"
                 },
 
-                // Panel
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)), "▪ 暗いパネル" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)),
-                    "有効 = <ダークパネル>: ゲーム標準のパネル色を使い、バニラのパネルに合う見た目です。\n" +
-                    "- 100%で完全に不透明になります。\n" +
-                    "無効 = <標準パネル>: 明るく半透明なHover Colorsスタイルです。\n" +
-                    "- ガラス風で、100%でも街が少し透けて見えます。\n" +
+                // Panel style
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelStyle)), "▪ パネルスタイル" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelStyle)),
+                    "**ダーク (バニラ)** はゲーム標準のパネルを使います。\n" +
+                    "- Legacy UI / Modern UI に自動で合います。\n" +
+                    "- ゲームのUI透明度設定に従います。\n" +
                     "\n" +
-                    "どちらのパネルも下の不透明度スライダーを使い、Modern UIとLegacy UIで同じ見た目になります。\n" +
+                    "**ガラス (カスタム)** はHover Colorsの明るいガラス調パネルです。\n" +
+                    "- 100%でも街が少し透けて見えます。\n" +
+                    "- 下にパネル不透明度スライダーが追加されます。\n" +
                     "\n" +
-                    "両方試して好みの方を選んでください。このModパネルの背景だけが変わり、ゲームUIには影響しません。"
+                    "両方試して好みの方を選んでください。変わるのはこのModパネルの背景だけで、ゲームUIには影響しません。\n" +
+                    "\n" +
+                    "ヒント: ゲームは各パネルの背後をぼかし、ボタンやスライダーを見やすくします。ゲームのUI透明度を0%にすると全パネルのぼかしがOFFになります。1%以上なら維持されます。"
                 },
+                { m_Settings.GetPanelStyleLocaleID("Dark"), "ダーク (バニラ)" },
+                { m_Settings.GetPanelStyleLocaleID("Glass"), "ガラス (カスタム)" },
 
                 // Panel opacity
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)), "▪ パネル不透明度" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)),
-                    "街中のパネル背景の濃さを調整します。\n" +
+                    "**ガラス (カスタム)** パネルの背景不透明度です。\n" +
                     "\n" +
-                    "**30% ガラス** が最も透明でクリアな見た目です。\n" +
-                    "**100%** ではダークパネルは完全に不透明、標準パネルはほぼ不透明になります。\n" +
+                    "**30%** が最も透明でクリアです。\n" +
+                    "**100%** はほぼ不透明ですが、街が少し透けます。\n" +
                     "\n" +
                     "変わるのは背景だけです。文字、アイコン、カラースウォッチは常に読みやすいままです。\n" +
                     "\n" +
-                    "**両方のパネルで使えます。** ゲームのインターフェース不透明度設定は、このパネルには影響しなくなりました。"
+                    "**ダーク (バニラ)** はゲームのUI透明度設定に従うため、選択中はこのスライダーを非表示にします。"
                 },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelTooltipsEnabled)), "▪ ツールチップ表示（推奨）" },

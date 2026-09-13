@@ -90,30 +90,35 @@ namespace HoverColors
                     "- สีข้อผิดพลาดการซ้อนทับยังมีผลก่อนเสมอเมื่อเปิด (สี vanilla = แดงแซลมอน)"
                 },
 
-                // Panel
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)), "▪ แผงมืดขึ้น" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)),
-                    "เปิด = <แผงมืด>: ใช้สีแผงของเกมเอง จึงเข้ากับแผงแบบ vanilla ของเกม\n" +
-                    "- ทึบเต็มที่ที่ 100%\n" +
-                    "ปิด = <แผงมาตรฐาน>: สไตล์ Hover Colors ที่สว่างและโปร่งใสกว่า\n" +
-                    "- ลุคแบบกระจก แม้ที่ 100% ก็ยังเห็นเมืองด้านหลังเล็กน้อย\n" +
+                // Panel style
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelStyle)), "▪ รูปแบบแผง" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelStyle)),
+                    "**มืด (แบบเกม)** ใช้พื้นผิวแผงของเกมโดยตรง\n" +
+                    "- เข้ากับ Legacy UI หรือ Modern UI อัตโนมัติ\n" +
+                    "- ใช้ค่าความโปร่งใสของ Interface ในเกม\n" +
                     "\n" +
-                    "แผงทั้งสองแบบใช้สไลเดอร์ความทึบด้านล่าง และดูเหมือนกันทั้ง Modern UI และ Legacy UI\n" +
+                    "**กระจก (กำหนดเอง)** ใช้แผงกระจกสีอ่อนของ Hover Colors\n" +
+                    "- แม้ 100% ก็ยังเห็นเมืองด้านหลังเล็กน้อย\n" +
+                    "- เพิ่มสไลเดอร์ความทึบของแผงด้านล่าง\n" +
                     "\n" +
-                    "ลองทั้งสองแบบแล้วเลือกที่ชอบ! เปลี่ยนเฉพาะพื้นหลังของแผงม็อดนี้ ไม่เปลี่ยน UI ของเกม"
+                    "ลองทั้งสองแบบแล้วเลือกที่ชอบ! เปลี่ยนเฉพาะพื้นหลังของแผงม็อดนี้ ไม่เปลี่ยน UI ของเกม\n" +
+                    "\n" +
+                    "เคล็ดลับ: เกมจะเบลอภาพหลังทุกแผงเพื่อให้ปุ่มและสไลเดอร์เด่นขึ้น ตั้งค่าความโปร่งใสของ Interface ในเกมเป็น 0% จะปิดเบลอทุกแผง ส่วน 1% ขึ้นไปจะยังคงเบลอไว้"
                 },
+                { m_Settings.GetPanelStyleLocaleID("Dark"), "มืด (แบบเกม)" },
+                { m_Settings.GetPanelStyleLocaleID("Glass"), "กระจก (กำหนดเอง)" },
 
                 // Panel opacity
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)), "▪ ความทึบของแผง" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)),
-                    "ปรับความทึบของพื้นหลังแผงในเมือง\n" +
+                    "ความทึบของพื้นหลังสำหรับแผง **กระจก (กำหนดเอง)**\n" +
                     "\n" +
-                    "**30% กระจก** โปร่งใสและดูโล่งที่สุด\n" +
-                    "**100%** ทึบเต็มที่สำหรับแผงมืด และเกือบทึบเต็มที่สำหรับแผงมาตรฐาน\n" +
+                    "**30%** โปร่งใสและดูโล่งที่สุด\n" +
+                    "**100%** เกือบทึบ แต่ยังเห็นเมืองด้านหลังเล็กน้อย\n" +
                     "\n" +
-                    "เปลี่ยนเฉพาะพื้นหลัง ข้อความ ไอคอน และช่องสียังอ่านได้ชัดเจนทุกระดับ\n" +
+                    "เปลี่ยนเฉพาะพื้นหลัง ข้อความ ไอคอน และช่องสียังอ่านได้ชัดเสมอ\n" +
                     "\n" +
-                    "**ใช้ได้กับแผงทั้งสองแบบ** การตั้งค่าความทึบของ Interface ในเกมจะไม่ส่งผลกับแผงนี้อีกต่อไป"
+                    "**มืด (แบบเกม)** ใช้ค่าความโปร่งใสของ Interface ในเกมแทน จึงซ่อนสไลเดอร์นี้เมื่อเลือกแบบมืด"
                 },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelTooltipsEnabled)), "▪ แสดงทูลทิป (แนะนำ)" },

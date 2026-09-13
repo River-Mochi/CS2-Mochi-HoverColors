@@ -90,30 +90,35 @@ namespace HoverColors
                     "- A cor de erro por sobreposição ainda tem prioridade quando ativada (vanilla = vermelho salmão)."
                 },
 
-                // Panel
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)), "▪ Painel mais escuro" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)),
-                    "Ativado = <Painel escuro>: usa as cores de painel do próprio jogo para combinar com os painéis vanilla.\n" +
-                    "- Fica totalmente sólido em 100%.\n" +
-                    "Desativado = <Painel padrão>: estilo Hover Colors mais claro e translúcido.\n" +
-                    "- Visual de vidro; mesmo em 100% ainda deixa um pouco da cidade aparecer.\n" +
+                // Panel style
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelStyle)), "▪ Estilo do painel" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelStyle)),
+                    "**Escuro (Vanilla)** usa a superfície de painel do próprio jogo.\n" +
+                    "- Combina automaticamente com Legacy UI ou Modern UI.\n" +
+                    "- Segue a transparência da interface do jogo.\n" +
                     "\n" +
-                    "Os dois estilos usam o controle de opacidade abaixo e ficam iguais na Modern UI e Legacy UI.\n" +
+                    "**Vidro (Personalizado)** usa a superfície de vidro mais clara do Hover Colors.\n" +
+                    "- Mesmo em 100%, ainda deixa um pouco da cidade aparecer.\n" +
+                    "- Adiciona abaixo um controle de opacidade do painel.\n" +
                     "\n" +
-                    "Experimente os dois! Isso muda apenas o fundo deste painel do mod, não a interface do jogo."
+                    "Experimente os dois! Só muda o fundo deste painel do mod, não a interface do jogo.\n" +
+                    "\n" +
+                    "Dica: o jogo desfoca o que fica atrás de cada painel para destacar botões e controles. Com Transparência da Interface em 0%, esse desfoque é desligado em todos os painéis. Com 1% ou mais, ele continua ativo."
                 },
+                { m_Settings.GetPanelStyleLocaleID("Dark"), "Escuro (Vanilla)" },
+                { m_Settings.GetPanelStyleLocaleID("Glass"), "Vidro (Personalizado)" },
 
                 // Panel opacity
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)), "▪ Opacidade do painel" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)),
-                    "Controla o quanto o fundo do painel na cidade é sólido.\n" +
+                    "Opacidade do fundo do painel **Vidro (Personalizado)**.\n" +
                     "\n" +
-                    "**30% Vidro** é o visual mais transparente e limpo.\n" +
-                    "**100%** fica totalmente sólido no painel escuro e quase sólido no painel padrão.\n" +
+                    "**30%** é o visual mais transparente e limpo.\n" +
+                    "**100%** fica quase sólido, mas ainda mostra um pouco da cidade.\n" +
                     "\n" +
-                    "Só o fundo muda. Texto, ícones e amostras de cor continuam totalmente legíveis em qualquer ajuste.\n" +
+                    "Só o fundo muda. Texto, ícones e amostras de cor continuam sempre legíveis.\n" +
                     "\n" +
-                    "**Funciona nos dois estilos de painel.** A configuração de Opacidade da Interface do jogo não afeta mais este painel."
+                    "**Escuro (Vanilla)** segue a transparência da interface do jogo, então este controle fica oculto quando ele é selecionado."
                 },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelTooltipsEnabled)), "▪ Mostrar dicas (recomendado)" },

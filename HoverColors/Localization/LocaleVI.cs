@@ -90,30 +90,35 @@ namespace HoverColors
                     "- Màu lỗi chồng lấn vẫn ưu tiên khi bật (màu lỗi vanilla = đỏ cá hồi)."
                 },
 
-                // Panel
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)), "▪ Bảng tối hơn" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)),
-                    "Bật = <Bảng Tối>: dùng màu bảng của chính game để giống các bảng vanilla.\n" +
-                    "- Hoàn toàn đặc ở 100%.\n" +
-                    "Tắt = <Bảng Tiêu chuẩn>: kiểu Hover Colors sáng và trong hơn.\n" +
-                    "- Hiệu ứng kính; ngay cả ở 100% vẫn nhìn thấy một chút thành phố phía sau.\n" +
+                // Panel style
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelStyle)), "▪ Kiểu bảng" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelStyle)),
+                    "**Tối (Vanilla)** dùng bề mặt bảng của chính game.\n" +
+                    "- Tự khớp với Legacy UI hoặc Modern UI.\n" +
+                    "- Theo cài đặt Độ trong suốt Giao diện của game.\n" +
                     "\n" +
-                    "Cả hai kiểu bảng đều dùng thanh độ đục bên dưới và hiển thị giống nhau trong Modern UI và Legacy UI.\n" +
+                    "**Kính (Tùy chỉnh)** dùng bề mặt kính sáng hơn của Hover Colors.\n" +
+                    "- Ngay cả 100% vẫn nhìn thấy một chút thành phố phía sau.\n" +
+                    "- Thêm thanh Độ đục bảng bên dưới.\n" +
                     "\n" +
-                    "Hãy thử cả hai và chọn kiểu bạn thích! Chỉ nền của bảng mod này thay đổi, không ảnh hưởng UI của game."
+                    "Hãy thử cả hai và chọn kiểu bạn thích! Chỉ nền của bảng mod này thay đổi, không ảnh hưởng UI của game.\n" +
+                    "\n" +
+                    "Mẹo: game làm mờ phía sau mỗi bảng để nút và thanh trượt nổi bật hơn. Đặt Độ trong suốt Giao diện của game về 0% sẽ tắt hiệu ứng mờ cho mọi bảng. Từ 1% trở lên sẽ giữ hiệu ứng này."
                 },
+                { m_Settings.GetPanelStyleLocaleID("Dark"), "Tối (Vanilla)" },
+                { m_Settings.GetPanelStyleLocaleID("Glass"), "Kính (Tùy chỉnh)" },
 
                 // Panel opacity
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)), "▪ Độ mờ bảng" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)), "▪ Độ đục bảng" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)),
-                    "Điều chỉnh độ đặc của nền bảng trong thành phố.\n" +
+                    "Độ đục nền cho bảng **Kính (Tùy chỉnh)**.\n" +
                     "\n" +
-                    "**30% Kính** là kiểu trong suốt và thoáng nhất.\n" +
-                    "**100%** hoàn toàn đặc với Bảng Tối và gần như đặc hoàn toàn với Bảng Tiêu chuẩn.\n" +
+                    "**30%** là kiểu trong suốt và thoáng nhất.\n" +
+                    "**100%** gần như đặc nhưng vẫn nhìn thấy một chút thành phố.\n" +
                     "\n" +
-                    "Chỉ nền thay đổi. Chữ, biểu tượng và ô màu vẫn luôn dễ đọc ở mọi mức.\n" +
+                    "Chỉ nền thay đổi. Chữ, biểu tượng và ô màu luôn dễ đọc.\n" +
                     "\n" +
-                    "**Hoạt động với cả hai kiểu bảng.** Cài đặt Độ mờ Giao diện của game không còn ảnh hưởng đến bảng này."
+                    "**Tối (Vanilla)** dùng Độ trong suốt Giao diện của game thay thế, nên thanh này sẽ bị ẩn khi chọn kiểu Tối."
                 },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelTooltipsEnabled)), "▪ Hiện mẹo (khuyên dùng)" },

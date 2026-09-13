@@ -90,30 +90,35 @@ namespace HoverColors
                     "- Etkinse çakışma hata rengi yine önceliklidir (vanilla hata rengi = somon kırmızı)."
                 },
 
-                // Panel
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)), "▪ Daha koyu panel" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)),
-                    "Açık = <Koyu panel>: oyunun kendi panel renklerini kullanır ve vanilla panellerle uyumlu görünür.\n" +
-                    "- 100%'de tamamen opaktır.\n" +
-                    "Kapalı = <Standart panel>: daha açık ve yarı saydam Hover Colors stili.\n" +
-                    "- Cam görünümü; 100%'de bile şehrin biraz görünmesini sağlar.\n" +
+                // Panel style
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelStyle)), "▪ Panel stili" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelStyle)),
+                    "**Koyu (Vanilla)** oyunun kendi panel yüzeyini kullanır.\n" +
+                    "- Legacy UI veya Modern UI görünümüne otomatik uyar.\n" +
+                    "- Oyunun Arayüz Şeffaflığı ayarını izler.\n" +
                     "\n" +
-                    "Her iki panel stili de aşağıdaki opaklık kaydırıcısını kullanır ve Modern UI ile Legacy UI'da aynı görünür.\n" +
+                    "**Cam (Özel)** daha açık Hover Colors cam yüzeyini kullanır.\n" +
+                    "- 100%'de bile şehrin biraz görünmesini sağlar.\n" +
+                    "- Aşağıya Panel opaklığı kaydırıcısı ekler.\n" +
                     "\n" +
-                    "İkisini de dene ve hangisini sevdiğini seç! Bu yalnızca mod panelinin arka planını değiştirir, oyun arayüzünü değil."
+                    "İkisini de dene ve hangisini sevdiğini seç! Yalnızca bu mod panelinin arka planı değişir, oyun arayüzü değil.\n" +
+                    "\n" +
+                    "İpucu: oyun, düğme ve kaydırıcıları belirginleştirmek için her panelin arkasını bulanıklaştırır. Oyunun Arayüz Şeffaflığı %0 olursa bu bulanıklık tüm panellerde kapanır. %1 veya üstünde açık kalır."
                 },
+                { m_Settings.GetPanelStyleLocaleID("Dark"), "Koyu (Vanilla)" },
+                { m_Settings.GetPanelStyleLocaleID("Glass"), "Cam (Özel)" },
 
                 // Panel opacity
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)), "▪ Panel opaklığı" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)),
-                    "Şehir içindeki panel arka planının ne kadar opak olduğunu ayarlar.\n" +
+                    "**Cam (Özel)** panelinin arka plan opaklığı.\n" +
                     "\n" +
-                    "**30% Cam** en şeffaf ve temiz görünümdür.\n" +
-                    "**100%** koyu panelde tamamen, standart panelde ise neredeyse tamamen opaktır.\n" +
+                    "**30%** en şeffaf ve temiz görünümdür.\n" +
+                    "**100%** neredeyse tamamen opaktır ama şehri biraz gösterir.\n" +
                     "\n" +
-                    "Yalnızca arka plan değişir. Metin, simgeler ve renk örnekleri her ayarda tamamen okunabilir kalır.\n" +
+                    "Yalnızca arka plan değişir. Metin, simgeler ve renk örnekleri her zaman okunaklı kalır.\n" +
                     "\n" +
-                    "**Her iki panel stilinde de çalışır.** Oyunun Arayüz Opaklığı ayarı artık bu paneli etkilemez."
+                    "**Koyu (Vanilla)** bunun yerine oyunun Arayüz Şeffaflığı ayarını izler; seçildiğinde bu kaydırıcı gizlenir."
                 },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelTooltipsEnabled)), "▪ İpuçlarını göster (önerilen)" },

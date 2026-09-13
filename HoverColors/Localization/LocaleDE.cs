@@ -90,30 +90,35 @@ namespace HoverColors
                     "- Die Überlappungs-Fehlerfarbe hat bei Aktivierung weiter Vorrang (Vanilla-Fehlerfarbe = Lachsrot)."
                 },
 
-                // Panel
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)), "▪ Dunkleres Panel" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)),
-                    "Aktiviert = <Dunkles Panel>: nutzt die eigenen Panel-Farben des Spiels und passt damit zu Vanilla-Panels.\n" +
-                    "- Bei 100% vollständig deckend.\n" +
-                    "Deaktiviert = <Standard-Panel>: hellerer, transparenter Hover-Colors-Stil.\n" +
-                    "- Glas-Look; selbst bei 100% bleibt etwas von der Stadt sichtbar.\n" +
+                // Panel style
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelStyle)), "▪ Panel-Stil" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelStyle)),
+                    "**Dunkel (Vanilla)** nutzt die eigene Panel-Oberfläche des Spiels.\n" +
+                    "- Passt sich automatisch an Legacy- oder Modern-UI an.\n" +
+                    "- Folgt der Interface-Transparenz des Spiels.\n" +
                     "\n" +
-                    "Beide Panel-Stile nutzen den Deckkraft-Regler unten und sehen in Modern UI und Legacy UI gleich aus.\n" +
+                    "**Glas (Benutzerdefiniert)** nutzt die hellere Hover-Colors-Glasoberfläche.\n" +
+                    "- Selbst bei 100% bleibt etwas von der Stadt sichtbar.\n" +
+                    "- Blendet unten einen Panel-Deckkraftregler ein.\n" +
                     "\n" +
-                    "Probier beide aus! Dies ändert nur den Hintergrund dieses Mod-Panels, nicht die Spiel-UI."
+                    "Probier beide aus! Dies ändert nur den Hintergrund dieses Mod-Panels, nicht die Spiel-UI.\n" +
+                    "\n" +
+                    "Tipp: Das Spiel verwischt den Bereich hinter jedem Panel, damit Schaltflächen und Regler besser sichtbar sind. Bei 0% Interface-Transparenz ist dieser Effekt für alle Panels aus. Ab 1% bleibt er aktiv."
                 },
+                { m_Settings.GetPanelStyleLocaleID("Dark"), "Dunkel (Vanilla)" },
+                { m_Settings.GetPanelStyleLocaleID("Glass"), "Glas (Benutzerdefiniert)" },
 
                 // Panel opacity
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)), "▪ Panel-Deckkraft" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)),
-                    "Bestimmt, wie deckend der Hintergrund des Panels in der Stadt ist.\n" +
+                    "Hintergrund-Deckkraft für das **Glas (Benutzerdefiniert)**-Panel.\n" +
                     "\n" +
-                    "**30% Glas** ist am transparentesten und klarsten.\n" +
-                    "**100%** ist beim dunklen Panel vollständig und beim Standard-Panel fast vollständig deckend.\n" +
+                    "**30%** ist am transparentesten und klarsten.\n" +
+                    "**100%** ist fast deckend, lässt aber noch etwas Stadt durchscheinen.\n" +
                     "\n" +
-                    "Nur der Hintergrund ändert sich. Text, Symbole und Farbfelder bleiben bei jeder Einstellung gut lesbar.\n" +
+                    "Nur der Hintergrund ändert sich. Text, Symbole und Farbfelder bleiben immer gut lesbar.\n" +
                     "\n" +
-                    "**Funktioniert mit beiden Panel-Stilen.** Die Interface-Deckkraft des Spiels beeinflusst dieses Panel nicht mehr."
+                    "**Dunkel (Vanilla)** folgt stattdessen der Interface-Transparenz des Spiels; deshalb ist dieser Regler dort ausgeblendet."
                 },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelTooltipsEnabled)), "▪ Tooltips anzeigen (empfohlen)" },

@@ -90,30 +90,35 @@ namespace HoverColors
                     "- 啟用時，重疊錯誤顏色仍優先（原版錯誤色 = 鮭紅）。"
                 },
 
-                // Panel
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)), "▪ 更暗面板" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)),
-                    "啟用 = <暗色面板>：使用遊戲自己的面板顏色，與原版面板風格一致。\n" +
-                    "- 100% 時完全不透明。\n" +
-                    "停用 = <標準面板>：更明亮、半透明的 Hover Colors 風格。\n" +
-                    "- 玻璃效果；即使在 100% 時仍能稍微看到後面的城市。\n" +
+                // Panel style
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelStyle)), "▪ 面板樣式" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelStyle)),
+                    "**暗色（原版）**使用遊戲自己的面板表面。\n" +
+                    "- 自動配合 Legacy UI 或 Modern UI。\n" +
+                    "- 跟隨遊戲的介面透明度設定。\n" +
                     "\n" +
-                    "兩種面板都使用下方的不透明度滑桿，並且在 Modern UI 和 Legacy UI 中顯示相同。\n" +
+                    "**玻璃（自訂）**使用較亮的 Hover Colors 玻璃面板。\n" +
+                    "- 即使 100% 仍能稍微看到後面的城市。\n" +
+                    "- 在下方加入面板不透明度滑桿。\n" +
                     "\n" +
-                    "兩種都試試，選擇你喜歡的！這只會改變本模組面板的背景，不影響遊戲 UI。"
+                    "兩種都試試，選你喜歡的！這只會改變本模組面板的背景，不影響遊戲 UI。\n" +
+                    "\n" +
+                    "提示：遊戲會模糊每個面板後方的畫面，讓按鈕和滑桿更清楚。把遊戲的介面透明度設為 0% 會關閉所有面板的模糊效果；1% 或更高則保留。"
                 },
+                { m_Settings.GetPanelStyleLocaleID("Dark"), "暗色（原版）" },
+                { m_Settings.GetPanelStyleLocaleID("Glass"), "玻璃（自訂）" },
 
                 // Panel opacity
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)), "▪ 面板不透明度" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)),
-                    "調整城市內面板背景的實心程度。\n" +
+                    "**玻璃（自訂）**面板的背景不透明度。\n" +
                     "\n" +
-                    "**30% 玻璃** 最透明、最清爽。\n" +
-                    "**100%** 時暗色面板完全不透明，標準面板接近完全不透明。\n" +
+                    "**30%** 最透明、最清爽。\n" +
+                    "**100%** 接近完全不透明，但仍能稍微看到城市。\n" +
                     "\n" +
-                    "只改變背景。文字、圖示和色塊在任何設定下都保持清楚可讀。\n" +
+                    "只改變背景。文字、圖示和色塊始終保持清楚可讀。\n" +
                     "\n" +
-                    "**兩種面板樣式都有效。** 遊戲的介面不透明度設定不再影響此面板。"
+                    "**暗色（原版）**改為跟隨遊戲的介面透明度，因此選中時會隱藏此滑桿。"
                 },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelTooltipsEnabled)), "▪ 顯示提示（推薦）" },

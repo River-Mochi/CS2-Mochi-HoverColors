@@ -90,30 +90,35 @@ namespace HoverColors
                     "- Kolor błędu nakładania nadal ma pierwszeństwo, gdy jest włączony (vanilla = łososiowy)."
                 },
 
-                // Panel
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)), "▪ Ciemniejszy panel" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)),
-                    "Włączone = <Ciemny panel>: używa kolorów panelu gry, dzięki czemu pasuje do paneli vanilla.\n" +
-                    "- Przy 100% jest całkowicie nieprzezroczysty.\n" +
-                    "Wyłączone = <Standardowy panel>: jaśniejszy, półprzezroczysty styl Hover Colors.\n" +
-                    "- Efekt szkła; nawet przy 100% trochę miasta pozostaje widoczne.\n" +
+                // Panel style
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelStyle)), "▪ Styl panelu" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelStyle)),
+                    "**Ciemny (Vanilla)** używa powierzchni panelu z gry.\n" +
+                    "- Automatycznie pasuje do Legacy UI lub Modern UI.\n" +
+                    "- Korzysta z ustawienia przezroczystości interfejsu gry.\n" +
                     "\n" +
-                    "Oba style używają suwaka krycia poniżej i wyglądają tak samo w Modern UI i Legacy UI.\n" +
+                    "**Szkło (Własny)** używa jaśniejszego szklanego panelu Hover Colors.\n" +
+                    "- Nawet przy 100% trochę miasta nadal prześwituje.\n" +
+                    "- Dodaje poniżej suwak krycia panelu.\n" +
                     "\n" +
-                    "Wypróbuj oba! Zmienia się tylko tło tego panelu moda, a nie interfejs gry."
+                    "Wypróbuj oba! Zmienia się tylko tło tego panelu moda, nie interfejs gry.\n" +
+                    "\n" +
+                    "Wskazówka: gra rozmywa obraz za każdym panelem, dzięki czemu przyciski i suwaki są wyraźniejsze. Ustawienie przezroczystości interfejsu gry na 0% wyłącza rozmycie dla wszystkich paneli. 1% lub więcej je zachowuje."
                 },
+                { m_Settings.GetPanelStyleLocaleID("Dark"), "Ciemny (Vanilla)" },
+                { m_Settings.GetPanelStyleLocaleID("Glass"), "Szkło (Własny)" },
 
                 // Panel opacity
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)), "▪ Krycie panelu" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)),
-                    "Określa krycie tła panelu w mieście.\n" +
+                    "Krycie tła panelu **Szkło (Własny)**.\n" +
                     "\n" +
-                    "**30% Szkło** daje najbardziej przezroczysty i czysty wygląd.\n" +
-                    "**100%** oznacza pełne krycie ciemnego panelu i prawie pełne krycie standardowego.\n" +
+                    "**30%** daje najbardziej przezroczysty i czysty wygląd.\n" +
+                    "**100%** jest prawie pełne, ale nadal lekko pokazuje miasto.\n" +
                     "\n" +
                     "Zmienia się tylko tło. Tekst, ikony i próbki kolorów pozostają zawsze czytelne.\n" +
                     "\n" +
-                    "**Działa z oboma stylami panelu.** Ustawienie krycia interfejsu gry nie wpływa już na ten panel."
+                    "**Ciemny (Vanilla)** korzysta zamiast tego z przezroczystości interfejsu gry, więc po jego wybraniu ten suwak jest ukryty."
                 },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelTooltipsEnabled)), "▪ Pokaż dymki (zalecane)" },

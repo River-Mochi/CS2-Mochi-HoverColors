@@ -90,30 +90,35 @@ namespace HoverColors
                     "- 켜져 있으면 겹침 오류색이 항상 우선합니다 (기본 오류색 = 연어색)."
                 },
 
-                // Panel
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)), "▪ 더 어두운 패널" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)),
-                    "활성화 = <어두운 패널>: 게임 자체 패널 색상을 사용해 바닐라 패널과 어울립니다.\n" +
-                    "- 100%에서는 완전히 불투명합니다.\n" +
-                    "비활성화 = <표준 패널>: 더 밝고 반투명한 Hover Colors 스타일입니다.\n" +
-                    "- 유리 느낌이며 100%에서도 도시가 약간 비칩니다.\n" +
+                // Panel style
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelStyle)), "▪ 패널 스타일" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelStyle)),
+                    "**어두움 (바닐라)** 은 게임 기본 패널 표면을 사용합니다.\n" +
+                    "- Legacy UI / Modern UI에 자동으로 맞습니다.\n" +
+                    "- 게임의 인터페이스 투명도 설정을 따릅니다.\n" +
                     "\n" +
-                    "두 패널 모두 아래의 불투명도 슬라이더를 사용하며 Modern UI와 Legacy UI에서 같은 모습입니다.\n" +
+                    "**유리 (사용자 지정)** 는 더 밝은 Hover Colors 유리 패널입니다.\n" +
+                    "- 100%에서도 도시가 조금 비칩니다.\n" +
+                    "- 아래에 패널 불투명도 슬라이더가 추가됩니다.\n" +
                     "\n" +
-                    "둘 다 사용해 보고 마음에 드는 쪽을 선택하세요! 이 모드 패널의 배경만 바뀌며 게임 UI에는 영향을 주지 않습니다."
+                    "둘 다 써 보고 마음에 드는 쪽을 고르세요! 이 모드 패널의 배경만 바뀌며 게임 UI에는 영향을 주지 않습니다.\n" +
+                    "\n" +
+                    "팁: 게임은 모든 패널 뒤를 흐리게 해 버튼과 슬라이더를 더 잘 보이게 합니다. 게임의 인터페이스 투명도를 0%로 하면 모든 패널의 흐림 효과가 꺼집니다. 1% 이상이면 유지됩니다."
                 },
+                { m_Settings.GetPanelStyleLocaleID("Dark"), "어두움 (바닐라)" },
+                { m_Settings.GetPanelStyleLocaleID("Glass"), "유리 (사용자 지정)" },
 
                 // Panel opacity
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)), "▪ 패널 불투명도" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)),
-                    "도시 내 패널 배경의 불투명도를 조절합니다.\n" +
+                    "**유리 (사용자 지정)** 패널의 배경 불투명도입니다.\n" +
                     "\n" +
-                    "**30% 유리** 가 가장 투명하고 깔끔한 모습입니다.\n" +
-                    "**100%**에서는 어두운 패널은 완전 불투명, 표준 패널은 거의 불투명합니다.\n" +
+                    "**30%**가 가장 투명하고 깔끔합니다.\n" +
+                    "**100%**는 거의 불투명하지만 도시가 조금 비칩니다.\n" +
                     "\n" +
-                    "배경만 바뀝니다. 텍스트, 아이콘, 색상 견본은 모든 설정에서 선명하게 유지됩니다.\n" +
+                    "배경만 바뀝니다. 텍스트, 아이콘, 색상 견본은 항상 선명하게 유지됩니다.\n" +
                     "\n" +
-                    "**두 패널 스타일 모두 작동합니다.** 게임의 인터페이스 불투명도 설정은 더 이상 이 패널에 영향을 주지 않습니다."
+                    "**어두움 (바닐라)** 은 게임의 인터페이스 투명도를 따르므로 선택하면 이 슬라이더가 숨겨집니다."
                 },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelTooltipsEnabled)), "▪ 툴팁 표시 (추천)" },

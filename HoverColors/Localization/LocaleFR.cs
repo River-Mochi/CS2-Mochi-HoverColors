@@ -90,30 +90,35 @@ namespace HoverColors
                     "- La couleur d'erreur de chevauchement reste prioritaire si activée (vanilla = rouge saumon)."
                 },
 
-                // Panel
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)), "▪ Panneau plus sombre" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)),
-                    "Activé = <Panneau sombre> : utilise les couleurs de panneau du jeu pour correspondre aux panneaux vanilla.\n" +
-                    "- Totalement opaque à 100%.\n" +
-                    "Désactivé = <Panneau standard> : style Hover Colors plus clair et translucide.\n" +
-                    "- Effet verre ; même à 100%, la ville reste légèrement visible.\n" +
+                // Panel style
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelStyle)), "▪ Style du panneau" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelStyle)),
+                    "**Sombre (Vanilla)** utilise la surface de panneau du jeu.\n" +
+                    "- S'adapte automatiquement à Legacy UI ou Modern UI.\n" +
+                    "- Suit la transparence de l'interface du jeu.\n" +
                     "\n" +
-                    "Les deux styles utilisent le curseur d'opacité ci-dessous et ont le même rendu en Modern UI et Legacy UI.\n" +
+                    "**Verre (Personnalisé)** utilise la surface vitrée plus claire de Hover Colors.\n" +
+                    "- Même à 100%, un peu de la ville reste visible.\n" +
+                    "- Ajoute un curseur d'opacité du panneau ci-dessous.\n" +
                     "\n" +
-                    "Essayez les deux ! Cela change uniquement le fond de ce panneau du mod, pas l'interface du jeu."
+                    "Essayez les deux ! Cela change seulement le fond de ce panneau du mod, pas l'interface du jeu.\n" +
+                    "\n" +
+                    "Astuce : le jeu floute ce qui se trouve derrière chaque panneau pour mieux faire ressortir boutons et curseurs. À 0% de transparence d'interface, ce flou est désactivé pour tous les panneaux. À 1% ou plus, il reste actif."
                 },
+                { m_Settings.GetPanelStyleLocaleID("Dark"), "Sombre (Vanilla)" },
+                { m_Settings.GetPanelStyleLocaleID("Glass"), "Verre (Personnalisé)" },
 
                 // Panel opacity
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)), "▪ Opacité du panneau" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)),
-                    "Règle l'opacité du fond du panneau en ville.\n" +
+                    "Opacité du fond du panneau **Verre (Personnalisé)**.\n" +
                     "\n" +
-                    "**30% Verre** est le rendu le plus transparent et clair.\n" +
-                    "**100%** est totalement opaque sur le panneau sombre et presque opaque sur le panneau standard.\n" +
+                    "**30%** donne le rendu le plus transparent et clair.\n" +
+                    "**100%** est presque opaque, tout en laissant un peu de ville visible.\n" +
                     "\n" +
-                    "Seul le fond change. Le texte, les icônes et les échantillons restent parfaitement lisibles.\n" +
+                    "Seul le fond change. Texte, icônes et échantillons restent toujours lisibles.\n" +
                     "\n" +
-                    "**Fonctionne avec les deux styles de panneau.** Le réglage d'opacité de l'interface du jeu n'affecte plus ce panneau."
+                    "**Sombre (Vanilla)** suit plutôt la transparence de l'interface du jeu ; ce curseur est donc masqué quand il est sélectionné."
                 },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelTooltipsEnabled)), "▪ Afficher les infobulles (recommandé)" },
