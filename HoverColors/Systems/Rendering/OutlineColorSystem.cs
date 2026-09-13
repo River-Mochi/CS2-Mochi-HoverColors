@@ -31,6 +31,12 @@ namespace HoverColors.Systems
         private const float kVanillaR = 0.502f;
         private const float kVanillaG = 0.869f;
         private const float kVanillaB = 1f;
+        // Vanilla uses two different alphas and they must not be confused:
+        //   m_HoveredColor.a  = 0.890  -> the per-object hover colour (the cyan you actually see)
+        //   _OuterColor.a     = 0.855  -> the halo edge opacity on the fullscreen material
+        // Both were read off a live game and logged; see the "Captured vanilla render colors" line
+        // in HoverColors.log. These constants are only fallbacks until that capture succeeds.
+        private const float kVanillaHoveredA = 0.890f;
         private const float kVanillaOutlineA = 0.855f;
         private const float kVanillaFillA = 0f;
         private const float kVanillaOwnerR = 0.247f;
@@ -43,7 +49,7 @@ namespace HoverColors.Systems
         // Cached so the per-frame path never re-hashes the property name.
         private static readonly int s_OutlineWidthProperty = Shader.PropertyToID("_OutlineWidth");
 
-        public static Color CapturedHoveredColor { get; private set; } = new Color(kVanillaR, kVanillaG, kVanillaB, kVanillaOutlineA);
+        public static Color CapturedHoveredColor { get; private set; } = new Color(kVanillaR, kVanillaG, kVanillaB, kVanillaHoveredA);
         public static Color CapturedOwnerColor { get; private set; } = new Color(kVanillaOwnerR, kVanillaOwnerG, kVanillaOwnerB, kVanillaOwnerA);
         public static Color CapturedOuterColor { get; private set; } = new Color(1f, 1f, 1f, kVanillaOutlineA);
         public static Color CapturedInnerColor { get; private set; } = new Color(1f, 1f, 1f, kVanillaFillA);
