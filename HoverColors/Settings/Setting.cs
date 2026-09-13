@@ -554,7 +554,7 @@ namespace HoverColors
         [SettingsUISection(Actions, kToolColors)]
         public bool UseOverlapWarningColor { get; set; }
 
-        // NetLanes cover detailing-style fences/hedges/markings placed through NetTool.
+        // NetLanes cover EDT-style fences/hedges/markings through NetTool.
         // ON lets those detail tools use custom HC colors while normal roads keep road overrides.
         [SettingsUISection(Actions, kToolColors)]
         public bool UseCustomColorsForNetLanes { get; set; }

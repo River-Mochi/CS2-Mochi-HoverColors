@@ -29,7 +29,7 @@ import type {
 // Shared vanilla-module library for HoverColors and future CS2 mods.
 //
 // This combines two good patterns from community:
-// - community "how to in the UI" notes
+// - yenyang's "how to in the UI" comments
 // - Luca's scalable grouped registries for components/themes/focus helpers
 // - River-Mochi notes and tweaks
 //
