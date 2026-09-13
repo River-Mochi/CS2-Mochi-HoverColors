@@ -47,7 +47,6 @@ Want to change the bright blue highlights?
 
 - Enjoy and the easiest way to support is clicking the Like 👍 button (top right) — no donations requested.
 - Feedback: use the GitHub or Discord links (icons right side).
-- MIT open source.
 
 ### ❤️ Credits and Thanks
 
@@ -115,8 +114,6 @@ tags: hover colors, remove blue, disable hover, highlight color, outline thickne
 <!--External link, can be set multiple times. supported types are "discord", "github", "youtube", "twitch", "x", "paypal", "patreon", "buymeacoffee", "kofi", "crowdin", "gitlab", "gofundme"-->
 <ExternalLink Type="discord" Url="https://discord.gg/gwXgvtyhjc" />
 <ExternalLink Type="github" Url="https://github.com/River-Mochi/CS2-Mochi-HoverColors" />
-
-
 <!--Supported values Public, Private, Unlisted-->
 <AccessLevel Value="Public" />
 </Publish>
