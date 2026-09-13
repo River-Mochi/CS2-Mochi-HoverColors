@@ -1,3 +1,11 @@
+// <copyright file="MochiColorPickerPanel.module.scss" company="River-Mochi">
+// Copyright (C) 2026 River-Mochi.
+// Licensed under the GNU General Public License v3.0 or later,
+// with the Cities: Skylines II Linking Exception.
+// See LICENSE and LICENSE-EXCEPTION in the project root.
+// Copyright and license notices MUST be preserved.
+// ================= </copyright> ======================
+
 @use "./panel/styles/presetButtons";
 @use "./panel/styles/dragGrip";
 @use "./panel/styles/activeIndicators";
@@ -7,28 +15,82 @@
 @use "./panel/styles/districtMenu";
 @use "./panel/styles/panelDarker";
 
+// Position comes from inline left/top now (the game panel measures its launcher; the Editor panel
+// uses the fixed corner below), because this element is mounted at a UI root instead of inside the
+// launcher button.
+//
+// No z-index. The old 10000 was an attempt to climb out of the GameTopLeft stacking context and it
+// could not - only root mounting fixes that. Left on, it would now outrank the vanilla colour-picker
+// balloon and the tooltips, which is the bug it caused in Editor mode. Document order already puts a
+// mod appended to the root above the vanilla panels, which is all this needs. All Speed Limits' own
+// root-mounted window carries no panel z-index either.
 .panelAnchor {
     position: absolute;
-    top: 100%;
-    left: 0;
-    margin-top: 6rem;
-    z-index: 10000;
+    z-index: auto;
     pointer-events: auto;
+}
+
+// Nothing to declare: the game panel's position is the inline left/top measured from the launcher.
+// The rule exists so the class survives into the CSS-module exports, same as .panelDarker.
+.panelAnchorGame {
+    margin-top: 0;
+}
+
+// Editor has no GameTopLeft launcher to measure, so the same draggable panel starts at a fixed
+// viewport position instead. position: fixed rather than absolute, because the Editor root is not a
+// positioned ancestor.
+//
+// Carries no z-index, like .panelAnchor. A z-index here outranks the vanilla colour-picker balloon
+// (z-index var(--tooltipIndex), 20 by default), which is what buried the picker behind the panel in
+// Editor mode. Other editor-mounted mod panels omit it for the same reason. The inline drag
+// transform still gives this element its own stacking context, so tooltips stay contained.
+.panelAnchorEditor {
+  position: fixed;
+  top: 64rem;
+  left: 16rem;
+  margin-top: 0;
 }
 
 .panelFrame {
     position: relative;
     overflow: visible;
+
+}
+
+// Standard only. Removes the vanilla Panel/Menu fill so Hover Colors is the sole painter, which is
+// what lets the title bar be genuinely see-through and puts the panel under HC's opacity slider
+// instead of the game's Interface Opacity. Darker deliberately does NOT get this: it keeps the
+// vanilla surface so it matches the player's game skin and follows the game's slider.
+.panelFrameCustom {
+    --menuPanel1: transparent;
+    --menuPanel2: transparent;
+    --panelColorDark: transparent;
+    --panelColorNormal: transparent;
+    --sectionHeaderColor: transparent;
+    background-color: transparent;
+    background-image: none;
 }
 
 .panelContent {
     --hc-panel-width: 246rem;
-    --hc-panel-alpha-top: 0.32;
-    --hc-panel-alpha-bottom: 0.24;
-    --hc-title-font-size: 12rem;
+    // Overwritten by the .panelOpacityNN classes below. These are the 80% defaults.
+    --hc-panel-alpha-top: 0.8;
+    --hc-panel-alpha-bottom: 0.734;
+    --hc-title-alpha: 0.8;
+    --hc-title-alpha-hover: 0.511;
+    --hc-title-font-size: 13rem;
     --hc-title-letter-spacing: 0.80rem;
     position: relative;
     overflow: visible;
+
+    // The vanilla content wrapper's padding differs between Modern and Legacy UI, and every
+    // negative-margin hack in this file existed to cancel it. Zeroing it once makes the layout
+    // skin-independent: .body and .actions already carry their own padding.
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+
     width: var(--hc-panel-width);
     min-width: var(--hc-panel-width);
     max-width: var(--hc-panel-width);
@@ -36,29 +98,133 @@
 }
 
 .panelStandard {
+    --menuPanel1: transparent;
+    --menuPanel2: transparent;
+    --panelColorDark: transparent;
+    --panelColorNormal: transparent;
+    --sectionHeaderColor: transparent;
+    // Vanilla's .content_XD5 carries `backdrop-filter: var(--panelBlur)` - blur(5px) - and it is
+    // deliberately left in place. It blurs the city behind the panel and our translucent gradient
+    // then paints over that blurred result, which is what actually makes this read as frosted glass.
+    //
+    // It was briefly nulled here on performance grounds. That was the wrong trade: the blur is not
+    // ours to save, the game already pays it on the toolbar and every vanilla panel on screen, and
+    // suppressing it on one small panel wins nothing measurable. What it cost was legibility - at a
+    // low opacity setting the sharp background showed straight through, and thin controls like the
+    // sliders lost their edges against high-contrast ground like crosswalks and signage. Blur
+    // removes that detail; a tint alone only lightens it, so no colour choice substitutes for this.
+    background-color: transparent;
     border: 0;
     border-radius: 12rem;
-    background-image: linear-gradient(to bottom, rgba(95, 124, 136, var(--hc-panel-alpha-top)), rgba(58, 78, 88, var(--hc-panel-alpha-bottom)));
-    background-color: rgba(58, 78, 88, var(--hc-panel-alpha-bottom));
+
+    // The header must stay unpainted so .titleBar's own alpha is the only thing between the player
+    // and the city. That used to be done with `rgba(...) 33rem` colour stops - but Gameface does
+    // not support a length-positioned gradient stop (vanilla's index.css has zero of them; every
+    // stop it ships is a % or bare). The whole background-image declaration was therefore invalid
+    // and dropped, which is why the opacity slider appeared to drive only the title bar while the
+    // body kept answering to the game's own Interface Opacity.
+    //
+    // Offsetting a plain two-stop gradient does the same job with constructs vanilla itself uses:
+    // background-position in rem and background-size. calc(100% - 33rem) is deliberately avoided -
+    // vanilla never mixes % and length inside calc, so it is not worth betting the panel on.
+    // Size stays 100%, so the gradient simply runs 33rem past the bottom edge and the last sliver
+    // of the end colour is clipped; at panel heights that is not a visible difference.
+    //
+    // !important is load-bearing. Legacy UI adds `.overwrite-legacy .content_XD5`, a two-class
+    // selector that sets background-image from the vanilla legacy gradient and so outranks this
+    // single class. Without it Legacy painted the body with vanilla's blue-grey instead of ours:
+    // the HC slider barely moved, the game's Interface Opacity still reached the panel through
+    // var(--uiOpacity), and the body clashed with our title bar. Same override City Watchdog uses.
+    //
+    // Body palette is City Watchdog's, which is also what EasyZoning copied for its own panel. It
+    // has to be this pair and not a lighter one: .titleBar already uses CWD's header colour
+    // rgb(36, 54, 66), and that header only reads as part of the same panel when the body sits in
+    // the same family. The previous rgb(95, 124, 136) top was from an older palette and turned the
+    // body into a pale grey at full opacity while the header stayed dark - the two looked like
+    // pieces of different panels. Low slider values hid it because alpha did all the work.
+    background-image: linear-gradient(
+        to bottom,
+        rgba(55, 82, 96, var(--hc-panel-alpha-top)),
+        rgba(31, 45, 60, var(--hc-panel-alpha-bottom))
+    ) !important;
+    background-repeat: no-repeat;
+    background-position: 0rem 33rem;
+    background-size: 100% 100%;
     box-shadow: 0 6rem 18rem rgba(0, 0, 0, 0.16);
 }
 
+// Dark deliberately paints no Hover Colors surface. The resolved vanilla panel/menu classes on this
+// element supply the background, the Legacy/Modern skin, the blur, and the game's own Interface
+// Opacity - which is exactly what players pick this style for.
+//
+// It was briefly repainted by Hover Colors so that the opacity slider could drive it. That made the
+// two styles fight over one surface and left Dark looking like neither the game nor Standard, so the
+// surface went back to vanilla and the slider is now hidden entirely when Dark is selected.
+//
+// Control styling still lives in panel/styles/_panelDarker.scss.
 .panelDarker {
     --hc-uses-vanilla-panel-surface: 1;
 }
 
+// Idle header sits darker than the body so the title bar reads as its own strip.
+// Padding must stay symmetric: the strip is now visible, so any top/bottom mismatch shows up as the
+// title and its buttons riding low. Everything sizes in rem + border-box so it holds at any UI scale.
 .titleBar {
     min-height: 20rem;
     display: flex;
     align-items: center;
-    margin: -8rem -1rem 0 -1rem;
-    padding: 8rem 6rem 1rem 6rem;
-    border-radius: 12rem 12rem 0 0;
-    background-color: transparent;
+    box-sizing: border-box;
+    // Zero margins: .panelContent no longer has padding to cancel, so the header spans exactly the
+    // panel width in every skin instead of overhanging it.
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    padding: 4.5rem 6rem 4.5rem 6rem;
+    border-top-left-radius: 12rem;
+    border-top-right-radius: 12rem;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
     transition: background-color 120ms ease-out;
+}
+
+// Standard: see-through header. Hover goes lighter AND thinner so it opens up rather than
+// gaining a white film.
+.panelStandard .titleBar {
+    background-color: rgba(36, 54, 66, var(--hc-title-alpha));
 
     &:hover {
-        background-color: rgba(254, 255, 255, 0.08);
+        background-color: rgba(76, 98, 112, var(--hc-title-alpha-hover));
+    }
+}
+
+// Dark header: var(--panelColorDark), which is the exact variable vanilla paints its own panel
+// headers with (see .header_emp and .header_Quv in the game's index.css). Using the variable rather
+// than a colour of our own means the header is near-black like every other panel header, tracks the
+// Legacy/Modern skin on its own, and fades with the game's Interface Opacity through
+// --panelOpacityDark - all without a line of code on our side.
+//
+// It was briefly transparent, which left the header the same colour as the body and made the panel
+// read as one flat slab with no title strip.
+//
+// The radius has to track the skin rather than our own 12rem. Vanilla paints the panel background
+// with .content_XD5, which has NO radius, while the rounding lives on .panel_YqS as
+// var(--panelRadius) - 12rem in some skins, 0, 4, 5, 6 or 14rem in others. Where ours was rounded
+// more than the panel, the top corners showed the translucent vanilla background instead of the
+// header: the wedges that appear on hover.
+.panelDarker .titleBar {
+    border-top-left-radius: var(--panelRadius);
+    border-top-right-radius: var(--panelRadius);
+    background-color: var(--panelColorDark);
+
+    // Hover steps from vanilla's dark panel colour to its normal one - the same pair the game uses
+    // between a panel's header and its body. That is lighter in colour AND lower in alpha
+    // (--panelOpacityNormal 0.55 against --panelOpacityDark 0.71), so the strip lifts and turns a
+    // little see-through at once, without a white film painted over it. A custom rgba wash was
+    // tried first and read far too bright; this one also tracks the skin and the game's Interface
+    // Opacity on its own, because both variables already do.
+    &:hover {
+        background-color: var(--panelColorNormal);
     }
 }
 
@@ -77,8 +243,9 @@
     user-select: none;
 }
 
+// Idle title is blue; hover/drag flips it to white (reverse of the original pair).
 .titleText {
-    color: rgba(254, 255, 255, 0.96);
+    color: #54d7ff;
     font-size: var(--hc-title-font-size);
     font-weight: 600;
     letter-spacing: var(--hc-title-letter-spacing);
@@ -90,27 +257,32 @@
 
 .titleBar:hover .titleText,
 .titleDragHandleActive .titleText {
-    color: #54d7ff;
+    color: rgba(254, 255, 255, 0.96);
 }
 
-.closeButton,
-.collapseButton {
-    flex: 0 0 24rem;
-    width: 24rem;
-    height: 24rem;
-    min-width: 24rem;
-    margin-left: 8rem;
-    padding: 0 !important;
-    overflow: visible;
+.eyeButton,
+.collapseButton,
+.closeButton {
+  flex: 0 0 24rem;
+  width: 24rem;
+  height: 24rem;
+  min-width: 24rem;
+  margin-left: 6rem;
+  padding: 0 !important;
+  overflow: visible;
+}
+.closeButton {
+  margin-left: 5rem;
 }
 
-.closeButton .closeIcon,
-.collapseButton .collapseIcon {
-    display: block;
-    pointer-events: none;
-    transform: scale(1);
-    transform-origin: center;
-    transition: opacity 120ms ease-out, transform 120ms ease-out;
+.eyeButton .eyeIcon,
+.collapseButton .collapseIcon,
+.closeButton .closeIcon {
+  display: block;
+  pointer-events: none;
+  transform: scale(1);
+  transform-origin: center;
+  transition: opacity 120ms ease-out, transform 120ms ease-out;
 }
 
 .closeButton .closeIcon {
@@ -133,6 +305,22 @@
 .collapseButton:hover .collapseIcon {
     opacity: 1;
     transform: scale(1.10);
+}
+
+// Deliberately the largest header glyph: it is the one state indicator players scan for.
+.eyeButton .eyeIcon {
+  width: 22rem;
+  height: 22rem;
+  opacity: 0.95;
+}
+.eyeButton:hover .eyeIcon {
+  opacity: 1;
+  transform: scale(1.10);
+}
+
+// Highlights OFF: keep the red slash at full strength so the state is obvious.
+.eyeButton .eyeIconOff {
+  opacity: 1;
 }
 
 .infoButton,
@@ -171,9 +359,7 @@
     }
 }
 
-.titleBar .infoButton {
-    margin-top: -2rem;
-}
+// No nudge here: the title bar centers its own row, so any offset would un-center the (i).
 
 .infoButtonTooltipsOff {
     background-color: transparent !important;
@@ -245,8 +431,16 @@
     padding: 6rem 8rem 5rem 8rem;
 }
 
+// Collapsed hides the action bar entirely, so this padding is the only thing between the outline
+// row's buttons and the bottom edge of the panel - the original 1rem left the first icon looking
+// like the panel had been cut off.
+//
+// Both sides are set here rather than inheriting .body's 6rem/5rem. Collapsed is a compact view and
+// carries a single row, so it takes 1rem off each side: enough clearance that the row is not touching
+// an edge, without the roomy padding that suits the full panel.
 .bodyCollapsed {
-    padding-bottom: 1rem;
+    padding-top: 5rem;
+    padding-bottom: 5rem;
 }
 
 .bodyCollapsed .outlineRow {
@@ -265,13 +459,16 @@
     margin-top: 2.5rem;
 }
 
-.body > .controlRow:nth-child(3) {
+// Divider above the Guidelines row. Selected by class, not child index, so inserting rows above it
+// cannot move the line onto the wrong row. Kept at the old selector's weight so the
+// `.controlRow + .controlRow` margin still loses to it.
+.body > .controlRow.guidelinesRow {
     margin-top: 5rem;
     padding-top: 5rem;
     padding-bottom: 4rem;
 }
 
-.body > .controlRow:nth-child(3)::before {
+.body > .controlRow.guidelinesRow::before {
     content: "";
     position: absolute;
     top: 0;
@@ -282,7 +479,7 @@
     pointer-events: none;
 }
 
-.panelDarker .body > .controlRow:nth-child(3)::before {
+.panelDarker .body > .controlRow.guidelinesRow::before {
     background-color: rgba(254, 255, 255, 0.20);
 }
 
@@ -327,4 +524,121 @@
 
 .outlineRight > * + * {
   margin-left: 4rem;
+}
+
+// Panel background opacity, driven by the Options slider (30-100 step 5).
+// Standard only: Dark uses the vanilla surface and the game's own Interface Opacity, and the
+// Options slider is hidden outright when Dark is selected rather than sitting there inert.
+//
+// The percent maps straight onto alpha, the way City Watchdog does it, scaled so the top of the
+// slider lands on 0.95 rather than 1.0. A glass panel that never goes fully opaque keeps a trace
+// of the city behind it even at maximum, which is the point of this style.
+// Only background alpha changes, so text, icons, sliders and swatches stay fully readable.
+//
+// The bottom stop trails the top by City Watchdog's 0.917 ratio, which is what gives the body its
+// slight fade. The ratio eases back out towards the top of the range so the last step is flat
+// across the whole body instead of having a bottom edge lighter than the top.
+.panelOpacity30 {
+    --hc-panel-alpha-top: 0.285;
+    --hc-panel-alpha-bottom: 0.2684;
+    --hc-title-alpha: 0.285;
+    --hc-title-alpha-hover: 0.1821;
+}
+
+.panelOpacity35 {
+    --hc-panel-alpha-top: 0.3325;
+    --hc-panel-alpha-bottom: 0.3146;
+    --hc-title-alpha: 0.3325;
+    --hc-title-alpha-hover: 0.2125;
+}
+
+.panelOpacity40 {
+    --hc-panel-alpha-top: 0.38;
+    --hc-panel-alpha-bottom: 0.3611;
+    --hc-title-alpha: 0.38;
+    --hc-title-alpha-hover: 0.2428;
+}
+
+.panelOpacity45 {
+    --hc-panel-alpha-top: 0.4275;
+    --hc-panel-alpha-bottom: 0.408;
+    --hc-title-alpha: 0.4275;
+    --hc-title-alpha-hover: 0.2732;
+}
+
+.panelOpacity50 {
+    --hc-panel-alpha-top: 0.475;
+    --hc-panel-alpha-bottom: 0.4553;
+    --hc-title-alpha: 0.475;
+    --hc-title-alpha-hover: 0.3035;
+}
+
+.panelOpacity55 {
+    --hc-panel-alpha-top: 0.5225;
+    --hc-panel-alpha-bottom: 0.503;
+    --hc-title-alpha: 0.5225;
+    --hc-title-alpha-hover: 0.3339;
+}
+
+.panelOpacity60 {
+    --hc-panel-alpha-top: 0.57;
+    --hc-panel-alpha-bottom: 0.5511;
+    --hc-title-alpha: 0.57;
+    --hc-title-alpha-hover: 0.3642;
+}
+
+.panelOpacity65 {
+    --hc-panel-alpha-top: 0.6175;
+    --hc-panel-alpha-bottom: 0.5996;
+    --hc-title-alpha: 0.6175;
+    --hc-title-alpha-hover: 0.3946;
+}
+
+.panelOpacity70 {
+    --hc-panel-alpha-top: 0.665;
+    --hc-panel-alpha-bottom: 0.6484;
+    --hc-title-alpha: 0.665;
+    --hc-title-alpha-hover: 0.4249;
+}
+
+.panelOpacity75 {
+    --hc-panel-alpha-top: 0.7125;
+    --hc-panel-alpha-bottom: 0.6977;
+    --hc-title-alpha: 0.7125;
+    --hc-title-alpha-hover: 0.4553;
+}
+
+.panelOpacity80 {
+    --hc-panel-alpha-top: 0.76;
+    --hc-panel-alpha-bottom: 0.7474;
+    --hc-title-alpha: 0.76;
+    --hc-title-alpha-hover: 0.4856;
+}
+
+.panelOpacity85 {
+    --hc-panel-alpha-top: 0.8075;
+    --hc-panel-alpha-bottom: 0.7974;
+    --hc-title-alpha: 0.8075;
+    --hc-title-alpha-hover: 0.516;
+}
+
+.panelOpacity90 {
+    --hc-panel-alpha-top: 0.855;
+    --hc-panel-alpha-bottom: 0.8479;
+    --hc-title-alpha: 0.855;
+    --hc-title-alpha-hover: 0.5463;
+}
+
+.panelOpacity95 {
+    --hc-panel-alpha-top: 0.9025;
+    --hc-panel-alpha-bottom: 0.8988;
+    --hc-title-alpha: 0.9025;
+    --hc-title-alpha-hover: 0.5767;
+}
+
+.panelOpacity100 {
+    --hc-panel-alpha-top: 0.95;
+    --hc-panel-alpha-bottom: 0.95;
+    --hc-title-alpha: 0.95;
+    --hc-title-alpha-hover: 0.607;
 }

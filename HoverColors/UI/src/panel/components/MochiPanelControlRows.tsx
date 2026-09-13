@@ -1,3 +1,11 @@
+// <copyright file="MochiPanelControlRows.tsx" company="River-Mochi">
+// Copyright (C) 2026 River-Mochi.
+// Licensed under the GNU General Public License v3.0 or later,
+// with the Cities: Skylines II Linking Exception.
+// See LICENSE and LICENSE-EXCEPTION in the project root.
+// Copyright and license notices MUST be preserved.
+// ================= </copyright> ======================
+
 // File: UI/src/panel/components/MochiPanelControlRows.tsx
 // Purpose: Visual rows for Outline, Fill, and Guidelines. Logic/state stays in MochiColorPickerPanel.tsx.
 
@@ -15,6 +23,7 @@ import {
 } from "../helpers/MochiPanelColorUtils";
 import { useMochiPanelText } from "../hooks/useMochiPanelText";
 import fillIconSrc from "../../../images/MainElements-Fill3.svg";
+import outlineThicknessIconSrc from "../../../images/outline-thickness.svg";
 import outlineIconSrc from "../../../images/MainElements_short_bigTriangle.svg";
 import guidelinesIconSrc from "../../../images/GuideLines4.svg";
 import switchIconSrc from "../../../images/icon-dbl-arrows.svg";
@@ -38,6 +47,8 @@ interface MochiPanelControlRowsProps {
   outline: Color;
   ownerColor: Color;
   fillA: number;
+  fillColor: Color;
+  outlineThicknessScale: number;
   guidelineLinesColor: Color;
   guidelinePreviewColor: Color;
   guidelineDashedColor: Color;
@@ -46,6 +57,7 @@ interface MochiPanelControlRowsProps {
   preset2Color: Color;
 
   colorPickerDirection: PickerDirection;
+  fillPickerDirection: PickerDirection;
   ownerPickerDirection: PickerDirection;
   guidelineLinesPickerDirection: PickerDirection;
   guidelinePreviewPickerDirection: PickerDirection;
@@ -56,6 +68,7 @@ interface MochiPanelControlRowsProps {
   preset2Active: boolean;
 
   swatchHovered: boolean;
+  fillSwatchHovered: boolean;
   ownerSwatchHovered: boolean;
   guidelineLinesHovered: boolean;
   guidelinePreviewHovered: boolean;
@@ -64,12 +77,15 @@ interface MochiPanelControlRowsProps {
   preset2Hovered: boolean;
 
   setSwatchHovered: React.Dispatch<React.SetStateAction<boolean>>;
+  setFillSwatchHovered: React.Dispatch<React.SetStateAction<boolean>>;
   setOwnerSwatchHovered: React.Dispatch<React.SetStateAction<boolean>>;
   setGuidelineLinesHovered: React.Dispatch<React.SetStateAction<boolean>>;
   setGuidelinePreviewHovered: React.Dispatch<React.SetStateAction<boolean>>;
   setGuidelineDashedHovered: React.Dispatch<React.SetStateAction<boolean>>;
   setPreset1Hovered: React.Dispatch<React.SetStateAction<boolean>>;
   setPreset2Hovered: React.Dispatch<React.SetStateAction<boolean>>;
+  setOutlinePickerOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setFillPickerOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setOwnerPickerOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setGuidelineLinesPickerOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setGuidelinePreviewPickerOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -82,6 +98,7 @@ interface MochiPanelControlRowsProps {
   handlePresetMouseUp: (slot: 1 | 2) => () => void;
 
   outlineSwatchRef: React.RefObject<HTMLDivElement>;
+  fillSwatchRef: React.RefObject<HTMLDivElement>;
   ownerSwatchRef: React.RefObject<HTMLDivElement>;
   guidelineLinesPickerRef: React.RefObject<HTMLDivElement>;
   guidelinePreviewPickerRef: React.RefObject<HTMLDivElement>;
@@ -90,6 +107,9 @@ interface MochiPanelControlRowsProps {
   handleOutlineChange: (value: Color) => void;
   handleOwnerColorChange: (value: Color) => void;
   handleFillAChange: (value: number) => void;
+  handleFillColorChange: (value: Color) => void;
+  handleOutlineThicknessChange: (value: number) => void;
+  handleResetOutlineThickness: () => void;
   handleGuidelineLinesColorChange: (value: Color) => void;
   handleGuidelinePreviewColorChange: (value: Color) => void;
   handleGuidelineDashedColorChange: (value: Color) => void;
@@ -100,6 +120,7 @@ interface MochiPanelControlRowsProps {
   handleTogglePresetDefaults: () => void;
   handleRestorePresetDefaults: () => void;
   updateColorPickerDirection: () => void;
+  updateFillPickerDirection: () => void;
   updateOwnerPickerDirection: () => void;
   updateGuidelineLinesPickerDirection: () => void;
   updateGuidelinePreviewPickerDirection: () => void;
@@ -117,6 +138,8 @@ export const MochiPanelControlRows = ({
   outline,
   ownerColor,
   fillA,
+  fillColor,
+  outlineThicknessScale,
   guidelineLinesColor,
   guidelinePreviewColor,
   guidelineDashedColor,
@@ -124,6 +147,7 @@ export const MochiPanelControlRows = ({
   preset1Color,
   preset2Color,
   colorPickerDirection,
+  fillPickerDirection,
   ownerPickerDirection,
   guidelineLinesPickerDirection,
   guidelinePreviewPickerDirection,
@@ -132,6 +156,7 @@ export const MochiPanelControlRows = ({
   preset1Active,
   preset2Active,
   swatchHovered,
+  fillSwatchHovered,
   ownerSwatchHovered,
   guidelineLinesHovered,
   guidelinePreviewHovered,
@@ -139,12 +164,15 @@ export const MochiPanelControlRows = ({
   preset1Hovered,
   preset2Hovered,
   setSwatchHovered,
+  setFillSwatchHovered,
   setOwnerSwatchHovered,
   setGuidelineLinesHovered,
   setGuidelinePreviewHovered,
   setGuidelineDashedHovered,
   setPreset1Hovered,
   setPreset2Hovered,
+  setOutlinePickerOpen,
+  setFillPickerOpen,
   setOwnerPickerOpen,
   setGuidelineLinesPickerOpen,
   setGuidelinePreviewPickerOpen,
@@ -155,6 +183,7 @@ export const MochiPanelControlRows = ({
   handlePresetMouseDown,
   handlePresetMouseUp,
   outlineSwatchRef,
+  fillSwatchRef,
   ownerSwatchRef,
   guidelineLinesPickerRef,
   guidelinePreviewPickerRef,
@@ -162,6 +191,9 @@ export const MochiPanelControlRows = ({
   handleOutlineChange,
   handleOwnerColorChange,
   handleFillAChange,
+  handleFillColorChange,
+  handleOutlineThicknessChange,
+  handleResetOutlineThickness,
   handleGuidelineLinesColorChange,
   handleGuidelinePreviewColorChange,
   handleGuidelineDashedColorChange,
@@ -172,6 +204,7 @@ export const MochiPanelControlRows = ({
   handleTogglePresetDefaults,
   handleRestorePresetDefaults,
   updateColorPickerDirection,
+  updateFillPickerDirection,
   updateOwnerPickerDirection,
   updateGuidelineLinesPickerDirection,
   updateGuidelinePreviewPickerDirection,
@@ -232,7 +265,11 @@ export const MochiPanelControlRows = ({
                   onMouseEnter={() => setSwatchHovered(true)}
                   onMouseLeave={() => setSwatchHovered(false)}
                   onChange={handleOutlineChange}
-                  onOpenPicker={updateColorPickerDirection}
+                  onOpenPicker={() => {
+                    setOutlinePickerOpen(true);
+                    updateColorPickerDirection();
+                  }}
+                  onClosePicker={() => setOutlinePickerOpen(false)}
                 />
                 <span className={styles.outlineFieldHoverRing} aria-hidden="true" />
                 <span className={styles.outlineFieldActiveDot} aria-hidden="true" />
@@ -368,6 +405,38 @@ export const MochiPanelControlRows = ({
       {!collapsed && (
         <>
           <div className={styles.controlRow}>
+            <SideTooltip tooltip={tt(text.tooltipResetOutlineThickness)} side="left">
+              <Button
+                className={styles.controlIconButton}
+                variant="icon"
+                onSelect={handleResetOutlineThickness}
+                focusKey={focusDisabled}
+              >
+                <img src={outlineThicknessIconSrc} className={`${styles.controlIcon} ${styles.idleIcon}`} alt="" />
+              </Button>
+            </SideTooltip>
+
+            <SideTooltip tooltip={tt(text.tooltipOutlineThickness)} side="right">
+              <div className={styles.controlBody}>
+                <div className={styles.sliderRow}>
+                  <MochiSlider
+                    focusKey={focusDisabled}
+                    className={styles.slider}
+                    value={outlineThicknessScale}
+                    start={0}
+                    end={2}
+                    gamepadStep={0.1}
+                    onChange={handleOutlineThicknessChange}
+                  />
+                  <div className={`${styles.valueField} ${numberFieldClass}`}>
+                    {outlineThicknessScale.toFixed(1)}
+                  </div>
+                </div>
+              </div>
+            </SideTooltip>
+          </div>
+
+          <div className={styles.controlRow}>
             <SideTooltip tooltip={tt(text.tooltipResetFill)} side="left">
               <Button
                 className={styles.controlIconButton}
@@ -379,9 +448,52 @@ export const MochiPanelControlRows = ({
               </Button>
             </SideTooltip>
 
-            <SideTooltip tooltip={tt(text.tooltipFillOpacity)} side="right">
-              <div className={styles.controlBody}>
-                <div className={styles.sliderRow}>
+            <div className={`${styles.controlBody} ${styles.fillControlBody}`}>
+              <SideTooltip tooltip={tt(text.tooltipFillSwatch)} side="right">
+                <div
+                  ref={fillSwatchRef}
+                  className={`${styles.outlineFieldShell} ${fillSwatchHovered ? styles.outlineFieldShellHovered : ""}`}
+                  onMouseOver={() => {
+                    if (!fillSwatchHovered) {
+                      setFillSwatchHovered(true);
+                    }
+                    updateFillPickerDirection();
+                  }}
+                  onMouseMove={() => {
+                    if (!fillSwatchHovered) {
+                      setFillSwatchHovered(true);
+                    }
+                    updateFillPickerDirection();
+                  }}
+                  onMouseLeave={() => setFillSwatchHovered(false)}
+                  onMouseDown={updateFillPickerDirection}
+                >
+                  <ColorField
+                    focusKey={focusDisabled}
+                    className={styles.outlineField}
+                    value={fillColor}
+                    alpha={true}
+                    popupDirection={fillPickerDirection}
+                    hideHint={true}
+                    hexInput={true}
+                    // Compact picker, same as Owner and the guideline swatches. Only Outline gets
+                    // the full wheel.
+                    colorWheel={false}
+                    onMouseEnter={() => setFillSwatchHovered(true)}
+                    onMouseLeave={() => setFillSwatchHovered(false)}
+                    onChange={handleFillColorChange}
+                    onOpenPicker={() => {
+                      setFillPickerOpen(true);
+                      updateFillPickerDirection();
+                    }}
+                    onClosePicker={() => setFillPickerOpen(false)}
+                  />
+                  <span className={styles.outlineFieldHoverRing} aria-hidden="true" />
+                </div>
+              </SideTooltip>
+
+              <SideTooltip tooltip={tt(text.tooltipFillOpacity)} side="right">
+                <div className={`${styles.sliderRow} ${styles.fillSliderRow}`}>
                   <MochiSlider
                     focusKey={focusDisabled}
                     className={styles.slider}
@@ -395,11 +507,11 @@ export const MochiPanelControlRows = ({
                     {`${Math.round(fillA * 100)}%`}
                   </div>
                 </div>
-              </div>
-            </SideTooltip>
+              </SideTooltip>
+            </div>
           </div>
 
-          <div className={styles.controlRow}>
+          <div className={`${styles.controlRow} ${styles.guidelinesRow}`}>
             <SideTooltip tooltip={tt(text.tooltipResetGuidelines)} side="left">
               <Button
                 className={styles.controlIconButton}

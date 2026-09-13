@@ -1,3 +1,11 @@
+// <copyright file="MochiPanelPieces.tsx" company="River-Mochi">
+// Copyright (C) 2026 River-Mochi.
+// Licensed under the GNU General Public License v3.0 or later,
+// with the Cities: Skylines II Linking Exception.
+// See LICENSE and LICENSE-EXCEPTION in the project root.
+// Copyright and license notices MUST be preserved.
+// ================= </copyright> ======================
+
 // File: UI/src/panel/components/MochiPanelPieces.tsx
 // Purpose: Small reusable pieces for MochiColorPickerPanel.tsx.
 
@@ -81,7 +89,9 @@ type DragGripProps = {
 };
 
 export const DragGrip = ({ active, tooltip, tooltipSide, onMouseDown }: DragGripProps) => (
-    <SideTooltip tooltip={tooltip} side={tooltipSide ?? "below"}>
+    // Always centred under the panel: the grip sits bottom-right, so a left-flush tooltip looked
+    // detached from it.
+    <SideTooltip tooltip={tooltip} side={tooltipSide ?? "below"} align="center">
         <div
             className={`${styles.dragGrip} ${active ? styles.dragGripActive : ""}`}
             onMouseDown={onMouseDown}

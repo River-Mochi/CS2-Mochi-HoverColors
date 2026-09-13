@@ -1,3 +1,11 @@
+// <copyright file="_actionBar.scss" company="River-Mochi">
+// Copyright (C) 2026 River-Mochi.
+// Licensed under the GNU General Public License v3.0 or later,
+// with the Cities: Skylines II Linking Exception.
+// See LICENSE and LICENSE-EXCEPTION in the project root.
+// Copyright and license notices MUST be preserved.
+// ================= </copyright> ======================
+
 // File: UI/src/panel/styles/_actionBar.scss
 // Purpose: Bottom action bar and shared bottom button styles.
 
@@ -8,7 +16,11 @@
     justify-content: space-between;
     align-items: center;
     margin-top: -2rem;
-    padding: 5rem 8rem 3rem 8rem;
+    // Bottom is deliberately much larger than the top. The buttons sat almost on the panel edge,
+    // which read as a clipped panel rather than a deliberate margin - most obvious on the collapsed
+    // panel, where this row is the last thing before the bottom corner. The row moves up 1rem and
+    // gains another 1rem underneath.
+    padding: 4rem 8rem 7rem 8rem;
     border-top: 1rem solid rgba(254, 255, 255, 0.16);
 }
 

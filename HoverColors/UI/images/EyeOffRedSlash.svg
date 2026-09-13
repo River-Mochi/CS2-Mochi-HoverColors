@@ -1,0 +1,30 @@
+<!-- File: EyeOffRedSlash.svg -->
+<!-- Purpose: Header eye button, highlights-OFF state. White eye with a red slash so OFF reads at a glance. -->
+<!-- Sized 38x38 to match the vanilla Media/PhotoMode/HideUIOff.svg used for the ON state. -->
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="38"
+     height="38"
+     viewBox="0 0 38 38"
+     role="img"
+     aria-label="Highlights off">
+
+  <rect width="38" height="38" rx="6" fill="rgba(78,86,90,0.18)"/>
+
+  <g fill="none"
+     stroke="#FFFFFF"
+     stroke-width="3"
+     stroke-linecap="round"
+     stroke-linejoin="round">
+
+    <path d="M4.4 19Q19 0 33.6 19Q19 38 4.4 19Z"/>
+    <circle cx="19" cy="19" r="4.6"/>
+
+  </g>
+
+  <path d="M6.4 6.4 31.6 31.6"
+        fill="none"
+        stroke="#F55A5A"
+        stroke-width="3.4"
+        stroke-linecap="round"/>
+
+</svg>

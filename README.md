@@ -1,111 +1,98 @@
-# Hover Colors [HC]
+# Hover Colors + Highlights [HC]
 
-Recolor hover highlights, reduce visual clutter, and make area tools easier to see in Cities: Skylines II.
+Hover Colors lets you **change, dim, or hide the game's bright hover highlights** and makes several building and area tools easier to see.
 
-Hover Colors lets you change the default blue hover outline, adjust opacity, customize guideline colors, and make Surface and District tools easier to work with.
+Change highlight colors, transparency, outline thickness, Fill color, Guidelines, District colors, and more — directly from a compact in-city panel.
 
-## Features
+## Highlights
 
-- Change hover outline color and opacity.
-- Change owner / parent-object highlight color and opacity.
-- Adjust hover fill opacity.
-- Save quick color presets for fast switching.
-- Customize guideline colors:
-  - S1: guide circles / spacing lines
-  - S2: road/tool preview overlay
-  - S3: dashed guideline color
-- Adjust guideline opacity from the panel or Options menu.
-- Toggle guideline colors between vanilla and your last custom set.
-- Hide Surface tool preview fill so layered surfaces are easier to see.
-- Hide Specialized Industry extractor lot preview fill.
-- Change District overlay and border color / opacity.
-- Reset District colors back to vanilla.
-- Use a darker panel mode for Legacy UI or stronger contrast.
-- Keep vanilla-style warning colors for bulldozer, roads, NetLanes, and placement conflicts when desired.
-- Saves your colors and presets between sessions.
-- No Harmony patches.
-
-## How to Use
-
-Open the Hover Colors panel from the game top-left button, or use the panel hotkey.
-
-Default hotkeys:
-
-```text
-J = open / close Hover Colors panel
-K = toggle preset 1 / preset 2
-L = toggle Surface preview fill
-```
-
-You can change or remove hotkeys in the Hover Colors Options menu.
+- Change the default blue hover highlight to **any color**.
+- Adjust highlight **transparency**.
+- Make the **outline thinner or thicker**.
+- Give the inside **Fill** its own color and transparency.
+- **1-click Eye button** to hide/show normal hover highlights without changing your saved colors.
+- Works on buildings, cars, trees, citizens, props, roads, and more.
+- Full color picker with HEX color support.
 
 ## Presets
 
-Use the preset buttons to quickly swap saved looks.
+Save and quickly switch between your favorite color setups.
 
-- Tap preset `1` or `2` to apply it.
-- Hold preset `1` or `2` to save your current outline, fill, and opacity settings.
-- Use the switch button to swap between the extra preset set and your saved set.
+- Tap **1** or **2** to use a preset.
+- Hold **1** or **2** for 0.5s to save your current colors.
+- **[⇔]** switches between Set A and Set B.
+- **[↺]** switches between Hover Colors defaults and your saved colors.
 
-Guideline colors have their own controls.
+That's **4 custom saved presets** plus the mod defaults.
 
-## Guidelines
+## Guidelines + Area Tools
 
-The guideline row has three color swatches:
+### Guidelines
 
-```text
-S1 = guide circles / spacing lines
-S2 = road/tool preview overlay
-S3 = dashed guideline color
-```
+Change the colors and transparency of road guides, spacing lines, dashed guides, and tool previews.
 
-Use these to make road guides, spacing circles, and preview overlays easier to see.
+### Surface Tool
 
-You can also adjust guideline opacity separately from hover outline opacity.
+Hide the cloudy Surface preview fill so you can see the real ground while placing or layering surfaces.
 
-## Surface and District Tools
+### Specialized Industry
 
-Surface tool:
+Hide extractor lot preview fill while drawing farms, forestry, oil, ore, and other industry areas.
 
-- Hide the cloudy Surface preview fill while placing or editing surfaces.
-- This helps you see the actual ground and layered surface colors.
+### Districts
 
-District tool:
+Change District overlay and border colors, adjust transparency, or return them to the game's default colors.
 
-- Change District overlay and border color.
-- Adjust District opacity.
-- Hold the District button to reset District colors back to vanilla.
+## Easy to Use
 
-## Options Menu
+- Open Hover Colors from the **palette icon at the top-left of the game**.
+- Hover over panel buttons for short tooltip help.
+- The panel can be collapsed or moved anywhere on screen.
+- Choose between two panel styles: **Dark** matches the game's own panels, or **Glass** for a lighter see-through look with its own opacity slider.
+- Additional tool behavior, reset choices, panel preferences, tooltips, and hotkeys are available in the game's **Options menu**.
 
-Check the Hover Colors Options menu for:
+## Editor Mode
 
-- Tool color behavior for bulldozer and roads.
-- NetLanes behavior.
-- Overlap / placement warning behavior.
-- Darker panel mode.
-- Guideline opacity.
-- Hotkeys.
+Hover Colors also works in the **Editor**.
 
-Recommended tool behavior keeps important warning colors visible while preserving your saved custom colors.
+Use your Hover Colors panel hotkey to open the same panel while working in Editor mode.
 
 ## Compatibility
 
 - Save-game safe.
 - Safe to remove.
-- No Harmony patches.
-- Designed to use the game's own vanilla systems where possible.
+- Works alongside **Recolor**:
+  - Hover Colors changes highlights, guidelines, overlays, and previews.
+  - Recolor changes the actual object colors.
 
 ## Supported Languages
 
-- English, Français, Deutsch, Español, Italiano
-- Polski, Português Brasil, Português Portugal, 简体中文
-- 繁體中文, 日本語, 한국어, ภาษาไทย, Tiếng Việt, Türkçe
+English, Français, Deutsch, Español, Italiano, Polski, Português Brasil, Português Portugal, 日本語, 한국어, 简体中文, 繁體中文, ภาษาไทย, Tiếng Việt, Türkçe
 
 ## Feedback
 
-Suggestions and bug reports are welcome.
+Suggestions and bug reports are welcome through GitHub or Discord.
+
 
 ## License
 
-MIT - see [LICENSE](LICENSE).
+Hover Colors is licensed under the **GNU General Public License v3.0 or later (GPL-3.0-or-later)**.
+
+You may use, modify, and redistribute Hover Colors under the GPL. If you distribute Hover Colors or a modified version, the GPL requires the covered work to remain under the GPL,
+its copyright and license notices MUST be preserved, and the corresponding source code MUST be made available under the GPL.
+
+Changing class names, field names, reorganizing the code, or using AI to make those changes does not turn copied or derived Hover Colors code into unrelated original work.
+
+See [LICENSE](LICENSE) for the full license terms.
+
+### Forks and Redistribution
+
+Hover Colors is actively maintained and officially distributed through **Paradox Mods**.
+
+If you want to improve the mod, please consider contributing through a PR, opening an issue, or contacting me instead of publishing a separate near-copy.
+
+If you publish a fork, please clearly identify it as a fork or modified version, credit **River-Mochi / Hover Colors**, link back to this repository, and clearly explain what you changed.
+
+**Reposting an actively maintained mod under a new listing, without need when it's still being maintained by the original author, fragments the community and support for users.**
+
+> License/Fork notes inspired by StarQ's GPLv3-licensed **SMCP** project.

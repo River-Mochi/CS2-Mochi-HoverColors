@@ -1,68 +1,101 @@
 // <copyright file="Setting.cs" company="River-Mochi">
-// Copyright (c) 2026 River-Mochi. All rights reserved.
-// Licensed under the MIT License. You may not use this file except in compliance with this License.
-// See LICENSE file in the project root for full license information.
-// This notice and the MIT License notice must be kept with
-// all copies or substantial portions of this code.
+// Copyright (C) 2026 River-Mochi.
+// Licensed under the GNU General Public License v3.0 or later,
+// with the Cities: Skylines II Linking Exception.
+// See LICENSE and LICENSE-EXCEPTION in the project root.
+// Copyright and license notices MUST be preserved.
 // ================= </copyright> ======================
 
 // File: Settings/Setting.cs
 // Purpose: Defines Hover Colors settings, persistent storage, and the Options UI surface.
-// Layout: 2 tabs (Actions, About) following CityWatchdog/EasyZoning convention.
 // Note: the in-city panel color settings are intentionally NOT decorated for Options UI — they are
 // persisted here, read by cs2/api bindings, and applied by Systems/HoverColorsUISystem.cs.
 
-namespace HoverColors.Settings
+namespace HoverColors
 {
     using Colossal.IO.AssetDatabase; // FileLocation
     using Game.Input;       // BindingKeyboard
     using Game.Modding;     // IMod
     using Game.Settings;    // ModSetting, attributes
-    using Game.UI;          // ProxyBinding
-    using Game.UI.Widgets;  // Unit.kPercentage
+    using Game.UI;          // Unit.kPercentage
 
     [FileLocation("ModsSettings/HoverColors/HoverColors")]
-    [SettingsUITabOrder(Actions, About)]
-    [SettingsUIGroupOrder(kToolColors, kPanel, kGuidelines, kKeyBindings, kAboutInfo, kAboutLinks, kAboutDedication)]
-    [SettingsUIShowGroupName(kToolColors, kPanel, kKeyBindings, kGuidelines, kAboutDedication)]
+    [SettingsUITabOrder(Actions, KeyBindings, About)]
+    [SettingsUIGroupOrder(kToolColors, kPanel, kReset, kKeyBindings, kAboutInfo, kAboutLinks, kAboutDedication)]
+    [SettingsUIShowGroupName(kToolColors, kPanel, kReset, kKeyBindings, kAboutDedication)]
     public partial class HoverColorsSettings : ModSetting
     {
         // Tab IDs
-        internal const string Actions = nameof(Actions);
-        internal const string About = nameof(About);
+        public const string Actions = "Actions";
+        public const string KeyBindings = "KeyBindings";
+        public const string About = "About";
 
         // Group IDs
-        internal const string kToolColors = nameof(kToolColors);
-        internal const string kPanel = nameof(kPanel);
-        internal const string kGuidelines = nameof(kGuidelines);
-        internal const string kKeyBindings = nameof(kKeyBindings);
-        internal const string kAboutInfo = nameof(kAboutInfo);
-        internal const string kAboutLinks = nameof(kAboutLinks);
-        internal const string kAboutDedication = nameof(kAboutDedication);
+        internal const string kToolColors = "kToolColors";
+        internal const string kPanel = "kPanel";
+        internal const string kReset = "kReset";
+        internal const string kKeyBindings = "kKeyBindings";
+        internal const string kAboutInfo = "kAboutInfo";
+        internal const string kAboutLinks = "kAboutLinks";
+        internal const string kAboutDedication = "kAboutDedication";
 
-        public const int kToolColorModeRecommended = 0;
-        public const int kToolColorModeVanilla = 1;
-        public const int kToolColorModeCustom = 2;
+        // Panel style is an int dropdown rather than a bool so the two options can be named on
+        // screen. Dark is 0 and the default, which is what a new player should meet first: it is the
+        // game's own panel surface and therefore already matches whatever skin they run.
+        internal const int kPanelStyleDark = 0;
+        internal const int kPanelStyleStandard = 1;
 
-        public const int kGuidelineColorPresetVanilla = 0;
-        public const int kGuidelineColorPresetCustom = 4;
+        private int m_PanelStyle = kPanelStyleDark;
 
-        public const int kGuidelineDashedColorPresetVanilla = 0;
-        public const int kGuidelineDashedColorPresetYellow = 1;
-        public const int kGuidelineDashedColorPresetGreen = 2;
+        internal const int kMinPanelOpacityPercent = 30;
+        internal const int kMaxPanelOpacityPercent = 100;
+
+        // Glass Custom panel new install slider opacity setting 70% as a little transparent starter since player should see instant difference from Dark panel.
+        internal const int kDefaultPanelOpacityPercent = 70;
+
+        private int m_PanelOpacityPercent = kDefaultPanelOpacityPercent;
+
+        internal static int ClampPanelOpacity(int value)
+        {
+            int snapped = (int)System.Math.Round(value / 5.0) * 5;
+            return System.Math.Max(kMinPanelOpacityPercent, System.Math.Min(kMaxPanelOpacityPercent, snapped));
+        }
+
+        internal const int kToolColorModeRecommended = 0;
+        internal const int kToolColorModeVanilla = 1;
+        internal const int kToolColorModeCustom = 2;
+
+        internal const int kGuidelineColorPresetVanilla = 0;
+        internal const int kGuidelineColorPresetCustom = 4;
+
+        internal const int kGuidelineDashedColorPresetVanilla = 0;
+        internal const int kGuidelineDashedColorPresetYellow = 1;
+        internal const int kGuidelineDashedColorPresetGreen = 2;
         // Value 3 used to be an old test color; now it is Mochi Blue.
-        public const int kGuidelineDashedColorPresetMochiBlue = 3;
-        public const int kGuidelineDashedColorPresetCyanBlue = 4;
-        public const int kGuidelineDashedColorPresetCustom = 5;
+        internal const int kGuidelineDashedColorPresetMochiBlue = 3;
+        internal const int kGuidelineDashedColorPresetCyanBlue = 4;
+        internal const int kGuidelineDashedColorPresetCustom = 5;
+
+        // Outline thickness is stored as a multiplier on the vanilla shader width, not as a raw
+        // width, so 1.0 always means "whatever this game build's _OutlineWidth actually is".
+        internal const float kMinOutlineThicknessScale = 0f;
+        internal const float kMaxOutlineThicknessScale = 2f;
+
+        // Two distinct meanings that used to share one constant:
+        //   mod default  - what a fresh install / never-initialized save starts on
+        //   vanilla      - the captured runtime _OutlineWidth, i.e. "no change vs the game"
+        internal const float kModDefaultOutlineThicknessScale = 0.8f;
+        internal const float kVanillaOutlineThicknessScale = 1f;
 
         // Centralized default for the guideline opacity slider.
         // Vanilla CS2 is 100; lower = more transparent. Keep TSX fallback bindings in sync.
-        public const int kDefaultGuidelineOpacityPercent = 30;
+        internal const int kDefaultGuidelineOpacityPercent = 30;
 
         // Kept for old local test .coc files. The city icon now resets guidelines to mod defaults.
         public int GuidelineDefaultPercent { get; set; }
 
-        private const string kAboutLinksRow = nameof(kAboutLinksRow);
+        private const string kAboutLinksRow = "kAboutLinksRow";
+        internal const string kResetRow = "kResetRow";
 
         // Same Paradox URL pattern as CityWatchdog — lands on River-Mochi's author page filtered to CS2.
         private const string kUrlParadox =
@@ -76,8 +109,8 @@ namespace HoverColors.Settings
         //   - OwnerR/G/B   → parent/owner highlight color, e.g. main building while placing sub-buildings
         //   - OutlineA     → outline halo edge opacity  (material _OuterColor.a)
         //   - FillA        → fill overlay opacity inside the silhouette (material _InnerColor.a)
-        // The dropped OutlineInner*/OutlineOuter* fields from the early alpha are gone — their
-        // saved values from the .coc file are ignored and replaced by SetDefaults() on next load.
+        //   - FillR/G/B    → fill tint inside the silhouette             (material _InnerColor.RGB)
+        //   - OutlineThicknessScale → multiplier on the captured vanilla material _OutlineWidth
         // -----------------------------------------------------------------------
 
         [SettingsUIHidden]
@@ -107,6 +140,31 @@ namespace HoverColors.Settings
         [SettingsUIHidden]
         public float FillA { get; set; }
 
+        // Fill tint. The outline material carries this as _InnerColor.RGB, which the fullscreen
+        // outline pass combines with the per-object hover color, so white reproduces the old
+        // behavior of the fill simply taking the Outline color.
+        [SettingsUIHidden]
+        public float FillR { get; set; }
+
+        [SettingsUIHidden]
+        public float FillG { get; set; }
+
+        [SettingsUIHidden]
+        public float FillB { get; set; }
+
+        // Saves written before the fill tint existed have no FillR/G/B, so they deserialize as
+        // black. This flag lets MigrateAfterLoad hand those saves white instead.
+        [SettingsUIHidden]
+        public bool FillColorInitialized { get; set; }
+
+        [SettingsUIHidden]
+        public float OutlineThicknessScale { get; set; }
+
+        // 0 is a legitimate player choice here, so the migration needs its own marker rather than
+        // treating an unset value as zero.
+        [SettingsUIHidden]
+        public bool OutlineThicknessInitialized { get; set; }
+
         // District overlay color. Disabled by default so we do not touch vanilla/other-mod
         // district prefabs until the player picks a color from the in-game District picker.
         [SettingsUIHidden]
@@ -126,8 +184,8 @@ namespace HoverColors.Settings
 
         // -----------------------------------------------------------------------
         // Player-editable preset slots (slots 1 + 2 on the in-city panel)
-        // Not decorated for Options UI. Each slot stores the same five values as the
-        // live swatch (Outline RGBA + FillA). The panel's Save button overwrites a slot
+        // Not decorated for Options UI. Each slot stores the same values as the
+        // live swatch (Outline RGBA + Fill RGBA). The panel's Save button overwrites a slot
         // with the current live color; the slot button applies it back. Persisted in the
         // .coc like the live values, so the in-city panel restores them after a reboot.
         // -----------------------------------------------------------------------
@@ -148,6 +206,15 @@ namespace HoverColors.Settings
         public float Preset1FillA { get; set; }
 
         [SettingsUIHidden]
+        public float Preset1FillR { get; set; }
+
+        [SettingsUIHidden]
+        public float Preset1FillG { get; set; }
+
+        [SettingsUIHidden]
+        public float Preset1FillB { get; set; }
+
+        [SettingsUIHidden]
         public float Preset2R { get; set; }
 
         [SettingsUIHidden]
@@ -162,6 +229,14 @@ namespace HoverColors.Settings
         [SettingsUIHidden]
         public float Preset2FillA { get; set; }
 
+        [SettingsUIHidden]
+        public float Preset2FillR { get; set; }
+
+        [SettingsUIHidden]
+        public float Preset2FillG { get; set; }
+
+        [SettingsUIHidden]
+        public float Preset2FillB { get; set; }
 
         // Four persisted preset slots shown as two buttons in the in-city panel.
         // ActivePresetSet 0 = Set A, 1 = Set B. The panel still shows P1/P2 only.
@@ -204,6 +279,15 @@ namespace HoverColors.Settings
         public float PresetAlt1FillA { get; set; }
 
         [SettingsUIHidden]
+        public float PresetAlt1FillR { get; set; }
+
+        [SettingsUIHidden]
+        public float PresetAlt1FillG { get; set; }
+
+        [SettingsUIHidden]
+        public float PresetAlt1FillB { get; set; }
+
+        [SettingsUIHidden]
         public int PresetAlt1GuidelinePercent { get; set; }
 
         [SettingsUIHidden]
@@ -220,6 +304,15 @@ namespace HoverColors.Settings
 
         [SettingsUIHidden]
         public float PresetAlt2FillA { get; set; }
+
+        [SettingsUIHidden]
+        public float PresetAlt2FillR { get; set; }
+
+        [SettingsUIHidden]
+        public float PresetAlt2FillG { get; set; }
+
+        [SettingsUIHidden]
+        public float PresetAlt2FillB { get; set; }
 
         [SettingsUIHidden]
         public int PresetAlt2GuidelinePercent { get; set; }
@@ -252,6 +345,15 @@ namespace HoverColors.Settings
         public float PresetDefaultsBackup1FillA { get; set; }
 
         [SettingsUIHidden]
+        public float PresetDefaultsBackup1FillR { get; set; }
+
+        [SettingsUIHidden]
+        public float PresetDefaultsBackup1FillG { get; set; }
+
+        [SettingsUIHidden]
+        public float PresetDefaultsBackup1FillB { get; set; }
+
+        [SettingsUIHidden]
         public int PresetDefaultsBackup1GuidelinePercent { get; set; }
 
         [SettingsUIHidden]
@@ -268,6 +370,15 @@ namespace HoverColors.Settings
 
         [SettingsUIHidden]
         public float PresetDefaultsBackup2FillA { get; set; }
+
+        [SettingsUIHidden]
+        public float PresetDefaultsBackup2FillR { get; set; }
+
+        [SettingsUIHidden]
+        public float PresetDefaultsBackup2FillG { get; set; }
+
+        [SettingsUIHidden]
+        public float PresetDefaultsBackup2FillB { get; set; }
 
         [SettingsUIHidden]
         public int PresetDefaultsBackup2GuidelinePercent { get; set; }
@@ -288,6 +399,15 @@ namespace HoverColors.Settings
         public float PresetDefaultsBackupAlt1FillA { get; set; }
 
         [SettingsUIHidden]
+        public float PresetDefaultsBackupAlt1FillR { get; set; }
+
+        [SettingsUIHidden]
+        public float PresetDefaultsBackupAlt1FillG { get; set; }
+
+        [SettingsUIHidden]
+        public float PresetDefaultsBackupAlt1FillB { get; set; }
+
+        [SettingsUIHidden]
         public int PresetDefaultsBackupAlt1GuidelinePercent { get; set; }
 
         [SettingsUIHidden]
@@ -304,6 +424,15 @@ namespace HoverColors.Settings
 
         [SettingsUIHidden]
         public float PresetDefaultsBackupAlt2FillA { get; set; }
+
+        [SettingsUIHidden]
+        public float PresetDefaultsBackupAlt2FillR { get; set; }
+
+        [SettingsUIHidden]
+        public float PresetDefaultsBackupAlt2FillG { get; set; }
+
+        [SettingsUIHidden]
+        public float PresetDefaultsBackupAlt2FillB { get; set; }
 
         [SettingsUIHidden]
         public int PresetDefaultsBackupAlt2GuidelinePercent { get; set; }
@@ -433,41 +562,86 @@ namespace HoverColors.Settings
         // -----------------------------------------------------------------------
         // Actions tab — Panel readability and help
         // -----------------------------------------------------------------------
+        // Options UI lists a group in declaration order, so this block is ordered the way it should
+        // read on screen: Panel style, then Panel opacity, then Tooltips.
+
+        // Superseded by PanelStyle. Kept as persisted field so an upgrading player's existing
+        // choice survives, and kept in sync by the PanelStyle setter so anything still reading it
+        // (the UI binding, presets) sees the same answer. Hidden, never shown in Options again.
+        [SettingsUIHidden]
+        public bool UseDarkerPanel { get; set; }
+
+        // False on saves written before the dropdown existed, which is how MigrateAfterLoad knows to
+        // seed PanelStyle from UseDarkerPanel instead of letting the new Dark default overwrite it.
+        [SettingsUIHidden]
+        public bool PanelStyleInitialized { get; set; }
+
+        // Dark hands the surface to the vanilla panel: it follows the game's Legacy/Modern skin and
+        // the game's own Interface Opacity. Standard is the Hover Colors glass surface and is the
+        // only one the opacity slider below applies to.
+        [SettingsUIDropdown(typeof(HoverColorsSettings), nameof(GetPanelStyleItems))]
+        [SettingsUISection(Actions, kPanel)]
+        public int PanelStyle
+        {
+            get => m_PanelStyle;
+            set
+            {
+                m_PanelStyle = value == kPanelStyleStandard ? kPanelStyleStandard : kPanelStyleDark;
+                UseDarkerPanel = m_PanelStyle == kPanelStyleDark;
+            }
+        }
+
+        // Drives SettingsUIHideByCondition on the opacity slider below.
+        public bool IsDarkPanel() => PanelStyle == kPanelStyleDark;
+
+        // Background alpha for the in-city panel, 30-100 in steps of 5. Applied as discrete
+        // background classes in SCSS; CSS opacity is deliberately not used because it would fade
+        // the text, icons and swatches too.
+        //
+        // Hidden rather than greyed out when Dark is selected. Dark is painted by the game, so this
+        // slider has nothing to act on there, and a disabled control still invites the question of
+        // why it does nothing - the previous greyed-out version was the confusing part.
+        [SettingsUISlider(min = kMinPanelOpacityPercent, max = kMaxPanelOpacityPercent, step = 5, scalarMultiplier = 1, unit = Unit.kPercentage)]
+        [SettingsUIHideByCondition(typeof(HoverColorsSettings), nameof(IsDarkPanel))]
+        [SettingsUISection(Actions, kPanel)]
+        public int PanelOpacityPercent
+        {
+            get => m_PanelOpacityPercent;
+            set => m_PanelOpacityPercent = ClampPanelOpacity(value);
+        }
+
         // PanelTooltipsEnabled is player-facing now so new players do not accidentally
         // lose tooltip help from a title-bar button. The city info icon can only turn it back ON.
-
         [SettingsUISection(Actions, kPanel)]
         public bool PanelTooltipsEnabled { get; set; }
 
-        // Hidden in-city preference: collapses the panel down to the outline row only.
-        // Title-bar arrow toggles this; Options menu has no control for it.
+        // Hidden in-city preference: collapses panel to outline row only.
+        // Title-bar arrow toggle (no Options UI setting for it)
         [SettingsUIHidden]
         public bool PanelCollapsed { get; set; }
 
-        // Hidden in-city preference for the Surface tool button/hotkey.
-        // Default ON because creators mainly use this mod to see layered surfaces clearly.
+        // Eye button state. Keeps player's saved color/alpha untouched while normal hover is hidden.
+        [SettingsUIHidden]
+        public bool HoverHighlightsSuppressed { get; set; }
+
+        // Hidden in-city preference for Surface tool button/hotkey.
+        // Default ON because players mainly use this to see layered surfaces clearly.
         [SettingsUIHidden]
         public bool SurfaceToolAreasSuppressed { get; set; }
 
         // Hidden in-city preference for Specialized Industry area fill previews.
-        // This is AreaTypeMask.Lots, so it must be handled with Surface in one system.
+        // This is AreaTypeMask.Lots, must be handled with Surface in one system.
         [SettingsUIHidden]
         public bool SpecializedIndustryAreasSuppressed { get; set; }
 
         [SettingsUIHidden]
         public bool SpecializedIndustryAreasSuppressionInitialized { get; set; }
 
-        // User-facing label is "Darker panel". LegacyUI's extra transparency exposed
-        // the need for this, but Modern UI players can use it too if they prefer
-        // stronger panel contrast.
-        [SettingsUISection(Actions, kPanel)]
-        public bool UseDarkerPanel { get; set; }
-
         // -----------------------------------------------------------------------
-        // Actions tab — Guidelines
+        // Guidelines (in-city panel only)
         // -----------------------------------------------------------------------
-        // Only opacity stays in Options. Dashed guide color moved to the in-city panel
-        // so players can use the same color picker pattern as the other guideline colors.
+        // All guideline controls live on the city panel now, so none of these appear in Options.
+        // They are still persisted here and still read by the cs2/api bindings.
 
         [SettingsUIHidden]
         public int GuidelineLinesColorPreset { get; set; }
@@ -475,25 +649,29 @@ namespace HoverColors.Settings
         [SettingsUIHidden]
         public int GuidelinePreviewColorPreset { get; set; }
 
-        [SettingsUISlider(min = 0, max = 100, step = 5, scalarMultiplier = 1, unit = Unit.kPercentage)]
-        [SettingsUISection(Actions, kGuidelines)]
+        [SettingsUIHidden]
         public int GuidelineOpacityPercent { get; set; }
 
         // -----------------------------------------------------------------------
-        // Actions tab — Key bindings
+        // Key Bindings tab
         // -----------------------------------------------------------------------
 
-        [SettingsUISection(Actions, kKeyBindings)]
+        [SettingsUISection(KeyBindings, kKeyBindings)]
         [SettingsUIKeyboardBinding(BindingKeyboard.J, Mod.kTogglePanelActionName)]
         public ProxyBinding TogglePanelBinding { get; set; }
 
-        [SettingsUISection(Actions, kKeyBindings)]
-        [SettingsUIKeyboardBinding(BindingKeyboard.L, Mod.kToggleSurfaceToolAreasActionName)]
-        public ProxyBinding ToggleSurfaceToolAreasBinding { get; set; }
+        // Unbound keybind by default so HC cannot collide with other mod/game shortcut.
+        [SettingsUISection(KeyBindings, kKeyBindings)]
+        [SettingsUIKeyboardBinding(BindingKeyboard.None, Mod.kToggleHighlightsActionName)]
+        public ProxyBinding ToggleHoverHighlightsBinding { get; set; }
 
-        [SettingsUISection(Actions, kKeyBindings)]
+        [SettingsUISection(KeyBindings, kKeyBindings)]
         [SettingsUIKeyboardBinding(BindingKeyboard.K, Mod.kTogglePresetActionName)]
         public ProxyBinding TogglePresetBinding { get; set; }
+
+        [SettingsUISection(KeyBindings, kKeyBindings)]
+        [SettingsUIKeyboardBinding(BindingKeyboard.L, Mod.kToggleSurfaceToolAreasActionName)]
+        public ProxyBinding ToggleSurfaceToolAreasBinding { get; set; }
 
         // -----------------------------------------------------------------------
         // About tab

@@ -1,3 +1,11 @@
+// <copyright file="useMochiPanelText.ts" company="River-Mochi">
+// Copyright (C) 2026 River-Mochi.
+// Licensed under the GNU General Public License v3.0 or later,
+// with the Cities: Skylines II Linking Exception.
+// See LICENSE and LICENSE-EXCEPTION in the project root.
+// Copyright and license notices MUST be preserved.
+// ================= </copyright> ======================
+
 // File: UI/src/panel/hooks/useMochiPanelText.ts
 // Purpose: Centralized panel text lookup so the main panel component stays focused on UI state.
 
@@ -19,14 +27,18 @@ export const useMochiPanelText = () => {
             tooltipCollapse: l("HoverColors.UI.Tooltip.CollapsePanel"),
             tooltipDraggable: l("HoverColors.UI.Tooltip.Draggable"),
             tooltipFillOpacity: l("HoverColors.UI.Tooltip.FillOpacity"),
+            tooltipFillSwatch: l("HoverColors.UI.Tooltip.FillSwatch"),
             tooltipGuidelinesColor: l("HoverColors.UI.Tooltip.GuidelinesColor"),
             tooltipGuidelinesPreviewColor: l("HoverColors.UI.Tooltip.GuidelinesPreviewColor"),
             tooltipGuidelinesDashedColor: l("HoverColors.UI.Tooltip.GuidelinesDashedColor"),
             tooltipGuidelinesOpacity: l("HoverColors.UI.Tooltip.GuidelinesOpacity"),
+            tooltipHoverToggle: l("HoverColors.UI.Tooltip.HoverToggle"),
             tooltipInfo: tooltipsEnabled
                 ? l("HoverColors.UI.Tooltip.Info")
                 : l("HoverColors.UI.Tooltip.InfoDisabled"),
             tooltipOutlineSwatch: l("HoverColors.UI.Tooltip.OutlineSwatch"),
+            tooltipOutlineThickness: l("HoverColors.UI.Tooltip.OutlineThickness"),
+            tooltipResetOutlineThickness: l("HoverColors.UI.Tooltip.ResetOutlineThickness"),
             tooltipOwnerSwatch: l("HoverColors.UI.Tooltip.OwnerSwatch"),
             tooltipPreset1: l("HoverColors.UI.Tooltip.Preset1"),
             tooltipPreset2: l("HoverColors.UI.Tooltip.Preset2"),

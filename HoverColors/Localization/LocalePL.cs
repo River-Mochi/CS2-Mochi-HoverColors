@@ -1,24 +1,21 @@
 // <copyright file="LocalePL.cs" company="River-Mochi">
-// Copyright (c) 2026 River-Mochi. All rights reserved.
-// Licensed under the MIT License. You may not use this file except in compliance with this License.
-// See LICENSE file in the project root for full license information.
-// This notice and the MIT License notice must be kept with
-// all copies or substantial portions of this code.
+// Copyright (C) 2026 River-Mochi.
+// Licensed under the GNU General Public License v3.0 or later,
+// with the Cities: Skylines II Linking Exception.
+// See LICENSE and LICENSE-EXCEPTION in the project root.
+// Copyright and license notices MUST be preserved.
 // ================= </copyright> ======================
 
 // File: Localization/LocalePL.cs
 // Purpose: Polish (pl-PL) strings for the Options Menu.
 // Strings for the in-city cohtml panel live separately in L10n/lang/pl-PL.json.
 
-namespace HoverColors.Localization
+namespace HoverColors
 {
     using System.Collections.Generic;
-
     using Colossal;
 
-    using HoverColors.Settings;
-
-    public sealed class LocalePL : IDictionarySource
+    public class LocalePL : IDictionarySource
     {
         private readonly HoverColorsSettings m_Settings;
 
@@ -44,20 +41,21 @@ namespace HoverColors.Localization
 
                 // Tabs
                 { m_Settings.GetOptionTabLocaleID(HoverColorsSettings.Actions), "Akcje" },
+                { m_Settings.GetOptionTabLocaleID(HoverColorsSettings.KeyBindings), "Skróty" },
                 { m_Settings.GetOptionTabLocaleID(HoverColorsSettings.About), "O modzie" },
 
                 // Groups
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kToolColors), "Kolory narzędzi" },
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kPanel), "Panel" },
+                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kReset), "Resetowanie" },
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kKeyBindings), "Skróty" },
-                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kGuidelines), "Linie pomocnicze" },
                 // AboutInfo + AboutLinks intentionally have empty group headers.
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kAboutInfo), string.Empty },
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kAboutLinks), string.Empty },
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kAboutDedication), "Dedykacja" },
 
                 // Tool color behavior
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToolColorMode)), "Buldożer + drogi" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToolColorMode)), "▪ Buldożer + drogi" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ToolColorMode)),
                     "Steruje tymczasowymi kolorami obrysu, gdy aktywny jest buldożer lub narzędzia dróg.\n" +
                     "\n" +
@@ -73,7 +71,7 @@ namespace HoverColors.Localization
                 { m_Settings.GetToolColorModeLocaleID("Vanilla"), "2. Kolory vanilla" },
                 { m_Settings.GetToolColorModeLocaleID("Custom"), "3. Zachowaj mój kolor" },
 
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseOverlapWarningColor)), "Włącz obrys nakładających się elementów" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseOverlapWarningColor)), "▪ Włącz obrys nakładających się elementów" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseOverlapWarningColor)),
                     "<Włączenie zalecane>\n" +
                     "Zostawia widoczny łososiowy obrys vanilla, gdy obiekt lub sieć jest blokowana przez kolizję.\n" +
@@ -82,55 +80,94 @@ namespace HoverColors.Localization
                     "Działa ze wszystkimi trybami Buldożer + drogi i nie nadpisuje zapisanego koloru."
                 },
 
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseCustomColorsForNetLanes)), "Pozwól na własne kolory dla NetLanes" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseCustomColorsForNetLanes)), "▪ Pozwól na własne kolory dla NetLanes" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseCustomColorsForNetLanes)),
                     "<Włączenie zalecane>\n" +
-                    "Używa zapisanego koloru/przezroczystości HC przy stawianiu detali NetLane, jak płoty, żywopłoty, oznaczenia itp.\n" +
+                    "Używa zapisanego koloru/przezroczystości HC przy stawianiu detali NetLane, jak płoty, żywopłoty i oznaczenia.\n" +
                     "\n" +
                     "- Zwykłe drogi nadal używają ustawienia Buldożer + drogi z listy.\n" +
                     "- Wyłącz, jeśli te narzędzia mają używać błękitu vanilla z gry.\n" +
                     "- Kolor błędu nakładania nadal ma pierwszeństwo, gdy jest włączony (vanilla = łososiowy)."
                 },
 
-                // Panel
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelTooltipsEnabled)), "Dymki kolorów po najechaniu" },
+                // Panel style
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelStyle)), "▪ Styl panelu" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelStyle)),
+                    "**Ciemny (Vanilla)** używa powierzchni panelu z gry.\n" +
+                    "- Automatycznie pasuje do Legacy UI lub Modern UI.\n" +
+                    "- Korzysta z ustawienia przezroczystości interfejsu gry.\n" +
+                    "\n" +
+                    "**Szkło (Własny)** używa jaśniejszego szklanego panelu Hover Colors.\n" +
+                    "- Nawet przy 100% trochę miasta nadal prześwituje.\n" +
+                    "- Dodaje poniżej suwak krycia panelu.\n" +
+                    "\n" +
+                    "Wypróbuj oba! Zmienia się tylko tło tego panelu moda, nie interfejs gry.\n" +
+                    "\n" +
+                    "Wskazówka: gra rozmywa obraz za każdym panelem, dzięki czemu przyciski i suwaki są wyraźniejsze. Ustawienie przezroczystości interfejsu gry na 0% wyłącza rozmycie dla wszystkich paneli. 1% lub więcej je zachowuje."
+                },
+                { m_Settings.GetPanelStyleLocaleID("Dark"), "Ciemny (Vanilla)" },
+                { m_Settings.GetPanelStyleLocaleID("Glass"), "Szkło (Własny)" },
+
+                // Panel opacity
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)), "▪ Krycie panelu" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)),
+                    "Krycie tła panelu **Szkło (Własny)**.\n" +
+                    "\n" +
+                    "**30%** daje najbardziej przezroczysty i czysty wygląd.\n" +
+                    "**100%** jest prawie pełne, ale nadal lekko pokazuje miasto.\n" +
+                    "\n" +
+                    "Zmienia się tylko tło. Tekst, ikony i próbki kolorów pozostają zawsze czytelne.\n" +
+                    "\n" +
+                    "**Ciemny (Vanilla)** korzysta zamiast tego z przezroczystości interfejsu gry, więc po jego wybraniu ten suwak jest ukryty."
+                },
+
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelTooltipsEnabled)), "▪ Pokaż dymki (zalecane)" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelTooltipsEnabled)),
-                    "<Włączone> = pokaż dymki pomocy kolorów po najechaniu (zalecane [x]).\n" +
-                    "<Wyłączone> = ukryj dymki tego moda.\n" +
-                    "Dymki można wyłączyć tylko w tym menu Opcje.\n" +
-                    "W mieście możesz je włączyć z powrotem: kliknij Info (i) na pasku tytułu."
+                    "Dla większości graczy zalecamy <zostawić włączone>.\n" +
+                    "Pokazuje krótką pomoc po najechaniu na przyciski Hover Colors.\n" +
+                    "Po wyłączeniu kliknij Info (i) na pasku tytułu albo ponownie zaznacz tę opcję.\n" +
+                    "Aby uniknąć przypadków, dymki można wyłączyć tylko w tym menu Opcje."
                 },
 
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)), "Ciemniejszy panel" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)),
-                    "Włączone = <Ciemny panel>: dla graczy LegacyUI; działa też w Modern UI, jeśli wolisz mocniejszy kontrast.\n" +
-                    "Wyłączone = <Panel standardowy>: własny półprzezroczysty styl kolorów po najechaniu.\n" +
-                    "- Jaśniejszy, nowocześniejszy wygląd.\n" +
-                    "- Najlepsze dla większości graczy z nowym Modern UI.\n" +
-                    "\n" +
-                    "Wypróbuj oba. Zmienia tylko tło panelu moda, nie interfejs gry."
-                },
 
-                // Guidelines opacity slider
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.GuidelineOpacityPercent)), "Krycie linii pomocniczych (alpha)" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.GuidelineOpacityPercent)),
-                    "Steruje kryciem przerywanej linii wyrównania, przydatne przy drogach, płotach, propach itd.\n" +
+                // Reset buttons
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ResetModDefaults)), "Przywróć domyślne moda" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ResetModDefaults)),
+                    "Przywraca wszystkie ustawienia Hover Colors jak po nowej instalacji: kolory, grubość obrysu, narzędzia, prowadnice, panel i dymki.\n" +
                     "\n" +
-                    "**100%** domyślne gry.\n" +
-                    "**Niżej** bardziej przezroczyste.\n" +
-                    "**0%** ukrywa wszystko.\n" +
-                    "Zostań powyżej 15%, bo linia będzie słabo widoczna.\n" +
-                    "Ten sam suwak jest w panelu miasta. Oba są zsynchronizowane.\n" +
-                    "Zmiana tutaj wygodnie zmienia też suwak w panelu miasta."
+                    "**Usuwa też zapisane presety (Set A i Set B).**\n" +
+                    "\n" +
+                    "Skróty klawiszowe pozostają bez zmian.\n" +
+                    "To jak pierwsza instalacja Hover Colors."
                 },
+                { m_Settings.GetOptionWarningLocaleID(nameof(HoverColorsSettings.ResetModDefaults)),
+                    "Przywrócić wszystkie ustawienia Hover Colors jak po nowej instalacji?\n\nZapisane presety (Set A i Set B) zostaną usunięte." },
+
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ResetColorsToVanilla)), "Przywróć kolory vanilla" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ResetColorsToVanilla)),
+                    "Przywraca wygląd gry: obrys, podświetlenie właściciela, wypełnienie, grubość, prowadnice i dzielnice.\n" +
+                    "\n" +
+                    "Wszystko inne zostaje bez zmian: Buldożer/drogi, podglądy narzędzi, presety, panel i skróty.\n" +
+                    "\n" +
+                    "Uwaga: mod można usunąć bez resetu. Podświetlenia same wrócą do ustawień gry.\n"+
+                    "To tylko szybki reset kolorów do ustawień gry."
+                },
+                { m_Settings.GetOptionWarningLocaleID(nameof(HoverColorsSettings.ResetColorsToVanilla)),
+                    "Przywrócić kolory sterowane przez mod do wyglądu gry?\n\nPresety, zachowanie narzędzi i opcje panelu zostają." },
 
                 // Keybinds
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.TogglePanelBinding)), "Otwórz/zamknij panel główny" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.TogglePanelBinding)),
-                    "Atalho para <abrir / fechar> o painel de cores na cidade." },
-                { m_Settings.GetBindingKeyLocaleID(Mod.kTogglePanelActionName), "Przełącz panel kolorów po najechaniu" },
+                    "Skrót do <otwarcia / zamknięcia> panelu kolorów w mieście." },
+                { m_Settings.GetBindingKeyLocaleID(Mod.kTogglePanelActionName), "Przełącz panel Hover Colors" },
 
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleSurfaceToolAreasBinding)), "Podglądy narzędzia Surface wł./wył." },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleHoverHighlightsBinding)), "Szybkie oko wł./wył." },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ToggleHoverHighlightsBinding)),
+                    "Opcjonalny skrót dla przycisku oka: natychmiast włącza/wyłącza podświetlenie + wypełnienie.\n" +
+                    "Domyślnie bez klawisza, aby uniknąć konfliktów." },
+                { m_Settings.GetBindingKeyLocaleID(Mod.kToggleHighlightsActionName), "Szybkie oko wł./wył." },
+
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleSurfaceToolAreasBinding)), "Podglądy Surface wł./wył." },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ToggleSurfaceToolAreasBinding)),
                     "Skrót do <ukrycia lub pokazania> aktywnych linii granicy Surface podczas stawiania powierzchni." },
                 { m_Settings.GetBindingKeyLocaleID(Mod.kToggleSurfaceToolAreasActionName), "Warstwa podglądu Surface wł./wył." },
@@ -149,7 +186,7 @@ namespace HoverColors.Localization
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.VersionText)), string.Empty },
 
                 // About Paradox Mods link button
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.OpenParadox)), "Paradox Mods" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.OpenParadox)), "Paradox Mods Mochi" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.OpenParadox)), "**Otwórz stronę autora w Paradox Mods.**" },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.MochiDedicationText)),

@@ -1,9 +1,9 @@
 // <copyright file="Mod.cs" company="River-Mochi">
-// Copyright (c) 2026 River-Mochi. All rights reserved.
-// Licensed under the MIT License. You may not use this file except in compliance with this License.
-// See LICENSE file in the project root for full license information.
-// This notice and the MIT License notice must be kept with
-// all copies or substantial portions of this code.
+// Copyright (C) 2026 River-Mochi.
+// Licensed under the GNU General Public License v3.0 or later,
+// with the Cities: Skylines II Linking Exception.
+// See LICENSE and LICENSE-EXCEPTION in the project root.
+// Copyright and license notices MUST be preserved.
 // ================= </copyright> ======================
 
 // File: Mod.cs
@@ -20,8 +20,6 @@ namespace HoverColors
     using Game;
     using Game.Modding;
     using Game.SceneFlow;
-    using HoverColors.Localization;
-    using HoverColors.Settings;
     using HoverColors.Systems;
     using HoverColors.UI;
     using Unity.Entities;
@@ -32,9 +30,11 @@ namespace HoverColors
         public const string ModId = "HoverColors";
         public const string ModTag = "[HC]";
 
-        public const string kTogglePanelActionName = "TogglePanel";
-        public const string kToggleSurfaceToolAreasActionName = "ToggleSurfaceToolAreas";
-        public const string kTogglePresetActionName = "TogglePreset";
+        internal const string kTogglePanelActionName = "TogglePanel";
+        internal const string kToggleSurfaceToolAreasActionName = "ToggleSurfaceToolAreas";
+        internal const string kTogglePresetActionName = "TogglePreset";
+
+        internal const string kToggleHighlightsActionName = "ToggleHoverHighlights";
 
         public static readonly string ModVersion =
             Assembly.GetExecutingAssembly().GetName().Version?.ToString(3) ?? "1.0.0";
@@ -67,7 +67,7 @@ namespace HoverColors
                 return;
             }
 
-            HoverColorsSettings setting = new HoverColorsSettings(this);
+            HoverColorsSettings setting = new(this);
             Settings = setting;
 
             try

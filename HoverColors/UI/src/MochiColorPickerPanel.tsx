@@ -1,3 +1,11 @@
+// <copyright file="MochiColorPickerPanel.tsx" company="River-Mochi">
+// Copyright (C) 2026 River-Mochi.
+// Licensed under the GNU General Public License v3.0 or later,
+// with the Cities: Skylines II Linking Exception.
+// See LICENSE and LICENSE-EXCEPTION in the project root.
+// Copyright and license notices MUST be preserved.
+// ================= </copyright> ======================
+
 // File: UI/src/MochiColorPickerPanel.tsx
 // Purpose: Compact in-city hover-color panel anchored under the GameTopLeft icon button.
 // Layout: title bar + color control rows + bottom action bar.
@@ -10,11 +18,16 @@ import { VanillaComponentResolver } from "./utils/vanilla/VanillaComponentResolv
 import {
     CHANNEL,
     COMPACT_PICKER_BODY_CLASS,
+    PICKER_OPEN_BODY_CLASS,
     districtA$,
     districtB$,
     districtG$,
     districtR$,
     fillA$,
+    fillB$,
+    fillG$,
+    fillR$,
+    hoverHighlightsSuppressed$,
     guidelineLinesColorA$,
     guidelineLinesColorB$,
     guidelineLinesColorG$,
@@ -28,6 +41,7 @@ import {
     guidelinePreviewColorG$,
     guidelinePreviewColorR$,
     outlineA$,
+    outlineThicknessScale$,
     outlineB$,
     outlineG$,
     outlineR$,
@@ -36,6 +50,7 @@ import {
     ownerG$,
     ownerR$,
     panelCollapsed$,
+    panelOpacityPercent$,
     panelTooltipsEnabled$,
     preset1A$,
     preset1Active$,
@@ -64,9 +79,57 @@ import { usePresetHold } from "./panel/hooks/usePresetHold";
 import { SideTooltip, SideTooltipProvider } from "./panel/tooltip/SideTooltip";
 import infoIconSrc from "../images/AdvisorInfoViewWhite.svg";
 import closeIconSrc from "../images/Close.svg";
+// Highlights-OFF eye: mod icon so the slash can be red. ON state keeps the vanilla eye.
+import eyeOffIconSrc from "../images/EyeOffRedSlash.svg";
 import styles from "./MochiColorPickerPanel.module.scss";
 
-export const MochiColorPickerPanel = () => {
+// Snaps to the 5-step grid the Options slider produces and looks up the matching background
+// class. CSS opacity is deliberately avoided: it would fade text, icons, sliders and swatches too.
+// Both fallbacks are the C# kDefaultPanelOpacityPercent. They only apply for the frame before the
+// real setting arrives, or if a save carries a value no class was generated for.
+const panelOpacityClassFor = (value: number) => {
+    const normalized = Math.round(Math.min(100, Math.max(30, Number.isFinite(value) ? value : 70)) / 5) * 5;
+    return styles[`panelOpacity${normalized}`] ?? styles.panelOpacity70;
+};
+
+type MochiColorPickerPanelProps = {
+    editorMode?: boolean;
+};
+
+type PanelOrigin = { left: number; top: number };
+
+// Used when the launcher cannot be measured. Deliberately the same corner the Editor panel opens in,
+// so a panel that lands here still looks placed rather than lost.
+const FALLBACK_ORIGIN: PanelOrigin = { left: 16, top: 64 };
+
+// Gap between the launcher button and the top of the panel, matching the old margin-top: 6rem.
+const LAUNCHER_GAP_PX = 6;
+
+// The panel no longer lives inside the launcher, so it has to find out where the launcher is. This
+// is the one measurement in the panel, and it is the well-behaved case: the button has been laid out
+// since the game UI loaded, so unlike a freshly mutated tooltip its rect is settled by the time this
+// runs. A 0x0 rect still means Gameface had nothing useful to report - a hidden or not-yet-laid-out
+// element reads that way - so that answer is rejected rather than trusted, and the panel falls back
+// to a fixed corner. Read only: nothing here mutates the DOM.
+const getGamePanelOrigin = (): PanelOrigin => {
+    if (typeof document === "undefined") {
+        return FALLBACK_ORIGIN;
+    }
+
+    const launcher = document.querySelector("[data-hc-launcher='true']");
+    if (launcher == null) {
+        return FALLBACK_ORIGIN;
+    }
+
+    const rect = (launcher as HTMLElement).getBoundingClientRect();
+    if (rect.width === 0 && rect.height === 0) {
+        return FALLBACK_ORIGIN;
+    }
+
+    return { left: rect.left, top: rect.bottom + LAUNCHER_GAP_PX };
+};
+
+export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPanelProps) => {
     const boundOutline: Color = {
         r: useValue(outlineR$),
         g: useValue(outlineG$),
@@ -98,6 +161,13 @@ export const MochiColorPickerPanel = () => {
         a: useValue(guidelinePreviewColorA$),
     };
     const boundFillA = useValue(fillA$);
+    const boundFill: Color = {
+        r: useValue(fillR$),
+        g: useValue(fillG$),
+        b: useValue(fillB$),
+        a: boundFillA,
+    };
+    const boundOutlineThicknessScale = useValue(outlineThicknessScale$);
     const boundGuideline = useValue(guidelineOpacity$);
     const boundGuidelineDashedColor: Color = {
         r: useValue(guidelineDashedColorR$),
@@ -106,6 +176,7 @@ export const MochiColorPickerPanel = () => {
         a: Math.max(0, Math.min(1, boundGuideline / 100)),
     };
     const useDarkerPanel = useValue(useDarkerPanel$);
+    const panelOpacityPercent = useValue(panelOpacityPercent$);
     const surfaceToolAreasSuppressed = useValue(surfaceToolAreasSuppressed$);
     const specializedIndustryAreasSuppressed = useValue(specializedIndustryAreasSuppressed$);
     const vanillaOutlineActive = useValue(vanillaOutlineActive$);
@@ -119,6 +190,7 @@ export const MochiColorPickerPanel = () => {
     const text = useMochiPanelText();
     const tooltipsEnabled = useValue(panelTooltipsEnabled$);
     const panelCollapsed = useValue(panelCollapsed$);
+    const hoverHighlightsSuppressed = useValue(hoverHighlightsSuppressed$);
 
     // FormattedParagraphs lets vanilla Tooltip render JSON \n as real line breaks.
     const tt = React.useCallback(
@@ -138,6 +210,8 @@ export const MochiColorPickerPanel = () => {
     const [outline, setOutline] = React.useState<Color>(boundOutline);
     const [ownerColor, setOwnerColor] = React.useState<Color>(boundOwner);
     const [fillA, setFillA] = React.useState<number>(boundFillA);
+    const [fillColor, setFillColor] = React.useState<Color>(boundFill);
+    const [outlineThicknessScale, setOutlineThicknessScale] = React.useState<number>(boundOutlineThicknessScale);
     const [districtColor, setDistrictColor] = React.useState<Color>(boundDistrict);
     const [guidelineLinesColor, setGuidelineLinesColor] = React.useState<Color>(boundGuidelineLinesColor);
     const [guidelinePreviewColor, setGuidelinePreviewColor] = React.useState<Color>(boundGuidelinePreviewColor);
@@ -145,12 +219,15 @@ export const MochiColorPickerPanel = () => {
     const [guidelineOpacity, setGuidelineOpacity] = React.useState<number>(boundGuideline);
 
     const [colorPickerDirection, setColorPickerDirection] = React.useState<"up" | "down">("down");
+    const [fillPickerDirection, setFillPickerDirection] = React.useState<"up" | "down">("down");
     const [ownerPickerDirection, setOwnerPickerDirection] = React.useState<"up" | "down">("down");
     const [guidelineLinesPickerDirection, setGuidelineLinesPickerDirection] = React.useState<"up" | "down">("up");
     const [guidelinePreviewPickerDirection, setGuidelinePreviewPickerDirection] = React.useState<"up" | "down">("up");
     const [guidelineDashedPickerDirection, setGuidelineDashedPickerDirection] = React.useState<"up" | "down">("up");
     const [districtPickerDirection, setDistrictPickerDirection] = React.useState<"up" | "down">("up");
 
+    const [outlinePickerOpen, setOutlinePickerOpen] = React.useState(false);
+    const [fillPickerOpen, setFillPickerOpen] = React.useState(false);
     const [ownerPickerOpen, setOwnerPickerOpen] = React.useState(false);
     const [districtPickerOpen, setDistrictPickerOpen] = React.useState(false);
     const [districtMenuOpen, setDistrictMenuOpen] = React.useState(false);
@@ -160,6 +237,7 @@ export const MochiColorPickerPanel = () => {
 
     // ColorField can swallow hover events; React hover state keeps the visible rings reliable in COHTML.
     const [swatchHovered, setSwatchHovered] = React.useState(false);
+    const [fillSwatchHovered, setFillSwatchHovered] = React.useState(false);
     const [ownerSwatchHovered, setOwnerSwatchHovered] = React.useState(false);
     const [guidelineLinesHovered, setGuidelineLinesHovered] = React.useState(false);
     const [guidelinePreviewHovered, setGuidelinePreviewHovered] = React.useState(false);
@@ -170,6 +248,7 @@ export const MochiColorPickerPanel = () => {
 
     const panelAnchorRef = React.useRef<HTMLDivElement>(null);
     const outlineSwatchRef = React.useRef<HTMLDivElement>(null);
+    const fillSwatchRef = React.useRef<HTMLDivElement>(null);
     const ownerSwatchRef = React.useRef<HTMLDivElement>(null);
     const guidelineLinesPickerRef = React.useRef<HTMLDivElement>(null);
     const guidelinePreviewPickerRef = React.useRef<HTMLDivElement>(null);
@@ -190,28 +269,73 @@ export const MochiColorPickerPanel = () => {
         panelDragging,
         panelElementRef,
         handlePanelDragStart,
-    } = usePanelDrag();
+    } = usePanelDrag(editorMode ? "editor" : "game");
+
+    // Re-measured on open rather than once at module load, so the origin is right even when the
+    // launcher has shifted - another mod added a GameTopLeft button above it, or the UI rescaled.
+    const [gamePanelOrigin, setGamePanelOrigin] = React.useState<PanelOrigin>(getGamePanelOrigin);
+
+    React.useLayoutEffect(() => {
+        if (!editorMode) {
+            setGamePanelOrigin(getGamePanelOrigin());
+        }
+    }, [editorMode]);
     const { openAreasToolPanel } = useDistrictToolPanel();
 
     // Keep local controls synced when C# settings change through presets, reset buttons, or game reload.
     React.useEffect(() => { setOutline(boundOutline); }, [boundOutline.r, boundOutline.g, boundOutline.b, boundOutline.a]);
     React.useEffect(() => { setOwnerColor(boundOwner); }, [boundOwner.r, boundOwner.g, boundOwner.b, boundOwner.a]);
     React.useEffect(() => { setFillA(boundFillA); }, [boundFillA]);
+    React.useEffect(() => { setFillColor(boundFill); }, [boundFill.r, boundFill.g, boundFill.b, boundFill.a]);
+    React.useEffect(() => { setOutlineThicknessScale(boundOutlineThicknessScale); }, [boundOutlineThicknessScale]);
     React.useEffect(() => { setDistrictColor(boundDistrict); }, [boundDistrict.r, boundDistrict.g, boundDistrict.b, boundDistrict.a]);
     React.useEffect(() => { setGuidelineLinesColor(boundGuidelineLinesColor); }, [boundGuidelineLinesColor.r, boundGuidelineLinesColor.g, boundGuidelineLinesColor.b, boundGuidelineLinesColor.a]);
     React.useEffect(() => { setGuidelinePreviewColor(boundGuidelinePreviewColor); }, [boundGuidelinePreviewColor.r, boundGuidelinePreviewColor.g, boundGuidelinePreviewColor.b, boundGuidelinePreviewColor.a]);
     React.useEffect(() => { setGuidelineDashedColor(boundGuidelineDashedColor); }, [boundGuidelineDashedColor.r, boundGuidelineDashedColor.g, boundGuidelineDashedColor.b, boundGuidelineDashedColor.a]);
     React.useEffect(() => { setGuidelineOpacity(boundGuideline); }, [boundGuideline]);
 
+    // The vanilla picker popup rides the game's anchored-balloon layer, whose z-index is
+    // var(--tooltipIndex) = 20 by default. The panel carries no z-index of its own any more, but it
+    // is mounted at a UI root and so paints after the balloon on document order alone. Raising
+    // --tooltipIndex to the value the game itself uses behind a modal backdrop puts the popup back
+    // above the panel, in the city and in the Editor alike.
     React.useEffect(() => {
         if (typeof document === "undefined") {
             return;
         }
 
-        const compactPickerOpen = ownerPickerOpen || districtPickerOpen || guidelineLinesPickerOpen || guidelinePreviewPickerOpen || guidelineDashedPickerOpen;
+        const anyPickerOpen = outlinePickerOpen
+            || fillPickerOpen
+            || ownerPickerOpen
+            || districtPickerOpen
+            || guidelineLinesPickerOpen
+            || guidelinePreviewPickerOpen
+            || guidelineDashedPickerOpen;
+
+        document.body.classList.toggle(PICKER_OPEN_BODY_CLASS, anyPickerOpen);
+
+        return () => document.body.classList.remove(PICKER_OPEN_BODY_CLASS);
+    }, [
+        districtPickerOpen,
+        fillPickerOpen,
+        guidelineDashedPickerOpen,
+        guidelineLinesPickerOpen,
+        guidelinePreviewPickerOpen,
+        outlinePickerOpen,
+        ownerPickerOpen,
+    ]);
+
+    React.useEffect(() => {
+        if (typeof document === "undefined") {
+            return;
+        }
+
+        // Fill is a compact (colorWheel=false) picker too, so it needs the hex spacing fix.
+        const compactPickerOpen = fillPickerOpen || ownerPickerOpen || districtPickerOpen || guidelineLinesPickerOpen || guidelinePreviewPickerOpen || guidelineDashedPickerOpen;
         document.body.classList.toggle(COMPACT_PICKER_BODY_CLASS, compactPickerOpen);
 
-        if (!compactPickerOpen) {
+        // The Outline picker is full-size, but it still has to close on an outside click.
+        if (!compactPickerOpen && !outlinePickerOpen) {
             return () => document.body.classList.remove(COMPACT_PICKER_BODY_CLASS);
         }
 
@@ -235,6 +359,8 @@ export const MochiColorPickerPanel = () => {
                 return;
             }
 
+            setOutlinePickerOpen(false);
+            setFillPickerOpen(false);
             setDistrictPickerOpen(false);
             setOwnerPickerOpen(false);
             setGuidelineLinesPickerOpen(false);
@@ -247,7 +373,7 @@ export const MochiColorPickerPanel = () => {
             document.removeEventListener("mousedown", onMouseDown);
             document.body.classList.remove(COMPACT_PICKER_BODY_CLASS);
         };
-    }, [districtPickerOpen, guidelineDashedPickerOpen, guidelineLinesPickerOpen, guidelinePreviewPickerOpen, ownerPickerOpen]);
+    }, [districtPickerOpen, fillPickerOpen, guidelineDashedPickerOpen, guidelineLinesPickerOpen, guidelinePreviewPickerOpen, outlinePickerOpen, ownerPickerOpen]);
 
     React.useEffect(() => {
         if (!districtMenuOpen || typeof document === "undefined") {
@@ -313,7 +439,25 @@ export const MochiColorPickerPanel = () => {
     const handleFillAChange = (v: number) => {
         const value = Math.max(0, Math.min(1, v));
         setFillA(value);
+        setFillColor(prev => ({ ...prev, a: value }));
         trigger(CHANNEL, "SetFillAlpha", value);
+    };
+
+    // Slider steps in 0.1; rounding here keeps the readout off floating-point drift.
+    const handleOutlineThicknessChange = (v: number) => {
+        const value = Math.round(Math.max(0, Math.min(2, v)) * 10) / 10;
+        setOutlineThicknessScale(value);
+        trigger(CHANNEL, "SetOutlineThickness", value);
+    };
+
+    // Swatch owns tint + opacity; the slider is the same alpha shown a second way.
+    const handleFillColorChange = (value: Color) => {
+        const syncedValue = normalizeColorFieldValue(value);
+        const alpha = Math.max(0, Math.min(1, typeof syncedValue.a === "number" ? syncedValue.a : 1));
+        const fillValue = { ...syncedValue, a: alpha };
+        setFillColor(fillValue);
+        setFillA(alpha);
+        trigger(CHANNEL, "SetFillColor", fillValue.r, fillValue.g, fillValue.b, alpha);
     };
 
     const handleDistrictColorChange = (value: Color) => {
@@ -352,9 +496,11 @@ export const MochiColorPickerPanel = () => {
     };
 
     const handleClosePanel = () => trigger(CHANNEL, "SetPanelOpen", false);
+    const handleToggleHighlights = () => trigger(CHANNEL, "ToggleHighlights");
     const handleToggleCollapse = () => trigger(CHANNEL, "SetPanelCollapsed", !panelCollapsed);
     const handleResetOutline = () => trigger(CHANNEL, "ResetOutlineToVanilla");
-    const handleResetFill = () => handleFillAChange(0);
+    const handleResetFill = () => trigger(CHANNEL, "ResetFillToVanilla");
+    const handleResetOutlineThickness = () => trigger(CHANNEL, "ResetOutlineThickness");
     const handleResetGuidelines = () => trigger(CHANNEL, "ResetGuidelines");
     const handleToggleSurfaceToolAreas = () => trigger(CHANNEL, "ToggleSurfaceToolAreas");
     const handleToggleSpecializedIndustryAreas = () => trigger(CHANNEL, "ToggleSpecializedIndustryAreas");
@@ -376,6 +522,7 @@ export const MochiColorPickerPanel = () => {
     }, []);
 
     const updateColorPickerDirection = React.useCallback(() => updatePickerDirection(outlineSwatchRef.current, setColorPickerDirection), [updatePickerDirection]);
+    const updateFillPickerDirection = React.useCallback(() => updatePickerDirection(fillSwatchRef.current, setFillPickerDirection), [updatePickerDirection]);
     const updateOwnerPickerDirection = React.useCallback(() => updatePickerDirection(ownerSwatchRef.current, setOwnerPickerDirection), [updatePickerDirection]);
     const updateDistrictPickerDirection = React.useCallback(() => updatePickerDirection(districtColorSwatchRef.current ?? districtPickerRef.current, setDistrictPickerDirection), [updatePickerDirection]);
     const updateGuidelineLinesPickerDirection = React.useCallback(() => updatePickerDirection(guidelineLinesPickerRef.current, setGuidelineLinesPickerDirection), [updatePickerDirection]);
@@ -390,17 +537,26 @@ export const MochiColorPickerPanel = () => {
     const panelBaseTheme = resolver.panelBaseTheme;
     const panelTheme = resolver.panelTheme;
     const infoviewMenuTheme = resolver.infoviewMenuTheme;
-    const closeButtonClass = `${roundHighlightButtonTheme["button"] ?? ""} ${styles.closeButton}`;
+    const eyeButtonClass = `${roundHighlightButtonTheme["button"] ?? ""} ${styles.eyeButton}`;
     const collapseButtonClass = `${roundHighlightButtonTheme["button"] ?? ""} ${styles.collapseButton}`;
-    const panelFrameClass = `${panelBaseTheme.panel ?? "panel_YqS"} ${infoviewMenuTheme.menu ?? "menu_O_M"} ${styles.panelFrame}`;
+    const closeButtonClass = `${roundHighlightButtonTheme["button"] ?? ""} ${styles.closeButton}`;
+    // Standard strips the vanilla fill so Hover Colors is the only painter. Dark keeps it: the
+    // vanilla surface is the whole reason to pick that style, so the HC opacity class is left off
+    // too and the panel follows the game's Interface Opacity instead.
+    const panelFrameClass = `${panelBaseTheme.panel ?? "panel_YqS"} ${infoviewMenuTheme.menu ?? "menu_O_M"} ${styles.panelFrame} ${useDarkerPanel ? "" : styles.panelFrameCustom}`;
     const panelSurfaceClass = useDarkerPanel ? styles.panelDarker : styles.panelStandard;
-    const panelContentClass = `${panelTheme.content ?? "content_XD5 content_AD7 child-opacity-transition_nkS"} ${infoviewMenuTheme.content ?? "content_Hzl"} ${styles.panelContent} ${panelSurfaceClass}`;
+    const panelOpacityClass = useDarkerPanel ? "" : panelOpacityClassFor(panelOpacityPercent);
+    const panelContentClass = `${panelTheme.content ?? "content_XD5 content_AD7 child-opacity-transition_nkS"} ${infoviewMenuTheme.content ?? "content_Hzl"} ${styles.panelContent} ${panelSurfaceClass} ${panelOpacityClass}`;
 
     return (
         <div
             ref={panelAnchorRef}
-            className={styles.panelAnchor}
-            style={{ transform: `translate(${panelOffset.x}px, ${panelOffset.y}px)` }}
+            className={`${styles.panelAnchor} ${editorMode ? styles.panelAnchorEditor : styles.panelAnchorGame}`}
+            style={{
+                left: editorMode ? undefined : `${gamePanelOrigin.left}px`,
+                top: editorMode ? undefined : `${gamePanelOrigin.top}px`,
+                transform: `translate(${panelOffset.x}px, ${panelOffset.y}px)`,
+            }}
         >
             <SideTooltipProvider anchorRef={panelAnchorRef} panelRef={panelElementRef} disabled={panelDragging}>
             <div ref={panelElementRef} className={panelFrameClass}>
@@ -418,13 +574,31 @@ export const MochiColorPickerPanel = () => {
                             </Button>
                         </SideTooltip>
 
-                        <SideTooltip tooltip={tt(text.tooltipDraggable)} side="right">
+                        <SideTooltip tooltip={tt(text.tooltipDraggable)} side="above" align="center">
                             <div
                                 className={`${styles.titleDragHandle} ${panelDragging ? styles.titleDragHandleActive : ""}`}
                                 onMouseDown={handlePanelDragStart}
                             >
                                 <span className={styles.titleText}>{text.title}</span>
                             </div>
+                        </SideTooltip>
+
+                        <SideTooltip tooltip={tt(text.tooltipHoverToggle)} side="right">
+                            <Button
+                                className={eyeButtonClass}
+                                variant="icon"
+                                onSelect={handleToggleHighlights}
+                                focusKey={focusDisabled}
+                                aria-pressed={hoverHighlightsSuppressed}
+                            >
+                                <img
+                                    src={hoverHighlightsSuppressed
+                                        ? eyeOffIconSrc
+                                        : "Media/PhotoMode/HideUIOff.svg"}
+                                    className={`${styles.eyeIcon} ${hoverHighlightsSuppressed ? styles.eyeIconOff : ""}`}
+                                    alt=""
+                                />
+                            </Button>
                         </SideTooltip>
 
                         <SideTooltip tooltip={tt(text.tooltipCollapse)} side="right">
@@ -467,6 +641,8 @@ export const MochiColorPickerPanel = () => {
                         outline={outline}
                         ownerColor={ownerColor}
                         fillA={fillA}
+                        fillColor={fillColor}
+                        outlineThicknessScale={outlineThicknessScale}
                         guidelineLinesColor={guidelineLinesColor}
                         guidelinePreviewColor={guidelinePreviewColor}
                         guidelineDashedColor={guidelineDashedColor}
@@ -474,6 +650,7 @@ export const MochiColorPickerPanel = () => {
                         preset1Color={preset1Color}
                         preset2Color={preset2Color}
                         colorPickerDirection={colorPickerDirection}
+                        fillPickerDirection={fillPickerDirection}
                         ownerPickerDirection={ownerPickerDirection}
                         guidelineLinesPickerDirection={guidelineLinesPickerDirection}
                         guidelinePreviewPickerDirection={guidelinePreviewPickerDirection}
@@ -482,6 +659,7 @@ export const MochiColorPickerPanel = () => {
                         preset1Active={preset1Active}
                         preset2Active={preset2Active}
                         swatchHovered={swatchHovered}                  
+                        fillSwatchHovered={fillSwatchHovered}
                         ownerSwatchHovered={ownerSwatchHovered}
                         guidelineLinesHovered={guidelineLinesHovered}
                         guidelinePreviewHovered={guidelinePreviewHovered}
@@ -489,12 +667,15 @@ export const MochiColorPickerPanel = () => {
                         preset1Hovered={preset1Hovered}
                         preset2Hovered={preset2Hovered}
                         setSwatchHovered={setSwatchHovered}
+                        setFillSwatchHovered={setFillSwatchHovered}
                         setOwnerSwatchHovered={setOwnerSwatchHovered}
                         setGuidelineLinesHovered={setGuidelineLinesHovered}
                         setGuidelinePreviewHovered={setGuidelinePreviewHovered}
                         setGuidelineDashedHovered={setGuidelineDashedHovered}
                         setPreset1Hovered={setPreset1Hovered}
                         setPreset2Hovered={setPreset2Hovered}
+                        setOutlinePickerOpen={setOutlinePickerOpen}
+                        setFillPickerOpen={setFillPickerOpen}
                         setOwnerPickerOpen={setOwnerPickerOpen}
                         setGuidelineLinesPickerOpen={setGuidelineLinesPickerOpen}
                         setGuidelinePreviewPickerOpen={setGuidelinePreviewPickerOpen}
@@ -505,6 +686,7 @@ export const MochiColorPickerPanel = () => {
                         handlePresetMouseDown={handlePresetMouseDown}
                         handlePresetMouseUp={handlePresetMouseUp}
                         outlineSwatchRef={outlineSwatchRef}
+                        fillSwatchRef={fillSwatchRef}
                         ownerSwatchRef={ownerSwatchRef}
                         guidelineLinesPickerRef={guidelineLinesPickerRef}
                         guidelinePreviewPickerRef={guidelinePreviewPickerRef}
@@ -512,6 +694,9 @@ export const MochiColorPickerPanel = () => {
                         handleOutlineChange={handleOutlineChange}
                         handleOwnerColorChange={handleOwnerColorChange}
                         handleFillAChange={handleFillAChange}
+                        handleFillColorChange={handleFillColorChange}
+                        handleOutlineThicknessChange={handleOutlineThicknessChange}
+                        handleResetOutlineThickness={handleResetOutlineThickness}
                         handleGuidelineLinesColorChange={handleGuidelineLinesColorChange}
                         handleGuidelinePreviewColorChange={handleGuidelinePreviewColorChange}
                         handleGuidelineDashedColorChange={handleGuidelineDashedColorChange}
@@ -522,6 +707,7 @@ export const MochiColorPickerPanel = () => {
                         handleTogglePresetDefaults={handleTogglePresetDefaults}
                         handleRestorePresetDefaults={handleRestorePresetDefaults}
                         updateColorPickerDirection={updateColorPickerDirection}
+                        updateFillPickerDirection={updateFillPickerDirection}
                         updateOwnerPickerDirection={updateOwnerPickerDirection}
                         updateGuidelineLinesPickerDirection={updateGuidelineLinesPickerDirection}
                         updateGuidelinePreviewPickerDirection={updateGuidelinePreviewPickerDirection}

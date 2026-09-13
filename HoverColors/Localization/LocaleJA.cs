@@ -1,24 +1,21 @@
 // <copyright file="LocaleJA.cs" company="River-Mochi">
-// Copyright (c) 2026 River-Mochi. All rights reserved.
-// Licensed under the MIT License. You may not use this file except in compliance with this License.
-// See LICENSE file in the project root for full license information.
-// This notice and the MIT License notice must be kept with
-// all copies or substantial portions of this code.
+// Copyright (C) 2026 River-Mochi.
+// Licensed under the GNU General Public License v3.0 or later,
+// with the Cities: Skylines II Linking Exception.
+// See LICENSE and LICENSE-EXCEPTION in the project root.
+// Copyright and license notices MUST be preserved.
 // ================= </copyright> ======================
 
 // File: Localization/LocaleJA.cs
 // Purpose: Japanese (ja-JP) strings for the Options Menu.
 // Strings for the in-city cohtml panel live separately in L10n/lang/ja-JP.json.
 
-namespace HoverColors.Localization
+namespace HoverColors
 {
     using System.Collections.Generic;
-
     using Colossal;
 
-    using HoverColors.Settings;
-
-    public sealed class LocaleJA : IDictionarySource
+    public class LocaleJA : IDictionarySource
     {
         private readonly HoverColorsSettings m_Settings;
 
@@ -44,36 +41,37 @@ namespace HoverColors.Localization
 
                 // Tabs
                 { m_Settings.GetOptionTabLocaleID(HoverColorsSettings.Actions), "操作" },
+                { m_Settings.GetOptionTabLocaleID(HoverColorsSettings.KeyBindings), "キー設定" },
                 { m_Settings.GetOptionTabLocaleID(HoverColorsSettings.About), "情報" },
 
                 // Groups
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kToolColors), "ツール色の動作" },
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kPanel), "パネル" },
+                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kReset), "リセット" },
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kKeyBindings), "キー設定" },
-                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kGuidelines), "ガイド" },
                 // AboutInfo + AboutLinks intentionally have empty group headers.
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kAboutInfo), string.Empty },
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kAboutLinks), string.Empty },
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kAboutDedication), "献辞" },
 
                 // Tool color behavior
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToolColorMode)), "ブルドーザー + 道路" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToolColorMode)), "▪ ブルドーザー + 道路" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ToolColorMode)),
                     "ブルドーザーや道路ツール使用中の一時的なアウトライン色を制御します。\n" +
                     "\n" +
-                    "**1. 推奨** 解体はゲームの警告色(黄)、道路はやわらかいバニラ青を使います。\n" +
+                    "**1. 推奨** 解体はゲームの警告色（黄）、道路はやわらかいバニラ青を使います。\n" +
                     "**2. バニラのツール色** ブルドーザー/道路ツール中は通常のバニラ青に戻します。\n" +
                     "**3. カスタム色を維持** 選んだ色をすべてで使います。\n" +
                     "\n" +
-                    "目的: 解体中にカスタム色が見づらいユーザー/テスターがいます。\n" +
+                    "目的: 解体中にカスタム色が見づらいユーザー/テスター向けです。\n" +
                     "ツール使用中に見やすい色を選べます。\n" +
-                    "カラーピッカーに自動保存されたカスタム色は上書きしません。"
+                    "カラーピッカーに自動保存された色は上書きしません。"
                 },
                 { m_Settings.GetToolColorModeLocaleID("Recommended"), "1. 推奨" },
                 { m_Settings.GetToolColorModeLocaleID("Vanilla"), "2. バニラのツール色" },
                 { m_Settings.GetToolColorModeLocaleID("Custom"), "3. カスタム色を維持" },
 
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseOverlapWarningColor)), "重なりオブジェクトのアウトラインを有効化" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseOverlapWarningColor)), "▪ 重なりオブジェクトのアウトラインを有効化" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseOverlapWarningColor)),
                     "<有効推奨>\n" +
                     "配置が重なりでブロックされた時、ゲーム標準のサーモン赤アウトラインを表示します。\n" +
@@ -82,58 +80,96 @@ namespace HoverColors.Localization
                     "すべてのブルドーザー + 道路モードで動作し、保存色は上書きしません。"
                 },
 
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseCustomColorsForNetLanes)), "NetLanesでカスタム色を許可" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseCustomColorsForNetLanes)), "▪ NetLanesでカスタム色を許可" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseCustomColorsForNetLanes)),
                     "<有効推奨>\n" +
                     "フェンス、生け垣、マーキングなどのNetLane詳細配置で、保存したHC色/透明度を使います。\n" +
                     "\n" +
-                    "- 通常の道路は、ドロップダウンで選んだブルドーザー + 道路設定に従います。\n" +
-                    "- それらのツールでゲームのバニラ青を使いたい場合は無効にします。\n" +
-                    "- 有効時は重なりエラー色が優先されます (バニラのエラー色 = サーモン赤)。"
+                    "- 通常の道路は、選んだブルドーザー + 道路設定に従います。\n" +
+                    "- これらのツールでゲームのバニラ青を使いたい場合は無効にします。\n" +
+                    "- 有効時は重なりエラー色が優先されます（バニラのエラー色 = サーモン赤）。"
                 },
 
-                // Panel
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelTooltipsEnabled)), "ホバー色のヘルプ" },
+                // Panel style
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelStyle)), "▪ パネルスタイル" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelStyle)),
+                    "**ダーク (バニラ)** はゲーム標準のパネルを使います。\n" +
+                    "- Legacy UI / Modern UI に自動で合います。\n" +
+                    "- ゲームのUI透明度設定に従います。\n" +
+                    "\n" +
+                    "**ガラス (カスタム)** はHover Colorsの明るいガラス調パネルです。\n" +
+                    "- 100%でも街が少し透けて見えます。\n" +
+                    "- 下にパネル不透明度スライダーが追加されます。\n" +
+                    "\n" +
+                    "両方試して好みの方を選んでください。変わるのはこのModパネルの背景だけで、ゲームUIには影響しません。\n" +
+                    "\n" +
+                    "ヒント: ゲームは各パネルの背後をぼかし、ボタンやスライダーを見やすくします。ゲームのUI透明度を0%にすると全パネルのぼかしがOFFになります。1%以上なら維持されます。"
+                },
+                { m_Settings.GetPanelStyleLocaleID("Dark"), "ダーク (バニラ)" },
+                { m_Settings.GetPanelStyleLocaleID("Glass"), "ガラス (カスタム)" },
+
+                // Panel opacity
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)), "▪ パネル不透明度" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)),
+                    "**ガラス (カスタム)** パネルの背景不透明度です。\n" +
+                    "\n" +
+                    "**30%** が最も透明でクリアです。\n" +
+                    "**100%** はほぼ不透明ですが、街が少し透けます。\n" +
+                    "\n" +
+                    "変わるのは背景だけです。文字、アイコン、カラースウォッチは常に読みやすいままです。\n" +
+                    "\n" +
+                    "**ダーク (バニラ)** はゲームのUI透明度設定に従うため、選択中はこのスライダーを非表示にします。"
+                },
+
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelTooltipsEnabled)), "▪ ツールチップ表示（推奨）" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelTooltipsEnabled)),
-                    "<有効> = ホバー色のヘルプツールチップを表示 (推奨 [x])。\n" +
-                    "<無効> = このMODのツールチップを非表示。\n" +
-                    "ツールチップはこのオプションメニューでのみ無効化できます。\n" +
-                    "街ではタイトルバーのInfo (i)をクリックして再度ONにできます。"
+                    "ほとんどのプレイヤーは<ONのまま>がおすすめです。\n" +
+                    "Hover Colorsのボタンにカーソルを合わせると短い説明を表示します。\n" +
+                    "無効にした場合は、タイトルバーのInfo (i)かこのチェックで再度ONにできます。\n" +
+                    "誤操作防止のため、ツールチップをOFFにできるのはこのオプション画面だけです。"
                 },
 
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)), "暗いパネル" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)),
-                    "有効 = <暗いパネル>: LegacyUI向け。Modern UIでも強いコントラストが欲しい時に使えます。\n" +
-                    "無効 = <標準パネル>: ホバー色用の半透明カスタムスタイル。\n" +
-                    "- 明るくモダンな見た目。\n" +
-                    "- 新しいModern UIを使う多くのプレイヤー向け。\n" +
-                    "\n" +
-                    "両方試して好みを選んでください。変更されるのはこのMODパネルの背景だけです。"
-                },
 
-                // Guidelines opacity slider
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.GuidelineOpacityPercent)), "ガイドの不透明度 (alpha)" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.GuidelineOpacityPercent)),
-                    "道路、フェンス、プロップ配置に便利な、破線の整列ガイドの不透明度を制御します。\n" +
+                // Reset buttons
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ResetModDefaults)), "MOD初期設定に戻す" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ResetModDefaults)),
+                    "Hover Colorsの全設定を初回インストール時に戻します: 色、アウトライン太さ、ツール色、ガイド、パネル、ツールチップ。\n" +
                     "\n" +
-                    "**100%** ゲーム標準。\n" +
-                    "**低いほど** 透明。\n" +
-                    "**0%** すべて非表示。\n" +
-                    "15%以上がおすすめです。低すぎると線が見えません。\n" +
-                    "同じスライダーが街のMODパネルにもあります。両方同期します。\n" +
-                    "こちらを変えると、街のパネル側も変わります。"
+                    "**保存したプリセット（Set A / Set B）も消去されます。**\n" +
+                    "\n" +
+                    "キー設定は変更しません。\n" +
+                    "Hover Colorsを初めて入れた状態と同じです。"
                 },
+                { m_Settings.GetOptionWarningLocaleID(nameof(HoverColorsSettings.ResetModDefaults)),
+                    "Hover Colorsの全設定を初回状態に戻しますか？\n\n保存したプリセット（Set A / Set B）は消去されます。" },
+
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ResetColorsToVanilla)), "色をバニラに戻す" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ResetColorsToVanilla)),
+                    "ゲーム標準の見た目に戻します: アウトライン、所有者ハイライト、塗り、太さ、ガイド、地区。\n" +
+                    "\n" +
+                    "その他はそのままです: ブルドーザー/道路、ツールプレビュー、プリセット、パネル、キー設定。\n" +
+                    "\n" +
+                    "注意: リセットせずにMODを削除しても問題ありません。ハイライトは自動でゲーム標準に戻ります。\n"+
+                    "これはゲーム標準色へすぐ戻すためのボタンです。"
+                },
+                { m_Settings.GetOptionWarningLocaleID(nameof(HoverColorsSettings.ResetColorsToVanilla)),
+                    "このMODが変更する色をゲーム標準に戻しますか？\n\nプリセット、ツール動作、パネル設定は保持されます。" },
 
                 // Keybinds
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.TogglePanelBinding)), "メインパネルを開く/閉じる" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.TogglePanelBinding)),
                     "街中のカラーパネルを<開く / 閉じる>ショートカット。" },
+                { m_Settings.GetBindingKeyLocaleID(Mod.kTogglePanelActionName), "Hover Colorsパネルを切替" },
 
-                { m_Settings.GetBindingKeyLocaleID(Mod.kTogglePanelActionName), "ホバー色パネルを切替" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleHoverHighlightsBinding)), "クイック目アイコン On/Off" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ToggleHoverHighlightsBinding)),
+                    "タイトルバーの目アイコン用オプションキー: ハイライト + 塗りを即座にOff/On。\n" +
+                    "キー競合を避けるため初期状態では未設定です。" },
+                { m_Settings.GetBindingKeyLocaleID(Mod.kToggleHighlightsActionName), "クイック目アイコン On/Off" },
 
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleSurfaceToolAreasBinding)), "Surfaceツールのプレビュー On/Off" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleSurfaceToolAreasBinding)), "Surfaceツールプレビュー On/Off" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ToggleSurfaceToolAreasBinding)),
-                    "サーフェス配置中のアクティブなSurface境界プレビュー線を<表示/非表示>にします。" },
+                    "Surface配置中の境界プレビュー線を<非表示 / 表示>にするショートカット。" },
                 { m_Settings.GetBindingKeyLocaleID(Mod.kToggleSurfaceToolAreasActionName), "Surfaceプレビューレイヤー On/Off" },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.TogglePresetBinding)), "プリセット1+2を切替" },
@@ -150,7 +186,7 @@ namespace HoverColors.Localization
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.VersionText)), string.Empty },
 
                 // About Paradox Mods link button
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.OpenParadox)), "Paradox Mods" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.OpenParadox)), "MochiのParadox Mods" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.OpenParadox)), "**作者のParadox Modsページを開きます。**" },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.MochiDedicationText)),

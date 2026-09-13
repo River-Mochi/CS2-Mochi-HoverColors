@@ -1,3 +1,11 @@
+// <copyright file="MochiPanelBindings.ts" company="River-Mochi">
+// Copyright (C) 2026 River-Mochi.
+// Licensed under the GNU General Public License v3.0 or later,
+// with the Cities: Skylines II Linking Exception.
+// See LICENSE and LICENSE-EXCEPTION in the project root.
+// Copyright and license notices MUST be preserved.
+// ================= </copyright> ======================
+
 // File: UI/src/panel/bindings/MochiPanelBindings.ts
 // Purpose: Central binding names/defaults for the compact Hover Colors panel.
 
@@ -14,11 +22,14 @@ export const DISTRICT_RESET_HOLD_MS = 800;
 // Body class used by MochiColorPickerPanel.global.scss while compact vanilla pickers are open.
 export const COMPACT_PICKER_BODY_CLASS = "mochiCompactColorPickerOpen";
 
-// Live color bindings
-export const outlineR$ = bindValue<number>(CHANNEL, "OutlineR", 0.502);
-export const outlineG$ = bindValue<number>(CHANNEL, "OutlineG", 0.869);
-export const outlineB$ = bindValue<number>(CHANNEL, "OutlineB", 1);
-export const outlineA$ = bindValue<number>(CHANNEL, "OutlineA", 0.855);
+// Set while ANY panel picker is open. Used to lift the vanilla balloon layer above the panel.
+export const PICKER_OPEN_BODY_CLASS = "mochiColorPickerOpen";
+
+// Live color bindings. New-install fallback matches Set A / P1.
+export const outlineR$ = bindValue<number>(CHANNEL, "OutlineR", 215 / 255);
+export const outlineG$ = bindValue<number>(CHANNEL, "OutlineG", 226 / 255);
+export const outlineB$ = bindValue<number>(CHANNEL, "OutlineB", 194 / 255);
+export const outlineA$ = bindValue<number>(CHANNEL, "OutlineA", 0.67);
 
 export const ownerR$ = bindValue<number>(CHANNEL, "OwnerR", 0.247);
 export const ownerG$ = bindValue<number>(CHANNEL, "OwnerG", 0.981);
@@ -26,6 +37,16 @@ export const ownerB$ = bindValue<number>(CHANNEL, "OwnerB", 0.247);
 export const ownerA$ = bindValue<number>(CHANNEL, "OwnerA", 0.702);
 
 export const fillA$ = bindValue<number>(CHANNEL, "FillA", 0);
+
+// Fill tint. White is neutral: the fill renders in the Outline color, as it did before the swatch.
+export const fillR$ = bindValue<number>(CHANNEL, "FillR", 1);
+export const fillG$ = bindValue<number>(CHANNEL, "FillG", 1);
+export const fillB$ = bindValue<number>(CHANNEL, "FillB", 1);
+
+// Multiplier on the game's captured vanilla outline width. 1 = vanilla on any build.
+// Fallback must match kModDefaultOutlineThicknessScale, not the vanilla 1.0 - this value is
+// what the slider shows for the frame before the real setting arrives.
+export const outlineThicknessScale$ = bindValue<number>(CHANNEL, "OutlineThicknessScale", 0.8);
 
 export const districtR$ = bindValue<number>(CHANNEL, "DistrictR", 128 / 255);
 export const districtG$ = bindValue<number>(CHANNEL, "DistrictG", 128 / 255);
@@ -48,22 +69,30 @@ export const guidelineDashedColorG$ = bindValue<number>(CHANNEL, "GuidelineDashe
 export const guidelineDashedColorB$ = bindValue<number>(CHANNEL, "GuidelineDashedColorB", 1);
 
 export const guidelineOpacity$ = bindValue<number>(CHANNEL, "GuidelineOpacityPercent", 30);
+export const panelOpen$ = bindValue<boolean>(CHANNEL, "PanelOpen", false);
 export const panelTooltipsEnabled$ = bindValue<boolean>(CHANNEL, "PanelTooltipsEnabled", true);
 export const panelCollapsed$ = bindValue<boolean>(CHANNEL, "PanelCollapsed", false);
-export const useDarkerPanel$ = bindValue<boolean>(CHANNEL, "UseDarkerPanel", false);
+export const hoverHighlightsSuppressed$ = bindValue<boolean>(CHANNEL, "HoverHighlightsSuppressed", false);
+
+// Defaults to true so a fresh load never flashes the Standard glass panel before the real
+// setting arrives. Dark is also the default panel style for new installs.
+export const useDarkerPanel$ = bindValue<boolean>(CHANNEL, "UseDarkerPanel", true);
+
+// Panel background alpha, 30-100 in steps of 5. Keep in sync with kDefaultPanelOpacityPercent.
+export const panelOpacityPercent$ = bindValue<number>(CHANNEL, "PanelOpacityPercent", 70);
 export const surfaceToolAreasSuppressed$ = bindValue<boolean>(CHANNEL, "SurfaceToolAreasSuppressed", true);
 export const specializedIndustryAreasSuppressed$ = bindValue<boolean>(CHANNEL, "SpecializedIndustryAreasSuppressed", true);
 export const vanillaOutlineActive$ = bindValue<boolean>(CHANNEL, "VanillaOutlineActive", false);
 
-// Preset stored-color bindings
-export const preset1R$ = bindValue<number>(CHANNEL, "Preset1R", 140 / 255);
-export const preset1G$ = bindValue<number>(CHANNEL, "Preset1G", 140 / 255);
-export const preset1B$ = bindValue<number>(CHANNEL, "Preset1B", 171 / 255);
-export const preset1A$ = bindValue<number>(CHANNEL, "Preset1A", 0.5);
+// Preset stored-color bindings. Set A is shown first.
+export const preset1R$ = bindValue<number>(CHANNEL, "Preset1R", 215 / 255);
+export const preset1G$ = bindValue<number>(CHANNEL, "Preset1G", 226 / 255);
+export const preset1B$ = bindValue<number>(CHANNEL, "Preset1B", 194 / 255);
+export const preset1A$ = bindValue<number>(CHANNEL, "Preset1A", 0.67);
 
-export const preset2R$ = bindValue<number>(CHANNEL, "Preset2R", 0.25);
-export const preset2G$ = bindValue<number>(CHANNEL, "Preset2G", 0.15);
-export const preset2B$ = bindValue<number>(CHANNEL, "Preset2B", 0.25);
+export const preset2R$ = bindValue<number>(CHANNEL, "Preset2R", 140 / 255);
+export const preset2G$ = bindValue<number>(CHANNEL, "Preset2G", 140 / 255);
+export const preset2B$ = bindValue<number>(CHANNEL, "Preset2B", 171 / 255);
 export const preset2A$ = bindValue<number>(CHANNEL, "Preset2A", 0.5);
 
 export const preset1Active$ = bindValue<boolean>(CHANNEL, "Preset1Active", false);
@@ -72,15 +101,15 @@ export const preset2Active$ = bindValue<boolean>(CHANNEL, "Preset2Active", false
 export const AREA_MENU_NAME_TOKENS = ["SERVICES.NAMES[AREAS]", "SERVICES.NAME[AREAS]", "AREAS"];
 
 export const DISTRICT_AREA_NAME_TOKENS = [
-    "ASSETS.NAME[DISTRICT AREA]",
-    "ASSETS.DESCRIPTION[DISTRICT AREA]",
-    "DISTRICT AREA",
-    "DISTRICT",
+  "ASSETS.NAME[DISTRICT AREA]",
+  "ASSETS.DESCRIPTION[DISTRICT AREA]",
+  "DISTRICT AREA",
+  "DISTRICT",
 ];
 
 export type ToolbarEntity = { index: number; version: number };
 
 export const sameEntity = (
-    a: ToolbarEntity | null | undefined,
-    b: ToolbarEntity | null | undefined,
+  a: ToolbarEntity | null | undefined,
+  b: ToolbarEntity | null | undefined,
 ) => a != null && b != null && a.index === b.index && a.version === b.version;

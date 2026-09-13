@@ -1,5 +1,13 @@
+// <copyright file="usePanelDrag.ts" company="River-Mochi">
+// Copyright (C) 2026 River-Mochi.
+// Licensed under the GNU General Public License v3.0 or later,
+// with the Cities: Skylines II Linking Exception.
+// See LICENSE and LICENSE-EXCEPTION in the project root.
+// Copyright and license notices MUST be preserved.
+// ================= </copyright> ======================
+
 // File: UI/src/panel/hooks/usePanelDrag.ts
-// Purpose: Keeps the GTL-anchored panel draggable while clamping it inside the game window.
+// Purpose: keeps the Editor or City GTL-anchored panel draggable and clamps it inside the game window.
 
 import { useCallback, useEffect, useRef, useState, type MouseEvent as ReactMouseEvent } from "react";
 
@@ -19,10 +27,16 @@ type PanelDragState = {
     originHeight: number;
 };
 
-let sessionPanelOffset: PanelOffset = { x: 0, y: 0 };
+type PanelDragContext = "game" | "editor";
 
-export const usePanelDrag = () => {
-    const [panelOffset, setPanelOffset] = useState<PanelOffset>(sessionPanelOffset);
+const sessionPanelOffsets: Record<PanelDragContext, PanelOffset> = {
+    game: { x: 0, y: 0 },
+    editor: { x: 0, y: 0 },
+};
+
+export const usePanelDrag = (context: PanelDragContext = "game") => {
+    const [panelOffset, setPanelOffset] = useState<PanelOffset>(sessionPanelOffsets[context]);
+
     const [panelDragging, setPanelDragging] = useState(false);
 
     const panelElementRef = useRef<HTMLDivElement | null>(null);
@@ -67,7 +81,7 @@ export const usePanelDrag = () => {
             if (panelDragFrameRef.current === null) {
                 panelDragFrameRef.current = window.requestAnimationFrame(() => {
                     panelDragFrameRef.current = null;
-                    sessionPanelOffset = panelDragPendingOffsetRef.current;
+                    sessionPanelOffsets[context] = panelDragPendingOffsetRef.current;
                     setPanelOffset(panelDragPendingOffsetRef.current);
                 });
             }
@@ -81,7 +95,7 @@ export const usePanelDrag = () => {
 
             panelDragRef.current = null;
             setPanelDragging(false);
-            sessionPanelOffset = panelDragPendingOffsetRef.current;
+            sessionPanelOffsets[context] = panelDragPendingOffsetRef.current;
             setPanelOffset(panelDragPendingOffsetRef.current);
         };
 
@@ -91,8 +105,8 @@ export const usePanelDrag = () => {
         return () => {
             window.removeEventListener("mousemove", onMove);
             window.removeEventListener("mouseup", onUp);
-        };
-    }, [panelDragging]);
+      };
+    }, [panelDragging, context]);
 
     useEffect(() => () => {
         if (panelDragFrameRef.current !== null) {

@@ -1,24 +1,21 @@
 // <copyright file="LocaleZH_HANT.cs" company="River-Mochi">
-// Copyright (c) 2026 River-Mochi. All rights reserved.
-// Licensed under the MIT License. You may not use this file except in compliance with this License.
-// See LICENSE file in the project root for full license information.
-// This notice and the MIT License notice must be kept with
-// all copies or substantial portions of this code.
+// Copyright (C) 2026 River-Mochi.
+// Licensed under the GNU General Public License v3.0 or later,
+// with the Cities: Skylines II Linking Exception.
+// See LICENSE and LICENSE-EXCEPTION in the project root.
+// Copyright and license notices MUST be preserved.
 // ================= </copyright> ======================
 
 // File: Localization/LocaleZH_HANT.cs
 // Purpose: Traditional Chinese (zh-HANT) strings for the Options Menu.
 // Strings for the in-city cohtml panel live separately in L10n/lang/zh-HANT.json.
 
-namespace HoverColors.Localization
+namespace HoverColors
 {
     using System.Collections.Generic;
-
     using Colossal;
 
-    using HoverColors.Settings;
-
-    public sealed class LocaleZH_HANT : IDictionarySource
+    public class LocaleZH_HANT : IDictionarySource
     {
         private readonly HoverColorsSettings m_Settings;
 
@@ -44,24 +41,25 @@ namespace HoverColors.Localization
 
                 // Tabs
                 { m_Settings.GetOptionTabLocaleID(HoverColorsSettings.Actions), "操作" },
+                { m_Settings.GetOptionTabLocaleID(HoverColorsSettings.KeyBindings), "快捷鍵" },
                 { m_Settings.GetOptionTabLocaleID(HoverColorsSettings.About), "關於" },
 
                 // Groups
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kToolColors), "工具顏色行為" },
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kPanel), "面板" },
+                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kReset), "重設" },
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kKeyBindings), "快捷鍵" },
-                { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kGuidelines), "輔助線" },
                 // AboutInfo + AboutLinks intentionally have empty group headers.
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kAboutInfo), string.Empty },
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kAboutLinks), string.Empty },
                 { m_Settings.GetOptionGroupLocaleID(HoverColorsSettings.kAboutDedication), "紀念" },
 
                 // Tool color behavior
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToolColorMode)), "推土機 + 道路" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToolColorMode)), "▪ 推土機 + 道路" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ToolColorMode)),
                     "控制推土機或道路工具啟用時的臨時輪廓顏色。\n" +
                     "\n" +
-                    "**1. 推薦** 拆除用遊戲警告色(黃)，道路用更柔和的原版藍。\n" +
+                    "**1. 推薦** 拆除用遊戲警告色（黃），道路用更柔和的原版藍。\n" +
                     "**2. 原版工具顏色** 在推土機或道路工具啟用時恢復遊戲正常原版藍。\n" +
                     "**3. 保留我的自訂色** 到處使用你選的顏色。\n" +
                     "\n" +
@@ -73,7 +71,7 @@ namespace HoverColors.Localization
                 { m_Settings.GetToolColorModeLocaleID("Vanilla"), "2. 原版工具顏色" },
                 { m_Settings.GetToolColorModeLocaleID("Custom"), "3. 保留我的自訂色" },
 
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseOverlapWarningColor)), "啟用重疊物件輪廓" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseOverlapWarningColor)), "▪ 啟用重疊物件輪廓" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseOverlapWarningColor)),
                     "<建議啟用>\n" +
                     "當物件或網路放置被重疊阻止時，保持遊戲原版鮭紅輪廓可見。\n" +
@@ -82,58 +80,96 @@ namespace HoverColors.Localization
                     "適用於所有推土機 + 道路模式，不會覆蓋你儲存的自訂色。"
                 },
 
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseCustomColorsForNetLanes)), "允許 NetLanes 使用自訂色" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseCustomColorsForNetLanes)), "▪ 允許 NetLanes 使用自訂色" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseCustomColorsForNetLanes)),
                     "<建議啟用>\n" +
                     "放置 NetLane 細節物，如圍欄、樹籬、標線等時，使用已儲存的 HC 顏色/透明度。\n" +
                     "\n" +
-                    "- 一般道路仍遵循你在下拉清單選的推土機 + 道路設定。\n" +
+                    "- 一般道路仍遵循你在清單選的推土機 + 道路設定。\n" +
                     "- 如果想讓這些工具使用遊戲原版藍色輪廓，請關閉此項。\n" +
                     "- 啟用時，重疊錯誤顏色仍優先（原版錯誤色 = 鮭紅）。"
                 },
 
-                // Panel
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelTooltipsEnabled)), "懸停顏色提示" },
+                // Panel style
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelStyle)), "▪ 面板樣式" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelStyle)),
+                    "**暗色（原版）**使用遊戲自己的面板表面。\n" +
+                    "- 自動配合 Legacy UI 或 Modern UI。\n" +
+                    "- 跟隨遊戲的介面透明度設定。\n" +
+                    "\n" +
+                    "**玻璃（自訂）**使用較亮的 Hover Colors 玻璃面板。\n" +
+                    "- 即使 100% 仍能稍微看到後面的城市。\n" +
+                    "- 在下方加入面板不透明度滑桿。\n" +
+                    "\n" +
+                    "兩種都試試，選你喜歡的！這只會改變本模組面板的背景，不影響遊戲 UI。\n" +
+                    "\n" +
+                    "提示：遊戲會模糊每個面板後方的畫面，讓按鈕和滑桿更清楚。把遊戲的介面透明度設為 0% 會關閉所有面板的模糊效果；1% 或更高則保留。"
+                },
+                { m_Settings.GetPanelStyleLocaleID("Dark"), "暗色（原版）" },
+                { m_Settings.GetPanelStyleLocaleID("Glass"), "玻璃（自訂）" },
+
+                // Panel opacity
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)), "▪ 面板不透明度" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)),
+                    "**玻璃（自訂）**面板的背景不透明度。\n" +
+                    "\n" +
+                    "**30%** 最透明、最清爽。\n" +
+                    "**100%** 接近完全不透明，但仍能稍微看到城市。\n" +
+                    "\n" +
+                    "只改變背景。文字、圖示和色塊始終保持清楚可讀。\n" +
+                    "\n" +
+                    "**暗色（原版）**改為跟隨遊戲的介面透明度，因此選中時會隱藏此滑桿。"
+                },
+
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelTooltipsEnabled)), "▪ 顯示提示（推薦）" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelTooltipsEnabled)),
-                    "<啟用> = 顯示懸停顏色說明提示（推薦 [x]）。\n" +
-                    "<停用> = 隱藏此 mod 的提示。\n" +
-                    "提示只能在此選項選單中關閉。\n" +
-                    "但可在城市裡重新開啟：點擊標題列上的 Info (i) 按鈕。"
+                    "建議多數玩家<保持開啟>。\n" +
+                    "滑鼠停在 Hover Colors 按鈕上時顯示簡短說明。\n" +
+                    "如果關閉，可點擊標題列 Info (i) 或重新勾選此項來開啟。\n" +
+                    "為避免誤關，提示只能在此選項選單中關閉。"
                 },
 
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)), "更暗面板" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseDarkerPanel)),
-                    "啟用 = <暗色面板>：為 LegacyUI 玩家製作；如果喜歡更高對比，Modern UI 也可用。\n" +
-                    "停用 = <標準面板>：懸停顏色的自訂半透明風格。\n" +
-                    "- 更亮、更現代的外觀。\n" +
-                    "- 最適合使用新版 Modern UI 的多數玩家。\n" +
-                    "\n" +
-                    "兩個都試試。這裡只改變此 mod 面板背景，不改變遊戲 UI。"
-                },
 
-                // Guidelines opacity slider
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.GuidelineOpacityPercent)), "輔助線不透明度 (alpha)" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.GuidelineOpacityPercent)),
-                    "控制虛線對齊輔助線不透明度，放置道路、圍欄、道具等時有用。\n" +
+                // Reset buttons
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ResetModDefaults)), "重設為 Mod 預設值" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ResetModDefaults)),
+                    "將所有 Hover Colors 設定恢復到全新安裝狀態：顏色、輪廓粗細、工具顏色、輔助線、面板和提示。\n" +
                     "\n" +
-                    "**100%** 遊戲預設。\n" +
-                    "**更低** 更透明。\n" +
-                    "**0%** 隱藏所有內容。\n" +
-                    "建議保持在15%以上，否則線很難看見。\n" +
-                    "城市 mod 面板裡也有同一個滑桿。兩者同步變化。\n" +
-                    "改這裡，城市面板中的滑桿也會一起變化。"
+                    "**這也會刪除你儲存的預設（Set A 和 Set B）。**\n" +
+                    "\n" +
+                    "快捷鍵不會改變。\n" +
+                    "就像第一次安裝 Hover Colors。"
                 },
+                { m_Settings.GetOptionWarningLocaleID(nameof(HoverColorsSettings.ResetModDefaults)),
+                    "將所有 Hover Colors 設定重設為全新安裝狀態？\n\n你儲存的預設（Set A 和 Set B）將被刪除。" },
+
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ResetColorsToVanilla)), "重設為原版顏色" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ResetColorsToVanilla)),
+                    "恢復遊戲自己的外觀：輪廓、擁有者高亮、填充、輪廓粗細、輔助線和區域。\n" +
+                    "\n" +
+                    "其他內容保持不變：推土機/道路、工具預覽、預設、面板選項和快捷鍵。\n" +
+                    "\n" +
+                    "注意：無需重設即可移除此 mod。高亮會自動恢復遊戲預設值。\n"+
+                    "這只是快速恢復遊戲預設顏色的按鈕。"
+                },
+                { m_Settings.GetOptionWarningLocaleID(nameof(HoverColorsSettings.ResetColorsToVanilla)),
+                    "將此 mod 控制的顏色恢復為遊戲原版外觀？\n\n預設、工具行為和面板選項會保留。" },
 
                 // Keybinds
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.TogglePanelBinding)), "開啟/關閉主面板" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.TogglePanelBinding)),
                     "用於<開啟 / 關閉>城市內顏色面板的快捷鍵。" },
+                { m_Settings.GetBindingKeyLocaleID(Mod.kTogglePanelActionName), "切換 Hover Colors 面板" },
 
-                { m_Settings.GetBindingKeyLocaleID(Mod.kTogglePanelActionName), "切換懸停顏色面板" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleHoverHighlightsBinding)), "快速眼睛 開/關" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ToggleHoverHighlightsBinding)),
+                    "標題列眼睛按鈕的可選快捷鍵：立即開/關 高亮 + 填充。\n" +
+                    "預設未綁定，避免快捷鍵衝突。" },
+                { m_Settings.GetBindingKeyLocaleID(Mod.kToggleHighlightsActionName), "快速眼睛 開/關" },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleSurfaceToolAreasBinding)), "Surface 工具預覽開/關" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ToggleSurfaceToolAreasBinding)),
-                    "快捷鍵：放置地表時<隱藏或顯示>活動 Surface 工具邊界預覽線。" },
+                    "快捷鍵：放置地表時<隱藏或顯示>活動 Surface 邊界預覽線。" },
                 { m_Settings.GetBindingKeyLocaleID(Mod.kToggleSurfaceToolAreasActionName), "Surface 工具預覽層開/關" },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.TogglePresetBinding)), "切換預設 1+2" },
@@ -150,7 +186,7 @@ namespace HoverColors.Localization
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.VersionText)), string.Empty },
 
                 // About Paradox Mods link button
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.OpenParadox)), "Paradox Mods" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.OpenParadox)), "Mochi 的 Paradox Mods" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.OpenParadox)), "**開啟作者的 Paradox Mods 頁面。**" },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.MochiDedicationText)),

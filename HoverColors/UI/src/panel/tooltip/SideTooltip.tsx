@@ -1,15 +1,47 @@
+// <copyright file="SideTooltip.tsx" company="River-Mochi">
+// Copyright (C) 2026 River-Mochi.
+// Licensed under the GNU General Public License v3.0 or later,
+// with the Cities: Skylines II Linking Exception.
+// See LICENSE and LICENSE-EXCEPTION in the project root.
+// Copyright and license notices MUST be preserved.
+// ================= </copyright> ======================
+
 // File: UI/src/panel/tooltip/SideTooltip.tsx
 // Purpose: Panel-anchored tooltips that render OFF the panel (left / right / above / below), never over it.
 // The vanilla cs2/ui Tooltip only centers over the hovered control, so it always covered the panel.
 // This renders a single tooltip layer positioned relative to the panel anchor. Because the panel
 // uses a CSS transform, position:fixed would be broken, so the tooltip is an absolute child of the
 // (transformed) anchor and is positioned with anchor-relative coordinates measured on hover.
+//
+// NOTHING about the tooltip itself is measured, on purpose. Earlier versions measured the layer
+// after mounting it and placed it from that; in Cohtml a getBoundingClientRect() taken in the same
+// frame the content changed is not reliable, so identical hovers produced different placements and
+// tooltips sometimes landed on top of the control. Every number here comes from the anchor, panel
+// and control rects, which are stable because those elements were laid out long before the hover.
+//
+// Instead of a measured size the layer is capped at the panel's own width, and the edges the layout
+// needs are produced by CSS transforms (-100% to right-align, -50% to centre) rather than by
+// arithmetic. That makes placement a pure function of the panel's position:
+//
+//   left   right edge on the panel's left edge,  vertically centred on the control
+//   right  left edge on the panel's right edge,  vertically centred on the control
+//   above  bottom edge on the panel's top edge,  left edge flush with the panel
+//   below  top edge on the panel's bottom edge,  left edge flush with the panel
+//
+// Because the cap equals the panel width, an above/below tooltip can never stick out past the panel,
+// and a left/right one can never reach back over it. Only the horizontal sides can run out of room,
+// so only those fall back (to "below"); above/below never flip, which is what keeps the title-bar
+// tooltip reliably above the panel.
 
 import React, { createContext, useContext, useState, type ReactNode, type RefObject } from "react";
 
 export type SideTooltipSide = "left" | "right" | "above" | "below";
 
-type ShowFn = (side: SideTooltipSide, content: ReactNode, controlRect: DOMRect) => void;
+// Horizontal alignment for above/below only. "start" keeps the long-standing behavior of
+// sitting flush with the panel's left edge, so existing tooltips are unaffected.
+export type SideTooltipAlign = "start" | "center";
+
+type ShowFn = (side: SideTooltipSide, content: ReactNode, controlRect: DOMRect, align: SideTooltipAlign) => void;
 
 const SideTooltipContext = createContext<{ show: ShowFn; hide: () => void }>({
     show: () => {},
@@ -19,11 +51,23 @@ const SideTooltipContext = createContext<{ show: ShowFn; hide: () => void }>({
 // Gap in pixels between the panel edge and the tooltip. Raise to push tooltips farther off-panel.
 const GAP_PX = 8;
 
+// Minimum pixels kept between the tooltip and the game window edge.
+const EDGE_PX = 8;
+
+// Room an "above" tooltip is assumed to need. Generous on purpose: nothing is measured, so this
+// stands in for a two-line tooltip plus its padding.
+const ABOVE_MIN_ROOM_REM = 70;
+
+// The panel is a known rem width, so its measured pixel width converts rem to px without touching
+// getComputedStyle. Must match --hc-panel-width in MochiColorPickerPanel.module.scss.
+const PANEL_WIDTH_REM = 246;
+
 type TipState = {
     content: ReactNode;
     left: number;
     top: number;
     transform: string;
+    maxWidth: number;
 } | null;
 
 type ProviderProps = {
@@ -42,7 +86,7 @@ export const SideTooltipProvider = ({ anchorRef, panelRef, disabled = false, chi
         }
     }, [disabled]);
 
-    const show: ShowFn = (side, content, control) => {
+    const show: ShowFn = (side, content, control, align) => {
         if (disabled) {
             return;
         }
@@ -53,18 +97,41 @@ export const SideTooltipProvider = ({ anchorRef, panelRef, disabled = false, chi
             return;
         }
 
-        // Make everything relative to the anchor so the absolute tooltip moves with the panel.
+        // Anchor-relative so the absolute tooltip travels with the dragged panel.
+        const panelLeft = panel.left - anchor.left;
+        const panelTop = panel.top - anchor.top;
         const controlMidY = control.top - anchor.top + control.height / 2;
-        const controlMidX = control.left - anchor.left + control.width / 2;
 
-        if (side === "right") {
-            setTip({ content, left: panel.right - anchor.left + GAP_PX, top: controlMidY, transform: "translateY(-50%)" });
-        } else if (side === "left") {
-            setTip({ content, left: panel.left - anchor.left - GAP_PX, top: controlMidY, transform: "translate(-100%, -50%)" });
-        } else if (side === "above") {
-            setTip({ content, left: controlMidX, top: panel.top - anchor.top - GAP_PX, transform: "translate(-50%, -100%)" });
+        // The layer is never wider than the panel, so the panel's own width is a safe stand-in for
+        // the tooltip's width in the fit tests below.
+        const maxWidth = panel.width;
+        const remPx = panel.width / PANEL_WIDTH_REM;
+
+        let placed = side;
+        if (side === "left" && panel.left - GAP_PX - maxWidth < EDGE_PX) {
+            placed = "below";
+        } else if (side === "right" && panel.right + GAP_PX + maxWidth > window.innerWidth - EDGE_PX) {
+            placed = "below";
+        } else if (side === "above" && panel.top - GAP_PX < ABOVE_MIN_ROOM_REM * remPx) {
+            // No tooltip is ever measured here, so "does it fit above" uses a generous fixed
+            // allowance instead. Falls back sideways rather than below, which would land the
+            // title-bar tooltip on top of the panel body.
+            placed = "right";
+        }
+
+        // Centered variants hang off the panel's midpoint instead of its left edge.
+        const centered = align === "center" && (placed === "above" || placed === "below");
+        const alignedLeft = centered ? panelLeft + panel.width / 2 : panelLeft;
+        const alignX = centered ? "translateX(-50%) " : "";
+
+        if (placed === "left") {
+            setTip({ content, left: panelLeft - GAP_PX, top: controlMidY, transform: "translate(-100%, -50%)", maxWidth });
+        } else if (placed === "right") {
+            setTip({ content, left: panelLeft + panel.width + GAP_PX, top: controlMidY, transform: "translateY(-50%)", maxWidth });
+        } else if (placed === "above") {
+            setTip({ content, left: alignedLeft, top: panelTop - GAP_PX, transform: `${alignX}translateY(-100%)`, maxWidth });
         } else {
-            setTip({ content, left: controlMidX, top: panel.bottom - anchor.top + GAP_PX, transform: "translateX(-50%)" });
+            setTip({ content, left: alignedLeft, top: panelTop + panel.height + GAP_PX, transform: alignX.trim() || "none", maxWidth });
         }
     };
 
@@ -81,7 +148,8 @@ export const SideTooltipProvider = ({ anchorRef, panelRef, disabled = false, chi
                     transform: tip.transform,
                     zIndex: 1000050,
                     pointerEvents: "none",
-                    maxWidth: "240rem",
+                    boxSizing: "border-box",
+                    maxWidth: `${tip.maxWidth}px`,
                     paddingTop: "7rem",
                     paddingRight: "10rem",
                     paddingBottom: "7rem",
@@ -107,19 +175,20 @@ export const SideTooltipProvider = ({ anchorRef, panelRef, disabled = false, chi
 type SideTooltipProps = {
     tooltip?: ReactNode;
     side: SideTooltipSide;
+    align?: SideTooltipAlign;
     children: React.ReactElement;
 };
 
 // Drop-in replacement for the vanilla <Tooltip>: wraps one child, adds hover handlers that drive the
 // shared tooltip layer. Uses cloneElement so it adds no extra DOM and never disturbs flex layout.
-export const SideTooltip = ({ tooltip, side, children }: SideTooltipProps) => {
+export const SideTooltip = ({ tooltip, side, align = "start", children }: SideTooltipProps) => {
     const { show, hide } = useContext(SideTooltipContext);
     const child = React.Children.only(children) as React.ReactElement<any>;
 
     return React.cloneElement(child, {
         onMouseEnter: (e: React.MouseEvent) => {
             if (tooltip != null) {
-                show(side, tooltip, (e.currentTarget as HTMLElement).getBoundingClientRect());
+                show(side, tooltip, (e.currentTarget as HTMLElement).getBoundingClientRect(), align);
             }
             child.props.onMouseEnter?.(e);
         },

@@ -1,25 +1,26 @@
 // <copyright file="Setting.Defaults.cs" company="River-Mochi">
-// Copyright (c) 2026 River-Mochi. All rights reserved.
-// Licensed under the MIT License. You may not use this file except in compliance with this License.
-// See LICENSE file in the project root for full license information.
-// This notice and the MIT License notice must be kept with
-// all copies or substantial portions of this code.
+// Copyright (C) 2026 River-Mochi.
+// Licensed under the GNU General Public License v3.0 or later,
+// with the Cities: Skylines II Linking Exception.
+// See LICENSE and LICENSE-EXCEPTION in the project root.
+// Copyright and license notices MUST be preserved.
 // ================= </copyright> ======================
 
 // File: Settings/Setting.Defaults.cs
 // Purpose: Defaults and one-time migration helpers for HoverColorsSettings.
 
-namespace HoverColors.Settings
+namespace HoverColors
 {
     public partial class HoverColorsSettings
     {
         public override void SetDefaults()
         {
-            // Vanilla cyan-blue from the OutlinesWorldUIPass material defaults.
-            OutlineR = 0.502f;
-            OutlineG = 0.869f;
-            OutlineB = 1f;
-            OutlineA = 0.855f;
+            // New installs start on HC's Set A / P1 instead of vanilla cyan-blue.
+            // Existing users keep their saved live color when their .coc loads.
+            OutlineR = kPresetA1R;
+            OutlineG = kPresetA1G;
+            OutlineB = kPresetA1B;
+            OutlineA = kPresetA1A;
 
             // Vanilla parent/owner green used for sub-building placement and owned objects.
             OwnerR = 0.247f;
@@ -29,6 +30,19 @@ namespace HoverColors.Settings
 
             // FillA=0 matches vanilla CS2: no extra silhouette overlay until the player turns it up.
             FillA = 0f;
+
+            // White is the neutral tint: the fill renders in the Outline color, same as before the
+            // fill had its own swatch. Matches the vanilla material _InnerColor RGB.
+            FillR = 1f;
+            FillG = 1f;
+            FillB = 1f;
+            FillColorInitialized = true;
+
+            // 1.0 = the vanilla shader width captured at runtime, whatever that build's value is.
+            OutlineThicknessScale = kModDefaultOutlineThicknessScale;
+            OutlineThicknessInitialized = true;
+
+            PanelOpacityPercent = kDefaultPanelOpacityPercent;
 
             // Safe fallback for the District picker until DistrictColorSystem captures the authored
             // default district prefab colors. Not applied unless DistrictColorEnabled is true.
@@ -50,12 +64,18 @@ namespace HoverColors.Settings
             Preset1B = kPresetA1B;
             Preset1A = kPresetA1A;
             Preset1FillA = kPresetA1FillA;
+            Preset1FillR = 1f;
+            Preset1FillG = 1f;
+            Preset1FillB = 1f;
 
             Preset2R = kPresetA2R;
             Preset2G = kPresetA2G;
             Preset2B = kPresetA2B;
             Preset2A = kPresetA2A;
             Preset2FillA = kPresetA2FillA;
+            Preset2FillR = 1f;
+            Preset2FillG = 1f;
+            Preset2FillB = 1f;
 
             // Set B: P1 = soft white, P2 = original dark purple-gray.
             PresetAlt1R = kPresetB1R;
@@ -63,12 +83,18 @@ namespace HoverColors.Settings
             PresetAlt1B = kPresetB1B;
             PresetAlt1A = kPresetB1A;
             PresetAlt1FillA = kPresetB1FillA;
+            PresetAlt1FillR = 1f;
+            PresetAlt1FillG = 1f;
+            PresetAlt1FillB = 1f;
 
             PresetAlt2R = kPresetB2R;
             PresetAlt2G = kPresetB2G;
             PresetAlt2B = kPresetB2B;
             PresetAlt2A = kPresetB2A;
             PresetAlt2FillA = kPresetB2FillA;
+            PresetAlt2FillR = 1f;
+            PresetAlt2FillG = 1f;
+            PresetAlt2FillB = 1f;
 
             Preset1GuidelinePercent = kDefaultGuidelineOpacityPercent;
             Preset2GuidelinePercent = kDefaultGuidelineOpacityPercent;
@@ -122,7 +148,11 @@ namespace HoverColors.Settings
             ToolColorMode = kToolColorModeRecommended;
             UseOverlapWarningColor = true;
             UseCustomColorsForNetLanes = true;
-            UseDarkerPanel = false;
+            // Dark for fresh installs and for Reset to Mod Defaults: it is the game's own panel
+            // surface, so it matches whatever UI skin the player already runs. The setter keeps the
+            // legacy UseDarkerPanel field in step.
+            PanelStyle = kPanelStyleDark;
+            PanelStyleInitialized = true;
             PanelCollapsed = false;
 
             // 100 = vanilla default. Lower = more transparent guidelines.
@@ -133,10 +163,48 @@ namespace HoverColors.Settings
         {
             bool changed = false;
 
+            // Saves written before the Panel style dropdown carry only the old Darker panel bool.
+            // Seed the dropdown from it, so a player who deliberately chose Standard is not silently
+            // moved to Dark just because Dark became the fresh-install default.
+            if (!PanelStyleInitialized)
+            {
+                PanelStyle = UseDarkerPanel ? kPanelStyleDark : kPanelStyleStandard;
+                PanelStyleInitialized = true;
+                changed = true;
+            }
+
             if (!SpecializedIndustryAreasSuppressionInitialized)
             {
                 SpecializedIndustryAreasSuppressed = true;
                 SpecializedIndustryAreasSuppressionInitialized = true;
+                changed = true;
+            }
+
+            // Without this an upgrading player's fill would go black the moment they raise the slider.
+            if (!FillColorInitialized)
+            {
+                FillR = 1f;
+                FillG = 1f;
+                FillB = 1f;
+
+                Preset1FillR = 1f; Preset1FillG = 1f; Preset1FillB = 1f;
+                Preset2FillR = 1f; Preset2FillG = 1f; Preset2FillB = 1f;
+                PresetAlt1FillR = 1f; PresetAlt1FillG = 1f; PresetAlt1FillB = 1f;
+                PresetAlt2FillR = 1f; PresetAlt2FillG = 1f; PresetAlt2FillB = 1f;
+
+                PresetDefaultsBackup1FillR = 1f; PresetDefaultsBackup1FillG = 1f; PresetDefaultsBackup1FillB = 1f;
+                PresetDefaultsBackup2FillR = 1f; PresetDefaultsBackup2FillG = 1f; PresetDefaultsBackup2FillB = 1f;
+                PresetDefaultsBackupAlt1FillR = 1f; PresetDefaultsBackupAlt1FillG = 1f; PresetDefaultsBackupAlt1FillB = 1f;
+                PresetDefaultsBackupAlt2FillR = 1f; PresetDefaultsBackupAlt2FillG = 1f; PresetDefaultsBackupAlt2FillB = 1f;
+
+                FillColorInitialized = true;
+                changed = true;
+            }
+
+            if (!OutlineThicknessInitialized)
+            {
+                OutlineThicknessScale = kModDefaultOutlineThicknessScale;
+                OutlineThicknessInitialized = true;
                 changed = true;
             }
 
@@ -150,6 +218,9 @@ namespace HoverColors.Settings
                 PresetAlt1B = kPresetB1B;
                 PresetAlt1A = kPresetB1A;
                 PresetAlt1FillA = kPresetB1FillA;
+                PresetAlt1FillR = 1f;
+                PresetAlt1FillG = 1f;
+                PresetAlt1FillB = 1f;
                 PresetAlt1GuidelinePercent = kDefaultGuidelineOpacityPercent;
 
                 PresetAlt2R = kPresetB2R;
@@ -157,6 +228,9 @@ namespace HoverColors.Settings
                 PresetAlt2B = kPresetB2B;
                 PresetAlt2A = kPresetB2A;
                 PresetAlt2FillA = kPresetB2FillA;
+                PresetAlt2FillR = 1f;
+                PresetAlt2FillG = 1f;
+                PresetAlt2FillB = 1f;
                 PresetAlt2GuidelinePercent = kDefaultGuidelineOpacityPercent;
 
                 PresetSetsInitialized = true;

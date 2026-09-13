@@ -1,3 +1,11 @@
+// <copyright file="MochiSlider.tsx" company="River-Mochi">
+// Copyright (C) 2026 River-Mochi.
+// Licensed under the GNU General Public License v3.0 or later,
+// with the Cities: Skylines II Linking Exception.
+// See LICENSE and LICENSE-EXCEPTION in the project root.
+// Copyright and license notices MUST be preserved.
+// ================= </copyright> ======================
+
 // File: UI/src/panel/components/MochiSlider.tsx
 // Purpose: Thin wrapper around the vanilla CS2 slider, matching the RoadRailSpeeds approach.
 //

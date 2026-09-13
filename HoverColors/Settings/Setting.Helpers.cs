@@ -1,23 +1,20 @@
 // <copyright file="Setting.Helpers.cs" company="River-Mochi">
-// Copyright (c) 2026 River-Mochi. All rights reserved.
-// Licensed under the MIT License. You may not use this file except in compliance with this License.
-// See LICENSE file in the project root for full license information.
-// This notice and the MIT License notice must be kept with
-// all copies or substantial portions of this code.
+// Copyright (C) 2026 River-Mochi.
+// Licensed under the GNU General Public License v3.0 or later,
+// with the Cities: Skylines II Linking Exception.
+// See LICENSE and LICENSE-EXCEPTION in the project root.
+// Copyright and license notices MUST be preserved.
 // ================= </copyright> ======================
 
 // File: Settings/Setting.Helpers.cs
 // Purpose: Small Options UI and external-link helpers for HoverColorsSettings.
 
-namespace HoverColors.Settings
+namespace HoverColors
 {
-    using System; // Exception handling for external link open failures.
-
-    using CS2Shared.RiverMochi; // WarnOnce for link failure logging.
-
-    using Game.UI.Widgets; // DropdownItem for Options UI dropdown rows.
-
-    using UnityEngine; // Application.OpenURL.
+    using System;               // Exception handling
+    using CS2Shared.RiverMochi; // LogUtils
+    using Game.UI.Widgets;      // DropdownItem for Options UI
+    using UnityEngine;          // Application.OpenURL
 
     public partial class HoverColorsSettings
     {
@@ -41,6 +38,28 @@ namespace HoverColors.Settings
                     displayName = GetToolColorModeLocaleID("Custom"),
                 },
             };
+        }
+
+        public DropdownItem<int>[] GetPanelStyleItems()
+        {
+            return new[]
+            {
+                new DropdownItem<int>
+                {
+                    value = kPanelStyleDark,
+                    displayName = GetPanelStyleLocaleID("Dark"),
+                },
+                new DropdownItem<int>
+                {
+                    value = kPanelStyleStandard,
+                    displayName = GetPanelStyleLocaleID("Glass"),
+                },
+            };
+        }
+
+        public string GetPanelStyleLocaleID(string valueName)
+        {
+            return "Options[" + id + ".PanelStyle." + valueName + "]";
         }
 
         public string GetToolColorModeLocaleID(string valueName)

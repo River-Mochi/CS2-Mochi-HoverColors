@@ -2,8 +2,6 @@
     <!--
     HoverColors.csproj   CS2 mod: "Hover Colors" [HC]
     - CS2 toolchain (Mod.props / Mod.targets) supplies TargetFramework, game ref resolution, analyzers.
-    - No LangVersion override: CS2 toolchain stays on the supported C# version.
-    - Nullable enable to match LogUtils + River-Mochi mod defaults.
     - UI build (under UI/) runs after C# build; webpack writes directly into the CS2 Mods folder.
       Release fails hard on npm errors; Debug warns and continues.
     - Version is the single source of truth here; the Scripts/Update-PublishConfig.ps1 target syncs it
@@ -25,8 +23,9 @@
         <Nullable>enable</Nullable>
 
         <!-- Versioning: single source of truth -->
+        <Version>1.1.0</Version>
 		<GameVersion>1.6.*</GameVersion>
-        <Version>1.0.2</Version>
+
         <AssemblyVersion>$(Version).0</AssemblyVersion>
         <FileVersion>$(Version).0</FileVersion>
 
@@ -34,9 +33,7 @@
         <RootNamespace>HoverColors</RootNamespace>
         <AssemblyName>HoverColors</AssemblyName>
         <AssemblyTitle>Hover Colors</AssemblyTitle>
-        <Product>Hover Colors</Product>
         <Copyright>Copyright © 2026 River-Mochi</Copyright>
-
 
 
         <!-- Configurable npm timeouts (ms). Prevents "looks stuck forever" without a hard cap on success. -->
@@ -63,70 +60,30 @@
 
     <!-- Game / Colossal / Unity refs (toolchain resolves these via $(ManagedPath) + AssemblySearchPaths). -->
     <ItemGroup>
-        <Reference Include="Game">
-            <Private>false</Private>
-        </Reference>
-        <Reference Include="Colossal.Core">
-            <Private>false</Private>
-        </Reference>
-        <Reference Include="Colossal.Logging">
-            <Private>false</Private>
-        </Reference>
-        <Reference Include="Colossal.IO.AssetDatabase">
-            <Private>false</Private>
-        </Reference>
-        <Reference Include="Colossal.UI">
-            <Private>false</Private>
-        </Reference>
-        <Reference Include="Colossal.UI.Binding">
-            <Private>false</Private>
-        </Reference>
-        <Reference Include="Colossal.Localization">
-            <Private>false</Private>
-        </Reference>
-        <Reference Include="Colossal.Mathematics">
-            <Private>false</Private>
-        </Reference>
-        <Reference Include="Colossal.Collections">
-            <Private>false</Private>
-        </Reference>
-        <Reference Include="UnityEngine.CoreModule">
-            <Private>false</Private>
-        </Reference>
-        <Reference Include="Unity.Burst">
-            <Private>false</Private>
-        </Reference>
-        <Reference Include="Unity.Collections">
-            <Private>false</Private>
-        </Reference>
-        <Reference Include="Unity.Entities">
-            <Private>false</Private>
-        </Reference>
-        <Reference Include="Unity.Mathematics">
-            <Private>false</Private>
-        </Reference>
-        <Reference Include="Unity.InputSystem">
-            <Private>false</Private>
-        </Reference>
+        <Reference Include="Game"><Private>false</Private></Reference>
+        <Reference Include="Colossal.Core"><Private>false</Private></Reference>
+        <Reference Include="Colossal.Logging"><Private>false</Private></Reference>
+        <Reference Include="Colossal.IO.AssetDatabase"><Private>false</Private></Reference>
+        <Reference Include="Colossal.UI"><Private>false</Private></Reference>
+        <Reference Include="Colossal.UI.Binding"><Private>false</Private></Reference>
+        <Reference Include="Colossal.Localization"><Private>false</Private></Reference>
+        <Reference Include="Colossal.Mathematics"><Private>false</Private></Reference>
+        <Reference Include="Colossal.Collections"><Private>false</Private></Reference>
+        <Reference Include="UnityEngine.CoreModule"><Private>false</Private></Reference>
+        <Reference Include="Unity.Burst"><Private>false</Private></Reference>
+        <Reference Include="Unity.Collections"><Private>false</Private></Reference>
+        <Reference Include="Unity.Entities"><Private>false</Private></Reference>
+        <Reference Include="Unity.Mathematics"><Private>false</Private></Reference>
+        <Reference Include="Unity.InputSystem"><Private>false</Private></Reference>
         <!-- HDRP refs are required by OutlineColorSystem (CustomPassVolume + OutlinesWorldUIPass). -->
-        <Reference Include="Unity.RenderPipelines.HighDefinition.Runtime">
-            <Private>false</Private>
-        </Reference>
-        <Reference Include="Unity.RenderPipelines.HighDefinition.Config.Runtime">
-            <Private>false</Private>
-        </Reference>
+        <Reference Include="Unity.RenderPipelines.HighDefinition.Runtime"><Private>false</Private></Reference>
+        <Reference Include="Unity.RenderPipelines.HighDefinition.Config.Runtime"><Private>false</Private></Reference>
     </ItemGroup>
 
     <ItemGroup>
-        <Reference Update="System">
-            <Private>false</Private>
-        </Reference>
-        <Reference Update="System.Core">
-            <Private>false</Private>
-        </Reference>
-        <Reference Update="System.Data">
-            <Private>false</Private>
-        </Reference>
+        <Reference Update="System"><Private>false</Private></Reference>
+        <Reference Update="System.Core"><Private>false</Private></Reference>
+        <Reference Update="System.Data"><Private>false</Private></Reference>
     </ItemGroup>
 
     <!-- Convenience link of CS2 toolchain files in Properties/ for easy viewing in VS. -->
@@ -156,9 +113,7 @@
         </Exec>
 
         <Error Condition="'$(Configuration)'=='Release' AND '$(NpmCiExit)'!='0'" Text="$(AssemblyTitle) UI: 'npm ci' failed (exit $(NpmCiExit)). Release build aborted." />
-
         <Warning Condition="'$(Configuration)'!='Release' AND '$(NpmCiExit)'!='0'" Text="$(AssemblyTitle) UI: 'npm ci' failed (exit $(NpmCiExit)). Continuing (non-Release)." />
-
         <WriteLinesToFile Condition="'$(NpmCiExit)'=='0'" File="$(ProjectDir)UI\node_modules\.stamp" Lines="ok" Overwrite="true" />
     </Target>
 
@@ -166,13 +121,11 @@
     <Target Name="BuildUI" AfterTargets="Build" DependsOnTargets="NpmInstallIfNeeded" Condition="Exists('$(ProjectDir)UI\package.json')">
 
         <Message Text="$(AssemblyTitle) UI: npm run build ($(Configuration))..." Importance="high" />
-
         <Exec Command="npm run build" WorkingDirectory="$(ProjectDir)UI" IgnoreExitCode="true" Timeout="$(HCNpmBuildTimeoutMs)">
             <Output TaskParameter="ExitCode" PropertyName="NpmBuildExit" />
         </Exec>
 
         <Error Condition="'$(Configuration)'=='Release' AND '$(NpmBuildExit)'!='0'" Text="$(AssemblyTitle) UI: 'npm run build' failed (exit $(NpmBuildExit)). Release build aborted." />
-
         <Warning Condition="'$(Configuration)'!='Release' AND '$(NpmBuildExit)'!='0'" Text="$(AssemblyTitle) UI: 'npm run build' failed (exit $(NpmBuildExit)). Continuing (non-Release)." />
     </Target>
 </Project>
