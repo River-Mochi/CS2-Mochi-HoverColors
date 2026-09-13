@@ -159,16 +159,18 @@ namespace HoverColors
             GuidelineOpacityPercent = kDefaultGuidelineOpacityPercent;
         }
 
-        public void MigrateAfterLoad()
+        /// <summary>
+        /// Validates values coming out of the .coc. Nothing here migrates: it repairs state a
+        /// corrupt, partially written or hand-edited settings file could hold, and runs every load.
+        /// </summary>
+        public void SanitizeAfterLoad()
         {
             bool changed = false;
 
-            // Despite the name, nothing here migrates. These checks sanitize values that a corrupt
-            // or hand-edited .coc could hold, and they run on every load.
-            //
-            // Five "XInitialized" migration blocks used to live here; 1.1.1 removed them because none
-            // could ever execute. The flags themselves are still live - Triggers.cs reads them - so
-            // they stayed. Full reasoning in docs/Internals.md, "Migration flags".
+            // Five "XInitialized" migration blocks used to live here. 1.1.1 removed them: none could
+            // ever execute, and the method was renamed to match what it really does. The flags stayed
+            // because Triggers.cs reads them. See docs/Internals.md, "Migration flags".
+
             if (ActivePresetSet != kPresetSetA && ActivePresetSet != kPresetSetB)
             {
                 ActivePresetSet = kPresetSetA;

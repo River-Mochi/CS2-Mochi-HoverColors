@@ -152,8 +152,8 @@ namespace HoverColors
         [SettingsUIHidden]
         public float FillB { get; set; }
 
-        // Saves written before the fill tint existed have no FillR/G/B, so they deserialize as
-        // black. This flag lets MigrateAfterLoad hand those saves white instead.
+        // Marks the fill colour as explicitly set. Triggers.cs reads it so the first write always
+        // persists even when the chosen value happens to equal the current one.
         [SettingsUIHidden]
         public bool FillColorInitialized { get; set; }
 
@@ -571,8 +571,8 @@ namespace HoverColors
         [SettingsUIHidden]
         public bool UseDarkerPanel { get; set; }
 
-        // False on saves written before the dropdown existed, which is how MigrateAfterLoad knows to
-        // seed PanelStyle from UseDarkerPanel instead of letting the new Dark default overwrite it.
+        // Marks the panel style as explicitly set. Kept alongside the legacy UseDarkerPanel field;
+        // see docs/Internals.md, "Migration flags", for why neither is removed.
         [SettingsUIHidden]
         public bool PanelStyleInitialized { get; set; }
 
