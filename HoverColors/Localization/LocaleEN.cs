@@ -91,7 +91,7 @@ namespace HoverColors
                 },
 
                 // Panel style
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelStyle)), "▪ Panel style" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelStyle)), "▪ Pick dark or glass panel" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelStyle)),
                     "**Dark (Vanilla)** uses the game's own panel surface.\n" +
                     "- Matches your Legacy or Modern UI skin automatically.\n" +

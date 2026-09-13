@@ -44,9 +44,9 @@ export const fillG$ = bindValue<number>(CHANNEL, "FillG", 1);
 export const fillB$ = bindValue<number>(CHANNEL, "FillB", 1);
 
 // Multiplier on the game's captured vanilla outline width. 1 = vanilla on any build.
-// Fallback must match kModDefaultOutlineThicknessScale, not the vanilla 1.0 - this value is
-// what the slider shows for the frame before the real setting arrives.
-export const outlineThicknessScale$ = bindValue<number>(CHANNEL, "OutlineThicknessScale", 0.8);
+// Must match kModDefaultOutlineThicknessScale - this is what the slider shows for the frame
+// before the real setting arrives.
+export const outlineThicknessScale$ = bindValue<number>(CHANNEL, "OutlineThicknessScale", 1);
 
 export const districtR$ = bindValue<number>(CHANNEL, "DistrictR", 128 / 255);
 export const districtG$ = bindValue<number>(CHANNEL, "DistrictG", 128 / 255);

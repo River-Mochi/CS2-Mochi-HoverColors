@@ -84,7 +84,10 @@ namespace HoverColors
         // Two distinct meanings that used to share one constant:
         //   mod default  - what a fresh install / never-initialized save starts on
         //   vanilla      - the captured runtime _OutlineWidth, i.e. "no change vs the game"
-        internal const float kModDefaultOutlineThicknessScale = 0.8f;
+        // Fresh installs start at the vanilla width; players who want thinner or thicker set it
+        // themselves. Equal to kVanillaOutlineThicknessScale today, kept separate because they mean
+        // different things: one is "what a new install gets", the other is "what the game shipped".
+        internal const float kModDefaultOutlineThicknessScale = 1f;
         internal const float kVanillaOutlineThicknessScale = 1f;
 
         // Centralized default for the guideline opacity slider.
@@ -250,8 +253,11 @@ namespace HoverColors
         internal const int kPresetSetA = 0;
         internal const int kPresetSetB = 1;
 
-        internal const float kPresetA1R = 215f / 255f, kPresetA1G = 226f / 255f, kPresetA1B = 194f / 255f;
-        internal const float kPresetA1A = 0.67f, kPresetA1FillA = 0f;
+        // Set A, slot 1: pale warm cream, approx RGB 224, 224, 202. Exact picker values are kept
+        // rather than rounded to x/255 so the shipped swatch is the colour that was chosen.
+        // Note this pair is also the fresh-install Outline colour - see Setting.Defaults.cs.
+        internal const float kPresetA1R = 0.8770671f, kPresetA1G = 0.879998f, kPresetA1B = 0.7919982f;
+        internal const float kPresetA1A = 0.79f, kPresetA1FillA = 0f;
 
         internal const float kPresetA2R = 140f / 255f, kPresetA2G = 140f / 255f, kPresetA2B = 171f / 255f;
         internal const float kPresetA2A = 0.5f, kPresetA2FillA = 0f;

@@ -59,7 +59,7 @@ namespace HoverColors
             ActivePresetSet = kPresetSetA;
             PresetSetsInitialized = true;
 
-            // Set A: P1 = off-white D7E2C2, P2 = original light gray-purple.
+            // Set A: P1 = pale warm cream ~E0E0CA, P2 = original light gray-purple.
             Preset1R = kPresetA1R;
             Preset1G = kPresetA1G;
             Preset1B = kPresetA1B;
