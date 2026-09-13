@@ -160,17 +160,20 @@ namespace HoverColors
         }
 
         /// <summary>
-        /// Validates values coming out of the .coc. Nothing here migrates: it repairs state a
-        /// corrupt, partially written or hand-edited settings file could hold, and runs every load.
+        /// Repairs saved preset values that fall outside the range the code expects, so a corrupt or
+        /// hand-edited .coc cannot leave the preset state inconsistent. Runs once per load.
         /// </summary>
         public void SanitizeAfterLoad()
         {
             bool changed = false;
 
-            // Five "XInitialized" migration blocks used to live here. 1.1.1 removed them: none could
-            // ever execute, and the method was renamed to match what it really does. The flags stayed
-            // because Triggers.cs reads them. See docs/Internals.md, "Migration flags".
-
+            // Belt and braces, not a safety net. Every consumer of these values already fails safe:
+            // ActivePresetSet and PresetDefaultsBackupActiveSet are only ever read as binary
+            // "== kPresetSetB" tests, never as indexes, so an out-of-range value already behaves as
+            // Set A; and the restore path already requires ToggleActive && HasBackup together.
+            //
+            // What they add is correcting the saved file itself, which a player can edit by hand.
+            // Removal candidate.
             if (ActivePresetSet != kPresetSetA && ActivePresetSet != kPresetSetB)
             {
                 ActivePresetSet = kPresetSetA;
