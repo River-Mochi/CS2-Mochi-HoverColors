@@ -1,4 +1,4 @@
-// <copyright file="LocaleKO.cs" company="River-Mochi">
+﻿// <copyright file="LocaleKO.cs" company="River-Mochi">
 // Copyright (C) 2026 River-Mochi.
 // Licensed under the GNU General Public License v3.0 or later,
 // with the Cities: Skylines II Linking Exception.
@@ -91,7 +91,7 @@ namespace HoverColors
                 },
 
                 // Panel style
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelStyle)), "▪ 패널 스타일" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelStyle)), "▪ 다크 또는 글래스 패널 선택" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelStyle)),
                     "**어두움 (바닐라)** 은 게임 기본 패널 표면을 사용합니다.\n" +
                     "- Legacy UI / Modern UI에 자동으로 맞습니다.\n" +

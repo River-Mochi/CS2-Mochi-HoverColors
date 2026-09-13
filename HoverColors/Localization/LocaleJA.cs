@@ -1,4 +1,4 @@
-// <copyright file="LocaleJA.cs" company="River-Mochi">
+﻿// <copyright file="LocaleJA.cs" company="River-Mochi">
 // Copyright (C) 2026 River-Mochi.
 // Licensed under the GNU General Public License v3.0 or later,
 // with the Cities: Skylines II Linking Exception.
@@ -91,7 +91,7 @@ namespace HoverColors
                 },
 
                 // Panel style
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelStyle)), "▪ パネルスタイル" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelStyle)), "▪ ダークまたはガラスパネルを選択" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelStyle)),
                     "**ダーク (バニラ)** はゲーム標準のパネルを使います。\n" +
                     "- Legacy UI / Modern UI に自動で合います。\n" +

@@ -1,4 +1,4 @@
-// <copyright file="LocaleTR.cs" company="River-Mochi">
+﻿// <copyright file="LocaleTR.cs" company="River-Mochi">
 // Copyright (C) 2026 River-Mochi.
 // Licensed under the GNU General Public License v3.0 or later,
 // with the Cities: Skylines II Linking Exception.
@@ -91,7 +91,7 @@ namespace HoverColors
                 },
 
                 // Panel style
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelStyle)), "▪ Panel stili" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelStyle)), "▪ Koyu veya cam panel seç" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelStyle)),
                     "**Koyu (Vanilla)** oyunun kendi panel yüzeyini kullanır.\n" +
                     "- Legacy UI veya Modern UI görünümüne otomatik uyar.\n" +

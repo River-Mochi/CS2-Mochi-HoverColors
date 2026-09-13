@@ -1,4 +1,4 @@
-// <copyright file="LocaleVI.cs" company="River-Mochi">
+﻿// <copyright file="LocaleVI.cs" company="River-Mochi">
 // Copyright (C) 2026 River-Mochi.
 // Licensed under the GNU General Public License v3.0 or later,
 // with the Cities: Skylines II Linking Exception.
@@ -91,7 +91,7 @@ namespace HoverColors
                 },
 
                 // Panel style
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelStyle)), "▪ Kiểu bảng" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelStyle)), "▪ Chọn bảng tối hoặc kính" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelStyle)),
                     "**Tối (Vanilla)** dùng bề mặt bảng của chính game.\n" +
                     "- Tự khớp với Legacy UI hoặc Modern UI.\n" +

@@ -1,4 +1,4 @@
-// <copyright file="LocaleTH.cs" company="River-Mochi">
+﻿// <copyright file="LocaleTH.cs" company="River-Mochi">
 // Copyright (C) 2026 River-Mochi.
 // Licensed under the GNU General Public License v3.0 or later,
 // with the Cities: Skylines II Linking Exception.
@@ -91,7 +91,7 @@ namespace HoverColors
                 },
 
                 // Panel style
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelStyle)), "▪ รูปแบบแผง" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelStyle)), "▪ เลือกแผงแบบมืดหรือกระจก" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelStyle)),
                     "**มืด (แบบเกม)** ใช้พื้นผิวแผงของเกมโดยตรง\n" +
                     "- เข้ากับ Legacy UI หรือ Modern UI อัตโนมัติ\n" +

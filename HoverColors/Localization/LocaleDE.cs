@@ -1,4 +1,4 @@
-// <copyright file="LocaleDE.cs" company="River-Mochi">
+﻿// <copyright file="LocaleDE.cs" company="River-Mochi">
 // Copyright (C) 2026 River-Mochi.
 // Licensed under the GNU General Public License v3.0 or later,
 // with the Cities: Skylines II Linking Exception.
@@ -91,7 +91,7 @@ namespace HoverColors
                 },
 
                 // Panel style
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelStyle)), "▪ Panel-Stil" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelStyle)), "▪ Dunkles oder Glas-Panel wählen" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelStyle)),
                     "**Dunkel (Vanilla)** nutzt die eigene Panel-Oberfläche des Spiels.\n" +
                     "- Passt sich automatisch an Legacy- oder Modern-UI an.\n" +

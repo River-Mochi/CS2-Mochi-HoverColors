@@ -1,4 +1,4 @@
-// <copyright file="LocaleZH_HANT.cs" company="River-Mochi">
+﻿// <copyright file="LocaleZH_HANT.cs" company="River-Mochi">
 // Copyright (C) 2026 River-Mochi.
 // Licensed under the GNU General Public License v3.0 or later,
 // with the Cities: Skylines II Linking Exception.
@@ -91,7 +91,7 @@ namespace HoverColors
                 },
 
                 // Panel style
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelStyle)), "▪ 面板樣式" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelStyle)), "▪ 選擇深色或玻璃面板" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelStyle)),
                     "**暗色（原版）**使用遊戲自己的面板表面。\n" +
                     "- 自動配合 Legacy UI 或 Modern UI。\n" +
