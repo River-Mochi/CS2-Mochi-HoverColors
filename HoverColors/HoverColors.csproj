@@ -23,7 +23,7 @@
         <Nullable>enable</Nullable>
 
         <!-- Versioning: single source of truth -->
-        <Version>1.1.0</Version>
+        <Version>1.1.1</Version>
 		<GameVersion>1.6.*</GameVersion>
 
         <AssemblyVersion>$(Version).0</AssemblyVersion>

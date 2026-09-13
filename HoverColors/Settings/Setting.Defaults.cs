@@ -163,80 +163,12 @@ namespace HoverColors
         {
             bool changed = false;
 
-            // Saves written before the Panel style dropdown carry only the old Darker panel bool.
-            // Seed the dropdown from it, so a player who deliberately chose Standard is not silently
-            // moved to Dark just because Dark became the fresh-install default.
-            if (!PanelStyleInitialized)
-            {
-                PanelStyle = UseDarkerPanel ? kPanelStyleDark : kPanelStyleStandard;
-                PanelStyleInitialized = true;
-                changed = true;
-            }
-
-            if (!SpecializedIndustryAreasSuppressionInitialized)
-            {
-                SpecializedIndustryAreasSuppressed = true;
-                SpecializedIndustryAreasSuppressionInitialized = true;
-                changed = true;
-            }
-
-            // Without this an upgrading player's fill would go black the moment they raise the slider.
-            if (!FillColorInitialized)
-            {
-                FillR = 1f;
-                FillG = 1f;
-                FillB = 1f;
-
-                Preset1FillR = 1f; Preset1FillG = 1f; Preset1FillB = 1f;
-                Preset2FillR = 1f; Preset2FillG = 1f; Preset2FillB = 1f;
-                PresetAlt1FillR = 1f; PresetAlt1FillG = 1f; PresetAlt1FillB = 1f;
-                PresetAlt2FillR = 1f; PresetAlt2FillG = 1f; PresetAlt2FillB = 1f;
-
-                PresetDefaultsBackup1FillR = 1f; PresetDefaultsBackup1FillG = 1f; PresetDefaultsBackup1FillB = 1f;
-                PresetDefaultsBackup2FillR = 1f; PresetDefaultsBackup2FillG = 1f; PresetDefaultsBackup2FillB = 1f;
-                PresetDefaultsBackupAlt1FillR = 1f; PresetDefaultsBackupAlt1FillG = 1f; PresetDefaultsBackupAlt1FillB = 1f;
-                PresetDefaultsBackupAlt2FillR = 1f; PresetDefaultsBackupAlt2FillG = 1f; PresetDefaultsBackupAlt2FillB = 1f;
-
-                FillColorInitialized = true;
-                changed = true;
-            }
-
-            if (!OutlineThicknessInitialized)
-            {
-                OutlineThicknessScale = kModDefaultOutlineThicknessScale;
-                OutlineThicknessInitialized = true;
-                changed = true;
-            }
-
-            if (!PresetSetsInitialized)
-            {
-                // Preserve existing player P1/P2 as Set A. Only initialize Set B.
-                ActivePresetSet = kPresetSetA;
-
-                PresetAlt1R = kPresetB1R;
-                PresetAlt1G = kPresetB1G;
-                PresetAlt1B = kPresetB1B;
-                PresetAlt1A = kPresetB1A;
-                PresetAlt1FillA = kPresetB1FillA;
-                PresetAlt1FillR = 1f;
-                PresetAlt1FillG = 1f;
-                PresetAlt1FillB = 1f;
-                PresetAlt1GuidelinePercent = kDefaultGuidelineOpacityPercent;
-
-                PresetAlt2R = kPresetB2R;
-                PresetAlt2G = kPresetB2G;
-                PresetAlt2B = kPresetB2B;
-                PresetAlt2A = kPresetB2A;
-                PresetAlt2FillA = kPresetB2FillA;
-                PresetAlt2FillR = 1f;
-                PresetAlt2FillG = 1f;
-                PresetAlt2FillB = 1f;
-                PresetAlt2GuidelinePercent = kDefaultGuidelineOpacityPercent;
-
-                PresetSetsInitialized = true;
-                changed = true;
-            }
-
+            // Despite the name, nothing here migrates. These checks sanitize values that a corrupt
+            // or hand-edited .coc could hold, and they run on every load.
+            //
+            // Five "XInitialized" migration blocks used to live here; 1.1.1 removed them because none
+            // could ever execute. The flags themselves are still live - Triggers.cs reads them - so
+            // they stayed. Full reasoning in docs/Internals.md, "Migration flags".
             if (ActivePresetSet != kPresetSetA && ActivePresetSet != kPresetSetB)
             {
                 ActivePresetSet = kPresetSetA;
