@@ -1,4 +1,4 @@
-// <copyright file="Setting.cs" company="River-Mochi">
+﻿// <copyright file="Setting.cs" company="River-Mochi">
 // Copyright (c) 2026 River-Mochi. All rights reserved.
 // Licensed under the MIT License. You may not use this file except in compliance with this License.
 // See LICENSE file in the project root for full license information.
@@ -565,7 +565,7 @@ namespace HoverColors
         // Options UI lists a group in declaration order, so this block is ordered the way it should
         // read on screen: Panel style, then Panel opacity, then Tooltips.
 
-        // Superseded by PanelStyle. Kept as a persisted field so an upgrading player's existing
+        // Superseded by PanelStyle. Kept as persisted field so an upgrading player's existing
         // choice survives, and kept in sync by the PanelStyle setter so anything still reading it
         // (the UI binding, presets) sees the same answer. Hidden, never shown in Options again.
         [SettingsUIHidden]
