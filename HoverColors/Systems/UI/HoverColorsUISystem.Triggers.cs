@@ -46,17 +46,23 @@ namespace HoverColors.UI
             AddBinding(new TriggerBinding(Mod.ModId, "TogglePresetDefaults", TogglePresetDefaults));
             AddBinding(new TriggerBinding(Mod.ModId, "RestorePresetDefaults", RestorePresetDefaults));
             AddBinding(new TriggerBinding(Mod.ModId, "ResetGuidelines", ResetGuidelines));
+#if DEBUG
             AddBinding(new TriggerBinding<string>(Mod.ModId, "LogDebug", LogDebug));
+#endif
         }
 
-        // Diagnostic sink for the panel. Keeps mod troubleshooting in HoverColors.log instead of
-        // UI.log, which every mod's console output shares.
+#if DEBUG
+        // Diagnostic sink for the panel, Debug builds only. Lets UI code write into HoverColors.log
+        // rather than console.log, which lands in the shared UI.log that every mod writes to.
         //
-        // Intentionally has no caller in the shipped UI - this is the reusable half of a debug probe
-        // whose throwaway half was removed. Kept because the alternative from the panel is
-        // console.log, which only reaches the shared UI.log. Reach for it when a game patch changes
-        // a vanilla class or variable the panel depends on and you need to see what it resolved,
-        // without shipping a debug build. Do not prune as dead code.
+        // Deliberately has no caller in the shipped UI: this is the reusable half of a debug probe
+        // whose throwaway half was removed. Reach for it when a game patch changes a vanilla class
+        // or CSS variable the panel depends on and you need to see what the panel actually resolved.
+        // Call it from the UI with trigger(CHANNEL, "LogDebug", someString).
+        //
+        // Compiled out of Release, binding and all, so a stray call can never add noise to a
+        // player's log - a player's log should stay sparse. Do not prune as dead code: it is a
+        // testing tool, not a leftover.
         private static void LogDebug(string message)
         {
             if (string.IsNullOrEmpty(message))
@@ -66,6 +72,7 @@ namespace HoverColors.UI
 
             LogUtils.Info(() => $"{Mod.ModTag} {message}");
         }
+#endif
 
         private void SetOutlineColor(float r, float g, float b, float a)
         {

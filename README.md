@@ -47,7 +47,8 @@ Change District overlay and border colors, adjust transparency, or return them t
 
 - Open Hover Colors from the **palette icon at the top-left of the game**.
 - Hover over panel buttons for short tooltip help.
-- The panel can be collapsed, moved, or switched between lighter and darker styles.
+- The panel can be collapsed or moved anywhere on screen.
+- Choose between two panel styles: **Dark** matches the game's own panels, or **Glass** for a lighter see-through look with its own opacity slider.
 - Additional tool behavior, reset choices, panel preferences, tooltips, and hotkeys are available in the game's **Options menu**.
 
 ## Editor Mode
