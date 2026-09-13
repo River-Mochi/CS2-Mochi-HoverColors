@@ -17,7 +17,6 @@ namespace HoverColors.Systems
     using System.Reflection;
     using Game;
     using Game.Prefabs;
-    using Game.Rendering;
     using Game.Tools;
     using Unity.Entities;
     using UnityEngine;

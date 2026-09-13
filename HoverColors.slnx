@@ -3,6 +3,9 @@
     <File Path=".editorconfig" />
     <File Path=".gitattributes" />
     <File Path=".gitignore" />
+    <File Path="docs/HideBlueHighlight.cs" />
+    <File Path="docs/Internals.md" />
+    <File Path="docs/OutlineRendering.md" />
     <File Path="LICENSE" />
     <File Path="README.md" />
   </Folder>

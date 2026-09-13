@@ -36,7 +36,7 @@ namespace HoverColors.Systems
                 return GetNetToolKind(netTool);
             }
 
-            // Better Bulldozer may still drive vanilla BulldozeToolSystem, but this keeps the
+            // Third-party bulldozer mods may still drive vanilla BulldozeToolSystem, but this keeps the
             // feature resilient if a tool wrapper becomes active instead.
             string typeName = tool.GetType().Name;
             if (typeName.IndexOf("Bulldoze", StringComparison.OrdinalIgnoreCase) >= 0
@@ -92,7 +92,7 @@ namespace HoverColors.Systems
                 return ToolKind.NetRoad;
             }
 
-            // EDT fences/hedges/markings and similar detail tools enter through NetTool
+            // Detailing-mod fences/hedges/markings and similar detail tools enter through NetTool
             // as lanes or fence prefabs. To keep this check cheap: selected prefab only.
             if (selectedPrefab is NetLanePrefab
                 || EntityManager.HasComponent<NetLaneData>(prefabEntity)

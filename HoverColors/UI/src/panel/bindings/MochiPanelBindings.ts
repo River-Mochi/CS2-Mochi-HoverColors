@@ -36,7 +36,9 @@ export const fillG$ = bindValue<number>(CHANNEL, "FillG", 1);
 export const fillB$ = bindValue<number>(CHANNEL, "FillB", 1);
 
 // Multiplier on the game's captured vanilla outline width. 1 = vanilla on any build.
-export const outlineThicknessScale$ = bindValue<number>(CHANNEL, "OutlineThicknessScale", 1);
+// Fallback must match kModDefaultOutlineThicknessScale, not the vanilla 1.0 - this value is
+// what the slider shows for the frame before the real setting arrives.
+export const outlineThicknessScale$ = bindValue<number>(CHANNEL, "OutlineThicknessScale", 0.8);
 
 export const districtR$ = bindValue<number>(CHANNEL, "DistrictR", 128 / 255);
 export const districtG$ = bindValue<number>(CHANNEL, "DistrictG", 128 / 255);
@@ -69,7 +71,7 @@ export const hoverHighlightsSuppressed$ = bindValue<boolean>(CHANNEL, "HoverHigh
 export const useDarkerPanel$ = bindValue<boolean>(CHANNEL, "UseDarkerPanel", true);
 
 // Panel background alpha, 30-100 in steps of 5. Keep in sync with kDefaultPanelOpacityPercent.
-export const panelOpacityPercent$ = bindValue<number>(CHANNEL, "PanelOpacityPercent", 80);
+export const panelOpacityPercent$ = bindValue<number>(CHANNEL, "PanelOpacityPercent", 70);
 export const surfaceToolAreasSuppressed$ = bindValue<boolean>(CHANNEL, "SurfaceToolAreasSuppressed", true);
 export const specializedIndustryAreasSuppressed$ = bindValue<boolean>(CHANNEL, "SpecializedIndustryAreasSuppressed", true);
 export const vanillaOutlineActive$ = bindValue<boolean>(CHANNEL, "VanillaOutlineActive", false);

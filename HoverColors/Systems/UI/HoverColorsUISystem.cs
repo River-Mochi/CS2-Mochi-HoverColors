@@ -113,7 +113,6 @@ namespace HoverColors.UI
 
             // Re-fetch if the action wasn't ready at OnCreate (RegisterKeyBindings race) or got dropped.
             RefreshKeybindActions();
-            
 
             // Read current shared state and flip it — works whether button or previous hotkey set it.
             if (m_TogglePanelAction?.WasReleasedThisFrame() == true)

@@ -73,7 +73,7 @@ namespace HoverColors.Systems
         }
 
         protected override void OnUpdate()
-        {      
+        {
             if (!IsInGameOrEditor() || m_ToolSystem == null || m_AreaToolSystem == null)
             {
                 RestoreIfNeeded();

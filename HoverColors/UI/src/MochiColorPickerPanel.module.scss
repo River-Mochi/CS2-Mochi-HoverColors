@@ -34,9 +34,8 @@
 //
 // Carries no z-index, like .panelAnchor. A z-index here outranks the vanilla colour-picker balloon
 // (z-index var(--tooltipIndex), 20 by default), which is what buried the picker behind the panel in
-// Editor mode. Yenyang's Recolor mounts its editor panel the same way and sets none either. The
-// inline drag transform still gives this element its own stacking context, so tooltips stay
-// contained.
+// Editor mode. Other editor-mounted mod panels omit it for the same reason. The inline drag
+// transform still gives this element its own stacking context, so tooltips stay contained.
 .panelAnchorEditor {
   position: fixed;
   top: 64rem;

@@ -77,9 +77,11 @@ import styles from "./MochiColorPickerPanel.module.scss";
 
 // Snaps to the 5-step grid the Options slider produces and looks up the matching background
 // class. CSS opacity is deliberately avoided: it would fade text, icons, sliders and swatches too.
+// Both fallbacks are the C# kDefaultPanelOpacityPercent. They only apply for the frame before the
+// real setting arrives, or if a save carries a value no class was generated for.
 const panelOpacityClassFor = (value: number) => {
-    const normalized = Math.round(Math.min(100, Math.max(30, Number.isFinite(value) ? value : 80)) / 5) * 5;
-    return styles[`panelOpacity${normalized}`] ?? styles.panelOpacity80;
+    const normalized = Math.round(Math.min(100, Math.max(30, Number.isFinite(value) ? value : 70)) / 5) * 5;
+    return styles[`panelOpacity${normalized}`] ?? styles.panelOpacity70;
 };
 
 type MochiColorPickerPanelProps = {
