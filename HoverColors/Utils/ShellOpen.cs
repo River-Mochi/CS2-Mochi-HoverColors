@@ -1,4 +1,4 @@
-// <copyright file="ShellOpen.cs" company="River-Mochi">
+﻿// <copyright file="ShellOpen.cs" company="River-Mochi">
 // Copyright (c) 2026 River-Mochi. All rights reserved.
 // Licensed under the MIT License. You may not use this file except in compliance with this License.
 // See LICENSE file in the project root for full license information.
@@ -7,7 +7,7 @@
 // ================= </copyright> ======================
 
 // File: Utils/ShellOpen.cs
-// Version: 0.3.5
+// Version: 0.3.6
 // Purpose: File/folder opening helpers for CS2 Options UI buttons.
 // Based on River-Mochi shared CS2 utilities.
     using System;
