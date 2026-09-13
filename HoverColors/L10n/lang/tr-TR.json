@@ -1,4 +1,4 @@
-{
+﻿{
   "HoverColors.UI.Title": "Hover Colors",
   "HoverColors.UI.TopLeft.Tooltip": "Üzerine gelme renkleri - vurgu + opaklık",
   "HoverColors.UI.Aria.ClosePanel": "Paneli kapat",
@@ -10,7 +10,7 @@
   "HoverColors.UI.Tooltip.Close": "Paneli kapat. Varsayılan kısayol: J.\nSol üst oyun simgesi Aç/Kapat.",
   "HoverColors.UI.Tooltip.ResetOutline": "Dış çizgi, oyun varsayılan rengine dönmek için tıkla",
   "HoverColors.UI.Tooltip.OutlineSwatch": "DIŞ ÇİZGİ - renk + opaklık için tıkla.",
-  "HoverColors.UI.Tooltip.ResetOutlineThickness": "Dış çizgi kalınlığını oyun varsayılanına döndür.",
+  "HoverColors.UI.Tooltip.ResetOutlineThickness": "Tıkla: dış çizgi kalınlığını sıfırla",
   "HoverColors.UI.Tooltip.OutlineThickness": "Dış çizgi kalınlığı.\n1.0 = oyun. Daha düşük ince, daha yüksek kalın.",
   "HoverColors.UI.Tooltip.OwnerSwatch": "Sahip/ana bina vurgusu.\nÖrnek: otobüs garajı. Yeşil = oyun varsayılanı.",
   "HoverColors.UI.Tooltip.ResetFill": "Dolgu, oyun varsayılanına dönmek için tıkla",

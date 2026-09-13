@@ -1,4 +1,4 @@
-{
+﻿{
   "HoverColors.UI.Title": "Hover Colors",
   "HoverColors.UI.TopLeft.Tooltip": "호버 색상 - 강조 + 불투명도",
   "HoverColors.UI.Aria.ClosePanel": "패널 닫기",
@@ -10,7 +10,7 @@
   "HoverColors.UI.Tooltip.Close": "패널 닫기. 기본 단축키: J.\n게임 좌상단 아이콘 켜기/끄기.",
   "HoverColors.UI.Tooltip.ResetOutline": "외곽선, 클릭하면 게임 기본 색으로 복원",
   "HoverColors.UI.Tooltip.OutlineSwatch": "외곽선 - 클릭해 색 + 불투명도 설정.",
-  "HoverColors.UI.Tooltip.ResetOutlineThickness": "외곽선 두께를 게임 기본값으로 복원.",
+  "HoverColors.UI.Tooltip.ResetOutlineThickness": "클릭하여 외곽선 두께 재설정",
   "HoverColors.UI.Tooltip.OutlineThickness": "외곽선 두께.\n1.0 = 게임 기본. 낮으면 얇고, 높으면 두껍습니다.",
   "HoverColors.UI.Tooltip.OwnerSwatch": "소유자/상위 건물 강조 색.\n예: 버스 차고지. 초록색이 게임 기본.",
   "HoverColors.UI.Tooltip.ResetFill": "채우기, 클릭하면 게임 기본값으로 복원",

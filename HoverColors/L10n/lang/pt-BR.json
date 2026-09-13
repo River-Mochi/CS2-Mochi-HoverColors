@@ -1,4 +1,4 @@
-{
+﻿{
   "HoverColors.UI.Title": "Hover Colors",
   "HoverColors.UI.TopLeft.Tooltip": "Cores ao passar - destaque + opacidade",
   "HoverColors.UI.Aria.ClosePanel": "Fechar painel",
@@ -10,7 +10,7 @@
   "HoverColors.UI.Tooltip.Close": "Fechar painel. Atalho padrão: J.\nÍcone superior esquerdo ligar/desligar.",
   "HoverColors.UI.Tooltip.ResetOutline": "Contorno, clique para voltar à cor do jogo",
   "HoverColors.UI.Tooltip.OutlineSwatch": "CONTORNO - clique para cor + opacidade.",
-  "HoverColors.UI.Tooltip.ResetOutlineThickness": "Restaurar espessura do contorno do jogo.",
+  "HoverColors.UI.Tooltip.ResetOutlineThickness": "Clique para redefinir a espessura",
   "HoverColors.UI.Tooltip.OutlineThickness": "Espessura do contorno.\n1.0 = jogo. Menor mais fino, maior mais grosso.",
   "HoverColors.UI.Tooltip.OwnerSwatch": "Destaque do prédio dono/principal.\nExemplo: garagem de ônibus. Verde = padrão do jogo.",
   "HoverColors.UI.Tooltip.ResetFill": "Preenchimento, clique para voltar ao padrão do jogo",

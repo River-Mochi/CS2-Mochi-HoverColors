@@ -1,4 +1,4 @@
-{
+﻿{
   "HoverColors.UI.Title": "Hover Colors",
   "HoverColors.UI.TopLeft.Tooltip": "สีเมื่อชี้เมาส์ - ไฮไลต์ + ความทึบ",
   "HoverColors.UI.Aria.ClosePanel": "ปิดแผง",
@@ -10,7 +10,7 @@
   "HoverColors.UI.Tooltip.Close": "ปิดแผง ปุ่มลัดเดิม: J\nไอคอนซ้ายบน เปิด/ปิด",
   "HoverColors.UI.Tooltip.ResetOutline": "เส้นขอบ คลิกเพื่อคืนสีเริ่มต้นของเกม",
   "HoverColors.UI.Tooltip.OutlineSwatch": "เส้นขอบ - คลิกเพื่อสี + ความทึบ",
-  "HoverColors.UI.Tooltip.ResetOutlineThickness": "คืนความหนาเส้นขอบเป็นค่าเริ่มต้นของเกม",
+  "HoverColors.UI.Tooltip.ResetOutlineThickness": "คลิกเพื่อรีเซ็ตความหนาเส้นขอบ",
   "HoverColors.UI.Tooltip.OutlineThickness": "ความหนาเส้นขอบ\n1.0 = ค่าเกม ต่ำกว่าบางขึ้น สูงกว่าหนาขึ้น",
   "HoverColors.UI.Tooltip.OwnerSwatch": "ไฮไลต์อาคารเจ้าของ/อาคารหลัก\nเช่น อู่รถเมล์ สีเขียวคือค่าเริ่มต้นเกม",
   "HoverColors.UI.Tooltip.ResetFill": "สีเติม คลิกเพื่อคืนค่าเริ่มต้นของเกม",

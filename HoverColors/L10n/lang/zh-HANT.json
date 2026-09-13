@@ -1,4 +1,4 @@
-{
+﻿{
   "HoverColors.UI.Title": "Hover Colors",
   "HoverColors.UI.TopLeft.Tooltip": "懸停顏色 - 高亮 + 不透明度",
   "HoverColors.UI.Aria.ClosePanel": "關閉面板",
@@ -10,7 +10,7 @@
   "HoverColors.UI.Tooltip.Close": "關閉面板。預設快捷鍵：J。\n遊戲左上圖示 開/關。",
   "HoverColors.UI.Tooltip.ResetOutline": "輪廓，點擊恢復遊戲預設顏色",
   "HoverColors.UI.Tooltip.OutlineSwatch": "輪廓 - 點擊設定顏色 + 不透明度。",
-  "HoverColors.UI.Tooltip.ResetOutlineThickness": "將輪廓粗細恢復為遊戲預設。",
+  "HoverColors.UI.Tooltip.ResetOutlineThickness": "點擊重設輪廓粗細",
   "HoverColors.UI.Tooltip.OutlineThickness": "輪廓粗細。\n1.0 = 遊戲預設。更低更細，更高更粗。",
   "HoverColors.UI.Tooltip.OwnerSwatch": "所屬/父級建築高亮。\n例如公車車庫。綠色 = 遊戲預設。",
   "HoverColors.UI.Tooltip.ResetFill": "填滿，點擊恢復遊戲預設",

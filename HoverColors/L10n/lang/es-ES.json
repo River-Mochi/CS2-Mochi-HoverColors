@@ -1,4 +1,4 @@
-{
+﻿{
   "HoverColors.UI.Title": "Hover Colors",
   "HoverColors.UI.TopLeft.Tooltip": "Colores al pasar - resaltado + opacidad",
   "HoverColors.UI.Aria.ClosePanel": "Cerrar panel",
@@ -10,7 +10,7 @@
   "HoverColors.UI.Tooltip.Close": "Cerrar panel. Tecla predet.: J.\nIcono superior izquierdo activar/desactivar.",
   "HoverColors.UI.Tooltip.ResetOutline": "Contorno, clic para volver al color del juego",
   "HoverColors.UI.Tooltip.OutlineSwatch": "CONTORNO - clic para color + opacidad.",
-  "HoverColors.UI.Tooltip.ResetOutlineThickness": "Restaurar grosor de contorno del juego.",
+  "HoverColors.UI.Tooltip.ResetOutlineThickness": "Haz clic para restablecer el grosor",
   "HoverColors.UI.Tooltip.OutlineThickness": "Grosor del contorno.\n1.0 = juego. Menor más fino, mayor más grueso.",
   "HoverColors.UI.Tooltip.OwnerSwatch": "Resaltado del edificio dueño/principal.\nEjemplo: cochera de autobuses. Verde = juego.",
   "HoverColors.UI.Tooltip.ResetFill": "Relleno, clic para volver al valor del juego",

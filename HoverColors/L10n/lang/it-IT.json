@@ -1,4 +1,4 @@
-{
+﻿{
   "HoverColors.UI.Title": "Hover Colors",
   "HoverColors.UI.TopLeft.Tooltip": "Colori al passaggio - evidenza + opacità",
   "HoverColors.UI.Aria.ClosePanel": "Chiudi pannello",
@@ -10,7 +10,7 @@
   "HoverColors.UI.Tooltip.Close": "Chiudi pannello. Tasto predef.: J.\nIcona in alto a sinistra attiva/disattiva.",
   "HoverColors.UI.Tooltip.ResetOutline": "Contorno, clic per tornare al colore del gioco",
   "HoverColors.UI.Tooltip.OutlineSwatch": "CONTORNO - clic per colore + opacità.",
-  "HoverColors.UI.Tooltip.ResetOutlineThickness": "Ripristina lo spessore contorno del gioco.",
+  "HoverColors.UI.Tooltip.ResetOutlineThickness": "Clic per ripristinare lo spessore",
   "HoverColors.UI.Tooltip.OutlineThickness": "Spessore contorno.\n1.0 = gioco. Più basso più sottile, più alto più spesso.",
   "HoverColors.UI.Tooltip.OwnerSwatch": "Evidenza dell'edificio proprietario/principale.\nEsempio: deposito autobus. Verde = valore del gioco.",
   "HoverColors.UI.Tooltip.ResetFill": "Riempimento, clic per tornare al valore del gioco",

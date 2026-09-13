@@ -1,4 +1,4 @@
-{
+﻿{
   "HoverColors.UI.Title": "Hover Colors",
   "HoverColors.UI.TopLeft.Tooltip": "Màu khi rê chuột - tô sáng + độ đục",
   "HoverColors.UI.Aria.ClosePanel": "Đóng bảng",
@@ -10,7 +10,7 @@
   "HoverColors.UI.Tooltip.Close": "Đóng bảng. Phím mặc định: J.\nBiểu tượng góc trái trên Bật/Tắt.",
   "HoverColors.UI.Tooltip.ResetOutline": "Viền, bấm để trả về màu mặc định game",
   "HoverColors.UI.Tooltip.OutlineSwatch": "VIỀN - bấm chọn màu + độ đục.",
-  "HoverColors.UI.Tooltip.ResetOutlineThickness": "Đặt lại độ dày viền về mặc định game.",
+  "HoverColors.UI.Tooltip.ResetOutlineThickness": "Nhấp để đặt lại độ dày viền",
   "HoverColors.UI.Tooltip.OutlineThickness": "Độ dày viền.\n1.0 = mặc định game. Thấp hơn mỏng hơn, cao hơn dày hơn.",
   "HoverColors.UI.Tooltip.OwnerSwatch": "Tô sáng công trình chủ/chính.\nVí dụ: bến xe buýt. Xanh lá = mặc định game.",
   "HoverColors.UI.Tooltip.ResetFill": "Tô nền, bấm để trả về mặc định game",

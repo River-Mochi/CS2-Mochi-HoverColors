@@ -1,4 +1,4 @@
-{
+﻿{
   "HoverColors.UI.Title": "Hover Colors",
   "HoverColors.UI.TopLeft.Tooltip": "ホバー色 - ハイライト + 不透明度",
   "HoverColors.UI.Aria.ClosePanel": "パネルを閉じる",
@@ -10,7 +10,7 @@
   "HoverColors.UI.Tooltip.Close": "パネルを閉じる。既定キー: J。\n左上アイコンでON/OFF。",
   "HoverColors.UI.Tooltip.ResetOutline": "アウトライン。クリックでゲーム既定色に戻す",
   "HoverColors.UI.Tooltip.OutlineSwatch": "アウトライン - クリックで色 + 不透明度。",
-  "HoverColors.UI.Tooltip.ResetOutlineThickness": "アウトラインの太さをゲーム既定に戻す。",
+  "HoverColors.UI.Tooltip.ResetOutlineThickness": "クリックして輪郭の太さをリセット",
   "HoverColors.UI.Tooltip.OutlineThickness": "アウトラインの太さ。\n1.0 = ゲーム既定。低いほど細く、高いほど太い。",
   "HoverColors.UI.Tooltip.OwnerSwatch": "所有/親建物のハイライト。\n例: バス車庫。緑がゲーム既定。",
   "HoverColors.UI.Tooltip.ResetFill": "塗りつぶし。クリックでゲーム既定に戻す",
