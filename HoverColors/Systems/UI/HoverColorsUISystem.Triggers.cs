@@ -1,4 +1,4 @@
-// <copyright file="HoverColorsUISystem.Triggers.cs" company="River-Mochi">
+﻿// <copyright file="HoverColorsUISystem.Triggers.cs" company="River-Mochi">
 // Copyright (C) 2026 River-Mochi.
 // Licensed under the GNU General Public License v3.0 or later,
 // with the Cities: Skylines II Linking Exception.
@@ -13,7 +13,6 @@ namespace HoverColors.UI
 {
     using System;
     using Colossal.UI.Binding;
-    using CS2Shared.RiverMochi;
     using HoverColors.Systems;
 
     public partial class HoverColorsUISystem
@@ -70,7 +69,7 @@ namespace HoverColors.UI
                 return;
             }
 
-            LogUtils.Info(() => $"{Mod.ModTag} {message}");
+            CS2Shared.RiverMochi.LogUtils.Info(() => $"{Mod.ModTag} {message}");
         }
 #endif
 
