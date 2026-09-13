@@ -80,7 +80,7 @@ tags: hover colors, remove blue, disable hover, highlight color, outline thickne
 
 
 <!--Thumbnail-->
-<Thumbnail Value="Properties/Thumbnail_half_school_cyan.jpg" />
+<Thumbnail Value="Properties/Thumbnail_half_school_cyan_dog.jpg" />
 <!--Screenshot, can be set multiple times-->
 <Screenshot Value="Properties/10-image-Before-after-DE-school.jpg" />
 <Screenshot Value="Properties/20-image-Panels.jpg" />
