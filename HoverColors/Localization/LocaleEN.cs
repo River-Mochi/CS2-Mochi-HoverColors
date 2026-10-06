@@ -59,12 +59,13 @@ namespace HoverColors
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ToolColorMode)),
                     "Controls temporary outline colors while bulldozer or road tools are active.\n" +
                     "\n" +
-                    "**1. Recommended** uses the game's Warning color (yellow) for demolition and a softer vanilla blue for roads.\n" +
+                    "**1. Recommended** uses the game's Warning color (yellow) for demolition and a softer vanilla blue for existing-road hover and new-road previews.\n" +
                     "**2. Vanilla tool colors** restores the game's normal vanilla blue while bulldoze or road tools are active.\n" +
                     "**3. Keep my custom color** uses your chosen color everywhere.\n" +
                     "\n" +
                     "Purpose: some users/testers find their custom color hard to see while bulldozing.\n" +
                     "This offers options for high visibility colors during tool usage.\n" +
+                    "The separate road footprint guide follows the Guidelines preview swatch.\n" +
                     "This does not overwrite your automatically saved custom color in the color picker."
                 },
                 { m_Settings.GetToolColorModeLocaleID("Recommended"), "1. Recommended" },

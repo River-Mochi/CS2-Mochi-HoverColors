@@ -48,6 +48,8 @@ namespace HoverColors.UI
         private ValueBinding<float> m_FillGBinding = null!;
         private ValueBinding<float> m_FillBBinding = null!;
         private ValueBinding<float> m_OutlineThicknessScaleBinding = null!;
+        private ValueBinding<float> m_SurfaceBorderThicknessScaleBinding = null!;
+        private ValueBinding<float> m_GuidelineDashedThicknessScaleBinding = null!;
         private ValueBinding<int> m_PanelOpacityPercentBinding = null!;
         private ValueBinding<float> m_DistrictRBinding = null!;
         private ValueBinding<float> m_DistrictGBinding = null!;
@@ -159,6 +161,12 @@ namespace HoverColors.UI
             m_OutlineThicknessScaleBinding = AddValueBinding(
                 "OutlineThicknessScale",
                 settings?.OutlineThicknessScale ?? HoverColorsSettings.kModDefaultOutlineThicknessScale);
+            m_SurfaceBorderThicknessScaleBinding = AddValueBinding(
+                "SurfaceBorderThicknessScale",
+                settings?.SurfaceBorderThicknessScale ?? HoverColorsSettings.kMaxOverlayThicknessScale);
+            m_GuidelineDashedThicknessScaleBinding = AddValueBinding(
+                "GuidelineDashedThicknessScale",
+                settings?.GuidelineDashedThicknessScale ?? HoverColorsSettings.kMaxOverlayThicknessScale);
             m_PanelOpacityPercentBinding = AddValueBinding(
                 "PanelOpacityPercent",
                 settings?.PanelOpacityPercent ?? HoverColorsSettings.kDefaultPanelOpacityPercent);
@@ -237,6 +245,12 @@ namespace HoverColors.UI
             UpdateIfChanged(
                 m_OutlineThicknessScaleBinding,
                 settings?.OutlineThicknessScale ?? HoverColorsSettings.kModDefaultOutlineThicknessScale);
+            UpdateIfChanged(
+                m_SurfaceBorderThicknessScaleBinding,
+                settings?.SurfaceBorderThicknessScale ?? HoverColorsSettings.kMaxOverlayThicknessScale);
+            UpdateIfChanged(
+                m_GuidelineDashedThicknessScaleBinding,
+                settings?.GuidelineDashedThicknessScale ?? HoverColorsSettings.kMaxOverlayThicknessScale);
             UpdateIfChanged(
                 m_PanelOpacityPercentBinding,
                 settings?.PanelOpacityPercent ?? HoverColorsSettings.kDefaultPanelOpacityPercent);

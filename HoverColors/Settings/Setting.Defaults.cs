@@ -41,6 +41,8 @@ namespace HoverColors
             // 1.0 = the vanilla shader width captured at runtime, whatever that build's value is.
             OutlineThicknessScale = kModDefaultOutlineThicknessScale;
             OutlineThicknessInitialized = true;
+            SurfaceBorderThicknessScale = kMaxOverlayThicknessScale;
+            GuidelineDashedThicknessScale = kMaxOverlayThicknessScale;
 
             PanelOpacityPercent = kDefaultPanelOpacityPercent;
 

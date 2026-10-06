@@ -19,6 +19,7 @@ namespace HoverColors
     using CS2Shared.RiverMochi;
     using Game;
     using Game.Modding;
+    using Game.Rendering;
     using Game.SceneFlow;
     using HoverColors.Systems;
     using HoverColors.UI;
@@ -138,6 +139,12 @@ namespace HoverColors
 
                 world.GetOrCreateSystemManaged<GuidelineColorSystem>();
                 updateSystem.UpdateAt<GuidelineColorSystem>(SystemUpdatePhase.Rendering);
+
+                // Narrow post-processing spans cover only each vanilla producer's own curves.
+                updateSystem.UpdateBefore<SurfaceBorderWidthCaptureSystem, AreaBorderRenderSystem>(SystemUpdatePhase.Rendering);
+                updateSystem.UpdateAfter<SurfaceBorderWidthApplySystem, AreaBorderRenderSystem>(SystemUpdatePhase.Rendering);
+                updateSystem.UpdateBefore<DashedGuidelineWidthCaptureSystem, GuideLinesSystem>(SystemUpdatePhase.Rendering);
+                updateSystem.UpdateAfter<DashedGuidelineWidthApplySystem, GuideLinesSystem>(SystemUpdatePhase.Rendering);
 
                 world.GetOrCreateSystemManaged<AreaToolOverlaySystem>();
                 updateSystem.UpdateAt<AreaToolOverlaySystem>(SystemUpdatePhase.Rendering);

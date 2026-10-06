@@ -90,6 +90,11 @@ namespace HoverColors
         internal const float kModDefaultOutlineThicknessScale = 1f;
         internal const float kVanillaOutlineThicknessScale = 1f;
 
+        // Overlay buffers can be narrowed without changing their authored geometry or bounds.
+        // Values above vanilla would require expanding the renderer's draw/culling geometry.
+        internal const float kMinOverlayThicknessScale = 0.1f;
+        internal const float kMaxOverlayThicknessScale = 1f;
+
         // Centralized default for the guideline opacity slider.
         // Vanilla CS2 is 100; lower = more transparent. Keep TSX fallback bindings in sync.
         internal const int kDefaultGuidelineOpacityPercent = 30;
@@ -168,6 +173,12 @@ namespace HoverColors
 
         [SettingsUIHidden]
         public float OutlineThicknessScale { get; set; }
+
+        [SettingsUIHidden]
+        public float SurfaceBorderThicknessScale { get; set; }
+
+        [SettingsUIHidden]
+        public float GuidelineDashedThicknessScale { get; set; }
 
         // Inert, like FillColorInitialized. Triggers.cs reads it in three places, but it is always
         // true so `&& OutlineThicknessInitialized` never changes the result.

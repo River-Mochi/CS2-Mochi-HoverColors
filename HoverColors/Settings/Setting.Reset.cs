@@ -85,6 +85,8 @@ namespace HoverColors
 
             OutlineThicknessScale = kVanillaOutlineThicknessScale;
             OutlineThicknessInitialized = true;
+            SurfaceBorderThicknessScale = kMaxOverlayThicknessScale;
+            GuidelineDashedThicknessScale = kMaxOverlayThicknessScale;
 
             // Global Eye toggle: vanilla behavior is normal hover highlights visible.
             HoverHighlightsSuppressed = false;

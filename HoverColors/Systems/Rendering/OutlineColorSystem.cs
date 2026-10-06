@@ -43,7 +43,9 @@ namespace HoverColors.Systems
         private const float kVanillaOwnerG = 0.981f;
         private const float kVanillaOwnerB = 0.247f;
         private const float kVanillaOwnerA = 0.702f;
-        private const float kRoadRecommendedOutlineA = 0.75f;
+        // Recommended road hover and temporary placement geometry keep vanilla cyan while
+        // showing more of the road beneath. Both read RenderingSettingsData.m_HoveredColor.
+        private const float kRoadRecommendedOutlineA = 0.55f;
         private const float kMaterialResolveRetrySeconds = 0.5f;
 
         // Cached so the per-frame path never re-hashes the property name.

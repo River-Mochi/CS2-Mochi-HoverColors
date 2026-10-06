@@ -35,6 +35,7 @@ import {
     guidelineDashedColorB$,
     guidelineDashedColorG$,
     guidelineDashedColorR$,
+    guidelineDashedThicknessScale$,
     guidelineOpacity$,
     guidelinePreviewColorA$,
     guidelinePreviewColorB$,
@@ -64,6 +65,7 @@ import {
     preset2R$,
     specializedIndustryAreasSuppressed$,
     surfaceToolAreasSuppressed$,
+    surfaceBorderThicknessScale$,
     useDarkerPanel$,
     vanillaOutlineActive$,
 } from "./panel/bindings/MochiPanelBindings";
@@ -168,6 +170,8 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
         a: boundFillA,
     };
     const boundOutlineThicknessScale = useValue(outlineThicknessScale$);
+    const boundSurfaceBorderThicknessScale = useValue(surfaceBorderThicknessScale$);
+    const boundGuidelineDashedThicknessScale = useValue(guidelineDashedThicknessScale$);
     const boundGuideline = useValue(guidelineOpacity$);
     const boundGuidelineDashedColor: Color = {
         r: useValue(guidelineDashedColorR$),
@@ -212,6 +216,8 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
     const [fillA, setFillA] = React.useState<number>(boundFillA);
     const [fillColor, setFillColor] = React.useState<Color>(boundFill);
     const [outlineThicknessScale, setOutlineThicknessScale] = React.useState<number>(boundOutlineThicknessScale);
+    const [surfaceBorderThicknessScale, setSurfaceBorderThicknessScale] = React.useState<number>(boundSurfaceBorderThicknessScale);
+    const [guidelineDashedThicknessScale, setGuidelineDashedThicknessScale] = React.useState<number>(boundGuidelineDashedThicknessScale);
     const [districtColor, setDistrictColor] = React.useState<Color>(boundDistrict);
     const [guidelineLinesColor, setGuidelineLinesColor] = React.useState<Color>(boundGuidelineLinesColor);
     const [guidelinePreviewColor, setGuidelinePreviewColor] = React.useState<Color>(boundGuidelinePreviewColor);
@@ -288,6 +294,8 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
     React.useEffect(() => { setFillA(boundFillA); }, [boundFillA]);
     React.useEffect(() => { setFillColor(boundFill); }, [boundFill.r, boundFill.g, boundFill.b, boundFill.a]);
     React.useEffect(() => { setOutlineThicknessScale(boundOutlineThicknessScale); }, [boundOutlineThicknessScale]);
+    React.useEffect(() => { setSurfaceBorderThicknessScale(boundSurfaceBorderThicknessScale); }, [boundSurfaceBorderThicknessScale]);
+    React.useEffect(() => { setGuidelineDashedThicknessScale(boundGuidelineDashedThicknessScale); }, [boundGuidelineDashedThicknessScale]);
     React.useEffect(() => { setDistrictColor(boundDistrict); }, [boundDistrict.r, boundDistrict.g, boundDistrict.b, boundDistrict.a]);
     React.useEffect(() => { setGuidelineLinesColor(boundGuidelineLinesColor); }, [boundGuidelineLinesColor.r, boundGuidelineLinesColor.g, boundGuidelineLinesColor.b, boundGuidelineLinesColor.a]);
     React.useEffect(() => { setGuidelinePreviewColor(boundGuidelinePreviewColor); }, [boundGuidelinePreviewColor.r, boundGuidelinePreviewColor.g, boundGuidelinePreviewColor.b, boundGuidelinePreviewColor.a]);
@@ -450,6 +458,18 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
         trigger(CHANNEL, "SetOutlineThickness", value);
     };
 
+    const handleSurfaceBorderThicknessChange = (v: number) => {
+        const value = Math.round(Math.max(0.1, Math.min(1, v)) * 10) / 10;
+        setSurfaceBorderThicknessScale(value);
+        trigger(CHANNEL, "SetSurfaceBorderThickness", value);
+    };
+
+    const handleGuidelineDashedThicknessChange = (v: number) => {
+        const value = Math.round(Math.max(0.1, Math.min(1, v)) * 10) / 10;
+        setGuidelineDashedThicknessScale(value);
+        trigger(CHANNEL, "SetGuidelineDashedThickness", value);
+    };
+
     // Swatch owns tint + opacity; the slider is the same alpha shown a second way.
     const handleFillColorChange = (value: Color) => {
         const syncedValue = normalizeColorFieldValue(value);
@@ -501,6 +521,8 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
     const handleResetOutline = () => trigger(CHANNEL, "ResetOutlineToVanilla");
     const handleResetFill = () => trigger(CHANNEL, "ResetFillToVanilla");
     const handleResetOutlineThickness = () => trigger(CHANNEL, "ResetOutlineThickness");
+    const handleResetSurfaceBorderThickness = () => trigger(CHANNEL, "ResetSurfaceBorderThickness");
+    const handleResetGuidelineDashedThickness = () => trigger(CHANNEL, "ResetGuidelineDashedThickness");
     const handleResetGuidelines = () => trigger(CHANNEL, "ResetGuidelines");
     const handleToggleSurfaceToolAreas = () => trigger(CHANNEL, "ToggleSurfaceToolAreas");
     const handleToggleSpecializedIndustryAreas = () => trigger(CHANNEL, "ToggleSpecializedIndustryAreas");
@@ -643,6 +665,8 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
                         fillA={fillA}
                         fillColor={fillColor}
                         outlineThicknessScale={outlineThicknessScale}
+                        surfaceBorderThicknessScale={surfaceBorderThicknessScale}
+                        guidelineDashedThicknessScale={guidelineDashedThicknessScale}
                         guidelineLinesColor={guidelineLinesColor}
                         guidelinePreviewColor={guidelinePreviewColor}
                         guidelineDashedColor={guidelineDashedColor}
@@ -697,6 +721,10 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
                         handleFillColorChange={handleFillColorChange}
                         handleOutlineThicknessChange={handleOutlineThicknessChange}
                         handleResetOutlineThickness={handleResetOutlineThickness}
+                        handleSurfaceBorderThicknessChange={handleSurfaceBorderThicknessChange}
+                        handleResetSurfaceBorderThickness={handleResetSurfaceBorderThickness}
+                        handleGuidelineDashedThicknessChange={handleGuidelineDashedThicknessChange}
+                        handleResetGuidelineDashedThickness={handleResetGuidelineDashedThickness}
                         handleGuidelineLinesColorChange={handleGuidelineLinesColorChange}
                         handleGuidelinePreviewColorChange={handleGuidelinePreviewColorChange}
                         handleGuidelineDashedColorChange={handleGuidelineDashedColorChange}

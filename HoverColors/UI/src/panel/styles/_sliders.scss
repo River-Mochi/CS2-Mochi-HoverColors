@@ -24,6 +24,14 @@
     background-color: transparent;
 }
 
+.widthLabel {
+    width: 48rem;
+    flex: 0 0 48rem;
+    color: rgba(254, 255, 255, 0.96);
+    font-size: 10rem;
+    line-height: 1;
+}
+
 .valueField {
     width: 40rem;
     height: 28rem;

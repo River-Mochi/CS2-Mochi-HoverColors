@@ -26,6 +26,10 @@ namespace HoverColors.UI
             AddBinding(new TriggerBinding(Mod.ModId, "ResetFillToVanilla", ResetFillToVanilla));
             AddBinding(new TriggerBinding<float>(Mod.ModId, "SetOutlineThickness", SetOutlineThickness));
             AddBinding(new TriggerBinding(Mod.ModId, "ResetOutlineThickness", ResetOutlineThickness));
+            AddBinding(new TriggerBinding<float>(Mod.ModId, "SetSurfaceBorderThickness", SetSurfaceBorderThickness));
+            AddBinding(new TriggerBinding(Mod.ModId, "ResetSurfaceBorderThickness", ResetSurfaceBorderThickness));
+            AddBinding(new TriggerBinding<float>(Mod.ModId, "SetGuidelineDashedThickness", SetGuidelineDashedThickness));
+            AddBinding(new TriggerBinding(Mod.ModId, "ResetGuidelineDashedThickness", ResetGuidelineDashedThickness));
             AddBinding(new TriggerBinding<int>(Mod.ModId, "SetGuidelineOpacity", SetGuidelineOpacity));
             AddBinding(new TriggerBinding<float, float, float, float>(Mod.ModId, "SetGuidelineLinesColor", SetGuidelineLinesColor));
             AddBinding(new TriggerBinding<float, float, float, float>(Mod.ModId, "SetGuidelinePreviewColor", SetGuidelinePreviewColor));
@@ -210,6 +214,45 @@ namespace HoverColors.UI
                 Math.Min(HoverColorsSettings.kMaxOutlineThicknessScale, scale));
 
             // Keep the stored value on the slider's 0.1 grid so the readout never shows drift.
+            return (float)Math.Round(clamped * 10.0) / 10f;
+        }
+
+        private void SetSurfaceBorderThickness(float scale)
+        {
+            HoverColorsSettings? settings = Mod.Settings;
+            if (settings == null) return;
+
+            scale = SnapOverlayThickness(scale);
+            if (ApproxEqual(settings.SurfaceBorderThicknessScale, scale)) return;
+            settings.SurfaceBorderThicknessScale = scale;
+            ApplySaveAndSync(settings);
+        }
+
+        private void ResetSurfaceBorderThickness()
+        {
+            SetSurfaceBorderThickness(HoverColorsSettings.kMaxOverlayThicknessScale);
+        }
+
+        private void SetGuidelineDashedThickness(float scale)
+        {
+            HoverColorsSettings? settings = Mod.Settings;
+            if (settings == null) return;
+
+            scale = SnapOverlayThickness(scale);
+            if (ApproxEqual(settings.GuidelineDashedThicknessScale, scale)) return;
+            settings.GuidelineDashedThicknessScale = scale;
+            ApplySaveAndSync(settings);
+        }
+
+        private void ResetGuidelineDashedThickness()
+        {
+            SetGuidelineDashedThickness(HoverColorsSettings.kMaxOverlayThicknessScale);
+        }
+
+        private static float SnapOverlayThickness(float scale)
+        {
+            float clamped = Math.Max(HoverColorsSettings.kMinOverlayThicknessScale,
+                Math.Min(HoverColorsSettings.kMaxOverlayThicknessScale, scale));
             return (float)Math.Round(clamped * 10.0) / 10f;
         }
 
