@@ -706,12 +706,7 @@ namespace HoverColors
         public string NameText => Mod.ModName;
 
         [SettingsUISection(About, kAboutInfo)]
-        public string VersionText =>
-#if DEBUG
-            Mod.ModVersion + " (DEBUG)";
-#else
-            Mod.ModVersion;
-#endif
+        public string VersionText => Mod.ModVersion + " " + Mod.BuildDisplayName;
 
         [SettingsUIButtonGroup(kAboutLinksRow)]
         [SettingsUIButton]

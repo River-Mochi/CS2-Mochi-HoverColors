@@ -7,14 +7,13 @@
 // ================= </copyright> ======================
 
 // File: UI/src/panel/styles/_actionBar.scss
-// Purpose: Bottom action bar and shared bottom button styles.
+// Purpose: Surface boundary row, fill toggles, District row, and shared button styles.
 
 .actions {
     position: relative;
     overflow: visible;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
     margin-top: -2rem;
     // Bottom is deliberately much larger than the top. The buttons sat almost on the panel edge,
     // which read as a clipped panel rather than a deliberate margin - most obvious on the collapsed
@@ -24,10 +23,56 @@
     border-top: 1rem solid rgba(254, 255, 255, 0.16);
 }
 
-.surfaceActions,
-.presetActions {
+.surfaceControlsRow,
+.districtActionsRow {
     display: flex;
     align-items: center;
+}
+
+.surfaceControlsRow {
+    min-height: 36rem;
+}
+
+.surfaceThicknessControl {
+    display: flex;
+    align-items: center;
+    flex: 1 1 auto;
+    min-width: 0;
+    margin-left: 4rem;
+    margin-right: 4rem;
+}
+
+.surfaceThicknessLabel {
+    width: 37rem;
+    flex: 0 0 37rem;
+    color: rgba(254, 255, 255, 0.96);
+    font-size: 10rem;
+}
+
+.surfaceThicknessSlider {
+    flex: 1 1 auto;
+    min-width: 0;
+    margin-right: 3rem;
+    background-color: transparent;
+}
+
+.surfaceThicknessValue {
+    width: 24rem;
+    flex: 0 0 24rem;
+    color: rgba(254, 255, 255, 0.96);
+    font-size: 12rem;
+    text-align: center;
+}
+
+.districtActionsRow {
+    min-height: 32rem;
+    margin-top: 4rem;
+    padding-top: 5rem;
+    border-top: 1rem solid rgba(254, 255, 255, 0.16);
+}
+
+.panelDarker .districtActionsRow {
+    border-top-color: rgba(254, 255, 255, 0.20);
 }
 
 .actionButton {

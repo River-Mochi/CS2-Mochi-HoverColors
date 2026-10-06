@@ -40,6 +40,12 @@ namespace HoverColors
         public static readonly string ModVersion =
             Assembly.GetExecutingAssembly().GetName().Version?.ToString(3) ?? "1.0.0";
 
+#if DEBUG
+        public const string BuildDisplayName = "Debug";
+#else
+        public const string BuildDisplayName = "Release";
+#endif
+
         private static bool s_BannerLogged;
 
         public static readonly ILog s_Log =

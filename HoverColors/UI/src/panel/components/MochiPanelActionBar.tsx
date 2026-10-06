@@ -7,17 +7,19 @@
 // ================= </copyright> ======================
 
 // File: UI/src/panel/components/MochiPanelActionBar.tsx
-// Purpose: Bottom action bar: Surface, Specialized Industry, and District color menu.
+// Purpose: Surface boundary controls, area fill toggles, and the District color menu.
 
 import React from "react";
 import { Button } from "cs2/ui";
 import { Color } from "cs2/bindings";
 import { SideTooltip } from "../tooltip/SideTooltip";
+import { MochiSlider } from "./MochiSlider";
 import { compactSwatchStyle, holdBarStyle } from "../helpers/MochiPanelColorUtils";
 import { useMochiPanelText } from "../hooks/useMochiPanelText";
 import lotToolIconSrc from "../../../images/LotTool03.svg";
 import specializedIndustryIconSrc from "../../../images/LotToolSpecializedIndustry.svg";
 import surfaceIconSrc from "../../../images/Districts03.svg";
+import outlineThicknessIconSrc from "../../../images/outline-thickness.svg";
 import styles from "../../MochiColorPickerPanel.module.scss";
 
 type PickerDirection = "up" | "down";
@@ -31,6 +33,9 @@ interface MochiPanelActionBarProps {
     ColorField: ColorFieldComponent;
     focusDisabled: any;
     useDarkerPanel: boolean;
+    surfaceBorderThicknessScale: number;
+    handleSurfaceBorderThicknessChange: (value: number) => void;
+    handleResetSurfaceBorderThickness: () => void;
 
     surfaceToolAreasSuppressed: boolean;
     specializedIndustryAreasSuppressed: boolean;
@@ -66,6 +71,9 @@ export const MochiPanelActionBar = ({
     ColorField,
     focusDisabled,
     useDarkerPanel,
+    surfaceBorderThicknessScale,
+    handleSurfaceBorderThicknessChange,
+    handleResetSurfaceBorderThickness,
     surfaceToolAreasSuppressed,
     specializedIndustryAreasSuppressed,
     districtMenuOpen,
@@ -96,7 +104,34 @@ export const MochiPanelActionBar = ({
 
     return (
         <div className={styles.actions}>
-            <div className={styles.surfaceActions}>
+            <div className={styles.surfaceControlsRow}>
+                <SideTooltip tooltip={tt(text.tooltipResetSurfaceBorderThickness)} side="left">
+                    <Button
+                        className={styles.controlIconButton}
+                        variant="icon"
+                        onSelect={handleResetSurfaceBorderThickness}
+                        focusKey={focusDisabled}
+                    >
+                        <img src={outlineThicknessIconSrc} className={`${styles.controlIcon} ${styles.idleIcon}`} alt="" />
+                    </Button>
+                </SideTooltip>
+
+                <SideTooltip tooltip={tt(text.tooltipSurfaceBorderThickness)} side="right">
+                    <div className={styles.surfaceThicknessControl}>
+                        <span className={styles.surfaceThicknessLabel}>{text.labelSurfaceBorder}</span>
+                        <MochiSlider
+                            focusKey={focusDisabled}
+                            className={styles.surfaceThicknessSlider}
+                            value={surfaceBorderThicknessScale}
+                            start={0.1}
+                            end={1}
+                            gamepadStep={0.1}
+                            onChange={handleSurfaceBorderThicknessChange}
+                        />
+                        <span className={styles.surfaceThicknessValue}>{surfaceBorderThicknessScale.toFixed(1)}</span>
+                    </div>
+                </SideTooltip>
+
                 <SideTooltip tooltip={tt(text.tooltipSurfaceToggle)} side="below">
                     <Button
                         className={`${styles.actionButton} ${styles.surfaceButton} ${surfaceToolAreasSuppressed ? styles.surfaceButtonActive : ""}`}
@@ -119,8 +154,11 @@ export const MochiPanelActionBar = ({
                     </Button>
                 </SideTooltip>
 
+            </div>
+
+            <div className={styles.districtActionsRow}>
                 <SideTooltip tooltip={tt(text.tooltipDistrictColors)} side="below">
-                    <div ref={districtPickerRef} className={styles.buttonGap}>
+                    <div ref={districtPickerRef}>
                         <Button
                             className={`${styles.actionButton} ${styles.surfaceButton} ${styles.districtPickerButton} ${districtMenuOpen ? styles.districtPickerButtonActive : ""}`}
                             variant="icon"

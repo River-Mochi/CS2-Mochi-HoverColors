@@ -665,7 +665,6 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
                         fillA={fillA}
                         fillColor={fillColor}
                         outlineThicknessScale={outlineThicknessScale}
-                        surfaceBorderThicknessScale={surfaceBorderThicknessScale}
                         guidelineDashedThicknessScale={guidelineDashedThicknessScale}
                         guidelineLinesColor={guidelineLinesColor}
                         guidelinePreviewColor={guidelinePreviewColor}
@@ -721,8 +720,6 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
                         handleFillColorChange={handleFillColorChange}
                         handleOutlineThicknessChange={handleOutlineThicknessChange}
                         handleResetOutlineThickness={handleResetOutlineThickness}
-                        handleSurfaceBorderThicknessChange={handleSurfaceBorderThicknessChange}
-                        handleResetSurfaceBorderThickness={handleResetSurfaceBorderThickness}
                         handleGuidelineDashedThicknessChange={handleGuidelineDashedThicknessChange}
                         handleResetGuidelineDashedThickness={handleResetGuidelineDashedThickness}
                         handleGuidelineLinesColorChange={handleGuidelineLinesColorChange}
@@ -750,6 +747,9 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
                                 ColorField={ColorField}
                                 focusDisabled={focusDisabled}
                                 useDarkerPanel={useDarkerPanel}
+                                surfaceBorderThicknessScale={surfaceBorderThicknessScale}
+                                handleSurfaceBorderThicknessChange={handleSurfaceBorderThicknessChange}
+                                handleResetSurfaceBorderThickness={handleResetSurfaceBorderThickness}
                                 surfaceToolAreasSuppressed={surfaceToolAreasSuppressed}
                                 specializedIndustryAreasSuppressed={specializedIndustryAreasSuppressed}
                                 districtMenuOpen={districtMenuOpen}

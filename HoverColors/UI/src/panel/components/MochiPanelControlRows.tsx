@@ -48,7 +48,6 @@ interface MochiPanelControlRowsProps {
   fillA: number;
   fillColor: Color;
   outlineThicknessScale: number;
-  surfaceBorderThicknessScale: number;
   guidelineDashedThicknessScale: number;
   guidelineLinesColor: Color;
   guidelinePreviewColor: Color;
@@ -111,8 +110,6 @@ interface MochiPanelControlRowsProps {
   handleFillColorChange: (value: Color) => void;
   handleOutlineThicknessChange: (value: number) => void;
   handleResetOutlineThickness: () => void;
-  handleSurfaceBorderThicknessChange: (value: number) => void;
-  handleResetSurfaceBorderThickness: () => void;
   handleGuidelineDashedThicknessChange: (value: number) => void;
   handleResetGuidelineDashedThickness: () => void;
   handleGuidelineLinesColorChange: (value: Color) => void;
@@ -145,7 +142,6 @@ export const MochiPanelControlRows = ({
   fillA,
   fillColor,
   outlineThicknessScale,
-  surfaceBorderThicknessScale,
   guidelineDashedThicknessScale,
   guidelineLinesColor,
   guidelinePreviewColor,
@@ -201,8 +197,6 @@ export const MochiPanelControlRows = ({
   handleFillColorChange,
   handleOutlineThicknessChange,
   handleResetOutlineThickness,
-  handleSurfaceBorderThicknessChange,
-  handleResetSurfaceBorderThickness,
   handleGuidelineDashedThicknessChange,
   handleResetGuidelineDashedThickness,
   handleGuidelineLinesColorChange,
@@ -520,39 +514,6 @@ export const MochiPanelControlRows = ({
                 </div>
               </SideTooltip>
             </div>
-          </div>
-
-          <div className={styles.controlRow}>
-            <SideTooltip tooltip={tt(text.tooltipResetSurfaceBorderThickness)} side="left">
-              <Button
-                className={styles.controlIconButton}
-                variant="icon"
-                onSelect={handleResetSurfaceBorderThickness}
-                focusKey={focusDisabled}
-              >
-                <img src={outlineThicknessIconSrc} className={`${styles.controlIcon} ${styles.idleIcon}`} alt="" />
-              </Button>
-            </SideTooltip>
-
-            <SideTooltip tooltip={tt(text.tooltipSurfaceBorderThickness)} side="right">
-              <div className={styles.controlBody}>
-                <div className={styles.sliderRow}>
-                  <span className={styles.widthLabel}>{text.labelSurfaceBorder}</span>
-                  <MochiSlider
-                    focusKey={focusDisabled}
-                    className={styles.slider}
-                    value={surfaceBorderThicknessScale}
-                    start={0.1}
-                    end={1}
-                    gamepadStep={0.1}
-                    onChange={handleSurfaceBorderThicknessChange}
-                  />
-                  <div className={`${styles.valueField} ${numberFieldClass}`}>
-                    {surfaceBorderThicknessScale.toFixed(1)}
-                  </div>
-                </div>
-              </div>
-            </SideTooltip>
           </div>
 
           <div className={`${styles.controlRow} ${styles.guidelinesRow}`}>
