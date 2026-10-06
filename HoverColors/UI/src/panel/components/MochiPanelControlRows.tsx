@@ -27,7 +27,6 @@ import outlineThicknessIconSrc from "../../../images/outline-thickness.svg";
 import outlineIconSrc from "../../../images/MainElements_short_bigTriangle.svg";
 import guidelinesIconSrc from "../../../images/GuideLines4.svg";
 import switchIconSrc from "../../../images/icon-dbl-arrows.svg";
-import resetIconSrc from "../../../images/Reset_Button.svg";
 import styles from "../../MochiColorPickerPanel.module.scss";
 
 type PickerDirection = "up" | "down";
@@ -403,7 +402,7 @@ export const MochiPanelControlRows = ({
                 onSelect={handleRestorePresetDefaults}
                 focusKey={focusDisabled}
               >
-                <img src={resetIconSrc} className={`${styles.resetIcon} ${styles.resetIconRestore}`} alt="" />
+                <img src="Media/Game/Icons/NewUI/Reset_Button.svg" className={`${styles.resetIcon} ${styles.resetIconRestore}`} alt="" />
               </Button>
 
             </SideTooltip>

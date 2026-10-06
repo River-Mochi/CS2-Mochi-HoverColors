@@ -14,7 +14,7 @@
 // - Preset action hover-grow is intentionally hover-only, not focus.
 //   Cohtml can keep focus after click, which made reset icons stay enlarged
 //   until the player clicked somewhere else.
-// - Restore defaults uses the CCW icon. Switch Set A/B uses the clockwise icon.
+// - Restore defaults uses the game's clockwise reset icon. Switch Set A/B uses double arrows.
 
 .presetSlot::before,
 .presetSlot::after {
@@ -158,9 +158,9 @@
 }
 
 .presetResetBare {
-  width: 22rem !important;
-  min-width: 22rem !important;
-  height: 22rem !important;
+  width: 26rem !important;
+  min-width: 26rem !important;
+  height: 26rem !important;
   padding-top: 0 !important;
   padding-right: 0 !important;
   padding-bottom: 0 !important;
@@ -169,7 +169,7 @@
   display: flex;
   flex-grow: 0;
   flex-shrink: 0;
-  flex-basis: 22rem;
+  flex-basis: 26rem;
   align-items: center;
   justify-content: center;
   border-top-style: none !important;
@@ -232,12 +232,11 @@
 
 
 // right button: restore all four preset slots to the mod defaults.
-// Uses CCW-looking arrow. Sized to match .resetIconSwitch next to it: both carry the same 0.76
-// idle opacity, so the smaller glyph was the only reason it read dimmer.
+// Use the game's reset asset at its original clockwise orientation.
 .resetIconRestore {
-  width: 19rem;
-  height: 19rem;
-  transform: scaleX(-1);
+  width: 26rem;
+  height: 26rem;
+  transform: none;
 }
 
 
@@ -247,7 +246,7 @@
 }
 
 .presetResetBare:hover .resetIconRestore {
-  transform: scaleX(-1) scale(1.16);
+  transform: scale(1.10);
 }
 
 .presetResetBare:hover .resetIconSwitch {

@@ -170,7 +170,7 @@
 // Padding must stay symmetric: the strip is now visible, so any top/bottom mismatch shows up as the
 // title and its buttons riding low. Everything sizes in rem + border-box so it holds at any UI scale.
 .titleBar {
-    min-height: 20rem;
+    min-height: 40rem;
     display: flex;
     align-items: center;
     box-sizing: border-box;
@@ -180,7 +180,7 @@
     margin-right: 0;
     margin-bottom: 0;
     margin-left: 0;
-    padding: 4.5rem 6rem 4.5rem 6rem;
+    padding: 6rem;
     border-top-left-radius: 12rem;
     border-top-right-radius: 12rem;
     border-bottom-left-radius: 0;
@@ -231,12 +231,12 @@
 .titleDragHandle {
     flex: 1 1 auto;
     min-width: 0;
-    min-height: 24rem;
+    min-height: 28rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0 10rem;
-    margin-left: 6rem;
+    padding: 0 6rem;
+    margin-left: 4rem;
     border-radius: 7rem;
     overflow: hidden;
     cursor: move;
@@ -263,10 +263,10 @@
 .eyeButton,
 .collapseButton,
 .closeButton {
-  flex: 0 0 24rem;
-  width: 24rem;
-  height: 24rem;
-  min-width: 24rem;
+  flex: 0 0 28rem;
+  width: 28rem;
+  height: 28rem;
+  min-width: 28rem;
   margin-left: 6rem;
   padding: 0 !important;
   overflow: visible;
@@ -286,8 +286,8 @@
 }
 
 .closeButton .closeIcon {
-    width: 14rem;
-    height: 14rem;
+    width: 17rem;
+    height: 17rem;
     opacity: 0.70;
 }
 
@@ -297,8 +297,8 @@
 }
 
 .collapseButton .collapseIcon {
-    width: 18rem;
-    height: 18rem;
+    width: 22rem;
+    height: 22rem;
     opacity: 0.92;
 }
 
@@ -309,8 +309,8 @@
 
 // Deliberately the largest header glyph: it is the one state indicator players scan for.
 .eyeButton .eyeIcon {
-  width: 22rem;
-  height: 22rem;
+  width: 25rem;
+  height: 25rem;
   opacity: 0.95;
 }
 .eyeButton:hover .eyeIcon {
