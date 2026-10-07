@@ -113,6 +113,9 @@ namespace HoverColors.Systems
         private float4 m_LotFillColor;
         private bool m_HideLot;
 
+        public bool IsActive => m_Active;
+        public bool NeedsHighPriorityColor => m_Scale < 0.999f;
+
         public OverlayCurveSpan(OverlayRenderSystem overlay)
         {
             m_Overlay = overlay;
@@ -403,6 +406,8 @@ namespace HoverColors.Systems
         private ToolSystem? m_ToolSystem;
         private AreaToolSystem? m_AreaToolSystem;
         private PrefabSystem? m_PrefabSystem;
+        private EntityQuery m_AreaBorderQuery;
+        private EntityQuery m_AreaBorderInfoviewQuery;
 
         internal OverlayCurveSpan? Span => m_Span;
 
@@ -413,6 +418,51 @@ namespace HoverColors.Systems
             m_ToolSystem = World.GetOrCreateSystemManaged<ToolSystem>();
             m_AreaToolSystem = World.GetOrCreateSystemManaged<AreaToolSystem>();
             m_PrefabSystem = World.GetOrCreateSystemManaged<PrefabSystem>();
+            // Match the two queries used by vanilla AreaBorderRenderSystem. When its chosen
+            // query is empty, it emits no curves and there is nothing for HC to scale.
+            m_AreaBorderQuery = GetEntityQuery(new EntityQueryDesc
+            {
+                All = new[] { ComponentType.ReadOnly<Game.Areas.Area>() },
+                Any = new[]
+                {
+                    ComponentType.ReadOnly<Temp>(),
+                    ComponentType.ReadOnly<Error>(),
+                    ComponentType.ReadOnly<Warning>(),
+                },
+                None = new[]
+                {
+                    ComponentType.ReadOnly<Hidden>(),
+                    ComponentType.ReadOnly<Game.Common.Deleted>(),
+                },
+            });
+            m_AreaBorderInfoviewQuery = GetEntityQuery(new EntityQueryDesc
+            {
+                All = new[] { ComponentType.ReadOnly<Game.Areas.Area>() },
+                Any = new[]
+                {
+                    ComponentType.ReadOnly<Temp>(),
+                    ComponentType.ReadOnly<Error>(),
+                    ComponentType.ReadOnly<Warning>(),
+                },
+                None = new[]
+                {
+                    ComponentType.ReadOnly<Hidden>(),
+                    ComponentType.ReadOnly<Game.Common.Deleted>(),
+                },
+            }, new EntityQueryDesc
+            {
+                All = new[]
+                {
+                    ComponentType.ReadOnly<Lot>(),
+                    ComponentType.ReadOnly<Game.Common.Owner>(),
+                },
+                None = new[]
+                {
+                    ComponentType.ReadOnly<Hidden>(),
+                    ComponentType.ReadOnly<Game.Common.Deleted>(),
+                    ComponentType.ReadOnly<Batch>(),
+                },
+            });
         }
 
         protected override void OnUpdate()
@@ -420,6 +470,15 @@ namespace HoverColors.Systems
             float surfaceScale = Mod.Settings?.SurfaceBorderThicknessScale ?? 1f;
             float extractorScale = Mod.Settings?.ExtractorBorderThicknessScale ?? 1f;
             if (surfaceScale >= 0.999f && extractorScale >= 0.999f)
+            {
+                m_Span?.Capture(1f);
+                return;
+            }
+
+            EntityQuery sourceQuery = m_ToolSystem?.activeInfoview != null
+                ? m_AreaBorderInfoviewQuery
+                : m_AreaBorderQuery;
+            if (sourceQuery.IsEmptyIgnoreFilter)
             {
                 m_Span?.Capture(1f);
                 return;
@@ -525,16 +584,24 @@ namespace HoverColors.Systems
 
         protected override void OnUpdate()
         {
-            if (m_GuidelineSettingsQuery.IsEmptyIgnoreFilter)
+            OverlayCurveSpan? span = m_Capture?.Span;
+            if (span?.IsActive != true)
             {
-                m_Capture?.Span?.Apply(dashedOnly: true);
+                return;
+            }
+
+            // Surface control-point circles can need scaling even with Dashes at 1.0.
+            // Only dashed/angle-guide scaling needs the High priority color lookup.
+            if (!span.NeedsHighPriorityColor || m_GuidelineSettingsQuery.IsEmptyIgnoreFilter)
+            {
+                span.Apply(dashedOnly: true);
                 return;
             }
 
             GuideLineSettingsData settings = EntityManager.GetComponentData<GuideLineSettingsData>(
                 m_GuidelineSettingsQuery.GetSingletonEntity());
             UnityEngine.Color high = settings.m_HighPriorityColor.linear;
-            m_Capture?.Span?.Apply(dashedOnly: true,
+            span.Apply(dashedOnly: true,
                 highPriorityColor: new float4(high.r, high.g, high.b, high.a),
                 hasHighPriorityColor: true);
         }

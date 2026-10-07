@@ -104,6 +104,7 @@ tags: hover colors, remove blue, disable hover, highlight color, outline thickne
 <RequiredDLC Value="" />
 <!--Change log for new version. Single line or multi line. Supports minimal markdown subset-->
 <ChangeLog>
+- Eyeball now hides ground property lot fill and outline.
 - Added thickness slider for guidelines.
 - Added thickness slider for Surfaces and Extractor area lots.
 - Added instant Show/hide button for angles tooltips when drawing roads or paths.
