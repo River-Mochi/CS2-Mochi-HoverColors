@@ -705,9 +705,8 @@ export const MochiPanelControlRows = ({
             </SideTooltip>
 
             <SideTooltip tooltip={tt(text.tooltipGuidelineDashedThickness)} side="right">
-              <div className={styles.controlBody}>
+              <div className={`${styles.controlBody} ${styles.dashedThicknessControl}`}>
                 <div className={styles.sliderRow}>
-                  <span className={styles.widthLabel}>{text.labelDashedGuides}</span>
                   <MochiSlider
                     focusKey={focusDisabled}
                     className={styles.slider}
@@ -721,6 +720,7 @@ export const MochiPanelControlRows = ({
                     {guidelineDashedThicknessScale.toFixed(1)}
                   </div>
                 </div>
+                <span className={styles.dashedThicknessLabel}>{text.labelDashedGuides}</span>
               </div>
             </SideTooltip>
           </div>

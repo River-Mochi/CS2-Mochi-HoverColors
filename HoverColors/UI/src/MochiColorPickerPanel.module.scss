@@ -485,6 +485,10 @@
     background-color: rgba(108, 136, 150, 0.20) !important;
 }
 
+.sectionToggle:hover .sectionToggleArrow {
+    opacity: 1;
+}
+
 .sectionToggleArrow {
     width: 14rem;
     height: 14rem;

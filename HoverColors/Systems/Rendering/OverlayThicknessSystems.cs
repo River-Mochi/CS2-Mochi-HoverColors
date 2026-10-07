@@ -62,11 +62,9 @@ namespace HoverColors.Systems
             ToolSystem? toolSystem,
             AreaToolSystem? areaToolSystem,
             PrefabSystem? prefabSystem,
-            out AreaGeometryData geometry,
-            out bool specializedIndustryLot)
+            out AreaGeometryData geometry)
         {
             geometry = default;
-            specializedIndustryLot = false;
             if (toolSystem == null || areaToolSystem == null || prefabSystem == null
                 || !ReferenceEquals(toolSystem.activeTool, areaToolSystem)
                 || areaToolSystem.GetPrefab() is not AreaPrefab prefab
@@ -77,9 +75,6 @@ namespace HoverColors.Systems
             }
 
             geometry = entityManager.GetComponentData<AreaGeometryData>(prefabEntity);
-            specializedIndustryLot = geometry.m_Type == AreaType.Lot
-                && (entityManager.HasComponent<ExtractorAreaData>(prefabEntity)
-                    || entityManager.HasComponent<StorageAreaData>(prefabEntity));
             return true;
         }
 
@@ -92,7 +87,7 @@ namespace HoverColors.Systems
         {
             snapDistance = 0f;
             if (!TryGetActiveAreaGeometry(entityManager, toolSystem, areaToolSystem, prefabSystem,
-                out AreaGeometryData geometry, out _)
+                out AreaGeometryData geometry)
                 || geometry.m_Type != AreaType.Surface)
             {
                 return false;
@@ -244,8 +239,13 @@ namespace HoverColors.Systems
                         continue;
                     }
 
-                    if (math.abs(curve.m_Size.x - AreaSnapDistance * 0.3f) > 0.001f
-                        && math.abs(curve.m_Size.x - AreaSnapDistance * 0.2f) > 0.001f)
+                    bool authoredWidth = math.abs(curve.m_Size.x - AreaSnapDistance * 0.3f) <= 0.001f
+                        || math.abs(curve.m_Size.x - AreaSnapDistance * 0.2f) <= 0.001f;
+                    // AreaBorderRenderSystem doubles the Lot snap distance for infoview borders.
+                    bool infoviewLotWidth = !ScaleAreaCircles
+                        && (math.abs(curve.m_Size.x - AreaSnapDistance * 0.6f) <= 0.001f
+                            || math.abs(curve.m_Size.x - AreaSnapDistance * 0.4f) <= 0.001f);
+                    if (!authoredWidth && !infoviewLotWidth)
                     {
                         continue;
                     }
@@ -302,21 +302,27 @@ namespace HoverColors.Systems
                 return;
             }
 
-            if (!OverlayCurveAccess.TryGetActiveAreaGeometry(
+            bool hasActiveArea = OverlayCurveAccess.TryGetActiveAreaGeometry(
                 EntityManager, m_ToolSystem, m_AreaToolSystem, m_PrefabSystem,
-                out AreaGeometryData geometry, out bool specializedIndustryLot))
+                out AreaGeometryData geometry);
+            if (hasActiveArea && geometry.m_Type == AreaType.Surface && surfaceScale < 0.999f)
             {
-                m_Span?.Capture(1f);
+                m_Span?.Capture(surfaceScale, geometry.m_SnapDistance);
                 return;
             }
 
-            float scale = geometry.m_Type switch
+            if (extractorScale < 0.999f)
             {
-                AreaType.Surface => surfaceScale,
-                AreaType.Lot when specializedIndustryLot => extractorScale,
-                _ => 1f,
-            };
-            m_Span?.Capture(scale, geometry.m_SnapDistance, scaleAreaCircles: geometry.m_Type == AreaType.Surface);
+                // ObjectToolSystem draws the Lot hover border before switching to AreaToolSystem
+                // for node editing. Match the game's Lot width even when no Area prefab is active.
+                float lotSnapDistance = hasActiveArea && geometry.m_Type == AreaType.Lot
+                    ? geometry.m_SnapDistance
+                    : AreaUtils.GetMinNodeDistance(AreaType.Lot);
+                m_Span?.Capture(extractorScale, lotSnapDistance, scaleAreaCircles: false);
+                return;
+            }
+
+            m_Span?.Capture(1f);
         }
 
         protected override void OnDestroy()
