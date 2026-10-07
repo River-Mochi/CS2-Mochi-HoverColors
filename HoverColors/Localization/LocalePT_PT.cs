@@ -51,15 +51,15 @@ namespace HoverColors
                 // Tool color behavior
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToolColorMode)), "▪ Bulldozer + estradas" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ToolColorMode)),
-                    "Controla cores temporárias de contorno enquanto o bulldozer ou ferramentas de estrada estão ativos.\n" +
+                    "Controla as cores temporárias do contorno com o bulldozer ou ferramentas de estrada.\n" +
                     "\n" +
-                    "**1. Recomendado** usa a cor de Aviso do jogo (amarelo) para demolição e um azul vanilla mais suave para estradas.\n" +
-                    "**2. Cores vanilla** repõe o azul vanilla normal do jogo com bulldozer ou estradas ativos.\n" +
-                    "**3. Manter a minha cor** usa a cor escolhida em todo o lado.\n" +
+                    "**1. Recomendado** usa o amarelo de aviso para demolição. Com uma ferramenta de estrada/caminho, suaviza o azul vanilla nas novas prévias e nos segmentos sob a ferramenta. Ao passar normalmente sobre uma estrada existente, continua a usar a tua cor de Contorno. O grande preenchimento de estrada nova segue a cor de prévia das Guias.\n" +
+                    "**2. Cores vanilla** repõe o azul vanilla normal com bulldozer ou estradas.\n" +
+                    "**3. Manter a minha cor** usa a tua cor em todo o lado.\n" +
                     "\n" +
-                    "Objetivo: alguns utilizadores/testers acham a cor personalizada difícil de ver ao demolir.\n" +
-                    "Oferece cores bem visíveis durante o uso de ferramentas.\n" +
-                    "Não substitui a cor guardada automaticamente no seletor."
+                    "Útil se a tua cor for difícil de ver ao demolir.\n" +
+                    "A guia separada da área da estrada também segue a cor de prévia das Guias.\n" +
+                    "Não altera a cor guardada no seletor."
                 },
                 { m_Settings.GetToolColorModeLocaleID("Recommended"), "1. Recomendado" },
                 { m_Settings.GetToolColorModeLocaleID("Vanilla"), "2. Cores vanilla" },
@@ -68,42 +68,45 @@ namespace HoverColors
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseOverlapWarningColor)), "▪ Ativar contorno de itens sobrepostos" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseOverlapWarningColor)),
                     "<Ativado recomendado>\n" +
-                    "Mantém visível o contorno vermelho salmão vanilla quando a colocação é bloqueada por sobreposição.\n" +
-                    "Limites de área, como raios de quinta da Indústria Especializada, ficam sem alterações.\n" +
+                    "Mantém o contorno vermelho salmão vanilla quando um objeto ou rede não pode ser colocado por sobreposição.\n" +
+                    "Limites de área, como raios de quinta da Indústria Especializada, não mudam.\n" +
                     "\n" +
-                    "Funciona com todos os modos Bulldozer + estradas e não substitui a cor guardada."
+                    "Funciona com todos os modos Bulldozer + estradas sem substituir a cor guardada."
                 },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseCustomColorsForNetLanes)), "▪ Permitir cores personalizadas para NetLanes" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseCustomColorsForNetLanes)),
                     "<Ativado recomendado>\n" +
-                    "Usa a cor/transparência HC guardada ao colocar detalhes NetLane como vedações, sebes, marcações e semelhantes.\n" +
+                    "Usa a cor/transparência HC guardada em detalhes NetLane como vedações, sebes e marcações.\n" +
                     "\n" +
-                    "- As estradas normais continuam a seguir a opção Bulldozer + estradas escolhida na lista.\n" +
-                    "- Desativa se quiseres que essas ferramentas usem o azul vanilla do jogo.\n" +
-                    "- A cor de erro por sobreposição continua a ter prioridade quando ativada (vanilla = vermelho salmão)."
+                    "- As estradas normais continuam a seguir Bulldozer + estradas.\n" +
+                    "- Desativa para usar o azul vanilla do jogo nestas ferramentas.\n" +
+                    "- A cor de erro por sobreposição continua a ter prioridade (vanilla = vermelho salmão)."
                 },
 
                 // Panel style
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelStyle)), "▪ Escolha painel escuro ou de vidro" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelStyle)), "▪ Escolhe painel escuro ou de vidro" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelStyle)),
-                    "**Escuro (Vanilla)** usa a superfície de painel do próprio jogo.\n" +
+                    "**Escuro (Vanilla)** usa o painel do próprio jogo.\n" +
                     "- Adapta-se automaticamente à Legacy UI ou Modern UI.\n" +
-                    "- Segue a transparência da interface do jogo.\n" +
+                    "- Segue a Opacidade da Interface do jogo.\n" +
                     "\n" +
-                    "**Vidro (Personalizado)** usa a superfície de vidro mais clara do Hover Colors.\n" +
+                    "**Vidro (Personalizado)** usa o painel de vidro mais claro do Hover Colors.\n" +
                     "- Mesmo a 100%, ainda deixa ver um pouco da cidade.\n" +
-                    "- Adiciona abaixo um cursor de opacidade do painel.\n" +
+                    "- Adiciona um cursor de opacidade do painel.\n" +
                     "\n" +
-                    "Experimenta os dois! Só muda o fundo deste painel do mod, não a interface do jogo.\n" +
+                    "Experimenta os dois! Só muda o fundo deste painel, não a interface do jogo.\n" +
                     "\n" +
-                    "Dica: o jogo desfoca o que fica atrás de cada painel para destacar botões e cursores. Com Transparência da Interface a 0%, esse desfoque é desligado em todos os painéis. Com 1% ou mais, mantém-se."
+                    "Dica: o jogo desfoca o que fica atrás dos painéis. Transparência da Interface a 0% desliga o desfoque; 1% ou mais mantém."
                 },
                 { m_Settings.GetPanelStyleLocaleID("Dark"), "Escuro (Vanilla)" },
                 { m_Settings.GetPanelStyleLocaleID("Glass"), "Vidro (Personalizado)" },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.LauncherLocation)), "▪ Localização do botão do painel" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.LauncherLocation)), "Escolha o canto superior esquerdo, superior direito ou Universal Mod Menu do jogo. Reinicie o jogo para mover o botão." },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.LauncherLocation)),
+                    "Escolhe o canto superior esquerdo, superior direito ou Universal Mod Menu.\n" +
+                    "**Reinicia o jogo** para aplicar a nova posição."
+                },
                 { m_Settings.GetLauncherLocationLocaleID("TopLeft"), "Superior esquerdo" },
                 { m_Settings.GetLauncherLocationLocaleID("TopRight"), "Superior direito" },
                 { m_Settings.GetLauncherLocationLocaleID("UniversalMenu"), "Universal Mod Menu" },
@@ -113,69 +116,80 @@ namespace HoverColors
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)),
                     "Opacidade do fundo do painel **Vidro (Personalizado)**.\n" +
                     "\n" +
-                    "**30%** é o aspeto mais transparente e limpo.\n" +
-                    "**100%** fica quase sólido, mas ainda deixa ver um pouco da cidade.\n" +
+                    "**30%** = mais transparente.\n" +
+                    "**100%** = quase sólido, ainda deixando ver um pouco da cidade.\n" +
                     "\n" +
-                    "Só o fundo muda. Texto, ícones e amostras de cor continuam sempre legíveis.\n" +
+                    "Só o fundo muda; texto, ícones e amostras continuam legíveis.\n" +
                     "\n" +
-                    "**Escuro (Vanilla)** segue a transparência da interface do jogo, por isso este cursor fica oculto quando é selecionado."
+                    "**Escuro (Vanilla)** segue a Opacidade da Interface do jogo, por isso este cursor fica oculto."
                 },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelTooltipsEnabled)), "▪ Mostrar dicas (recomendado)" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelTooltipsEnabled)),
-                    "<Deixa isto ligado> é recomendado para a maioria dos jogadores.\n" +
+                    "<Deixa ligado> é recomendado.\n" +
                     "Mostra ajuda breve ao passar o rato nos botões do Hover Colors.\n" +
                     "Se desativares, clica em Info (i) na barra de título ou volta a marcar esta opção.\n" +
-                    "Para evitar enganos, as dicas só podem ser desativadas neste menu Opções."
+                    "As dicas só podem ser desativadas neste menu Opções."
                 },
-
 
                 // Reset buttons
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ResetModDefaults)), "Repor padrões do mod" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ResetModDefaults)),
                     "Repõe todas as definições do Hover Colors como numa instalação nova: cores, espessura do contorno, ferramentas, guias, painel e dicas.\n" +
                     "\n" +
-                    "**Isto também apaga os presets guardados (Set A e Set B).**\n" +
+                    "**Também apaga os presets guardados (Set A e Set B).**\n" +
                     "\n" +
-                    "Os atalhos não são alterados.\n" +
+                    "Os atalhos não mudam.\n" +
                     "É como instalar o Hover Colors pela primeira vez."
                 },
                 { m_Settings.GetOptionWarningLocaleID(nameof(HoverColorsSettings.ResetModDefaults)),
-                    "Repor todas as definições do Hover Colors como numa instalação nova?\n\nOs presets guardados (Set A e Set B) serão apagados." },
+                    "Repor todas as definições do Hover Colors?\n" +
+                    "\n" +
+                    "Os presets guardados (Set A e Set B) serão apagados."
+                },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ResetColorsToVanilla)), "Repor cores vanilla" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ResetColorsToVanilla)),
                     "Devolve o aspeto original do jogo: contorno, destaque do proprietário, preenchimento, espessura, guias e distritos.\n" +
                     "\n" +
-                    "Tudo o resto fica como definiste: Bulldozer/estradas, prévias, presets, painel e atalhos.\n" +
+                    "Tudo o resto fica igual: Bulldozer/estradas, prévias, presets, painel e atalhos.\n" +
                     "\n" +
-                    "Nota: o mod pode ser removido sem qualquer reset. Os destaques voltam sozinhos aos padrões do jogo.\n"+
-                    "Este botão apenas faz um reset rápido para as cores padrão do jogo."
+                    "Podes remover o mod sem reset; os destaques voltam sozinhos aos padrões do jogo.\n" +
+                    "Este botão só faz um reset rápido das cores."
                 },
                 { m_Settings.GetOptionWarningLocaleID(nameof(HoverColorsSettings.ResetColorsToVanilla)),
-                    "Repor as cores controladas pelo mod para o aspeto do jogo?\n\nPresets, comportamento das ferramentas e painel são mantidos." },
+                    "Repor as cores controladas pelo mod para o aspeto do jogo?\n" +
+                    "\n" +
+                    "Presets, ferramentas e opções do painel são mantidos."
+                },
 
                 // Keybinds
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.TogglePanelBinding)), "Abrir/fechar painel principal" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.TogglePanelBinding)),
-                    "Atalho para <abrir / fechar> o painel de cores na cidade." },
+                    "Atalho para <abrir / fechar> o painel de cores na cidade."
+                },
                 { m_Settings.GetBindingKeyLocaleID(Mod.kTogglePanelActionName), "Alternar painel Hover Colors" },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleHoverHighlightsBinding)), "Olho rápido On/Off" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ToggleHoverHighlightsBinding)),
                     "Atalho opcional para o botão Olho: liga/desliga imediatamente Destaque + Preenchimento.\n" +
-                    "Vem sem tecla atribuída para evitar conflitos." },
+                    "Vem sem tecla atribuída para evitar conflitos."
+                },
                 { m_Settings.GetBindingKeyLocaleID(Mod.kToggleHighlightsActionName), "Olho rápido On/Off" },
 
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleRoadAngleTooltipsBinding)), "Caixas de ângulo de estradas e caminhos" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleRoadAngleTooltipsBinding)), "Dicas de ângulo On/Off" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ToggleRoadAngleTooltipsBinding)),
-                    "Atalho para alternar ângulos e Colocar/Anular ao desenhar estradas e caminhos. Custo, comprimento e inclinação continuam visíveis." },
-                { m_Settings.GetBindingKeyLocaleID(Mod.kToggleRoadAngleTooltipsActionName), "Ângulos e dicas do rato" },
+                    "Atalho para as caixas de ângulo e Colocar/Anular.\n" +
+                    "Funciona ao desenhar estradas ou caminhos novos.\n" +
+                    "Custo, comprimento e inclinação continuam visíveis."
+                },
+                { m_Settings.GetBindingKeyLocaleID(Mod.kToggleRoadAngleTooltipsActionName), "Ângulos e dicas do rato On/Off" },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.TogglePresetBinding)), "Alternar presets 1+2" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.TogglePresetBinding)),
                     "Atalho para alternar entre\n" +
-                    "<slot de preset 1 e slot 2>." },
+                    "<preset 1 e preset 2>."
+                },
                 { m_Settings.GetBindingKeyLocaleID(Mod.kTogglePresetActionName), "Alternar entre presets 1 e 2" },
 
                 // About name + version
@@ -190,7 +204,7 @@ namespace HoverColors
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.OpenParadox)), "**Abrir a página do autor no Paradox Mods.**" },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.MochiDedicationText)),
-                    "Em memória de Mochi."
+                    "Em memória de Mochi, com amor."
                 },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.MochiDedicationText)),
                     "Este mod é dedicado à Mochi.\n" +

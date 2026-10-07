@@ -53,13 +53,13 @@ namespace HoverColors
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ToolColorMode)),
                     "ควบคุมสีเส้นขอบชั่วคราวเมื่อใช้ bulldozer หรือเครื่องมือถนน\n" +
                     "\n" +
-                    "**1. แนะนำ** ใช้สีเตือนของเกม (เหลือง) สำหรับรื้อ และสีน้ำเงิน vanilla ที่นุ่มลงสำหรับถนน\n" +
+                    "**1. แนะนำ** ใช้สีเตือนเหลืองตอนรื้อ เมื่อใช้เครื่องมือถนน/ทางเดิน จะลดความสดของสีน้ำเงิน vanilla ในพรีวิวใหม่และช่วงถนนใต้เครื่องมือ การชี้ถนนเดิมตามปกติยังใช้สีเส้นขอบของคุณ ส่วนพื้นที่เติมกว้างของถนนใหม่ใช้สีพรีวิวจาก Guidelines\n" +
                     "**2. สีเครื่องมือ vanilla** คืนสีน้ำเงิน vanilla ปกติเมื่อใช้ bulldozer หรือถนน\n" +
                     "**3. ใช้สีของฉัน** ใช้สีที่คุณเลือกทุกที่\n" +
                     "\n" +
-                    "เหตุผล: ผู้ใช้/ผู้ทดสอบบางคนมองสีของตนยากตอนรื้อ\n" +
-                    "ตัวเลือกนี้ให้สีที่มองเห็นชัดขณะใช้เครื่องมือ\n" +
-                    "ไม่เขียนทับสีที่บันทึกอัตโนมัติในตัวเลือกสี"
+                    "เหมาะเมื่อสีของคุณมองยากตอนรื้อ\n" +
+                    "ไกด์พื้นที่ถนนแยกก็ใช้สีพรีวิวจาก Guidelines เช่นกัน\n" +
+                    "ไม่เขียนทับสีที่บันทึกไว้ในตัวเลือกสี"
                 },
                 { m_Settings.GetToolColorModeLocaleID("Recommended"), "1. แนะนำ" },
                 { m_Settings.GetToolColorModeLocaleID("Vanilla"), "2. สีเครื่องมือ vanilla" },
@@ -68,42 +68,45 @@ namespace HoverColors
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseOverlapWarningColor)), "▪ เปิดเส้นขอบของวัตถุที่ซ้อนทับ" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseOverlapWarningColor)),
                     "<แนะนำให้เปิด>\n" +
-                    "คงเส้นขอบสีแดงแซลมอนของเกมไว้เมื่อวางวัตถุหรือเน็ตเวิร์กไม่ได้เพราะซ้อนทับ\n" +
-                    "ขอบเขตพื้นที่ เช่น รัศมีฟาร์ม Specialized Industry จะไม่ถูกเปลี่ยน\n" +
+                    "แสดงเส้นขอบแดงแซลมอน vanilla เมื่อวางวัตถุหรือเน็ตเวิร์กไม่ได้เพราะซ้อนทับ\n" +
+                    "ขอบเขตพื้นที่ เช่น รัศมีฟาร์ม Specialized Industry จะไม่เปลี่ยน\n" +
                     "\n" +
-                    "ใช้ได้กับทุกโหมด Bulldozer + ถนน และไม่เขียนทับสีที่คุณบันทึกไว้"
+                    "ใช้ได้กับทุกโหมด Bulldozer + ถนน และไม่เขียนทับสีที่บันทึกไว้"
                 },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.UseCustomColorsForNetLanes)), "▪ อนุญาตสีเองสำหรับ NetLanes" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.UseCustomColorsForNetLanes)),
                     "<แนะนำให้เปิด>\n" +
-                    "ใช้สี/ความโปร่งใส HC ที่บันทึกไว้เมื่อวางรายละเอียด NetLane เช่น รั้ว พุ่มไม้ เส้นมาร์ก และอื่น ๆ\n" +
+                    "ใช้สี/ความโปร่งใส HC ที่บันทึกไว้กับรายละเอียด NetLane เช่น รั้ว พุ่มไม้ และเส้นมาร์ก\n" +
                     "\n" +
-                    "- ถนนปกติยังใช้ค่าที่เลือกในรายการ Bulldozer + ถนน\n" +
-                    "- ปิดถ้าต้องการให้เครื่องมือเหล่านี้ใช้สีน้ำเงิน vanilla ของเกม\n" +
-                    "- สีข้อผิดพลาดการซ้อนทับยังมีผลก่อนเสมอเมื่อเปิด (สี vanilla = แดงแซลมอน)"
+                    "- ถนนปกติยังใช้ค่า Bulldozer + ถนน\n" +
+                    "- ปิดถ้าต้องการสีน้ำเงิน vanilla ของเกม\n" +
+                    "- สีข้อผิดพลาดการซ้อนทับยังมาก่อนเสมอ (vanilla = แดงแซลมอน)"
                 },
 
                 // Panel style
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelStyle)), "▪ เลือกแผงแบบมืดหรือกระจก" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelStyle)),
-                    "**มืด (แบบเกม)** ใช้พื้นผิวแผงของเกมโดยตรง\n" +
+                    "**มืด (แบบเกม)** ใช้แผงของเกมโดยตรง\n" +
                     "- เข้ากับ Legacy UI หรือ Modern UI อัตโนมัติ\n" +
-                    "- ใช้ค่าความโปร่งใสของ Interface ในเกม\n" +
+                    "- ใช้ค่าความทึบของ Interface ในเกม\n" +
                     "\n" +
                     "**กระจก (กำหนดเอง)** ใช้แผงกระจกสีอ่อนของ Hover Colors\n" +
                     "- แม้ 100% ก็ยังเห็นเมืองด้านหลังเล็กน้อย\n" +
-                    "- เพิ่มสไลเดอร์ความทึบของแผงด้านล่าง\n" +
+                    "- เพิ่มสไลเดอร์ความทึบของแผง\n" +
                     "\n" +
-                    "ลองทั้งสองแบบแล้วเลือกที่ชอบ! เปลี่ยนเฉพาะพื้นหลังของแผงม็อดนี้ ไม่เปลี่ยน UI ของเกม\n" +
+                    "ลองทั้งสองแบบแล้วเลือกที่ชอบ! เปลี่ยนเฉพาะพื้นหลังของแผงม็อดนี้\n" +
                     "\n" +
-                    "เคล็ดลับ: เกมจะเบลอภาพหลังทุกแผงเพื่อให้ปุ่มและสไลเดอร์เด่นขึ้น ตั้งค่าความโปร่งใสของ Interface ในเกมเป็น 0% จะปิดเบลอทุกแผง ส่วน 1% ขึ้นไปจะยังคงเบลอไว้"
+                    "เคล็ดลับ: เกมจะเบลอภาพหลังแผง ตั้งค่าความโปร่งใส Interface เป็น 0% จะปิดเบลอ ส่วน 1% ขึ้นไปจะยังเปิดอยู่"
                 },
                 { m_Settings.GetPanelStyleLocaleID("Dark"), "มืด (แบบเกม)" },
                 { m_Settings.GetPanelStyleLocaleID("Glass"), "กระจก (กำหนดเอง)" },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.LauncherLocation)), "▪ ตำแหน่งปุ่มแผง" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.LauncherLocation)), "เลือกมุมซ้ายบน มุมขวาบน หรือ Universal Mod Menu ของเกม รีสตาร์ตเกมเพื่อย้ายปุ่ม" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.LauncherLocation)),
+                    "เลือกซ้ายบน ขวาบน หรือ Universal Mod Menu\n" +
+                    "**รีสตาร์ตเกม** เพื่อให้ตำแหน่งใหม่มีผล"
+                },
                 { m_Settings.GetLauncherLocationLocaleID("TopLeft"), "ซ้ายบน" },
                 { m_Settings.GetLauncherLocationLocaleID("TopRight"), "ขวาบน" },
                 { m_Settings.GetLauncherLocationLocaleID("UniversalMenu"), "Universal Mod Menu" },
@@ -111,71 +114,82 @@ namespace HoverColors
                 // Panel opacity
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)), "▪ ความทึบของแผง" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)),
-                    "ความทึบของพื้นหลังสำหรับแผง **กระจก (กำหนดเอง)**\n" +
+                    "ความทึบพื้นหลังของแผง **กระจก (กำหนดเอง)**\n" +
                     "\n" +
-                    "**30%** โปร่งใสและดูโล่งที่สุด\n" +
-                    "**100%** เกือบทึบ แต่ยังเห็นเมืองด้านหลังเล็กน้อย\n" +
+                    "**30%** = โปร่งใสที่สุด\n" +
+                    "**100%** = เกือบทึบ แต่ยังเห็นเมืองเล็กน้อย\n" +
                     "\n" +
-                    "เปลี่ยนเฉพาะพื้นหลัง ข้อความ ไอคอน และช่องสียังอ่านได้ชัดเสมอ\n" +
+                    "เปลี่ยนเฉพาะพื้นหลัง ข้อความ ไอคอน และสียังอ่านง่าย\n" +
                     "\n" +
-                    "**มืด (แบบเกม)** ใช้ค่าความโปร่งใสของ Interface ในเกมแทน จึงซ่อนสไลเดอร์นี้เมื่อเลือกแบบมืด"
+                    "**มืด (แบบเกม)** ใช้ค่าความทึบ Interface ของเกม จึงซ่อนสไลเดอร์นี้"
                 },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelTooltipsEnabled)), "▪ แสดงทูลทิป (แนะนำ)" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelTooltipsEnabled)),
-                    "แนะนำให้ผู้เล่นส่วนใหญ่<เปิดไว้>\n" +
+                    "ผู้เล่นส่วนใหญ่ควร<เปิดไว้>\n" +
                     "แสดงคำอธิบายสั้น ๆ เมื่อชี้เมาส์ที่ปุ่ม Hover Colors\n" +
-                    "ถ้าปิดไว้ ให้คลิก Info (i) บนแถบหัวเรื่อง หรือเปิดจากช่องนี้อีกครั้ง\n" +
-                    "เพื่อป้องกันการปิดโดยไม่ตั้งใจ ทูลทิปจะปิดได้เฉพาะในเมนู Options นี้"
+                    "ถ้าปิด ให้คลิก Info (i) บนแถบหัวเรื่องหรือเปิดตัวเลือกนี้อีกครั้ง\n" +
+                    "ทูลทิปจะปิดได้เฉพาะในเมนู Options นี้"
                 },
-
 
                 // Reset buttons
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ResetModDefaults)), "รีเซ็ตเป็นค่าเริ่มต้นของม็อด" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ResetModDefaults)),
-                    "คืนค่าทั้งหมดของ Hover Colors เหมือนติดตั้งใหม่: สี ความหนาเส้นขอบ สีเครื่องมือ ไกด์ แผง และทูลทิป\n" +
+                    "คืนค่า Hover Colors ทั้งหมดเหมือนติดตั้งใหม่: สี ความหนาเส้นขอบ สีเครื่องมือ ไกด์ แผง และทูลทิป\n" +
                     "\n" +
                     "**พรีเซ็ตที่บันทึกไว้ (Set A และ Set B) จะถูกลบด้วย**\n" +
                     "\n" +
-                    "ปุ่มลัดจะไม่ถูกเปลี่ยน\n" +
-                    "เหมือนติดตั้ง Hover Colors เป็นครั้งแรก"
+                    "ปุ่มลัดไม่เปลี่ยน\n" +
+                    "เหมือนติดตั้ง Hover Colors ครั้งแรก"
                 },
                 { m_Settings.GetOptionWarningLocaleID(nameof(HoverColorsSettings.ResetModDefaults)),
-                    "รีเซ็ตค่า Hover Colors ทั้งหมดเหมือนติดตั้งใหม่หรือไม่?\n\nพรีเซ็ตที่บันทึกไว้ (Set A และ Set B) จะถูกลบ" },
+                    "รีเซ็ตค่า Hover Colors ทั้งหมดหรือไม่?\n" +
+                    "\n" +
+                    "พรีเซ็ตที่บันทึกไว้ (Set A และ Set B) จะถูกลบ"
+                },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ResetColorsToVanilla)), "รีเซ็ตสีเป็น vanilla" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ResetColorsToVanilla)),
                     "คืนหน้าตาเดิมของเกม: เส้นขอบ ไฮไลต์เจ้าของ สีเติม ความหนา ไกด์ และเขต\n" +
                     "\n" +
-                    "ค่าอื่นคงเดิม: Bulldozer/ถนน พรีวิวเครื่องมือ พรีเซ็ต แผง และปุ่มลัด\n" +
+                    "ค่าอื่นคงเดิม: Bulldozer/ถนน พรีวิว พรีเซ็ต แผง และปุ่มลัด\n" +
                     "\n" +
-                    "หมายเหตุ: ลบม็อดได้โดยไม่ต้องรีเซ็ต ไฮไลต์จะกลับเป็นค่าเกมเอง\n"+
-                    "ปุ่มนี้เป็นเพียงรีเซ็ตด่วนกลับสู่สีเริ่มต้นของเกม"
+                    "ลบม็อดได้โดยไม่ต้องรีเซ็ต ไฮไลต์จะกลับเป็นค่าเกมเอง\n" +
+                    "ปุ่มนี้เป็นแค่รีเซ็ตสีแบบเร็ว"
                 },
                 { m_Settings.GetOptionWarningLocaleID(nameof(HoverColorsSettings.ResetColorsToVanilla)),
-                    "รีเซ็ตสีที่ม็อดควบคุมกลับเป็นหน้าตาเดิมของเกมหรือไม่?\n\nพรีเซ็ต การทำงานของเครื่องมือ และตัวเลือกแผงจะยังอยู่" },
+                    "คืนสีที่ม็อดควบคุมเป็นหน้าตาเดิมของเกมหรือไม่?\n" +
+                    "\n" +
+                    "พรีเซ็ต การทำงานของเครื่องมือ และตัวเลือกแผงจะยังอยู่"
+                },
 
                 // Keybinds
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.TogglePanelBinding)), "เปิด/ปิดแผงหลัก" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.TogglePanelBinding)),
-                    "ปุ่มลัดเพื่อ<เปิด / ปิด>แผงสีในเมือง" },
+                    "ปุ่มลัดสำหรับ<เปิด / ปิด>แผงสีในเมือง"
+                },
                 { m_Settings.GetBindingKeyLocaleID(Mod.kTogglePanelActionName), "สลับแผง Hover Colors" },
 
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleHoverHighlightsBinding)), "ตาแบบด่วน เปิด/ปิด" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleHoverHighlightsBinding)), "ตาด่วน เปิด/ปิด" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ToggleHoverHighlightsBinding)),
                     "ปุ่มลัดเสริมสำหรับปุ่มรูปตา: เปิด/ปิด Highlight + Fill ทันที\n" +
-                    "ค่าเริ่มต้นไม่ผูกปุ่ม เพื่อเลี่ยงปุ่มชนกัน" },
-                { m_Settings.GetBindingKeyLocaleID(Mod.kToggleHighlightsActionName), "ตาแบบด่วน เปิด/ปิด" },
+                    "ไม่ได้กำหนดปุ่มไว้เพื่อเลี่ยงปุ่มชนกัน"
+                },
+                { m_Settings.GetBindingKeyLocaleID(Mod.kToggleHighlightsActionName), "ตาด่วน เปิด/ปิด" },
 
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleRoadAngleTooltipsBinding)), "แสดง/ซ่อนกรอบมุมถนนและทางเดิน" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleRoadAngleTooltipsBinding)), "ทูลทิปมุม เปิด/ปิด" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ToggleRoadAngleTooltipsBinding)),
-                    "ปุ่มลัดสลับกรอบมุมและวาง/ย้อนกลับเมื่อวาดถนนและทางเดิน ค่าใช้จ่าย ความยาว และความชันยังแสดงอยู่" },
-                { m_Settings.GetBindingKeyLocaleID(Mod.kToggleRoadAngleTooltipsActionName), "มุมและคำแนะนำเมาส์" },
+                    "ปุ่มลัดสำหรับกล่องมุมและกล่อง วาง/เลิกทำ\n" +
+                    "ใช้ขณะวาดถนนหรือทางเดินใหม่\n" +
+                    "ราคา ความยาว และความชันยังแสดงอยู่"
+                },
+                { m_Settings.GetBindingKeyLocaleID(Mod.kToggleRoadAngleTooltipsActionName), "มุมและคำแนะนำเมาส์ เปิด/ปิด" },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.TogglePresetBinding)), "สลับพรีเซ็ต 1+2" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.TogglePresetBinding)),
                     "ปุ่มลัดเพื่อสลับระหว่าง\n" +
-                    "<ช่องพรีเซ็ต 1 และ 2>" },
+                    "<พรีเซ็ต 1 และพรีเซ็ต 2>"
+                },
                 { m_Settings.GetBindingKeyLocaleID(Mod.kTogglePresetActionName), "สลับระหว่างพรีเซ็ต 1 และ 2" },
 
                 // About name + version
@@ -190,13 +204,13 @@ namespace HoverColors
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.OpenParadox)), "**เปิดหน้า Paradox Mods ของผู้สร้าง**" },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.MochiDedicationText)),
-                    "แด่ความทรงจำของ Mochi"
+                    "ด้วยรักและคิดถึง Mochi"
                 },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.MochiDedicationText)),
                     "ม็อดนี้อุทิศให้ Mochi\n" +
                     "เธอเป็นน้องหมาที่รักมาก รับมาเลี้ยงตอนอายุ 7 ปี\n" +
                     "และมอบความรักกับความสุขให้ 13 ปี\n" +
-                    "ม็อดนี้คงเกิดขึ้นไม่ได้ถ้าไม่มี Mochi"
+                    "ถ้าไม่มี Mochi ม็อดนี้ก็คงไม่มีวันนี้"
                 },
             };
         }

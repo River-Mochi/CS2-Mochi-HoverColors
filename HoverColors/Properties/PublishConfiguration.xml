@@ -17,25 +17,30 @@ Want to change the bright blue highlights?
 ### Highlights
 
 - 1-click change highlight color + transparency.
-- **NEW: Change outline thickness** from thin to thick.
-- **NEW: Fill color** and outline color are now separate.
+- Change outline thickness** from thin to thick.
+- Fill color and outline color are now separate.
 - Full color picker — click on any color or exact HEX value.
 - Works on buildings, cars, trees, citizens, props, roads, and more.
 - **1-Click Eye button** to hide/show highlights anytime.
+- New Property lots: now follow the Outline thickness and Fill color/opacity controls; the Eyeball also hides property lot borders and fill.
 - Hover over buttons for quick tooltip help.
 - Restore vanilla colors anytime with 1-click.
 
 ### Guidelines + Area Tools
 
 - **Guidelines:** change colors and opacity for roads, spacing lines, and previews.
+- Adjust dashed road and angle-guide thickness.
 - **Surfaces:** hide the cloudy preview fill so you can see the real ground.
 - **Specialized Industry:** hide lot previews while drawing farms, forestry, oil, ore, and other industry areas.
+- New Thickness for Surface and Extractor area border lines.
 - **Districts:** change border + overlay color and opacity.
 
 ### Panel + Options
-- NEW: works in Editor Mode: use the main panel hotkey to open the panel (default J).
-- NEW: Panel style choice — Dark matches the game's panels, Glass is a lighter see-through look with its own opacity slider.
+- Works in Editor Mode: use the main panel hotkey to open the panel (default J).
+- Panel style choice — Dark matches the game's panels, Glass is a lighter see-through look with its own opacity slider.
 - Bulldozer + Road tool color choices are in the Options menu.
+- Hide angle and Place/Undo hints while drawing roads or paths; cost and measurements remain visible.
+- Collapse panel sections, remember the panel position, and choose a top-left, top-right, or Universal Mod Menu launcher.
 
 ## Good to Know
 
@@ -43,7 +48,7 @@ Want to change the bright blue highlights?
 - **Works with Recolor:** Hover Colors changes highlights, guidelines, overlays, and previews. Recolor changes the actual objects.
 - **Lightweight:** no Harmony patches and Safe to remove anytime.
 - Alpha = transparency. Click any color box, a full color picker opens. Use the last bar.
-- Performance friendly: HC applies changes when needed, then stays idle.
+- Performance friendly: color settings update when needed; active previews are adjusted as they are drawn.
 
 ### Support + Feedback
 
@@ -111,7 +116,7 @@ tags: hover colors, remove blue, disable hover, highlight color, outline thickne
 - Added Collapsible section arrows and section titles.
 - Title bar is slightly taller.
 - Pink dot indicator for active highlight color (blue dot previously was harder to see).
-- Add Options menu choice for panel button in Top Left, Top Right, or Universal Mod menu -  new default is Top right.
+- Added an Options menu choice for the panel button: Top Left, Top Right, or Universal Mod Menu. New installs default to Top Left.
 - remove Hotkey for Surface preview filter On/off
 - add new hotkey for Angles tooltips on/off.
 - Edge highlight for new roads is now 0.80 alpha instead of 0.75 (vanilla is 0.855)
