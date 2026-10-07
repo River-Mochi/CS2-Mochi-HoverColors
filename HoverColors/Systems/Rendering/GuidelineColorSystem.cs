@@ -164,7 +164,7 @@ namespace HoverColors.Systems
             data.m_VeryLowPriorityColor = desiredVeryLow;
             data.m_LowPriorityColor = desiredLow;
             data.m_MediumPriorityColor = desiredMedium;
-            // High draws dashed alignment/telegraph helpers. RGB comes from the panel; slider scales alpha.
+            // High draws dashed alignment and solid angle helpers. RGB comes from the panel; slider scales alpha.
             data.m_HighPriorityColor = desiredHigh;
 
             // Leave positive placement feedback fully vanilla so valid-placement green stays familiar.

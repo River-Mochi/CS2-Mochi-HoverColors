@@ -142,7 +142,7 @@ namespace HoverColors.Systems
             m_Active = true;
         }
 
-        public void Apply(bool dashedOnly)
+        public void Apply(bool dashedOnly, float4 highPriorityColor = default, bool hasHighPriorityColor = false)
         {
             if (!m_Active
                 || !OverlayCurveAccess.TryGetLists(m_Overlay, out NativeList<OverlayRenderSystem.CurveData> projected,
@@ -161,6 +161,8 @@ namespace HoverColors.Systems
                 AreaSnapDistance = m_AreaSnapDistance,
                 SurfaceCircleScale = m_SurfaceCircleScale,
                 ScaleAreaCircles = m_ScaleAreaCircles,
+                HighPriorityColor = highPriorityColor,
+                HasHighPriorityColor = hasHighPriorityColor,
             }.Schedule(dependencies);
             m_Overlay.AddBufferWriter(m_LastJob);
             m_Active = false;
@@ -197,23 +199,29 @@ namespace HoverColors.Systems
             public float AreaSnapDistance;
             public float SurfaceCircleScale;
             public bool ScaleAreaCircles;
+            public float4 HighPriorityColor;
+            public bool HasHighPriorityColor;
 
             public void Execute()
             {
                 int2 start = Start[0];
-                ScaleRange(Projected, start.x);
-                ScaleRange(Absolute, start.y);
+                ScaleRange(Projected, start.x, projected: true);
+                ScaleRange(Absolute, start.y, projected: false);
             }
 
-            private void ScaleRange(NativeList<OverlayRenderSystem.CurveData> curves, int start)
+            private void ScaleRange(NativeList<OverlayRenderSystem.CurveData> curves, int start, bool projected)
             {
                 for (int i = math.clamp(start, 0, curves.Length); i < curves.Length; i++)
                 {
                     OverlayRenderSystem.CurveData curve = curves[i];
                     if (DashedOnly)
                     {
-                        if (curve.m_DashLengths.x > 0f && Scale < 0.999f)
+                        if (Scale < 0.999f && (curve.m_DashLengths.x > 0f
+                            || (!projected && HasHighPriorityColor && !IsCircle(curve)
+                                && MatchesHighPriorityColor(curve))))
                         {
+                            // Solid high-priority angle guides share the dashed swatch. Exclude
+                            // projected curves so road-width previews retain their real width.
                             curve.m_Size.x *= Scale;
                         }
                         else if (SurfaceCircleScale < 0.999f && IsCircle(curve)
@@ -270,6 +278,14 @@ namespace HoverColors.Systems
                 return curve.m_Curve.m00 == curve.m_Curve.m03
                     && curve.m_Curve.m10 == curve.m_Curve.m13
                     && curve.m_Curve.m20 == curve.m_Curve.m23;
+            }
+
+            private bool MatchesHighPriorityColor(OverlayRenderSystem.CurveData curve)
+            {
+                return math.abs(curve.m_FillColor.r - HighPriorityColor.x) < 0.001f
+                    && math.abs(curve.m_FillColor.g - HighPriorityColor.y) < 0.001f
+                    && math.abs(curve.m_FillColor.b - HighPriorityColor.z) < 0.001f
+                    && math.abs(curve.m_FillColor.a - HighPriorityColor.w) < 0.001f;
             }
         }
     }
@@ -391,16 +407,29 @@ namespace HoverColors.Systems
     public partial class DashedGuidelineWidthApplySystem : GameSystemBase
     {
         private DashedGuidelineWidthCaptureSystem? m_Capture;
+        private EntityQuery m_GuidelineSettingsQuery;
 
         protected override void OnCreate()
         {
             base.OnCreate();
             m_Capture = World.GetOrCreateSystemManaged<DashedGuidelineWidthCaptureSystem>();
+            m_GuidelineSettingsQuery = GetEntityQuery(ComponentType.ReadOnly<GuideLineSettingsData>());
         }
 
         protected override void OnUpdate()
         {
-            m_Capture?.Span?.Apply(dashedOnly: true);
+            if (m_GuidelineSettingsQuery.IsEmptyIgnoreFilter)
+            {
+                m_Capture?.Span?.Apply(dashedOnly: true);
+                return;
+            }
+
+            GuideLineSettingsData settings = EntityManager.GetComponentData<GuideLineSettingsData>(
+                m_GuidelineSettingsQuery.GetSingletonEntity());
+            UnityEngine.Color high = settings.m_HighPriorityColor.linear;
+            m_Capture?.Span?.Apply(dashedOnly: true,
+                highPriorityColor: new float4(high.r, high.g, high.b, high.a),
+                hasHighPriorityColor: true);
         }
     }
 }
