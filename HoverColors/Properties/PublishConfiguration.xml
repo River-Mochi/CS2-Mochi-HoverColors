@@ -111,6 +111,8 @@ tags: hover colors, remove blue, disable hover, highlight color, outline thickne
 - Title bar is slightly taller.
 - Pink dot indicator for active highlight color (blue dot previously was harder to see).
 - Add Options menu choice for panel button in Top Left, Top Right, or Universal Mod menu -  new default is Top right.
+- remove Hotkey for Surface preview filter On/off
+- add new hotkey for Angles tooltips on/off.
 - Edge highlight for new roads is now 0.80 alpha instead of 0.75 (vanilla is 0.855)
 - Updated all translations and various UI fixes.
 </ChangeLog>
