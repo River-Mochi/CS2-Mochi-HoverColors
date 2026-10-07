@@ -111,6 +111,7 @@ namespace HoverColors.Systems
         private float4 m_LotHoveredColor;
         private float4 m_LotOutlineColor;
         private float4 m_LotFillColor;
+        private bool m_HideLot;
 
         public OverlayCurveSpan(OverlayRenderSystem overlay)
         {
@@ -171,7 +172,8 @@ namespace HoverColors.Systems
             m_Active = false;
         }
 
-        public void CaptureLotPreview(float scale, float4 hoveredColor, float4 outlineColor, float4 fillColor)
+        public void CaptureLotPreview(float scale, float4 hoveredColor, float4 outlineColor, float4 fillColor,
+            bool hideLot = false)
         {
             m_Active = false;
             if (!OverlayCurveAccess.TryGetLists(m_Overlay, out NativeList<OverlayRenderSystem.CurveData> projected,
@@ -184,6 +186,7 @@ namespace HoverColors.Systems
             m_LotHoveredColor = hoveredColor;
             m_LotOutlineColor = outlineColor;
             m_LotFillColor = fillColor;
+            m_HideLot = hideLot;
             m_LastJob = new CaptureLengthsJob
             {
                 Projected = projected,
@@ -211,6 +214,7 @@ namespace HoverColors.Systems
                 HoveredColor = m_LotHoveredColor,
                 OutlineColor = m_LotOutlineColor,
                 FillColor = m_LotFillColor,
+                HideLot = m_HideLot,
             }.Schedule(dependencies);
             m_Overlay.AddBufferWriter(m_LastJob);
             m_Active = false;
@@ -245,6 +249,7 @@ namespace HoverColors.Systems
             public float4 HoveredColor;
             public float4 OutlineColor;
             public float4 FillColor;
+            public bool HideLot;
 
             public void Execute()
             {
@@ -259,6 +264,23 @@ namespace HoverColors.Systems
                         || math.abs(curve.m_OutlineColor.g - HoveredColor.y) > 0.001f
                         || math.abs(curve.m_OutlineColor.b - HoveredColor.z) > 0.001f)
                     {
+                        continue;
+                    }
+
+                    if (HideLot)
+                    {
+                        // Default Tool's selected Temp lot forces 0.25 outline alpha and a
+                        // 0.05 fill even when the Eyeball zeroes the hovered render color.
+                        // Warning/error lots have different alpha and remain visible.
+                        if (math.abs(curve.m_OutlineColor.a - 0.25f) > 0.001f
+                            || math.abs(curve.m_FillColor.a - 0.05f) > 0.001f)
+                        {
+                            continue;
+                        }
+
+                        curve.m_OutlineColor.a = 0f;
+                        curve.m_FillColor.a = 0f;
+                        Projected[i] = curve;
                         continue;
                     }
 
@@ -532,14 +554,28 @@ namespace HoverColors.Systems
             base.OnCreate();
             m_Span = new OverlayCurveSpan(World.GetOrCreateSystemManaged<OverlayRenderSystem>());
             m_ToolSystem = World.GetOrCreateSystemManaged<ToolSystem>();
-            m_TempQuery = GetEntityQuery(ComponentType.ReadOnly<Temp>());
+            m_TempQuery = GetEntityQuery(new EntityQueryDesc
+            {
+                All = new[] { ComponentType.ReadOnly<Temp>() },
+                Any = new[]
+                {
+                    ComponentType.ReadOnly<Game.Buildings.Building>(),
+                    ComponentType.ReadOnly<Game.Buildings.Extension>(),
+                    ComponentType.ReadOnly<Game.Objects.AssetStamp>(),
+                    ComponentType.ReadOnly<Game.Net.Taxiway>(),
+                    ComponentType.ReadOnly<Game.Objects.Tree>(),
+                },
+            });
             m_RenderingSettingsQuery = GetEntityQuery(ComponentType.ReadOnly<RenderingSettingsData>());
         }
 
         protected override void OnUpdate()
         {
             HoverColorsSettings? settings = Mod.Settings;
-            if (settings == null || m_ToolSystem?.activeTool is not ObjectToolSystem
+            bool placement = m_ToolSystem?.activeTool is ObjectToolSystem;
+            bool hidePlacedLot = settings?.HoverHighlightsSuppressed == true
+                && m_ToolSystem?.activeTool is DefaultToolSystem;
+            if (settings == null || (!placement && !hidePlacedLot)
                 || m_TempQuery.IsEmptyIgnoreFilter || m_RenderingSettingsQuery.IsEmptyIgnoreFilter)
             {
                 return;
@@ -554,7 +590,7 @@ namespace HoverColors.Systems
             m_Span?.CaptureLotPreview(settings.OutlineThicknessScale,
                 new float4(hovered.r, hovered.g, hovered.b, hovered.a),
                 new float4(outline.r, outline.g, outline.b, outline.a),
-                new float4(fill.r, fill.g, fill.b, fill.a));
+                new float4(fill.r, fill.g, fill.b, fill.a), hidePlacedLot);
         }
 
         protected override void OnDestroy()

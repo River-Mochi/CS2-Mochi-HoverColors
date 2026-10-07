@@ -162,7 +162,8 @@ namespace HoverColors.Systems
                 HoverColorsSettings.kMaxOutlineThicknessScale);
             EffectivePalette palette;
             ToolBaseSystem? activeToolSystem = m_ToolSystem?.activeTool;
-            bool previewEnabled = activeToolSystem is ObjectToolSystem;
+            bool previewEnabled = activeToolSystem is ObjectToolSystem
+                || (settings.HoverHighlightsSuppressed && activeToolSystem is DefaultToolSystem);
             if (previewEnabled != m_BuildingLotPreviewEnabled)
             {
                 m_BuildingLotPreviewEnabled = previewEnabled;
