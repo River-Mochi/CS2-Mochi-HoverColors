@@ -98,13 +98,16 @@ namespace HoverColors
                     "\n" +
                     "Try both and see which you prefer! This only changes the background of this mod panel and not the game's UI.\n" +
                     "\n" +
-                    "Tip: the game blurs what is behind every panel, which helps buttons and sliders stand out. Setting the game's own Interface Transparency to 0% turns that blur off for all panels, including this one. 1% or higher keeps it."
+                    "Tip: the game blurs what is behind every panel, which helps buttons and sliders stand out.\n" +
+                    "Setting the game's own Interface Transparency to 0% turns that blur off for all panels, including this one. 1% or higher keeps it."
                 },
                 { m_Settings.GetPanelStyleLocaleID("Dark"), "Dark (Vanilla)" },
                 { m_Settings.GetPanelStyleLocaleID("Glass"), "Glass (Custom)" },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.LauncherLocation)), "▪ Panel button location" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.LauncherLocation)), "Choose top left, top right, or the game's Universal Mod Menu. Restart the game to move the button." },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.LauncherLocation)),
+                    "Choose top left, top right, or the game's Universal Mod Menu.\n" +
+                    "**Restart the game** for the button location to change." },
                 { m_Settings.GetLauncherLocationLocaleID("TopLeft"), "Top left" },
                 { m_Settings.GetLauncherLocationLocaleID("TopRight"), "Top right" },
                 { m_Settings.GetLauncherLocationLocaleID("UniversalMenu"), "Universal Mod Menu" },
@@ -168,10 +171,10 @@ namespace HoverColors
                     "Ships unbound to avoid key conflicts." },
                 { m_Settings.GetBindingKeyLocaleID(Mod.kToggleHighlightsActionName), "Quick Eyeball On/Off" },
 
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleSurfaceToolAreasBinding)), "Toggle Surface tool previews on/off" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ToggleSurfaceToolAreasBinding)),
-                    "Hotkey shortcut to <hide or show> active Surface tool boundary preview lines while placing surfaces." },
-                { m_Settings.GetBindingKeyLocaleID(Mod.kToggleSurfaceToolAreasActionName), "Surface tool preview layer On/Off" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleRoadAngleTooltipsBinding)), "Road and path angle boxes on/off" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ToggleRoadAngleTooltipsBinding)),
+                    "Hotkey for angle and Place/Undo boxes while drawing roads and paths. Cost, length, and slope stay visible." },
+                { m_Settings.GetBindingKeyLocaleID(Mod.kToggleRoadAngleTooltipsActionName), "Angle and mouse hints on/off" },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.TogglePresetBinding)), "Toggle presets 1+2" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.TogglePresetBinding)),

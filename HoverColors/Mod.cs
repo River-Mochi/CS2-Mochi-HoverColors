@@ -33,7 +33,7 @@ namespace HoverColors
         public const string ModTag = "[HC]";
 
         internal const string kTogglePanelActionName = "TogglePanel";
-        internal const string kToggleSurfaceToolAreasActionName = "ToggleSurfaceToolAreas";
+        internal const string kToggleRoadAngleTooltipsActionName = "ToggleRoadAngleTooltips";
         internal const string kTogglePresetActionName = "TogglePreset";
 
         internal const string kToggleHighlightsActionName = "ToggleHoverHighlights";
@@ -152,6 +152,8 @@ namespace HoverColors
                 updateSystem.UpdateAfter<AreaBorderWidthApplySystem, AreaBorderRenderSystem>(SystemUpdatePhase.Rendering);
                 updateSystem.UpdateBefore<DashedGuidelineWidthCaptureSystem, GuideLinesSystem>(SystemUpdatePhase.Rendering);
                 updateSystem.UpdateAfter<DashedGuidelineWidthApplySystem, GuideLinesSystem>(SystemUpdatePhase.Rendering);
+                updateSystem.UpdateBefore<BuildingLotPreviewCaptureSystem, BuildingLotRenderSystem>(SystemUpdatePhase.Rendering);
+                updateSystem.UpdateAfter<BuildingLotPreviewApplySystem, BuildingLotRenderSystem>(SystemUpdatePhase.Rendering);
                 updateSystem.UpdateAfter<RoadAngleTooltipFilterSystem, InputHintsTooltipSystem>(SystemUpdatePhase.UITooltip);
                 world.GetOrCreateSystemManaged<RoadAngleTooltipFilterSystem>().Enabled = setting.RoadAngleTooltipsHidden;
 

@@ -742,8 +742,8 @@ namespace HoverColors
         public ProxyBinding TogglePresetBinding { get; set; }
 
         [SettingsUISection(KeyBindings, kKeyBindings)]
-        [SettingsUIKeyboardBinding(BindingKeyboard.L, Mod.kToggleSurfaceToolAreasActionName)]
-        public ProxyBinding ToggleSurfaceToolAreasBinding { get; set; }
+        [SettingsUIKeyboardBinding(BindingKeyboard.L, Mod.kToggleRoadAngleTooltipsActionName)]
+        public ProxyBinding ToggleRoadAngleTooltipsBinding { get; set; }
 
         // -----------------------------------------------------------------------
         // About tab

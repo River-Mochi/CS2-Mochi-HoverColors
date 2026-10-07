@@ -41,7 +41,7 @@ const register: ModRegistrar = (moduleRegistry) => {
   // The game's Universal Mod Menu opens whenever anything is registered in that hook,
   // even when a component returns null. Register only the selected location at startup.
   const requestedLocation = launcherLocation$.value;
-  const location = requestedLocation === 0 || requestedLocation === 2 ? requestedLocation : 1;
+  const location = requestedLocation === 1 || requestedLocation === 2 ? requestedLocation : 0;
   const launcherHost = location === 0 ? "GameTopLeft" : location === 2 ? "UniversalModMenu" : "GameTopRight";
   const Launcher = () => <ModIconButton location={location} />;
   moduleRegistry.append(launcherHost, Launcher);

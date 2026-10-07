@@ -167,10 +167,10 @@ namespace HoverColors
                     "키 충돌 방지를 위해 기본 미지정입니다." },
                 { m_Settings.GetBindingKeyLocaleID(Mod.kToggleHighlightsActionName), "빠른 눈 아이콘 On/Off" },
 
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleSurfaceToolAreasBinding)), "Surface 도구 미리보기 켜기/끄기" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ToggleSurfaceToolAreasBinding)),
-                    "표면 배치 중 활성 Surface 경계 미리보기 선을 <숨기거나 표시>하는 단축키." },
-                { m_Settings.GetBindingKeyLocaleID(Mod.kToggleSurfaceToolAreasActionName), "Surface 미리보기 레이어 켜기/끄기" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleRoadAngleTooltipsBinding)), "도로와 길 각도 표시 켜기/끄기" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ToggleRoadAngleTooltipsBinding)),
+                    "도로와 길을 그릴 때 각도 및 배치/실행 취소 표시를 전환합니다. 비용, 길이, 경사는 계속 표시됩니다." },
+                { m_Settings.GetBindingKeyLocaleID(Mod.kToggleRoadAngleTooltipsActionName), "각도 및 마우스 안내 전환" },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.TogglePresetBinding)), "프리셋 1+2 전환" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.TogglePresetBinding)),

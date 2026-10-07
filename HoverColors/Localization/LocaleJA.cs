@@ -167,10 +167,10 @@ namespace HoverColors
                     "キー競合を避けるため初期状態では未設定です。" },
                 { m_Settings.GetBindingKeyLocaleID(Mod.kToggleHighlightsActionName), "クイック目アイコン On/Off" },
 
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleSurfaceToolAreasBinding)), "Surfaceツールプレビュー On/Off" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ToggleSurfaceToolAreasBinding)),
-                    "Surface配置中の境界プレビュー線を<非表示 / 表示>にするショートカット。" },
-                { m_Settings.GetBindingKeyLocaleID(Mod.kToggleSurfaceToolAreasActionName), "Surfaceプレビューレイヤー On/Off" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleRoadAngleTooltipsBinding)), "道路・小道の角度表示を切り替え" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ToggleRoadAngleTooltipsBinding)),
+                    "道路や小道の作成中に角度と配置/元に戻す表示を切り替えます。費用、長さ、勾配は表示されます。" },
+                { m_Settings.GetBindingKeyLocaleID(Mod.kToggleRoadAngleTooltipsActionName), "角度とマウス操作の表示切替" },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.TogglePresetBinding)), "プリセット1+2を切替" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.TogglePresetBinding)),

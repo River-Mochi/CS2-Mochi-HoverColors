@@ -167,10 +167,10 @@ namespace HoverColors
                     "Standardmäßig unbelegt, um Tastenkonflikte zu vermeiden." },
                 { m_Settings.GetBindingKeyLocaleID(Mod.kToggleHighlightsActionName), "Schnelles Auge Ein/Aus" },
 
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleSurfaceToolAreasBinding)), "Surface-Tool-Vorschau ein/aus" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ToggleSurfaceToolAreasBinding)),
-                    "Hotkey zum <Ausblenden oder Anzeigen> aktiver Surface-Grenzvorschauen beim Platzieren von Flächen." },
-                { m_Settings.GetBindingKeyLocaleID(Mod.kToggleSurfaceToolAreasActionName), "Surface-Vorschauebene Ein/Aus" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleRoadAngleTooltipsBinding)), "Straßen- und Wegwinkel-Hinweise ein/aus" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ToggleRoadAngleTooltipsBinding)),
+                    "Hotkey für Winkel- und Platzieren/Rückgängig-Hinweise bei Straßen und Wegen. Kosten, Länge und Steigung bleiben sichtbar." },
+                { m_Settings.GetBindingKeyLocaleID(Mod.kToggleRoadAngleTooltipsActionName), "Winkel- und Maushinweise ein/aus" },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.TogglePresetBinding)), "Presets 1+2 umschalten" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.TogglePresetBinding)),

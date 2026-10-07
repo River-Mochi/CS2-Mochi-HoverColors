@@ -66,6 +66,9 @@ namespace HoverColors.Systems
         private EntityQuery m_RenderSettingsQuery;
         private ToolSystem? m_ToolSystem;
         private PrefabSystem? m_PrefabSystem;
+        private BuildingLotPreviewCaptureSystem? m_BuildingLotPreviewCapture;
+        private BuildingLotPreviewApplySystem? m_BuildingLotPreviewApply;
+        private bool m_BuildingLotPreviewEnabled;
         private readonly PrefabID m_RenderingSettingsPrefab = new(nameof(m_RenderingSettingsPrefab), "RenderingSettings");
 
         // Cached HDRP outline material. UnityEngine.Object operator!= detects destroyed-but-not-null.
@@ -125,6 +128,12 @@ namespace HoverColors.Systems
             m_RenderSettingsQuery = GetEntityQuery(ComponentType.ReadWrite<RenderingSettingsData>());
             m_ToolSystem = World.GetOrCreateSystemManaged<ToolSystem>();
             m_PrefabSystem = World.GetOrCreateSystemManaged<PrefabSystem>();
+            BuildingLotPreviewCaptureSystem lotCapture = World.GetOrCreateSystemManaged<BuildingLotPreviewCaptureSystem>();
+            BuildingLotPreviewApplySystem lotApply = World.GetOrCreateSystemManaged<BuildingLotPreviewApplySystem>();
+            lotCapture.Enabled = false;
+            lotApply.Enabled = false;
+            m_BuildingLotPreviewCapture = lotCapture;
+            m_BuildingLotPreviewApply = lotApply;
             InitializeHoverToggle();
         }
 
@@ -153,6 +162,13 @@ namespace HoverColors.Systems
                 HoverColorsSettings.kMaxOutlineThicknessScale);
             EffectivePalette palette;
             ToolBaseSystem? activeToolSystem = m_ToolSystem?.activeTool;
+            bool previewEnabled = activeToolSystem is ObjectToolSystem;
+            if (previewEnabled != m_BuildingLotPreviewEnabled)
+            {
+                m_BuildingLotPreviewEnabled = previewEnabled;
+                if (m_BuildingLotPreviewCapture != null) m_BuildingLotPreviewCapture.Enabled = previewEnabled;
+                if (m_BuildingLotPreviewApply != null) m_BuildingLotPreviewApply.Enabled = previewEnabled;
+            }
             ToolKind activeTool = GetActiveToolKind(activeToolSystem);
             if (settings.UseOverlapWarningColor && HasSupportedPlacementError(activeToolSystem))
             {

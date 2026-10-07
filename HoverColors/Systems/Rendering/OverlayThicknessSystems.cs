@@ -7,7 +7,7 @@
 // ================= </copyright> ======================
 
 // File: Systems/Rendering/OverlayThicknessSystems.cs
-// Purpose: Scale only the overlay curves emitted by the Area border and guideline systems.
+// Purpose: Adjust overlay curves emitted by Area borders, guidelines, and building lot previews.
 // Capturing the list lengths on either side of each vanilla producer keeps unrelated overlays and
 // the actual road-preview width untouched. The jobs preserve the game's writer dependency chain.
 
@@ -108,6 +108,9 @@ namespace HoverColors.Systems
         private float m_AreaSnapDistance;
         private float m_SurfaceCircleScale;
         private bool m_ScaleAreaCircles;
+        private float4 m_LotHoveredColor;
+        private float4 m_LotOutlineColor;
+        private float4 m_LotFillColor;
 
         public OverlayCurveSpan(OverlayRenderSystem overlay)
         {
@@ -168,6 +171,51 @@ namespace HoverColors.Systems
             m_Active = false;
         }
 
+        public void CaptureLotPreview(float scale, float4 hoveredColor, float4 outlineColor, float4 fillColor)
+        {
+            m_Active = false;
+            if (!OverlayCurveAccess.TryGetLists(m_Overlay, out NativeList<OverlayRenderSystem.CurveData> projected,
+                    out NativeList<OverlayRenderSystem.CurveData> absolute, out JobHandle dependencies))
+            {
+                return;
+            }
+
+            m_Scale = math.clamp(scale, 0f, 2f);
+            m_LotHoveredColor = hoveredColor;
+            m_LotOutlineColor = outlineColor;
+            m_LotFillColor = fillColor;
+            m_LastJob = new CaptureLengthsJob
+            {
+                Projected = projected,
+                Absolute = absolute,
+                Start = m_Start,
+            }.Schedule(dependencies);
+            m_Overlay.AddBufferWriter(m_LastJob);
+            m_Active = true;
+        }
+
+        public void ApplyLotPreview()
+        {
+            if (!m_Active
+                || !OverlayCurveAccess.TryGetLists(m_Overlay, out NativeList<OverlayRenderSystem.CurveData> projected,
+                    out _, out JobHandle dependencies))
+            {
+                return;
+            }
+
+            m_LastJob = new ApplyLotPreviewJob
+            {
+                Projected = projected,
+                Start = m_Start,
+                Scale = m_Scale,
+                HoveredColor = m_LotHoveredColor,
+                OutlineColor = m_LotOutlineColor,
+                FillColor = m_LotFillColor,
+            }.Schedule(dependencies);
+            m_Overlay.AddBufferWriter(m_LastJob);
+            m_Active = false;
+        }
+
         public void Dispose()
         {
             m_LastJob.Complete();
@@ -186,6 +234,43 @@ namespace HoverColors.Systems
             public void Execute()
             {
                 Start[0] = new int2(Projected.Length, Absolute.Length);
+            }
+        }
+
+        private struct ApplyLotPreviewJob : IJob
+        {
+            public NativeList<OverlayRenderSystem.CurveData> Projected;
+            [ReadOnly] public NativeArray<int2> Start;
+            public float Scale;
+            public float4 HoveredColor;
+            public float4 OutlineColor;
+            public float4 FillColor;
+
+            public void Execute()
+            {
+                for (int i = math.clamp(Start[0].x, 0, Projected.Length); i < Projected.Length; i++)
+                {
+                    OverlayRenderSystem.CurveData curve = Projected[i];
+                    // DrawLot is the only projected 0.2/0.4 outline in this producer. The
+                    // hovered RGB test preserves warning/error/owner preview feedback.
+                    if ((math.abs(curve.m_OutlineWidth - 0.2f) > 0.001f
+                            && math.abs(curve.m_OutlineWidth - 0.4f) > 0.001f)
+                        || math.abs(curve.m_OutlineColor.r - HoveredColor.x) > 0.001f
+                        || math.abs(curve.m_OutlineColor.g - HoveredColor.y) > 0.001f
+                        || math.abs(curve.m_OutlineColor.b - HoveredColor.z) > 0.001f)
+                    {
+                        continue;
+                    }
+
+                    // Keep a visible hairline at slider zero, matching the outline slider's
+                    // appearance. Geometry, snap targets, and culling bounds stay untouched.
+                    curve.m_OutlineWidth *= math.max(0.1f, Scale);
+                    curve.m_OutlineColor = new UnityEngine.Color(
+                        OutlineColor.x, OutlineColor.y, OutlineColor.z, OutlineColor.w);
+                    curve.m_FillColor = new UnityEngine.Color(
+                        FillColor.x, FillColor.y, FillColor.z, FillColor.w);
+                    Projected[i] = curve;
+                }
             }
         }
 
@@ -430,6 +515,68 @@ namespace HoverColors.Systems
             m_Capture?.Span?.Apply(dashedOnly: true,
                 highPriorityColor: new float4(high.r, high.g, high.b, high.a),
                 hasHighPriorityColor: true);
+        }
+    }
+
+    public partial class BuildingLotPreviewCaptureSystem : GameSystemBase
+    {
+        private OverlayCurveSpan? m_Span;
+        private ToolSystem? m_ToolSystem;
+        private EntityQuery m_TempQuery;
+        private EntityQuery m_RenderingSettingsQuery;
+
+        internal OverlayCurveSpan? Span => m_Span;
+
+        protected override void OnCreate()
+        {
+            base.OnCreate();
+            m_Span = new OverlayCurveSpan(World.GetOrCreateSystemManaged<OverlayRenderSystem>());
+            m_ToolSystem = World.GetOrCreateSystemManaged<ToolSystem>();
+            m_TempQuery = GetEntityQuery(ComponentType.ReadOnly<Temp>());
+            m_RenderingSettingsQuery = GetEntityQuery(ComponentType.ReadOnly<RenderingSettingsData>());
+        }
+
+        protected override void OnUpdate()
+        {
+            HoverColorsSettings? settings = Mod.Settings;
+            if (settings == null || m_ToolSystem?.activeTool is not ObjectToolSystem
+                || m_TempQuery.IsEmptyIgnoreFilter || m_RenderingSettingsQuery.IsEmptyIgnoreFilter)
+            {
+                return;
+            }
+
+            UnityEngine.Color hovered = EntityManager.GetComponentData<RenderingSettingsData>(
+                m_RenderingSettingsQuery.GetSingletonEntity()).m_HoveredColor.linear;
+            UnityEngine.Color outline = new UnityEngine.Color(
+                settings.OutlineR, settings.OutlineG, settings.OutlineB, settings.OutlineA).linear;
+            UnityEngine.Color fill = new UnityEngine.Color(
+                settings.FillR, settings.FillG, settings.FillB, settings.FillA).linear;
+            m_Span?.CaptureLotPreview(settings.OutlineThicknessScale,
+                new float4(hovered.r, hovered.g, hovered.b, hovered.a),
+                new float4(outline.r, outline.g, outline.b, outline.a),
+                new float4(fill.r, fill.g, fill.b, fill.a));
+        }
+
+        protected override void OnDestroy()
+        {
+            m_Span?.Dispose();
+            base.OnDestroy();
+        }
+    }
+
+    public partial class BuildingLotPreviewApplySystem : GameSystemBase
+    {
+        private BuildingLotPreviewCaptureSystem? m_Capture;
+
+        protected override void OnCreate()
+        {
+            base.OnCreate();
+            m_Capture = World.GetOrCreateSystemManaged<BuildingLotPreviewCaptureSystem>();
+        }
+
+        protected override void OnUpdate()
+        {
+            m_Capture?.Span?.ApplyLotPreview();
         }
     }
 }
