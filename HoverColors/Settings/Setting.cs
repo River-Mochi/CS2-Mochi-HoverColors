@@ -18,6 +18,8 @@ namespace HoverColors
     using Game.Modding;     // IMod
     using Game.Settings;    // ModSetting, attributes
     using Game.UI;          // Unit.kPercentage
+    using HoverColors.Systems;
+    using Unity.Entities;
 
     [FileLocation("ModsSettings/HoverColors/HoverColors")]
     [SettingsUITabOrder(Actions, KeyBindings, About)]
@@ -183,9 +185,24 @@ namespace HoverColors
         [SettingsUIHidden]
         public float GuidelineDashedThicknessScale { get; set; }
 
-        // In-city Guidelines button. Keep road angles visible on fresh installs.
+        private bool m_RoadAngleTooltipsHidden;
+
+        // In-city Guidelines button. A visible-angle setting disables the filter system entirely.
         [SettingsUIHidden]
-        public bool RoadAngleTooltipsHidden { get; set; }
+        public bool RoadAngleTooltipsHidden
+        {
+            get => m_RoadAngleTooltipsHidden;
+            set
+            {
+                m_RoadAngleTooltipsHidden = value;
+                RoadAngleTooltipFilterSystem? filter = World.DefaultGameObjectInjectionWorld?
+                    .GetExistingSystemManaged<RoadAngleTooltipFilterSystem>();
+                if (filter != null)
+                {
+                    filter.Enabled = value;
+                }
+            }
+        }
 
         // Inert, like FillColorInitialized. Triggers.cs reads it in three places, but it is always
         // true so `&& OutlineThicknessInitialized` never changes the result.

@@ -697,7 +697,7 @@ export const MochiPanelControlRows = ({
             </div>
           </div>
 
-          <div className={styles.controlRow}>
+          <div className={`${styles.controlRow} ${styles.surfaceControlsRow}`}>
             <SideTooltip tooltip={tt(text.tooltipResetGuidelineDashedThickness)} side="left">
               <Button
                 className={styles.controlIconButton}
@@ -710,22 +710,22 @@ export const MochiPanelControlRows = ({
             </SideTooltip>
 
             <SideTooltip tooltip={tt(text.tooltipGuidelineDashedThickness)} side="right">
-              <div className={`${styles.controlBody} ${styles.dashedThicknessControl}`}>
-                <div className={styles.sliderRow}>
+              <div className={styles.areaThicknessControl}>
+                <div className={styles.areaThicknessTrack}>
                   <MochiSlider
                     focusKey={focusDisabled}
-                    className={styles.slider}
+                    className={styles.areaThicknessSlider}
                     value={guidelineDashedThicknessScale}
                     start={0.1}
                     end={1}
                     gamepadStep={0.1}
                     onChange={handleGuidelineDashedThicknessChange}
                   />
-                  <div className={`${styles.valueField} ${numberFieldClass}`}>
+                  <span className={styles.areaThicknessValue}>
                     {guidelineDashedThicknessScale.toFixed(1)}
-                  </div>
+                  </span>
                 </div>
-                <span className={styles.dashedThicknessLabel}>{text.labelDashedGuides}</span>
+                <span className={styles.areaThicknessLabel}>{text.labelDashedGuides}</span>
               </div>
             </SideTooltip>
             <SideTooltip
@@ -735,7 +735,7 @@ export const MochiPanelControlRows = ({
               side="right"
             >
               <Button
-                className={`${styles.controlIconButton} ${styles.angleTooltipButton} ${roadAngleTooltipsHidden ? styles.angleTooltipButtonOff : ""}`}
+                className={`${styles.actionButton} ${styles.surfaceButton} ${styles.angleTooltipButton} ${roadAngleTooltipsHidden ? styles.angleTooltipButtonOff : ""}`}
                 variant="icon"
                 onSelect={handleToggleRoadAngleTooltips}
                 focusKey={focusDisabled}

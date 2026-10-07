@@ -152,7 +152,8 @@ namespace HoverColors
                 updateSystem.UpdateAfter<AreaBorderWidthApplySystem, AreaBorderRenderSystem>(SystemUpdatePhase.Rendering);
                 updateSystem.UpdateBefore<DashedGuidelineWidthCaptureSystem, GuideLinesSystem>(SystemUpdatePhase.Rendering);
                 updateSystem.UpdateAfter<DashedGuidelineWidthApplySystem, GuideLinesSystem>(SystemUpdatePhase.Rendering);
-                updateSystem.UpdateBefore<RoadAngleTooltipFilterSystem, GuideLineTooltipSystem>(SystemUpdatePhase.UITooltip);
+                updateSystem.UpdateAfter<RoadAngleTooltipFilterSystem, InputHintsTooltipSystem>(SystemUpdatePhase.UITooltip);
+                world.GetOrCreateSystemManaged<RoadAngleTooltipFilterSystem>().Enabled = setting.RoadAngleTooltipsHidden;
 
                 world.GetOrCreateSystemManaged<AreaToolOverlaySystem>();
                 updateSystem.UpdateAt<AreaToolOverlaySystem>(SystemUpdatePhase.Rendering);
