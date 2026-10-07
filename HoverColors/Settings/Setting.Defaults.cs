@@ -42,6 +42,7 @@ namespace HoverColors
             OutlineThicknessScale = kModDefaultOutlineThicknessScale;
             OutlineThicknessInitialized = true;
             SurfaceBorderThicknessScale = kMaxOverlayThicknessScale;
+            ExtractorBorderThicknessScale = kMaxOverlayThicknessScale;
             GuidelineDashedThicknessScale = kMaxOverlayThicknessScale;
 
             PanelOpacityPercent = kDefaultPanelOpacityPercent;

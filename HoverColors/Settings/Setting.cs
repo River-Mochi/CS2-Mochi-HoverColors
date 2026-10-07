@@ -178,6 +178,9 @@ namespace HoverColors
         public float SurfaceBorderThicknessScale { get; set; }
 
         [SettingsUIHidden]
+        public float ExtractorBorderThicknessScale { get; set; }
+
+        [SettingsUIHidden]
         public float GuidelineDashedThicknessScale { get; set; }
 
         // Inert, like FillColorInitialized. Triggers.cs reads it in three places, but it is always

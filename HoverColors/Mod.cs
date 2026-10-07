@@ -147,8 +147,8 @@ namespace HoverColors
                 updateSystem.UpdateAt<GuidelineColorSystem>(SystemUpdatePhase.Rendering);
 
                 // Narrow post-processing spans cover only each vanilla producer's own curves.
-                updateSystem.UpdateBefore<SurfaceBorderWidthCaptureSystem, AreaBorderRenderSystem>(SystemUpdatePhase.Rendering);
-                updateSystem.UpdateAfter<SurfaceBorderWidthApplySystem, AreaBorderRenderSystem>(SystemUpdatePhase.Rendering);
+                updateSystem.UpdateBefore<AreaBorderWidthCaptureSystem, AreaBorderRenderSystem>(SystemUpdatePhase.Rendering);
+                updateSystem.UpdateAfter<AreaBorderWidthApplySystem, AreaBorderRenderSystem>(SystemUpdatePhase.Rendering);
                 updateSystem.UpdateBefore<DashedGuidelineWidthCaptureSystem, GuideLinesSystem>(SystemUpdatePhase.Rendering);
                 updateSystem.UpdateAfter<DashedGuidelineWidthApplySystem, GuideLinesSystem>(SystemUpdatePhase.Rendering);
 

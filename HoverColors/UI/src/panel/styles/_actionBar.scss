@@ -26,16 +26,22 @@
 }
 
 .surfaceControlsRow,
+.extractorControlsRow,
 .districtActionsRow {
     display: flex;
     align-items: center;
 }
 
-.surfaceControlsRow {
+.surfaceControlsRow,
+.extractorControlsRow {
     min-height: 36rem;
 }
 
-.surfaceThicknessControl {
+.extractorControlsRow {
+    margin-top: 2rem;
+}
+
+.areaThicknessControl {
     display: flex;
     flex-direction: column;
     align-items: stretch;
@@ -46,28 +52,28 @@
     margin-right: 4rem;
 }
 
-.surfaceThicknessTrack {
+.areaThicknessTrack {
     display: flex;
     align-items: center;
     width: 100%;
     min-width: 0;
 }
 
-.surfaceThicknessLabel {
+.areaThicknessLabel {
     color: rgba(254, 255, 255, 0.96);
     font-size: 10rem;
     line-height: 1;
     text-align: center;
 }
 
-.surfaceThicknessSlider {
+.areaThicknessSlider {
     flex: 1 1 auto;
     min-width: 0;
     margin-right: 3rem;
     background-color: transparent;
 }
 
-.surfaceThicknessValue {
+.areaThicknessValue {
     width: 24rem;
     flex: 0 0 24rem;
     color: rgba(254, 255, 255, 0.96);
@@ -117,10 +123,6 @@
         box-shadow: none !important;
         color: #ffffff !important;
     }
-}
-
-.buttonGap {
-    margin-left: 4rem !important;
 }
 
 .surfaceButton {

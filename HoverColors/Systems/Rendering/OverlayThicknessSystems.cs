@@ -7,7 +7,7 @@
 // ================= </copyright> ======================
 
 // File: Systems/Rendering/OverlayThicknessSystems.cs
-// Purpose: Scale only the overlay curves emitted by the Surface border and guideline systems.
+// Purpose: Scale only the overlay curves emitted by the Area border and guideline systems.
 // Capturing the list lengths on either side of each vanilla producer keeps unrelated overlays and
 // the actual road-preview width untouched. The jobs preserve the game's writer dependency chain.
 
@@ -57,14 +57,16 @@ namespace HoverColors.Systems
             return false;
         }
 
-        public static bool TryGetSurfaceSnapDistance(
+        public static bool TryGetActiveAreaGeometry(
             EntityManager entityManager,
             ToolSystem? toolSystem,
             AreaToolSystem? areaToolSystem,
             PrefabSystem? prefabSystem,
-            out float snapDistance)
+            out AreaGeometryData geometry,
+            out bool specializedIndustryLot)
         {
-            snapDistance = 0f;
+            geometry = default;
+            specializedIndustryLot = false;
             if (toolSystem == null || areaToolSystem == null || prefabSystem == null
                 || !ReferenceEquals(toolSystem.activeTool, areaToolSystem)
                 || areaToolSystem.GetPrefab() is not AreaPrefab prefab
@@ -74,9 +76,30 @@ namespace HoverColors.Systems
                 return false;
             }
 
-            AreaGeometryData geometry = entityManager.GetComponentData<AreaGeometryData>(prefabEntity);
+            geometry = entityManager.GetComponentData<AreaGeometryData>(prefabEntity);
+            specializedIndustryLot = geometry.m_Type == AreaType.Lot
+                && (entityManager.HasComponent<ExtractorAreaData>(prefabEntity)
+                    || entityManager.HasComponent<StorageAreaData>(prefabEntity));
+            return true;
+        }
+
+        public static bool TryGetSurfaceSnapDistance(
+            EntityManager entityManager,
+            ToolSystem? toolSystem,
+            AreaToolSystem? areaToolSystem,
+            PrefabSystem? prefabSystem,
+            out float snapDistance)
+        {
+            snapDistance = 0f;
+            if (!TryGetActiveAreaGeometry(entityManager, toolSystem, areaToolSystem, prefabSystem,
+                out AreaGeometryData geometry, out _)
+                || geometry.m_Type != AreaType.Surface)
+            {
+                return false;
+            }
+
             snapDistance = geometry.m_SnapDistance;
-            return geometry.m_Type == AreaType.Surface;
+            return true;
         }
     }
 
@@ -87,8 +110,9 @@ namespace HoverColors.Systems
         private JobHandle m_LastJob;
         private bool m_Active;
         private float m_Scale;
-        private float m_SurfaceSnapDistance;
+        private float m_AreaSnapDistance;
         private float m_SurfaceCircleScale;
+        private bool m_ScaleAreaCircles;
 
         public OverlayCurveSpan(OverlayRenderSystem overlay)
         {
@@ -96,7 +120,8 @@ namespace HoverColors.Systems
             m_Start = new NativeArray<int2>(1, Allocator.Persistent);
         }
 
-        public void Capture(float scale, float surfaceSnapDistance = 0f, float surfaceCircleScale = 1f)
+        public void Capture(float scale, float areaSnapDistance = 0f, float surfaceCircleScale = 1f,
+            bool scaleAreaCircles = true)
         {
             m_Active = false;
             scale = math.clamp(scale, 0.1f, 1f);
@@ -109,8 +134,9 @@ namespace HoverColors.Systems
             }
 
             m_Scale = scale;
-            m_SurfaceSnapDistance = surfaceSnapDistance;
+            m_AreaSnapDistance = areaSnapDistance;
             m_SurfaceCircleScale = surfaceCircleScale;
+            m_ScaleAreaCircles = scaleAreaCircles;
             m_LastJob = new CaptureLengthsJob
             {
                 Projected = projected,
@@ -137,8 +163,9 @@ namespace HoverColors.Systems
                 Start = m_Start,
                 Scale = m_Scale,
                 DashedOnly = dashedOnly,
-                SurfaceSnapDistance = m_SurfaceSnapDistance,
+                AreaSnapDistance = m_AreaSnapDistance,
                 SurfaceCircleScale = m_SurfaceCircleScale,
+                ScaleAreaCircles = m_ScaleAreaCircles,
             }.Schedule(dependencies);
             m_Overlay.AddBufferWriter(m_LastJob);
             m_Active = false;
@@ -172,8 +199,9 @@ namespace HoverColors.Systems
             [ReadOnly] public NativeArray<int2> Start;
             public float Scale;
             public bool DashedOnly;
-            public float SurfaceSnapDistance;
+            public float AreaSnapDistance;
             public float SurfaceCircleScale;
+            public bool ScaleAreaCircles;
 
             public void Execute()
             {
@@ -194,7 +222,7 @@ namespace HoverColors.Systems
                             curve.m_Size.x *= Scale;
                         }
                         else if (SurfaceCircleScale < 0.999f && IsCircle(curve)
-                            && math.abs(curve.m_Size.x - SurfaceSnapDistance * 0.5f) <= 0.001f)
+                            && math.abs(curve.m_Size.x - AreaSnapDistance * 0.5f) <= 0.001f)
                         {
                             // The Area tool's active control-point circle comes from
                             // GuideLinesSystem, separate from AreaBorderRenderSystem's joint dots.
@@ -210,8 +238,14 @@ namespace HoverColors.Systems
                         continue;
                     }
 
-                    if (math.abs(curve.m_Size.x - SurfaceSnapDistance * 0.3f) > 0.001f
-                        && math.abs(curve.m_Size.x - SurfaceSnapDistance * 0.2f) > 0.001f)
+                    if (!ScaleAreaCircles && IsCircle(curve))
+                    {
+                        // Keep Lot joint dots at vanilla size so their handles remain easy to see.
+                        continue;
+                    }
+
+                    if (math.abs(curve.m_Size.x - AreaSnapDistance * 0.3f) > 0.001f
+                        && math.abs(curve.m_Size.x - AreaSnapDistance * 0.2f) > 0.001f)
                     {
                         continue;
                     }
@@ -240,7 +274,7 @@ namespace HoverColors.Systems
         }
     }
 
-    public partial class SurfaceBorderWidthCaptureSystem : GameSystemBase
+    public partial class AreaBorderWidthCaptureSystem : GameSystemBase
     {
         private OverlayCurveSpan? m_Span;
         private ToolSystem? m_ToolSystem;
@@ -260,16 +294,29 @@ namespace HoverColors.Systems
 
         protected override void OnUpdate()
         {
-            float scale = Mod.Settings?.SurfaceBorderThicknessScale ?? 1f;
-            if (scale >= 0.999f
-                || !OverlayCurveAccess.TryGetSurfaceSnapDistance(
-                    EntityManager, m_ToolSystem, m_AreaToolSystem, m_PrefabSystem, out float snapDistance))
+            float surfaceScale = Mod.Settings?.SurfaceBorderThicknessScale ?? 1f;
+            float extractorScale = Mod.Settings?.ExtractorBorderThicknessScale ?? 1f;
+            if (surfaceScale >= 0.999f && extractorScale >= 0.999f)
             {
                 m_Span?.Capture(1f);
                 return;
             }
 
-            m_Span?.Capture(scale, snapDistance);
+            if (!OverlayCurveAccess.TryGetActiveAreaGeometry(
+                EntityManager, m_ToolSystem, m_AreaToolSystem, m_PrefabSystem,
+                out AreaGeometryData geometry, out bool specializedIndustryLot))
+            {
+                m_Span?.Capture(1f);
+                return;
+            }
+
+            float scale = geometry.m_Type switch
+            {
+                AreaType.Surface => surfaceScale,
+                AreaType.Lot when specializedIndustryLot => extractorScale,
+                _ => 1f,
+            };
+            m_Span?.Capture(scale, geometry.m_SnapDistance, scaleAreaCircles: geometry.m_Type == AreaType.Surface);
         }
 
         protected override void OnDestroy()
@@ -279,14 +326,14 @@ namespace HoverColors.Systems
         }
     }
 
-    public partial class SurfaceBorderWidthApplySystem : GameSystemBase
+    public partial class AreaBorderWidthApplySystem : GameSystemBase
     {
-        private SurfaceBorderWidthCaptureSystem? m_Capture;
+        private AreaBorderWidthCaptureSystem? m_Capture;
 
         protected override void OnCreate()
         {
             base.OnCreate();
-            m_Capture = World.GetOrCreateSystemManaged<SurfaceBorderWidthCaptureSystem>();
+            m_Capture = World.GetOrCreateSystemManaged<AreaBorderWidthCaptureSystem>();
         }
 
         protected override void OnUpdate()

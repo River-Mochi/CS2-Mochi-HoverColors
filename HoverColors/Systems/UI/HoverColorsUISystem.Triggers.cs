@@ -28,6 +28,8 @@ namespace HoverColors.UI
             AddBinding(new TriggerBinding(Mod.ModId, "ResetOutlineThickness", ResetOutlineThickness));
             AddBinding(new TriggerBinding<float>(Mod.ModId, "SetSurfaceBorderThickness", SetSurfaceBorderThickness));
             AddBinding(new TriggerBinding(Mod.ModId, "ResetSurfaceBorderThickness", ResetSurfaceBorderThickness));
+            AddBinding(new TriggerBinding<float>(Mod.ModId, "SetExtractorBorderThickness", SetExtractorBorderThickness));
+            AddBinding(new TriggerBinding(Mod.ModId, "ResetExtractorBorderThickness", ResetExtractorBorderThickness));
             AddBinding(new TriggerBinding<float>(Mod.ModId, "SetGuidelineDashedThickness", SetGuidelineDashedThickness));
             AddBinding(new TriggerBinding(Mod.ModId, "ResetGuidelineDashedThickness", ResetGuidelineDashedThickness));
             AddBinding(new TriggerBinding<int>(Mod.ModId, "SetGuidelineOpacity", SetGuidelineOpacity));
@@ -231,6 +233,22 @@ namespace HoverColors.UI
         private void ResetSurfaceBorderThickness()
         {
             SetSurfaceBorderThickness(HoverColorsSettings.kMaxOverlayThicknessScale);
+        }
+
+        private void SetExtractorBorderThickness(float scale)
+        {
+            HoverColorsSettings? settings = Mod.Settings;
+            if (settings == null) return;
+
+            scale = SnapOverlayThickness(scale);
+            if (ApproxEqual(settings.ExtractorBorderThicknessScale, scale)) return;
+            settings.ExtractorBorderThicknessScale = scale;
+            ApplySaveAndSync(settings);
+        }
+
+        private void ResetExtractorBorderThickness()
+        {
+            SetExtractorBorderThickness(HoverColorsSettings.kMaxOverlayThicknessScale);
         }
 
         private void SetGuidelineDashedThickness(float scale)
