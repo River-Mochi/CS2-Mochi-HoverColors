@@ -4,57 +4,51 @@
 <!--Name of the mod to display to players-->
 <DisplayName Value="Hover Colors + Highlights" />
 <!--Short description of the mod-->
-<ShortDescription Value="Change blue highlights to Any color, opacity strength or thickness. Fill color, Guidelines, Hide Surface layers, add District colors."/>
+<ShortDescription Value="Change blue highlights to Any color, Opacity, or Thickness. Fill color, Guidelines, Hide Surface layers, add District colors."/>
 <!--Long description of the mod. Single line or multi line. Supports minimal markdown subset-->
 <LongDescription>
 ## Mochi's Hover Colors
 
-Want to change the bright blue highlights?
+Bright blue highlights getting in the way? Want cleaner road guides, thinner color borders, or less distracting tool previews?
 
-**Easy tool to Dim, Hide, or Change highlights to any color, opacity strength, or line thickness. Adjust Guidelines and Surface tools also.**
-
+**Hover Colors lets you Dim, Hide, or Change highlights, guidelines, and tool overlays so you can see your city instead of the UI.**
 
 ### Highlights
 
-- 1-click change highlight color + transparency.
-- Change outline thickness** from thin to thick.
-- Fill color and outline color are now separate.
-- Full color picker — click on any color or exact HEX value.
-- Works on buildings, cars, trees, citizens, props, roads, and more.
-- **1-Click Eye button** to hide/show highlights anytime.
-- New Property lots: now follow the Outline thickness and Fill color/opacity controls; the Eyeball also hides property lot borders and fill.
-- Hover over buttons for quick tooltip help.
-- Restore vanilla colors anytime with 1-click.
+- Change highlight color, transparency, fill, and outline thickness.
+- **1-Click Eye button** hides/shows highlights instantly.
+- Works on buildings, cars, trees, citizens, props, roads, property lots, and more.
+- Full color picker with HEX support.
+- Save and quickly switch between **4 custom color presets**.
 
 ### Guidelines + Area Tools
 
-- **Guidelines:** change colors and opacity for roads, spacing lines, and previews.
-- Adjust dashed road and angle-guide thickness.
-- **Surfaces:** hide the cloudy preview fill so you can see the real ground.
-- **Specialized Industry:** hide lot previews while drawing farms, forestry, oil, ore, and other industry areas.
-- New Thickness for Surface and Extractor area border lines.
-- **Districts:** change border + overlay color and opacity.
+- Change guideline colors, opacity, and line thickness.
+- Adjust Surface and Extractor area border thickness.
+- Hide Surface and Specialized Industry preview fills.
+- Change District border + overlay color and opacity.
+- Hide angle and Place/Undo hints while drawing roads or paths.
 
 ### Panel + Options
-- Works in Editor Mode: use the main panel hotkey to open the panel (default J).
-- Panel style choice — Dark matches the game's panels, Glass is a lighter see-through look with its own opacity slider.
-- Bulldozer + Road tool color choices are in the Options menu.
-- Hide angle and Place/Undo hints while drawing roads or paths; cost and measurements remain visible.
-- Collapse panel sections, remember the panel position, and choose a top-left, top-right, or Universal Mod Menu launcher.
+
+- Glass or Dark panel styles.
+- Collapsible sections and remembered panel position.
+- Choose Top Left, Top Right, or Universal Mod Menu for the launcher.
+- Works in **Editor Mode**, use the panel hotkey to open (default J).
+- Extra Bulldozer and other options in the Options menu.
 
 ## Good to Know
 
-- **To start:** click the Hover Colors palette icon (top-left icon).
-- **Works with Recolor:** Hover Colors changes highlights, guidelines, overlays, and previews. Recolor changes the actual objects.
-- **Lightweight:** no Harmony patches and Safe to remove anytime.
-- Alpha = transparency. Click any color box, a full color picker opens. Use the last bar.
-- Performance friendly: color settings update when needed; active previews are adjusted as they are drawn.
+- **To start:** click the Hover Colors palette icon (top-left by default).
+- **Works with Recolor:** Hover Colors changes highlights, guides, overlays, and previews. Recolor changes the actual objects.
+- **Lightweight:** no Harmony patches and safe to remove anytime. Performance friendly, settings update when needed.
+- Hover over controls for quick tooltip help.
 
 ### Support + Feedback
 
-- Enjoy and the easiest way to support is clicking the Like 👍 button (top right) — no donations requested.
-- Feedback: use the GitHub or Discord links (icons right side). Prs are welcome.
-- Mod is GPL-3.0-or-later open source. Clones/Forks MUST stay GPL and credit the original. See Github for details.
+- The easiest way to support is clicking the Like 👍 button (top right) — no donations requested.
+- Feedback: use the GitHub or Discord links (icons right side). PRs are welcome.
+- Mod is GPL-3.0-or-later open source. Clones/Forks must stay GPL and credit the original, see Github for details.
 
 ### ❤️ Credits and Thanks
 
@@ -64,21 +58,14 @@ Want to change the bright blue highlights?
 - Flashbond - collab, tech feedback, testing
 - yenyang (Recolor, Anarchy) - collab, tech feedback, testing
 - StarQ - tech feedback, testing
-- gagaxm, Mayor Cheeks - surface-hide requests and testing
+- Gagaxm, Mayor Cheeks - surface-hide requests and testing
 - Dx, BugsyG, Necko1996, ElGendo87, Maestro - testing
 - =Noel= - images and testing
 - rzzirrah - image consultant
 
-### Presets
-
-- Tap **1** or **2** to switch presets.
-- Hold **1** or **2** for 0.5s to save your current colors.
-- **[⇔]** switches between Set A and Set B = **4 saved custom presets**.
-- **[↺]** switches between HC defaults and your saved colors.
-
 ### 15 Languages
 
-English, Français, Deutsch, Español, Italiano, Polski, Português Brasil, Português Portugal, 日本語, 한국어, 简体中文, 繁體中文, ภาษาไทย, Tiếng Việt, Türkçe
+English, Français, Deutsch, Español, Italiano, Polski, Português Brasil, Português Portugal, 日本語, 한국어, 简体中文, 繁體中文, ภาษาไทย Thai, Tiếng Việt, Türkçe
 
 tags: hover colors, remove blue, disable hover, highlight color, outline thickness, fill color, guidelines, districts, surface tool, transparent overlays, industry surfaces
 </LongDescription>
@@ -111,15 +98,16 @@ tags: hover colors, remove blue, disable hover, highlight color, outline thickne
 <ChangeLog>
 - Eyeball now hides ground property lot fill and outline.
 - Added thickness slider for guidelines.
-- Added thickness slider for Surfaces and Extractor area lots.
+- Added thickness slider for Surfaces and Extractor area borders.
 - Added instant Show/hide button for angles tooltips when drawing roads or paths.
-- Added Collapsible section arrows and section titles.
+- Added collapsible section arrows and section titles.
 - Title bar is slightly taller.
+- Panel position is now remembered.
 - Pink dot indicator for active highlight color (blue dot previously was harder to see).
 - Added an Options menu choice for the panel button: Top Left, Top Right, or Universal Mod Menu. New installs default to Top Left.
 - remove Hotkey for Surface preview filter On/off
 - add new hotkey for Angles tooltips on/off.
-- Edge highlight for new roads is now 0.80 alpha instead of 0.75 (vanilla is 0.855)
+- New-road edge highlight is now 0.80 alpha instead of 0.75 (vanilla is ~0.855)
 - Updated all translations and various UI fixes.
 </ChangeLog>
 <!--External link, can be set multiple times. supported types are "discord", "github", "youtube", "twitch", "x", "paypal", "patreon", "buymeacoffee", "kofi", "crowdin", "gitlab", "gofundme"-->
