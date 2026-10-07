@@ -102,6 +102,12 @@ namespace HoverColors
                 { m_Settings.GetPanelStyleLocaleID("Dark"), "มืด (แบบเกม)" },
                 { m_Settings.GetPanelStyleLocaleID("Glass"), "กระจก (กำหนดเอง)" },
 
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.LauncherLocation)), "▪ ตำแหน่งปุ่มแผง" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.LauncherLocation)), "เลือกมุมซ้ายบน มุมขวาบน หรือ Universal Mod Menu ของเกม รีสตาร์ตเกมเพื่อย้ายปุ่ม" },
+                { m_Settings.GetLauncherLocationLocaleID("TopLeft"), "ซ้ายบน" },
+                { m_Settings.GetLauncherLocationLocaleID("TopRight"), "ขวาบน" },
+                { m_Settings.GetLauncherLocationLocaleID("UniversalMenu"), "Universal Mod Menu" },
+
                 // Panel opacity
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)), "▪ ความทึบของแผง" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)),

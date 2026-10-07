@@ -57,6 +57,21 @@ namespace HoverColors
             };
         }
 
+        public DropdownItem<int>[] GetLauncherLocationItems()
+        {
+            return new[]
+            {
+                new DropdownItem<int> { value = kLauncherTopLeft, displayName = GetLauncherLocationLocaleID("TopLeft") },
+                new DropdownItem<int> { value = kLauncherTopRight, displayName = GetLauncherLocationLocaleID("TopRight") },
+                new DropdownItem<int> { value = kLauncherUniversalMenu, displayName = GetLauncherLocationLocaleID("UniversalMenu") },
+            };
+        }
+
+        public string GetLauncherLocationLocaleID(string valueName)
+        {
+            return "Options[" + id + ".LauncherLocation." + valueName + "]";
+        }
+
         public string GetPanelStyleLocaleID(string valueName)
         {
             return "Options[" + id + ".PanelStyle." + valueName + "]";

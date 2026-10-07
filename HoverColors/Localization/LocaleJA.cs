@@ -102,6 +102,12 @@ namespace HoverColors
                 { m_Settings.GetPanelStyleLocaleID("Dark"), "ダーク (バニラ)" },
                 { m_Settings.GetPanelStyleLocaleID("Glass"), "ガラス (カスタム)" },
 
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.LauncherLocation)), "▪ パネルボタンの位置" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.LauncherLocation)), "左上、右上、ゲーム内の Universal Mod Menu から選択します。ボタンの移動にはゲームの再起動が必要です。" },
+                { m_Settings.GetLauncherLocationLocaleID("TopLeft"), "左上" },
+                { m_Settings.GetLauncherLocationLocaleID("TopRight"), "右上" },
+                { m_Settings.GetLauncherLocationLocaleID("UniversalMenu"), "Universal Mod Menu" },
+
                 // Panel opacity
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)), "▪ パネル不透明度" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)),

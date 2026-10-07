@@ -10,7 +10,7 @@
   "HoverColors.UI.Tooltip.Draggable": "Sürüklenebilir",
   "HoverColors.UI.Tooltip.CollapsePanel": "Sadece dış çizgi satırına daralt.\nTekrar tıkla, tam panel açılsın.",
   "HoverColors.UI.Tooltip.HoverToggle": "Vurgular Aç/Kapat.\nKAPALI normal vurguları gizler.\nNesneye tıklayınca dış çizgi rengin yine görünür.\nŞehri sakin gezmek için iyi.",
-  "HoverColors.UI.Tooltip.Close": "Paneli kapat. Varsayılan kısayol: J.\nSol üst oyun simgesi Aç/Kapat.",
+  "HoverColors.UI.Tooltip.Close": "Paneli kapat. Varsayılan kısayol: J.\nSeçilen düğmeyle açın veya kapatın.",
   "HoverColors.UI.Tooltip.ResetOutline": "Dış çizgi, oyun varsayılan rengine dönmek için tıkla",
   "HoverColors.UI.Tooltip.OutlineSwatch": "DIŞ ÇİZGİ - renk + opaklık için tıkla.",
   "HoverColors.UI.Tooltip.ResetOutlineThickness": "Tıkla: dış çizgi kalınlığını sıfırla",

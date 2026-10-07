@@ -10,7 +10,7 @@
   "HoverColors.UI.Tooltip.Draggable": "Arrastável",
   "HoverColors.UI.Tooltip.CollapsePanel": "Recolhe só para a linha de contorno.\nClique de novo para expandir.",
   "HoverColors.UI.Tooltip.HoverToggle": "Destaques ligar/desligar.\nDESLIGADO oculta os normais.\nClicar num objeto ainda mostra sua cor de contorno.\nBom para passear pela cidade sem destaques.",
-  "HoverColors.UI.Tooltip.Close": "Fechar painel. Atalho padrão: J.\nÍcone superior esquerdo ligar/desligar.",
+  "HoverColors.UI.Tooltip.Close": "Fechar painel. Atalho padrão: J.\nAbra ou feche com o botão escolhido.",
   "HoverColors.UI.Tooltip.ResetOutline": "Contorno, clique para voltar à cor do jogo",
   "HoverColors.UI.Tooltip.OutlineSwatch": "CONTORNO - clique para cor + opacidade.",
   "HoverColors.UI.Tooltip.ResetOutlineThickness": "Clique para redefinir a espessura",

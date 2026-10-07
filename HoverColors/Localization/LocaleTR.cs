@@ -102,6 +102,12 @@ namespace HoverColors
                 { m_Settings.GetPanelStyleLocaleID("Dark"), "Koyu (Vanilla)" },
                 { m_Settings.GetPanelStyleLocaleID("Glass"), "Cam (Özel)" },
 
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.LauncherLocation)), "▪ Panel düğmesinin konumu" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.LauncherLocation)), "Sol üst, sağ üst veya oyunun Universal Mod Menu seçeneğini seçin. Düğmeyi taşımak için oyunu yeniden başlatın." },
+                { m_Settings.GetLauncherLocationLocaleID("TopLeft"), "Sol üst" },
+                { m_Settings.GetLauncherLocationLocaleID("TopRight"), "Sağ üst" },
+                { m_Settings.GetLauncherLocationLocaleID("UniversalMenu"), "Universal Mod Menu" },
+
                 // Panel opacity
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)), "▪ Panel opaklığı" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)),

@@ -102,6 +102,12 @@ namespace HoverColors
                 { m_Settings.GetPanelStyleLocaleID("Dark"), "Oscuro (Vanilla)" },
                 { m_Settings.GetPanelStyleLocaleID("Glass"), "Cristal (Personalizado)" },
 
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.LauncherLocation)), "▪ Ubicación del botón del panel" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.LauncherLocation)), "Elige arriba a la izquierda, arriba a la derecha o el Universal Mod Menu del juego. Reinicia el juego para mover el botón." },
+                { m_Settings.GetLauncherLocationLocaleID("TopLeft"), "Arriba a la izquierda" },
+                { m_Settings.GetLauncherLocationLocaleID("TopRight"), "Arriba a la derecha" },
+                { m_Settings.GetLauncherLocationLocaleID("UniversalMenu"), "Universal Mod Menu" },
+
                 // Panel opacity
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)), "▪ Opacidad del panel" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)),

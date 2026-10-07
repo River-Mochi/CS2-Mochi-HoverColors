@@ -10,7 +10,7 @@
   "HoverColors.UI.Tooltip.Draggable": "ลากได้",
   "HoverColors.UI.Tooltip.CollapsePanel": "ย่อเหลือแถวเส้นขอบ\nคลิกอีกครั้งเพื่อขยาย",
   "HoverColors.UI.Tooltip.HoverToggle": "เปิด/ปิดไฮไลต์\nปิด = ซ่อนไฮไลต์ปกติ\nคลิกวัตถุยังเห็นสีเส้นขอบของคุณ\nเหมาะตอนเลื่อนดูเมืองแบบไม่รบกวน",
-  "HoverColors.UI.Tooltip.Close": "ปิดแผง ปุ่มลัดเดิม: J\nไอคอนซ้ายบน เปิด/ปิด",
+  "HoverColors.UI.Tooltip.Close": "ปิดแผง ปุ่มลัดเดิม: J\nใช้ปุ่มที่เลือกเพื่อเปิดหรือปิด",
   "HoverColors.UI.Tooltip.ResetOutline": "เส้นขอบ คลิกเพื่อคืนสีเริ่มต้นของเกม",
   "HoverColors.UI.Tooltip.OutlineSwatch": "เส้นขอบ - คลิกเพื่อสี + ความทึบ",
   "HoverColors.UI.Tooltip.ResetOutlineThickness": "คลิกเพื่อรีเซ็ตความหนาเส้นขอบ",

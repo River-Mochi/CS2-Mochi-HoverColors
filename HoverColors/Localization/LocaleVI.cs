@@ -102,6 +102,12 @@ namespace HoverColors
                 { m_Settings.GetPanelStyleLocaleID("Dark"), "Tối (Vanilla)" },
                 { m_Settings.GetPanelStyleLocaleID("Glass"), "Kính (Tùy chỉnh)" },
 
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.LauncherLocation)), "▪ Vị trí nút bảng điều khiển" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.LauncherLocation)), "Chọn góc trên trái, góc trên phải hoặc Universal Mod Menu của trò chơi. Khởi động lại trò chơi để chuyển nút." },
+                { m_Settings.GetLauncherLocationLocaleID("TopLeft"), "Trên trái" },
+                { m_Settings.GetLauncherLocationLocaleID("TopRight"), "Trên phải" },
+                { m_Settings.GetLauncherLocationLocaleID("UniversalMenu"), "Universal Mod Menu" },
+
                 // Panel opacity
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)), "▪ Độ đục bảng" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)),

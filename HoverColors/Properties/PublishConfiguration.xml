@@ -105,11 +105,12 @@ tags: hover colors, remove blue, disable hover, highlight color, outline thickne
 <!--Change log for new version. Single line or multi line. Supports minimal markdown subset-->
 <ChangeLog>
 - Added thickness slider for guidelines.
-- Added thickness slider for surfaces and extractor area lots.
+- Added thickness slider for Surfaces and Extractor area lots.
 - Added instant Show/hide button for angles tooltips when drawing roads or paths.
 - Added Collapsible section arrows and section titles.
 - Title bar is slightly taller.
 - Pink dot indicator for active highlight color (blue dot previously was harder to see).
+- Add Options menu choice for panel button in Top Left, Top Right, or Universal Mod menu -  new default is Top right.
 - Edge highlight for new roads is now 0.80 alpha instead of 0.75 (vanilla is 0.855)
 - Updated all translations and various UI fixes.
 </ChangeLog>

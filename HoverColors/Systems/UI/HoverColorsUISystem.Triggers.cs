@@ -44,6 +44,9 @@ namespace HoverColors.UI
             AddBinding(new TriggerBinding<bool>(Mod.ModId, "SetPanelOpen", SetPanelOpen));
             AddBinding(new TriggerBinding<bool>(Mod.ModId, "SetPanelTooltipsEnabled", SetPanelTooltipsEnabled));
             AddBinding(new TriggerBinding<bool>(Mod.ModId, "SetPanelCollapsed", SetPanelCollapsed));
+            AddBinding(new TriggerBinding<bool>(Mod.ModId, "SetGuidelinesExpanded", SetGuidelinesExpanded));
+            AddBinding(new TriggerBinding<bool>(Mod.ModId, "SetAreasExpanded", SetAreasExpanded));
+            AddBinding(new TriggerBinding<string>(Mod.ModId, "SetPanelPosition", SetPanelPosition));
             AddBinding(new TriggerBinding(Mod.ModId, "ToggleSurfaceToolAreas", ToggleSurfaceToolAreas));
             AddBinding(new TriggerBinding(Mod.ModId, "ToggleSpecializedIndustryAreas", ToggleSpecializedIndustryAreas));
             AddBinding(new TriggerBinding<int>(Mod.ModId, "ApplyPreset", ApplyPreset));
@@ -534,6 +537,37 @@ namespace HoverColors.UI
             }
 
             settings.PanelCollapsed = collapsed;
+            ApplySaveAndSync(settings);
+        }
+
+        private void SetGuidelinesExpanded(bool expanded)
+        {
+            HoverColorsSettings? settings = Mod.Settings;
+            if (settings == null || settings.GuidelinesExpanded == expanded) return;
+            settings.GuidelinesExpanded = expanded;
+            ApplySaveAndSync(settings);
+        }
+
+        private void SetAreasExpanded(bool expanded)
+        {
+            HoverColorsSettings? settings = Mod.Settings;
+            if (settings == null || settings.AreasExpanded == expanded) return;
+            settings.AreasExpanded = expanded;
+            ApplySaveAndSync(settings);
+        }
+
+        private void SetPanelPosition(string payload)
+        {
+            HoverColorsSettings? settings = Mod.Settings;
+            if (settings == null || string.IsNullOrWhiteSpace(payload)) return;
+            string[] parts = payload.Split(',');
+            if (parts.Length != 2 || !int.TryParse(parts[0], out int x) || !int.TryParse(parts[1], out int y)) return;
+            x = Math.Max(-20000, Math.Min(20000, x));
+            y = Math.Max(-20000, Math.Min(20000, y));
+            if (settings.PanelPositionSet && settings.PanelPositionX == x && settings.PanelPositionY == y) return;
+            settings.PanelPositionSet = true;
+            settings.PanelPositionX = x;
+            settings.PanelPositionY = y;
             ApplySaveAndSync(settings);
         }
 

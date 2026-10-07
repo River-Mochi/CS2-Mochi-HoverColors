@@ -30,13 +30,13 @@
     pointer-events: auto;
 }
 
-// Nothing to declare: the game panel's position is the inline left/top measured from the launcher.
+// Nothing to declare: the game panel's position is the inline left/top measured from the selected launcher.
 // The rule exists so the class survives into the CSS-module exports, same as .panelDarker.
 .panelAnchorGame {
     margin-top: 0;
 }
 
-// Editor has no GameTopLeft launcher to measure, so the same draggable panel starts at a fixed
+// Editor has no city launcher to measure, so the same draggable panel starts at a fixed
 // viewport position instead. position: fixed rather than absolute, because the Editor root is not a
 // positioned ancestor.
 //

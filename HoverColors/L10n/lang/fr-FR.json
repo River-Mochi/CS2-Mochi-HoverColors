@@ -10,7 +10,7 @@
   "HoverColors.UI.Tooltip.Draggable": "Déplaçable",
   "HoverColors.UI.Tooltip.CollapsePanel": "Réduire à la ligne contour.\nCliquez encore pour développer.",
   "HoverColors.UI.Tooltip.HoverToggle": "Surbrillances activées/désactivées.\nDÉSACTIVÉ masque les normales.\nCliquer un objet montre toujours votre contour.\nPratique pour parcourir la ville tranquillement.",
-  "HoverColors.UI.Tooltip.Close": "Fermer le panneau. Raccourci par défaut : J.\nIcône en haut à gauche activée/désactivée.",
+  "HoverColors.UI.Tooltip.Close": "Fermer le panneau. Raccourci par défaut : J.\nUtilisez le bouton choisi pour l'ouvrir ou le fermer.",
   "HoverColors.UI.Tooltip.ResetOutline": "Contour, cliquez pour revenir à la couleur du jeu",
   "HoverColors.UI.Tooltip.OutlineSwatch": "CONTOUR - clic pour couleur + opacité.",
   "HoverColors.UI.Tooltip.ResetOutlineThickness": "Cliquez pour réinitialiser l’épaisseur",

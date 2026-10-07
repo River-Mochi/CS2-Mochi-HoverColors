@@ -102,6 +102,12 @@ namespace HoverColors
                 { m_Settings.GetPanelStyleLocaleID("Dark"), "暗色（原版）" },
                 { m_Settings.GetPanelStyleLocaleID("Glass"), "玻璃（自定义）" },
 
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.LauncherLocation)), "▪ 面板按钮位置" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.LauncherLocation)), "选择左上角、右上角或游戏内的 Universal Mod Menu。重启游戏后按钮位置生效。" },
+                { m_Settings.GetLauncherLocationLocaleID("TopLeft"), "左上角" },
+                { m_Settings.GetLauncherLocationLocaleID("TopRight"), "右上角" },
+                { m_Settings.GetLauncherLocationLocaleID("UniversalMenu"), "Universal Mod Menu" },
+
                 // Panel opacity
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)), "▪ 面板不透明度" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)),

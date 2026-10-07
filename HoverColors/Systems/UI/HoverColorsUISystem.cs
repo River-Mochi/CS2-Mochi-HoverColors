@@ -73,6 +73,12 @@ namespace HoverColors.UI
         private ValueBinding<bool> m_PanelOpenBinding = null!;
         private ValueBinding<bool> m_PanelTooltipsEnabledBinding = null!;
         private ValueBinding<bool> m_PanelCollapsedBinding = null!;
+        private ValueBinding<bool> m_GuidelinesExpandedBinding = null!;
+        private ValueBinding<bool> m_AreasExpandedBinding = null!;
+        private ValueBinding<bool> m_PanelPositionSetBinding = null!;
+        private ValueBinding<int> m_PanelPositionXBinding = null!;
+        private ValueBinding<int> m_PanelPositionYBinding = null!;
+        private ValueBinding<int> m_LauncherLocationBinding = null!;
         private ValueBinding<bool> m_UseDarkerPanelBinding = null!;
         private ValueBinding<bool> m_SurfaceToolAreasSuppressedBinding = null!;
         private ValueBinding<bool> m_SpecializedIndustryAreasSuppressedBinding = null!;
@@ -201,6 +207,12 @@ namespace HoverColors.UI
             m_PanelOpenBinding = AddValueBinding("PanelOpen", s_PanelOpen);
             m_PanelTooltipsEnabledBinding = AddValueBinding("PanelTooltipsEnabled", settings?.PanelTooltipsEnabled ?? true);
             m_PanelCollapsedBinding = AddValueBinding("PanelCollapsed", settings?.PanelCollapsed ?? false);
+            m_GuidelinesExpandedBinding = AddValueBinding("GuidelinesExpanded", settings?.GuidelinesExpanded ?? true);
+            m_AreasExpandedBinding = AddValueBinding("AreasExpanded", settings?.AreasExpanded ?? true);
+            m_PanelPositionSetBinding = AddValueBinding("PanelPositionSet", settings?.PanelPositionSet ?? false);
+            m_PanelPositionXBinding = AddValueBinding("PanelPositionX", settings?.PanelPositionX ?? 0);
+            m_PanelPositionYBinding = AddValueBinding("PanelPositionY", settings?.PanelPositionY ?? 0);
+            m_LauncherLocationBinding = AddValueBinding("LauncherLocation", settings?.LauncherLocation ?? HoverColorsSettings.kLauncherTopRight);
             // Read PanelStyle, not the legacy bool: PanelStyle is the value Options writes, and a
             // missing settings object should fall back to Dark, the default style.
             m_UseDarkerPanelBinding = AddValueBinding("UseDarkerPanel", settings == null || settings.PanelStyle == HoverColorsSettings.kPanelStyleDark);
@@ -289,6 +301,12 @@ namespace HoverColors.UI
             UpdateIfChanged(m_PanelOpenBinding, s_PanelOpen);
             UpdateIfChanged(m_PanelTooltipsEnabledBinding, settings?.PanelTooltipsEnabled ?? true);
             UpdateIfChanged(m_PanelCollapsedBinding, settings?.PanelCollapsed ?? false);
+            UpdateIfChanged(m_GuidelinesExpandedBinding, settings?.GuidelinesExpanded ?? true);
+            UpdateIfChanged(m_AreasExpandedBinding, settings?.AreasExpanded ?? true);
+            UpdateIfChanged(m_PanelPositionSetBinding, settings?.PanelPositionSet ?? false);
+            UpdateIfChanged(m_PanelPositionXBinding, settings?.PanelPositionX ?? 0);
+            UpdateIfChanged(m_PanelPositionYBinding, settings?.PanelPositionY ?? 0);
+            UpdateIfChanged(m_LauncherLocationBinding, settings?.LauncherLocation ?? HoverColorsSettings.kLauncherTopRight);
             UpdateIfChanged(m_UseDarkerPanelBinding, settings == null || settings.PanelStyle == HoverColorsSettings.kPanelStyleDark);
             UpdateIfChanged(m_SurfaceToolAreasSuppressedBinding, AreaToolOverlaySystem.SuppressSurfaceToolAreas);
             UpdateIfChanged(m_SpecializedIndustryAreasSuppressedBinding, AreaToolOverlaySystem.SuppressSpecializedIndustryToolAreas);

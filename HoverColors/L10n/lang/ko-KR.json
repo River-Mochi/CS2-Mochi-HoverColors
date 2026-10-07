@@ -10,7 +10,7 @@
   "HoverColors.UI.Tooltip.Draggable": "드래그 가능",
   "HoverColors.UI.Tooltip.CollapsePanel": "외곽선 줄만 남기고 접기.\n다시 클릭하면 전체 표시.",
   "HoverColors.UI.Tooltip.HoverToggle": "강조 표시 켜기/끄기.\n끄면 일반 강조를 숨깁니다.\n오브젝트 클릭 시 외곽선 색은 계속 표시됩니다.\n도시를 조용히 둘러볼 때 편리합니다.",
-  "HoverColors.UI.Tooltip.Close": "패널 닫기. 기본 단축키: J.\n게임 좌상단 아이콘 켜기/끄기.",
+  "HoverColors.UI.Tooltip.Close": "패널 닫기. 기본 단축키: J.\n선택한 버튼으로 열거나 닫습니다.",
   "HoverColors.UI.Tooltip.ResetOutline": "외곽선, 클릭하면 게임 기본 색으로 복원",
   "HoverColors.UI.Tooltip.OutlineSwatch": "외곽선 - 클릭해 색 + 불투명도 설정.",
   "HoverColors.UI.Tooltip.ResetOutlineThickness": "클릭하여 외곽선 두께 재설정",

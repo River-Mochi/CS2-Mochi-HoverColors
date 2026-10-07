@@ -10,7 +10,7 @@
   "HoverColors.UI.Tooltip.Draggable": "Có thể kéo",
   "HoverColors.UI.Tooltip.CollapsePanel": "Thu gọn chỉ còn hàng viền.\nBấm lại để mở đầy đủ.",
   "HoverColors.UI.Tooltip.HoverToggle": "Bật/tắt tô sáng.\nTẮT ẩn tô sáng bình thường.\nBấm vật thể vẫn hiện màu viền của bạn.\nTiện khi rê camera quanh thành phố.",
-  "HoverColors.UI.Tooltip.Close": "Đóng bảng. Phím mặc định: J.\nBiểu tượng góc trái trên Bật/Tắt.",
+  "HoverColors.UI.Tooltip.Close": "Đóng bảng. Phím mặc định: J.\nMở hoặc đóng bằng nút đã chọn.",
   "HoverColors.UI.Tooltip.ResetOutline": "Viền, bấm để trả về màu mặc định game",
   "HoverColors.UI.Tooltip.OutlineSwatch": "VIỀN - bấm chọn màu + độ đục.",
   "HoverColors.UI.Tooltip.ResetOutlineThickness": "Nhấp để đặt lại độ dày viền",

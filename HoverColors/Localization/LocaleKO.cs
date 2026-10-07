@@ -102,6 +102,12 @@ namespace HoverColors
                 { m_Settings.GetPanelStyleLocaleID("Dark"), "어두움 (바닐라)" },
                 { m_Settings.GetPanelStyleLocaleID("Glass"), "유리 (사용자 지정)" },
 
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.LauncherLocation)), "▪ 패널 버튼 위치" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.LauncherLocation)), "왼쪽 위, 오른쪽 위 또는 게임의 Universal Mod Menu를 선택합니다. 버튼 위치는 게임을 다시 시작한 후 바뀝니다." },
+                { m_Settings.GetLauncherLocationLocaleID("TopLeft"), "왼쪽 위" },
+                { m_Settings.GetLauncherLocationLocaleID("TopRight"), "오른쪽 위" },
+                { m_Settings.GetLauncherLocationLocaleID("UniversalMenu"), "Universal Mod Menu" },
+
                 // Panel opacity
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)), "▪ 패널 불투명도" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)),

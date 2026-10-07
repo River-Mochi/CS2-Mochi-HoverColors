@@ -10,7 +10,7 @@
   "HoverColors.UI.Tooltip.Draggable": "可拖动",
   "HoverColors.UI.Tooltip.CollapsePanel": "折叠到轮廓行。\n再点展开完整面板。",
   "HoverColors.UI.Tooltip.HoverToggle": "高亮 开/关。\n关闭后隐藏普通高亮。\n点击物体仍显示你的轮廓颜色。\n适合安静地移动镜头看城市。",
-  "HoverColors.UI.Tooltip.Close": "关闭面板。默认热键：J。\n游戏左上图标 开/关。",
+  "HoverColors.UI.Tooltip.Close": "关闭面板。默认热键：J。\n使用所选按钮打开或关闭。",
   "HoverColors.UI.Tooltip.ResetOutline": "轮廓，点击恢复游戏默认颜色",
   "HoverColors.UI.Tooltip.OutlineSwatch": "轮廓 - 点击设置颜色 + 不透明度。",
   "HoverColors.UI.Tooltip.ResetOutlineThickness": "点击重置轮廓粗细",

@@ -47,6 +47,10 @@ namespace HoverColors
         internal const int kPanelStyleDark = 0;
         internal const int kPanelStyleStandard = 1;
 
+        internal const int kLauncherTopLeft = 0;
+        internal const int kLauncherTopRight = 1;
+        internal const int kLauncherUniversalMenu = 2;
+
         private int m_PanelStyle = kPanelStyleDark;
 
         internal const int kMinPanelOpacityPercent = 30;
@@ -658,6 +662,10 @@ namespace HoverColors
             set => m_PanelOpacityPercent = ClampPanelOpacity(value);
         }
 
+        [SettingsUIDropdown(typeof(HoverColorsSettings), nameof(GetLauncherLocationItems))]
+        [SettingsUISection(Actions, kPanel)]
+        public int LauncherLocation { get; set; }
+
         // PanelTooltipsEnabled is player-facing now so new players do not accidentally
         // lose tooltip help from a title-bar button. The city info icon can only turn it back ON.
         [SettingsUISection(Actions, kPanel)]
@@ -667,6 +675,21 @@ namespace HoverColors
         // Title-bar arrow toggle (no Options UI setting for it)
         [SettingsUIHidden]
         public bool PanelCollapsed { get; set; }
+
+        [SettingsUIHidden]
+        public bool GuidelinesExpanded { get; set; }
+
+        [SettingsUIHidden]
+        public bool AreasExpanded { get; set; }
+
+        [SettingsUIHidden]
+        public bool PanelPositionSet { get; set; }
+
+        [SettingsUIHidden]
+        public int PanelPositionX { get; set; }
+
+        [SettingsUIHidden]
+        public int PanelPositionY { get; set; }
 
         // Eye button state. Keeps player's saved color/alpha untouched while normal hover is hidden.
         [SettingsUIHidden]

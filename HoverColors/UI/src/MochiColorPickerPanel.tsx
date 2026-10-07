@@ -7,7 +7,7 @@
 // ================= </copyright> ======================
 
 // File: UI/src/MochiColorPickerPanel.tsx
-// Purpose: Compact in-city hover-color panel anchored under the GameTopLeft icon button.
+// Purpose: Compact in-city hover-color panel anchored under the selected launcher.
 // Layout: title bar + color control rows + bottom action bar.
 
 import React from "react";
@@ -53,6 +53,11 @@ import {
     ownerG$,
     ownerR$,
     panelCollapsed$,
+    guidelinesExpanded$,
+    areasExpanded$,
+    panelPositionSet$,
+    panelPositionX$,
+    panelPositionY$,
     panelOpacityPercent$,
     panelTooltipsEnabled$,
     preset1A$,
@@ -102,8 +107,7 @@ type MochiColorPickerPanelProps = {
 
 type PanelOrigin = { left: number; top: number };
 
-// Used when the launcher cannot be measured. Deliberately the same corner the Editor panel opens in,
-// so a panel that lands here still looks placed rather than lost.
+// Used when the launcher cannot be measured. The fixed corner keeps the panel visible.
 const FALLBACK_ORIGIN: PanelOrigin = { left: 16, top: 64 };
 
 // Gap between the launcher button and the top of the panel, matching the old margin-top: 6rem.
@@ -115,7 +119,7 @@ const LAUNCHER_GAP_PX = 6;
 // runs. A 0x0 rect still means Gameface had nothing useful to report - a hidden or not-yet-laid-out
 // element reads that way - so that answer is rejected rather than trusted, and the panel falls back
 // to a fixed corner. Read only: nothing here mutates the DOM.
-const getGamePanelOrigin = (): PanelOrigin => {
+const getGamePanelOrigin = (panelWidth = 0): PanelOrigin => {
     if (typeof document === "undefined") {
         return FALLBACK_ORIGIN;
     }
@@ -130,7 +134,9 @@ const getGamePanelOrigin = (): PanelOrigin => {
         return FALLBACK_ORIGIN;
     }
 
-    return { left: rect.left, top: rect.bottom + LAUNCHER_GAP_PX };
+    const location = Number((launcher as HTMLElement).getAttribute("data-hc-launcher-location"));
+    const left = location === 0 ? rect.left : rect.right - panelWidth;
+    return { left: Math.max(0, left), top: rect.bottom + LAUNCHER_GAP_PX };
 };
 
 export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPanelProps) => {
@@ -198,6 +204,11 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
     const text = useMochiPanelText();
     const tooltipsEnabled = useValue(panelTooltipsEnabled$);
     const panelCollapsed = useValue(panelCollapsed$);
+    const guidelinesExpanded = useValue(guidelinesExpanded$);
+    const areasExpanded = useValue(areasExpanded$);
+    const panelPositionSet = useValue(panelPositionSet$);
+    const panelPositionX = useValue(panelPositionX$);
+    const panelPositionY = useValue(panelPositionY$);
     const hoverHighlightsSuppressed = useValue(hoverHighlightsSuppressed$);
 
     // FormattedParagraphs lets vanilla Tooltip render JSON \n as real line breaks.
@@ -242,8 +253,6 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
     const [ownerPickerOpen, setOwnerPickerOpen] = React.useState(false);
     const [districtPickerOpen, setDistrictPickerOpen] = React.useState(false);
     const [districtMenuOpen, setDistrictMenuOpen] = React.useState(false);
-    const [guidelinesExpanded, setGuidelinesExpanded] = React.useState(true);
-    const [areasExpanded, setAreasExpanded] = React.useState(true);
     const [guidelineLinesPickerOpen, setGuidelineLinesPickerOpen] = React.useState(false);
     const [guidelinePreviewPickerOpen, setGuidelinePreviewPickerOpen] = React.useState(false);
     const [guidelineDashedPickerOpen, setGuidelineDashedPickerOpen] = React.useState(false);
@@ -270,6 +279,11 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
     const districtMenuRef = React.useRef<HTMLDivElement>(null);
     const districtColorSwatchRef = React.useRef<HTMLDivElement>(null);
 
+    const [gamePanelOrigin, setGamePanelOrigin] = React.useState<PanelOrigin>(getGamePanelOrigin);
+    const savedPanelPosition = panelPositionSet ? { left: panelPositionX, top: panelPositionY } : null;
+    const savePanelPosition = React.useCallback((left: number, top: number) => {
+        trigger(CHANNEL, "SetPanelPosition", `${Math.round(left)},${Math.round(top)}`);
+    }, []);
     const {
         holdSlot,
         holdProgress,
@@ -282,15 +296,13 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
         panelDragging,
         panelElementRef,
         handlePanelDragStart,
-    } = usePanelDrag(editorMode ? "editor" : "game");
+    } = usePanelDrag(editorMode ? "editor" : "game", gamePanelOrigin, editorMode ? null : savedPanelPosition, savePanelPosition);
 
     // Re-measured on open rather than once at module load, so the origin is right even when the
-    // launcher has shifted - another mod added a GameTopLeft button above it, or the UI rescaled.
-    const [gamePanelOrigin, setGamePanelOrigin] = React.useState<PanelOrigin>(getGamePanelOrigin);
-
+    // launcher has shifted, the selected host changed, or the UI rescaled.
     React.useLayoutEffect(() => {
         if (!editorMode) {
-            setGamePanelOrigin(getGamePanelOrigin());
+            setGamePanelOrigin(getGamePanelOrigin(panelElementRef.current?.getBoundingClientRect().width ?? 0));
         }
     }, [editorMode]);
     const { openAreasToolPanel } = useDistrictToolPanel();
@@ -678,7 +690,7 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
                         collapsed={panelCollapsed}
                         guidelinesExpanded={guidelinesExpanded}
                         handleToggleGuidelines={() => {
-                            setGuidelinesExpanded(!guidelinesExpanded);
+                            trigger(CHANNEL, "SetGuidelinesExpanded", !guidelinesExpanded);
                             setGuidelineLinesPickerOpen(false);
                             setGuidelinePreviewPickerOpen(false);
                             setGuidelineDashedPickerOpen(false);
@@ -774,7 +786,7 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
                                 useDarkerPanel={useDarkerPanel}
                                 areasExpanded={areasExpanded}
                                 handleToggleAreas={() => {
-                                    setAreasExpanded(!areasExpanded);
+                                    trigger(CHANNEL, "SetAreasExpanded", !areasExpanded);
                                     setDistrictMenuOpen(false);
                                     setDistrictPickerOpen(false);
                                 }}

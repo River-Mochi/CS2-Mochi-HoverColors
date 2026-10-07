@@ -10,7 +10,7 @@
   "HoverColors.UI.Tooltip.Draggable": "Arrastrable",
   "HoverColors.UI.Tooltip.CollapsePanel": "Colapsa a la fila de contorno.\nClic otra vez para expandir.",
   "HoverColors.UI.Tooltip.HoverToggle": "Resaltados activar/desactivar.\nDESACTIVADO oculta los normales.\nAl hacer clic aún verás tu color de contorno.\nÚtil para mover la cámara sin resaltados.",
-  "HoverColors.UI.Tooltip.Close": "Cerrar panel. Tecla predet.: J.\nIcono superior izquierdo activar/desactivar.",
+  "HoverColors.UI.Tooltip.Close": "Cerrar panel. Tecla predet.: J.\nAbrir o cerrar con el botón elegido.",
   "HoverColors.UI.Tooltip.ResetOutline": "Contorno, clic para volver al color del juego",
   "HoverColors.UI.Tooltip.OutlineSwatch": "CONTORNO - clic para color + opacidad.",
   "HoverColors.UI.Tooltip.ResetOutlineThickness": "Haz clic para restablecer el grosor",

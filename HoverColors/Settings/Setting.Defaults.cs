@@ -159,6 +159,12 @@ namespace HoverColors
             PanelStyle = kPanelStyleDark;
             PanelStyleInitialized = true;
             PanelCollapsed = false;
+            GuidelinesExpanded = true;
+            AreasExpanded = true;
+            PanelPositionSet = false;
+            PanelPositionX = 0;
+            PanelPositionY = 0;
+            LauncherLocation = kLauncherTopRight;
 
             // 100 = vanilla default. Lower = more transparent guidelines.
             GuidelineOpacityPercent = kDefaultGuidelineOpacityPercent;

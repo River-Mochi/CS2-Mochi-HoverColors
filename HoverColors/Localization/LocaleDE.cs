@@ -102,6 +102,12 @@ namespace HoverColors
                 { m_Settings.GetPanelStyleLocaleID("Dark"), "Dunkel (Vanilla)" },
                 { m_Settings.GetPanelStyleLocaleID("Glass"), "Glas (Benutzerdefiniert)" },
 
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.LauncherLocation)), "▪ Position der Mod-Schaltfläche" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.LauncherLocation)), "Wähle oben links, oben rechts oder das eingebaute Universal Mod Menu. Die Änderung wird nach einem Neustart des Spiels wirksam." },
+                { m_Settings.GetLauncherLocationLocaleID("TopLeft"), "Oben links" },
+                { m_Settings.GetLauncherLocationLocaleID("TopRight"), "Oben rechts" },
+                { m_Settings.GetLauncherLocationLocaleID("UniversalMenu"), "Universal Mod Menu" },
+
                 // Panel opacity
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)), "▪ Panel-Deckkraft" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)),

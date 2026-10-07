@@ -10,7 +10,7 @@
   "HoverColors.UI.Tooltip.Draggable": "Draggable",
   "HoverColors.UI.Tooltip.CollapsePanel": "Collapse panel to outline row only.\nClick again expands to full panel.",
   "HoverColors.UI.Tooltip.HoverToggle": "Highlights On/Off.\nOFF hides normal highlights.\nClicking an object still shows your Outline color.\nGood for panning the city quietly.",
-  "HoverColors.UI.Tooltip.Close": "Close panel. Default hotkey: J.\nGame top-left icon On/Off.",
+  "HoverColors.UI.Tooltip.Close": "Close panel. Default hotkey: J.\nUse the selected launcher button to open or close it.",
   "HoverColors.UI.Tooltip.ResetOutline": "Outline, click to reset to Game Default color",
   "HoverColors.UI.Tooltip.OutlineSwatch": "OUTLINE - click for color + opacity.",
   "HoverColors.UI.Tooltip.ResetOutlineThickness": "Click to reset outline Thickness to game default",

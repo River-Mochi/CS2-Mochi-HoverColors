@@ -76,6 +76,12 @@ export const guidelineOpacity$ = bindValue<number>(CHANNEL, "GuidelineOpacityPer
 export const panelOpen$ = bindValue<boolean>(CHANNEL, "PanelOpen", false);
 export const panelTooltipsEnabled$ = bindValue<boolean>(CHANNEL, "PanelTooltipsEnabled", true);
 export const panelCollapsed$ = bindValue<boolean>(CHANNEL, "PanelCollapsed", false);
+export const guidelinesExpanded$ = bindValue<boolean>(CHANNEL, "GuidelinesExpanded", true);
+export const areasExpanded$ = bindValue<boolean>(CHANNEL, "AreasExpanded", true);
+export const panelPositionSet$ = bindValue<boolean>(CHANNEL, "PanelPositionSet", false);
+export const panelPositionX$ = bindValue<number>(CHANNEL, "PanelPositionX", 0);
+export const panelPositionY$ = bindValue<number>(CHANNEL, "PanelPositionY", 0);
+export const launcherLocation$ = bindValue<number>(CHANNEL, "LauncherLocation", 1);
 export const hoverHighlightsSuppressed$ = bindValue<boolean>(CHANNEL, "HoverHighlightsSuppressed", false);
 
 // Defaults to true so a fresh load never flashes the Standard glass panel before the real

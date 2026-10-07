@@ -10,7 +10,7 @@
   "HoverColors.UI.Tooltip.Draggable": "ドラッグ可",
   "HoverColors.UI.Tooltip.CollapsePanel": "アウトライン行だけに折りたたみ。\n再クリックで全表示。",
   "HoverColors.UI.Tooltip.HoverToggle": "ハイライト ON/OFF。\nOFFで通常のハイライトを非表示。\nオブジェクトをクリックするとアウトライン色は表示。\n街を静かに見回す時に便利。",
-  "HoverColors.UI.Tooltip.Close": "パネルを閉じる。既定キー: J。\n左上アイコンでON/OFF。",
+  "HoverColors.UI.Tooltip.Close": "パネルを閉じる。既定キー: J。\n選択したボタンで開閉できます。",
   "HoverColors.UI.Tooltip.ResetOutline": "アウトライン。クリックでゲーム既定色に戻す",
   "HoverColors.UI.Tooltip.OutlineSwatch": "アウトライン - クリックで色 + 不透明度。",
   "HoverColors.UI.Tooltip.ResetOutlineThickness": "クリックして輪郭の太さをリセット",

@@ -10,7 +10,7 @@
   "HoverColors.UI.Tooltip.Draggable": "Przeciągalne",
   "HoverColors.UI.Tooltip.CollapsePanel": "Zwiń do wiersza obrysu.\nKliknij ponownie, aby rozwinąć.",
   "HoverColors.UI.Tooltip.HoverToggle": "Podświetlenia wł./wył.\nWYŁ. ukrywa zwykłe podświetlenia.\nKliknięcie obiektu nadal pokazuje kolor obrysu.\nDobre do spokojnego przesuwania kamery.",
-  "HoverColors.UI.Tooltip.Close": "Zamknij panel. Domyślny skrót: J.\nIkona gry u góry po lewej wł./wył.",
+  "HoverColors.UI.Tooltip.Close": "Zamknij panel. Domyślny skrót: J.\nOtwórz lub zamknij wybranym przyciskiem.",
   "HoverColors.UI.Tooltip.ResetOutline": "Obrys, kliknij aby przywrócić kolor gry",
   "HoverColors.UI.Tooltip.OutlineSwatch": "OBRYS - klik: kolor + krycie.",
   "HoverColors.UI.Tooltip.ResetOutlineThickness": "Kliknij, aby zresetować grubość obrysu",
