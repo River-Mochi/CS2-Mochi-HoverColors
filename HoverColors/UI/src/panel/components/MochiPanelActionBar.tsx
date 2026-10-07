@@ -14,6 +14,7 @@ import { Button } from "cs2/ui";
 import { Color } from "cs2/bindings";
 import { SideTooltip } from "../tooltip/SideTooltip";
 import { MochiSlider } from "./MochiSlider";
+import { PanelSectionToggle } from "./MochiPanelPieces";
 import { compactSwatchStyle, holdBarStyle } from "../helpers/MochiPanelColorUtils";
 import { useMochiPanelText } from "../hooks/useMochiPanelText";
 import lotToolIconSrc from "../../../images/LotTool03.svg";
@@ -33,6 +34,8 @@ interface MochiPanelActionBarProps {
     ColorField: ColorFieldComponent;
     focusDisabled: any;
     useDarkerPanel: boolean;
+    areasExpanded: boolean;
+    handleToggleAreas: () => void;
     surfaceBorderThicknessScale: number;
     handleSurfaceBorderThicknessChange: (value: number) => void;
     handleResetSurfaceBorderThickness: () => void;
@@ -71,6 +74,8 @@ export const MochiPanelActionBar = ({
     ColorField,
     focusDisabled,
     useDarkerPanel,
+    areasExpanded,
+    handleToggleAreas,
     surfaceBorderThicknessScale,
     handleSurfaceBorderThicknessChange,
     handleResetSurfaceBorderThickness,
@@ -104,6 +109,9 @@ export const MochiPanelActionBar = ({
 
     return (
         <div className={styles.actions}>
+            <PanelSectionToggle label={text.sectionAreas} expanded={areasExpanded} onToggle={handleToggleAreas} focusDisabled={focusDisabled} />
+            {areasExpanded && (
+                <>
             <div className={styles.surfaceControlsRow}>
                 <SideTooltip tooltip={tt(text.tooltipResetSurfaceBorderThickness)} side="left">
                     <Button
@@ -118,17 +126,19 @@ export const MochiPanelActionBar = ({
 
                 <SideTooltip tooltip={tt(text.tooltipSurfaceBorderThickness)} side="right">
                     <div className={styles.surfaceThicknessControl}>
+                        <div className={styles.surfaceThicknessTrack}>
+                            <MochiSlider
+                                focusKey={focusDisabled}
+                                className={styles.surfaceThicknessSlider}
+                                value={surfaceBorderThicknessScale}
+                                start={0.1}
+                                end={1}
+                                gamepadStep={0.1}
+                                onChange={handleSurfaceBorderThicknessChange}
+                            />
+                            <span className={styles.surfaceThicknessValue}>{surfaceBorderThicknessScale.toFixed(1)}</span>
+                        </div>
                         <span className={styles.surfaceThicknessLabel}>{text.labelSurfaceBorder}</span>
-                        <MochiSlider
-                            focusKey={focusDisabled}
-                            className={styles.surfaceThicknessSlider}
-                            value={surfaceBorderThicknessScale}
-                            start={0.1}
-                            end={1}
-                            gamepadStep={0.1}
-                            onChange={handleSurfaceBorderThicknessChange}
-                        />
-                        <span className={styles.surfaceThicknessValue}>{surfaceBorderThicknessScale.toFixed(1)}</span>
                     </div>
                 </SideTooltip>
 
@@ -240,6 +250,8 @@ export const MochiPanelActionBar = ({
                         </SideTooltip>
                     </div>
                 </div>
+            )}
+                </>
             )}
         </div>
     );

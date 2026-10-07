@@ -1,5 +1,7 @@
 {
   "HoverColors.UI.Title": "Hover Colors",
+  "HoverColors.UI.Section.Guidelines": "Guidelines",
+  "HoverColors.UI.Section.Areas": "Areas",
   "HoverColors.UI.TopLeft.Tooltip": "Couleurs au survol - surbrillance + opacité",
   "HoverColors.UI.Aria.ClosePanel": "Fermer le panneau",
   "HoverColors.UI.Tooltip.Info": "Désactivez les infobulles dans Options.",

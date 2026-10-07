@@ -1,5 +1,7 @@
 {
   "HoverColors.UI.Title": "Hover Colors",
+  "HoverColors.UI.Section.Guidelines": "Guidelines",
+  "HoverColors.UI.Section.Areas": "Areas",
   "HoverColors.UI.TopLeft.Tooltip": "Cores ao passar - realce + opacidade",
   "HoverColors.UI.Aria.ClosePanel": "Fechar painel",
   "HoverColors.UI.Tooltip.Info": "Desliga as dicas no menu Opções.",

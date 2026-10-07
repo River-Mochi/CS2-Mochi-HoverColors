@@ -1,5 +1,7 @@
 {
   "HoverColors.UI.Title": "Hover Colors",
+  "HoverColors.UI.Section.Guidelines": "Guidelines",
+  "HoverColors.UI.Section.Areas": "Areas",
   "HoverColors.UI.TopLeft.Tooltip": "Üzerine gelme renkleri - vurgu + opaklık",
   "HoverColors.UI.Aria.ClosePanel": "Paneli kapat",
   "HoverColors.UI.Tooltip.Info": "İpuçlarını Seçenekler menüsünden kapat.",

@@ -1,5 +1,7 @@
 {
   "HoverColors.UI.Title": "Hover Colors",
+  "HoverColors.UI.Section.Guidelines": "Guidelines",
+  "HoverColors.UI.Section.Areas": "Areas",
   "HoverColors.UI.TopLeft.Tooltip": "Hover Colors - highlights + opacity",
   "HoverColors.UI.Aria.ClosePanel": "Close panel",
   "HoverColors.UI.Tooltip.Info": "See Options menu to turn off tooltips.",

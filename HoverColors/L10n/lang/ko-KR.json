@@ -1,5 +1,7 @@
 {
   "HoverColors.UI.Title": "Hover Colors",
+  "HoverColors.UI.Section.Guidelines": "Guidelines",
+  "HoverColors.UI.Section.Areas": "Areas",
   "HoverColors.UI.TopLeft.Tooltip": "호버 색상 - 강조 + 불투명도",
   "HoverColors.UI.Aria.ClosePanel": "패널 닫기",
   "HoverColors.UI.Tooltip.Info": "옵션 메뉴에서 툴팁을 끌 수 있습니다.",

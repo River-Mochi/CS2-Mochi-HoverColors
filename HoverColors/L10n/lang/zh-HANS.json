@@ -1,5 +1,7 @@
 {
   "HoverColors.UI.Title": "Hover Colors",
+  "HoverColors.UI.Section.Guidelines": "Guidelines",
+  "HoverColors.UI.Section.Areas": "Areas",
   "HoverColors.UI.TopLeft.Tooltip": "悬停颜色 - 高亮 + 不透明度",
   "HoverColors.UI.Aria.ClosePanel": "关闭面板",
   "HoverColors.UI.Tooltip.Info": "可在选项菜单关闭提示。",

@@ -14,7 +14,7 @@ import { Button } from "cs2/ui";
 import { Color } from "cs2/bindings";
 import { SideTooltip } from "../tooltip/SideTooltip";
 import { MochiSlider } from "./MochiSlider";
-import { PresetSlotButton } from "./MochiPanelPieces";
+import { PanelSectionToggle, PresetSlotButton } from "./MochiPanelPieces";
 import {
   compactSwatchStyle,
   holdBarStyle,
@@ -42,6 +42,8 @@ interface MochiPanelControlRowsProps {
   numberFieldClass: string;
   useDarkerPanel: boolean;
   collapsed: boolean;
+  guidelinesExpanded: boolean;
+  handleToggleGuidelines: () => void;
 
   outline: Color;
   ownerColor: Color;
@@ -137,6 +139,8 @@ export const MochiPanelControlRows = ({
   numberFieldClass,
   useDarkerPanel,
   collapsed,
+  guidelinesExpanded,
+  handleToggleGuidelines,
   outline,
   ownerColor,
   fillA,
@@ -516,6 +520,15 @@ export const MochiPanelControlRows = ({
             </div>
           </div>
 
+          <PanelSectionToggle
+            label={text.sectionGuidelines}
+            expanded={guidelinesExpanded}
+            onToggle={handleToggleGuidelines}
+            focusDisabled={focusDisabled}
+          />
+
+          {guidelinesExpanded && (
+          <>
           <div className={`${styles.controlRow} ${styles.guidelinesRow}`}>
             <SideTooltip tooltip={tt(text.tooltipResetGuidelines)} side="left">
               <Button
@@ -711,6 +724,8 @@ export const MochiPanelControlRows = ({
               </div>
             </SideTooltip>
           </div>
+          </>
+          )}
         </>
       )}
     </div>

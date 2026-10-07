@@ -1,5 +1,7 @@
 {
   "HoverColors.UI.Title": "Hover Colors",
+  "HoverColors.UI.Section.Guidelines": "Guidelines",
+  "HoverColors.UI.Section.Areas": "Areas",
   "HoverColors.UI.TopLeft.Tooltip": "สีเมื่อชี้เมาส์ - ไฮไลต์ + ความทึบ",
   "HoverColors.UI.Aria.ClosePanel": "ปิดแผง",
   "HoverColors.UI.Tooltip.Info": "ปิดทูลทิปได้ในเมนูตัวเลือก",

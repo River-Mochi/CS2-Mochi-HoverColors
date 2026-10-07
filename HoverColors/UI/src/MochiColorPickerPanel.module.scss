@@ -459,28 +459,46 @@
     margin-top: 2.5rem;
 }
 
-// Divider above the Guidelines row. Selected by class, not child index, so inserting rows above it
-// cannot move the line onto the wrong row. Kept at the old selector's weight so the
-// `.controlRow + .controlRow` margin still loses to it.
-.body > .controlRow.guidelinesRow {
-    margin-top: 5rem;
-    padding-top: 5rem;
-    padding-bottom: 4rem;
+.sectionToggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    box-sizing: border-box;
+    min-height: 20rem;
+    height: 20rem;
+    padding: 0 3rem !important;
+    margin-top: 3rem;
+    border: 0 !important;
+    border-top: 1rem solid rgba(254, 255, 255, 0.16) !important;
+    border-radius: 0;
+    background: transparent !important;
+    box-shadow: none !important;
+    color: rgba(254, 255, 255, 0.88) !important;
+    font-size: 10rem;
+    font-weight: 600;
+    cursor: pointer;
 }
 
-.body > .controlRow.guidelinesRow::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: -8rem;
-    right: -8rem;
-    height: 1rem;
-    background-color: rgba(254, 255, 255, 0.16);
+.sectionToggle:hover {
+    color: #ffffff !important;
+    background-color: rgba(108, 136, 150, 0.20) !important;
+}
+
+.sectionToggleArrow {
+    width: 14rem;
+    height: 14rem;
+    opacity: 0.82;
+    filter: brightness(0) invert(1);
     pointer-events: none;
 }
 
-.panelDarker .body > .controlRow.guidelinesRow::before {
-    background-color: rgba(254, 255, 255, 0.20);
+.panelDarker .sectionToggle {
+    border-top-color: rgba(254, 255, 255, 0.20) !important;
+}
+
+.guidelinesRow {
+    padding-bottom: 4rem;
 }
 
 .panelDarker .actions {
@@ -523,7 +541,7 @@
 }
 
 .outlineRight > * + * {
-  margin-left: 1rem;
+  margin-left: 0;
 }
 
 // Panel background opacity, driven by the Options slider (30-100 step 5).

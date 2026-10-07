@@ -1,5 +1,7 @@
 {
   "HoverColors.UI.Title": "Hover Colors",
+  "HoverColors.UI.Section.Guidelines": "Guidelines",
+  "HoverColors.UI.Section.Areas": "Areas",
   "HoverColors.UI.TopLeft.Tooltip": "Màu khi rê chuột - tô sáng + độ đục",
   "HoverColors.UI.Aria.ClosePanel": "Đóng bảng",
   "HoverColors.UI.Tooltip.Info": "Tắt mẹo trong menu Tùy chọn.",

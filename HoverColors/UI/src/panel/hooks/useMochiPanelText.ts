@@ -23,6 +23,8 @@ export const useMochiPanelText = () => {
         return {
             ariaClosePanel: l("HoverColors.UI.Aria.ClosePanel"),
             title: l("HoverColors.UI.Title"),
+            sectionGuidelines: l("HoverColors.UI.Section.Guidelines"),
+            sectionAreas: l("HoverColors.UI.Section.Areas"),
             tooltipClose: l("HoverColors.UI.Tooltip.Close"),
             tooltipCollapse: l("HoverColors.UI.Tooltip.CollapsePanel"),
             tooltipDraggable: l("HoverColors.UI.Tooltip.Draggable"),

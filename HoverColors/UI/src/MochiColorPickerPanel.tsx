@@ -237,6 +237,8 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
     const [ownerPickerOpen, setOwnerPickerOpen] = React.useState(false);
     const [districtPickerOpen, setDistrictPickerOpen] = React.useState(false);
     const [districtMenuOpen, setDistrictMenuOpen] = React.useState(false);
+    const [guidelinesExpanded, setGuidelinesExpanded] = React.useState(true);
+    const [areasExpanded, setAreasExpanded] = React.useState(true);
     const [guidelineLinesPickerOpen, setGuidelineLinesPickerOpen] = React.useState(false);
     const [guidelinePreviewPickerOpen, setGuidelinePreviewPickerOpen] = React.useState(false);
     const [guidelineDashedPickerOpen, setGuidelineDashedPickerOpen] = React.useState(false);
@@ -660,6 +662,13 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
                         numberFieldClass={numberFieldClass}
                         useDarkerPanel={useDarkerPanel}
                         collapsed={panelCollapsed}
+                        guidelinesExpanded={guidelinesExpanded}
+                        handleToggleGuidelines={() => {
+                            setGuidelinesExpanded(!guidelinesExpanded);
+                            setGuidelineLinesPickerOpen(false);
+                            setGuidelinePreviewPickerOpen(false);
+                            setGuidelineDashedPickerOpen(false);
+                        }}
                         outline={outline}
                         ownerColor={ownerColor}
                         fillA={fillA}
@@ -747,6 +756,12 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
                                 ColorField={ColorField}
                                 focusDisabled={focusDisabled}
                                 useDarkerPanel={useDarkerPanel}
+                                areasExpanded={areasExpanded}
+                                handleToggleAreas={() => {
+                                    setAreasExpanded(!areasExpanded);
+                                    setDistrictMenuOpen(false);
+                                    setDistrictPickerOpen(false);
+                                }}
                                 surfaceBorderThicknessScale={surfaceBorderThicknessScale}
                                 handleSurfaceBorderThicknessChange={handleSurfaceBorderThicknessChange}
                                 handleResetSurfaceBorderThickness={handleResetSurfaceBorderThickness}
