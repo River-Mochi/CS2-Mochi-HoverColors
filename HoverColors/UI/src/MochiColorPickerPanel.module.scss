@@ -30,13 +30,13 @@
     pointer-events: auto;
 }
 
-// Nothing to declare: the game panel's position is the inline left/top measured from the launcher.
+// Nothing to declare: the game panel's position is the inline left/top measured from the selected launcher.
 // The rule exists so the class survives into the CSS-module exports, same as .panelDarker.
 .panelAnchorGame {
     margin-top: 0;
 }
 
-// Editor has no GameTopLeft launcher to measure, so the same draggable panel starts at a fixed
+// Editor has no city launcher to measure, so the same draggable panel starts at a fixed
 // viewport position instead. position: fixed rather than absolute, because the Editor root is not a
 // positioned ancestor.
 //
@@ -170,7 +170,7 @@
 // Padding must stay symmetric: the strip is now visible, so any top/bottom mismatch shows up as the
 // title and its buttons riding low. Everything sizes in rem + border-box so it holds at any UI scale.
 .titleBar {
-    min-height: 20rem;
+    min-height: 34rem;
     display: flex;
     align-items: center;
     box-sizing: border-box;
@@ -180,7 +180,7 @@
     margin-right: 0;
     margin-bottom: 0;
     margin-left: 0;
-    padding: 4.5rem 6rem 4.5rem 6rem;
+    padding: 4rem 6rem;
     border-top-left-radius: 12rem;
     border-top-right-radius: 12rem;
     border-bottom-left-radius: 0;
@@ -231,12 +231,12 @@
 .titleDragHandle {
     flex: 1 1 auto;
     min-width: 0;
-    min-height: 24rem;
+    min-height: 26rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0 10rem;
-    margin-left: 6rem;
+    padding: 0 6rem;
+    margin-left: 4rem;
     border-radius: 7rem;
     overflow: hidden;
     cursor: move;
@@ -263,10 +263,10 @@
 .eyeButton,
 .collapseButton,
 .closeButton {
-  flex: 0 0 24rem;
-  width: 24rem;
-  height: 24rem;
-  min-width: 24rem;
+  flex: 0 0 26rem;
+  width: 26rem;
+  height: 26rem;
+  min-width: 26rem;
   margin-left: 6rem;
   padding: 0 !important;
   overflow: visible;
@@ -286,8 +286,8 @@
 }
 
 .closeButton .closeIcon {
-    width: 14rem;
-    height: 14rem;
+    width: 16rem;
+    height: 16rem;
     opacity: 0.70;
 }
 
@@ -297,8 +297,8 @@
 }
 
 .collapseButton .collapseIcon {
-    width: 18rem;
-    height: 18rem;
+    width: 20rem;
+    height: 20rem;
     opacity: 0.92;
 }
 
@@ -309,8 +309,8 @@
 
 // Deliberately the largest header glyph: it is the one state indicator players scan for.
 .eyeButton .eyeIcon {
-  width: 22rem;
-  height: 22rem;
+  width: 23rem;
+  height: 23rem;
   opacity: 0.95;
 }
 .eyeButton:hover .eyeIcon {
@@ -425,6 +425,35 @@
     transform: none;
 }
 
+.angleTooltipButton {
+    margin-left: 0;
+}
+
+.angleTooltipIcon {
+    width: 24rem;
+    height: 24rem;
+    display: block;
+    pointer-events: none;
+}
+
+.angleTooltipButtonOff,
+.panelDarker .angleTooltipButtonOff {
+    background-color: rgba(130, 91, 22, 0.48) !important;
+    border-color: rgba(255, 213, 77, 0.92) !important;
+    box-shadow: inset 0 0 0 1rem rgba(255, 213, 77, 0.18) !important;
+}
+
+.angleTooltipButtonOff .angleTooltipIcon {
+    opacity: 1;
+    filter: brightness(0) saturate(100%) invert(87%) sepia(61%) saturate(842%) hue-rotate(341deg) brightness(103%);
+}
+
+.angleTooltipButtonOff:hover,
+.panelDarker .angleTooltipButtonOff:hover {
+    border-color: #ffe28a !important;
+    background-color: rgba(160, 112, 27, 0.56) !important;
+}
+
 .body {
     display: flex;
     flex-direction: column;
@@ -459,28 +488,61 @@
     margin-top: 2.5rem;
 }
 
-// Divider above the Guidelines row. Selected by class, not child index, so inserting rows above it
-// cannot move the line onto the wrong row. Kept at the old selector's weight so the
-// `.controlRow + .controlRow` margin still loses to it.
-.body > .controlRow.guidelinesRow {
-    margin-top: 5rem;
-    padding-top: 5rem;
-    padding-bottom: 4rem;
+.highlightsHeading {
+    display: flex;
+    align-items: center;
+    height: 16rem;
+    padding-left: 3rem;
+    margin-bottom: 2rem;
+    color: rgba(254, 255, 255, 0.88);
+    font-size: 10rem;
+    font-weight: 600;
 }
 
-.body > .controlRow.guidelinesRow::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: -8rem;
-    right: -8rem;
-    height: 1rem;
-    background-color: rgba(254, 255, 255, 0.16);
+.sectionToggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    box-sizing: border-box;
+    min-height: 20rem;
+    height: 20rem;
+    padding: 0 3rem !important;
+    margin-top: 3rem;
+    border: 0 !important;
+    border-top: 1rem solid rgba(254, 255, 255, 0.16) !important;
+    border-radius: 0;
+    background: transparent !important;
+    box-shadow: none !important;
+    color: rgba(254, 255, 255, 0.88) !important;
+    font-size: 10rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.sectionToggle:hover {
+    color: #ffffff !important;
+    background-color: rgba(108, 136, 150, 0.20) !important;
+}
+
+.sectionToggle:hover .sectionToggleArrow {
+    opacity: 1;
+}
+
+.sectionToggleArrow {
+    width: 14rem;
+    height: 14rem;
+    opacity: 0.82;
+    filter: brightness(0) invert(1);
     pointer-events: none;
 }
 
-.panelDarker .body > .controlRow.guidelinesRow::before {
-    background-color: rgba(254, 255, 255, 0.20);
+.panelDarker .sectionToggle {
+    border-top-color: rgba(254, 255, 255, 0.20) !important;
+}
+
+.guidelinesRow {
+    padding-bottom: 4rem;
 }
 
 .panelDarker .actions {
@@ -523,7 +585,7 @@
 }
 
 .outlineRight > * + * {
-  margin-left: 4rem;
+  margin-left: 0;
 }
 
 // Panel background opacity, driven by the Options slider (30-100 step 5).

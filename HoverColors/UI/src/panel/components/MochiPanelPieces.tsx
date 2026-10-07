@@ -15,6 +15,30 @@ import { Color } from "cs2/bindings";
 import { SideTooltip, type SideTooltipSide } from "../tooltip/SideTooltip";
 import styles from "../../MochiColorPickerPanel.module.scss";
 
+type PanelSectionToggleProps = {
+    label: string;
+    expanded: boolean;
+    onToggle: () => void;
+    focusDisabled: any;
+};
+
+export const PanelSectionToggle = ({ label, expanded, onToggle, focusDisabled }: PanelSectionToggleProps) => (
+    <Button
+        className={styles.sectionToggle}
+        variant="icon"
+        onSelect={onToggle}
+        focusKey={focusDisabled}
+        aria-expanded={expanded}
+    >
+        <span>{label}</span>
+        <img
+            src={expanded ? "Media/Glyphs/ThickStrokeArrowDown.svg" : "Media/Glyphs/ThickStrokeArrowRight.svg"}
+            className={styles.sectionToggleArrow}
+            alt=""
+        />
+    </Button>
+);
+
 type PresetSlotButtonProps = {
     slot: 1 | 2;
     color: Color;

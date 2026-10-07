@@ -28,16 +28,10 @@ namespace HoverColors
             IList<IDictionaryEntryError> errors,
             Dictionary<string, int> indexCounts)
         {
-            string title = Mod.ModName;
-            if (!string.IsNullOrEmpty(Mod.ModVersion))
-            {
-                title += " (" + Mod.ModVersion + ")";
-            }
-
             return new Dictionary<string, string>
             {
                 // Mod title in the left rail of the Options menu.
-                { m_Settings.GetSettingsLocaleID(), title },
+                { m_Settings.GetSettingsLocaleID(), Mod.ModName },
 
                 // Tabs
                 { m_Settings.GetOptionTabLocaleID(HoverColorsSettings.Actions), "การทำงาน" },
@@ -108,6 +102,12 @@ namespace HoverColors
                 { m_Settings.GetPanelStyleLocaleID("Dark"), "มืด (แบบเกม)" },
                 { m_Settings.GetPanelStyleLocaleID("Glass"), "กระจก (กำหนดเอง)" },
 
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.LauncherLocation)), "▪ ตำแหน่งปุ่มแผง" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.LauncherLocation)), "เลือกมุมซ้ายบน มุมขวาบน หรือ Universal Mod Menu ของเกม รีสตาร์ตเกมเพื่อย้ายปุ่ม" },
+                { m_Settings.GetLauncherLocationLocaleID("TopLeft"), "ซ้ายบน" },
+                { m_Settings.GetLauncherLocationLocaleID("TopRight"), "ขวาบน" },
+                { m_Settings.GetLauncherLocationLocaleID("UniversalMenu"), "Universal Mod Menu" },
+
                 // Panel opacity
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)), "▪ ความทึบของแผง" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)),
@@ -167,10 +167,10 @@ namespace HoverColors
                     "ค่าเริ่มต้นไม่ผูกปุ่ม เพื่อเลี่ยงปุ่มชนกัน" },
                 { m_Settings.GetBindingKeyLocaleID(Mod.kToggleHighlightsActionName), "ตาแบบด่วน เปิด/ปิด" },
 
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleSurfaceToolAreasBinding)), "พรีวิวเครื่องมือ Surface เปิด/ปิด" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ToggleSurfaceToolAreasBinding)),
-                    "ปุ่มลัดเพื่อ <ซ่อนหรือแสดง> เส้นขอบ Surface ที่ใช้งานอยู่ตอนวางพื้นผิว" },
-                { m_Settings.GetBindingKeyLocaleID(Mod.kToggleSurfaceToolAreasActionName), "เลเยอร์พรีวิว Surface เปิด/ปิด" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleRoadAngleTooltipsBinding)), "แสดง/ซ่อนกรอบมุมถนนและทางเดิน" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ToggleRoadAngleTooltipsBinding)),
+                    "ปุ่มลัดสลับกรอบมุมและวาง/ย้อนกลับเมื่อวาดถนนและทางเดิน ค่าใช้จ่าย ความยาว และความชันยังแสดงอยู่" },
+                { m_Settings.GetBindingKeyLocaleID(Mod.kToggleRoadAngleTooltipsActionName), "มุมและคำแนะนำเมาส์" },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.TogglePresetBinding)), "สลับพรีเซ็ต 1+2" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.TogglePresetBinding)),

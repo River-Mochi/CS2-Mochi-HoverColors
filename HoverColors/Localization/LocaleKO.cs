@@ -28,16 +28,10 @@ namespace HoverColors
             IList<IDictionaryEntryError> errors,
             Dictionary<string, int> indexCounts)
         {
-            string title = Mod.ModName;
-            if (!string.IsNullOrEmpty(Mod.ModVersion))
-            {
-                title += " (" + Mod.ModVersion + ")";
-            }
-
             return new Dictionary<string, string>
             {
                 // Mod title in the left rail of the Options menu.
-                { m_Settings.GetSettingsLocaleID(), title },
+                { m_Settings.GetSettingsLocaleID(), Mod.ModName },
 
                 // Tabs
                 { m_Settings.GetOptionTabLocaleID(HoverColorsSettings.Actions), "동작" },
@@ -108,6 +102,12 @@ namespace HoverColors
                 { m_Settings.GetPanelStyleLocaleID("Dark"), "어두움 (바닐라)" },
                 { m_Settings.GetPanelStyleLocaleID("Glass"), "유리 (사용자 지정)" },
 
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.LauncherLocation)), "▪ 패널 버튼 위치" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.LauncherLocation)), "왼쪽 위, 오른쪽 위 또는 게임의 Universal Mod Menu를 선택합니다. 버튼 위치는 게임을 다시 시작한 후 바뀝니다." },
+                { m_Settings.GetLauncherLocationLocaleID("TopLeft"), "왼쪽 위" },
+                { m_Settings.GetLauncherLocationLocaleID("TopRight"), "오른쪽 위" },
+                { m_Settings.GetLauncherLocationLocaleID("UniversalMenu"), "Universal Mod Menu" },
+
                 // Panel opacity
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)), "▪ 패널 불투명도" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)),
@@ -167,10 +167,10 @@ namespace HoverColors
                     "키 충돌 방지를 위해 기본 미지정입니다." },
                 { m_Settings.GetBindingKeyLocaleID(Mod.kToggleHighlightsActionName), "빠른 눈 아이콘 On/Off" },
 
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleSurfaceToolAreasBinding)), "Surface 도구 미리보기 켜기/끄기" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ToggleSurfaceToolAreasBinding)),
-                    "표면 배치 중 활성 Surface 경계 미리보기 선을 <숨기거나 표시>하는 단축키." },
-                { m_Settings.GetBindingKeyLocaleID(Mod.kToggleSurfaceToolAreasActionName), "Surface 미리보기 레이어 켜기/끄기" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleRoadAngleTooltipsBinding)), "도로와 길 각도 표시 켜기/끄기" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ToggleRoadAngleTooltipsBinding)),
+                    "도로와 길을 그릴 때 각도 및 배치/실행 취소 표시를 전환합니다. 비용, 길이, 경사는 계속 표시됩니다." },
+                { m_Settings.GetBindingKeyLocaleID(Mod.kToggleRoadAngleTooltipsActionName), "각도 및 마우스 안내 전환" },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.TogglePresetBinding)), "프리셋 1+2 전환" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.TogglePresetBinding)),

@@ -28,16 +28,10 @@ namespace HoverColors
             IList<IDictionaryEntryError> errors,
             Dictionary<string, int> indexCounts)
         {
-            string title = Mod.ModName;
-            if (!string.IsNullOrEmpty(Mod.ModVersion))
-            {
-                title += " (" + Mod.ModVersion + ")";
-            }
-
             return new Dictionary<string, string>
             {
                 // Mod title in the left rail of the Options menu.
-                { m_Settings.GetSettingsLocaleID(), title },
+                { m_Settings.GetSettingsLocaleID(), Mod.ModName },
 
                 // Tabs
                 { m_Settings.GetOptionTabLocaleID(HoverColorsSettings.Actions), "Eylemler" },
@@ -108,6 +102,12 @@ namespace HoverColors
                 { m_Settings.GetPanelStyleLocaleID("Dark"), "Koyu (Vanilla)" },
                 { m_Settings.GetPanelStyleLocaleID("Glass"), "Cam (Özel)" },
 
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.LauncherLocation)), "▪ Panel düğmesinin konumu" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.LauncherLocation)), "Sol üst, sağ üst veya oyunun Universal Mod Menu seçeneğini seçin. Düğmeyi taşımak için oyunu yeniden başlatın." },
+                { m_Settings.GetLauncherLocationLocaleID("TopLeft"), "Sol üst" },
+                { m_Settings.GetLauncherLocationLocaleID("TopRight"), "Sağ üst" },
+                { m_Settings.GetLauncherLocationLocaleID("UniversalMenu"), "Universal Mod Menu" },
+
                 // Panel opacity
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)), "▪ Panel opaklığı" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)),
@@ -167,10 +167,10 @@ namespace HoverColors
                     "Tuş çakışmalarını önlemek için varsayılan olarak atanmamıştır." },
                 { m_Settings.GetBindingKeyLocaleID(Mod.kToggleHighlightsActionName), "Hızlı göz Aç/Kapat" },
 
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleSurfaceToolAreasBinding)), "Surface aracı önizlemeleri aç/kapat" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ToggleSurfaceToolAreasBinding)),
-                    "Yüzey yerleştirirken aktif Surface sınır önizleme çizgilerini <gizle veya göster> kısayolu." },
-                { m_Settings.GetBindingKeyLocaleID(Mod.kToggleSurfaceToolAreasActionName), "Surface önizleme katmanı aç/kapat" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleRoadAngleTooltipsBinding)), "Yol ve patika açı kutuları aç/kapat" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ToggleRoadAngleTooltipsBinding)),
+                    "Yol ve patika çizerken açı ile Yerleştir/Geri Al kutularını değiştirir. Maliyet, uzunluk ve eğim görünür kalır." },
+                { m_Settings.GetBindingKeyLocaleID(Mod.kToggleRoadAngleTooltipsActionName), "Açı ve fare ipuçları" },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.TogglePresetBinding)), "Preset 1+2 değiştir" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.TogglePresetBinding)),

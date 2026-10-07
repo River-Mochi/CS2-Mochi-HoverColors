@@ -9,13 +9,13 @@
 // File: UI/src/index.tsx
 // Purpose: Mod entry point registered with the cs2/modding registry.
 //   - Wires the VanillaComponentResolver so all vanilla components resolve once on load.
-//   - Appends city button to GameTopLeft and mounts the same panel in Editor.
+//   - Registers selectable city launcher locations and mounts the same panel in Editor.
 // webpack entry point; only add module-level side effects here.
 
 import { useValue } from "cs2/api";
 import { ModRegistrar } from "cs2/modding";
 import { MochiColorPickerPanel } from "./MochiColorPickerPanel";
-import { panelOpen$ } from "./panel/bindings/MochiPanelBindings";
+import { launcherLocation$, panelOpen$ } from "./panel/bindings/MochiPanelBindings";
 import { VanillaComponentResolver } from "./utils/vanilla/VanillaComponentResolver";
 import "./MochiColorPickerPanel.global.scss";
 
@@ -38,10 +38,13 @@ const EditorPanelEntry = () => {
 const register: ModRegistrar = (moduleRegistry) => {
   VanillaComponentResolver.setRegistry(moduleRegistry);
 
-  moduleRegistry.append(
-    "GameTopLeft",
-    ModIconButton
-  );
+  // The game's Universal Mod Menu opens whenever anything is registered in that hook,
+  // even when a component returns null. Register only the selected location at startup.
+  const requestedLocation = launcherLocation$.value;
+  const location = requestedLocation === 1 || requestedLocation === 2 ? requestedLocation : 0;
+  const launcherHost = location === 0 ? "GameTopLeft" : location === 2 ? "UniversalModMenu" : "GameTopRight";
+  const Launcher = () => <ModIconButton location={location} />;
+  moduleRegistry.append(launcherHost, Launcher);
 
   moduleRegistry.append(
     "Game",

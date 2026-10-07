@@ -28,16 +28,10 @@ namespace HoverColors
             IList<IDictionaryEntryError> errors,
             Dictionary<string, int> indexCounts)
         {
-            string title = Mod.ModName;
-            if (!string.IsNullOrEmpty(Mod.ModVersion))
-            {
-                title += " (" + Mod.ModVersion + ")";
-            }
-
             return new Dictionary<string, string>
             {
                 // Mod title in the left rail of the Options menu.
-                { m_Settings.GetSettingsLocaleID(), title },
+                { m_Settings.GetSettingsLocaleID(), Mod.ModName },
 
                 // Tabs
                 { m_Settings.GetOptionTabLocaleID(HoverColorsSettings.Actions), "Azioni" },
@@ -108,6 +102,12 @@ namespace HoverColors
                 { m_Settings.GetPanelStyleLocaleID("Dark"), "Scuro (Vanilla)" },
                 { m_Settings.GetPanelStyleLocaleID("Glass"), "Vetro (Personalizzato)" },
 
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.LauncherLocation)), "▪ Posizione del pulsante del pannello" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.LauncherLocation)), "Scegli in alto a sinistra, in alto a destra o Universal Mod Menu del gioco. Riavvia il gioco per spostare il pulsante." },
+                { m_Settings.GetLauncherLocationLocaleID("TopLeft"), "In alto a sinistra" },
+                { m_Settings.GetLauncherLocationLocaleID("TopRight"), "In alto a destra" },
+                { m_Settings.GetLauncherLocationLocaleID("UniversalMenu"), "Universal Mod Menu" },
+
                 // Panel opacity
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)), "▪ Opacità pannello" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)),
@@ -167,10 +167,10 @@ namespace HoverColors
                     "Nessun tasto assegnato di default per evitare conflitti." },
                 { m_Settings.GetBindingKeyLocaleID(Mod.kToggleHighlightsActionName), "Occhio rapido On/Off" },
 
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleSurfaceToolAreasBinding)), "Anteprime Surface On/Off" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ToggleSurfaceToolAreasBinding)),
-                    "Tasto rapido per <nascondere o mostrare> le linee limite Surface durante il piazzamento." },
-                { m_Settings.GetBindingKeyLocaleID(Mod.kToggleSurfaceToolAreasActionName), "Livello anteprima Surface On/Off" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleRoadAngleTooltipsBinding)), "Riquadri angolo strade e sentieri" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ToggleRoadAngleTooltipsBinding)),
+                    "Scorciatoia per mostrare o nascondere angoli e Posiziona/Annulla per strade e sentieri. Costo, lunghezza e pendenza restano visibili." },
+                { m_Settings.GetBindingKeyLocaleID(Mod.kToggleRoadAngleTooltipsActionName), "Angoli e suggerimenti mouse" },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.TogglePresetBinding)), "Alterna preset 1+2" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.TogglePresetBinding)),

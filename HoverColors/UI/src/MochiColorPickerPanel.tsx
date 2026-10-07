@@ -7,7 +7,7 @@
 // ================= </copyright> ======================
 
 // File: UI/src/MochiColorPickerPanel.tsx
-// Purpose: Compact in-city hover-color panel anchored under the GameTopLeft icon button.
+// Purpose: Compact in-city hover-color panel anchored under the selected launcher.
 // Layout: title bar + color control rows + bottom action bar.
 
 import React from "react";
@@ -35,6 +35,9 @@ import {
     guidelineDashedColorB$,
     guidelineDashedColorG$,
     guidelineDashedColorR$,
+    guidelineDashedThicknessScale$,
+    roadAngleTooltipsHidden$,
+    extractorBorderThicknessScale$,
     guidelineOpacity$,
     guidelinePreviewColorA$,
     guidelinePreviewColorB$,
@@ -50,6 +53,11 @@ import {
     ownerG$,
     ownerR$,
     panelCollapsed$,
+    guidelinesExpanded$,
+    areasExpanded$,
+    panelPositionSet$,
+    panelPositionX$,
+    panelPositionY$,
     panelOpacityPercent$,
     panelTooltipsEnabled$,
     preset1A$,
@@ -64,6 +72,7 @@ import {
     preset2R$,
     specializedIndustryAreasSuppressed$,
     surfaceToolAreasSuppressed$,
+    surfaceBorderThicknessScale$,
     useDarkerPanel$,
     vanillaOutlineActive$,
 } from "./panel/bindings/MochiPanelBindings";
@@ -98,8 +107,7 @@ type MochiColorPickerPanelProps = {
 
 type PanelOrigin = { left: number; top: number };
 
-// Used when the launcher cannot be measured. Deliberately the same corner the Editor panel opens in,
-// so a panel that lands here still looks placed rather than lost.
+// Used when the launcher cannot be measured. The fixed corner keeps the panel visible.
 const FALLBACK_ORIGIN: PanelOrigin = { left: 16, top: 64 };
 
 // Gap between the launcher button and the top of the panel, matching the old margin-top: 6rem.
@@ -111,7 +119,7 @@ const LAUNCHER_GAP_PX = 6;
 // runs. A 0x0 rect still means Gameface had nothing useful to report - a hidden or not-yet-laid-out
 // element reads that way - so that answer is rejected rather than trusted, and the panel falls back
 // to a fixed corner. Read only: nothing here mutates the DOM.
-const getGamePanelOrigin = (): PanelOrigin => {
+const getGamePanelOrigin = (panelWidth = 0): PanelOrigin => {
     if (typeof document === "undefined") {
         return FALLBACK_ORIGIN;
     }
@@ -126,7 +134,9 @@ const getGamePanelOrigin = (): PanelOrigin => {
         return FALLBACK_ORIGIN;
     }
 
-    return { left: rect.left, top: rect.bottom + LAUNCHER_GAP_PX };
+    const location = Number((launcher as HTMLElement).getAttribute("data-hc-launcher-location"));
+    const left = location === 0 ? rect.left : rect.right - panelWidth;
+    return { left: Math.max(0, left), top: rect.bottom + LAUNCHER_GAP_PX };
 };
 
 export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPanelProps) => {
@@ -168,6 +178,10 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
         a: boundFillA,
     };
     const boundOutlineThicknessScale = useValue(outlineThicknessScale$);
+    const boundSurfaceBorderThicknessScale = useValue(surfaceBorderThicknessScale$);
+    const boundExtractorBorderThicknessScale = useValue(extractorBorderThicknessScale$);
+    const boundGuidelineDashedThicknessScale = useValue(guidelineDashedThicknessScale$);
+    const roadAngleTooltipsHidden = useValue(roadAngleTooltipsHidden$);
     const boundGuideline = useValue(guidelineOpacity$);
     const boundGuidelineDashedColor: Color = {
         r: useValue(guidelineDashedColorR$),
@@ -190,6 +204,11 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
     const text = useMochiPanelText();
     const tooltipsEnabled = useValue(panelTooltipsEnabled$);
     const panelCollapsed = useValue(panelCollapsed$);
+    const guidelinesExpanded = useValue(guidelinesExpanded$);
+    const areasExpanded = useValue(areasExpanded$);
+    const panelPositionSet = useValue(panelPositionSet$);
+    const panelPositionX = useValue(panelPositionX$);
+    const panelPositionY = useValue(panelPositionY$);
     const hoverHighlightsSuppressed = useValue(hoverHighlightsSuppressed$);
 
     // FormattedParagraphs lets vanilla Tooltip render JSON \n as real line breaks.
@@ -212,6 +231,9 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
     const [fillA, setFillA] = React.useState<number>(boundFillA);
     const [fillColor, setFillColor] = React.useState<Color>(boundFill);
     const [outlineThicknessScale, setOutlineThicknessScale] = React.useState<number>(boundOutlineThicknessScale);
+    const [surfaceBorderThicknessScale, setSurfaceBorderThicknessScale] = React.useState<number>(boundSurfaceBorderThicknessScale);
+    const [extractorBorderThicknessScale, setExtractorBorderThicknessScale] = React.useState<number>(boundExtractorBorderThicknessScale);
+    const [guidelineDashedThicknessScale, setGuidelineDashedThicknessScale] = React.useState<number>(boundGuidelineDashedThicknessScale);
     const [districtColor, setDistrictColor] = React.useState<Color>(boundDistrict);
     const [guidelineLinesColor, setGuidelineLinesColor] = React.useState<Color>(boundGuidelineLinesColor);
     const [guidelinePreviewColor, setGuidelinePreviewColor] = React.useState<Color>(boundGuidelinePreviewColor);
@@ -257,6 +279,11 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
     const districtMenuRef = React.useRef<HTMLDivElement>(null);
     const districtColorSwatchRef = React.useRef<HTMLDivElement>(null);
 
+    const [gamePanelOrigin, setGamePanelOrigin] = React.useState<PanelOrigin>(getGamePanelOrigin);
+    const savedPanelPosition = panelPositionSet ? { left: panelPositionX, top: panelPositionY } : null;
+    const savePanelPosition = React.useCallback((left: number, top: number) => {
+        trigger(CHANNEL, "SetPanelPosition", `${Math.round(left)},${Math.round(top)}`);
+    }, []);
     const {
         holdSlot,
         holdProgress,
@@ -269,15 +296,13 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
         panelDragging,
         panelElementRef,
         handlePanelDragStart,
-    } = usePanelDrag(editorMode ? "editor" : "game");
+    } = usePanelDrag(editorMode ? "editor" : "game", gamePanelOrigin, editorMode ? null : savedPanelPosition, savePanelPosition);
 
     // Re-measured on open rather than once at module load, so the origin is right even when the
-    // launcher has shifted - another mod added a GameTopLeft button above it, or the UI rescaled.
-    const [gamePanelOrigin, setGamePanelOrigin] = React.useState<PanelOrigin>(getGamePanelOrigin);
-
+    // launcher has shifted, the selected host changed, or the UI rescaled.
     React.useLayoutEffect(() => {
         if (!editorMode) {
-            setGamePanelOrigin(getGamePanelOrigin());
+            setGamePanelOrigin(getGamePanelOrigin(panelElementRef.current?.getBoundingClientRect().width ?? 0));
         }
     }, [editorMode]);
     const { openAreasToolPanel } = useDistrictToolPanel();
@@ -288,6 +313,9 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
     React.useEffect(() => { setFillA(boundFillA); }, [boundFillA]);
     React.useEffect(() => { setFillColor(boundFill); }, [boundFill.r, boundFill.g, boundFill.b, boundFill.a]);
     React.useEffect(() => { setOutlineThicknessScale(boundOutlineThicknessScale); }, [boundOutlineThicknessScale]);
+    React.useEffect(() => { setSurfaceBorderThicknessScale(boundSurfaceBorderThicknessScale); }, [boundSurfaceBorderThicknessScale]);
+    React.useEffect(() => { setExtractorBorderThicknessScale(boundExtractorBorderThicknessScale); }, [boundExtractorBorderThicknessScale]);
+    React.useEffect(() => { setGuidelineDashedThicknessScale(boundGuidelineDashedThicknessScale); }, [boundGuidelineDashedThicknessScale]);
     React.useEffect(() => { setDistrictColor(boundDistrict); }, [boundDistrict.r, boundDistrict.g, boundDistrict.b, boundDistrict.a]);
     React.useEffect(() => { setGuidelineLinesColor(boundGuidelineLinesColor); }, [boundGuidelineLinesColor.r, boundGuidelineLinesColor.g, boundGuidelineLinesColor.b, boundGuidelineLinesColor.a]);
     React.useEffect(() => { setGuidelinePreviewColor(boundGuidelinePreviewColor); }, [boundGuidelinePreviewColor.r, boundGuidelinePreviewColor.g, boundGuidelinePreviewColor.b, boundGuidelinePreviewColor.a]);
@@ -450,6 +478,24 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
         trigger(CHANNEL, "SetOutlineThickness", value);
     };
 
+    const handleSurfaceBorderThicknessChange = (v: number) => {
+        const value = Math.round(Math.max(0.1, Math.min(1, v)) * 10) / 10;
+        setSurfaceBorderThicknessScale(value);
+        trigger(CHANNEL, "SetSurfaceBorderThickness", value);
+    };
+
+    const handleExtractorBorderThicknessChange = (v: number) => {
+        const value = Math.round(Math.max(0.1, Math.min(1, v)) * 10) / 10;
+        setExtractorBorderThicknessScale(value);
+        trigger(CHANNEL, "SetExtractorBorderThickness", value);
+    };
+
+    const handleGuidelineDashedThicknessChange = (v: number) => {
+        const value = Math.round(Math.max(0.1, Math.min(1, v)) * 10) / 10;
+        setGuidelineDashedThicknessScale(value);
+        trigger(CHANNEL, "SetGuidelineDashedThickness", value);
+    };
+
     // Swatch owns tint + opacity; the slider is the same alpha shown a second way.
     const handleFillColorChange = (value: Color) => {
         const syncedValue = normalizeColorFieldValue(value);
@@ -501,7 +547,11 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
     const handleResetOutline = () => trigger(CHANNEL, "ResetOutlineToVanilla");
     const handleResetFill = () => trigger(CHANNEL, "ResetFillToVanilla");
     const handleResetOutlineThickness = () => trigger(CHANNEL, "ResetOutlineThickness");
+    const handleResetSurfaceBorderThickness = () => trigger(CHANNEL, "ResetSurfaceBorderThickness");
+    const handleResetExtractorBorderThickness = () => trigger(CHANNEL, "ResetExtractorBorderThickness");
+    const handleResetGuidelineDashedThickness = () => trigger(CHANNEL, "ResetGuidelineDashedThickness");
     const handleResetGuidelines = () => trigger(CHANNEL, "ResetGuidelines");
+    const handleToggleRoadAngleTooltips = () => trigger(CHANNEL, "ToggleRoadAngleTooltips");
     const handleToggleSurfaceToolAreas = () => trigger(CHANNEL, "ToggleSurfaceToolAreas");
     const handleToggleSpecializedIndustryAreas = () => trigger(CHANNEL, "ToggleSpecializedIndustryAreas");
     const handleTogglePresetDefaults = () => trigger(CHANNEL, "TogglePresetDefaults");
@@ -638,11 +688,20 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
                         numberFieldClass={numberFieldClass}
                         useDarkerPanel={useDarkerPanel}
                         collapsed={panelCollapsed}
+                        guidelinesExpanded={guidelinesExpanded}
+                        handleToggleGuidelines={() => {
+                            trigger(CHANNEL, "SetGuidelinesExpanded", !guidelinesExpanded);
+                            setGuidelineLinesPickerOpen(false);
+                            setGuidelinePreviewPickerOpen(false);
+                            setGuidelineDashedPickerOpen(false);
+                        }}
                         outline={outline}
                         ownerColor={ownerColor}
                         fillA={fillA}
                         fillColor={fillColor}
                         outlineThicknessScale={outlineThicknessScale}
+                        guidelineDashedThicknessScale={guidelineDashedThicknessScale}
+                        roadAngleTooltipsHidden={roadAngleTooltipsHidden}
                         guidelineLinesColor={guidelineLinesColor}
                         guidelinePreviewColor={guidelinePreviewColor}
                         guidelineDashedColor={guidelineDashedColor}
@@ -697,6 +756,9 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
                         handleFillColorChange={handleFillColorChange}
                         handleOutlineThicknessChange={handleOutlineThicknessChange}
                         handleResetOutlineThickness={handleResetOutlineThickness}
+                        handleGuidelineDashedThicknessChange={handleGuidelineDashedThicknessChange}
+                        handleResetGuidelineDashedThickness={handleResetGuidelineDashedThickness}
+                        handleToggleRoadAngleTooltips={handleToggleRoadAngleTooltips}
                         handleGuidelineLinesColorChange={handleGuidelineLinesColorChange}
                         handleGuidelinePreviewColorChange={handleGuidelinePreviewColorChange}
                         handleGuidelineDashedColorChange={handleGuidelineDashedColorChange}
@@ -722,6 +784,18 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
                                 ColorField={ColorField}
                                 focusDisabled={focusDisabled}
                                 useDarkerPanel={useDarkerPanel}
+                                areasExpanded={areasExpanded}
+                                handleToggleAreas={() => {
+                                    trigger(CHANNEL, "SetAreasExpanded", !areasExpanded);
+                                    setDistrictMenuOpen(false);
+                                    setDistrictPickerOpen(false);
+                                }}
+                                surfaceBorderThicknessScale={surfaceBorderThicknessScale}
+                                handleSurfaceBorderThicknessChange={handleSurfaceBorderThicknessChange}
+                                handleResetSurfaceBorderThickness={handleResetSurfaceBorderThickness}
+                                extractorBorderThicknessScale={extractorBorderThicknessScale}
+                                handleExtractorBorderThicknessChange={handleExtractorBorderThicknessChange}
+                                handleResetExtractorBorderThickness={handleResetExtractorBorderThickness}
                                 surfaceToolAreasSuppressed={surfaceToolAreasSuppressed}
                                 specializedIndustryAreasSuppressed={specializedIndustryAreasSuppressed}
                                 districtMenuOpen={districtMenuOpen}

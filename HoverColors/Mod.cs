@@ -19,7 +19,9 @@ namespace HoverColors
     using CS2Shared.RiverMochi;
     using Game;
     using Game.Modding;
+    using Game.Rendering;
     using Game.SceneFlow;
+    using Game.UI.Tooltip;
     using HoverColors.Systems;
     using HoverColors.UI;
     using Unity.Entities;
@@ -31,13 +33,19 @@ namespace HoverColors
         public const string ModTag = "[HC]";
 
         internal const string kTogglePanelActionName = "TogglePanel";
-        internal const string kToggleSurfaceToolAreasActionName = "ToggleSurfaceToolAreas";
+        internal const string kToggleRoadAngleTooltipsActionName = "ToggleRoadAngleTooltips";
         internal const string kTogglePresetActionName = "TogglePreset";
 
         internal const string kToggleHighlightsActionName = "ToggleHoverHighlights";
 
         public static readonly string ModVersion =
             Assembly.GetExecutingAssembly().GetName().Version?.ToString(3) ?? "1.0.0";
+
+#if DEBUG
+        public const string BuildDisplayName = "Debug";
+#else
+        public const string BuildDisplayName = "Release";
+#endif
 
         private static bool s_BannerLogged;
 
@@ -138,6 +146,16 @@ namespace HoverColors
 
                 world.GetOrCreateSystemManaged<GuidelineColorSystem>();
                 updateSystem.UpdateAt<GuidelineColorSystem>(SystemUpdatePhase.Rendering);
+
+                // Narrow post-processing spans cover only each vanilla producer's own curves.
+                updateSystem.UpdateBefore<AreaBorderWidthCaptureSystem, AreaBorderRenderSystem>(SystemUpdatePhase.Rendering);
+                updateSystem.UpdateAfter<AreaBorderWidthApplySystem, AreaBorderRenderSystem>(SystemUpdatePhase.Rendering);
+                updateSystem.UpdateBefore<DashedGuidelineWidthCaptureSystem, GuideLinesSystem>(SystemUpdatePhase.Rendering);
+                updateSystem.UpdateAfter<DashedGuidelineWidthApplySystem, GuideLinesSystem>(SystemUpdatePhase.Rendering);
+                updateSystem.UpdateBefore<BuildingLotPreviewCaptureSystem, BuildingLotRenderSystem>(SystemUpdatePhase.Rendering);
+                updateSystem.UpdateAfter<BuildingLotPreviewApplySystem, BuildingLotRenderSystem>(SystemUpdatePhase.Rendering);
+                updateSystem.UpdateAfter<RoadAngleTooltipFilterSystem, InputHintsTooltipSystem>(SystemUpdatePhase.UITooltip);
+                world.GetOrCreateSystemManaged<RoadAngleTooltipFilterSystem>().Enabled = setting.RoadAngleTooltipsHidden;
 
                 world.GetOrCreateSystemManaged<AreaToolOverlaySystem>();
                 updateSystem.UpdateAt<AreaToolOverlaySystem>(SystemUpdatePhase.Rendering);

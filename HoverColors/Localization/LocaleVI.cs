@@ -28,16 +28,10 @@ namespace HoverColors
             IList<IDictionaryEntryError> errors,
             Dictionary<string, int> indexCounts)
         {
-            string title = Mod.ModName;
-            if (!string.IsNullOrEmpty(Mod.ModVersion))
-            {
-                title += " (" + Mod.ModVersion + ")";
-            }
-
             return new Dictionary<string, string>
             {
                 // Mod title in the left rail of the Options menu.
-                { m_Settings.GetSettingsLocaleID(), title },
+                { m_Settings.GetSettingsLocaleID(), Mod.ModName },
 
                 // Tabs
                 { m_Settings.GetOptionTabLocaleID(HoverColorsSettings.Actions), "Thao tác" },
@@ -108,6 +102,12 @@ namespace HoverColors
                 { m_Settings.GetPanelStyleLocaleID("Dark"), "Tối (Vanilla)" },
                 { m_Settings.GetPanelStyleLocaleID("Glass"), "Kính (Tùy chỉnh)" },
 
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.LauncherLocation)), "▪ Vị trí nút bảng điều khiển" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.LauncherLocation)), "Chọn góc trên trái, góc trên phải hoặc Universal Mod Menu của trò chơi. Khởi động lại trò chơi để chuyển nút." },
+                { m_Settings.GetLauncherLocationLocaleID("TopLeft"), "Trên trái" },
+                { m_Settings.GetLauncherLocationLocaleID("TopRight"), "Trên phải" },
+                { m_Settings.GetLauncherLocationLocaleID("UniversalMenu"), "Universal Mod Menu" },
+
                 // Panel opacity
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)), "▪ Độ đục bảng" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)),
@@ -167,10 +167,10 @@ namespace HoverColors
                     "Mặc định chưa gán phím để tránh xung đột." },
                 { m_Settings.GetBindingKeyLocaleID(Mod.kToggleHighlightsActionName), "Mắt nhanh Bật/Tắt" },
 
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleSurfaceToolAreasBinding)), "Xem trước Surface bật/tắt" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ToggleSurfaceToolAreasBinding)),
-                    "Phím tắt để <ẩn hoặc hiện> đường ranh Surface khi đặt bề mặt." },
-                { m_Settings.GetBindingKeyLocaleID(Mod.kToggleSurfaceToolAreasActionName), "Lớp xem trước Surface bật/tắt" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleRoadAngleTooltipsBinding)), "Bật/tắt ô góc đường và lối đi" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ToggleRoadAngleTooltipsBinding)),
+                    "Phím tắt chuyển ô góc và Đặt/Hoàn tác khi vẽ đường và lối đi. Chi phí, chiều dài và độ dốc vẫn hiển thị." },
+                { m_Settings.GetBindingKeyLocaleID(Mod.kToggleRoadAngleTooltipsActionName), "Góc và gợi ý chuột" },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.TogglePresetBinding)), "Đổi preset 1+2" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.TogglePresetBinding)),

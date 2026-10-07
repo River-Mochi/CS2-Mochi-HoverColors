@@ -7,17 +7,20 @@
 // ================= </copyright> ======================
 
 // File: UI/src/panel/components/MochiPanelActionBar.tsx
-// Purpose: Bottom action bar: Surface, Specialized Industry, and District color menu.
+// Purpose: Surface boundary controls, area fill toggles, and the District color menu.
 
 import React from "react";
 import { Button } from "cs2/ui";
 import { Color } from "cs2/bindings";
 import { SideTooltip } from "../tooltip/SideTooltip";
+import { MochiSlider } from "./MochiSlider";
+import { PanelSectionToggle } from "./MochiPanelPieces";
 import { compactSwatchStyle, holdBarStyle } from "../helpers/MochiPanelColorUtils";
 import { useMochiPanelText } from "../hooks/useMochiPanelText";
 import lotToolIconSrc from "../../../images/LotTool03.svg";
 import specializedIndustryIconSrc from "../../../images/LotToolSpecializedIndustry.svg";
 import surfaceIconSrc from "../../../images/Districts03.svg";
+import outlineThicknessIconSrc from "../../../images/outline-thickness.svg";
 import styles from "../../MochiColorPickerPanel.module.scss";
 
 type PickerDirection = "up" | "down";
@@ -31,6 +34,14 @@ interface MochiPanelActionBarProps {
     ColorField: ColorFieldComponent;
     focusDisabled: any;
     useDarkerPanel: boolean;
+    areasExpanded: boolean;
+    handleToggleAreas: () => void;
+    surfaceBorderThicknessScale: number;
+    handleSurfaceBorderThicknessChange: (value: number) => void;
+    handleResetSurfaceBorderThickness: () => void;
+    extractorBorderThicknessScale: number;
+    handleExtractorBorderThicknessChange: (value: number) => void;
+    handleResetExtractorBorderThickness: () => void;
 
     surfaceToolAreasSuppressed: boolean;
     specializedIndustryAreasSuppressed: boolean;
@@ -66,6 +77,14 @@ export const MochiPanelActionBar = ({
     ColorField,
     focusDisabled,
     useDarkerPanel,
+    areasExpanded,
+    handleToggleAreas,
+    surfaceBorderThicknessScale,
+    handleSurfaceBorderThicknessChange,
+    handleResetSurfaceBorderThickness,
+    extractorBorderThicknessScale,
+    handleExtractorBorderThicknessChange,
+    handleResetExtractorBorderThickness,
     surfaceToolAreasSuppressed,
     specializedIndustryAreasSuppressed,
     districtMenuOpen,
@@ -96,7 +115,39 @@ export const MochiPanelActionBar = ({
 
     return (
         <div className={styles.actions}>
-            <div className={styles.surfaceActions}>
+            <PanelSectionToggle label={text.sectionAreas} expanded={areasExpanded} onToggle={handleToggleAreas} focusDisabled={focusDisabled} />
+            {areasExpanded && (
+                <>
+            <div className={styles.surfaceControlsRow}>
+                <SideTooltip tooltip={tt(text.tooltipResetSurfaceBorderThickness)} side="left">
+                    <Button
+                        className={styles.controlIconButton}
+                        variant="icon"
+                        onSelect={handleResetSurfaceBorderThickness}
+                        focusKey={focusDisabled}
+                    >
+                        <img src={outlineThicknessIconSrc} className={`${styles.controlIcon} ${styles.idleIcon}`} alt="" />
+                    </Button>
+                </SideTooltip>
+
+                <SideTooltip tooltip={tt(text.tooltipSurfaceBorderThickness)} side="right">
+                    <div className={styles.areaThicknessControl}>
+                        <div className={styles.areaThicknessTrack}>
+                            <MochiSlider
+                                focusKey={focusDisabled}
+                                className={styles.areaThicknessSlider}
+                                value={surfaceBorderThicknessScale}
+                                start={0.1}
+                                end={1}
+                                gamepadStep={0.1}
+                                onChange={handleSurfaceBorderThicknessChange}
+                            />
+                            <span className={styles.areaThicknessValue}>{surfaceBorderThicknessScale.toFixed(1)}</span>
+                        </div>
+                        <span className={styles.areaThicknessLabel}>{text.labelSurfaceBorder}</span>
+                    </div>
+                </SideTooltip>
+
                 <SideTooltip tooltip={tt(text.tooltipSurfaceToggle)} side="below">
                     <Button
                         className={`${styles.actionButton} ${styles.surfaceButton} ${surfaceToolAreasSuppressed ? styles.surfaceButtonActive : ""}`}
@@ -108,9 +159,41 @@ export const MochiPanelActionBar = ({
                     </Button>
                 </SideTooltip>
 
+            </div>
+
+            <div className={styles.extractorControlsRow}>
+                <SideTooltip tooltip={tt(text.tooltipResetExtractorBorderThickness)} side="left">
+                    <Button
+                        className={styles.controlIconButton}
+                        variant="icon"
+                        onSelect={handleResetExtractorBorderThickness}
+                        focusKey={focusDisabled}
+                    >
+                        <img src={outlineThicknessIconSrc} className={`${styles.controlIcon} ${styles.idleIcon}`} alt="" />
+                    </Button>
+                </SideTooltip>
+
+                <SideTooltip tooltip={tt(text.tooltipExtractorBorderThickness)} side="right">
+                    <div className={styles.areaThicknessControl}>
+                        <div className={styles.areaThicknessTrack}>
+                            <MochiSlider
+                                focusKey={focusDisabled}
+                                className={styles.areaThicknessSlider}
+                                value={extractorBorderThicknessScale}
+                                start={0.1}
+                                end={1}
+                                gamepadStep={0.1}
+                                onChange={handleExtractorBorderThicknessChange}
+                            />
+                            <span className={styles.areaThicknessValue}>{extractorBorderThicknessScale.toFixed(1)}</span>
+                        </div>
+                        <span className={styles.areaThicknessLabel}>{text.labelExtractorBorder}</span>
+                    </div>
+                </SideTooltip>
+
                 <SideTooltip tooltip={tt(text.tooltipSpecializedIndustryToggle)} side="below">
                     <Button
-                        className={`${styles.actionButton} ${styles.surfaceButton} ${styles.buttonGap} ${specializedIndustryAreasSuppressed ? styles.surfaceButtonActive : ""}`}
+                        className={`${styles.actionButton} ${styles.surfaceButton} ${specializedIndustryAreasSuppressed ? styles.surfaceButtonActive : ""}`}
                         variant="icon"
                         onSelect={handleToggleSpecializedIndustryAreas}
                         focusKey={focusDisabled}
@@ -118,9 +201,11 @@ export const MochiPanelActionBar = ({
                         <img src={specializedIndustryIconSrc} className={`${styles.controlIcon} ${styles.idleIcon}`} alt="" />
                     </Button>
                 </SideTooltip>
+            </div>
 
+            <div className={styles.districtActionsRow}>
                 <SideTooltip tooltip={tt(text.tooltipDistrictColors)} side="below">
-                    <div ref={districtPickerRef} className={styles.buttonGap}>
+                    <div ref={districtPickerRef}>
                         <Button
                             className={`${styles.actionButton} ${styles.surfaceButton} ${styles.districtPickerButton} ${districtMenuOpen ? styles.districtPickerButtonActive : ""}`}
                             variant="icon"
@@ -202,6 +287,8 @@ export const MochiPanelActionBar = ({
                         </SideTooltip>
                     </div>
                 </div>
+            )}
+                </>
             )}
         </div>
     );

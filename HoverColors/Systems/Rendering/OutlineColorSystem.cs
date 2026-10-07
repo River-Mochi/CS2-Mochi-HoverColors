@@ -43,7 +43,9 @@ namespace HoverColors.Systems
         private const float kVanillaOwnerG = 0.981f;
         private const float kVanillaOwnerB = 0.247f;
         private const float kVanillaOwnerA = 0.702f;
-        private const float kRoadRecommendedOutlineA = 0.75f;
+        // Recommended road hover and temporary placement geometry keep vanilla cyan while
+        // showing more of the road beneath. Both read RenderingSettingsData.m_HoveredColor.
+        private const float kRoadRecommendedOutlineA = 0.80f;
         private const float kMaterialResolveRetrySeconds = 0.5f;
 
         // Cached so the per-frame path never re-hashes the property name.
@@ -64,6 +66,9 @@ namespace HoverColors.Systems
         private EntityQuery m_RenderSettingsQuery;
         private ToolSystem? m_ToolSystem;
         private PrefabSystem? m_PrefabSystem;
+        private BuildingLotPreviewCaptureSystem? m_BuildingLotPreviewCapture;
+        private BuildingLotPreviewApplySystem? m_BuildingLotPreviewApply;
+        private bool m_BuildingLotPreviewEnabled;
         private readonly PrefabID m_RenderingSettingsPrefab = new(nameof(m_RenderingSettingsPrefab), "RenderingSettings");
 
         // Cached HDRP outline material. UnityEngine.Object operator!= detects destroyed-but-not-null.
@@ -123,6 +128,12 @@ namespace HoverColors.Systems
             m_RenderSettingsQuery = GetEntityQuery(ComponentType.ReadWrite<RenderingSettingsData>());
             m_ToolSystem = World.GetOrCreateSystemManaged<ToolSystem>();
             m_PrefabSystem = World.GetOrCreateSystemManaged<PrefabSystem>();
+            BuildingLotPreviewCaptureSystem lotCapture = World.GetOrCreateSystemManaged<BuildingLotPreviewCaptureSystem>();
+            BuildingLotPreviewApplySystem lotApply = World.GetOrCreateSystemManaged<BuildingLotPreviewApplySystem>();
+            lotCapture.Enabled = false;
+            lotApply.Enabled = false;
+            m_BuildingLotPreviewCapture = lotCapture;
+            m_BuildingLotPreviewApply = lotApply;
             InitializeHoverToggle();
         }
 
@@ -151,6 +162,14 @@ namespace HoverColors.Systems
                 HoverColorsSettings.kMaxOutlineThicknessScale);
             EffectivePalette palette;
             ToolBaseSystem? activeToolSystem = m_ToolSystem?.activeTool;
+            bool previewEnabled = activeToolSystem is ObjectToolSystem
+                || (settings.HoverHighlightsSuppressed && activeToolSystem is DefaultToolSystem);
+            if (previewEnabled != m_BuildingLotPreviewEnabled)
+            {
+                m_BuildingLotPreviewEnabled = previewEnabled;
+                if (m_BuildingLotPreviewCapture != null) m_BuildingLotPreviewCapture.Enabled = previewEnabled;
+                if (m_BuildingLotPreviewApply != null) m_BuildingLotPreviewApply.Enabled = previewEnabled;
+            }
             ToolKind activeTool = GetActiveToolKind(activeToolSystem);
             if (settings.UseOverlapWarningColor && HasSupportedPlacementError(activeToolSystem))
             {

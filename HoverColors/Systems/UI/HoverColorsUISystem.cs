@@ -32,7 +32,7 @@ namespace HoverColors.UI
         // ProxyActions registered by Setting.RegisterKeyBindings() in Mod.OnLoad.
         // Cached actions are checked with WasReleasedThisFrame(); lookup is retried only if an action is missing.
         private ProxyAction? m_TogglePanelAction;
-        private ProxyAction? m_ToggleSurfaceToolAreasAction;
+        private ProxyAction? m_ToggleRoadAngleTooltipsAction;
 
         // Live color bindings
         private ValueBinding<float> m_OutlineRBinding = null!;
@@ -48,6 +48,10 @@ namespace HoverColors.UI
         private ValueBinding<float> m_FillGBinding = null!;
         private ValueBinding<float> m_FillBBinding = null!;
         private ValueBinding<float> m_OutlineThicknessScaleBinding = null!;
+        private ValueBinding<float> m_SurfaceBorderThicknessScaleBinding = null!;
+        private ValueBinding<float> m_ExtractorBorderThicknessScaleBinding = null!;
+        private ValueBinding<float> m_GuidelineDashedThicknessScaleBinding = null!;
+        private ValueBinding<bool> m_RoadAngleTooltipsHiddenBinding = null!;
         private ValueBinding<int> m_PanelOpacityPercentBinding = null!;
         private ValueBinding<float> m_DistrictRBinding = null!;
         private ValueBinding<float> m_DistrictGBinding = null!;
@@ -69,6 +73,12 @@ namespace HoverColors.UI
         private ValueBinding<bool> m_PanelOpenBinding = null!;
         private ValueBinding<bool> m_PanelTooltipsEnabledBinding = null!;
         private ValueBinding<bool> m_PanelCollapsedBinding = null!;
+        private ValueBinding<bool> m_GuidelinesExpandedBinding = null!;
+        private ValueBinding<bool> m_AreasExpandedBinding = null!;
+        private ValueBinding<bool> m_PanelPositionSetBinding = null!;
+        private ValueBinding<int> m_PanelPositionXBinding = null!;
+        private ValueBinding<int> m_PanelPositionYBinding = null!;
+        private ValueBinding<int> m_LauncherLocationBinding = null!;
         private ValueBinding<bool> m_UseDarkerPanelBinding = null!;
         private ValueBinding<bool> m_SurfaceToolAreasSuppressedBinding = null!;
         private ValueBinding<bool> m_SpecializedIndustryAreasSuppressedBinding = null!;
@@ -123,9 +133,9 @@ namespace HoverColors.UI
 
             UpdateHoverToggleHotkey();
 
-            if (m_ToggleSurfaceToolAreasAction?.WasReleasedThisFrame() == true)
+            if (m_ToggleRoadAngleTooltipsAction?.WasReleasedThisFrame() == true)
             {
-                ToggleSurfaceToolAreas();
+                ToggleRoadAngleTooltips();
             }
 
             // K toggles between preset slot 1 and slot 2.
@@ -159,6 +169,17 @@ namespace HoverColors.UI
             m_OutlineThicknessScaleBinding = AddValueBinding(
                 "OutlineThicknessScale",
                 settings?.OutlineThicknessScale ?? HoverColorsSettings.kModDefaultOutlineThicknessScale);
+            m_SurfaceBorderThicknessScaleBinding = AddValueBinding(
+                "SurfaceBorderThicknessScale",
+                settings?.SurfaceBorderThicknessScale ?? HoverColorsSettings.kMaxOverlayThicknessScale);
+            m_ExtractorBorderThicknessScaleBinding = AddValueBinding(
+                "ExtractorBorderThicknessScale",
+                settings?.ExtractorBorderThicknessScale ?? HoverColorsSettings.kMaxOverlayThicknessScale);
+            m_GuidelineDashedThicknessScaleBinding = AddValueBinding(
+                "GuidelineDashedThicknessScale",
+                settings?.GuidelineDashedThicknessScale ?? HoverColorsSettings.kMaxOverlayThicknessScale);
+            m_RoadAngleTooltipsHiddenBinding = AddValueBinding(
+                "RoadAngleTooltipsHidden", settings?.RoadAngleTooltipsHidden ?? false);
             m_PanelOpacityPercentBinding = AddValueBinding(
                 "PanelOpacityPercent",
                 settings?.PanelOpacityPercent ?? HoverColorsSettings.kDefaultPanelOpacityPercent);
@@ -186,6 +207,12 @@ namespace HoverColors.UI
             m_PanelOpenBinding = AddValueBinding("PanelOpen", s_PanelOpen);
             m_PanelTooltipsEnabledBinding = AddValueBinding("PanelTooltipsEnabled", settings?.PanelTooltipsEnabled ?? true);
             m_PanelCollapsedBinding = AddValueBinding("PanelCollapsed", settings?.PanelCollapsed ?? false);
+            m_GuidelinesExpandedBinding = AddValueBinding("GuidelinesExpanded", settings?.GuidelinesExpanded ?? true);
+            m_AreasExpandedBinding = AddValueBinding("AreasExpanded", settings?.AreasExpanded ?? true);
+            m_PanelPositionSetBinding = AddValueBinding("PanelPositionSet", settings?.PanelPositionSet ?? false);
+            m_PanelPositionXBinding = AddValueBinding("PanelPositionX", settings?.PanelPositionX ?? 0);
+            m_PanelPositionYBinding = AddValueBinding("PanelPositionY", settings?.PanelPositionY ?? 0);
+            m_LauncherLocationBinding = AddValueBinding("LauncherLocation", settings?.LauncherLocation ?? HoverColorsSettings.kLauncherTopLeft);
             // Read PanelStyle, not the legacy bool: PanelStyle is the value Options writes, and a
             // missing settings object should fall back to Dark, the default style.
             m_UseDarkerPanelBinding = AddValueBinding("UseDarkerPanel", settings == null || settings.PanelStyle == HoverColorsSettings.kPanelStyleDark);
@@ -238,6 +265,16 @@ namespace HoverColors.UI
                 m_OutlineThicknessScaleBinding,
                 settings?.OutlineThicknessScale ?? HoverColorsSettings.kModDefaultOutlineThicknessScale);
             UpdateIfChanged(
+                m_SurfaceBorderThicknessScaleBinding,
+                settings?.SurfaceBorderThicknessScale ?? HoverColorsSettings.kMaxOverlayThicknessScale);
+            UpdateIfChanged(
+                m_ExtractorBorderThicknessScaleBinding,
+                settings?.ExtractorBorderThicknessScale ?? HoverColorsSettings.kMaxOverlayThicknessScale);
+            UpdateIfChanged(
+                m_GuidelineDashedThicknessScaleBinding,
+                settings?.GuidelineDashedThicknessScale ?? HoverColorsSettings.kMaxOverlayThicknessScale);
+            UpdateIfChanged(m_RoadAngleTooltipsHiddenBinding, settings?.RoadAngleTooltipsHidden ?? false);
+            UpdateIfChanged(
                 m_PanelOpacityPercentBinding,
                 settings?.PanelOpacityPercent ?? HoverColorsSettings.kDefaultPanelOpacityPercent);
             UpdateIfChanged(m_DistrictRBinding, settings?.DistrictR ?? 128f / 255f);
@@ -264,6 +301,12 @@ namespace HoverColors.UI
             UpdateIfChanged(m_PanelOpenBinding, s_PanelOpen);
             UpdateIfChanged(m_PanelTooltipsEnabledBinding, settings?.PanelTooltipsEnabled ?? true);
             UpdateIfChanged(m_PanelCollapsedBinding, settings?.PanelCollapsed ?? false);
+            UpdateIfChanged(m_GuidelinesExpandedBinding, settings?.GuidelinesExpanded ?? true);
+            UpdateIfChanged(m_AreasExpandedBinding, settings?.AreasExpanded ?? true);
+            UpdateIfChanged(m_PanelPositionSetBinding, settings?.PanelPositionSet ?? false);
+            UpdateIfChanged(m_PanelPositionXBinding, settings?.PanelPositionX ?? 0);
+            UpdateIfChanged(m_PanelPositionYBinding, settings?.PanelPositionY ?? 0);
+            UpdateIfChanged(m_LauncherLocationBinding, settings?.LauncherLocation ?? HoverColorsSettings.kLauncherTopLeft);
             UpdateIfChanged(m_UseDarkerPanelBinding, settings == null || settings.PanelStyle == HoverColorsSettings.kPanelStyleDark);
             UpdateIfChanged(m_SurfaceToolAreasSuppressedBinding, AreaToolOverlaySystem.SuppressSurfaceToolAreas);
             UpdateIfChanged(m_SpecializedIndustryAreasSuppressedBinding, AreaToolOverlaySystem.SuppressSpecializedIndustryToolAreas);
@@ -308,7 +351,7 @@ namespace HoverColors.UI
         private void InitializeKeybindActions()
         {
             m_TogglePanelAction = EnableAction(Mod.kTogglePanelActionName);
-            m_ToggleSurfaceToolAreasAction = EnableAction(Mod.kToggleSurfaceToolAreasActionName);
+            m_ToggleRoadAngleTooltipsAction = EnableAction(Mod.kToggleRoadAngleTooltipsActionName);
             m_TogglePresetAction = EnableAction(Mod.kTogglePresetActionName);
         }
 
@@ -319,9 +362,9 @@ namespace HoverColors.UI
                 m_TogglePanelAction = EnableAction(Mod.kTogglePanelActionName);
             }
 
-            if (m_ToggleSurfaceToolAreasAction == null)
+            if (m_ToggleRoadAngleTooltipsAction == null)
             {
-                m_ToggleSurfaceToolAreasAction = EnableAction(Mod.kToggleSurfaceToolAreasActionName);
+                m_ToggleRoadAngleTooltipsAction = EnableAction(Mod.kToggleRoadAngleTooltipsActionName);
             }
 
             if (m_TogglePresetAction == null)

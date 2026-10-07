@@ -26,6 +26,13 @@ namespace HoverColors.UI
             AddBinding(new TriggerBinding(Mod.ModId, "ResetFillToVanilla", ResetFillToVanilla));
             AddBinding(new TriggerBinding<float>(Mod.ModId, "SetOutlineThickness", SetOutlineThickness));
             AddBinding(new TriggerBinding(Mod.ModId, "ResetOutlineThickness", ResetOutlineThickness));
+            AddBinding(new TriggerBinding<float>(Mod.ModId, "SetSurfaceBorderThickness", SetSurfaceBorderThickness));
+            AddBinding(new TriggerBinding(Mod.ModId, "ResetSurfaceBorderThickness", ResetSurfaceBorderThickness));
+            AddBinding(new TriggerBinding<float>(Mod.ModId, "SetExtractorBorderThickness", SetExtractorBorderThickness));
+            AddBinding(new TriggerBinding(Mod.ModId, "ResetExtractorBorderThickness", ResetExtractorBorderThickness));
+            AddBinding(new TriggerBinding<float>(Mod.ModId, "SetGuidelineDashedThickness", SetGuidelineDashedThickness));
+            AddBinding(new TriggerBinding(Mod.ModId, "ResetGuidelineDashedThickness", ResetGuidelineDashedThickness));
+            AddBinding(new TriggerBinding(Mod.ModId, "ToggleRoadAngleTooltips", ToggleRoadAngleTooltips));
             AddBinding(new TriggerBinding<int>(Mod.ModId, "SetGuidelineOpacity", SetGuidelineOpacity));
             AddBinding(new TriggerBinding<float, float, float, float>(Mod.ModId, "SetGuidelineLinesColor", SetGuidelineLinesColor));
             AddBinding(new TriggerBinding<float, float, float, float>(Mod.ModId, "SetGuidelinePreviewColor", SetGuidelinePreviewColor));
@@ -37,6 +44,9 @@ namespace HoverColors.UI
             AddBinding(new TriggerBinding<bool>(Mod.ModId, "SetPanelOpen", SetPanelOpen));
             AddBinding(new TriggerBinding<bool>(Mod.ModId, "SetPanelTooltipsEnabled", SetPanelTooltipsEnabled));
             AddBinding(new TriggerBinding<bool>(Mod.ModId, "SetPanelCollapsed", SetPanelCollapsed));
+            AddBinding(new TriggerBinding<bool>(Mod.ModId, "SetGuidelinesExpanded", SetGuidelinesExpanded));
+            AddBinding(new TriggerBinding<bool>(Mod.ModId, "SetAreasExpanded", SetAreasExpanded));
+            AddBinding(new TriggerBinding<string>(Mod.ModId, "SetPanelPosition", SetPanelPosition));
             AddBinding(new TriggerBinding(Mod.ModId, "ToggleSurfaceToolAreas", ToggleSurfaceToolAreas));
             AddBinding(new TriggerBinding(Mod.ModId, "ToggleSpecializedIndustryAreas", ToggleSpecializedIndustryAreas));
             AddBinding(new TriggerBinding<int>(Mod.ModId, "ApplyPreset", ApplyPreset));
@@ -210,6 +220,61 @@ namespace HoverColors.UI
                 Math.Min(HoverColorsSettings.kMaxOutlineThicknessScale, scale));
 
             // Keep the stored value on the slider's 0.1 grid so the readout never shows drift.
+            return (float)Math.Round(clamped * 10.0) / 10f;
+        }
+
+        private void SetSurfaceBorderThickness(float scale)
+        {
+            HoverColorsSettings? settings = Mod.Settings;
+            if (settings == null) return;
+
+            scale = SnapOverlayThickness(scale);
+            if (ApproxEqual(settings.SurfaceBorderThicknessScale, scale)) return;
+            settings.SurfaceBorderThicknessScale = scale;
+            ApplySaveAndSync(settings);
+        }
+
+        private void ResetSurfaceBorderThickness()
+        {
+            SetSurfaceBorderThickness(HoverColorsSettings.kMaxOverlayThicknessScale);
+        }
+
+        private void SetExtractorBorderThickness(float scale)
+        {
+            HoverColorsSettings? settings = Mod.Settings;
+            if (settings == null) return;
+
+            scale = SnapOverlayThickness(scale);
+            if (ApproxEqual(settings.ExtractorBorderThicknessScale, scale)) return;
+            settings.ExtractorBorderThicknessScale = scale;
+            ApplySaveAndSync(settings);
+        }
+
+        private void ResetExtractorBorderThickness()
+        {
+            SetExtractorBorderThickness(HoverColorsSettings.kMaxOverlayThicknessScale);
+        }
+
+        private void SetGuidelineDashedThickness(float scale)
+        {
+            HoverColorsSettings? settings = Mod.Settings;
+            if (settings == null) return;
+
+            scale = SnapOverlayThickness(scale);
+            if (ApproxEqual(settings.GuidelineDashedThicknessScale, scale)) return;
+            settings.GuidelineDashedThicknessScale = scale;
+            ApplySaveAndSync(settings);
+        }
+
+        private void ResetGuidelineDashedThickness()
+        {
+            SetGuidelineDashedThickness(HoverColorsSettings.kMaxOverlayThicknessScale);
+        }
+
+        private static float SnapOverlayThickness(float scale)
+        {
+            float clamped = Math.Max(HoverColorsSettings.kMinOverlayThicknessScale,
+                Math.Min(HoverColorsSettings.kMaxOverlayThicknessScale, scale));
             return (float)Math.Round(clamped * 10.0) / 10f;
         }
 
@@ -439,6 +504,18 @@ namespace HoverColors.UI
             ApplySaveAndSync(settings);
         }
 
+        private void ToggleRoadAngleTooltips()
+        {
+            HoverColorsSettings? settings = Mod.Settings;
+            if (settings == null)
+            {
+                return;
+            }
+
+            settings.RoadAngleTooltipsHidden = !settings.RoadAngleTooltipsHidden;
+            ApplySaveAndSync(settings);
+        }
+
         private void SetPanelTooltipsEnabled(bool enabled)
         {
             HoverColorsSettings? settings = Mod.Settings;
@@ -460,6 +537,37 @@ namespace HoverColors.UI
             }
 
             settings.PanelCollapsed = collapsed;
+            ApplySaveAndSync(settings);
+        }
+
+        private void SetGuidelinesExpanded(bool expanded)
+        {
+            HoverColorsSettings? settings = Mod.Settings;
+            if (settings == null || settings.GuidelinesExpanded == expanded) return;
+            settings.GuidelinesExpanded = expanded;
+            ApplySaveAndSync(settings);
+        }
+
+        private void SetAreasExpanded(bool expanded)
+        {
+            HoverColorsSettings? settings = Mod.Settings;
+            if (settings == null || settings.AreasExpanded == expanded) return;
+            settings.AreasExpanded = expanded;
+            ApplySaveAndSync(settings);
+        }
+
+        private void SetPanelPosition(string payload)
+        {
+            HoverColorsSettings? settings = Mod.Settings;
+            if (settings == null || string.IsNullOrWhiteSpace(payload)) return;
+            string[] parts = payload.Split(',');
+            if (parts.Length != 2 || !int.TryParse(parts[0], out int x) || !int.TryParse(parts[1], out int y)) return;
+            x = Math.Max(-20000, Math.Min(20000, x));
+            y = Math.Max(-20000, Math.Min(20000, y));
+            if (settings.PanelPositionSet && settings.PanelPositionX == x && settings.PanelPositionY == y) return;
+            settings.PanelPositionSet = true;
+            settings.PanelPositionX = x;
+            settings.PanelPositionY = y;
             ApplySaveAndSync(settings);
         }
 

@@ -18,6 +18,8 @@ namespace HoverColors
     using Game.Modding;     // IMod
     using Game.Settings;    // ModSetting, attributes
     using Game.UI;          // Unit.kPercentage
+    using HoverColors.Systems;
+    using Unity.Entities;
 
     [FileLocation("ModsSettings/HoverColors/HoverColors")]
     [SettingsUITabOrder(Actions, KeyBindings, About)]
@@ -44,6 +46,10 @@ namespace HoverColors
         // game's own panel surface and therefore already matches whatever skin they run.
         internal const int kPanelStyleDark = 0;
         internal const int kPanelStyleStandard = 1;
+
+        internal const int kLauncherTopLeft = 0;
+        internal const int kLauncherTopRight = 1;
+        internal const int kLauncherUniversalMenu = 2;
 
         private int m_PanelStyle = kPanelStyleDark;
 
@@ -89,6 +95,11 @@ namespace HoverColors
         // different things: one is "what a new install gets", the other is "what the game shipped".
         internal const float kModDefaultOutlineThicknessScale = 1f;
         internal const float kVanillaOutlineThicknessScale = 1f;
+
+        // Overlay buffers can be narrowed without changing their authored geometry or bounds.
+        // Values above vanilla would require expanding the renderer's draw/culling geometry.
+        internal const float kMinOverlayThicknessScale = 0.1f;
+        internal const float kMaxOverlayThicknessScale = 1f;
 
         // Centralized default for the guideline opacity slider.
         // Vanilla CS2 is 100; lower = more transparent. Keep TSX fallback bindings in sync.
@@ -168,6 +179,34 @@ namespace HoverColors
 
         [SettingsUIHidden]
         public float OutlineThicknessScale { get; set; }
+
+        [SettingsUIHidden]
+        public float SurfaceBorderThicknessScale { get; set; }
+
+        [SettingsUIHidden]
+        public float ExtractorBorderThicknessScale { get; set; }
+
+        [SettingsUIHidden]
+        public float GuidelineDashedThicknessScale { get; set; }
+
+        private bool m_RoadAngleTooltipsHidden;
+
+        // In-city Guidelines button. A visible-angle setting disables the filter system entirely.
+        [SettingsUIHidden]
+        public bool RoadAngleTooltipsHidden
+        {
+            get => m_RoadAngleTooltipsHidden;
+            set
+            {
+                m_RoadAngleTooltipsHidden = value;
+                RoadAngleTooltipFilterSystem? filter = World.DefaultGameObjectInjectionWorld?
+                    .GetExistingSystemManaged<RoadAngleTooltipFilterSystem>();
+                if (filter != null)
+                {
+                    filter.Enabled = value;
+                }
+            }
+        }
 
         // Inert, like FillColorInitialized. Triggers.cs reads it in three places, but it is always
         // true so `&& OutlineThicknessInitialized` never changes the result.
@@ -623,6 +662,10 @@ namespace HoverColors
             set => m_PanelOpacityPercent = ClampPanelOpacity(value);
         }
 
+        [SettingsUIDropdown(typeof(HoverColorsSettings), nameof(GetLauncherLocationItems))]
+        [SettingsUISection(Actions, kPanel)]
+        public int LauncherLocation { get; set; }
+
         // PanelTooltipsEnabled is player-facing now so new players do not accidentally
         // lose tooltip help from a title-bar button. The city info icon can only turn it back ON.
         [SettingsUISection(Actions, kPanel)]
@@ -632,6 +675,21 @@ namespace HoverColors
         // Title-bar arrow toggle (no Options UI setting for it)
         [SettingsUIHidden]
         public bool PanelCollapsed { get; set; }
+
+        [SettingsUIHidden]
+        public bool GuidelinesExpanded { get; set; }
+
+        [SettingsUIHidden]
+        public bool AreasExpanded { get; set; }
+
+        [SettingsUIHidden]
+        public bool PanelPositionSet { get; set; }
+
+        [SettingsUIHidden]
+        public int PanelPositionX { get; set; }
+
+        [SettingsUIHidden]
+        public int PanelPositionY { get; set; }
 
         // Eye button state. Keeps player's saved color/alpha untouched while normal hover is hidden.
         [SettingsUIHidden]
@@ -684,8 +742,8 @@ namespace HoverColors
         public ProxyBinding TogglePresetBinding { get; set; }
 
         [SettingsUISection(KeyBindings, kKeyBindings)]
-        [SettingsUIKeyboardBinding(BindingKeyboard.L, Mod.kToggleSurfaceToolAreasActionName)]
-        public ProxyBinding ToggleSurfaceToolAreasBinding { get; set; }
+        [SettingsUIKeyboardBinding(BindingKeyboard.L, Mod.kToggleRoadAngleTooltipsActionName)]
+        public ProxyBinding ToggleRoadAngleTooltipsBinding { get; set; }
 
         // -----------------------------------------------------------------------
         // About tab
@@ -695,12 +753,7 @@ namespace HoverColors
         public string NameText => Mod.ModName;
 
         [SettingsUISection(About, kAboutInfo)]
-        public string VersionText =>
-#if DEBUG
-            Mod.ModVersion + " (DEBUG)";
-#else
-            Mod.ModVersion;
-#endif
+        public string VersionText => Mod.ModVersion + " " + Mod.BuildDisplayName;
 
         [SettingsUIButtonGroup(kAboutLinksRow)]
         [SettingsUIButton]

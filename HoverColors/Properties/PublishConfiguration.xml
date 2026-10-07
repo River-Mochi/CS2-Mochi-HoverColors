@@ -95,7 +95,7 @@ tags: hover colors, remove blue, disable hover, highlight color, outline thickne
 <!--Link to the forum post where the mod can be discussed-->
 <ForumLink Value="https://forum.paradoxplaza.com/forum/threads/mochis-hover-colors.1925898/" />
 <!--Version of the mod-->
-<ModVersion Value="1.1.1" />
+<ModVersion Value="1.2.0" />
 <!--Recommended version of the base game to use the mod-->
 <GameVersion Value="1.6.*" />
 <!--Dependency for the mod, can be set multiple times-->
@@ -104,15 +104,17 @@ tags: hover colors, remove blue, disable hover, highlight color, outline thickne
 <RequiredDLC Value="" />
 <!--Change log for new version. Single line or multi line. Supports minimal markdown subset-->
 <ChangeLog>
-- Existing Players, go to OPTIONS, new panel choices, start on Dark (vanilla) or switch to Glass if you
-prefer a more clear look. Your saved colors and presets are unchanged.
-- NEW: separate Fill color from Outline color.
-- NEW: Outline Thickness slider.
-- NEW: 1-click Eyeball button to hide/show highlights - you can pan the whole city without triggering any bright Highlights.
-- NEW: Editor Mode support.
-- Panel style choices - Dark (Vanilla) matches the game's look and follows game's Interface -> UI transparency slider.
-- Glass (Custom) allows a more clear panel and has an Options -> opacity slider that is independent of the game slider.
-- Added separate Mod Defaults + Vanilla color Game reset buttons.
+- Eyeball now hides ground property lot fill and outline.
+- Added thickness slider for guidelines.
+- Added thickness slider for Surfaces and Extractor area lots.
+- Added instant Show/hide button for angles tooltips when drawing roads or paths.
+- Added Collapsible section arrows and section titles.
+- Title bar is slightly taller.
+- Pink dot indicator for active highlight color (blue dot previously was harder to see).
+- Add Options menu choice for panel button in Top Left, Top Right, or Universal Mod menu -  new default is Top right.
+- remove Hotkey for Surface preview filter On/off
+- add new hotkey for Angles tooltips on/off.
+- Edge highlight for new roads is now 0.80 alpha instead of 0.75 (vanilla is 0.855)
 - Updated all translations and various UI fixes.
 </ChangeLog>
 <!--External link, can be set multiple times. supported types are "discord", "github", "youtube", "twitch", "x", "paypal", "patreon", "buymeacoffee", "kofi", "crowdin", "gitlab", "gofundme"-->

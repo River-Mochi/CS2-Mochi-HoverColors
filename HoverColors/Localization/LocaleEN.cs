@@ -28,16 +28,10 @@ namespace HoverColors
             IList<IDictionaryEntryError> errors,
             Dictionary<string, int> indexCounts)
         {
-            string title = Mod.ModName;
-            if (!string.IsNullOrEmpty(Mod.ModVersion))
-            {
-                title += " (" + Mod.ModVersion + ")";
-            }
-
             return new Dictionary<string, string>
             {
                 // Mod title in the left rail of the Options menu.
-                { m_Settings.GetSettingsLocaleID(), title },
+                { m_Settings.GetSettingsLocaleID(), Mod.ModName },
 
                 // Tabs
                 { m_Settings.GetOptionTabLocaleID(HoverColorsSettings.Actions), "Actions" },
@@ -59,12 +53,13 @@ namespace HoverColors
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ToolColorMode)),
                     "Controls temporary outline colors while bulldozer or road tools are active.\n" +
                     "\n" +
-                    "**1. Recommended** uses the game's Warning color (yellow) for demolition and a softer vanilla blue for roads.\n" +
+                    "**1. Recommended** uses the game's Warning color (yellow) for bulldoze. With a road or path tool active, it softens vanilla-blue highlight edges on new previews and existing segments under that tool. Ordinary existing-road hover still uses your Outline color. The broad new-road fill is controlled by the Guidelines preview swatch.\n" +
                     "**2. Vanilla tool colors** restores the game's normal vanilla blue while bulldoze or road tools are active.\n" +
                     "**3. Keep my custom color** uses your chosen color everywhere.\n" +
                     "\n" +
                     "Purpose: some users/testers find their custom color hard to see while bulldozing.\n" +
                     "This offers options for high visibility colors during tool usage.\n" +
+                    "The separate road footprint guide follows the Guidelines preview swatch.\n" +
                     "This does not overwrite your automatically saved custom color in the color picker."
                 },
                 { m_Settings.GetToolColorModeLocaleID("Recommended"), "1. Recommended" },
@@ -103,10 +98,19 @@ namespace HoverColors
                     "\n" +
                     "Try both and see which you prefer! This only changes the background of this mod panel and not the game's UI.\n" +
                     "\n" +
-                    "Tip: the game blurs what is behind every panel, which helps buttons and sliders stand out. Setting the game's own Interface Transparency to 0% turns that blur off for all panels, including this one. 1% or higher keeps it."
+                    "Tip: the game blurs what is behind every panel, which helps buttons and sliders stand out.\n" +
+                    "Setting the game's own Interface Transparency to 0% turns that blur off for all panels, including this one. 1% or higher keeps it."
                 },
                 { m_Settings.GetPanelStyleLocaleID("Dark"), "Dark (Vanilla)" },
                 { m_Settings.GetPanelStyleLocaleID("Glass"), "Glass (Custom)" },
+
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.LauncherLocation)), "▪ Panel button location" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.LauncherLocation)),
+                    "Choose top left, top right, or the game's Universal Mod Menu.\n" +
+                    "**Restart the game** for the button location to change." },
+                { m_Settings.GetLauncherLocationLocaleID("TopLeft"), "Top left" },
+                { m_Settings.GetLauncherLocationLocaleID("TopRight"), "Top right" },
+                { m_Settings.GetLauncherLocationLocaleID("UniversalMenu"), "Universal Mod Menu" },
 
                 // Panel opacity
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelOpacityPercent)), "▪ Panel opacity" },
@@ -167,10 +171,13 @@ namespace HoverColors
                     "Ships unbound to avoid key conflicts." },
                 { m_Settings.GetBindingKeyLocaleID(Mod.kToggleHighlightsActionName), "Quick Eyeball On/Off" },
 
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleSurfaceToolAreasBinding)), "Toggle Surface tool previews on/off" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ToggleSurfaceToolAreasBinding)),
-                    "Hotkey shortcut to <hide or show> active Surface tool boundary preview lines while placing surfaces." },
-                { m_Settings.GetBindingKeyLocaleID(Mod.kToggleSurfaceToolAreasActionName), "Surface tool preview layer On/Off" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleRoadAngleTooltipsBinding)), "Angle tooltips on/off" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ToggleRoadAngleTooltipsBinding)),
+                    "Hotkey for angle tooltip boxes and Place/Undo boxes\n" +
+                    "Works while drawing new roads or paths.\n" +
+                    "Cost, length, and slope stay visible."
+                },
+                { m_Settings.GetBindingKeyLocaleID(Mod.kToggleRoadAngleTooltipsActionName), "Angle and mouse hints on/off" },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.TogglePresetBinding)), "Toggle presets 1+2" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.TogglePresetBinding)),

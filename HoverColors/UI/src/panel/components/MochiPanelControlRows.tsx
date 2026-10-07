@@ -14,7 +14,7 @@ import { Button } from "cs2/ui";
 import { Color } from "cs2/bindings";
 import { SideTooltip } from "../tooltip/SideTooltip";
 import { MochiSlider } from "./MochiSlider";
-import { PresetSlotButton } from "./MochiPanelPieces";
+import { PanelSectionToggle, PresetSlotButton } from "./MochiPanelPieces";
 import {
   compactSwatchStyle,
   holdBarStyle,
@@ -27,7 +27,6 @@ import outlineThicknessIconSrc from "../../../images/outline-thickness.svg";
 import outlineIconSrc from "../../../images/MainElements_short_bigTriangle.svg";
 import guidelinesIconSrc from "../../../images/GuideLines4.svg";
 import switchIconSrc from "../../../images/icon-dbl-arrows.svg";
-import resetIconSrc from "../../../images/Reset_Button.svg";
 import styles from "../../MochiColorPickerPanel.module.scss";
 
 type PickerDirection = "up" | "down";
@@ -43,12 +42,16 @@ interface MochiPanelControlRowsProps {
   numberFieldClass: string;
   useDarkerPanel: boolean;
   collapsed: boolean;
+  guidelinesExpanded: boolean;
+  handleToggleGuidelines: () => void;
 
   outline: Color;
   ownerColor: Color;
   fillA: number;
   fillColor: Color;
   outlineThicknessScale: number;
+  guidelineDashedThicknessScale: number;
+  roadAngleTooltipsHidden: boolean;
   guidelineLinesColor: Color;
   guidelinePreviewColor: Color;
   guidelineDashedColor: Color;
@@ -110,6 +113,9 @@ interface MochiPanelControlRowsProps {
   handleFillColorChange: (value: Color) => void;
   handleOutlineThicknessChange: (value: number) => void;
   handleResetOutlineThickness: () => void;
+  handleGuidelineDashedThicknessChange: (value: number) => void;
+  handleResetGuidelineDashedThickness: () => void;
+  handleToggleRoadAngleTooltips: () => void;
   handleGuidelineLinesColorChange: (value: Color) => void;
   handleGuidelinePreviewColorChange: (value: Color) => void;
   handleGuidelineDashedColorChange: (value: Color) => void;
@@ -135,11 +141,15 @@ export const MochiPanelControlRows = ({
   numberFieldClass,
   useDarkerPanel,
   collapsed,
+  guidelinesExpanded,
+  handleToggleGuidelines,
   outline,
   ownerColor,
   fillA,
   fillColor,
   outlineThicknessScale,
+  guidelineDashedThicknessScale,
+  roadAngleTooltipsHidden,
   guidelineLinesColor,
   guidelinePreviewColor,
   guidelineDashedColor,
@@ -194,6 +204,9 @@ export const MochiPanelControlRows = ({
   handleFillColorChange,
   handleOutlineThicknessChange,
   handleResetOutlineThickness,
+  handleGuidelineDashedThicknessChange,
+  handleResetGuidelineDashedThickness,
+  handleToggleRoadAngleTooltips,
   handleGuidelineLinesColorChange,
   handleGuidelinePreviewColorChange,
   handleGuidelineDashedColorChange,
@@ -220,6 +233,7 @@ export const MochiPanelControlRows = ({
   const handlePresetButtonSelect = React.useCallback(() => undefined, []);
   return (
     <div className={`${styles.body} ${collapsed ? styles.bodyCollapsed : ""}`}>
+      {!collapsed && <div className={styles.highlightsHeading}>{text.sectionHighlights}</div>}
       <div className={`${styles.controlRow} ${styles.outlineRow}`}>
         <SideTooltip tooltip={tt(text.tooltipResetOutline)} side="left">
           <Button
@@ -391,7 +405,7 @@ export const MochiPanelControlRows = ({
                 onSelect={handleRestorePresetDefaults}
                 focusKey={focusDisabled}
               >
-                <img src={resetIconSrc} className={`${styles.resetIcon} ${styles.resetIconRestore}`} alt="" />
+                <img src="Media/Game/Icons/NewUI/Reset_Button.svg" className={`${styles.resetIcon} ${styles.resetIconRestore}`} alt="" />
               </Button>
 
             </SideTooltip>
@@ -511,6 +525,15 @@ export const MochiPanelControlRows = ({
             </div>
           </div>
 
+          <PanelSectionToggle
+            label={text.sectionGuidelines}
+            expanded={guidelinesExpanded}
+            onToggle={handleToggleGuidelines}
+            focusDisabled={focusDisabled}
+          />
+
+          {guidelinesExpanded && (
+          <>
           <div className={`${styles.controlRow} ${styles.guidelinesRow}`}>
             <SideTooltip tooltip={tt(text.tooltipResetGuidelines)} side="left">
               <Button
@@ -673,6 +696,58 @@ export const MochiPanelControlRows = ({
               </SideTooltip>
             </div>
           </div>
+
+          <div className={`${styles.controlRow} ${styles.surfaceControlsRow}`}>
+            <SideTooltip tooltip={tt(text.tooltipResetGuidelineDashedThickness)} side="left">
+              <Button
+                className={styles.controlIconButton}
+                variant="icon"
+                onSelect={handleResetGuidelineDashedThickness}
+                focusKey={focusDisabled}
+              >
+                <img src={outlineThicknessIconSrc} className={`${styles.controlIcon} ${styles.idleIcon}`} alt="" />
+              </Button>
+            </SideTooltip>
+
+            <SideTooltip tooltip={tt(text.tooltipGuidelineDashedThickness)} side="right">
+              <div className={styles.areaThicknessControl}>
+                <div className={styles.areaThicknessTrack}>
+                  <MochiSlider
+                    focusKey={focusDisabled}
+                    className={styles.areaThicknessSlider}
+                    value={guidelineDashedThicknessScale}
+                    start={0.1}
+                    end={1}
+                    gamepadStep={0.1}
+                    onChange={handleGuidelineDashedThicknessChange}
+                  />
+                  <span className={styles.areaThicknessValue}>
+                    {guidelineDashedThicknessScale.toFixed(1)}
+                  </span>
+                </div>
+                <span className={styles.areaThicknessLabel}>{text.labelDashedGuides}</span>
+              </div>
+            </SideTooltip>
+            <SideTooltip
+              tooltip={tt(roadAngleTooltipsHidden
+                ? text.tooltipRoadAngleTooltipsOff
+                : text.tooltipRoadAngleTooltipsOn)}
+              side="right"
+            >
+              <Button
+                className={`${styles.actionButton} ${styles.surfaceButton} ${styles.angleTooltipButton} ${roadAngleTooltipsHidden ? styles.angleTooltipButtonOff : ""}`}
+                variant="icon"
+                onSelect={handleToggleRoadAngleTooltips}
+                focusKey={focusDisabled}
+                aria-label={roadAngleTooltipsHidden ? text.tooltipRoadAngleTooltipsOff : text.tooltipRoadAngleTooltipsOn}
+                aria-pressed={roadAngleTooltipsHidden}
+              >
+                <img src="Media/Glyphs/Angle.svg" className={`${styles.angleTooltipIcon} ${styles.idleIcon}`} alt="" />
+              </Button>
+            </SideTooltip>
+          </div>
+          </>
+          )}
         </>
       )}
     </div>

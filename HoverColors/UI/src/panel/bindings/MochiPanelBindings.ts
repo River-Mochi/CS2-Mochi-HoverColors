@@ -47,6 +47,10 @@ export const fillB$ = bindValue<number>(CHANNEL, "FillB", 1);
 // Must match kModDefaultOutlineThicknessScale - this is what the slider shows for the frame
 // before the real setting arrives.
 export const outlineThicknessScale$ = bindValue<number>(CHANNEL, "OutlineThicknessScale", 1);
+export const surfaceBorderThicknessScale$ = bindValue<number>(CHANNEL, "SurfaceBorderThicknessScale", 1);
+export const extractorBorderThicknessScale$ = bindValue<number>(CHANNEL, "ExtractorBorderThicknessScale", 1);
+export const guidelineDashedThicknessScale$ = bindValue<number>(CHANNEL, "GuidelineDashedThicknessScale", 1);
+export const roadAngleTooltipsHidden$ = bindValue<boolean>(CHANNEL, "RoadAngleTooltipsHidden", false);
 
 export const districtR$ = bindValue<number>(CHANNEL, "DistrictR", 128 / 255);
 export const districtG$ = bindValue<number>(CHANNEL, "DistrictG", 128 / 255);
@@ -72,6 +76,12 @@ export const guidelineOpacity$ = bindValue<number>(CHANNEL, "GuidelineOpacityPer
 export const panelOpen$ = bindValue<boolean>(CHANNEL, "PanelOpen", false);
 export const panelTooltipsEnabled$ = bindValue<boolean>(CHANNEL, "PanelTooltipsEnabled", true);
 export const panelCollapsed$ = bindValue<boolean>(CHANNEL, "PanelCollapsed", false);
+export const guidelinesExpanded$ = bindValue<boolean>(CHANNEL, "GuidelinesExpanded", true);
+export const areasExpanded$ = bindValue<boolean>(CHANNEL, "AreasExpanded", true);
+export const panelPositionSet$ = bindValue<boolean>(CHANNEL, "PanelPositionSet", false);
+export const panelPositionX$ = bindValue<number>(CHANNEL, "PanelPositionX", 0);
+export const panelPositionY$ = bindValue<number>(CHANNEL, "PanelPositionY", 0);
+export const launcherLocation$ = bindValue<number>(CHANNEL, "LauncherLocation", 0);
 export const hoverHighlightsSuppressed$ = bindValue<boolean>(CHANNEL, "HoverHighlightsSuppressed", false);
 
 // Defaults to true so a fresh load never flashes the Standard glass panel before the real

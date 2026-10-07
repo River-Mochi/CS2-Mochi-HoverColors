@@ -28,7 +28,8 @@ namespace HoverColors
             OwnerB = 0.247f;
             OwnerA = 0.702f;
 
-            // FillA=0 matches vanilla CS2: no extra silhouette overlay until the player turns it up.
+            // FillA=0 matches vanilla silhouette hover behavior. It also removes the valid
+            // building-lot placement fill now that those previews use the same Fill swatch.
             FillA = 0f;
 
             // White is the neutral tint: the fill renders in the Outline color, same as before the
@@ -41,6 +42,10 @@ namespace HoverColors
             // 1.0 = the vanilla shader width captured at runtime, whatever that build's value is.
             OutlineThicknessScale = kModDefaultOutlineThicknessScale;
             OutlineThicknessInitialized = true;
+            SurfaceBorderThicknessScale = kMaxOverlayThicknessScale;
+            ExtractorBorderThicknessScale = kMaxOverlayThicknessScale;
+            GuidelineDashedThicknessScale = kMaxOverlayThicknessScale;
+            RoadAngleTooltipsHidden = false;
 
             PanelOpacityPercent = kDefaultPanelOpacityPercent;
 
@@ -155,6 +160,12 @@ namespace HoverColors
             PanelStyle = kPanelStyleDark;
             PanelStyleInitialized = true;
             PanelCollapsed = false;
+            GuidelinesExpanded = true;
+            AreasExpanded = true;
+            PanelPositionSet = false;
+            PanelPositionX = 0;
+            PanelPositionY = 0;
+            LauncherLocation = kLauncherTopLeft;
 
             // 100 = vanilla default. Lower = more transparent guidelines.
             GuidelineOpacityPercent = kDefaultGuidelineOpacityPercent;
