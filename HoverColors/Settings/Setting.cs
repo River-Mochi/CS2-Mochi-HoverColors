@@ -183,6 +183,10 @@ namespace HoverColors
         [SettingsUIHidden]
         public float GuidelineDashedThicknessScale { get; set; }
 
+        // In-city Guidelines button. Keep road angles visible on fresh installs.
+        [SettingsUIHidden]
+        public bool RoadAngleTooltipsHidden { get; set; }
+
         // Inert, like FillColorInitialized. Triggers.cs reads it in three places, but it is always
         // true so `&& OutlineThicknessInitialized` never changes the result.
         [SettingsUIHidden]

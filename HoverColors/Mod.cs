@@ -21,6 +21,7 @@ namespace HoverColors
     using Game.Modding;
     using Game.Rendering;
     using Game.SceneFlow;
+    using Game.UI.Tooltip;
     using HoverColors.Systems;
     using HoverColors.UI;
     using Unity.Entities;
@@ -151,6 +152,7 @@ namespace HoverColors
                 updateSystem.UpdateAfter<AreaBorderWidthApplySystem, AreaBorderRenderSystem>(SystemUpdatePhase.Rendering);
                 updateSystem.UpdateBefore<DashedGuidelineWidthCaptureSystem, GuideLinesSystem>(SystemUpdatePhase.Rendering);
                 updateSystem.UpdateAfter<DashedGuidelineWidthApplySystem, GuideLinesSystem>(SystemUpdatePhase.Rendering);
+                updateSystem.UpdateBefore<RoadAngleTooltipFilterSystem, GuideLineTooltipSystem>(SystemUpdatePhase.UITooltip);
 
                 world.GetOrCreateSystemManaged<AreaToolOverlaySystem>();
                 updateSystem.UpdateAt<AreaToolOverlaySystem>(SystemUpdatePhase.Rendering);

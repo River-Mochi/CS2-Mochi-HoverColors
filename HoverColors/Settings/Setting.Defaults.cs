@@ -44,6 +44,7 @@ namespace HoverColors
             SurfaceBorderThicknessScale = kMaxOverlayThicknessScale;
             ExtractorBorderThicknessScale = kMaxOverlayThicknessScale;
             GuidelineDashedThicknessScale = kMaxOverlayThicknessScale;
+            RoadAngleTooltipsHidden = false;
 
             PanelOpacityPercent = kDefaultPanelOpacityPercent;
 

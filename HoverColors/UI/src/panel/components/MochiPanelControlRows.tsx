@@ -51,6 +51,7 @@ interface MochiPanelControlRowsProps {
   fillColor: Color;
   outlineThicknessScale: number;
   guidelineDashedThicknessScale: number;
+  roadAngleTooltipsHidden: boolean;
   guidelineLinesColor: Color;
   guidelinePreviewColor: Color;
   guidelineDashedColor: Color;
@@ -114,6 +115,7 @@ interface MochiPanelControlRowsProps {
   handleResetOutlineThickness: () => void;
   handleGuidelineDashedThicknessChange: (value: number) => void;
   handleResetGuidelineDashedThickness: () => void;
+  handleToggleRoadAngleTooltips: () => void;
   handleGuidelineLinesColorChange: (value: Color) => void;
   handleGuidelinePreviewColorChange: (value: Color) => void;
   handleGuidelineDashedColorChange: (value: Color) => void;
@@ -147,6 +149,7 @@ export const MochiPanelControlRows = ({
   fillColor,
   outlineThicknessScale,
   guidelineDashedThicknessScale,
+  roadAngleTooltipsHidden,
   guidelineLinesColor,
   guidelinePreviewColor,
   guidelineDashedColor,
@@ -203,6 +206,7 @@ export const MochiPanelControlRows = ({
   handleResetOutlineThickness,
   handleGuidelineDashedThicknessChange,
   handleResetGuidelineDashedThickness,
+  handleToggleRoadAngleTooltips,
   handleGuidelineLinesColorChange,
   handleGuidelinePreviewColorChange,
   handleGuidelineDashedColorChange,
@@ -229,6 +233,7 @@ export const MochiPanelControlRows = ({
   const handlePresetButtonSelect = React.useCallback(() => undefined, []);
   return (
     <div className={`${styles.body} ${collapsed ? styles.bodyCollapsed : ""}`}>
+      {!collapsed && <div className={styles.highlightsHeading}>{text.sectionHighlights}</div>}
       <div className={`${styles.controlRow} ${styles.outlineRow}`}>
         <SideTooltip tooltip={tt(text.tooltipResetOutline)} side="left">
           <Button
@@ -722,6 +727,23 @@ export const MochiPanelControlRows = ({
                 </div>
                 <span className={styles.dashedThicknessLabel}>{text.labelDashedGuides}</span>
               </div>
+            </SideTooltip>
+            <SideTooltip
+              tooltip={tt(roadAngleTooltipsHidden
+                ? text.tooltipRoadAngleTooltipsOff
+                : text.tooltipRoadAngleTooltipsOn)}
+              side="right"
+            >
+              <Button
+                className={`${styles.controlIconButton} ${styles.angleTooltipButton} ${roadAngleTooltipsHidden ? styles.angleTooltipButtonOff : ""}`}
+                variant="icon"
+                onSelect={handleToggleRoadAngleTooltips}
+                focusKey={focusDisabled}
+                aria-label={roadAngleTooltipsHidden ? text.tooltipRoadAngleTooltipsOff : text.tooltipRoadAngleTooltipsOn}
+                aria-pressed={roadAngleTooltipsHidden}
+              >
+                <img src="Media/Glyphs/Angle.svg" className={`${styles.angleTooltipIcon} ${styles.idleIcon}`} alt="" />
+              </Button>
             </SideTooltip>
           </div>
           </>

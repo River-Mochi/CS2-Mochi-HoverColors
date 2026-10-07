@@ -1,5 +1,6 @@
 {
   "HoverColors.UI.Title": "Hover Colors",
+  "HoverColors.UI.Section.Highlights": "Highlights",
   "HoverColors.UI.Section.Guidelines": "Guidelines",
   "HoverColors.UI.Section.Areas": "Areas",
   "HoverColors.UI.TopLeft.Tooltip": "Couleurs au survol - surbrillance + opacité",
@@ -21,6 +22,8 @@
   "HoverColors.UI.Tooltip.ResetSurfaceBorderThickness": "Reset the Surface boundary line and dots to game size.",
   "HoverColors.UI.Tooltip.ExtractorBorderThickness": "Extractor lot boundary line width. 1.0 = game default; lower = thinner. Joint dots stay at game size.",
   "HoverColors.UI.Tooltip.ResetExtractorBorderThickness": "Reset the Extractor lot boundary line to game width.",
+  "HoverColors.UI.Tooltip.RoadAngleTooltipsOn": "Hide angle boxes while drawing roads. Length and slope stay visible.",
+  "HoverColors.UI.Tooltip.RoadAngleTooltipsOff": "Show angle boxes while drawing roads.",
   "HoverColors.UI.Tooltip.GuidelineDashedThickness": "Dashed and solid angle guide width. 1.0 = game default; lower = thinner. Road preview width and circles stay unchanged.",
   "HoverColors.UI.Tooltip.ResetGuidelineDashedThickness": "Reset dashed and angle guide width to game size.",
   "HoverColors.UI.Tooltip.OwnerSwatch": "Surbrillance du bâtiment propriétaire/parent.\nExemple : dépôt de bus. Vert = valeur du jeu.",

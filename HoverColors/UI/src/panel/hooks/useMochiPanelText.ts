@@ -23,6 +23,7 @@ export const useMochiPanelText = () => {
         return {
             ariaClosePanel: l("HoverColors.UI.Aria.ClosePanel"),
             title: l("HoverColors.UI.Title"),
+            sectionHighlights: l("HoverColors.UI.Section.Highlights"),
             sectionGuidelines: l("HoverColors.UI.Section.Guidelines"),
             sectionAreas: l("HoverColors.UI.Section.Areas"),
             tooltipClose: l("HoverColors.UI.Tooltip.Close"),
@@ -46,6 +47,8 @@ export const useMochiPanelText = () => {
             tooltipExtractorBorderThickness: l("HoverColors.UI.Tooltip.ExtractorBorderThickness"),
             tooltipResetExtractorBorderThickness: l("HoverColors.UI.Tooltip.ResetExtractorBorderThickness"),
             tooltipGuidelineDashedThickness: l("HoverColors.UI.Tooltip.GuidelineDashedThickness"),
+            tooltipRoadAngleTooltipsOn: l("HoverColors.UI.Tooltip.RoadAngleTooltipsOn"),
+            tooltipRoadAngleTooltipsOff: l("HoverColors.UI.Tooltip.RoadAngleTooltipsOff"),
             tooltipResetGuidelineDashedThickness: l("HoverColors.UI.Tooltip.ResetGuidelineDashedThickness"),
             labelSurfaceBorder: l("HoverColors.UI.Label.SurfaceBorder"),
             labelExtractorBorder: l("HoverColors.UI.Label.ExtractorBorder"),

@@ -32,6 +32,7 @@ namespace HoverColors.UI
             AddBinding(new TriggerBinding(Mod.ModId, "ResetExtractorBorderThickness", ResetExtractorBorderThickness));
             AddBinding(new TriggerBinding<float>(Mod.ModId, "SetGuidelineDashedThickness", SetGuidelineDashedThickness));
             AddBinding(new TriggerBinding(Mod.ModId, "ResetGuidelineDashedThickness", ResetGuidelineDashedThickness));
+            AddBinding(new TriggerBinding(Mod.ModId, "ToggleRoadAngleTooltips", ToggleRoadAngleTooltips));
             AddBinding(new TriggerBinding<int>(Mod.ModId, "SetGuidelineOpacity", SetGuidelineOpacity));
             AddBinding(new TriggerBinding<float, float, float, float>(Mod.ModId, "SetGuidelineLinesColor", SetGuidelineLinesColor));
             AddBinding(new TriggerBinding<float, float, float, float>(Mod.ModId, "SetGuidelinePreviewColor", SetGuidelinePreviewColor));
@@ -497,6 +498,18 @@ namespace HoverColors.UI
             settings.OwnerG = owner.g;
             settings.OwnerB = owner.b;
             settings.OwnerA = owner.a;
+            ApplySaveAndSync(settings);
+        }
+
+        private void ToggleRoadAngleTooltips()
+        {
+            HoverColorsSettings? settings = Mod.Settings;
+            if (settings == null)
+            {
+                return;
+            }
+
+            settings.RoadAngleTooltipsHidden = !settings.RoadAngleTooltipsHidden;
             ApplySaveAndSync(settings);
         }
 

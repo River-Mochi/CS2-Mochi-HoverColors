@@ -36,6 +36,7 @@ import {
     guidelineDashedColorG$,
     guidelineDashedColorR$,
     guidelineDashedThicknessScale$,
+    roadAngleTooltipsHidden$,
     extractorBorderThicknessScale$,
     guidelineOpacity$,
     guidelinePreviewColorA$,
@@ -174,6 +175,7 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
     const boundSurfaceBorderThicknessScale = useValue(surfaceBorderThicknessScale$);
     const boundExtractorBorderThicknessScale = useValue(extractorBorderThicknessScale$);
     const boundGuidelineDashedThicknessScale = useValue(guidelineDashedThicknessScale$);
+    const roadAngleTooltipsHidden = useValue(roadAngleTooltipsHidden$);
     const boundGuideline = useValue(guidelineOpacity$);
     const boundGuidelineDashedColor: Color = {
         r: useValue(guidelineDashedColorR$),
@@ -537,6 +539,7 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
     const handleResetExtractorBorderThickness = () => trigger(CHANNEL, "ResetExtractorBorderThickness");
     const handleResetGuidelineDashedThickness = () => trigger(CHANNEL, "ResetGuidelineDashedThickness");
     const handleResetGuidelines = () => trigger(CHANNEL, "ResetGuidelines");
+    const handleToggleRoadAngleTooltips = () => trigger(CHANNEL, "ToggleRoadAngleTooltips");
     const handleToggleSurfaceToolAreas = () => trigger(CHANNEL, "ToggleSurfaceToolAreas");
     const handleToggleSpecializedIndustryAreas = () => trigger(CHANNEL, "ToggleSpecializedIndustryAreas");
     const handleTogglePresetDefaults = () => trigger(CHANNEL, "TogglePresetDefaults");
@@ -686,6 +689,7 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
                         fillColor={fillColor}
                         outlineThicknessScale={outlineThicknessScale}
                         guidelineDashedThicknessScale={guidelineDashedThicknessScale}
+                        roadAngleTooltipsHidden={roadAngleTooltipsHidden}
                         guidelineLinesColor={guidelineLinesColor}
                         guidelinePreviewColor={guidelinePreviewColor}
                         guidelineDashedColor={guidelineDashedColor}
@@ -742,6 +746,7 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
                         handleResetOutlineThickness={handleResetOutlineThickness}
                         handleGuidelineDashedThicknessChange={handleGuidelineDashedThicknessChange}
                         handleResetGuidelineDashedThickness={handleResetGuidelineDashedThickness}
+                        handleToggleRoadAngleTooltips={handleToggleRoadAngleTooltips}
                         handleGuidelineLinesColorChange={handleGuidelineLinesColorChange}
                         handleGuidelinePreviewColorChange={handleGuidelinePreviewColorChange}
                         handleGuidelineDashedColorChange={handleGuidelineDashedColorChange}
