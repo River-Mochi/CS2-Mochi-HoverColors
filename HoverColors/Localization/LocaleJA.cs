@@ -104,8 +104,7 @@ namespace HoverColors
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.LauncherLocation)), "▪ パネルボタンの位置" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.LauncherLocation)),
-                    "左上、右上、または Universal Mod Menu を選びます。\n" +
-                    "位置の変更には**ゲームの再起動**が必要です。"
+                    "左上、右上、または Universal Mod Menu を選びます。変更するとボタンの位置がすぐに切り替わります。"
                 },
                 { m_Settings.GetLauncherLocationLocaleID("TopLeft"), "左上" },
                 { m_Settings.GetLauncherLocationLocaleID("TopRight"), "右上" },

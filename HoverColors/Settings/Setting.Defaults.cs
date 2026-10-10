@@ -11,16 +11,20 @@
 
 namespace HoverColors
 {
+    using HoverColors.Systems;
+
     public partial class HoverColorsSettings
     {
         public override void SetDefaults()
         {
-            // New installs start on HC's Set A / P1 instead of vanilla cyan-blue.
+            // Start with the game's captured vanilla blue when available. The capture properties
+            // contain the known vanilla fallback until the rendering system reads the live values.
             // Existing users keep their saved live color when their .coc loads.
-            OutlineR = kPresetA1R;
-            OutlineG = kPresetA1G;
-            OutlineB = kPresetA1B;
-            OutlineA = kPresetA1A;
+            UnityEngine.Color hovered = OutlineColorSystem.CapturedHoveredColor;
+            OutlineR = hovered.r;
+            OutlineG = hovered.g;
+            OutlineB = hovered.b;
+            OutlineA = OutlineColorSystem.CapturedOutlineA;
 
             // Vanilla parent/owner green used for sub-building placement and owned objects.
             OwnerR = 0.247f;

@@ -106,8 +106,7 @@ namespace HoverColors
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.LauncherLocation)), "▪ Panel button location" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.LauncherLocation)),
-                    "Choose top left, top right, or the game's Universal Mod Menu.\n" +
-                    "**Restart the game** for the button location to change." },
+                    "Choose top left, top right, or the game's Universal Mod Menu. The button moves when you change this setting." },
                 { m_Settings.GetLauncherLocationLocaleID("TopLeft"), "Top left" },
                 { m_Settings.GetLauncherLocationLocaleID("TopRight"), "Top right" },
                 { m_Settings.GetLauncherLocationLocaleID("UniversalMenu"), "Universal Mod Menu" },

@@ -35,16 +35,27 @@ const EditorPanelEntry = () => {
   return isOpen ? <MochiColorPickerPanel editorMode /> : null;
 };
 
+const LauncherAt = ({ location }: { location: number }) => {
+  const requestedLocation = useValue(launcherLocation$);
+  // A missing or invalid saved choice leaves the launcher at its default location.
+  const selectedLocation = requestedLocation === 1 || requestedLocation === 2 ? requestedLocation : 0;
+  return selectedLocation === location ? <ModIconButton location={location} /> : null;
+};
+
+const TopLeftLauncher = () => <LauncherAt location={0} />;
+const TopRightLauncher = () => <LauncherAt location={1} />;
+const UniversalMenuLauncher = () => <LauncherAt location={2} />;
+
 const register: ModRegistrar = (moduleRegistry) => {
   VanillaComponentResolver.setRegistry(moduleRegistry);
 
-  // The game's Universal Mod Menu opens whenever anything is registered in that hook,
-  // even when a component returns null. Register only the selected location at startup.
-  const requestedLocation = launcherLocation$.value;
-  const location = requestedLocation === 1 || requestedLocation === 2 ? requestedLocation : 0;
-  const launcherHost = location === 0 ? "GameTopLeft" : location === 2 ? "UniversalModMenu" : "GameTopRight";
-  const Launcher = () => <ModIconButton location={location} />;
-  moduleRegistry.append(launcherHost, Launcher);
+  // Register each host once. The binding chooses which host renders the button live,
+  // including after the player's saved setting arrives from C#.
+  moduleRegistry.append("GameTopLeft", TopLeftLauncher);
+  moduleRegistry.append("GameTopRight", TopRightLauncher);
+  // The game shows its general Mods menu button whenever this hook is registered,
+  // even while the Hover Colors entry itself returns null.
+  moduleRegistry.append("UniversalModMenu", UniversalMenuLauncher);
 
   moduleRegistry.append(
     "Game",

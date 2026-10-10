@@ -104,8 +104,7 @@ namespace HoverColors
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.LauncherLocation)), "▪ Position der Panel-Schaltfläche" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.LauncherLocation)),
-                    "Wähle oben links, oben rechts oder das Universal Mod Menu.\n" +
-                    "**Spiel neu starten**, damit die Position geändert wird."
+                    "Wähle oben links, oben rechts oder das Universal Mod Menu. Die Schaltfläche wechselt beim Ändern dieser Einstellung sofort den Ort."
                 },
                 { m_Settings.GetLauncherLocationLocaleID("TopLeft"), "Oben links" },
                 { m_Settings.GetLauncherLocationLocaleID("TopRight"), "Oben rechts" },
