@@ -44,17 +44,17 @@ const LauncherAt = ({ location }: { location: number }) => {
 
 const TopLeftLauncher = () => <LauncherAt location={0} />;
 const TopRightLauncher = () => <LauncherAt location={1} />;
-const UniversalMenuLauncher = () => <LauncherAt location={2} />;
+// Keep an entry in the game's Mods menu as a fallback if a corner hook is not mounted.
+const UniversalMenuLauncher = () => <ModIconButton location={2} />;
 
 const register: ModRegistrar = (moduleRegistry) => {
   VanillaComponentResolver.setRegistry(moduleRegistry);
 
-  // Register each host once. The binding chooses which host renders the button live,
-  // including after the player's saved setting arrives from C#.
+  // Register each host once. The binding chooses the corner live, while Universal
+  // remains available alongside it when the saved choice is a corner.
   moduleRegistry.append("GameTopLeft", TopLeftLauncher);
   moduleRegistry.append("GameTopRight", TopRightLauncher);
-  // The game shows its general Mods menu button whenever this hook is registered,
-  // even while the Hover Colors entry itself returns null.
+  // The general Mods menu remains useful if the game's corner hook is unavailable.
   moduleRegistry.append("UniversalModMenu", UniversalMenuLauncher);
 
   moduleRegistry.append(

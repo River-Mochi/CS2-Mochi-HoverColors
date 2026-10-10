@@ -106,8 +106,8 @@ namespace HoverColors
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.LauncherLocation)),
                     "Choisissez en haut à gauche, en haut à droite ou dans l’Universal Mod Menu. Le bouton change de place dès que vous modifiez ce réglage."
                 },
-                { m_Settings.GetLauncherLocationLocaleID("TopLeft"), "En haut à gauche" },
-                { m_Settings.GetLauncherLocationLocaleID("TopRight"), "En haut à droite" },
+                { m_Settings.GetLauncherLocationLocaleID("TopLeft"), "En haut à gauche + Universal" },
+                { m_Settings.GetLauncherLocationLocaleID("TopRight"), "En haut à droite + Universal" },
                 { m_Settings.GetLauncherLocationLocaleID("UniversalMenu"), "Universal Mod Menu" },
 
                 // Panel opacity

@@ -106,8 +106,8 @@ namespace HoverColors
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.LauncherLocation)),
                     "Wähle oben links, oben rechts oder das Universal Mod Menu. Die Schaltfläche wechselt beim Ändern dieser Einstellung sofort den Ort."
                 },
-                { m_Settings.GetLauncherLocationLocaleID("TopLeft"), "Oben links" },
-                { m_Settings.GetLauncherLocationLocaleID("TopRight"), "Oben rechts" },
+                { m_Settings.GetLauncherLocationLocaleID("TopLeft"), "Oben links + Universal" },
+                { m_Settings.GetLauncherLocationLocaleID("TopRight"), "Oben rechts + Universal" },
                 { m_Settings.GetLauncherLocationLocaleID("UniversalMenu"), "Universal Mod Menu" },
 
                 // Panel opacity

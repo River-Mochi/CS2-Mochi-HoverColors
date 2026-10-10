@@ -106,8 +106,8 @@ namespace HoverColors
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.LauncherLocation)),
                     "เลือกซ้ายบน ขวาบน หรือ Universal Mod Menu ปุ่มจะย้ายตำแหน่งทันทีเมื่อเปลี่ยนการตั้งค่านี้"
                 },
-                { m_Settings.GetLauncherLocationLocaleID("TopLeft"), "ซ้ายบน" },
-                { m_Settings.GetLauncherLocationLocaleID("TopRight"), "ขวาบน" },
+                { m_Settings.GetLauncherLocationLocaleID("TopLeft"), "ซ้ายบน + Universal" },
+                { m_Settings.GetLauncherLocationLocaleID("TopRight"), "ขวาบน + Universal" },
                 { m_Settings.GetLauncherLocationLocaleID("UniversalMenu"), "Universal Mod Menu" },
 
                 // Panel opacity

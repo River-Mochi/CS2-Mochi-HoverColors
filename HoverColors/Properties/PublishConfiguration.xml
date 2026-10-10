@@ -33,13 +33,13 @@ Bright blue highlights getting in the way? Want cleaner road guides, thinner col
 
 - Glass or Dark panel styles.
 - Collapsible sections and remembered panel position.
-- Move the launcher instantly between Top Left, Top Right, and Universal Mod Menu.
+- Choose a Top Left or Top Right launcher with a Universal Mod Menu backup, or Universal alone. Changes apply instantly.
 - Works in **Editor Mode**, use the panel hotkey to open (default J).
 - Extra Bulldozer and other options in the Options menu.
 
 ## Good to Know
 
-- **To start:** click the Hover Colors palette icon (top-left by default).
+- **To start:** click the Hover Colors palette icon (top-left or Universal Mod Menu by default).
 - **Works with Recolor:** Hover Colors changes highlights, guides, overlays, and previews. Recolor changes the actual objects.
 - **Lightweight:** no Harmony patches and safe to remove anytime. Performance friendly, settings update when needed.
 - Hover over controls for quick tooltip help.
@@ -87,7 +87,7 @@ tags: hover colors, remove blue, disable hover, highlight color, outline thickne
 <!--Link to the forum post where the mod can be discussed-->
 <ForumLink Value="https://forum.paradoxplaza.com/forum/threads/mochis-hover-colors.1925898/" />
 <!--Version of the mod-->
-<ModVersion Value="1.2.0" />
+<ModVersion Value="1.3.0" />
 <!--Recommended version of the base game to use the mod-->
 <GameVersion Value="1.6.*" />
 <!--Dependency for the mod, can be set multiple times-->
@@ -96,7 +96,7 @@ tags: hover colors, remove blue, disable hover, highlight color, outline thickne
 <RequiredDLC Value="" />
 <!--Change log for new version. Single line or multi line. Supports minimal markdown subset-->
 <ChangeLog>
-- Panel button location now Instant change: Top Left, Top Right, and Universal Mod Menu. No restart needed.
+- Panel button location changes instantly, with a Universal Mod Menu entry also available when a corner is selected. No restart needed.
 - New installs start with the game's vanilla blue highlight instead of preset 1. Existing saved colors and presets are kept.
 - Updated all translations and various UI fixes.
 </ChangeLog>

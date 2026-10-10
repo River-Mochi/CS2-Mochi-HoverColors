@@ -45,7 +45,7 @@ Change District overlay and border colors, adjust transparency, or return them t
 
 ## Easy to Use
 
-- Open Hover Colors from the **palette icon at the top-left by default**; its location can be changed in Options.
+- Open Hover Colors from the **palette icon at the top-left and in the Universal Mod Menu by default**; Options can move the corner icon or use Universal alone.
 - Hover over panel buttons for short tooltip help.
 - The panel can be collapsed or moved anywhere on screen.
 - Choose between two panel styles: **Dark** matches the game's own panels, or **Glass** for a lighter see-through look with its own opacity slider.

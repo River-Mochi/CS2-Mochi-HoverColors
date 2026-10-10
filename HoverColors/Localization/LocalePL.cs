@@ -106,8 +106,8 @@ namespace HoverColors
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.LauncherLocation)),
                     "Wybierz lewy górny róg, prawy górny róg lub Universal Mod Menu. Zmiana tego ustawienia natychmiast przenosi przycisk."
                 },
-                { m_Settings.GetLauncherLocationLocaleID("TopLeft"), "Lewy górny róg" },
-                { m_Settings.GetLauncherLocationLocaleID("TopRight"), "Prawy górny róg" },
+                { m_Settings.GetLauncherLocationLocaleID("TopLeft"), "Lewy górny róg + Universal" },
+                { m_Settings.GetLauncherLocationLocaleID("TopRight"), "Prawy górny róg + Universal" },
                 { m_Settings.GetLauncherLocationLocaleID("UniversalMenu"), "Universal Mod Menu" },
 
                 // Panel opacity

@@ -106,8 +106,8 @@ namespace HoverColors
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.LauncherLocation)),
                     "왼쪽 위, 오른쪽 위 또는 Universal Mod Menu를 선택합니다. 설정을 변경하면 버튼 위치가 즉시 바뀝니다."
                 },
-                { m_Settings.GetLauncherLocationLocaleID("TopLeft"), "왼쪽 위" },
-                { m_Settings.GetLauncherLocationLocaleID("TopRight"), "오른쪽 위" },
+                { m_Settings.GetLauncherLocationLocaleID("TopLeft"), "왼쪽 위 + Universal" },
+                { m_Settings.GetLauncherLocationLocaleID("TopRight"), "오른쪽 위 + Universal" },
                 { m_Settings.GetLauncherLocationLocaleID("UniversalMenu"), "Universal Mod Menu" },
 
                 // Panel opacity
