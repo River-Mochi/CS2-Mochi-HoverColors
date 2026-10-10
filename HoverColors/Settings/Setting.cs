@@ -294,7 +294,7 @@ namespace HoverColors
 
         // Set A, slot 1: pale warm cream, approx RGB 224, 224, 202. Exact picker values are kept
         // rather than rounded to x/255 so the shipped swatch is the colour that was chosen.
-        // Note this pair is also the fresh-install Outline colour - see Setting.Defaults.cs.
+        // Stored preset colors are independent of the fresh-install live Outline color.
         internal const float kPresetA1R = 0.8770671f, kPresetA1G = 0.879998f, kPresetA1B = 0.7919982f;
         internal const float kPresetA1A = 0.80f, kPresetA1FillA = 0f;
 

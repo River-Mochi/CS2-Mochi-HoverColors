@@ -104,11 +104,10 @@ namespace HoverColors
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.LauncherLocation)), "▪ Panel düğmesinin konumu" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.LauncherLocation)),
-                    "Sol üst, sağ üst veya Universal Mod Menu seç.\n" +
-                    "Yeni konum için **oyunu yeniden başlat**."
+                    "Sol üst, sağ üst veya Universal Mod Menu seç. Bu ayarı değiştirdiğinde düğme hemen yer değiştirir."
                 },
-                { m_Settings.GetLauncherLocationLocaleID("TopLeft"), "Sol üst" },
-                { m_Settings.GetLauncherLocationLocaleID("TopRight"), "Sağ üst" },
+                { m_Settings.GetLauncherLocationLocaleID("TopLeft"), "Sol üst + Universal" },
+                { m_Settings.GetLauncherLocationLocaleID("TopRight"), "Sağ üst + Universal" },
                 { m_Settings.GetLauncherLocationLocaleID("UniversalMenu"), "Universal Mod Menu" },
 
                 // Panel opacity

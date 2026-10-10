@@ -33,13 +33,13 @@ Bright blue highlights getting in the way? Want cleaner road guides, thinner col
 
 - Glass or Dark panel styles.
 - Collapsible sections and remembered panel position.
-- Choose Top Left, Top Right, or Universal Mod Menu for the launcher.
+- Choose a Top Left or Top Right launcher with a Universal Mod Menu backup, or Universal alone. Changes apply instantly.
 - Works in **Editor Mode**, use the panel hotkey to open (default J).
 - Extra Bulldozer and other options in the Options menu.
 
 ## Good to Know
 
-- **To start:** click the Hover Colors palette icon (top-left by default).
+- **To start:** click the Hover Colors palette icon (top-left or Universal Mod Menu by default).
 - **Works with Recolor:** Hover Colors changes highlights, guides, overlays, and previews. Recolor changes the actual objects.
 - **Lightweight:** no Harmony patches and safe to remove anytime. Performance friendly, settings update when needed.
 - Hover over controls for quick tooltip help.
@@ -87,7 +87,7 @@ tags: hover colors, remove blue, disable hover, highlight color, outline thickne
 <!--Link to the forum post where the mod can be discussed-->
 <ForumLink Value="https://forum.paradoxplaza.com/forum/threads/mochis-hover-colors.1925898/" />
 <!--Version of the mod-->
-<ModVersion Value="1.2.0" />
+<ModVersion Value="1.3.0" />
 <!--Recommended version of the base game to use the mod-->
 <GameVersion Value="1.6.*" />
 <!--Dependency for the mod, can be set multiple times-->
@@ -96,18 +96,8 @@ tags: hover colors, remove blue, disable hover, highlight color, outline thickne
 <RequiredDLC Value="" />
 <!--Change log for new version. Single line or multi line. Supports minimal markdown subset-->
 <ChangeLog>
-- Eyeball now hides ground property lot fill and outline.
-- Added thickness slider for guidelines.
-- Added thickness slider for Surfaces and Extractor area borders.
-- Added instant Show/hide button for angles tooltips when drawing roads or paths.
-- Added collapsible section arrows and section titles.
-- Title bar is slightly taller.
-- Panel position is now remembered.
-- Pink dot indicator for active highlight color (blue dot previously was harder to see).
-- Added an Options menu choice for the panel button: Top Left, Top Right, or Universal Mod Menu. New installs default to Top Left.
-- remove Hotkey for Surface preview filter On/off
-- add new hotkey for Angles tooltips on/off.
-- New-road edge highlight is now 0.80 alpha instead of 0.75 (vanilla is ~0.855)
+- Panel button location changes instantly, with a Universal Mod Menu entry also available when a corner is selected. No restart needed.
+- New installs start with the game's vanilla blue highlight instead of preset 1. Existing saved colors and presets are kept.
 - Updated all translations and various UI fixes.
 </ChangeLog>
 <!--External link, can be set multiple times. supported types are "discord", "github", "youtube", "twitch", "x", "paypal", "patreon", "buymeacoffee", "kofi", "crowdin", "gitlab", "gofundme"-->

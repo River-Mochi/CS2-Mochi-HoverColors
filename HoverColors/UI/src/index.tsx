@@ -12,10 +12,10 @@
 //   - Registers selectable city launcher locations and mounts the same panel in Editor.
 // webpack entry point; only add module-level side effects here.
 
-import { useValue } from "cs2/api";
+import { trigger, useValue } from "cs2/api";
 import { ModRegistrar } from "cs2/modding";
 import { MochiColorPickerPanel } from "./MochiColorPickerPanel";
-import { launcherLocation$, panelOpen$ } from "./panel/bindings/MochiPanelBindings";
+import { CHANNEL, launcherLocation$, panelOpen$ } from "./panel/bindings/MochiPanelBindings";
 import { VanillaComponentResolver } from "./utils/vanilla/VanillaComponentResolver";
 import "./MochiColorPickerPanel.global.scss";
 
@@ -35,26 +35,34 @@ const EditorPanelEntry = () => {
   return isOpen ? <MochiColorPickerPanel editorMode /> : null;
 };
 
+const LauncherAt = ({ location }: { location: number }) => {
+  const requestedLocation = useValue(launcherLocation$);
+  // A missing or invalid saved choice leaves the launcher at its default location.
+  const selectedLocation = requestedLocation === 1 || requestedLocation === 2 ? requestedLocation : 0;
+  return selectedLocation === location ? <ModIconButton location={location} /> : null;
+};
+
+const TopLeftLauncher = () => <LauncherAt location={0} />;
+const TopRightLauncher = () => <LauncherAt location={1} />;
+// Keep an entry in the game's Mods menu as a fallback if a corner hook is not mounted.
+const UniversalMenuLauncher = () => <ModIconButton location={2} />;
+
 const register: ModRegistrar = (moduleRegistry) => {
-  VanillaComponentResolver.setRegistry(moduleRegistry);
+  try {
+    VanillaComponentResolver.setRegistry(moduleRegistry);
 
-  // The game's Universal Mod Menu opens whenever anything is registered in that hook,
-  // even when a component returns null. Register only the selected location at startup.
-  const requestedLocation = launcherLocation$.value;
-  const location = requestedLocation === 1 || requestedLocation === 2 ? requestedLocation : 0;
-  const launcherHost = location === 0 ? "GameTopLeft" : location === 2 ? "UniversalModMenu" : "GameTopRight";
-  const Launcher = () => <ModIconButton location={location} />;
-  moduleRegistry.append(launcherHost, Launcher);
-
-  moduleRegistry.append(
-    "Game",
-    GamePanelEntry
-  );
-
-  moduleRegistry.append(
-    "Editor",
-    EditorPanelEntry
-  );
+    // Register each host once. The binding chooses the corner live, while Universal
+    // remains available alongside it when the saved choice is a corner.
+    moduleRegistry.append("Game", GamePanelEntry);
+    moduleRegistry.append("Editor", EditorPanelEntry);
+    moduleRegistry.append("UniversalModMenu", UniversalMenuLauncher);
+    moduleRegistry.append("GameTopLeft", TopLeftLauncher);
+    moduleRegistry.append("GameTopRight", TopRightLauncher);
+  } catch (error) {
+    // The game's registrar loop has no catch. Do not stop other mods from registering.
+    // An import failure happens before this callback, so it cannot report itself here.
+    try { trigger(CHANNEL, "ReportUIRegistrationFailure", String(error)); } catch { /* UI bridge unavailable. */ }
+  }
 };
 
 export default register;

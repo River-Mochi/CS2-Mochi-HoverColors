@@ -55,9 +55,21 @@ namespace HoverColors.UI
             AddBinding(new TriggerBinding(Mod.ModId, "TogglePresetDefaults", TogglePresetDefaults));
             AddBinding(new TriggerBinding(Mod.ModId, "RestorePresetDefaults", RestorePresetDefaults));
             AddBinding(new TriggerBinding(Mod.ModId, "ResetGuidelines", ResetGuidelines));
+            AddBinding(new TriggerBinding<string>(Mod.ModId, "ReportUIRegistrationFailure", ReportUIRegistrationFailure));
 #if DEBUG
             AddBinding(new TriggerBinding<string>(Mod.ModId, "LogDebug", LogDebug));
 #endif
+        }
+
+        private static void ReportUIRegistrationFailure(string detail)
+        {
+            if (string.IsNullOrEmpty(detail))
+            {
+                return;
+            }
+
+            string limitedDetail = detail.Length > 400 ? detail.Substring(0, 400) : detail;
+            CS2Shared.RiverMochi.LogUtils.Error(() => $"{Mod.ModTag} UI module registration failed: {limitedDetail}");
         }
 
 #if DEBUG

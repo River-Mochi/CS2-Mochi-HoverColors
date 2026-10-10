@@ -25,11 +25,11 @@ export const COMPACT_PICKER_BODY_CLASS = "mochiCompactColorPickerOpen";
 // Set while ANY panel picker is open. Used to lift the vanilla balloon layer above the panel.
 export const PICKER_OPEN_BODY_CLASS = "mochiColorPickerOpen";
 
-// Live color bindings. New-install fallback matches Set A / P1.
-export const outlineR$ = bindValue<number>(CHANNEL, "OutlineR", 215 / 255);
-export const outlineG$ = bindValue<number>(CHANNEL, "OutlineG", 226 / 255);
-export const outlineB$ = bindValue<number>(CHANNEL, "OutlineB", 194 / 255);
-export const outlineA$ = bindValue<number>(CHANNEL, "OutlineA", 0.67);
+// Live color bindings. The pre-binding fallback matches the captured vanilla defaults.
+export const outlineR$ = bindValue<number>(CHANNEL, "OutlineR", 0.502);
+export const outlineG$ = bindValue<number>(CHANNEL, "OutlineG", 0.869);
+export const outlineB$ = bindValue<number>(CHANNEL, "OutlineB", 1);
+export const outlineA$ = bindValue<number>(CHANNEL, "OutlineA", 0.855);
 
 export const ownerR$ = bindValue<number>(CHANNEL, "OwnerR", 0.247);
 export const ownerG$ = bindValue<number>(CHANNEL, "OwnerG", 0.981);

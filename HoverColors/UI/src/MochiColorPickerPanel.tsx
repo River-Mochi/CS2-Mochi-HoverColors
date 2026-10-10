@@ -15,6 +15,7 @@ import { Button, FormattedParagraphs } from "cs2/ui";
 import { Color } from "cs2/bindings";
 import { trigger, useValue } from "cs2/api";
 import { VanillaComponentResolver } from "./utils/vanilla/VanillaComponentResolver";
+import { getLastLauncherLocation, getRecentLauncherBounds } from "./entry/launcherSelection";
 import {
     CHANNEL,
     COMPACT_PICKER_BODY_CLASS,
@@ -122,6 +123,20 @@ const LAUNCHER_GAP_PX = 6;
 const getGamePanelOrigin = (panelWidth = 0): PanelOrigin => {
     if (typeof document === "undefined") {
         return FALLBACK_ORIGIN;
+    }
+
+    const lastLocation = getLastLauncherLocation();
+    const preferredLauncher = lastLocation === null
+        ? null
+        : document.querySelector(`[data-hc-launcher-location='${lastLocation}']`);
+    const preferredRect = preferredLauncher?.getBoundingClientRect();
+    const recentBounds = lastLocation === null ? null : getRecentLauncherBounds(lastLocation);
+    const clickedBounds = preferredRect != null && (preferredRect.width !== 0 || preferredRect.height !== 0)
+        ? preferredRect
+        : recentBounds;
+    if (clickedBounds != null && lastLocation != null) {
+        const left = lastLocation === 0 ? clickedBounds.left : clickedBounds.right - panelWidth;
+        return { left: Math.max(0, left), top: clickedBounds.bottom + LAUNCHER_GAP_PX };
     }
 
     const launcher = document.querySelector("[data-hc-launcher='true']");

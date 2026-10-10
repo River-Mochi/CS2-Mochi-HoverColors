@@ -23,11 +23,7 @@ namespace HoverColors.Systems
 
     public partial class OutlineColorSystem : GameSystemBase
     {
-        // Vanilla cyan defaults applied during Bulldoze / Net tool override.
-        // Keep in sync with HoverColorsSettings.SetDefaults().
-
-        // Vanilla cyan fallbacks used by captured/override paths.
-        // New-install live HC color may intentionally be different.
+        // Vanilla cyan fallbacks used by captured/override paths and fresh-install defaults.
         private const float kVanillaR = 0.502f;
         private const float kVanillaG = 0.869f;
         private const float kVanillaB = 1f;

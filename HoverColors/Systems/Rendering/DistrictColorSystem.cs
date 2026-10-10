@@ -207,8 +207,8 @@ namespace HoverColors.Systems
 
             PrefabAreaColorData data = EntityManager.GetComponentData<PrefabAreaColorData>(prefabEntity);
 
-            // AreaBufferSystem consumes all four colors. Driving edge + selection edge here
-            // is what controls the persistent District boundary line shown while editing.
+            // AreaBufferSystem consumes these colors for the District fill and its mesh edge.
+            // The editable boundary with joint dots is drawn separately by AreaBorderRenderSystem.
             data.m_FillColor = fillColor;
             data.m_EdgeColor = edgeColor;
             data.m_SelectionFillColor = selectionFillColor;
