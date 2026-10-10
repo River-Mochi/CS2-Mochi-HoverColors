@@ -13,7 +13,6 @@
 
 namespace HoverColors.Systems
 {
-    using System;
     using System.Reflection;
     using CS2Shared.RiverMochi;
     using Game;
