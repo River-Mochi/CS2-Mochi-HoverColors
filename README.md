@@ -41,7 +41,7 @@ Hide extractor lot preview fill while drawing farms, forestry, oil, ore, and oth
 
 ### Districts
 
-Change District overlay and border colors, adjust transparency, or return them to the game's default colors.
+Change District overlay and border colors, adjust transparency and boundary thickness, or return them to the game's defaults.
 
 ## Easy to Use
 

@@ -22,7 +22,9 @@ namespace HoverColors.Systems
     using CS2Shared.RiverMochi;
     using Game;
     using Game.Common;
+    using Game.Areas;
     using Game.Prefabs;
+    using Game.Rendering;
 
     using Unity.Entities;
     using UnityEngine;
@@ -49,7 +51,13 @@ namespace HoverColors.Systems
         public static bool HasCapturedDistrictDefaults { get; private set; }
 
         private PrefabSystem? m_PrefabSystem;
+        private AreaBufferSystem? m_AreaBufferSystem;
         private EntityQuery m_DistrictAreaQuery;
+        private static readonly int s_AreaParameters = Shader.PropertyToID("colossal_AreaParameters");
+        private Material? m_DistrictMaterial;
+        private Vector4 m_VanillaAreaParameters;
+        private float m_LastBorderScale = 1f;
+        private bool m_BorderParametersLogged;
 
         private bool m_CaptureLogged;
         private bool m_SeededSettingsFromCapture;
@@ -65,6 +73,7 @@ namespace HoverColors.Systems
             base.OnCreate();
 
             m_PrefabSystem = World.GetOrCreateSystemManaged<PrefabSystem>();
+            m_AreaBufferSystem = World.GetOrCreateSystemManaged<AreaBufferSystem>();
             m_DistrictAreaQuery = SystemAPI.QueryBuilder()
                 .WithAll<AreaComponent, DistrictComponent, AreaNode, AreaTriangle>()
                 .WithNone<Deleted>()
@@ -77,6 +86,13 @@ namespace HoverColors.Systems
         {
             base.OnGameLoadingComplete(purpose, mode);
             m_Applied = false;
+            RestoreDistrictBorderWidth();
+        }
+
+        protected override void OnDestroy()
+        {
+            RestoreDistrictBorderWidth();
+            base.OnDestroy();
         }
 
         protected override void OnUpdate()
@@ -87,6 +103,7 @@ namespace HoverColors.Systems
                 return;
             }
 
+            ApplyDistrictBorderWidth(settings.DistrictBorderThicknessScale);
             TryCaptureDefaults();
             SeedSettingsFromCapture(settings);
 
@@ -226,6 +243,65 @@ namespace HoverColors.Systems
             // AreaBufferSystem uses this exact signal when district display needs rebuilding
             // (for example on localization/name changes), so this uses same safe vanilla path.
             EntityManager.AddComponent<Updated>(m_DistrictAreaQuery);
+        }
+
+        private void ApplyDistrictBorderWidth(float requestedScale)
+        {
+            float scale = Mathf.Clamp(requestedScale, HoverColorsSettings.kMinOverlayThicknessScale, 1f);
+            if (scale >= 0.999f && m_DistrictMaterial == null)
+            {
+                return;
+            }
+
+            if (m_DistrictMaterial != null && Mathf.Abs(scale - m_LastBorderScale) < 0.001f)
+            {
+                return;
+            }
+
+            if (m_AreaBufferSystem == null)
+            {
+                return;
+            }
+
+            // The district mesh has its own material. Fetch it only when the slider changes or
+            // a newly loaded city needs the saved scale, avoiding a buffer query every frame.
+            m_AreaBufferSystem.GetAreaBuffer(AreaType.District, out _, out Material material, out _);
+            if (material == null)
+            {
+                // The game creates this material when its area-type prefab is ready. Retry on
+                // the next update while a city is loading; do not log a normal load delay.
+                return;
+            }
+
+            if (!ReferenceEquals(material, m_DistrictMaterial))
+            {
+                m_DistrictMaterial = material;
+                m_VanillaAreaParameters = material.GetVector(s_AreaParameters);
+                m_LastBorderScale = 1f;
+                if (!m_BorderParametersLogged)
+                {
+                    m_BorderParametersLogged = true;
+                    LogUtils.Info(() => $"{Mod.ModTag} Captured vanilla District area parameters: " +
+                        $"({m_VanillaAreaParameters.x:F3}, {m_VanillaAreaParameters.y:F3}, " +
+                        $"{m_VanillaAreaParameters.z:F3}, {m_VanillaAreaParameters.w:F3})");
+                }
+            }
+
+            Vector4 scaledParameters = m_VanillaAreaParameters;
+            scaledParameters.x *= scale;
+            material.SetVector(s_AreaParameters, scaledParameters);
+            m_LastBorderScale = scale;
+        }
+
+        private void RestoreDistrictBorderWidth()
+        {
+            if (m_DistrictMaterial != null)
+            {
+                m_DistrictMaterial.SetVector(s_AreaParameters, m_VanillaAreaParameters);
+            }
+
+            m_DistrictMaterial = null;
+            m_LastBorderScale = 1f;
         }
 
         private bool TryGetDefaultDistrictPrefab(out Entity prefabEntity)

@@ -50,6 +50,7 @@ namespace HoverColors.UI
         private ValueBinding<float> m_OutlineThicknessScaleBinding = null!;
         private ValueBinding<float> m_SurfaceBorderThicknessScaleBinding = null!;
         private ValueBinding<float> m_ExtractorBorderThicknessScaleBinding = null!;
+        private ValueBinding<float> m_DistrictBorderThicknessScaleBinding = null!;
         private ValueBinding<float> m_GuidelineDashedThicknessScaleBinding = null!;
         private ValueBinding<bool> m_RoadAngleTooltipsHiddenBinding = null!;
         private ValueBinding<int> m_PanelOpacityPercentBinding = null!;
@@ -175,6 +176,9 @@ namespace HoverColors.UI
             m_ExtractorBorderThicknessScaleBinding = AddValueBinding(
                 "ExtractorBorderThicknessScale",
                 settings?.ExtractorBorderThicknessScale ?? HoverColorsSettings.kMaxOverlayThicknessScale);
+            m_DistrictBorderThicknessScaleBinding = AddValueBinding(
+                "DistrictBorderThicknessScale",
+                settings?.DistrictBorderThicknessScale ?? HoverColorsSettings.kMaxOverlayThicknessScale);
             m_GuidelineDashedThicknessScaleBinding = AddValueBinding(
                 "GuidelineDashedThicknessScale",
                 settings?.GuidelineDashedThicknessScale ?? HoverColorsSettings.kMaxOverlayThicknessScale);
@@ -270,6 +274,9 @@ namespace HoverColors.UI
             UpdateIfChanged(
                 m_ExtractorBorderThicknessScaleBinding,
                 settings?.ExtractorBorderThicknessScale ?? HoverColorsSettings.kMaxOverlayThicknessScale);
+            UpdateIfChanged(
+                m_DistrictBorderThicknessScaleBinding,
+                settings?.DistrictBorderThicknessScale ?? HoverColorsSettings.kMaxOverlayThicknessScale);
             UpdateIfChanged(
                 m_GuidelineDashedThicknessScaleBinding,
                 settings?.GuidelineDashedThicknessScale ?? HoverColorsSettings.kMaxOverlayThicknessScale);

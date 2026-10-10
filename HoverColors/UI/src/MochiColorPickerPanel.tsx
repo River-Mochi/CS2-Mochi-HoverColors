@@ -21,6 +21,7 @@ import {
     COMPACT_PICKER_BODY_CLASS,
     PICKER_OPEN_BODY_CLASS,
     districtA$,
+    districtBorderThicknessScale$,
     districtB$,
     districtG$,
     districtR$,
@@ -195,6 +196,7 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
     const boundOutlineThicknessScale = useValue(outlineThicknessScale$);
     const boundSurfaceBorderThicknessScale = useValue(surfaceBorderThicknessScale$);
     const boundExtractorBorderThicknessScale = useValue(extractorBorderThicknessScale$);
+    const boundDistrictBorderThicknessScale = useValue(districtBorderThicknessScale$);
     const boundGuidelineDashedThicknessScale = useValue(guidelineDashedThicknessScale$);
     const roadAngleTooltipsHidden = useValue(roadAngleTooltipsHidden$);
     const boundGuideline = useValue(guidelineOpacity$);
@@ -248,6 +250,7 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
     const [outlineThicknessScale, setOutlineThicknessScale] = React.useState<number>(boundOutlineThicknessScale);
     const [surfaceBorderThicknessScale, setSurfaceBorderThicknessScale] = React.useState<number>(boundSurfaceBorderThicknessScale);
     const [extractorBorderThicknessScale, setExtractorBorderThicknessScale] = React.useState<number>(boundExtractorBorderThicknessScale);
+    const [districtBorderThicknessScale, setDistrictBorderThicknessScale] = React.useState<number>(boundDistrictBorderThicknessScale);
     const [guidelineDashedThicknessScale, setGuidelineDashedThicknessScale] = React.useState<number>(boundGuidelineDashedThicknessScale);
     const [districtColor, setDistrictColor] = React.useState<Color>(boundDistrict);
     const [guidelineLinesColor, setGuidelineLinesColor] = React.useState<Color>(boundGuidelineLinesColor);
@@ -330,6 +333,7 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
     React.useEffect(() => { setOutlineThicknessScale(boundOutlineThicknessScale); }, [boundOutlineThicknessScale]);
     React.useEffect(() => { setSurfaceBorderThicknessScale(boundSurfaceBorderThicknessScale); }, [boundSurfaceBorderThicknessScale]);
     React.useEffect(() => { setExtractorBorderThicknessScale(boundExtractorBorderThicknessScale); }, [boundExtractorBorderThicknessScale]);
+    React.useEffect(() => { setDistrictBorderThicknessScale(boundDistrictBorderThicknessScale); }, [boundDistrictBorderThicknessScale]);
     React.useEffect(() => { setGuidelineDashedThicknessScale(boundGuidelineDashedThicknessScale); }, [boundGuidelineDashedThicknessScale]);
     React.useEffect(() => { setDistrictColor(boundDistrict); }, [boundDistrict.r, boundDistrict.g, boundDistrict.b, boundDistrict.a]);
     React.useEffect(() => { setGuidelineLinesColor(boundGuidelineLinesColor); }, [boundGuidelineLinesColor.r, boundGuidelineLinesColor.g, boundGuidelineLinesColor.b, boundGuidelineLinesColor.a]);
@@ -505,6 +509,12 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
         trigger(CHANNEL, "SetExtractorBorderThickness", value);
     };
 
+    const handleDistrictBorderThicknessChange = (v: number) => {
+        const value = Math.round(Math.max(0.1, Math.min(1, v)) * 10) / 10;
+        setDistrictBorderThicknessScale(value);
+        trigger(CHANNEL, "SetDistrictBorderThickness", value);
+    };
+
     const handleGuidelineDashedThicknessChange = (v: number) => {
         const value = Math.round(Math.max(0.1, Math.min(1, v)) * 10) / 10;
         setGuidelineDashedThicknessScale(value);
@@ -564,6 +574,7 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
     const handleResetOutlineThickness = () => trigger(CHANNEL, "ResetOutlineThickness");
     const handleResetSurfaceBorderThickness = () => trigger(CHANNEL, "ResetSurfaceBorderThickness");
     const handleResetExtractorBorderThickness = () => trigger(CHANNEL, "ResetExtractorBorderThickness");
+    const handleResetDistrictBorderThickness = () => trigger(CHANNEL, "ResetDistrictBorderThickness");
     const handleResetGuidelineDashedThickness = () => trigger(CHANNEL, "ResetGuidelineDashedThickness");
     const handleResetGuidelines = () => trigger(CHANNEL, "ResetGuidelines");
     const handleToggleRoadAngleTooltips = () => trigger(CHANNEL, "ToggleRoadAngleTooltips");
@@ -811,6 +822,9 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
                                 extractorBorderThicknessScale={extractorBorderThicknessScale}
                                 handleExtractorBorderThicknessChange={handleExtractorBorderThicknessChange}
                                 handleResetExtractorBorderThickness={handleResetExtractorBorderThickness}
+                                districtBorderThicknessScale={districtBorderThicknessScale}
+                                handleDistrictBorderThicknessChange={handleDistrictBorderThicknessChange}
+                                handleResetDistrictBorderThickness={handleResetDistrictBorderThickness}
                                 surfaceToolAreasSuppressed={surfaceToolAreasSuppressed}
                                 specializedIndustryAreasSuppressed={specializedIndustryAreasSuppressed}
                                 districtMenuOpen={districtMenuOpen}

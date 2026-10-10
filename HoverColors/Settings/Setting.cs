@@ -187,6 +187,9 @@ namespace HoverColors
         public float ExtractorBorderThicknessScale { get; set; }
 
         [SettingsUIHidden]
+        public float DistrictBorderThicknessScale { get; set; }
+
+        [SettingsUIHidden]
         public float GuidelineDashedThicknessScale { get; set; }
 
         private bool m_RoadAngleTooltipsHidden;

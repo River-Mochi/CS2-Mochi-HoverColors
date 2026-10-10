@@ -48,24 +48,22 @@ const TopRightLauncher = () => <LauncherAt location={1} />;
 const UniversalMenuLauncher = () => <ModIconButton location={2} />;
 
 const register: ModRegistrar = (moduleRegistry) => {
-  VanillaComponentResolver.setRegistry(moduleRegistry);
+  try {
+    VanillaComponentResolver.setRegistry(moduleRegistry);
 
-  // Register each host once. The binding chooses the corner live, while Universal
-  // remains available alongside it when the saved choice is a corner.
-  moduleRegistry.append("GameTopLeft", TopLeftLauncher);
-  moduleRegistry.append("GameTopRight", TopRightLauncher);
-  // The general Mods menu remains useful if the game's corner hook is unavailable.
-  moduleRegistry.append("UniversalModMenu", UniversalMenuLauncher);
-
-  moduleRegistry.append(
-    "Game",
-    GamePanelEntry
-  );
-
-  moduleRegistry.append(
-    "Editor",
-    EditorPanelEntry
-  );
+    // Register each host once. The binding chooses the corner live, while Universal
+    // remains available alongside it when the saved choice is a corner.
+    moduleRegistry.append("Game", GamePanelEntry);
+    moduleRegistry.append("Editor", EditorPanelEntry);
+    moduleRegistry.append("UniversalModMenu", UniversalMenuLauncher);
+    moduleRegistry.append("GameTopLeft", TopLeftLauncher);
+    moduleRegistry.append("GameTopRight", TopRightLauncher);
+    console.info("[HC] UI module registrations completed");
+  } catch (error) {
+    // The game's registrar loop has no catch. Report our own failure without stopping
+    // other mods from registering; an import failure happens before this callback.
+    console.error("[HC] UI module registration failed", error);
+  }
 };
 
 export default register;
