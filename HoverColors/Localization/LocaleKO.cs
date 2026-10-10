@@ -104,8 +104,7 @@ namespace HoverColors
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.LauncherLocation)), "▪ 패널 버튼 위치" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.LauncherLocation)),
-                    "왼쪽 위, 오른쪽 위 또는 Universal Mod Menu를 선택합니다.\n" +
-                    "위치 변경은 **게임 재시작 후** 적용됩니다."
+                    "왼쪽 위, 오른쪽 위 또는 Universal Mod Menu를 선택합니다. 설정을 변경하면 버튼 위치가 즉시 바뀝니다."
                 },
                 { m_Settings.GetLauncherLocationLocaleID("TopLeft"), "왼쪽 위" },
                 { m_Settings.GetLauncherLocationLocaleID("TopRight"), "오른쪽 위" },

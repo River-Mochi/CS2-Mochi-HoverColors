@@ -104,8 +104,7 @@ namespace HoverColors
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.LauncherLocation)), "▪ Emplacement du bouton du panneau" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.LauncherLocation)),
-                    "Choisissez en haut à gauche, en haut à droite ou dans l’Universal Mod Menu.\n" +
-                    "**Redémarrez le jeu** pour appliquer le nouvel emplacement."
+                    "Choisissez en haut à gauche, en haut à droite ou dans l’Universal Mod Menu. Le bouton change de place dès que vous modifiez ce réglage."
                 },
                 { m_Settings.GetLauncherLocationLocaleID("TopLeft"), "En haut à gauche" },
                 { m_Settings.GetLauncherLocationLocaleID("TopRight"), "En haut à droite" },

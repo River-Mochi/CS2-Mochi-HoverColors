@@ -104,8 +104,7 @@ namespace HoverColors
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.LauncherLocation)), "▪ Local do botão do painel" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.LauncherLocation)),
-                    "Escolha o canto superior esquerdo, superior direito ou Universal Mod Menu.\n" +
-                    "**Reinicie o jogo** para aplicar a nova posição."
+                    "Escolha o canto superior esquerdo, superior direito ou Universal Mod Menu. O botão muda de posição assim que você altera esta opção."
                 },
                 { m_Settings.GetLauncherLocationLocaleID("TopLeft"), "Superior esquerdo" },
                 { m_Settings.GetLauncherLocationLocaleID("TopRight"), "Superior direito" },

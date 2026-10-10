@@ -104,8 +104,7 @@ namespace HoverColors
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.LauncherLocation)), "▪ 面板按钮位置" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.LauncherLocation)),
-                    "选择左上角、右上角或 Universal Mod Menu。\n" +
-                    "**重启游戏**后按钮位置才会改变。"
+                    "选择左上角、右上角或 Universal Mod Menu。更改此设置后，按钮会立即移动到所选位置。"
                 },
                 { m_Settings.GetLauncherLocationLocaleID("TopLeft"), "左上角" },
                 { m_Settings.GetLauncherLocationLocaleID("TopRight"), "右上角" },

@@ -33,7 +33,7 @@ Bright blue highlights getting in the way? Want cleaner road guides, thinner col
 
 - Glass or Dark panel styles.
 - Collapsible sections and remembered panel position.
-- Choose Top Left, Top Right, or Universal Mod Menu for the launcher.
+- Move the launcher instantly between Top Left, Top Right, and Universal Mod Menu.
 - Works in **Editor Mode**, use the panel hotkey to open (default J).
 - Extra Bulldozer and other options in the Options menu.
 
@@ -96,18 +96,8 @@ tags: hover colors, remove blue, disable hover, highlight color, outline thickne
 <RequiredDLC Value="" />
 <!--Change log for new version. Single line or multi line. Supports minimal markdown subset-->
 <ChangeLog>
-- Eyeball now hides ground property lot fill and outline.
-- Added thickness slider for guidelines.
-- Added thickness slider for Surfaces and Extractor area borders.
-- Added instant Show/hide button for angles tooltips when drawing roads or paths.
-- Added collapsible section arrows and section titles.
-- Title bar is slightly taller.
-- Panel position is now remembered.
-- Pink dot indicator for active highlight color (blue dot previously was harder to see).
-- Added an Options menu choice for the panel button: Top Left, Top Right, or Universal Mod Menu. New installs default to Top Left.
-- remove Hotkey for Surface preview filter On/off
-- add new hotkey for Angles tooltips on/off.
-- New-road edge highlight is now 0.80 alpha instead of 0.75 (vanilla is ~0.855)
+- Panel button location now Instant change: Top Left, Top Right, and Universal Mod Menu. No restart needed.
+- New installs start with the game's vanilla blue highlight instead of preset 1. Existing saved colors and presets are kept.
 - Updated all translations and various UI fixes.
 </ChangeLog>
 <!--External link, can be set multiple times. supported types are "discord", "github", "youtube", "twitch", "x", "paypal", "patreon", "buymeacoffee", "kofi", "crowdin", "gitlab", "gofundme"-->

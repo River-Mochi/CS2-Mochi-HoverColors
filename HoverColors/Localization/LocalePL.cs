@@ -104,8 +104,7 @@ namespace HoverColors
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.LauncherLocation)), "▪ Położenie przycisku panelu" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.LauncherLocation)),
-                    "Wybierz lewy górny róg, prawy górny róg lub Universal Mod Menu.\n" +
-                    "**Uruchom grę ponownie**, aby zmienić położenie."
+                    "Wybierz lewy górny róg, prawy górny róg lub Universal Mod Menu. Zmiana tego ustawienia natychmiast przenosi przycisk."
                 },
                 { m_Settings.GetLauncherLocationLocaleID("TopLeft"), "Lewy górny róg" },
                 { m_Settings.GetLauncherLocationLocaleID("TopRight"), "Prawy górny róg" },

@@ -104,8 +104,7 @@ namespace HoverColors
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.LauncherLocation)), "▪ ตำแหน่งปุ่มแผง" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.LauncherLocation)),
-                    "เลือกซ้ายบน ขวาบน หรือ Universal Mod Menu\n" +
-                    "**รีสตาร์ตเกม** เพื่อให้ตำแหน่งใหม่มีผล"
+                    "เลือกซ้ายบน ขวาบน หรือ Universal Mod Menu ปุ่มจะย้ายตำแหน่งทันทีเมื่อเปลี่ยนการตั้งค่านี้"
                 },
                 { m_Settings.GetLauncherLocationLocaleID("TopLeft"), "ซ้ายบน" },
                 { m_Settings.GetLauncherLocationLocaleID("TopRight"), "ขวาบน" },

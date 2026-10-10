@@ -104,8 +104,7 @@ namespace HoverColors
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.LauncherLocation)), "▪ Vị trí nút bảng" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.LauncherLocation)),
-                    "Chọn góc trên trái, trên phải hoặc Universal Mod Menu.\n" +
-                    "**Khởi động lại game** để áp dụng vị trí mới."
+                    "Chọn góc trên trái, trên phải hoặc Universal Mod Menu. Nút chuyển vị trí ngay khi bạn thay đổi cài đặt này."
                 },
                 { m_Settings.GetLauncherLocationLocaleID("TopLeft"), "Trên trái" },
                 { m_Settings.GetLauncherLocationLocaleID("TopRight"), "Trên phải" },
