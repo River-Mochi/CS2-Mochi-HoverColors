@@ -4,7 +4,7 @@
 <!--Name of the mod to display to players-->
 <DisplayName Value="Hover Colors + Highlights" />
 <!--Short description of the mod-->
-<ShortDescription Value="Change blue highlights to Any color, Opacity, or Thickness. Fill color, Guidelines, Hide Surface layers, add District colors."/>
+<ShortDescription Value="Change blue Highlights to Any color, Opacity, or Thickness. Fill color, Guidelines, Hide Surface layers, alter District colors."/>
 <!--Long description of the mod. Single line or multi line. Supports minimal markdown subset-->
 <LongDescription>
 ## Mochi's Hover Colors
@@ -33,13 +33,13 @@ Bright blue highlights getting in the way? Want cleaner road guides, thinner col
 
 - Glass or Dark panel styles.
 - Collapsible sections and remembered panel position.
-- Choose a Top Left or Top Right launcher with a Universal Mod Menu backup, or Universal alone. Changes apply instantly.
+- Choose Top Left or Top Right button or Universal alone. Changes apply instantly.
 - Works in **Editor Mode**, use the panel hotkey to open (default J).
 - Extra Bulldozer and other options in the Options menu.
 
 ## Good to Know
 
-- **To start:** click the Hover Colors palette icon (top-left or Universal Mod Menu by default).
+- **To start:** click the Hover Colors palette icon. New install default is both Top Left plus Universal location.
 - **Works with Recolor:** Hover Colors changes highlights, guides, overlays, and previews. Recolor changes the actual objects.
 - **Lightweight:** no Harmony patches and safe to remove anytime. Performance friendly, settings update when needed.
 - Hover over controls for quick tooltip help.
@@ -96,9 +96,9 @@ tags: hover colors, remove blue, disable hover, highlight color, outline thickne
 <RequiredDLC Value="" />
 <!--Change log for new version. Single line or multi line. Supports minimal markdown subset-->
 <ChangeLog>
-- Panel button location changes instantly, with a Universal Mod Menu entry also available when a corner is selected. No restart needed.
+- Panel button location changes instantly. Universal Mod Menu entry also available when either Game Top Left or Top Right is selected. No restart needed.
 - New installs start with the game's vanilla blue highlight instead of preset 1. Existing saved colors and presets are kept.
-- Updated all translations and various UI fixes.
+- Updated all translations and improved launcher button handling.
 </ChangeLog>
 <!--External link, can be set multiple times. supported types are "discord", "github", "youtube", "twitch", "x", "paypal", "patreon", "buymeacoffee", "kofi", "crowdin", "gitlab", "gofundme"-->
 <ExternalLink Type="discord" Url="https://discord.gg/gwXgvtyhjc" />
