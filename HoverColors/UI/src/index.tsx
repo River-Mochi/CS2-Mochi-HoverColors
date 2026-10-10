@@ -12,10 +12,10 @@
 //   - Registers selectable city launcher locations and mounts the same panel in Editor.
 // webpack entry point; only add module-level side effects here.
 
-import { useValue } from "cs2/api";
+import { trigger, useValue } from "cs2/api";
 import { ModRegistrar } from "cs2/modding";
 import { MochiColorPickerPanel } from "./MochiColorPickerPanel";
-import { launcherLocation$, panelOpen$ } from "./panel/bindings/MochiPanelBindings";
+import { CHANNEL, launcherLocation$, panelOpen$ } from "./panel/bindings/MochiPanelBindings";
 import { VanillaComponentResolver } from "./utils/vanilla/VanillaComponentResolver";
 import "./MochiColorPickerPanel.global.scss";
 
@@ -58,11 +58,10 @@ const register: ModRegistrar = (moduleRegistry) => {
     moduleRegistry.append("UniversalModMenu", UniversalMenuLauncher);
     moduleRegistry.append("GameTopLeft", TopLeftLauncher);
     moduleRegistry.append("GameTopRight", TopRightLauncher);
-    console.info("[HC] UI module registrations completed");
   } catch (error) {
-    // The game's registrar loop has no catch. Report our own failure without stopping
-    // other mods from registering; an import failure happens before this callback.
-    console.error("[HC] UI module registration failed", error);
+    // The game's registrar loop has no catch. Do not stop other mods from registering.
+    // An import failure happens before this callback, so it cannot report itself here.
+    try { trigger(CHANNEL, "ReportUIRegistrationFailure", String(error)); } catch { /* UI bridge unavailable. */ }
   }
 };
 
