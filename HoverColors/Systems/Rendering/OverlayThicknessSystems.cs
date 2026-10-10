@@ -469,8 +469,7 @@ namespace HoverColors.Systems
         {
             float surfaceScale = Mod.Settings?.SurfaceBorderThicknessScale ?? 1f;
             float extractorScale = Mod.Settings?.ExtractorBorderThicknessScale ?? 1f;
-            float districtScale = Mod.Settings?.DistrictBorderThicknessScale ?? 1f;
-            if (surfaceScale >= 0.999f && extractorScale >= 0.999f && districtScale >= 0.999f)
+            if (surfaceScale >= 0.999f && extractorScale >= 0.999f)
             {
                 m_Span?.Capture(1f);
                 return;
@@ -491,13 +490,6 @@ namespace HoverColors.Systems
             if (hasActiveArea && geometry.m_Type == AreaType.Surface && surfaceScale < 0.999f)
             {
                 m_Span?.Capture(surfaceScale, geometry.m_SnapDistance);
-                return;
-            }
-
-            if (hasActiveArea && geometry.m_Type == AreaType.District && districtScale < 0.999f)
-            {
-                // Keep the editable node circles at vanilla size for reliable grabbing.
-                m_Span?.Capture(districtScale, geometry.m_SnapDistance, scaleAreaCircles: false);
                 return;
             }
 

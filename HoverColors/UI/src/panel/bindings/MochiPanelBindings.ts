@@ -49,7 +49,6 @@ export const fillB$ = bindValue<number>(CHANNEL, "FillB", 1);
 export const outlineThicknessScale$ = bindValue<number>(CHANNEL, "OutlineThicknessScale", 1);
 export const surfaceBorderThicknessScale$ = bindValue<number>(CHANNEL, "SurfaceBorderThicknessScale", 1);
 export const extractorBorderThicknessScale$ = bindValue<number>(CHANNEL, "ExtractorBorderThicknessScale", 1);
-export const districtBorderThicknessScale$ = bindValue<number>(CHANNEL, "DistrictBorderThicknessScale", 1);
 export const guidelineDashedThicknessScale$ = bindValue<number>(CHANNEL, "GuidelineDashedThicknessScale", 1);
 export const roadAngleTooltipsHidden$ = bindValue<boolean>(CHANNEL, "RoadAngleTooltipsHidden", false);
 

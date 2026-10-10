@@ -42,9 +42,6 @@ interface MochiPanelActionBarProps {
     extractorBorderThicknessScale: number;
     handleExtractorBorderThicknessChange: (value: number) => void;
     handleResetExtractorBorderThickness: () => void;
-    districtBorderThicknessScale: number;
-    handleDistrictBorderThicknessChange: (value: number) => void;
-    handleResetDistrictBorderThickness: () => void;
 
     surfaceToolAreasSuppressed: boolean;
     specializedIndustryAreasSuppressed: boolean;
@@ -88,9 +85,6 @@ export const MochiPanelActionBar = ({
     extractorBorderThicknessScale,
     handleExtractorBorderThicknessChange,
     handleResetExtractorBorderThickness,
-    districtBorderThicknessScale,
-    handleDistrictBorderThicknessChange,
-    handleResetDistrictBorderThickness,
     surfaceToolAreasSuppressed,
     specializedIndustryAreasSuppressed,
     districtMenuOpen,
@@ -227,35 +221,6 @@ export const MochiPanelActionBar = ({
                             <img src={surfaceIconSrc} className={`${styles.controlIcon} ${styles.idleIcon} ${styles.districtPickerIcon}`} alt="" />
                         </Button>
                     </div>
-                </SideTooltip>
-
-                <SideTooltip tooltip={tt(text.tooltipDistrictBorderThickness)} side="right">
-                    <div className={styles.areaThicknessControl}>
-                        <div className={styles.areaThicknessTrack}>
-                            <MochiSlider
-                                focusKey={focusDisabled}
-                                className={styles.areaThicknessSlider}
-                                value={districtBorderThicknessScale}
-                                start={0.1}
-                                end={1}
-                                gamepadStep={0.1}
-                                onChange={handleDistrictBorderThicknessChange}
-                            />
-                            <span className={styles.areaThicknessValue}>{districtBorderThicknessScale.toFixed(1)}</span>
-                        </div>
-                        <span className={styles.areaThicknessLabel}>{text.labelDistrictBorder}</span>
-                    </div>
-                </SideTooltip>
-
-                <SideTooltip tooltip={tt(text.tooltipResetDistrictBorderThickness)} side="right">
-                    <Button
-                        className={styles.controlIconButton}
-                        variant="icon"
-                        onSelect={handleResetDistrictBorderThickness}
-                        focusKey={focusDisabled}
-                    >
-                        <img src={outlineThicknessIconSrc} className={`${styles.controlIcon} ${styles.idleIcon}`} alt="" />
-                    </Button>
                 </SideTooltip>
             </div>
 

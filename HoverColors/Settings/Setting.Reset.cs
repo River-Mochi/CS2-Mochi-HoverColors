@@ -87,7 +87,6 @@ namespace HoverColors
             OutlineThicknessInitialized = true;
             SurfaceBorderThicknessScale = kMaxOverlayThicknessScale;
             ExtractorBorderThicknessScale = kMaxOverlayThicknessScale;
-            DistrictBorderThicknessScale = kMaxOverlayThicknessScale;
             GuidelineDashedThicknessScale = kMaxOverlayThicknessScale;
             RoadAngleTooltipsHidden = false;
 

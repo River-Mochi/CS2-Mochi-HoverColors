@@ -24,7 +24,7 @@ Bright blue highlights getting in the way? Want cleaner road guides, thinner col
 ### Guidelines + Area Tools
 
 - Change guideline colors, opacity, and line thickness.
-- Adjust Surface, Extractor, and District area border thickness.
+- Adjust Surface and Extractor area border thickness.
 - Hide Surface and Specialized Industry preview fills.
 - Change District border + overlay color and opacity.
 - Hide angle and Place/Undo hints while drawing roads or paths.
@@ -97,7 +97,6 @@ tags: hover colors, remove blue, disable hover, highlight color, outline thickne
 <!--Change log for new version. Single line or multi line. Supports minimal markdown subset-->
 <ChangeLog>
 - Panel button location changes instantly, with a Universal Mod Menu entry also available when a corner is selected. No restart needed.
-- Added a District boundary thickness slider beside the District color button.
 - New installs start with the game's vanilla blue highlight instead of preset 1. Existing saved colors and presets are kept.
 - Updated all translations and various UI fixes.
 </ChangeLog>
