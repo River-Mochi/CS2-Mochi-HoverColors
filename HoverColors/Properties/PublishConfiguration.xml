@@ -96,8 +96,11 @@ tags: hover colors, remove blue, disable hover, highlight color, outline thickne
 <RequiredDLC Value="" />
 <!--Change log for new version. Single line or multi line. Supports minimal markdown subset-->
 <ChangeLog>
-- Panel main icon button location changes instantly. No restart needed.
-- When new mod Options > Top Left or Top Right is selected, the Univeral mod menu also gets an icon.
+- Improved/harden Hover Colors launcher icon button.
+- Options change of panel Launch button location now apply instantly. No restart needed.
+- Hardened the panel hotkey so it works independently of launcher location (default is J).
+- Improved Game, Editor, and Universal Mod Menu UI registration.
+- Improved UI diagnostics for troubleshooting.
 </ChangeLog>
 <!--External link, can be set multiple times. supported types are "discord", "github", "youtube", "twitch", "x", "paypal", "patreon", "buymeacoffee", "kofi", "crowdin", "gitlab", "gofundme"-->
 <ExternalLink Type="discord" Url="https://discord.gg/gwXgvtyhjc" />
