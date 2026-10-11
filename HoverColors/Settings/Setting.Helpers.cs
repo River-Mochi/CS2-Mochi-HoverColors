@@ -109,8 +109,8 @@ namespace HoverColors
             }
         }
 
-        // LauncherLocation is persisted as an int. Any unknown/old/corrupt value
-        // must still leave the player with the safe default GTL + Universal.
+        // LauncherLocation is persisted as an int. Unknown values fall back to GTL
+        // anywhere the live launcher value is consumed.
         internal static int NormalizeLauncherLocation(int value)
         {
             return value == kLauncherTopRight || value == kLauncherUniversalMenu
@@ -128,8 +128,7 @@ namespace HoverColors
             };
         }
 
-        // Called directly by SettingsUISetter when the Options dropdown changes.
-        // GetOrCreate mirrors Topo's pattern and pushes the new value immediately.
+        // Same direct path used by Topo: Options setter -> UI system -> live binding.
         public void SetLauncherLocation(int value)
         {
             int normalized = NormalizeLauncherLocation(value);
@@ -147,25 +146,6 @@ namespace HoverColors
                 world.GetOrCreateSystemManaged<HoverColors.UI.HoverColorsUISystem>();
 
             uiSystem.UpdateLauncherLocation(normalized);
-        }
-
-        // Repair only impossible persisted values. Valid player choices 0/1/2
-        // are never changed, including Universal-only.
-        public bool SanitizeAfterLoad()
-        {
-            int normalized = NormalizeLauncherLocation(LauncherLocation);
-
-            if (LauncherLocation == normalized)
-            {
-                return false;
-            }
-
-            LogUtils.Warn(
-                $"{Mod.ModTag} Invalid saved LauncherLocation={LauncherLocation}; " +
-                "resetting to TopLeft+Universal.");
-
-            LauncherLocation = normalized;
-            return true;
         }
     }
 }

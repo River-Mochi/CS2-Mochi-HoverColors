@@ -11,7 +11,6 @@
 
 namespace HoverColors
 {
-    using System;
     using System.Reflection;
     using Colossal.IO.AssetDatabase;
     using Colossal.Localization;
@@ -35,7 +34,6 @@ namespace HoverColors
         internal const string kTogglePanelActionName = "TogglePanel";
         internal const string kToggleRoadAngleTooltipsActionName = "ToggleRoadAngleTooltips";
         internal const string kTogglePresetActionName = "TogglePreset";
-
         internal const string kToggleHighlightsActionName = "ToggleHoverHighlights";
 
         public static readonly string ModVersion =
@@ -69,125 +67,84 @@ namespace HoverColors
 #endif
             }
 
-            if (GameManager.instance == null)
-            {
-                LogUtils.Warn($"{ModTag} GameManager.instance is null; {ModName} cannot initialize.");
-                return;
-            }
-
             HoverColorsSettings setting = new(this);
             Settings = setting;
 
-            try
-            {
-                LocalizationManager? localizationManager = GameManager.instance.localizationManager;
-                if (localizationManager == null)
-                {
-                    LogUtils.Warn($"{ModTag} LocalizationManager is null; locale sources were not registered.");
-                }
-                else
-                {
-                    // Register localization before Options UI reads setting labels.
-                    localizationManager.AddSource("en-US", new LocaleEN(setting));
-                    localizationManager.AddSource("fr-FR", new LocaleFR(setting));
-                    localizationManager.AddSource("es-ES", new LocaleES(setting));
-                    localizationManager.AddSource("de-DE", new LocaleDE(setting));
-                    localizationManager.AddSource("it-IT", new LocaleIT(setting));
-                    localizationManager.AddSource("ja-JP", new LocaleJA(setting));
-                    localizationManager.AddSource("ko-KR", new LocaleKO(setting));
-                    localizationManager.AddSource("pl-PL", new LocalePL(setting));
-                    localizationManager.AddSource("pt-BR", new LocalePT_BR(setting));
-                    localizationManager.AddSource("pt-PT", new LocalePT_PT(setting));
-                    localizationManager.AddSource("zh-HANS", new LocaleZH_HANS(setting));
-                    localizationManager.AddSource("zh-HANT", new LocaleZH_HANT(setting));
-                    localizationManager.AddSource("th-TH", new LocaleTH(setting));
-                    localizationManager.AddSource("vi-VN", new LocaleVI(setting));
-                    localizationManager.AddSource("tr-TR", new LocaleTR(setting));
-                }
-            }
-            catch (Exception ex)
-            {
-                LogUtils.Error($"{ModTag} Localization registration failed: {ex.GetType().Name}: {ex.Message}", ex);
-            }
+            // Register localization before Options UI reads its labels.
+            LocalizationManager localizationManager =
+                GameManager.instance.localizationManager;
 
-            try
-            {
-                AssetDatabase.global.LoadSettings(
-                    ModId,
-                    setting,
-                    new HoverColorsSettings(this));
+            localizationManager.AddSource("en-US", new LocaleEN(setting));
+            localizationManager.AddSource("fr-FR", new LocaleFR(setting));
+            localizationManager.AddSource("es-ES", new LocaleES(setting));
+            localizationManager.AddSource("de-DE", new LocaleDE(setting));
+            localizationManager.AddSource("it-IT", new LocaleIT(setting));
+            localizationManager.AddSource("ja-JP", new LocaleJA(setting));
+            localizationManager.AddSource("ko-KR", new LocaleKO(setting));
+            localizationManager.AddSource("pl-PL", new LocalePL(setting));
+            localizationManager.AddSource("pt-BR", new LocalePT_BR(setting));
+            localizationManager.AddSource("pt-PT", new LocalePT_PT(setting));
+            localizationManager.AddSource("zh-HANS", new LocaleZH_HANS(setting));
+            localizationManager.AddSource("zh-HANT", new LocaleZH_HANT(setting));
+            localizationManager.AddSource("th-TH", new LocaleTH(setting));
+            localizationManager.AddSource("vi-VN", new LocaleVI(setting));
+            localizationManager.AddSource("tr-TR", new LocaleTR(setting));
 
-                // Repair only impossible legacy/corrupt values before Options or UI bindings see them.
-                setting.SanitizeAfterLoad();
+            // Normal CS2 settings startup. If loading fails, do not continue with
+            // a partially initialized mod.
+            AssetDatabase.global.LoadSettings(
+                ModId,
+                setting,
+                new HoverColorsSettings(this));
 
-                LogUtils.Info(
-                    $"{ModTag} Settings loaded: launcher=" +
-                    $"{HoverColorsSettings.GetLauncherLocationName(setting.LauncherLocation)} " +
-                    $"({setting.LauncherLocation})");
-            }
-            catch (Exception ex)
-            {
-                LogUtils.Error(
-                    $"{ModTag} Settings load failed: {ex.GetType().Name}: {ex.Message}",
-                    ex);
-            }
+            setting.RegisterInOptionsUI();
+            setting.RegisterKeyBindings();
 
-            try
-            {
-                setting.RegisterInOptionsUI();
-            }
-            catch (Exception ex)
-            {
-                LogUtils.Error($"{ModTag} Options UI registration failed: {ex.GetType().Name}: {ex.Message}", ex);
-            }
+            World world = World.DefaultGameObjectInjectionWorld;
 
-            try
-            {
-                setting.RegisterKeyBindings();
-            }
-            catch (Exception ex)
-            {
-                LogUtils.Error($"{ModTag} Keybinding registration failed: {ex.GetType().Name}: {ex.Message}", ex);
-            }
+            world.GetOrCreateSystemManaged<OutlineColorSystem>();
+            updateSystem.UpdateAt<OutlineColorSystem>(
+                SystemUpdatePhase.Rendering);
 
-            try
-            {
-                World world = World.DefaultGameObjectInjectionWorld;
+            world.GetOrCreateSystemManaged<GuidelineColorSystem>();
+            updateSystem.UpdateAt<GuidelineColorSystem>(
+                SystemUpdatePhase.Rendering);
 
-                world.GetOrCreateSystemManaged<OutlineColorSystem>();
-                updateSystem.UpdateAt<OutlineColorSystem>(SystemUpdatePhase.Rendering);
+            // Narrow post-processing spans cover only each vanilla producer's own curves.
+            updateSystem.UpdateBefore<AreaBorderWidthCaptureSystem, AreaBorderRenderSystem>(
+                SystemUpdatePhase.Rendering);
+            updateSystem.UpdateAfter<AreaBorderWidthApplySystem, AreaBorderRenderSystem>(
+                SystemUpdatePhase.Rendering);
 
-                world.GetOrCreateSystemManaged<GuidelineColorSystem>();
-                updateSystem.UpdateAt<GuidelineColorSystem>(SystemUpdatePhase.Rendering);
+            updateSystem.UpdateBefore<DashedGuidelineWidthCaptureSystem, GuideLinesSystem>(
+                SystemUpdatePhase.Rendering);
+            updateSystem.UpdateAfter<DashedGuidelineWidthApplySystem, GuideLinesSystem>(
+                SystemUpdatePhase.Rendering);
 
-                // Narrow post-processing spans cover only each vanilla producer's own curves.
-                updateSystem.UpdateBefore<AreaBorderWidthCaptureSystem, AreaBorderRenderSystem>(SystemUpdatePhase.Rendering);
-                updateSystem.UpdateAfter<AreaBorderWidthApplySystem, AreaBorderRenderSystem>(SystemUpdatePhase.Rendering);
-                updateSystem.UpdateBefore<DashedGuidelineWidthCaptureSystem, GuideLinesSystem>(SystemUpdatePhase.Rendering);
-                updateSystem.UpdateAfter<DashedGuidelineWidthApplySystem, GuideLinesSystem>(SystemUpdatePhase.Rendering);
-                updateSystem.UpdateBefore<BuildingLotPreviewCaptureSystem, BuildingLotRenderSystem>(SystemUpdatePhase.Rendering);
-                updateSystem.UpdateAfter<BuildingLotPreviewApplySystem, BuildingLotRenderSystem>(SystemUpdatePhase.Rendering);
-                updateSystem.UpdateAfter<RoadAngleTooltipFilterSystem, InputHintsTooltipSystem>(SystemUpdatePhase.UITooltip);
-                world.GetOrCreateSystemManaged<RoadAngleTooltipFilterSystem>().Enabled = setting.RoadAngleTooltipsHidden;
+            updateSystem.UpdateBefore<BuildingLotPreviewCaptureSystem, BuildingLotRenderSystem>(
+                SystemUpdatePhase.Rendering);
+            updateSystem.UpdateAfter<BuildingLotPreviewApplySystem, BuildingLotRenderSystem>(
+                SystemUpdatePhase.Rendering);
 
-                world.GetOrCreateSystemManaged<AreaToolOverlaySystem>();
-                updateSystem.UpdateAt<AreaToolOverlaySystem>(SystemUpdatePhase.Rendering);
+            updateSystem.UpdateAfter<RoadAngleTooltipFilterSystem, InputHintsTooltipSystem>(
+                SystemUpdatePhase.UITooltip);
 
-                world.GetOrCreateSystemManaged<DistrictColorSystem>();
-                updateSystem.UpdateAt<DistrictColorSystem>(SystemUpdatePhase.Rendering);
+            world.GetOrCreateSystemManaged<RoadAngleTooltipFilterSystem>().Enabled =
+                setting.RoadAngleTooltipsHidden;
 
-                // harden: create UI bridge explicitly so bindings/triggers exist even before
-                // a launcher or panel component has rendered.
-                world.GetOrCreateSystemManaged<HoverColorsUISystem>();
-                updateSystem.UpdateAt<HoverColorsUISystem>(
-                    SystemUpdatePhase.UIUpdate);
+            world.GetOrCreateSystemManaged<AreaToolOverlaySystem>();
+            updateSystem.UpdateAt<AreaToolOverlaySystem>(
+                SystemUpdatePhase.Rendering);
 
+            world.GetOrCreateSystemManaged<DistrictColorSystem>();
+            updateSystem.UpdateAt<DistrictColorSystem>(
+                SystemUpdatePhase.Rendering);
 
-            }
-            catch (Exception ex)
-            {
-                LogUtils.Error($"{ModTag} System scheduling failed: {ex.GetType().Name}: {ex.Message}", ex);
-            }
+            // Keep this explicit: the UI bridge owns the J hotkey and bindings used by
+            // Game/Editor/GTL/GTR/UMM, so create it during normal mod startup.
+            world.GetOrCreateSystemManaged<HoverColorsUISystem>();
+            updateSystem.UpdateAt<HoverColorsUISystem>(
+                SystemUpdatePhase.UIUpdate);
         }
 
         public void OnDispose()
