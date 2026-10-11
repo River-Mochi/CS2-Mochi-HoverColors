@@ -96,9 +96,8 @@ tags: hover colors, remove blue, disable hover, highlight color, outline thickne
 <RequiredDLC Value="" />
 <!--Change log for new version. Single line or multi line. Supports minimal markdown subset-->
 <ChangeLog>
-- Panel button location changes instantly. Universal Mod Menu entry also available when either Game Top Left or Top Right is selected. No restart needed.
-- New installs start with the game's vanilla blue highlight instead of preset 1. Existing saved colors and presets are kept.
-- Updated all translations and improved launcher button handling.
+- Panel main icon button location changes instantly. No restart needed.
+- When new mod Options > Top Left or Top Right is selected, the Univeral mod menu also gets an icon.
 </ChangeLog>
 <!--External link, can be set multiple times. supported types are "discord", "github", "youtube", "twitch", "x", "paypal", "patreon", "buymeacoffee", "kofi", "crowdin", "gitlab", "gofundme"-->
 <ExternalLink Type="discord" Url="https://discord.gg/gwXgvtyhjc" />
