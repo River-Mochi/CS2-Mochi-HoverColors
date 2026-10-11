@@ -74,13 +74,13 @@ tags: hover colors, remove blue, disable hover, highlight color, outline thickne
 <!--Thumbnail-->
 <Thumbnail Value="Properties/Thumbnail_half_school_cyan_dog.jpg" />
 <!--Screenshot, can be set multiple times-->
-<Screenshot Value="Properties/10-image-Before-after-DE-school.jpg" />
-<Screenshot Value="Properties/20-image-Panels.jpg" />
+<Screenshot Value="Properties/10-image-Before.jpg" />
+<Screenshot Value="Properties/15-image-After.jpg" />
+<Screenshot Value="Properties/20-image-Eyeball.jpg" />
+<Screenshot Value="Properties/21-image-Panels.jpg" />
 <Screenshot Value="Properties/22-image-AreaLots.jpg" />
-<Screenshot Value="Properties/25-image-Guidelines.jpg" />
-<Screenshot Value="Properties/30-image-Guidelines.jpg" />
+<Screenshot Value="Properties/23-image-Guidelines-Areas.jpg" />
 <Screenshot Value="Properties/35-image-Fence.jpg" />
-<Screenshot Value="Properties/40-image-DistrictColorPicker.jpg" />
 <Screenshot Value="Properties/50-image-EditorMode.jpg" />
 <!--Tag, can be set multiple times-->
 <Tag Value="" />
