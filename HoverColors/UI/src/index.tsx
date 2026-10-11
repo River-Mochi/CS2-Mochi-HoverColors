@@ -8,12 +8,13 @@
 
 // File: UI/src/index.tsx
 // Purpose: Mod entry point registered with the cs2/modding registry.
-//   - Wires the VanillaComponentResolver so all vanilla components resolve once on load.
-//   - Registers selectable city launcher locations and mounts the same panel in Editor.
-// webpack entry point; only add module-level side effects here.
+//   - Wires the VanillaComponentResolver once on load.
+//   - Registers Game + Editor panel hosts.
+//   - Registers GTL, GTR and Universal independently so one failed host cannot block another.
 
 import { trigger, useValue } from "cs2/api";
 import { ModRegistrar } from "cs2/modding";
+import { useEffect } from "react";
 import { MochiColorPickerPanel } from "./MochiColorPickerPanel";
 import { CHANNEL, launcherLocation$, panelOpen$ } from "./panel/bindings/MochiPanelBindings";
 import { VanillaComponentResolver } from "./utils/vanilla/VanillaComponentResolver";
@@ -21,48 +22,155 @@ import "./MochiColorPickerPanel.global.scss";
 
 import ModIconButton from "./entry/ModIconButton";
 
-// The panel mounts at the "Game" root rather than inside the GameTopLeft launcher. Nested in
-// GameTopLeft it shared that container's stacking context, so vanilla panels the player dragged over
-// it painted on top no matter what z-index the panel carried. All Speed Limits appends its own
-// window to "Game" for the same reason. The launcher keeps only the button.
+const reportUIStatus = (detail: string) => {
+  try {
+    trigger(CHANNEL, "ReportUIStatus", detail);
+  } catch {
+    // If the C# bridge is unavailable, leave evidence in UI.log instead.
+    console.log(`[HoverColors] UI: ${detail}`);
+  }
+};
+
+const reportUIFailure = (host: string, error: unknown) => {
+  const detail = `${host}: ${String(error)}`;
+
+  try {
+    trigger(CHANNEL, "ReportUIRegistrationFailure", detail);
+  } catch {
+    console.error(`[HoverColors] UI registration failed: ${detail}`);
+  }
+};
+
+// The panel lives at Game root instead of inside GTL/GTR.
+// This keeps J independent from whichever launcher location the player selected.
 const GamePanelEntry = () => {
   const isOpen = useValue(panelOpen$);
+
+  useEffect(() => {
+    reportUIStatus("mounted:Game");
+  }, []);
+
+  // This only commits if the panel tree successfully renders.
+  useEffect(() => {
+    if (isOpen) {
+      reportUIStatus("panel-open:Game");
+    }
+  }, [isOpen]);
+
   return isOpen ? <MochiColorPickerPanel /> : null;
 };
 
 const EditorPanelEntry = () => {
   const isOpen = useValue(panelOpen$);
+
+  useEffect(() => {
+    reportUIStatus("mounted:Editor");
+  }, []);
+
+  // Editor has no GTL/GTR/UMM launcher, so the hotkey is the access path here.
+  useEffect(() => {
+    if (isOpen) {
+      reportUIStatus("panel-open:Editor");
+    }
+  }, [isOpen]);
+
   return isOpen ? <MochiColorPickerPanel editorMode /> : null;
 };
 
 const LauncherAt = ({ location }: { location: number }) => {
   const requestedLocation = useValue(launcherLocation$);
-  // A missing or invalid saved choice leaves the launcher at its default location.
-  const selectedLocation = requestedLocation === 1 || requestedLocation === 2 ? requestedLocation : 0;
-  return selectedLocation === location ? <ModIconButton location={location} /> : null;
+
+  // Unknown/missing values always fall back to GTL.
+  const selectedLocation =
+    requestedLocation === 1 || requestedLocation === 2
+      ? requestedLocation
+      : 0;
+
+  const hostName =
+    location === 1
+      ? "GameTopRight"
+      : "GameTopLeft";
+
+  useEffect(() => {
+    reportUIStatus(`mounted:${hostName}`);
+  }, [hostName]);
+
+  // If this appears in HoverColors.log, React successfully committed the selected launcher.
+  useEffect(() => {
+    if (selectedLocation === location) {
+      reportUIStatus(`launcher-visible:${hostName}`);
+    }
+  }, [hostName, location, selectedLocation]);
+
+  return selectedLocation === location
+    ? <ModIconButton location={location} />
+    : null;
 };
 
 const TopLeftLauncher = () => <LauncherAt location={0} />;
+
 const TopRightLauncher = () => <LauncherAt location={1} />;
-// Keep an entry in the game's Mods menu as a fallback if a corner hook is not mounted.
-const UniversalMenuLauncher = () => <ModIconButton location={2} />;
+
+// Universal is intentionally always registered. When GTL/GTR is selected it is
+// a second tidy-menu access point; when Universal-only is selected it is the only icon.
+const UniversalMenuLauncher = () => {
+  useEffect(() => {
+    // UMM contents may not mount until the player actually opens the Universal Mod Menu.
+    reportUIStatus("launcher-visible:UniversalModMenu");
+  }, []);
+
+  return <ModIconButton location={2} />;
+};
 
 const register: ModRegistrar = (moduleRegistry) => {
+  reportUIStatus("registrar-start");
+
+  // Resolver failure should not stop the simple launcher buttons from registering.
   try {
     VanillaComponentResolver.setRegistry(moduleRegistry);
-
-    // Register each host once. The binding chooses the corner live, while Universal
-    // remains available alongside it when the saved choice is a corner.
-    moduleRegistry.append("Game", GamePanelEntry);
-    moduleRegistry.append("Editor", EditorPanelEntry);
-    moduleRegistry.append("UniversalModMenu", UniversalMenuLauncher);
-    moduleRegistry.append("GameTopLeft", TopLeftLauncher);
-    moduleRegistry.append("GameTopRight", TopRightLauncher);
+    reportUIStatus("resolver-ready");
   } catch (error) {
-    // The game's registrar loop has no catch. Do not stop other mods from registering.
-    // An import failure happens before this callback, so it cannot report itself here.
-    try { trigger(CHANNEL, "ReportUIRegistrationFailure", String(error)); } catch { /* UI bridge unavailable. */ }
+    reportUIFailure("VanillaComponentResolver", error);
   }
+
+  // Each host is deliberately isolated. GTL/GTR/UMM failure must never block
+  // Game or Editor, because the hotkey panel must still work.
+  try {
+    moduleRegistry.append("Game", GamePanelEntry);
+    reportUIStatus("registered:Game");
+  } catch (error) {
+    reportUIFailure("Game", error);
+  }
+
+  try {
+    moduleRegistry.append("Editor", EditorPanelEntry);
+    reportUIStatus("registered:Editor");
+  } catch (error) {
+    reportUIFailure("Editor", error);
+  }
+
+  try {
+    moduleRegistry.append("GameTopLeft", TopLeftLauncher);
+    reportUIStatus("registered:GameTopLeft");
+  } catch (error) {
+    reportUIFailure("GameTopLeft", error);
+  }
+
+  try {
+    moduleRegistry.append("GameTopRight", TopRightLauncher);
+    reportUIStatus("registered:GameTopRight");
+  } catch (error) {
+    reportUIFailure("GameTopRight", error);
+  }
+
+  try {
+    moduleRegistry.append("UniversalModMenu", UniversalMenuLauncher);
+    reportUIStatus("registered:UniversalModMenu");
+  } catch (error) {
+    reportUIFailure("UniversalModMenu", error);
+  }
+
+  reportUIStatus("registrar-complete");
 };
 
 export default register;

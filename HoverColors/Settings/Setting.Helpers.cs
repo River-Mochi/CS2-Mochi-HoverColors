@@ -61,9 +61,21 @@ namespace HoverColors
         {
             return new[]
             {
-                new DropdownItem<int> { value = kLauncherTopLeft, displayName = GetLauncherLocationLocaleID("TopLeft") },
-                new DropdownItem<int> { value = kLauncherTopRight, displayName = GetLauncherLocationLocaleID("TopRight") },
-                new DropdownItem<int> { value = kLauncherUniversalMenu, displayName = GetLauncherLocationLocaleID("UniversalMenu") },
+                new DropdownItem<int>
+                {
+                    value = kLauncherTopLeft,
+                    displayName = GetLauncherLocationLocaleID("TopLeft"),
+                },
+                new DropdownItem<int>
+                {
+                    value = kLauncherTopRight,
+                    displayName = GetLauncherLocationLocaleID("TopRight"),
+                },
+                new DropdownItem<int>
+                {
+                    value = kLauncherUniversalMenu,
+                    displayName = GetLauncherLocationLocaleID("UniversalMenu"),
+                },
             };
         }
 
@@ -97,6 +109,8 @@ namespace HoverColors
             }
         }
 
+        // LauncherLocation is persisted as an int. Any unknown/old/corrupt value
+        // must still leave the player with the safe default GTL + Universal.
         internal static int NormalizeLauncherLocation(int value)
         {
             return value == kLauncherTopRight || value == kLauncherUniversalMenu
@@ -114,12 +128,16 @@ namespace HoverColors
             };
         }
 
+        // Called directly by SettingsUISetter when the Options dropdown changes.
+        // GetOrCreate mirrors Topo's pattern and pushes the new value immediately.
         public void SetLauncherLocation(int value)
         {
             int normalized = NormalizeLauncherLocation(value);
             LauncherLocation = normalized;
 
-            Unity.Entities.World? world = Unity.Entities.World.DefaultGameObjectInjectionWorld;
+            Unity.Entities.World? world =
+                Unity.Entities.World.DefaultGameObjectInjectionWorld;
+
             if (world == null || !world.IsCreated)
             {
                 return;
@@ -131,6 +149,8 @@ namespace HoverColors
             uiSystem.UpdateLauncherLocation(normalized);
         }
 
+        // Repair only impossible persisted values. Valid player choices 0/1/2
+        // are never changed, including Universal-only.
         public bool SanitizeAfterLoad()
         {
             int normalized = NormalizeLauncherLocation(LauncherLocation);
@@ -142,7 +162,7 @@ namespace HoverColors
 
             LogUtils.Warn(
                 $"{Mod.ModTag} Invalid saved LauncherLocation={LauncherLocation}; " +
-                $"resetting to TopLeft+Universal.");
+                "resetting to TopLeft+Universal.");
 
             LauncherLocation = normalized;
             return true;

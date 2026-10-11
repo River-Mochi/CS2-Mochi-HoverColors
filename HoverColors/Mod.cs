@@ -112,11 +112,24 @@ namespace HoverColors
 
             try
             {
-                AssetDatabase.global.LoadSettings(ModId, setting, new HoverColorsSettings(this));
+                AssetDatabase.global.LoadSettings(
+                    ModId,
+                    setting,
+                    new HoverColorsSettings(this));
+
+                // Repair only impossible legacy/corrupt values before Options or UI bindings see them.
+                setting.SanitizeAfterLoad();
+
+                LogUtils.Info(
+                    $"{ModTag} Settings loaded: launcher=" +
+                    $"{HoverColorsSettings.GetLauncherLocationName(setting.LauncherLocation)} " +
+                    $"({setting.LauncherLocation})");
             }
             catch (Exception ex)
             {
-                LogUtils.Error($"{ModTag} Settings load failed: {ex.GetType().Name}: {ex.Message}", ex);
+                LogUtils.Error(
+                    $"{ModTag} Settings load failed: {ex.GetType().Name}: {ex.Message}",
+                    ex);
             }
 
             try
@@ -163,6 +176,8 @@ namespace HoverColors
                 world.GetOrCreateSystemManaged<DistrictColorSystem>();
                 updateSystem.UpdateAt<DistrictColorSystem>(SystemUpdatePhase.Rendering);
 
+                // harden: create UI bridge explicitly so bindings/triggers exist even before
+                // a launcher or panel component has rendered.
                 world.GetOrCreateSystemManaged<HoverColorsUISystem>();
                 updateSystem.UpdateAt<HoverColorsUISystem>(
                     SystemUpdatePhase.UIUpdate);

@@ -54,11 +54,33 @@ namespace HoverColors.UI
 
             AddBinding(new TriggerBinding(Mod.ModId, "TogglePresetDefaults", TogglePresetDefaults));
             AddBinding(new TriggerBinding(Mod.ModId, "RestorePresetDefaults", RestorePresetDefaults));
+
             AddBinding(new TriggerBinding(Mod.ModId, "ResetGuidelines", ResetGuidelines));
+            // Release diagnostics from index.tsx. Intentionally sparse:
+            // registration, mount, launcher visibility and panel-open events only.
+            AddBinding(new TriggerBinding<string>(Mod.ModId, "ReportUIStatus", ReportUIStatus));
             AddBinding(new TriggerBinding<string>(Mod.ModId, "ReportUIRegistrationFailure", ReportUIRegistrationFailure));
+
 #if DEBUG
+
             AddBinding(new TriggerBinding<string>(Mod.ModId, "LogDebug", LogDebug));
 #endif
+        }
+
+        private static void ReportUIStatus(string detail)
+        {
+            if (string.IsNullOrWhiteSpace(detail))
+            {
+                return;
+            }
+
+            string limitedDetail =
+                detail.Length > 400
+                    ? detail.Substring(0, 400)
+                    : detail;
+
+            CS2Shared.RiverMochi.LogUtils.Info(
+                () => $"{Mod.ModTag} UI: {limitedDetail}");
         }
 
         private static void ReportUIRegistrationFailure(string detail)

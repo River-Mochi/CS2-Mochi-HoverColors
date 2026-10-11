@@ -113,6 +113,15 @@ namespace HoverColors.UI
             RegisterValueBindings();
             RegisterTriggerBindings();
             RegisterHoverToggleBindings();  // Behavior: toggle Outlines all off, only click object shows it.
+
+            // If this appears but no frontend "registrar-start" follows, the C# bridge
+            // loaded successfully and failure is on the UI/TypeScript side.
+            int launcherLocation = HoverColorsSettings.NormalizeLauncherLocation(
+                Mod.Settings?.LauncherLocation ?? HoverColorsSettings.kLauncherTopLeft);
+
+            LogUtils.Info(
+                $"{Mod.ModTag} UI bridge ready: launcher=" +
+                $"{HoverColorsSettings.GetLauncherLocationName(launcherLocation)} ({launcherLocation})");
         }
 
         protected override void OnUpdate()
@@ -128,6 +137,16 @@ namespace HoverColors.UI
             if (m_TogglePanelAction?.WasReleasedThisFrame() == true)
             {
                 TogglePanel();
+
+                int launcherLocation = HoverColorsSettings.NormalizeLauncherLocation(
+                    Mod.Settings?.LauncherLocation ?? HoverColorsSettings.kLauncherTopLeft);
+
+                // Release diagnostic: proves the backend received the panel hotkey even
+                // if a broken frontend and player sees no main icon onscreen.
+                LogUtils.Info(
+                    $"{Mod.ModTag} Panel hotkey: open={s_PanelOpen}, launcher=" +
+                    $"{HoverColorsSettings.GetLauncherLocationName(launcherLocation)} ({launcherLocation})");
+
                 SyncValueBindings();
             }
 
@@ -345,6 +364,10 @@ namespace HoverColors.UI
         private void SetPanelOpen(bool open)
         {
             s_PanelOpen = open;
+
+            // This path comes from a UI launcher button and not the keyboard action.
+            LogUtils.Info($"{Mod.ModTag} Panel UI trigger: open={s_PanelOpen}");
+
             UpdateIfChanged(m_PanelOpenBinding, s_PanelOpen);
         }
 
@@ -357,20 +380,43 @@ namespace HoverColors.UI
 
         private void RefreshKeybindActions()
         {
-            if (m_TogglePanelAction == null)
+            // Cached ProxyAction can still be disabled later by game/UI state.
+            // Re-enable and recover any missing reference.
+            m_TogglePanelAction =
+                EnsureActionEnabled(
+                    m_TogglePanelAction,
+                    Mod.kTogglePanelActionName);
+
+            m_ToggleRoadAngleTooltipsAction =
+                EnsureActionEnabled(
+                    m_ToggleRoadAngleTooltipsAction,
+                    Mod.kToggleRoadAngleTooltipsActionName);
+
+            m_TogglePresetAction =
+                EnsureActionEnabled(
+                    m_TogglePresetAction,
+                    Mod.kTogglePresetActionName);
+        }
+
+        private static ProxyAction? EnsureActionEnabled(
+            ProxyAction? action,
+            string actionName)
+        {
+            if (action == null)
             {
-                m_TogglePanelAction = EnableAction(Mod.kTogglePanelActionName);
+                return EnableAction(actionName);
             }
 
-            if (m_ToggleRoadAngleTooltipsAction == null)
+            if (!action.shouldBeEnabled)
             {
-                m_ToggleRoadAngleTooltipsAction = EnableAction(Mod.kToggleRoadAngleTooltipsActionName);
+                action.shouldBeEnabled = true;
+
+                LogUtils.WarnOnce(
+                    "reenabled-keybind-" + actionName,
+                    () => $"{Mod.ModTag} Re-enabled keybinding '{actionName}'.");
             }
 
-            if (m_TogglePresetAction == null)
-            {
-                m_TogglePresetAction = EnableAction(Mod.kTogglePresetActionName);
-            }
+            return action;
         }
 
         // CWD-style: fetch the ProxyAction registered by the [SettingsUIKeyboardBinding] attribute
