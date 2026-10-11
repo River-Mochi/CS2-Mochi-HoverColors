@@ -96,5 +96,56 @@ namespace HoverColors
                     ex);
             }
         }
+
+        internal static int NormalizeLauncherLocation(int value)
+        {
+            return value == kLauncherTopRight || value == kLauncherUniversalMenu
+                ? value
+                : kLauncherTopLeft;
+        }
+
+        internal static string GetLauncherLocationName(int value)
+        {
+            return NormalizeLauncherLocation(value) switch
+            {
+                kLauncherTopRight => "TopRight+Universal",
+                kLauncherUniversalMenu => "UniversalOnly",
+                _ => "TopLeft+Universal",
+            };
+        }
+
+        public void SetLauncherLocation(int value)
+        {
+            int normalized = NormalizeLauncherLocation(value);
+            LauncherLocation = normalized;
+
+            Unity.Entities.World? world = Unity.Entities.World.DefaultGameObjectInjectionWorld;
+            if (world == null || !world.IsCreated)
+            {
+                return;
+            }
+
+            HoverColors.UI.HoverColorsUISystem uiSystem =
+                world.GetOrCreateSystemManaged<HoverColors.UI.HoverColorsUISystem>();
+
+            uiSystem.UpdateLauncherLocation(normalized);
+        }
+
+        public bool SanitizeAfterLoad()
+        {
+            int normalized = NormalizeLauncherLocation(LauncherLocation);
+
+            if (LauncherLocation == normalized)
+            {
+                return false;
+            }
+
+            LogUtils.Warn(
+                $"{Mod.ModTag} Invalid saved LauncherLocation={LauncherLocation}; " +
+                $"resetting to TopLeft+Universal.");
+
+            LauncherLocation = normalized;
+            return true;
+        }
     }
 }

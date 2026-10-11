@@ -396,5 +396,22 @@ namespace HoverColors.UI
             }
         }
 
+        public void UpdateLauncherLocation(int location)
+        {
+            int normalized = HoverColorsSettings.NormalizeLauncherLocation(location);
+
+            HoverColorsSettings? settings = Mod.Settings;
+            if (settings != null)
+            {
+                settings.LauncherLocation = normalized;
+            }
+
+            UpdateIfChanged(m_LauncherLocationBinding, normalized);
+
+            LogUtils.Info(
+                $"{Mod.ModTag} Launcher location changed: " +
+                $"{HoverColorsSettings.GetLauncherLocationName(normalized)} ({normalized})");
+        }
+
     }
 }

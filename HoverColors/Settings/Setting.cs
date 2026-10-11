@@ -662,9 +662,12 @@ namespace HoverColors
             set => m_PanelOpacityPercent = ClampPanelOpacity(value);
         }
 
+
         [SettingsUIDropdown(typeof(HoverColorsSettings), nameof(GetLauncherLocationItems))]
+        [SettingsUISetter(typeof(HoverColorsSettings), nameof(SetLauncherLocation))]
         [SettingsUISection(Actions, kPanel)]
         public int LauncherLocation { get; set; }
+
 
         // PanelTooltipsEnabled is player-facing now so new players do not accidentally
         // lose tooltip help from a title-bar button. The city info icon can only turn it back ON.

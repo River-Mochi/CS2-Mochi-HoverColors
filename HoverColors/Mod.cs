@@ -163,7 +163,11 @@ namespace HoverColors
                 world.GetOrCreateSystemManaged<DistrictColorSystem>();
                 updateSystem.UpdateAt<DistrictColorSystem>(SystemUpdatePhase.Rendering);
 
-                updateSystem.UpdateAt<HoverColorsUISystem>(SystemUpdatePhase.UIUpdate);
+                world.GetOrCreateSystemManaged<HoverColorsUISystem>();
+                updateSystem.UpdateAt<HoverColorsUISystem>(
+                    SystemUpdatePhase.UIUpdate);
+
+
             }
             catch (Exception ex)
             {
