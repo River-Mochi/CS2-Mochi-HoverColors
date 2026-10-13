@@ -10,11 +10,10 @@
 """
 Add or replace standard River-Mochi GPL source-file headers.
 
-This script is intended to be shared across River-Mochi Cities: Skylines II
-mods that use GPL-3.0-or-later plus the Cities: Skylines II Linking Exception.
+This script is intended to be shared across River-Mochi CS2 mods that use 
+GPL-3.0-or-later plus the Cities: Skylines II Linking Exception.
 
-Run it using the real path to this script from anywhere in the repository.
-Examples below assume the script is at <path-to-script>/add_gpl_headers.py:
+Examples below to run it assume the script is at <path-to-script>/add_gpl_headers.py:
 
   # Preview only. No files are changed.
   py -3 <path-to-script>/add_gpl_headers.py
