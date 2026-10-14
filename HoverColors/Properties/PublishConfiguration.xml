@@ -64,12 +64,14 @@ Bright blue highlights getting in the way? Want cleaner road guides, thinner col
 - rzzirrah - image consultant
 
 ### 15 Languages
-
 English, Français, Deutsch, Español, Italiano, Polski, Português Brasil, Português Portugal, 日本語, 한국어, 简体中文, 繁體中文, ภาษาไทย Thai, Tiếng Việt, Türkçe
+
+### Manual Download Installs
+- Paradox makes the downloaded folder name a long string of odd characters.
+- If you rename it, HoverColors is safe. Don't use `+` in any Mods/ downloaded folder names. A `+` can prevent mod icons and UI from loading in the city.
 
 tags: hover colors, remove blue, disable hover, highlight color, outline thickness, fill color, guidelines, districts, surface tool, transparent overlays, industry surfaces
 </LongDescription>
-
 
 <!--Thumbnail-->
 <Thumbnail Value="Properties/Thumbnail_half_school_cyan_dog.jpg" />
