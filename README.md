@@ -1,4 +1,4 @@
-# Hover Colors + Highlights [HC]
+# Hover Colors and Highlights [HC]
 
 Hover Colors lets you **change, dim, or hide the game's bright hover highlights** and makes several building and area tools easier to see.
 
@@ -73,6 +73,14 @@ English, Français, Deutsch, Español, Italiano, Polski, Português Brasil, Port
 
 Suggestions and bug reports are welcome through GitHub or Discord.
 
+
+### Manual ZIP install
+If you download the mod directly from here OR Paradox website 
+Extract the mod to:
+`Cities Skylines II\Mods\HoverColors\`
+
+Keep the folder name `HoverColors`. Renaming manually installed mod folders may prevent the game UI module from loading. This means you won't see the Icon in the game Top Left.
+COHTML seems to have an issue with folder names that have plus "+" in them. 
 
 ## License
 
