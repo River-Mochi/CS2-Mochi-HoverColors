@@ -44,5 +44,21 @@
   "HoverColors.UI.Tooltip.DistrictColors": "District overlay + border color/opacity.\nHold 0.5s to reset to game color.",
   "HoverColors.UI.Tooltip.ResetDistrictColors": "Reset all districts to the game's default blue.",
   "HoverColors.UI.DistrictMenu.AllDistricts": "All Districts",
-  "HoverColors.UI.DistrictMenu.ResetAll": "Reset"
+  "HoverColors.UI.DistrictMenu.ResetAll": "Reset",
+  "HoverColors.UI.MapBoundary.Title": "Map Borders",
+  "HoverColors.UI.MapBoundary.Tile": "Unlocked tiles",
+  "HoverColors.UI.MapBoundary.Map": "Map edge",
+  "HoverColors.UI.MapBoundary.More": "Line options",
+  "HoverColors.UI.MapBoundary.Width": "Width",
+  "HoverColors.UI.MapBoundary.Dashes": "Dash size",
+  "HoverColors.UI.MapBoundary.Reset": "Reset",
+  "HoverColors.UI.Tooltip.MapBoundary": "Change map border colors, opacity and visibility.",
+  "HoverColors.UI.Tooltip.MapBoundaryVisibility": "Show/hide all map borders instantly.",
+  "HoverColors.UI.Tooltip.MapBoundaryTile": "Unlocked tile border color + opacity.",
+  "HoverColors.UI.Tooltip.MapBoundaryMap": "Outer map edge color + opacity.",
+  "HoverColors.UI.Tooltip.MapBoundaryTileVisible": "Show/hide unlocked tile borders.",
+  "HoverColors.UI.Tooltip.MapBoundaryMapVisible": "Show/hide outer map edge.",
+  "HoverColors.UI.Tooltip.MapBoundaryWidth": "Border width. 1.0 = game default.",
+  "HoverColors.UI.Tooltip.MapBoundaryDashes": "Dash and gap size. 1.0 = game default.",
+  "HoverColors.UI.Tooltip.MapBoundaryReset": "Restore map borders to game defaults."
 }
