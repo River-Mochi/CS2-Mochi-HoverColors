@@ -67,7 +67,6 @@ export const useMochiPanelText = () => {
             mapBoundaryTitle: l("HoverColors.UI.MapBoundary.Title"),
             mapBoundaryTile: l("HoverColors.UI.MapBoundary.Tile"),
             mapBoundaryMap: l("HoverColors.UI.MapBoundary.Map"),
-            mapBoundaryMore: l("HoverColors.UI.MapBoundary.More"),
             mapBoundaryWidth: l("HoverColors.UI.MapBoundary.Width"),
             mapBoundaryDashes: l("HoverColors.UI.MapBoundary.Dashes"),
             mapBoundaryReset: l("HoverColors.UI.MapBoundary.Reset"),
