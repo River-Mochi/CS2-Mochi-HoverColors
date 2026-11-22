@@ -219,6 +219,7 @@ export const MochiPanelActionBar = ({
                     onOpen={onMapOpen}
                     onPickerOpenChange={onMapPickerOpenChange}
                 />
+                <div className={styles.districtActionLauncher}>
                 <SideTooltip tooltip={tt(text.tooltipDistrictColors)} side="below">
                     <div ref={districtPickerRef}>
                         <Button
@@ -237,6 +238,7 @@ export const MochiPanelActionBar = ({
                         </Button>
                     </div>
                 </SideTooltip>
+                </div>
             </div>
 
             {districtMenuOpen && (

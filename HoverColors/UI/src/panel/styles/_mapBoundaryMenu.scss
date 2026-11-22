@@ -46,25 +46,38 @@
 
 .mapBoundaryMenu {
     position: absolute;
-    left: 90rem;
+    left: 100%;
     bottom: 0;
-    width: 223rem;
-    max-height: 305rem;
+    width: 225rem;
+    margin-left: 7rem;
     padding: 8rem;
     box-sizing: border-box;
     border-radius: 7rem;
-    overflow-y: auto;
-    overflow-x: visible;
+    overflow: visible;
     background-color: rgba(17, 27, 35, 0.96);
     box-shadow: 0 7rem 18rem rgba(0, 0, 0, 0.28);
     z-index: 85;
+}
+
+.mapBoundaryMenuLeft {
+    left: auto;
+    right: 100%;
+    margin-left: 0;
+    margin-right: 7rem;
+}
+
+.mapBoundaryMenuHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8rem;
 }
 
 .mapBoundaryMenuTitle {
     color: rgba(255, 255, 255, 0.96);
     font-size: 12rem;
     font-weight: 700;
-    margin: 0 0 8rem 1rem;
+    margin-left: 1rem;
 }
 
 .mapBoundaryColorRow {
@@ -85,7 +98,10 @@
 
 .mapBoundarySwatchPreview {
     position: absolute;
-    inset: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
     z-index: 3;
     pointer-events: none;
     border-radius: 4rem;
@@ -93,7 +109,10 @@
 
 .mapBoundaryColorField {
     position: absolute;
-    inset: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
     width: 100% !important;
     height: 100% !important;
     background-color: transparent !important;
@@ -105,7 +124,10 @@
 .mapBoundaryColorField > button,
 .mapBoundaryColorField button {
     position: absolute !important;
-    inset: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
     width: 100% !important;
     height: 100% !important;
     padding: 0 !important;
@@ -149,29 +171,32 @@
     pointer-events: none;
 }
 
-.mapBoundaryMoreButton,
 .mapBoundaryReset {
-    color: rgba(255, 255, 255, 0.9) !important;
-    border: 0 !important;
-    background-color: rgba(36, 54, 66, 0.78) !important;
+    flex: 0 0 auto;
+    min-height: 22rem;
+    padding: 0 7rem;
+    border: 1rem solid rgba(148, 182, 198, 0.25) !important;
     border-radius: 4rem;
-    font-size: 11rem;
+    background-color: rgba(36, 54, 66, 0.78) !important;
+    color: rgba(255, 255, 255, 0.88) !important;
+    font-size: 10rem;
+    font-weight: 650;
     cursor: pointer;
 }
 
-.mapBoundaryMoreButton {
-    display: block;
-    width: 100%;
-    min-height: 25rem;
-    margin-top: 7rem;
+.mapBoundaryReset:hover,
+.mapBoundaryReset:focus {
+    background-color: rgba(72, 99, 114, 0.92) !important;
 }
 
-.mapBoundaryMore {
+.mapBoundarySliders {
+    margin-top: 7rem;
     padding-top: 5rem;
+    border-top: 1rem solid rgba(254, 255, 255, 0.18);
 }
 
 .mapBoundarySliderBlock {
-    margin: 5rem 2rem 8rem;
+    margin: 5rem 2rem 10rem;
 }
 
 .mapBoundarySliderTitle {
@@ -183,12 +208,8 @@
 }
 
 .mapBoundarySlider {
-    width: 100%;
-}
-
-.mapBoundaryReset {
     display: block;
-    min-height: 24rem;
-    margin: 7rem 0 0 auto;
-    padding: 0 8rem;
+    width: 100%;
+    min-width: 0;
+    background-color: transparent;
 }

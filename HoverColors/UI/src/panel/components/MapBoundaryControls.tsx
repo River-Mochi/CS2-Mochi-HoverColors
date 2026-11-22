@@ -8,7 +8,7 @@
 
 // File: UI/src/panel/components/MapBoundaryControls.tsx
 // Optional map-border flyout. Main Areas row stays tiny: map button + quick visibility eye.
-// Compact vanilla RGBA/hex pickers; extra geometry sliders are folded away by default.
+// Compact native RGBA/hex pickers; width and dash sliders are visible immediately.
 
 import React from "react";
 import { Button } from "cs2/ui";
@@ -68,9 +68,9 @@ export const MapBoundaryControls = ({
     const [tileColor, setTileColor] = React.useState<Color>(boundTile);
     const [mapColor, setMapColor] = React.useState<Color>(boundMap);
     const [menuOpen, setMenuOpen] = React.useState(false);
-    const [moreOpen, setMoreOpen] = React.useState(false);
     const [activePicker, setActivePicker] = React.useState<"tile" | "map" | null>(null);
     const [pickerDirection, setPickerDirection] = React.useState<PickerDirection>("up");
+    const [menuOnLeft, setMenuOnLeft] = React.useState(false);
 
     const launcherRef = React.useRef<HTMLDivElement>(null);
     const menuRef = React.useRef<HTMLDivElement>(null);
@@ -129,6 +129,10 @@ export const MapBoundaryControls = ({
             setMenuOpen(false);
             closePicker();
         } else {
+            // Open outside the main panel, flip side for right-edge launchers.
+            const actions = launcherRef.current?.parentElement?.parentElement;
+            const rect = actions?.getBoundingClientRect();
+            setMenuOnLeft(rect != null && window.innerWidth - rect.right < 250);
             onOpen();
             setMenuOpen(true);
         }
@@ -176,8 +180,17 @@ export const MapBoundaryControls = ({
             </div>
 
             {menuOpen && (
-                <div ref={menuRef} className={styles.mapBoundaryMenu}>
-                    <div className={styles.mapBoundaryMenuTitle}>{text.mapBoundaryTitle}</div>
+                <div ref={menuRef} className={`${styles.mapBoundaryMenu} ${menuOnLeft ? styles.mapBoundaryMenuLeft : ""}`}>
+                    <div className={styles.mapBoundaryMenuHeader}>
+                        <div className={styles.mapBoundaryMenuTitle}>{text.mapBoundaryTitle}</div>
+                        <SideTooltip tooltip={tt(text.tooltipMapBoundaryReset)} side="right">
+                            <Button className={styles.mapBoundaryReset}
+                                onSelect={() => trigger(CHANNEL, "ResetMapBoundary")}
+                                focusKey={focusDisabled}>
+                                {text.mapBoundaryReset}
+                            </Button>
+                        </SideTooltip>
+                    </div>
                     <div className={styles.mapBoundaryColorRow}>
                         <SideTooltip tooltip={tt(text.tooltipMapBoundaryTile)} side="right">
                             <div ref={tileSwatchRef} className={styles.mapBoundarySwatch}
@@ -250,43 +263,30 @@ export const MapBoundaryControls = ({
                         </SideTooltip>
                     </div>
 
-                    <Button className={styles.mapBoundaryMoreButton} onSelect={() => setMoreOpen(!moreOpen)}
-                        focusKey={focusDisabled} aria-expanded={moreOpen}>
-                        {text.mapBoundaryMore} {moreOpen ? "▴" : "▾"}
-                    </Button>
-                    {moreOpen && (
-                        <div className={styles.mapBoundaryMore}>
-                            <SideTooltip tooltip={tt(text.tooltipMapBoundaryWidth)} side="right">
-                                <div className={styles.mapBoundarySliderBlock}>
-                                    <div className={styles.mapBoundarySliderTitle}>
-                                        <span>{text.mapBoundaryWidth}</span><span>{width.toFixed(1)}×</span>
-                                    </div>
-                                    <MochiSlider value={width} start={0.5} end={2}
-                                        gamepadStep={0.1} step={0.1}
-                                        onChange={(v: number) => trigger(CHANNEL, "SetMapBoundaryWidthScale", v)}
-                                        focusKey={focusDisabled} className={styles.mapBoundarySlider} />
+                    <div className={styles.mapBoundarySliders}>
+                        <SideTooltip tooltip={tt(text.tooltipMapBoundaryWidth)} side="right">
+                            <div className={styles.mapBoundarySliderBlock}>
+                                <div className={styles.mapBoundarySliderTitle}>
+                                    <span>{text.mapBoundaryWidth}</span><span>{width.toFixed(1)}×</span>
                                 </div>
-                            </SideTooltip>
-                            <SideTooltip tooltip={tt(text.tooltipMapBoundaryDashes)} side="right">
-                                <div className={styles.mapBoundarySliderBlock}>
-                                    <div className={styles.mapBoundarySliderTitle}>
-                                        <span>{text.mapBoundaryDashes}</span><span>{dashes.toFixed(1)}×</span>
-                                    </div>
-                                    <MochiSlider value={dashes} start={0.5} end={2}
-                                        gamepadStep={0.1} step={0.1}
-                                        onChange={(v: number) => trigger(CHANNEL, "SetMapBoundaryDashScale", v)}
-                                        focusKey={focusDisabled} className={styles.mapBoundarySlider} />
+                                <MochiSlider value={width} start={0.5} end={2}
+                                    gamepadStep={0.1} step={0.1}
+                                    onChange={(v: number) => trigger(CHANNEL, "SetMapBoundaryWidthScale", v)}
+                                    focusKey={focusDisabled} className={styles.mapBoundarySlider} />
+                            </div>
+                        </SideTooltip>
+                        <SideTooltip tooltip={tt(text.tooltipMapBoundaryDashes)} side="right">
+                            <div className={styles.mapBoundarySliderBlock}>
+                                <div className={styles.mapBoundarySliderTitle}>
+                                    <span>{text.mapBoundaryDashes}</span><span>{dashes.toFixed(1)}×</span>
                                 </div>
-                            </SideTooltip>
-                        </div>
-                    )}
-                    <SideTooltip tooltip={tt(text.tooltipMapBoundaryReset)} side="right">
-                        <Button className={styles.mapBoundaryReset} onSelect={() =>
-                            trigger(CHANNEL, "ResetMapBoundary")}
-                            focusKey={focusDisabled}>
-                            {text.mapBoundaryReset}
-                        </Button>
-                    </SideTooltip>
+                                <MochiSlider value={dashes} start={0.5} end={2}
+                                    gamepadStep={0.1} step={0.1}
+                                    onChange={(v: number) => trigger(CHANNEL, "SetMapBoundaryDashScale", v)}
+                                    focusKey={focusDisabled} className={styles.mapBoundarySlider} />
+                            </div>
+                        </SideTooltip>
+                    </div>
                 </div>
             )}
         </>

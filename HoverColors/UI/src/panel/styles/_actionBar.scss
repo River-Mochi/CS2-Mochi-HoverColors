@@ -88,6 +88,13 @@
     border-top: 1rem solid rgba(254, 255, 255, 0.16);
 }
 
+// Map controls stay on the left; District is a separate action at the far right.
+.districtActionLauncher {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+}
+
 .panelDarker .districtActionsRow {
     border-top-color: rgba(254, 255, 255, 0.20);
 }
