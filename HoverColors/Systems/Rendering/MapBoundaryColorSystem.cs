@@ -113,7 +113,7 @@ namespace HoverColors.Systems
 
             // Slider dragging can generate several UI events in one instant; avoid
             // rebuilding all tile boundaries for every individual intermediate value.
-            if (Time.unscaledTime < m_NextRefreshTime)
+            if (UnityEngine.Time.unscaledTime < m_NextRefreshTime)
             {
                 return;
             }
@@ -128,7 +128,7 @@ namespace HoverColors.Systems
             // and requests regeneration on the next vanilla PreCulling update.
             // No fake tile edits, duplicated meshes, or Harmony patches.
             m_MeshSystem.PreDeserialize(default);
-            m_NextRefreshTime = Time.unscaledTime + 0.12f;
+            m_NextRefreshTime = UnityEngine.Time.unscaledTime + 0.12f;
         }
 
         public void RestoreVanilla()
