@@ -267,6 +267,7 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
     const [fillPickerOpen, setFillPickerOpen] = React.useState(false);
     const [ownerPickerOpen, setOwnerPickerOpen] = React.useState(false);
     const [districtPickerOpen, setDistrictPickerOpen] = React.useState(false);
+    const [mapBoundaryPickerOpen, setMapBoundaryPickerOpen] = React.useState(false);
     const [districtMenuOpen, setDistrictMenuOpen] = React.useState(false);
     const [guidelineLinesPickerOpen, setGuidelineLinesPickerOpen] = React.useState(false);
     const [guidelinePreviewPickerOpen, setGuidelinePreviewPickerOpen] = React.useState(false);
@@ -351,6 +352,7 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
             || fillPickerOpen
             || ownerPickerOpen
             || districtPickerOpen
+            || mapBoundaryPickerOpen
             || guidelineLinesPickerOpen
             || guidelinePreviewPickerOpen
             || guidelineDashedPickerOpen;
@@ -360,6 +362,7 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
         return () => document.body.classList.remove(PICKER_OPEN_BODY_CLASS);
     }, [
         districtPickerOpen,
+        mapBoundaryPickerOpen,
         fillPickerOpen,
         guidelineDashedPickerOpen,
         guidelineLinesPickerOpen,
@@ -374,7 +377,7 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
         }
 
         // Fill is a compact (colorWheel=false) picker too, so it needs the hex spacing fix.
-        const compactPickerOpen = fillPickerOpen || ownerPickerOpen || districtPickerOpen || guidelineLinesPickerOpen || guidelinePreviewPickerOpen || guidelineDashedPickerOpen;
+        const compactPickerOpen = fillPickerOpen || ownerPickerOpen || districtPickerOpen || mapBoundaryPickerOpen || guidelineLinesPickerOpen || guidelinePreviewPickerOpen || guidelineDashedPickerOpen;
         document.body.classList.toggle(COMPACT_PICKER_BODY_CLASS, compactPickerOpen);
 
         // The Outline picker is full-size, but it still has to close on an outside click.
@@ -416,7 +419,7 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
             document.removeEventListener("mousedown", onMouseDown);
             document.body.classList.remove(COMPACT_PICKER_BODY_CLASS);
         };
-    }, [districtPickerOpen, fillPickerOpen, guidelineDashedPickerOpen, guidelineLinesPickerOpen, guidelinePreviewPickerOpen, outlinePickerOpen, ownerPickerOpen]);
+    }, [districtPickerOpen, mapBoundaryPickerOpen, fillPickerOpen, guidelineDashedPickerOpen, guidelineLinesPickerOpen, guidelinePreviewPickerOpen, outlinePickerOpen, ownerPickerOpen]);
 
     React.useEffect(() => {
         if (!districtMenuOpen || typeof document === "undefined") {
@@ -804,7 +807,13 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
                                     trigger(CHANNEL, "SetAreasExpanded", !areasExpanded);
                                     setDistrictMenuOpen(false);
                                     setDistrictPickerOpen(false);
+                                    setMapBoundaryPickerOpen(false);
                                 }}
+                                onMapOpen={() => {
+                                    setDistrictMenuOpen(false);
+                                    setDistrictPickerOpen(false);
+                                }}
+                                onMapPickerOpenChange={setMapBoundaryPickerOpen}
                                 surfaceBorderThicknessScale={surfaceBorderThicknessScale}
                                 handleSurfaceBorderThicknessChange={handleSurfaceBorderThicknessChange}
                                 handleResetSurfaceBorderThickness={handleResetSurfaceBorderThickness}

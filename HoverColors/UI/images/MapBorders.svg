@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <!-- Small map-grid icon: a cyan owned-tile block inside a dashed outer boundary. -->
+  <rect x="3.5" y="3.5" width="25" height="25" rx="2.5" fill="none" stroke="#8ED8ED" stroke-width="2" stroke-dasharray="4 2"/>
+  <path d="M15.5 5V27M5 15.5H27" fill="none" stroke="#D2E9F0" stroke-width="1.8"/>
+  <path d="M6 6H14V14H6Z" fill="#32B6EC" fill-opacity="0.74"/>
+</svg>
