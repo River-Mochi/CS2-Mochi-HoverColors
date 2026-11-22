@@ -154,9 +154,18 @@ namespace HoverColors
 
         public void OnDispose()
         {
-            // Hand the original boundary prefab back when disabling the mod in a live city.
-            World.DefaultGameObjectInjectionWorld?
-                .GetExistingSystemManaged<MapBoundaryColorSystem>()?.RestoreVanilla();
+            // Hand the original boundary prefab back when disabling in a live city.
+            // The game world may already be disposed during application shutdown.
+            try
+            {
+                World.DefaultGameObjectInjectionWorld?
+                    .GetExistingSystemManaged<MapBoundaryColorSystem>()?.RestoreVanilla();
+            }
+            catch (System.Exception ex)
+            {
+                LogUtils.Warn(() => $"{ModTag} Could not restore map borders on shutdown: {ex.Message}");
+            }
+
             Settings?.UnregisterInOptionsUI();
             Settings = null;
         }

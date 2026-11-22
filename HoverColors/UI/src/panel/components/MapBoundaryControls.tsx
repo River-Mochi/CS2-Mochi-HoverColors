@@ -112,11 +112,14 @@ export const MapBoundaryControls = ({
 
     React.useEffect(() => () => onPickerOpenChange(false), [onPickerOpenChange]);
 
+    const updatePickerDirection = (target: HTMLElement | null) => {
+        if (target == null) return;
+        const rect = target.getBoundingClientRect();
+        setPickerDirection(rect.top + rect.height / 2 < window.innerHeight / 2 ? "down" : "up");
+    };
+
     const openPicker = (type: "tile" | "map", target: HTMLElement | null) => {
-        if (target != null) {
-            const rect = target.getBoundingClientRect();
-            setPickerDirection(rect.top + rect.height / 2 < window.innerHeight / 2 ? "down" : "up");
-        }
+        updatePickerDirection(target);
         setActivePicker(type);
         onPickerOpenChange(true);
     };
@@ -178,6 +181,8 @@ export const MapBoundaryControls = ({
                     <div className={styles.mapBoundaryColorRow}>
                         <SideTooltip tooltip={tt(text.tooltipMapBoundaryTile)} side="right">
                             <div ref={tileSwatchRef} className={styles.mapBoundarySwatch}
+                                onMouseOver={() => updatePickerDirection(tileSwatchRef.current)}
+                                onMouseDown={() => updatePickerDirection(tileSwatchRef.current)}
                                 style={compactSwatchStyle(tileColor, activePicker === "tile", useDarkerPanel)}>
                                 <span className={styles.mapBoundarySwatchPreview}
                                     style={compactSwatchStyle(tileColor)} aria-hidden="true" />
@@ -212,6 +217,8 @@ export const MapBoundaryControls = ({
                     <div className={styles.mapBoundaryColorRow}>
                         <SideTooltip tooltip={tt(text.tooltipMapBoundaryMap)} side="right">
                             <div ref={mapSwatchRef} className={styles.mapBoundarySwatch}
+                                onMouseOver={() => updatePickerDirection(mapSwatchRef.current)}
+                                onMouseDown={() => updatePickerDirection(mapSwatchRef.current)}
                                 style={compactSwatchStyle(mapColor, activePicker === "map", useDarkerPanel)}>
                                 <span className={styles.mapBoundarySwatchPreview}
                                     style={compactSwatchStyle(mapColor)} aria-hidden="true" />
