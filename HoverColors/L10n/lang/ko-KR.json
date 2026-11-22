@@ -44,5 +44,21 @@
   "HoverColors.UI.Tooltip.DistrictColors": "구역 오버레이 + 경계 색/불투명도.\n0.5초 길게 눌러 게임 색으로 복원.",
   "HoverColors.UI.Tooltip.ResetDistrictColors": "모든 구역을 게임 기본 파란색으로 복원.",
   "HoverColors.UI.DistrictMenu.AllDistricts": "모든 구역",
-  "HoverColors.UI.DistrictMenu.ResetAll": "초기화"
+  "HoverColors.UI.DistrictMenu.ResetAll": "초기화",
+  "HoverColors.UI.MapBoundary.Title": "맵 경계선",
+  "HoverColors.UI.MapBoundary.Tile": "해금된 타일",
+  "HoverColors.UI.MapBoundary.Map": "맵 외곽",
+  "HoverColors.UI.MapBoundary.More": "선 설정",
+  "HoverColors.UI.MapBoundary.Width": "선 두께",
+  "HoverColors.UI.MapBoundary.Dashes": "점선 크기",
+  "HoverColors.UI.MapBoundary.Reset": "초기화",
+  "HoverColors.UI.Tooltip.MapBoundary": "경계선 색상, 투명도, 표시를 변경합니다.",
+  "HoverColors.UI.Tooltip.MapBoundaryVisibility": "모든 맵 경계선을 즉시 표시/숨기기.",
+  "HoverColors.UI.Tooltip.MapBoundaryTile": "해금된 타일 경계선의 색과 투명도.",
+  "HoverColors.UI.Tooltip.MapBoundaryMap": "맵 외곽선의 색과 투명도.",
+  "HoverColors.UI.Tooltip.MapBoundaryTileVisible": "타일 경계선 표시/숨기기.",
+  "HoverColors.UI.Tooltip.MapBoundaryMapVisible": "맵 외곽선 표시/숨기기.",
+  "HoverColors.UI.Tooltip.MapBoundaryWidth": "선 두께. 1.0 = 게임 기본.",
+  "HoverColors.UI.Tooltip.MapBoundaryDashes": "점선과 간격. 1.0 = 게임 기본.",
+  "HoverColors.UI.Tooltip.MapBoundaryReset": "맵 경계선을 게임 기본으로 복원."
 }

@@ -44,5 +44,21 @@
   "HoverColors.UI.Tooltip.DistrictColors": "Sovrapposizione distretto + colore/opacità bordo.\nTieni 0,5 s per il colore del gioco.",
   "HoverColors.UI.Tooltip.ResetDistrictColors": "Ripristina tutti i distretti al blu predefinito del gioco.",
   "HoverColors.UI.DistrictMenu.AllDistricts": "Tutti i distretti",
-  "HoverColors.UI.DistrictMenu.ResetAll": "Ripristina"
+  "HoverColors.UI.DistrictMenu.ResetAll": "Ripristina",
+  "HoverColors.UI.MapBoundary.Title": "Confini mappa",
+  "HoverColors.UI.MapBoundary.Tile": "Riquadri sbloccati",
+  "HoverColors.UI.MapBoundary.Map": "Bordo mappa",
+  "HoverColors.UI.MapBoundary.More": "Opzioni linee",
+  "HoverColors.UI.MapBoundary.Width": "Spessore",
+  "HoverColors.UI.MapBoundary.Dashes": "Tratti",
+  "HoverColors.UI.MapBoundary.Reset": "Ripristina",
+  "HoverColors.UI.Tooltip.MapBoundary": "Cambia colore, opacità e visibilità dei confini.",
+  "HoverColors.UI.Tooltip.MapBoundaryVisibility": "Mostra/nascondi subito tutti i confini.",
+  "HoverColors.UI.Tooltip.MapBoundaryTile": "Colore e opacità dei riquadri sbloccati.",
+  "HoverColors.UI.Tooltip.MapBoundaryMap": "Colore e opacità del bordo della mappa.",
+  "HoverColors.UI.Tooltip.MapBoundaryTileVisible": "Mostra/nascondi i confini dei riquadri.",
+  "HoverColors.UI.Tooltip.MapBoundaryMapVisible": "Mostra/nascondi il bordo della mappa.",
+  "HoverColors.UI.Tooltip.MapBoundaryWidth": "Spessore. 1,0 = valore del gioco.",
+  "HoverColors.UI.Tooltip.MapBoundaryDashes": "Tratti e spazi. 1,0 = valore del gioco.",
+  "HoverColors.UI.Tooltip.MapBoundaryReset": "Ripristina i confini originali."
 }

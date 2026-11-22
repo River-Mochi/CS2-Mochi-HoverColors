@@ -44,5 +44,21 @@
   "HoverColors.UI.Tooltip.DistrictColors": "Superposición de distrito + color/opacidad del borde.\nMantén 0,5 s para volver al color del juego.",
   "HoverColors.UI.Tooltip.ResetDistrictColors": "Restablecer todos los distritos al azul predeterminado del juego.",
   "HoverColors.UI.DistrictMenu.AllDistricts": "Todos los distritos",
-  "HoverColors.UI.DistrictMenu.ResetAll": "Restablecer"
+  "HoverColors.UI.DistrictMenu.ResetAll": "Restablecer",
+  "HoverColors.UI.MapBoundary.Title": "Bordes del mapa",
+  "HoverColors.UI.MapBoundary.Tile": "Casillas desbloqueadas",
+  "HoverColors.UI.MapBoundary.Map": "Límite del mapa",
+  "HoverColors.UI.MapBoundary.More": "Opciones de línea",
+  "HoverColors.UI.MapBoundary.Width": "Grosor",
+  "HoverColors.UI.MapBoundary.Dashes": "Tamaño de guiones",
+  "HoverColors.UI.MapBoundary.Reset": "Restablecer",
+  "HoverColors.UI.Tooltip.MapBoundary": "Cambia el color, la opacidad y la visibilidad de los bordes.",
+  "HoverColors.UI.Tooltip.MapBoundaryVisibility": "Muestra u oculta todos los bordes al instante.",
+  "HoverColors.UI.Tooltip.MapBoundaryTile": "Color y opacidad de las casillas desbloqueadas.",
+  "HoverColors.UI.Tooltip.MapBoundaryMap": "Color y opacidad del límite del mapa.",
+  "HoverColors.UI.Tooltip.MapBoundaryTileVisible": "Mostrar u ocultar los bordes de las casillas.",
+  "HoverColors.UI.Tooltip.MapBoundaryMapVisible": "Mostrar u ocultar el límite del mapa.",
+  "HoverColors.UI.Tooltip.MapBoundaryWidth": "Grosor. 1,0 = valor del juego.",
+  "HoverColors.UI.Tooltip.MapBoundaryDashes": "Guiones y espacios. 1,0 = valor del juego.",
+  "HoverColors.UI.Tooltip.MapBoundaryReset": "Restablecer los bordes originales."
 }

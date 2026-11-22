@@ -44,5 +44,21 @@
   "HoverColors.UI.Tooltip.DistrictColors": "Superposition district + couleur/opacité de bordure.\nMaintenez 0,5 s pour la couleur du jeu.",
   "HoverColors.UI.Tooltip.ResetDistrictColors": "Réinitialiser tous les districts au bleu par défaut du jeu.",
   "HoverColors.UI.DistrictMenu.AllDistricts": "Tous les districts",
-  "HoverColors.UI.DistrictMenu.ResetAll": "Réinitialiser"
+  "HoverColors.UI.DistrictMenu.ResetAll": "Réinitialiser",
+  "HoverColors.UI.MapBoundary.Title": "Bordures de carte",
+  "HoverColors.UI.MapBoundary.Tile": "Tuiles débloquées",
+  "HoverColors.UI.MapBoundary.Map": "Bord de carte",
+  "HoverColors.UI.MapBoundary.More": "Options des lignes",
+  "HoverColors.UI.MapBoundary.Width": "Épaisseur",
+  "HoverColors.UI.MapBoundary.Dashes": "Taille des tirets",
+  "HoverColors.UI.MapBoundary.Reset": "Réinit.",
+  "HoverColors.UI.Tooltip.MapBoundary": "Change la couleur, l'opacité et l'affichage des bordures.",
+  "HoverColors.UI.Tooltip.MapBoundaryVisibility": "Afficher/masquer toutes les bordures.",
+  "HoverColors.UI.Tooltip.MapBoundaryTile": "Couleur et opacité des tuiles débloquées.",
+  "HoverColors.UI.Tooltip.MapBoundaryMap": "Couleur et opacité du bord de la carte.",
+  "HoverColors.UI.Tooltip.MapBoundaryTileVisible": "Afficher/masquer la limite des tuiles.",
+  "HoverColors.UI.Tooltip.MapBoundaryMapVisible": "Afficher/masquer le bord de la carte.",
+  "HoverColors.UI.Tooltip.MapBoundaryWidth": "Épaisseur. 1,0 = jeu par défaut.",
+  "HoverColors.UI.Tooltip.MapBoundaryDashes": "Tirets et espaces. 1,0 = jeu par défaut.",
+  "HoverColors.UI.Tooltip.MapBoundaryReset": "Rétablir les bordures du jeu."
 }
