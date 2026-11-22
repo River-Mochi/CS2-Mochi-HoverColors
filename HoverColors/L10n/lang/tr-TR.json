@@ -44,5 +44,21 @@
   "HoverColors.UI.Tooltip.DistrictColors": "Bölge kaplaması + sınır renk/opaklığı.\n0,5 sn basılı tut: oyun rengine dön.",
   "HoverColors.UI.Tooltip.ResetDistrictColors": "Tüm bölgeleri oyunun varsayılan mavisine döndür.",
   "HoverColors.UI.DistrictMenu.AllDistricts": "Tüm bölgeler",
-  "HoverColors.UI.DistrictMenu.ResetAll": "Sıfırla"
+  "HoverColors.UI.DistrictMenu.ResetAll": "Sıfırla",
+  "HoverColors.UI.MapBoundary.Title": "Harita Sınırları",
+  "HoverColors.UI.MapBoundary.Tile": "Açılan kareler",
+  "HoverColors.UI.MapBoundary.Map": "Harita kenarı",
+  "HoverColors.UI.MapBoundary.More": "Çizgi ayarları",
+  "HoverColors.UI.MapBoundary.Width": "Kalınlık",
+  "HoverColors.UI.MapBoundary.Dashes": "Kesik boyu",
+  "HoverColors.UI.MapBoundary.Reset": "Sıfırla",
+  "HoverColors.UI.Tooltip.MapBoundary": "Sınırların rengini, saydamlığını ve görünürlüğünü ayarla.",
+  "HoverColors.UI.Tooltip.MapBoundaryVisibility": "Tüm sınırları anında göster/gizle.",
+  "HoverColors.UI.Tooltip.MapBoundaryTile": "Açılan karelerin sınır rengi ve saydamlığı.",
+  "HoverColors.UI.Tooltip.MapBoundaryMap": "Harita kenarı rengi ve saydamlığı.",
+  "HoverColors.UI.Tooltip.MapBoundaryTileVisible": "Kare sınırlarını göster/gizle.",
+  "HoverColors.UI.Tooltip.MapBoundaryMapVisible": "Harita kenarını göster/gizle.",
+  "HoverColors.UI.Tooltip.MapBoundaryWidth": "Çizgi kalınlığı. 1,0 = oyun varsayılanı.",
+  "HoverColors.UI.Tooltip.MapBoundaryDashes": "Kesikler ve boşluklar. 1,0 = oyun varsayılanı.",
+  "HoverColors.UI.Tooltip.MapBoundaryReset": "Harita sınırlarını varsayılana döndür."
 }

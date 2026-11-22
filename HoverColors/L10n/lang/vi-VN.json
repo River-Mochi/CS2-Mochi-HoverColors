@@ -44,5 +44,21 @@
   "HoverColors.UI.Tooltip.DistrictColors": "Lớp phủ quận + màu/độ đục đường ranh.\nGiữ 0,5s để về màu game.",
   "HoverColors.UI.Tooltip.ResetDistrictColors": "Đặt lại mọi quận về màu xanh mặc định của game.",
   "HoverColors.UI.DistrictMenu.AllDistricts": "Tất cả quận",
-  "HoverColors.UI.DistrictMenu.ResetAll": "Đặt lại"
+  "HoverColors.UI.DistrictMenu.ResetAll": "Đặt lại",
+  "HoverColors.UI.MapBoundary.Title": "Ranh giới bản đồ",
+  "HoverColors.UI.MapBoundary.Tile": "Ô đã mở",
+  "HoverColors.UI.MapBoundary.Map": "Rìa bản đồ",
+  "HoverColors.UI.MapBoundary.More": "Tùy chọn nét",
+  "HoverColors.UI.MapBoundary.Width": "Độ dày",
+  "HoverColors.UI.MapBoundary.Dashes": "Cỡ nét đứt",
+  "HoverColors.UI.MapBoundary.Reset": "Đặt lại",
+  "HoverColors.UI.Tooltip.MapBoundary": "Đổi màu, độ mờ và hiển thị ranh giới.",
+  "HoverColors.UI.Tooltip.MapBoundaryVisibility": "Hiện/ẩn ngay mọi ranh giới.",
+  "HoverColors.UI.Tooltip.MapBoundaryTile": "Màu và độ mờ viền ô đã mở.",
+  "HoverColors.UI.Tooltip.MapBoundaryMap": "Màu và độ mờ rìa bản đồ.",
+  "HoverColors.UI.Tooltip.MapBoundaryTileVisible": "Hiện/ẩn viền ô đã mở.",
+  "HoverColors.UI.Tooltip.MapBoundaryMapVisible": "Hiện/ẩn rìa bản đồ.",
+  "HoverColors.UI.Tooltip.MapBoundaryWidth": "Độ dày. 1.0 = mặc định game.",
+  "HoverColors.UI.Tooltip.MapBoundaryDashes": "Nét đứt và khoảng trống. 1.0 = mặc định game.",
+  "HoverColors.UI.Tooltip.MapBoundaryReset": "Đặt lại ranh giới mặc định."
 }

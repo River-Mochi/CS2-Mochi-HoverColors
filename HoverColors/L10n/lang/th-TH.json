@@ -44,5 +44,21 @@
   "HoverColors.UI.Tooltip.DistrictColors": "สีพื้นที่เขต + สี/ความทึบเส้นขอบ\nกดค้าง 0.5วิ เพื่อคืนสีเกม",
   "HoverColors.UI.Tooltip.ResetDistrictColors": "รีเซ็ตทุกเขตเป็นสีน้ำเงินเริ่มต้นของเกม",
   "HoverColors.UI.DistrictMenu.AllDistricts": "ทุกเขต",
-  "HoverColors.UI.DistrictMenu.ResetAll": "รีเซ็ต"
+  "HoverColors.UI.DistrictMenu.ResetAll": "รีเซ็ต",
+  "HoverColors.UI.MapBoundary.Title": "เส้นขอบแผนที่",
+  "HoverColors.UI.MapBoundary.Tile": "ช่องที่ปลดล็อก",
+  "HoverColors.UI.MapBoundary.Map": "ขอบแผนที่",
+  "HoverColors.UI.MapBoundary.More": "ตั้งค่าเส้น",
+  "HoverColors.UI.MapBoundary.Width": "ความหนา",
+  "HoverColors.UI.MapBoundary.Dashes": "ขนาดเส้นประ",
+  "HoverColors.UI.MapBoundary.Reset": "รีเซ็ต",
+  "HoverColors.UI.Tooltip.MapBoundary": "เปลี่ยนสี ความโปร่งใส และการแสดงเส้นขอบ",
+  "HoverColors.UI.Tooltip.MapBoundaryVisibility": "แสดง/ซ่อนเส้นขอบทั้งหมดทันที",
+  "HoverColors.UI.Tooltip.MapBoundaryTile": "สีและความโปร่งใสของขอบช่องที่ปลดล็อก",
+  "HoverColors.UI.Tooltip.MapBoundaryMap": "สีและความโปร่งใสของขอบแผนที่",
+  "HoverColors.UI.Tooltip.MapBoundaryTileVisible": "แสดง/ซ่อนขอบช่องที่ปลดล็อก",
+  "HoverColors.UI.Tooltip.MapBoundaryMapVisible": "แสดง/ซ่อนขอบแผนที่",
+  "HoverColors.UI.Tooltip.MapBoundaryWidth": "ความหนาเส้น 1.0 = ค่าเกม",
+  "HoverColors.UI.Tooltip.MapBoundaryDashes": "ขนาดเส้นประและช่องว่าง 1.0 = ค่าเกม",
+  "HoverColors.UI.Tooltip.MapBoundaryReset": "คืนค่าเส้นขอบแผนที่ของเกม"
 }

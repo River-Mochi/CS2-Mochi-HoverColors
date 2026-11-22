@@ -44,5 +44,21 @@
   "HoverColors.UI.Tooltip.DistrictColors": "Sobreposição do distrito + cor/opacidade da borda.\nSegure 0,5 s para voltar à cor do jogo.",
   "HoverColors.UI.Tooltip.ResetDistrictColors": "Redefinir todos os distritos para o azul padrão do jogo.",
   "HoverColors.UI.DistrictMenu.AllDistricts": "Todos os distritos",
-  "HoverColors.UI.DistrictMenu.ResetAll": "Redefinir"
+  "HoverColors.UI.DistrictMenu.ResetAll": "Redefinir",
+  "HoverColors.UI.MapBoundary.Title": "Limites do mapa",
+  "HoverColors.UI.MapBoundary.Tile": "Blocos liberados",
+  "HoverColors.UI.MapBoundary.Map": "Borda do mapa",
+  "HoverColors.UI.MapBoundary.More": "Opções de linha",
+  "HoverColors.UI.MapBoundary.Width": "Espessura",
+  "HoverColors.UI.MapBoundary.Dashes": "Tamanho dos traços",
+  "HoverColors.UI.MapBoundary.Reset": "Restaurar",
+  "HoverColors.UI.Tooltip.MapBoundary": "Mude cor, opacidade e visibilidade dos limites.",
+  "HoverColors.UI.Tooltip.MapBoundaryVisibility": "Mostre/oculte todos os limites na hora.",
+  "HoverColors.UI.Tooltip.MapBoundaryTile": "Cor e opacidade dos blocos liberados.",
+  "HoverColors.UI.Tooltip.MapBoundaryMap": "Cor e opacidade da borda do mapa.",
+  "HoverColors.UI.Tooltip.MapBoundaryTileVisible": "Mostrar/ocultar limites dos blocos.",
+  "HoverColors.UI.Tooltip.MapBoundaryMapVisible": "Mostrar/ocultar borda do mapa.",
+  "HoverColors.UI.Tooltip.MapBoundaryWidth": "Espessura. 1,0 = padrão do jogo.",
+  "HoverColors.UI.Tooltip.MapBoundaryDashes": "Traços e espaços. 1,0 = padrão do jogo.",
+  "HoverColors.UI.Tooltip.MapBoundaryReset": "Restaure os limites padrão do jogo."
 }

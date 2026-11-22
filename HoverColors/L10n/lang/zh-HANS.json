@@ -44,5 +44,21 @@
   "HoverColors.UI.Tooltip.DistrictColors": "地区覆盖 + 边界颜色/不透明度。\n长按0.5秒恢复游戏颜色。",
   "HoverColors.UI.Tooltip.ResetDistrictColors": "将所有地区恢复为游戏默认蓝色。",
   "HoverColors.UI.DistrictMenu.AllDistricts": "所有地区",
-  "HoverColors.UI.DistrictMenu.ResetAll": "重置"
+  "HoverColors.UI.DistrictMenu.ResetAll": "重置",
+  "HoverColors.UI.MapBoundary.Title": "地图边界",
+  "HoverColors.UI.MapBoundary.Tile": "已解锁地块",
+  "HoverColors.UI.MapBoundary.Map": "地图外沿",
+  "HoverColors.UI.MapBoundary.More": "线条设置",
+  "HoverColors.UI.MapBoundary.Width": "线宽",
+  "HoverColors.UI.MapBoundary.Dashes": "虚线大小",
+  "HoverColors.UI.MapBoundary.Reset": "重置",
+  "HoverColors.UI.Tooltip.MapBoundary": "调整边界颜色、透明度和显示。",
+  "HoverColors.UI.Tooltip.MapBoundaryVisibility": "一键显示/隐藏所有地图边界。",
+  "HoverColors.UI.Tooltip.MapBoundaryTile": "已解锁地块边界颜色和透明度。",
+  "HoverColors.UI.Tooltip.MapBoundaryMap": "地图外沿颜色和透明度。",
+  "HoverColors.UI.Tooltip.MapBoundaryTileVisible": "显示/隐藏地块边界。",
+  "HoverColors.UI.Tooltip.MapBoundaryMapVisible": "显示/隐藏地图外沿。",
+  "HoverColors.UI.Tooltip.MapBoundaryWidth": "线宽：1.0 = 游戏默认。",
+  "HoverColors.UI.Tooltip.MapBoundaryDashes": "虚线与间隔：1.0 = 游戏默认。",
+  "HoverColors.UI.Tooltip.MapBoundaryReset": "恢复游戏默认地图边界。"
 }
