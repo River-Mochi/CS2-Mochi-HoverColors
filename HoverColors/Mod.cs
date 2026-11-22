@@ -140,6 +140,11 @@ namespace HoverColors
             updateSystem.UpdateAt<DistrictColorSystem>(
                 SystemUpdatePhase.Rendering);
 
+            // Apply changes immediately before the vanilla boundary mesh is generated.
+            world.GetOrCreateSystemManaged<MapBoundaryColorSystem>();
+            updateSystem.UpdateBefore<MapBoundaryColorSystem, CityBoundaryMeshSystem>(
+                SystemUpdatePhase.PreCulling);
+
             // Keep this explicit: the UI bridge owns the J hotkey and bindings used by
             // Game/Editor/GTL/GTR/UMM, so create it during normal mod startup.
             world.GetOrCreateSystemManaged<HoverColorsUISystem>();
@@ -149,6 +154,9 @@ namespace HoverColors
 
         public void OnDispose()
         {
+            // Hand the original boundary prefab back when disabling the mod in a live city.
+            World.DefaultGameObjectInjectionWorld?
+                .GetExistingSystemManaged<MapBoundaryColorSystem>()?.RestoreVanilla();
             Settings?.UnregisterInOptionsUI();
             Settings = null;
         }
