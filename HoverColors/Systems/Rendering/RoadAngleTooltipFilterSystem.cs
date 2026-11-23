@@ -14,6 +14,7 @@ namespace HoverColors.Systems
     using System;
     using CS2Shared.RiverMochi;
     using Game;
+    using Game.Prefabs;
     using Game.Tools;
     using Game.UI.Tooltip;
 
@@ -33,12 +34,20 @@ namespace HoverColors.Systems
 
         protected override void OnUpdate()
         {
-            // No prefab lookup here. NetToolSystem can draw using either its selected
-            // prefab or a lane prefab; GetPrefab()/TryGetEntity()/RoadData gating could
-            // cause the entire filter to return before processing vanilla tooltips.
+            // The toggle is intended for NEW road/path construction only.
+            // Other networks (rail, pipes, power, etc.) must keep their vanilla hints.
+            // RoadPrefab and PathwayPrefab can be identified directly, without the
+            // fragile ECS PrefabSystem.TryGetEntity + RoadData prerequisite.
             if (Mod.Settings?.RoadAngleTooltipsHidden != true
                 || m_TooltipUISystem == null
-                || m_ToolSystem?.activeTool is not NetToolSystem)
+                || m_ToolSystem?.activeTool is not NetToolSystem netTool
+                || netTool.actualMode == NetToolSystem.Mode.Replace)
+            {
+                return;
+            }
+
+            if (netTool.GetPrefab() is not RoadPrefab
+                && netTool.GetPrefab() is not PathwayPrefab)
             {
                 return;
             }
@@ -48,7 +57,7 @@ namespace HoverColors.Systems
             if (!m_ExecutionLogged)
             {
                 m_ExecutionLogged = true;
-                LogUtils.Info(() => $"{Mod.ModTag} Road tooltip filter running (NetToolSystem, hide ON)");
+                LogUtils.Info(() => $"{Mod.ModTag} Road tooltip filter running (road/path build, hide ON)");
             }
 
             // Runs after vanilla InputHintsTooltipSystem in UITooltip, before
