@@ -34,20 +34,7 @@ namespace HoverColors.Systems
 
         protected override void OnUpdate()
         {
-            // The toggle is intended for NEW road/path construction only.
-            // Other networks (rail, pipes, power, etc.) must keep their vanilla hints.
-            // RoadPrefab and PathwayPrefab can be identified directly, without the
-            // fragile ECS PrefabSystem.TryGetEntity + RoadData prerequisite.
-            if (Mod.Settings?.RoadAngleTooltipsHidden != true
-                || m_TooltipUISystem == null
-                || m_ToolSystem?.activeTool is not NetToolSystem netTool
-                || netTool.actualMode == NetToolSystem.Mode.Replace)
-            {
-                return;
-            }
-
-            PrefabBase? selectedPrefab = netTool.GetPrefab();
-            if (selectedPrefab is not RoadPrefab && selectedPrefab is not PathwayPrefab)
+            if (m_TooltipUISystem == null || !ShouldFilter(m_ToolSystem))
             {
                 return;
             }
@@ -95,6 +82,21 @@ namespace HoverColors.Systems
                 LogUtils.Info(() => $"{Mod.ModTag} Road tooltip filter active: " +
                     $"removed {removedAngles} angle, {removedHints} Place/Undo hints");
             }
+        }
+
+        // Shared by the before-guide-angle pass and the after-input-hints pass.
+        // Do not suppress anything in rail, subway, pipe, or upgrade tools.
+        internal static bool ShouldFilter(ToolSystem? toolSystem)
+        {
+            if (Mod.Settings?.RoadAngleTooltipsHidden != true
+                || toolSystem?.activeTool is not NetToolSystem netTool
+                || netTool.actualMode == NetToolSystem.Mode.Replace)
+            {
+                return false;
+            }
+
+            PrefabBase? selectedPrefab = netTool.GetPrefab();
+            return selectedPrefab is RoadPrefab || selectedPrefab is PathwayPrefab;
         }
 
         private static bool IsNetPlaceOrUndoHint(InputHintTooltip hint)

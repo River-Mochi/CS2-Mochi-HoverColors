@@ -126,6 +126,10 @@ namespace HoverColors
             updateSystem.UpdateAfter<BuildingLotPreviewApplySystem, BuildingLotRenderSystem>(
                 SystemUpdatePhase.Rendering);
 
+            // Strip angle-only tooltip entries BEFORE vanilla builds UI groups.
+            // Existing post-pass still filters Place/Undo and catches any remaining angle groups.
+            updateSystem.UpdateBefore<RoadAngleTooltipPruneSystem, GuideLineTooltipSystem>(
+                SystemUpdatePhase.UITooltip);
             updateSystem.UpdateAfter<RoadAngleTooltipFilterSystem, InputHintsTooltipSystem>(
                 SystemUpdatePhase.UITooltip);
 
