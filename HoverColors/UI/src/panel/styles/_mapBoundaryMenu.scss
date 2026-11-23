@@ -37,9 +37,10 @@
     background-color: rgba(86, 63, 67, 0.82) !important;
 }
 
+// Larger transparent eye glyph, with the button's existing background showing through.
 .mapBoundaryEyeIcon {
-    width: 19rem;
-    height: 19rem;
+    width: 23rem;
+    height: 23rem;
     display: block;
     pointer-events: none;
 }

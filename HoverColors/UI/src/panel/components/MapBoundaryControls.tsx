@@ -26,6 +26,7 @@ import { SideTooltip, SideTooltipProvider } from "../tooltip/SideTooltip";
 import { MochiSlider } from "./MochiSlider";
 import mapIconSrc from "../../../images/MapBorders.svg";
 import eyeOffIconSrc from "../../../images/EyeOffRedSlash.svg";
+import eyeOnIconSrc from "../../../images/EyeOnTransparent.svg";
 import styles from "../../MochiColorPickerPanel.module.scss";
 
 type PanelText = ReturnType<typeof useMochiPanelText>;
@@ -173,7 +174,7 @@ export const MapBoundaryControls = ({
                         aria-label={text.tooltipMapBoundaryVisibility}
                         aria-pressed={allHidden}
                     >
-                        <img src={allHidden ? eyeOffIconSrc : "Media/PhotoMode/HideUIOff.svg"}
+                        <img src={allHidden ? eyeOffIconSrc : eyeOnIconSrc}
                             className={styles.mapBoundaryEyeIcon} alt="" />
                     </Button>
                 </SideTooltip>
