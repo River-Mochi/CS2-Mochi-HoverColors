@@ -98,7 +98,10 @@ namespace HoverColors.UI
         {
             HoverColorsSettings? settings = Mod.Settings;
             if (settings == null) return;
-            bool visible = !settings.MapBoundaryTileVisible || !settings.MapBoundaryMapVisible;
+            // The quick eye should always hide if either boundary is currently visible.
+            // Only when both are hidden should it reveal them both.
+            // Previous logic unexpectedly SHOWED both from a mixed visibility state.
+            bool visible = !(settings.MapBoundaryTileVisible || settings.MapBoundaryMapVisible);
             settings.MapBoundaryTileVisible = visible;
             settings.MapBoundaryMapVisible = visible;
             ApplySaveAndSync(settings);
@@ -153,7 +156,7 @@ namespace HoverColors.UI
         private void SetMapBoundaryDashScale(float scale)
         {
             HoverColorsSettings? settings = Mod.Settings;
-            if (settings == null) return;
+            if (settings == null || float.IsNaN(scale) || float.IsInfinity(scale)) return;
             scale = Mathf.Round(Mathf.Clamp(scale, 0.5f, 2f) * 10f) / 10f;
             if (Mathf.Approximately(settings.MapBoundaryDashScale, scale)) return;
             settings.MapBoundaryDashScale = scale;
