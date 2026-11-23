@@ -46,8 +46,8 @@ namespace HoverColors.Systems
                 return;
             }
 
-            if (netTool.GetPrefab() is not RoadPrefab
-                && netTool.GetPrefab() is not PathwayPrefab)
+            PrefabBase? selectedPrefab = netTool.GetPrefab();
+            if (selectedPrefab is not RoadPrefab && selectedPrefab is not PathwayPrefab)
             {
                 return;
             }
