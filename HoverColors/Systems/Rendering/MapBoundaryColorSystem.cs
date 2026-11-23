@@ -104,10 +104,12 @@ namespace HoverColors.Systems
             if (!settings.MapBoundaryMapVisible) map.a = 0f;
 
             float width = GetWidth(settings);
-            // StarQ's old mod uses at least the selected width for tile length. This avoids
-            // extremely wide dashes being shorter than they are wide at large widths.
-            float tiling = Mathf.Max(
-                width, CapturedTilingLength * Mathf.Clamp(settings.MapBoundaryDashScale, 0.5f, 2f));
+            // Scale the larger of the vanilla tiling length and current width. This keeps
+            // dash spacing adjustable even at the 200-unit width limit; unlike a hard minimum
+            // of 'width', the Dash size slider remains responsive across its whole range.
+            float tiling = Mathf.Max(1f,
+                Mathf.Max(width, CapturedTilingLength) *
+                Mathf.Clamp(settings.MapBoundaryDashScale, 0.5f, 2f));
 
             // Zero width guarantees a completely hidden mesh when both sets are off, even if the
             // boundary material's dark fringe is not driven solely by vertex-color alpha.
