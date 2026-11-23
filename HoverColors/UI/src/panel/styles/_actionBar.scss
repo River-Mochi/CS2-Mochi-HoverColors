@@ -82,15 +82,23 @@
 }
 
 .districtActionsRow {
+    width: 100%;
+    box-sizing: border-box;
     min-height: 32rem;
     margin-top: 4rem;
     padding-top: 5rem;
     border-top: 1rem solid rgba(254, 255, 255, 0.16);
 }
 
-// Map controls stay on the left; District is a separate action at the far right.
+// Cohtml does not reliably expand margin-left:auto on a flex child.
+// A real expanding spacer separates Map Borders from District.
+.districtActionSpacer {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
 .districtActionLauncher {
-    margin-left: auto;
+    flex: 0 0 32rem;
     display: flex;
     align-items: center;
 }

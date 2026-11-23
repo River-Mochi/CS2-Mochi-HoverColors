@@ -22,7 +22,7 @@ import { CHANNEL,
 } from "../bindings/MochiPanelBindings";
 import { compactSwatchStyle, normalizeColorFieldValue } from "../helpers/MochiPanelColorUtils";
 import { useMochiPanelText } from "../hooks/useMochiPanelText";
-import { SideTooltip } from "../tooltip/SideTooltip";
+import { SideTooltip, SideTooltipProvider } from "../tooltip/SideTooltip";
 import { MochiSlider } from "./MochiSlider";
 import mapIconSrc from "../../../images/MapBorders.svg";
 import eyeOffIconSrc from "../../../images/EyeOffRedSlash.svg";
@@ -181,9 +181,10 @@ export const MapBoundaryControls = ({
 
             {menuOpen && (
                 <div ref={menuRef} className={`${styles.mapBoundaryMenu} ${menuOnLeft ? styles.mapBoundaryMenuLeft : ""}`}>
+                    <SideTooltipProvider anchorRef={menuRef} panelRef={menuRef}>
                     <div className={styles.mapBoundaryMenuHeader}>
                         <div className={styles.mapBoundaryMenuTitle}>{text.mapBoundaryTitle}</div>
-                        <SideTooltip tooltip={tt(text.tooltipMapBoundaryReset)} side="right">
+                        <SideTooltip tooltip={tt(text.tooltipMapBoundaryReset)} side={menuOnLeft ? "below" : "right"}>
                             <Button className={styles.mapBoundaryReset}
                                 onSelect={() => trigger(CHANNEL, "ResetMapBoundary")}
                                 focusKey={focusDisabled}>
@@ -192,7 +193,7 @@ export const MapBoundaryControls = ({
                         </SideTooltip>
                     </div>
                     <div className={styles.mapBoundaryColorRow}>
-                        <SideTooltip tooltip={tt(text.tooltipMapBoundaryTile)} side="right">
+                        <SideTooltip tooltip={tt(text.tooltipMapBoundaryTile)} side={menuOnLeft ? "below" : "right"}>
                             <div ref={tileSwatchRef} className={styles.mapBoundarySwatch}
                                 onMouseOver={() => updatePickerDirection(tileSwatchRef.current)}
                                 onMouseDown={() => updatePickerDirection(tileSwatchRef.current)}
@@ -215,7 +216,7 @@ export const MapBoundaryControls = ({
                             </div>
                         </SideTooltip>
                         <span className={styles.mapBoundaryColorLabel}>{text.mapBoundaryTile}</span>
-                        <SideTooltip tooltip={tt(text.tooltipMapBoundaryTileVisible)} side="right">
+                        <SideTooltip tooltip={tt(text.tooltipMapBoundaryTileVisible)} side={menuOnLeft ? "below" : "right"}>
                             <Button className={styles.mapBoundarySmallEye} variant="icon"
                                 onSelect={() => trigger(CHANNEL, "SetMapBoundaryTileVisible", !tileVisible)}
                                 focusKey={focusDisabled}
@@ -228,7 +229,7 @@ export const MapBoundaryControls = ({
                     </div>
 
                     <div className={styles.mapBoundaryColorRow}>
-                        <SideTooltip tooltip={tt(text.tooltipMapBoundaryMap)} side="right">
+                        <SideTooltip tooltip={tt(text.tooltipMapBoundaryMap)} side={menuOnLeft ? "below" : "right"}>
                             <div ref={mapSwatchRef} className={styles.mapBoundarySwatch}
                                 onMouseOver={() => updatePickerDirection(mapSwatchRef.current)}
                                 onMouseDown={() => updatePickerDirection(mapSwatchRef.current)}
@@ -251,7 +252,7 @@ export const MapBoundaryControls = ({
                             </div>
                         </SideTooltip>
                         <span className={styles.mapBoundaryColorLabel}>{text.mapBoundaryMap}</span>
-                        <SideTooltip tooltip={tt(text.tooltipMapBoundaryMapVisible)} side="right">
+                        <SideTooltip tooltip={tt(text.tooltipMapBoundaryMapVisible)} side={menuOnLeft ? "below" : "right"}>
                             <Button className={styles.mapBoundarySmallEye} variant="icon"
                                 onSelect={() => trigger(CHANNEL, "SetMapBoundaryMapVisible", !mapVisible)}
                                 focusKey={focusDisabled}
@@ -264,7 +265,7 @@ export const MapBoundaryControls = ({
                     </div>
 
                     <div className={styles.mapBoundarySliders}>
-                        <SideTooltip tooltip={tt(text.tooltipMapBoundaryWidth)} side="right">
+                        <SideTooltip tooltip={tt(text.tooltipMapBoundaryWidth)} side={menuOnLeft ? "below" : "right"}>
                             <div className={styles.mapBoundarySliderBlock}>
                                 <div className={styles.mapBoundarySliderTitle}>
                                     <span>{text.mapBoundaryWidth}</span><span>{width.toFixed(0)}</span>
@@ -275,7 +276,7 @@ export const MapBoundaryControls = ({
                                     focusKey={focusDisabled} className={styles.mapBoundarySlider} />
                             </div>
                         </SideTooltip>
-                        <SideTooltip tooltip={tt(text.tooltipMapBoundaryDashes)} side="right">
+                        <SideTooltip tooltip={tt(text.tooltipMapBoundaryDashes)} side={menuOnLeft ? "below" : "right"}>
                             <div className={styles.mapBoundarySliderBlock}>
                                 <div className={styles.mapBoundarySliderTitle}>
                                     <span>{text.mapBoundaryDashes}</span><span>{dashes.toFixed(1)}×</span>
@@ -287,6 +288,7 @@ export const MapBoundaryControls = ({
                             </div>
                         </SideTooltip>
                     </div>
+                    </SideTooltipProvider>
                 </div>
             )}
         </>

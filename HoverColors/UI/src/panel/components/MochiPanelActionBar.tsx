@@ -219,8 +219,9 @@ export const MochiPanelActionBar = ({
                     onOpen={onMapOpen}
                     onPickerOpenChange={onMapPickerOpenChange}
                 />
+                <div className={styles.districtActionSpacer} />
                 <div className={styles.districtActionLauncher}>
-                <SideTooltip tooltip={tt(text.tooltipDistrictColors)} side="below">
+                    <SideTooltip tooltip={tt(text.tooltipDistrictColors)} side="below">
                     <div ref={districtPickerRef}>
                         <Button
                             className={`${styles.actionButton} ${styles.surfaceButton} ${styles.districtPickerButton} ${districtMenuOpen ? styles.districtPickerButtonActive : ""}`}
@@ -237,7 +238,7 @@ export const MochiPanelActionBar = ({
                             <img src={surfaceIconSrc} className={`${styles.controlIcon} ${styles.idleIcon} ${styles.districtPickerIcon}`} alt="" />
                         </Button>
                     </div>
-                </SideTooltip>
+                    </SideTooltip>
                 </div>
             </div>
 

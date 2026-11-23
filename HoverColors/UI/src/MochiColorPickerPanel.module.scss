@@ -427,12 +427,23 @@
 }
 
 .angleTooltipButton {
+    width: 24rem !important;
+    min-width: 24rem !important;
+    height: 24rem !important;
+    flex: 0 0 24rem;
     margin-left: 0;
+    margin-right: 4rem;
+    transform-origin: center center;
+    transition: transform 120ms ease-out;
+}
+
+.angleTooltipButton:hover {
+    transform: scale(1.08);
 }
 
 .angleTooltipIcon {
-    width: 24rem;
-    height: 24rem;
+    width: 19rem;
+    height: 19rem;
     display: block;
     pointer-events: none;
 }
