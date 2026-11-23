@@ -13,6 +13,7 @@ namespace HoverColors.UI
 {
     using System;
     using Colossal.UI.Binding;
+    using CS2Shared.RiverMochi;
     using HoverColors.Systems;
 
     public partial class HoverColorsUISystem
