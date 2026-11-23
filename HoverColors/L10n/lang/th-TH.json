@@ -57,7 +57,7 @@
   "HoverColors.UI.Tooltip.MapBoundaryMap": "ขอบเขตนอกสุดของทั้งแผนที่ ไม่ใช่ช่องที่ปลดล็อก ลองซูมออก",
   "HoverColors.UI.Tooltip.MapBoundaryTileVisible": "แสดง/ซ่อนขอบช่องที่ปลดล็อก",
   "HoverColors.UI.Tooltip.MapBoundaryMapVisible": "แสดง/ซ่อนขอบแผนที่",
-  "HoverColors.UI.Tooltip.MapBoundaryWidth": "ความหนาเส้น 1.0 = ค่าเกม",
-  "HoverColors.UI.Tooltip.MapBoundaryDashes": "ขนาดเส้นประและช่องว่าง 1.0 = ค่าเกม",
+  "HoverColors.UI.Tooltip.MapBoundaryWidth": "ความหนาเส้น: 1–200 หน่วย รีเซ็ตเพื่อคืนค่าเกม",
+  "HoverColors.UI.Tooltip.MapBoundaryDashes": "เส้นประและช่องว่าง: 0.5–2 เท่า ปรับตามเส้นที่หนาขึ้น",
   "HoverColors.UI.Tooltip.MapBoundaryReset": "คืนค่าเส้นขอบแผนที่ของเกม"
 }

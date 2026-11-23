@@ -57,7 +57,7 @@
   "HoverColors.UI.Tooltip.MapBoundaryMap": "Äußere Grenze der gesamten Karte, nicht deiner Kacheln. Zum Anzeigen herauszoomen.",
   "HoverColors.UI.Tooltip.MapBoundaryTileVisible": "Kachelgrenzen ein-/ausblenden.",
   "HoverColors.UI.Tooltip.MapBoundaryMapVisible": "Kartenrand ein-/ausblenden.",
-  "HoverColors.UI.Tooltip.MapBoundaryWidth": "Linienbreite. 1,0 = Spielstandard.",
-  "HoverColors.UI.Tooltip.MapBoundaryDashes": "Striche und Lücken. 1,0 = Spielstandard.",
+  "HoverColors.UI.Tooltip.MapBoundaryWidth": "Linienbreite: 1–200 Einheiten. Reset = Spielstandard.",
+  "HoverColors.UI.Tooltip.MapBoundaryDashes": "Striche/Abstände: 0,5–2×. Passt sich breiten Linien an.",
   "HoverColors.UI.Tooltip.MapBoundaryReset": "Kartengrenzen auf Spielstandard zurücksetzen."
 }

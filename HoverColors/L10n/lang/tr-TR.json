@@ -57,7 +57,7 @@
   "HoverColors.UI.Tooltip.MapBoundaryMap": "Açılan kareler değil, tüm haritanın dış sınırı. Görmek için uzaklaş.",
   "HoverColors.UI.Tooltip.MapBoundaryTileVisible": "Kare sınırlarını göster/gizle.",
   "HoverColors.UI.Tooltip.MapBoundaryMapVisible": "Harita kenarını göster/gizle.",
-  "HoverColors.UI.Tooltip.MapBoundaryWidth": "Çizgi kalınlığı. 1,0 = oyun varsayılanı.",
-  "HoverColors.UI.Tooltip.MapBoundaryDashes": "Kesikler ve boşluklar. 1,0 = oyun varsayılanı.",
+  "HoverColors.UI.Tooltip.MapBoundaryWidth": "Çizgi kalınlığı: 1–200 birim. Sıfırla = oyun varsayılanı.",
+  "HoverColors.UI.Tooltip.MapBoundaryDashes": "Kesik/aralık: 0,5–2×. Geniş çizgilere göre ölçeklenir.",
   "HoverColors.UI.Tooltip.MapBoundaryReset": "Harita sınırlarını varsayılana döndür."
 }

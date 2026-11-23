@@ -57,7 +57,7 @@
   "HoverColors.UI.Tooltip.MapBoundaryMap": "Limite esterno dell'intera mappa, non dei riquadri sbloccati. Allontana la visuale.",
   "HoverColors.UI.Tooltip.MapBoundaryTileVisible": "Mostra/nascondi i confini dei riquadri.",
   "HoverColors.UI.Tooltip.MapBoundaryMapVisible": "Mostra/nascondi il bordo della mappa.",
-  "HoverColors.UI.Tooltip.MapBoundaryWidth": "Spessore. 1,0 = valore del gioco.",
-  "HoverColors.UI.Tooltip.MapBoundaryDashes": "Tratti e spazi. 1,0 = valore del gioco.",
+  "HoverColors.UI.Tooltip.MapBoundaryWidth": "Spessore: 1–200 unità. Ripristina = valore del gioco.",
+  "HoverColors.UI.Tooltip.MapBoundaryDashes": "Tratti e spazi: 0,5–2×. Si adattano a linee larghe.",
   "HoverColors.UI.Tooltip.MapBoundaryReset": "Ripristina i confini originali."
 }

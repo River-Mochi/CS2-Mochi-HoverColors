@@ -57,7 +57,7 @@
   "HoverColors.UI.Tooltip.MapBoundaryMap": "整張地圖最外層的邊界，不是已解鎖地塊邊界。縮小地圖查看。",
   "HoverColors.UI.Tooltip.MapBoundaryTileVisible": "顯示/隱藏地塊邊界。",
   "HoverColors.UI.Tooltip.MapBoundaryMapVisible": "顯示/隱藏地圖外緣。",
-  "HoverColors.UI.Tooltip.MapBoundaryWidth": "線寬：1.0 = 遊戲預設。",
-  "HoverColors.UI.Tooltip.MapBoundaryDashes": "虛線與間隔：1.0 = 遊戲預設。",
+  "HoverColors.UI.Tooltip.MapBoundaryWidth": "線寬：1–200 遊戲單位。重設還原遊戲預設值。",
+  "HoverColors.UI.Tooltip.MapBoundaryDashes": "虛線及間隔：0.5–2 倍。寬線條會相應加大間距。",
   "HoverColors.UI.Tooltip.MapBoundaryReset": "還原遊戲預設地圖邊界。"
 }

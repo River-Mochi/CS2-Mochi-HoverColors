@@ -57,7 +57,7 @@
   "HoverColors.UI.Tooltip.MapBoundaryMap": "Límite exterior de todo el mapa, no de las casillas desbloqueadas. Aleja el zoom.",
   "HoverColors.UI.Tooltip.MapBoundaryTileVisible": "Mostrar u ocultar los bordes de las casillas.",
   "HoverColors.UI.Tooltip.MapBoundaryMapVisible": "Mostrar u ocultar el límite del mapa.",
-  "HoverColors.UI.Tooltip.MapBoundaryWidth": "Grosor. 1,0 = valor del juego.",
-  "HoverColors.UI.Tooltip.MapBoundaryDashes": "Guiones y espacios. 1,0 = valor del juego.",
+  "HoverColors.UI.Tooltip.MapBoundaryWidth": "Grosor: 1–200 unidades. Restablecer = valor del juego.",
+  "HoverColors.UI.Tooltip.MapBoundaryDashes": "Guiones y espacios: 0,5–2×. Se ajustan a líneas anchas.",
   "HoverColors.UI.Tooltip.MapBoundaryReset": "Restablecer los bordes originales."
 }

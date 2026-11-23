@@ -57,7 +57,7 @@
   "HoverColors.UI.Tooltip.MapBoundaryMap": "Ranh giới ngoài cùng của cả bản đồ, không phải ô đã mở. Thu nhỏ để xem.",
   "HoverColors.UI.Tooltip.MapBoundaryTileVisible": "Hiện/ẩn viền ô đã mở.",
   "HoverColors.UI.Tooltip.MapBoundaryMapVisible": "Hiện/ẩn rìa bản đồ.",
-  "HoverColors.UI.Tooltip.MapBoundaryWidth": "Độ dày. 1.0 = mặc định game.",
-  "HoverColors.UI.Tooltip.MapBoundaryDashes": "Nét đứt và khoảng trống. 1.0 = mặc định game.",
+  "HoverColors.UI.Tooltip.MapBoundaryWidth": "Độ dày: 1–200 đơn vị. Đặt lại để về mặc định game.",
+  "HoverColors.UI.Tooltip.MapBoundaryDashes": "Nét đứt/khoảng cách: 0.5–2×. Tự co giãn theo nét dày.",
   "HoverColors.UI.Tooltip.MapBoundaryReset": "Đặt lại ranh giới mặc định."
 }

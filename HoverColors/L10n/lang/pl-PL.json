@@ -57,7 +57,7 @@
   "HoverColors.UI.Tooltip.MapBoundaryMap": "Zewnętrzna granica całej mapy, nie odblokowanych kafelków. Oddal widok.",
   "HoverColors.UI.Tooltip.MapBoundaryTileVisible": "Pokaż/ukryj granice kafelków.",
   "HoverColors.UI.Tooltip.MapBoundaryMapVisible": "Pokaż/ukryj krawędź mapy.",
-  "HoverColors.UI.Tooltip.MapBoundaryWidth": "Grubość linii. 1,0 = domyślnie.",
-  "HoverColors.UI.Tooltip.MapBoundaryDashes": "Kreski i odstępy. 1,0 = domyślnie.",
+  "HoverColors.UI.Tooltip.MapBoundaryWidth": "Grubość: 1–200 jednostek. Reset = wartość gry.",
+  "HoverColors.UI.Tooltip.MapBoundaryDashes": "Kreski i odstępy: 0,5–2×. Skala rośnie przy grubszych liniach.",
   "HoverColors.UI.Tooltip.MapBoundaryReset": "Przywróć domyślne granice mapy."
 }

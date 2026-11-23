@@ -57,7 +57,7 @@
   "HoverColors.UI.Tooltip.MapBoundaryMap": "해금된 타일이 아닌 전체 맵의 바깥 경계입니다. 축소해서 확인하세요.",
   "HoverColors.UI.Tooltip.MapBoundaryTileVisible": "타일 경계선 표시/숨기기.",
   "HoverColors.UI.Tooltip.MapBoundaryMapVisible": "맵 외곽선 표시/숨기기.",
-  "HoverColors.UI.Tooltip.MapBoundaryWidth": "선 두께. 1.0 = 게임 기본.",
-  "HoverColors.UI.Tooltip.MapBoundaryDashes": "점선과 간격. 1.0 = 게임 기본.",
+  "HoverColors.UI.Tooltip.MapBoundaryWidth": "선 두께: 1–200. 초기화하면 게임 기본값으로 복원.",
+  "HoverColors.UI.Tooltip.MapBoundaryDashes": "점선/간격: 0.5–2배. 두꺼운 선에 맞춰 조정.",
   "HoverColors.UI.Tooltip.MapBoundaryReset": "맵 경계선을 게임 기본으로 복원."
 }

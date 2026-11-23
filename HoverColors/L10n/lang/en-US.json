@@ -57,7 +57,7 @@
   "HoverColors.UI.Tooltip.MapBoundaryMap": "Extreme outer edge of the entire map, far beyond unlocked tiles. Zoom out to see it.",
   "HoverColors.UI.Tooltip.MapBoundaryTileVisible": "Show/hide unlocked tile borders.",
   "HoverColors.UI.Tooltip.MapBoundaryMapVisible": "Show/hide outer map edge.",
-  "HoverColors.UI.Tooltip.MapBoundaryWidth": "Border width: 1–200 game units. Reset restores the game's original width.",
-  "HoverColors.UI.Tooltip.MapBoundaryDashes": "Dash and gap size. 1.0 = game default. Wide borders may increase the minimum dash length.",
+  "HoverColors.UI.Tooltip.MapBoundaryWidth": "Border width: 1–200 game units. Reset restores the original width.",
+  "HoverColors.UI.Tooltip.MapBoundaryDashes": "Dash spacing: 0.5–2×. At large widths, scales with line width.",
   "HoverColors.UI.Tooltip.MapBoundaryReset": "Restore map borders to game defaults."
 }

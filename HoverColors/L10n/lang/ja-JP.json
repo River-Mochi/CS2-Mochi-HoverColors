@@ -57,7 +57,7 @@
   "HoverColors.UI.Tooltip.MapBoundaryMap": "マップ全体の外周です。解放タイルの境界ではありません。ズームアウトして確認。",
   "HoverColors.UI.Tooltip.MapBoundaryTileVisible": "タイル境界線を表示/非表示。",
   "HoverColors.UI.Tooltip.MapBoundaryMapVisible": "マップ外周を表示/非表示。",
-  "HoverColors.UI.Tooltip.MapBoundaryWidth": "線幅。1.0 = ゲーム標準。",
-  "HoverColors.UI.Tooltip.MapBoundaryDashes": "破線と間隔。1.0 = ゲーム標準。",
+  "HoverColors.UI.Tooltip.MapBoundaryWidth": "線幅：1～200。リセットでゲーム標準に戻す。",
+  "HoverColors.UI.Tooltip.MapBoundaryDashes": "破線と間隔：0.5～2倍。線幅が広い場合はそれに合わせる。",
   "HoverColors.UI.Tooltip.MapBoundaryReset": "マップ境界線を標準に戻す。"
 }

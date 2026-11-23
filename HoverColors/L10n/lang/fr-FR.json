@@ -57,7 +57,7 @@
   "HoverColors.UI.Tooltip.MapBoundaryMap": "Limite extérieure de toute la carte, pas des tuiles débloquées. Dézoomez pour la voir.",
   "HoverColors.UI.Tooltip.MapBoundaryTileVisible": "Afficher/masquer la limite des tuiles.",
   "HoverColors.UI.Tooltip.MapBoundaryMapVisible": "Afficher/masquer le bord de la carte.",
-  "HoverColors.UI.Tooltip.MapBoundaryWidth": "Épaisseur. 1,0 = jeu par défaut.",
-  "HoverColors.UI.Tooltip.MapBoundaryDashes": "Tirets et espaces. 1,0 = jeu par défaut.",
+  "HoverColors.UI.Tooltip.MapBoundaryWidth": "Épaisseur : 1 à 200 unités. Réinit. = jeu par défaut.",
+  "HoverColors.UI.Tooltip.MapBoundaryDashes": "Tirets/espaces : 0,5 à 2×. Adaptés aux lignes épaisses.",
   "HoverColors.UI.Tooltip.MapBoundaryReset": "Rétablir les bordures du jeu."
 }

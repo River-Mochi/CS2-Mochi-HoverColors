@@ -57,7 +57,7 @@
   "HoverColors.UI.Tooltip.MapBoundaryMap": "Limite de todo o mapa, não dos blocos desbloqueados. Afasta a vista para ver.",
   "HoverColors.UI.Tooltip.MapBoundaryTileVisible": "Mostrar/ocultar limites dos blocos.",
   "HoverColors.UI.Tooltip.MapBoundaryMapVisible": "Mostrar/ocultar borda do mapa.",
-  "HoverColors.UI.Tooltip.MapBoundaryWidth": "Espessura. 1,0 = padrão do jogo.",
-  "HoverColors.UI.Tooltip.MapBoundaryDashes": "Traços e espaços. 1,0 = padrão do jogo.",
+  "HoverColors.UI.Tooltip.MapBoundaryWidth": "Espessura: 1–200 unidades. Repor = padrão do jogo.",
+  "HoverColors.UI.Tooltip.MapBoundaryDashes": "Traços e espaços: 0,5–2×. Adaptam-se a linhas largas.",
   "HoverColors.UI.Tooltip.MapBoundaryReset": "Repõe os limites originais do mapa."
 }
