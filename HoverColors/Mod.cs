@@ -130,7 +130,9 @@ namespace HoverColors
             // Existing post-pass still filters Place/Undo and catches any remaining angle groups.
             updateSystem.UpdateBefore<RoadAngleTooltipPruneSystem, GuideLineTooltipSystem>(
                 SystemUpdatePhase.UITooltip);
-            updateSystem.UpdateAfter<RoadAngleTooltipFilterSystem, InputHintsTooltipSystem>(
+            // Run after ordinary UITooltip producers, including other mods that add
+            // mouse hints with UpdateAt after the vanilla InputHintsTooltipSystem.
+            updateSystem.UpdateAfter<RoadAngleTooltipFilterSystem>(
                 SystemUpdatePhase.UITooltip);
 
             // Keep the system scheduled even when the button starts OFF. The system's

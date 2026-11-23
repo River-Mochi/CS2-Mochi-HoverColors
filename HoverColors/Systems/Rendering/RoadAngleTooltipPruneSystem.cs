@@ -46,14 +46,28 @@ namespace HoverColors.Systems
                 m_GuideLinesSystem.GetTooltips(out JobHandle dependencies);
             dependencies.Complete();
 
-            int removed = 0;
-            for (int i = items.Length - 1; i >= 0; i--)
+            // Compact in place so the remaining length labels keep their order and
+            // the vanilla guideLineTooltip{index} widget paths stay stable.
+            int kept = 0;
+            int originalCount = items.Length;
+            for (int i = 0; i < originalCount; i++)
             {
-                if (items[i].m_Type == GuideLinesSystem.TooltipType.Angle)
+                GuideLinesSystem.TooltipInfo item = items[i];
+                if (item.m_Type != GuideLinesSystem.TooltipType.Angle)
                 {
-                    items.RemoveAtSwapBack(i);
-                    removed++;
+                    if (kept != i)
+                    {
+                        items[kept] = item;
+                    }
+
+                    kept++;
                 }
+            }
+
+            int removed = originalCount - kept;
+            if (removed > 0)
+            {
+                items.ResizeUninitialized(kept);
             }
 
             if (removed > 0 && !m_Logged)

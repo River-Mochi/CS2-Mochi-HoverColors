@@ -7,7 +7,7 @@
 // ================= </copyright> ======================
 
 // File: Systems/Rendering/RoadAngleTooltipFilterSystem.cs
-// Purpose: Hide net preview angle and placement hints while preserving cost and measurements.
+// Purpose: Hide road/path angle, placement and mode hints while preserving cost and measurements.
 
 namespace HoverColors.Systems
 {
@@ -47,16 +47,17 @@ namespace HoverColors.Systems
                 LogUtils.Info(() => $"{Mod.ModTag} Road tooltip filter running (road/path build, hide ON)");
             }
 
-            // Runs after vanilla InputHintsTooltipSystem in UITooltip, before
-            // TooltipUISystem serializes groups. Keep cost, length and slope intact.
+            // Runs after UITooltip producers, before TooltipUISystem serializes groups.
+            // Keep cost, length and slope intact. Extended Tooltip's replacement for
+            // GuideLineTooltipSystem leaves angle groups at the default category.
             int removedAngles = 0;
             for (int i = m_TooltipUISystem.groups.Count - 1; i >= 0; i--)
             {
                 TooltipGroup group = m_TooltipUISystem.groups[i];
-                if (group.category == TooltipGroup.Category.Network
-                    && group.children.Count == 1
+                if (group.children.Count == 1
                     && group.children[0] is FloatTooltip angle
-                    && angle.unit == "angle")
+                    && angle.unit == "angle"
+                    && angle.icon == "Media/Glyphs/Angle.svg")
                 {
                     m_TooltipUISystem.groups.RemoveAt(i);
                     removedAngles++;
@@ -64,10 +65,18 @@ namespace HoverColors.Systems
             }
 
             int removedHints = 0;
+            int removedModes = 0;
             var mouseHints = m_TooltipUISystem.mouseGroup.children;
             for (int i = mouseHints.Count - 1; i >= 0; i--)
             {
-                if (mouseHints[i] is InputHintTooltip hint && IsNetPlaceOrUndoHint(hint))
+                if (mouseHints[i] is StringTooltip mode && mode.path == "etNetToolMode")
+                {
+                    // Extended Tooltip 1.7.0 adds the current Net Tool mode here.
+                    // Match its widget path without referencing that mod's assembly.
+                    mouseHints.RemoveAt(i);
+                    removedModes++;
+                }
+                else if (mouseHints[i] is InputHintTooltip hint && IsNetPlaceOrUndoHint(hint))
                 {
                     mouseHints.RemoveAt(i);
                     removedHints++;
@@ -76,15 +85,15 @@ namespace HoverColors.Systems
 
             // Only once per city/world: proof in HoverColors.log that the filter ran.
             // No frame-by-frame logging.
-            if (!m_FilterLogged && (removedAngles != 0 || removedHints != 0))
+            if (!m_FilterLogged && (removedAngles != 0 || removedHints != 0 || removedModes != 0))
             {
                 m_FilterLogged = true;
                 LogUtils.Info(() => $"{Mod.ModTag} Road tooltip filter active: " +
-                    $"removed {removedAngles} angle, {removedHints} Place/Undo hints");
+                    $"removed {removedAngles} angle, {removedHints} Place/Undo, {removedModes} mode hints");
             }
         }
 
-        // Shared by the before-guide-angle pass and the after-input-hints pass.
+        // Shared by the before-guide-angle pass and the final tooltip pass.
         // Do not suppress anything in rail, subway, pipe, or upgrade tools.
         internal static bool ShouldFilter(ToolSystem? toolSystem)
         {
