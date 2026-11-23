@@ -547,6 +547,8 @@ namespace HoverColors.UI
             }
 
             settings.RoadAngleTooltipsHidden = !settings.RoadAngleTooltipsHidden;
+            LogUtils.Info(() => $"{Mod.ModTag} Road angle tooltip filter: " +
+                (settings.RoadAngleTooltipsHidden ? "ON (hide hints)" : "OFF (show hints)"));
             ApplySaveAndSync(settings);
         }
 
