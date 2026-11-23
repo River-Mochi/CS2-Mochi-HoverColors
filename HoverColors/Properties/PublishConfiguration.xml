@@ -90,7 +90,7 @@ tags: hover colors, remove blue, disable hover, highlight color, outline thickne
 <!--Link to the forum post where the mod can be discussed-->
 <ForumLink Value="https://forum.paradoxplaza.com/forum/threads/mochis-hover-colors.1925898/" />
 <!--Version of the mod-->
-<ModVersion Value="1.3.1" />
+<ModVersion Value="1.4.0" />
 <!--Recommended version of the base game to use the mod-->
 <GameVersion Value="1.6.*" />
 <!--Dependency for the mod, can be set multiple times-->
@@ -99,11 +99,9 @@ tags: hover colors, remove blue, disable hover, highlight color, outline thickne
 <RequiredDLC Value="" />
 <!--Change log for new version. Single line or multi line. Supports minimal markdown subset-->
 <ChangeLog>
-- Improved/harden Hover Colors launcher icon button.
-- Options change of panel Launch button location now apply instantly. No restart needed.
-- Hardened the panel hotkey so it works independently of launcher location (default is J).
-- Improved Game, Editor, and Universal Mod Menu UI registration.
-- Improved UI diagnostics for troubleshooting.
+- Added Map Boundary lines control panel: color and dashed line slider, and you can HIDE them too separate from main Hover Outline Hide eyeball.
+- Fixed angle tooltips still showing even if toggled off, per changes in 1.6.4f1.
+- Improved UI diagnostics.
 </ChangeLog>
 <!--External link, can be set multiple times. supported types are "discord", "github", "youtube", "twitch", "x", "paypal", "patreon", "buymeacoffee", "kofi", "crowdin", "gitlab", "gofundme"-->
 <ExternalLink Type="discord" Url="https://discord.gg/gwXgvtyhjc" />
