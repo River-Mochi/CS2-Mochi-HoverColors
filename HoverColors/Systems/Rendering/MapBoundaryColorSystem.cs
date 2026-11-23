@@ -55,6 +55,11 @@ namespace HoverColors.Systems
         {
             float baseWidth = Mathf.Max(0.01f, CapturedWidth);
             float scale = settings?.MapBoundaryWidthScale ?? 1f;
+            if (float.IsNaN(scale) || float.IsInfinity(scale))
+            {
+                scale = 1f;
+            }
+
             return Mathf.Clamp(baseWidth * scale, 1f, MaxBoundaryWidth);
         }
 
@@ -107,9 +112,15 @@ namespace HoverColors.Systems
             // Scale the larger of the vanilla tiling length and current width. This keeps
             // dash spacing adjustable even at the 200-unit width limit; unlike a hard minimum
             // of 'width', the Dash size slider remains responsive across its whole range.
+            float dashScale = settings.MapBoundaryDashScale;
+            if (float.IsNaN(dashScale) || float.IsInfinity(dashScale))
+            {
+                dashScale = 1f;
+            }
+
             float tiling = Mathf.Max(1f,
                 Mathf.Max(width, CapturedTilingLength) *
-                Mathf.Clamp(settings.MapBoundaryDashScale, 0.5f, 2f));
+                Mathf.Clamp(dashScale, 0.5f, 2f));
 
             // Zero width guarantees a completely hidden mesh when both sets are off, even if the
             // boundary material's dark fringe is not driven solely by vertex-color alpha.
