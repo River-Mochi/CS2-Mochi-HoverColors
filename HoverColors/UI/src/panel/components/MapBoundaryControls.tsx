@@ -18,7 +18,7 @@ import { CHANNEL,
     mapBoundaryTileR$, mapBoundaryTileG$, mapBoundaryTileB$, mapBoundaryTileA$,
     mapBoundaryMapR$, mapBoundaryMapG$, mapBoundaryMapB$, mapBoundaryMapA$,
     mapBoundaryTileVisible$, mapBoundaryMapVisible$,
-    mapBoundaryWidthScale$, mapBoundaryDashScale$,
+    mapBoundaryWidth$, mapBoundaryDashScale$,
 } from "../bindings/MochiPanelBindings";
 import { compactSwatchStyle, normalizeColorFieldValue } from "../helpers/MochiPanelColorUtils";
 import { useMochiPanelText } from "../hooks/useMochiPanelText";
@@ -61,7 +61,7 @@ export const MapBoundaryControls = ({
     };
     const tileVisible = useValue(mapBoundaryTileVisible$);
     const mapVisible = useValue(mapBoundaryMapVisible$);
-    const width = useValue(mapBoundaryWidthScale$);
+    const width = useValue(mapBoundaryWidth$);
     const dashes = useValue(mapBoundaryDashScale$);
     const allHidden = !tileVisible && !mapVisible;
 
@@ -267,11 +267,11 @@ export const MapBoundaryControls = ({
                         <SideTooltip tooltip={tt(text.tooltipMapBoundaryWidth)} side="right">
                             <div className={styles.mapBoundarySliderBlock}>
                                 <div className={styles.mapBoundarySliderTitle}>
-                                    <span>{text.mapBoundaryWidth}</span><span>{width.toFixed(1)}×</span>
+                                    <span>{text.mapBoundaryWidth}</span><span>{width.toFixed(0)}</span>
                                 </div>
-                                <MochiSlider value={width} start={0.5} end={2}
-                                    gamepadStep={0.1} step={0.1}
-                                    onChange={(v: number) => trigger(CHANNEL, "SetMapBoundaryWidthScale", v)}
+                                <MochiSlider value={width} start={1} end={200}
+                                    gamepadStep={1} step={1}
+                                    onChange={(v: number) => trigger(CHANNEL, "SetMapBoundaryWidth", v)}
                                     focusKey={focusDisabled} className={styles.mapBoundarySlider} />
                             </div>
                         </SideTooltip>

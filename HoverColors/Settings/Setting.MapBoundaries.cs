@@ -54,7 +54,8 @@ namespace HoverColors
         [SettingsUIHidden]
         public float MapBoundaryMapA { get; set; } = 0.25f;
 
-        // Multiplier on the actual prefab width/tiling length; 1 = exact game default.
+        // Internally stored as a multiplier, but the in-city Width slider shows actual units (1–200).
+        // 1 = captured vanilla width, even when a game/map build uses a different default.
         [SettingsUIHidden]
         public float MapBoundaryWidthScale { get; set; } = 1f;
 

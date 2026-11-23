@@ -27,7 +27,7 @@ namespace HoverColors.UI
         private ValueBinding<float> m_MapBoundaryMapABinding = null!;
         private ValueBinding<bool> m_MapBoundaryTileVisibleBinding = null!;
         private ValueBinding<bool> m_MapBoundaryMapVisibleBinding = null!;
-        private ValueBinding<float> m_MapBoundaryWidthScaleBinding = null!;
+        private ValueBinding<float> m_MapBoundaryWidthBinding = null!;
         private ValueBinding<float> m_MapBoundaryDashScaleBinding = null!;
 
         private void RegisterMapBoundaryValueBindings(HoverColorsSettings? settings)
@@ -44,7 +44,7 @@ namespace HoverColors.UI
             m_MapBoundaryMapABinding = AddValueBinding("MapBoundaryMapA", map.a);
             m_MapBoundaryTileVisibleBinding = AddValueBinding("MapBoundaryTileVisible", settings?.MapBoundaryTileVisible ?? true);
             m_MapBoundaryMapVisibleBinding = AddValueBinding("MapBoundaryMapVisible", settings?.MapBoundaryMapVisible ?? true);
-            m_MapBoundaryWidthScaleBinding = AddValueBinding("MapBoundaryWidthScale", settings?.MapBoundaryWidthScale ?? 1f);
+            m_MapBoundaryWidthBinding = AddValueBinding("MapBoundaryWidth", MapBoundaryColorSystem.GetWidth(settings));
             m_MapBoundaryDashScaleBinding = AddValueBinding("MapBoundaryDashScale", settings?.MapBoundaryDashScale ?? 1f);
         }
 
@@ -62,7 +62,7 @@ namespace HoverColors.UI
             UpdateIfChanged(m_MapBoundaryMapABinding, map.a);
             UpdateIfChanged(m_MapBoundaryTileVisibleBinding, settings?.MapBoundaryTileVisible ?? true);
             UpdateIfChanged(m_MapBoundaryMapVisibleBinding, settings?.MapBoundaryMapVisible ?? true);
-            UpdateIfChanged(m_MapBoundaryWidthScaleBinding, settings?.MapBoundaryWidthScale ?? 1f);
+            UpdateIfChanged(m_MapBoundaryWidthBinding, MapBoundaryColorSystem.GetWidth(settings));
             UpdateIfChanged(m_MapBoundaryDashScaleBinding, settings?.MapBoundaryDashScale ?? 1f);
         }
 
@@ -73,7 +73,7 @@ namespace HoverColors.UI
             AddBinding(new TriggerBinding(Mod.ModId, "ToggleMapBoundaryVisibility", ToggleMapBoundaryVisibility));
             AddBinding(new TriggerBinding<float, float, float, float>(Mod.ModId, "SetMapBoundaryTileColor", SetMapBoundaryTileColor));
             AddBinding(new TriggerBinding<float, float, float, float>(Mod.ModId, "SetMapBoundaryMapColor", SetMapBoundaryMapColor));
-            AddBinding(new TriggerBinding<float>(Mod.ModId, "SetMapBoundaryWidthScale", SetMapBoundaryWidthScale));
+            AddBinding(new TriggerBinding<float>(Mod.ModId, "SetMapBoundaryWidth", SetMapBoundaryWidth));
             AddBinding(new TriggerBinding<float>(Mod.ModId, "SetMapBoundaryDashScale", SetMapBoundaryDashScale));
             AddBinding(new TriggerBinding(Mod.ModId, "ResetMapBoundary", ResetMapBoundary));
         }
@@ -136,11 +136,15 @@ namespace HoverColors.UI
             ApplySaveAndSync(settings);
         }
 
-        private void SetMapBoundaryWidthScale(float scale)
+        private void SetMapBoundaryWidth(float width)
         {
             HoverColorsSettings? settings = Mod.Settings;
-            if (settings == null) return;
-            scale = Mathf.Round(Mathf.Clamp(scale, 0.5f, 2f) * 10f) / 10f;
+            if (settings == null || float.IsNaN(width) || float.IsInfinity(width)) return;
+
+            // Width is in actual game units (1–200), not a multiple of vanilla.
+            float desiredWidth = Mathf.Round(Mathf.Clamp(width, 1f, MapBoundaryColorSystem.MaxBoundaryWidth));
+            float baseWidth = Mathf.Max(0.01f, MapBoundaryColorSystem.CapturedWidth);
+            float scale = desiredWidth / baseWidth;
             if (Mathf.Approximately(settings.MapBoundaryWidthScale, scale)) return;
             settings.MapBoundaryWidthScale = scale;
             ApplySaveAndSync(settings);

@@ -23,6 +23,7 @@ namespace HoverColors.Systems
     {
         public static Color CapturedTileColor { get; private set; } = new(1f, 1f, 1f, 0.75f);
         public static Color CapturedMapColor { get; private set; } = new(1f, 1f, 1f, 0.25f);
+        public const float MaxBoundaryWidth = 200f;
         public static float CapturedWidth { get; private set; } = 20f;
         public static float CapturedTilingLength { get; private set; } = 80f;
 
@@ -46,6 +47,15 @@ namespace HoverColors.Systems
                 ? new Color(settings.MapBoundaryMapR, settings.MapBoundaryMapG,
                     settings.MapBoundaryMapB, settings.MapBoundaryMapA)
                 : CapturedMapColor;
+        }
+
+        // The UI uses real world-width units. Settings store a multiplier so game defaults
+        // still follow each map/game build and Reset restores its original authored width.
+        public static float GetWidth(HoverColorsSettings? settings)
+        {
+            float baseWidth = Mathf.Max(0.01f, CapturedWidth);
+            float scale = settings?.MapBoundaryWidthScale ?? 1f;
+            return Mathf.Clamp(baseWidth * scale, 1f, MaxBoundaryWidth);
         }
 
         protected override void OnCreate()
@@ -93,8 +103,11 @@ namespace HoverColors.Systems
             if (!settings.MapBoundaryTileVisible) tile.a = 0f;
             if (!settings.MapBoundaryMapVisible) map.a = 0f;
 
-            float width = CapturedWidth * Mathf.Clamp(settings.MapBoundaryWidthScale, 0.5f, 2f);
-            float tiling = CapturedTilingLength * Mathf.Clamp(settings.MapBoundaryDashScale, 0.5f, 2f);
+            float width = GetWidth(settings);
+            // StarQ's old mod uses at least the selected width for tile length. This avoids
+            // extremely wide dashes being shorter than they are wide at large widths.
+            float tiling = Mathf.Max(
+                width, CapturedTilingLength * Mathf.Clamp(settings.MapBoundaryDashScale, 0.5f, 2f));
 
             // Zero width guarantees a completely hidden mesh when both sets are off, even if the
             // boundary material's dark fringe is not driven solely by vertex-color alpha.

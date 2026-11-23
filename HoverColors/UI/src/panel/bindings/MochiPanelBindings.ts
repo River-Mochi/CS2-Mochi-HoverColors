@@ -68,7 +68,8 @@ export const mapBoundaryMapB$ = bindValue<number>(CHANNEL, "MapBoundaryMapB", 1)
 export const mapBoundaryMapA$ = bindValue<number>(CHANNEL, "MapBoundaryMapA", 0.25);
 export const mapBoundaryTileVisible$ = bindValue<boolean>(CHANNEL, "MapBoundaryTileVisible", true);
 export const mapBoundaryMapVisible$ = bindValue<boolean>(CHANNEL, "MapBoundaryMapVisible", true);
-export const mapBoundaryWidthScale$ = bindValue<number>(CHANNEL, "MapBoundaryWidthScale", 1);
+// Game units, updated to the captured vanilla width when the city loads.
+export const mapBoundaryWidth$ = bindValue<number>(CHANNEL, "MapBoundaryWidth", 20);
 export const mapBoundaryDashScale$ = bindValue<number>(CHANNEL, "MapBoundaryDashScale", 1);
 
 export const guidelineLinesColorR$ = bindValue<number>(CHANNEL, "GuidelineLinesColorR", 0.7);
