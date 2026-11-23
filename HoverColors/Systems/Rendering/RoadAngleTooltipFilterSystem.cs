@@ -22,6 +22,7 @@ namespace HoverColors.Systems
         private ToolSystem? m_ToolSystem;
         private TooltipUISystem? m_TooltipUISystem;
         private bool m_FilterLogged;
+        private bool m_ExecutionLogged;
 
         protected override void OnCreate()
         {
@@ -40,6 +41,14 @@ namespace HoverColors.Systems
                 || m_ToolSystem?.activeTool is not NetToolSystem)
             {
                 return;
+            }
+
+            // One-time diagnostic to distinguish "system not executing" from "no match"
+            // without spamming logs for every drag frame.
+            if (!m_ExecutionLogged)
+            {
+                m_ExecutionLogged = true;
+                LogUtils.Info(() => $"{Mod.ModTag} Road tooltip filter running (NetToolSystem, hide ON)");
             }
 
             // Runs after vanilla InputHintsTooltipSystem in UITooltip, before
@@ -81,14 +90,21 @@ namespace HoverColors.Systems
 
         private static bool IsNetPlaceOrUndoHint(InputHintTooltip hint)
         {
-            // NetToolSystem retrieves these actions by these exact names in 1.6.4f1.
-            // DisplayNameOverride.source is presentation metadata and can vary across
-            // game versions or modded UI; the action's map/name are stable identifiers.
-            if (!string.Equals(hint.m_Action.mapName, "NetToolSystem", StringComparison.Ordinal))
+            // UIInputActionCollection.GetActionState(name, "NetToolSystem") creates a
+            // DisplayNameOverride with source "name (NetToolSystem)". The underlying
+            // ProxyAction.mapName is NOT guaranteed to be "NetToolSystem".
+            // This is why the previous mapName-based filter failed for Place/Undo.
+            string? source = hint.m_Action.displayOverride?.source;
+            if (string.Equals(source, "Place Net Control Point (NetToolSystem)", StringComparison.Ordinal)
+                || string.Equals(source, "Place Net Edge (NetToolSystem)", StringComparison.Ordinal)
+                || string.Equals(source, "Place Net Node (NetToolSystem)", StringComparison.Ordinal)
+                || string.Equals(source, "Undo Net Control Point (NetToolSystem)", StringComparison.Ordinal))
             {
-                return false;
+                return true;
             }
 
+            // If another UI overrides the display source, allow only these specific
+            // NetToolSystem action names. The caller already checks the active tool.
             string name = hint.m_Action.name;
             return string.Equals(name, "Place Net Control Point", StringComparison.Ordinal)
                 || string.Equals(name, "Place Net Edge", StringComparison.Ordinal)

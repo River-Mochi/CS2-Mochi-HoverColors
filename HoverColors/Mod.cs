@@ -129,8 +129,9 @@ namespace HoverColors
             updateSystem.UpdateAfter<RoadAngleTooltipFilterSystem, InputHintsTooltipSystem>(
                 SystemUpdatePhase.UITooltip);
 
-            world.GetOrCreateSystemManaged<RoadAngleTooltipFilterSystem>().Enabled =
-                setting.RoadAngleTooltipsHidden;
+            // Keep the system scheduled even when the button starts OFF. The system's
+            // own first conditional handles the setting without toggling ECS Enabled.
+            world.GetOrCreateSystemManaged<RoadAngleTooltipFilterSystem>().Enabled = true;
 
             world.GetOrCreateSystemManaged<AreaToolOverlaySystem>();
             updateSystem.UpdateAt<AreaToolOverlaySystem>(
