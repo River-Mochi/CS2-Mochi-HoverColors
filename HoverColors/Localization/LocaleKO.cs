@@ -176,13 +176,13 @@ namespace HoverColors
                 },
                 { m_Settings.GetBindingKeyLocaleID(Mod.kToggleHighlightsActionName), "빠른 눈 아이콘 On/Off" },
 
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleRoadAngleTooltipsBinding)), "각도 툴팁 켜기/끄기" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleRoadAngleTooltipsBinding)), "도로 안내 정리" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ToggleRoadAngleTooltipsBinding)),
-                    "각도 및 배치/실행 취소 상자용 단축키입니다.\n" +
-                    "새 도로나 길을 그릴 때 작동합니다.\n" +
-                    "비용, 길이, 경사는 계속 표시됩니다."
+                    "새 도로나 길을 그릴 때 안내 표시를 줄이는 단축키입니다.\n" +
+                    "비용, 배치/취소 및 도로 모드를 숨깁니다.\n" +
+                    "각도와 길이는 유지됩니다. 경사는 각도와 겹치지 않게 커서 옆에 표시됩니다."
                 },
-                { m_Settings.GetBindingKeyLocaleID(Mod.kToggleRoadAngleTooltipsActionName), "각도 및 마우스 안내 켜기/끄기" },
+                { m_Settings.GetBindingKeyLocaleID(Mod.kToggleRoadAngleTooltipsActionName), "도로 안내 정리" },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.TogglePresetBinding)), "프리셋 1+2 전환" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.TogglePresetBinding)),

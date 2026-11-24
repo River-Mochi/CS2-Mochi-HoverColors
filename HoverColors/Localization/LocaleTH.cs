@@ -176,13 +176,13 @@ namespace HoverColors
                 },
                 { m_Settings.GetBindingKeyLocaleID(Mod.kToggleHighlightsActionName), "ตาด่วน เปิด/ปิด" },
 
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleRoadAngleTooltipsBinding)), "ทูลทิปมุม เปิด/ปิด" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleRoadAngleTooltipsBinding)), "ตัวกรองข้อความถนน" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ToggleRoadAngleTooltipsBinding)),
-                    "ปุ่มลัดสำหรับกล่องมุมและกล่อง วาง/เลิกทำ\n" +
-                    "ใช้ขณะวาดถนนหรือทางเดินใหม่\n" +
-                    "ราคา ความยาว และความชันยังแสดงอยู่"
+                    "ปุ่มลัดเพื่อลดข้อความขณะวาดถนนหรือทางเดินใหม่\n" +
+                    "ซ่อนราคา วาง/ย้อนกลับ และโหมดเครื่องมือถนน\n" +
+                    "ยังแสดงมุมและระยะทาง ความชันย้ายไปข้างเคอร์เซอร์เพื่อไม่ให้มุมบัง"
                 },
-                { m_Settings.GetBindingKeyLocaleID(Mod.kToggleRoadAngleTooltipsActionName), "มุมและคำแนะนำเมาส์ เปิด/ปิด" },
+                { m_Settings.GetBindingKeyLocaleID(Mod.kToggleRoadAngleTooltipsActionName), "ตัวกรองข้อความถนน" },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.TogglePresetBinding)), "สลับพรีเซ็ต 1+2" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.TogglePresetBinding)),

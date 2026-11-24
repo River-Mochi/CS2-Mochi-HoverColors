@@ -176,13 +176,13 @@ namespace HoverColors
                 },
                 { m_Settings.GetBindingKeyLocaleID(Mod.kToggleHighlightsActionName), "Mắt nhanh Bật/Tắt" },
 
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleRoadAngleTooltipsBinding)), "Mẹo góc Bật/Tắt" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleRoadAngleTooltipsBinding)), "Lọc gợi ý đường" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ToggleRoadAngleTooltipsBinding)),
-                    "Phím tắt cho ô góc và Đặt/Hoàn tác.\n" +
-                    "Dùng khi vẽ đường hoặc lối đi mới.\n" +
-                    "Chi phí, chiều dài và độ dốc vẫn hiển thị."
+                    "Phím tắt giảm rối khi vẽ đường hoặc lối đi mới.\n" +
+                    "Ẩn chi phí, Đặt/Hoàn tác và chế độ vẽ đường.\n" +
+                    "Góc và độ dài vẫn hiện. Độ dốc ở cạnh con trỏ nên không bị góc che."
                 },
-                { m_Settings.GetBindingKeyLocaleID(Mod.kToggleRoadAngleTooltipsActionName), "Góc và gợi ý chuột Bật/Tắt" },
+                { m_Settings.GetBindingKeyLocaleID(Mod.kToggleRoadAngleTooltipsActionName), "Lọc gợi ý đường" },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.TogglePresetBinding)), "Đổi preset 1+2" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.TogglePresetBinding)),

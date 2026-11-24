@@ -176,13 +176,13 @@ namespace HoverColors
                 },
                 { m_Settings.GetBindingKeyLocaleID(Mod.kToggleHighlightsActionName), "Hızlı göz Aç/Kapat" },
 
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleRoadAngleTooltipsBinding)), "Açı ipuçları Aç/Kapat" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleRoadAngleTooltipsBinding)), "Yol ipucu filtresi" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ToggleRoadAngleTooltipsBinding)),
-                    "Açı ve Yerleştir/Geri Al kutuları için kısayol.\n" +
-                    "Yeni yol veya patika çizerken çalışır.\n" +
-                    "Maliyet, uzunluk ve eğim görünür kalır."
+                    "Yeni yol veya patika çizerken kalabalığı azaltan kısayol.\n" +
+                    "Maliyet, Yerleştir/Geri al ve yol modunu gizler.\n" +
+                    "Açılar ve uzunluklar görünür kalır. Eğim, açıların arkasında kalmaması için imleç yanındadır."
                 },
-                { m_Settings.GetBindingKeyLocaleID(Mod.kToggleRoadAngleTooltipsActionName), "Açı ve fare ipuçları Aç/Kapat" },
+                { m_Settings.GetBindingKeyLocaleID(Mod.kToggleRoadAngleTooltipsActionName), "Yol ipucu filtresi" },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.TogglePresetBinding)), "Preset 1+2 değiştir" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.TogglePresetBinding)),

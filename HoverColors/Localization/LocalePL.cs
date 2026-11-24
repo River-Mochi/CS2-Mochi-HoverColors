@@ -176,13 +176,13 @@ namespace HoverColors
                 },
                 { m_Settings.GetBindingKeyLocaleID(Mod.kToggleHighlightsActionName), "Szybkie oko wł./wył." },
 
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleRoadAngleTooltipsBinding)), "Dymki kątów wł./wył." },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleRoadAngleTooltipsBinding)), "Filtr wskazówek drogowych" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ToggleRoadAngleTooltipsBinding)),
-                    "Skrót dla dymków kątów oraz pól Umieść/Cofnij.\n" +
-                    "Działa podczas rysowania nowych dróg lub ścieżek.\n" +
-                    "Koszt, długość i nachylenie pozostają widoczne."
+                    "Skrót ograniczający podpowiedzi podczas rysowania dróg i ścieżek.\n" +
+                    "Ukrywa koszt, Umieść/Cofnij oraz tryb drogi.\n" +
+                    "Kąty i długości pozostają. Nachylenie pokazuje się przy kursorze, bez zasłaniania."
                 },
-                { m_Settings.GetBindingKeyLocaleID(Mod.kToggleRoadAngleTooltipsActionName), "Kąty i wskazówki myszy wł./wył." },
+                { m_Settings.GetBindingKeyLocaleID(Mod.kToggleRoadAngleTooltipsActionName), "Filtr wskazówek drogowych" },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.TogglePresetBinding)), "Przełącz presety 1+2" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.TogglePresetBinding)),
