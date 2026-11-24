@@ -7,7 +7,7 @@
 // ================= </copyright> ======================
 
 // File: Systems/Rendering/RoadAngleTooltipFilterSystem.cs
-// Purpose: Reduce road/path tooltip clutter: retain angles and lengths, relocate slope; hide cost, placement and mode hints.
+// Purpose: Reduce road/path clutter: keep angles and segment guides, move slope and total length to cursor; hide cost and hints.
 
 namespace HoverColors.Systems
 {
@@ -24,7 +24,6 @@ namespace HoverColors.Systems
         private TooltipUISystem? m_TooltipUISystem;
         private bool m_FilterLogged;
         private bool m_ExecutionLogged;
-        private TooltipGroup? m_LengthOnlyGroup;
 
         protected override void OnCreate()
         {
@@ -48,44 +47,33 @@ namespace HoverColors.Systems
                 LogUtils.Info(() => $"{Mod.ModTag} Road tooltip filter running (road/path build, hide ON)");
             }
 
-            // Runs after UITooltip producers, before TooltipUISystem serializes groups.
-            // Keep vanilla / Extended Tooltip angle groups intact; only move slope
-            // away from potentially overlapping length and angle boxes.
-            int movedSlopes = 0;
+            // Runs after tooltip producers and before the game's UI serializes groups.
+            // Keep vanilla and Extended Tooltip angle groups and guideline distances.
+            // NetCourseTooltipSystem supplies the separate total *road curve* length
+            // plus slope in one world-positioned "tempNetEdgeStart" group.
+            int movedCourseGroups = 0;
             for (int i = m_TooltipUISystem.groups.Count - 1; i >= 0; i--)
             {
                 TooltipGroup group = m_TooltipUISystem.groups[i];
                 if (group.path == "tempNetEdgeStart"
                     && group.children.Count == 2
                     && group.children[0] is FloatTooltip length
+                    && length.unit == "length"
+                    && length.icon == "Media/Glyphs/Length.svg"
                     && group.children[1] is FloatTooltip slope
                     && slope.icon == "Media/Glyphs/Slope.svg")
                 {
-                    // Vanilla places length and slope in one world-positioned group.
-                    // Replace it for this UI frame only: length stays on the road;
-                    // the original slope widget appears with cursor hints on the right,
-                    // in place of the suppressed cost. Do not mutate the vanilla group:
-                    // disabling the toggle must restore its original layout immediately.
-                    if (m_LengthOnlyGroup == null)
-                    {
-                        m_LengthOnlyGroup = new TooltipGroup
-                        {
-                            path = "tempNetEdgeStart",
-                            horizontalAlignment = group.horizontalAlignment,
-                            verticalAlignment = group.verticalAlignment,
-                            category = group.category
-                        };
-                        m_LengthOnlyGroup.children.Add(length);
-                    }
-                    else
-                    {
-                        m_LengthOnlyGroup.children[0] = length;
-                    }
-
-                    m_LengthOnlyGroup.position = group.position;
-                    m_TooltipUISystem.groups[i] = m_LengthOnlyGroup;
+                    // Leave the guideline U7/U7 distance labels in their original
+                    // positions. Move ONLY the vanilla road-curve total length and
+                    // slope to the right-side cursor tooltip list, in this order:
+                    // slope FIRST, total length SECOND. Reuse the original widgets
+                    // and values; do not change the game's measurements or group.
+                    // TooltipUISystem recreates its lists every frame, so turning
+                    // the filter OFF restores vanilla positioning immediately.
+                    m_TooltipUISystem.groups.RemoveAt(i);
                     m_TooltipUISystem.mouseGroup.children.Add(slope);
-                    movedSlopes++;
+                    m_TooltipUISystem.mouseGroup.children.Add(length);
+                    movedCourseGroups++;
                 }
             }
 
@@ -120,12 +108,12 @@ namespace HoverColors.Systems
             // No frame-by-frame logging.
             if (!m_FilterLogged &&
                 (removedHints != 0 || removedModes != 0 ||
-                 removedCosts != 0 || movedSlopes != 0))
+                 removedCosts != 0 || movedCourseGroups != 0))
             {
                 m_FilterLogged = true;
                 LogUtils.Info(() => $"{Mod.ModTag} Road tooltip filter active: " +
                     $"removed {removedHints} Place/Undo, {removedModes} mode, " +
-                    $"{removedCosts} cost; relocated {movedSlopes} slope hints (angles retained)");
+                    $"{removedCosts} cost; relocated {movedCourseGroups} slope/total-length pairs (angles retained)");
             }
         }
 
