@@ -65,10 +65,8 @@ Bright blue highlights getting in the way? Want cleaner road guides, thinner col
 - River-Mochi - mod author
 - Flashbond - collab, tech feedback, testing
 - yenyang (Recolor, Anarchy) - collab, tech feedback, testing
-- StarQ - testing, tech feedback.
-- StarQ's retired mod Boundary Lines Modifier concept to change Map border lines moved to Hover Colors "Map Borders" section on StarQ's request.
-- Gagaxm, Mayor Cheeks - Surface-hide feature requests and testing
-- Testing: Dx, BugsyG, Necko1996, ElGendo87, Maestro
+- StarQ's mod Boundary Lines Modifier is retired and concept moved to Hover Colors "Map Borders" on StarQ's request.
+- Testing: StarQ, Dx, BugsyG, Necko1996, ElGendo87, Maestro
 - =Noel= (MapExt) images and testing
 - rzzirrah - image consultant
 
@@ -90,8 +88,9 @@ tags: hover colors, remove blue, disable hover, highlight color, outline thickne
 <Screenshot Value="Properties/15-image-After.jpg" />
 <Screenshot Value="Properties/20-image-Eyeball.jpg" />
 <Screenshot Value="Properties/21-image-Panels.jpg" />
-<Screenshot Value="Properties/22-image-AreaLots.jpg" />
-<Screenshot Value="Properties/23-image-Guidelines-Areas.jpg" />
+<Screenshot Value="Properties/22-image-MapBorders.jpg" />
+<Screenshot Value="Properties/23-image-AreaLots.jpg" />
+<Screenshot Value="Properties/25-image-Guidelines-Areas.jpg" />
 <Screenshot Value="Properties/35-image-Fence.jpg" />
 <Screenshot Value="Properties/50-image-EditorMode.jpg" />
 <!--Tag, can be set multiple times-->
