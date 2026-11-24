@@ -56,7 +56,7 @@ Bright blue highlights getting in the way? Want cleaner road guides, thinner col
 
 - Support by clicking the Like 👍 button (top right) — no donations requested, just a free like for many months of work and testing.
 - Feedback: use the [Discord](https://discord.gg/gwXgvtyhjc) | [GitHub](https://github.com/River-Mochi/CS2-Mochi-HoverColors) icon links on this page.
-- Mod is GPL-3.0 license. PR's or code contributions are welcome. Clones/Forks must stay GPL and credit the original, see Github for details.
+- PR's or code contributions are welcome. Mod is GPL-3.0-or-later license. Clones/Forks must stay GPL and credit the original, see Github for details.
 
 ### ❤️ Credits and Thanks
 
@@ -79,7 +79,7 @@ English, Français, Deutsch, Español, Italiano, Polski, Português Brasil, Port
 - You can safely rename this mod's folder to **HoverColors**
 - Don't use "+" in manually installed folder names. It can prevent mod icons and UI from loading in the city.
 
-┌─────────────────────────────────────────────────────────────┐
+┌──────────────────────────────────────┐
 
 ## Hover Colors · 高亮颜色与辅助线美化
 
