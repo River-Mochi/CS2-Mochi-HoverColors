@@ -30,6 +30,7 @@ namespace HoverColors.Systems
             base.OnCreate();
             m_ToolSystem = World.GetOrCreateSystemManaged<ToolSystem>();
             m_TooltipUISystem = World.GetOrCreateSystemManaged<TooltipUISystem>();
+            InitializeMiddleAnglePlacement();
         }
 
         protected override void OnUpdate()
@@ -103,6 +104,12 @@ namespace HoverColors.Systems
                     mouseHints.RemoveAt(i);
                     removedHints++;
                 }
+            }
+
+            // Phase 2: reposition a verified middle angle without changing its value.
+            if (m_ToolSystem?.activeTool is NetToolSystem netTool)
+            {
+                TryMoveMiddleAngle(netTool, m_TooltipUISystem);
             }
 
             // Only once per city/world: proof in HoverColors.log that the filter ran.
