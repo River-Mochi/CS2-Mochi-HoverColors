@@ -176,13 +176,13 @@ namespace HoverColors
                 },
                 { m_Settings.GetBindingKeyLocaleID(Mod.kToggleHighlightsActionName), "Occhio rapido On/Off" },
 
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleRoadAngleTooltipsBinding)), "Tooltip angolo On/Off" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleRoadAngleTooltipsBinding)), "Filtro avvisi stradali" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ToggleRoadAngleTooltipsBinding)),
-                    "Scorciatoia per i riquadri angolo e Posiziona/Annulla.\n" +
-                    "Funziona mentre disegni nuove strade o sentieri.\n" +
-                    "Costo, lunghezza e pendenza restano visibili."
+                    "Scorciatoia per ridurre gli avvisi quando tracci strade o percorsi.\n" +
+                    "Nasconde costo, Piazza/Annulla e modalità.\n" +
+                    "Angoli e lunghezze restano visibili. La pendenza appare vicino al cursore, senza sovrapporsi."
                 },
-                { m_Settings.GetBindingKeyLocaleID(Mod.kToggleRoadAngleTooltipsActionName), "Angoli e suggerimenti mouse On/Off" },
+                { m_Settings.GetBindingKeyLocaleID(Mod.kToggleRoadAngleTooltipsActionName), "Filtro avvisi stradali" },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.TogglePresetBinding)), "Alterna preset 1+2" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.TogglePresetBinding)),

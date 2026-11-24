@@ -176,13 +176,13 @@ namespace HoverColors
                 },
                 { m_Settings.GetBindingKeyLocaleID(Mod.kToggleHighlightsActionName), "Ojo rápido On/Off" },
 
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleRoadAngleTooltipsBinding)), "Ayudas de ángulo On/Off" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleRoadAngleTooltipsBinding)), "Filtro de avisos viales" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ToggleRoadAngleTooltipsBinding)),
-                    "Atajo para los cuadros de ángulo y Colocar/Deshacer.\n" +
-                    "Funciona al dibujar carreteras o caminos nuevos.\n" +
-                    "Coste, longitud y pendiente siguen visibles."
+                    "Atajo para reducir avisos al trazar carreteras o caminos.\n" +
+                    "Oculta Coste, Colocar/Deshacer y modo de trazado.\n" +
+                    "Ángulos y longitudes siguen visibles. La pendiente aparece junto al cursor sin taparse."
                 },
-                { m_Settings.GetBindingKeyLocaleID(Mod.kToggleRoadAngleTooltipsActionName), "Ángulos y avisos del ratón On/Off" },
+                { m_Settings.GetBindingKeyLocaleID(Mod.kToggleRoadAngleTooltipsActionName), "Filtro de avisos viales" },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.TogglePresetBinding)), "Alternar presets 1+2" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.TogglePresetBinding)),

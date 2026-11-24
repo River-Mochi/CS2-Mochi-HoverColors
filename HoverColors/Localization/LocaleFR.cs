@@ -176,13 +176,13 @@ namespace HoverColors
                 },
                 { m_Settings.GetBindingKeyLocaleID(Mod.kToggleHighlightsActionName), "Œil rapide On/Off" },
 
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleRoadAngleTooltipsBinding)), "Infobulles d’angle On/Off" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleRoadAngleTooltipsBinding)), "Filtre des infos routières" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ToggleRoadAngleTooltipsBinding)),
-                    "Raccourci pour les cases d’angle et Placer/Annuler.\n" +
-                    "Fonctionne pendant le tracé de nouvelles routes ou chemins.\n" +
-                    "Coût, longueur et pente restent visibles."
+                    "Raccourci pour alléger l'affichage lors du tracé de routes ou chemins.\n" +
+                    "Masque coût, Placer/Annuler et mode de tracé.\n" +
+                    "Angles et distances restent visibles. La pente apparaît près du curseur, sans chevauchement."
                 },
-                { m_Settings.GetBindingKeyLocaleID(Mod.kToggleRoadAngleTooltipsActionName), "Angles et indications souris On/Off" },
+                { m_Settings.GetBindingKeyLocaleID(Mod.kToggleRoadAngleTooltipsActionName), "Filtre des infos routières" },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.TogglePresetBinding)), "Basculer presets 1+2" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.TogglePresetBinding)),
