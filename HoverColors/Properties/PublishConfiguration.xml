@@ -101,7 +101,7 @@ tags: hover colors, remove blue, disable hover, highlight color, outline thickne
 <!--Change log for new version. Single line or multi line. Supports minimal markdown subset-->
 <ChangeLog>
 - Added Map Border lines control: color and dashed line slider, and you can Hide them too separate from main Hover Outline Hide eyeball.
-- Fixed angle tooltips still showing even if toggled off, per changes in 1.6.4f1.
+- Fixed angle button to hide some tooltip clutter when drawing roads.
 - Improved UI diagnostics.
 </ChangeLog>
 <!--External link, can be set multiple times. supported types are "discord", "github", "youtube", "twitch", "x", "paypal", "patreon", "buymeacoffee", "kofi", "crowdin", "gitlab", "gofundme"-->
