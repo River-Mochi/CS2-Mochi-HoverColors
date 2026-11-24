@@ -4,7 +4,7 @@
 <!--Name of the mod to display to players-->
 <DisplayName Value="Hover Colors Highlights" />
 <!--Short description of the mod-->
-<ShortDescription Value="Change blue Highlights to Any color, Opacity, or Thickness. Fill color, Guidelines, Hide Surface layers, alter District colors."/>
+<ShortDescription Value="Change or hide blue Highlights, Outline thickness, Fill colors, Guidelines, Map Borders, Districts and tool overlays. Reduce road-building tooltip clutter."/>
 <!--Long description of the mod. Single line or multi line. Supports minimal markdown subset-->
 <LongDescription>
 ## Mochi's Hover Colors
@@ -24,10 +24,17 @@ Bright blue highlights getting in the way? Want cleaner road guides, thinner col
 ### Guidelines + Area Tools
 
 - Change guideline colors, opacity, and line thickness.
-- Adjust Surface and Extractor area border thickness.
+- **Road Clutter Filter:** hide cost and not needed mouse hints. Keep angles and guide distances, with slope and total road length now beside your cursor.
+- Adjust Surface and Extractor border thickness.
 - Hide Surface and Specialized Industry preview fills.
-- Change District border + overlay color and opacity.
-- Hide angle and Place/Undo hints while drawing roads or paths.
+- Change District border and overlay colors only single color for now.
+
+### NEW: Map Borders
+
+- Change unlocked-tile borders and outer map edge colors and opacity separately.
+- Adjust border width and dash size.
+- **1-click Eye button** to hide/show all map borders independently of hover highlights.
+- Reset to game defaults anytime.
 
 ### Panel + Options
 
@@ -43,6 +50,7 @@ Bright blue highlights getting in the way? Want cleaner road guides, thinner col
 * **Works with Recolor:** Hover Colors changes highlights, guides, overlays, and previews. Recolor changes the actual objects.
 * **Lightweight:** no Harmony patches and safe to remove anytime. Performance friendly, settings update when needed.
 * Hover over controls for quick tooltip help.
+* Compatible with Extended Tooltip: Road Clutter Filter works with or without it.
 
 ### Support + Feedback
 
@@ -100,9 +108,10 @@ tags: hover colors, remove blue, disable hover, highlight color, outline thickne
 <RequiredDLC Value="" />
 <!--Change log for new version. Single line or multi line. Supports minimal markdown subset-->
 <ChangeLog>
-- Added Map Border lines control: color and dashed line slider, and you can Hide them too separate from main Hover Outline Hide eyeball.
-- Fixed angle button to hide some tooltip clutter when drawing roads.
-- Improved UI diagnostics.
+- **NEW: Map Borders** — customize colors, opacity, width, dash size and visibility.
+- Improved Road Clutter Filter — when drawing roads: slope and total length are now beside the cursor, and fewer distracting mouse tooltips.
+- Extended Tooltip compatibility.
+- Improved icons, panel controls and translations.
 </ChangeLog>
 <!--External link, can be set multiple times. supported types are "discord", "github", "youtube", "twitch", "x", "paypal", "patreon", "buymeacoffee", "kofi", "crowdin", "gitlab", "gofundme"-->
 <ExternalLink Type="discord" Url="https://discord.gg/gwXgvtyhjc" />
