@@ -1,86 +1,49 @@
 # Hover Colors and Highlights [HC]
 
-Hover Colors lets you **change, dim, or hide the game's bright hover highlights** and makes several building and area tools easier to see.
-
-Change highlight colors, transparency, outline thickness, Fill color, Guidelines, District colors, and more — directly from a compact in-city panel.
+Bright blue highlights getting in the way? **Change, dim, or hide them** and make building tools easier to see.
 
 ## Highlights
 
-- Change the default blue hover highlight to **any color**.
-- Adjust highlight **transparency**.
-- Make the **outline thinner or thicker**.
-- Give the inside **Fill** its own color and transparency.
-- **1-click Eye button** to hide/show normal hover highlights without changing your saved colors.
+- Any outline and fill color, opacity, and outline thickness.
+- 1-click Eye button to hide/show highlights instantly.
 - Works on buildings, cars, trees, citizens, props, roads, and more.
-- Full color picker with HEX color support.
-
-## Presets
-
-Save and quickly switch between your favorite color setups.
-
-- Tap **1** or **2** to use a preset.
-- Hold **1** or **2** for 0.5s to save your current colors.
-- **[⇔]** switches between Set A and Set B.
-- **[↺]** switches between Hover Colors defaults and your saved colors.
-
-That's **4 custom saved presets** plus the mod defaults.
+- Color picker with HEX support and **4 custom presets**.
 
 ## Guidelines + Area Tools
 
-### Guidelines
+- **Guidelines:** change colors, opacity, and dash/angle guide thickness.
+- **Road Clutter Filter:** hide cost, Place/Undo, and road-mode hints while drawing roads or paths. Keep angles and guide distances; show slope and total length beside the cursor.
+- **Surface + Extractor:** hide preview fills and adjust border thickness.
+- **Districts:** change border and overlay colors and opacity.
+- **Map Borders:** change colors and opacity of unlocked-tile borders and the outer map edge separately. Adjust width and dash size, hide either or both, or reset to game defaults.
 
-Change the colors and transparency of road guides, spacing lines, dashed guides, and tool previews.
+Thanks to StarQ for the Map Borders concept from the retired Boundary Lines Modifier mod.
 
-### Surface Tool
+## Quick Tips
 
-Hide the cloudy Surface preview fill so you can see the real ground while placing or layering surfaces.
-
-### Specialized Industry
-
-Hide extractor lot preview fill while drawing farms, forestry, oil, ore, and other industry areas.
-
-### Districts
-
-Change District overlay and border colors, adjust transparency, or return them to the game's default colors.
-
-## Easy to Use
-
-- Open Hover Colors from the **palette icon at the top-left and in the Universal Mod Menu by default**; Options can move the corner icon or use Universal alone.
-- Hover over panel buttons for short tooltip help.
-- The panel can be collapsed or moved anywhere on screen.
-- Choose between two panel styles: **Dark** matches the game's own panels, or **Glass** for a lighter see-through look with its own opacity slider.
-- Additional tool behavior, reset choices, panel preferences, tooltips, and hotkeys are available in the game's **Options menu**.
-
-## Editor Mode
-
-Hover Colors also works in the **Editor**.
-
-Use your Hover Colors panel hotkey to open the same panel while working in Editor mode.
+- Open the palette icon (top left + Universal Mod Menu by default).
+- Tap preset **1** or **2** to use it; hold for 0.5s to save. **⇔** switches sets A/B; **↺** switches between mod defaults and saved colors.
+- Drag or collapse the panel; choose Glass or Dark style.
+- Check Options for launcher location, hotkeys, and extra tool settings.
+- Works in the **Editor** too — use the panel hotkey.
+- Hover over buttons for quick help.
 
 ## Compatibility
 
-- Save-game safe.
-- Safe to remove.
-- Works alongside **Recolor**:
-  - Hover Colors changes highlights, guidelines, overlays, and previews.
-  - Recolor changes the actual object colors.
+- Save-game safe, safe to remove, no Harmony patches.
+- Works with Recolor (actual object colors) and Extended Tooltip (optional).
 
-## Supported Languages
+## Languages
 
 English, Français, Deutsch, Español, Italiano, Polski, Português Brasil, Português Portugal, 日本語, 한국어, 简体中文, 繁體中文, ภาษาไทย, Tiếng Việt, Türkçe
 
 ## Feedback
 
-Suggestions and bug reports are welcome through GitHub or Discord.
-
+[Discord](https://discord.gg/gwXgvtyhjc) or [GitHub issues](https://github.com/River-Mochi/CS2-Mochi-HoverColors/issues).
 
 ### Manual ZIP install
-If you download the mod directly from here OR Paradox website 
-Extract the mod to:
-`Cities Skylines II\Mods\HoverColors\`
 
-Keep the folder name `HoverColors`. Renaming manually installed mod folders may prevent the game UI module from loading. This means you won't see the Icon in the game Top Left.
-COHTML seems to have an issue with folder names that have plus "+" in them. 
+Extract to `Cities Skylines II\Mods\HoverColors\`. Keep the folder name `HoverColors`; avoid "+" in manually installed mod folder names, as it can prevent the UI from loading.
 
 ## License
 
