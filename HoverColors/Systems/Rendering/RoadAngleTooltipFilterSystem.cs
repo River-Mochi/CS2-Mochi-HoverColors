@@ -58,7 +58,8 @@ namespace HoverColors.Systems
                 if (group.path == "tempNetEdgeStart"
                     && group.children.Count == 2
                     && group.children[0] is FloatTooltip length
-                    && length.unit == "length"
+                    // Extended Tooltip can change the unit to floatTwoFractions (U).
+                    // The course group path and icons identify these widgets regardless of units.
                     && length.icon == "Media/Glyphs/Length.svg"
                     && group.children[1] is FloatTooltip slope
                     && slope.icon == "Media/Glyphs/Slope.svg")
