@@ -7,7 +7,7 @@
 // ================= </copyright> ======================
 
 // File: Systems/Rendering/RoadAngleTooltipFilterSystem.cs
-// Purpose: Hide road/path angle, placement and mode hints while preserving cost and measurements.
+// Purpose: Hide road/path angles, placement, mode and cost hints; keep length and slope.
 
 namespace HoverColors.Systems
 {
@@ -24,6 +24,7 @@ namespace HoverColors.Systems
         private TooltipUISystem? m_TooltipUISystem;
         private bool m_FilterLogged;
         private bool m_ExecutionLogged;
+        private TooltipGroup? m_LengthOnlyGroup;
 
         protected override void OnCreate()
         {
@@ -48,9 +49,10 @@ namespace HoverColors.Systems
             }
 
             // Runs after UITooltip producers, before TooltipUISystem serializes groups.
-            // Keep cost, length and slope intact. Extended Tooltip's replacement for
+            // Keep road length and slope. Extended Tooltip's replacement for
             // GuideLineTooltipSystem leaves angle groups at the default category.
             int removedAngles = 0;
+            int movedSlopes = 0;
             for (int i = m_TooltipUISystem.groups.Count - 1; i >= 0; i--)
             {
                 TooltipGroup group = m_TooltipUISystem.groups[i];
@@ -62,14 +64,54 @@ namespace HoverColors.Systems
                     m_TooltipUISystem.groups.RemoveAt(i);
                     removedAngles++;
                 }
+                else if (group.path == "tempNetEdgeStart"
+                    && group.children.Count == 2
+                    && group.children[0] is FloatTooltip length
+                    && group.children[1] is FloatTooltip slope
+                    && slope.icon == "Media/Glyphs/Slope.svg")
+                {
+                    // Vanilla places length and slope in one world-positioned group.
+                    // Replace it for this UI frame only: length stays on the road;
+                    // the original slope widget appears with cursor hints on the right,
+                    // in place of the suppressed cost. Do not mutate the vanilla group:
+                    // disabling the toggle must restore its original layout immediately.
+                    if (m_LengthOnlyGroup == null)
+                    {
+                        m_LengthOnlyGroup = new TooltipGroup
+                        {
+                            path = "tempNetEdgeStart",
+                            horizontalAlignment = group.horizontalAlignment,
+                            verticalAlignment = group.verticalAlignment,
+                            category = group.category
+                        };
+                        m_LengthOnlyGroup.children.Add(length);
+                    }
+                    else
+                    {
+                        m_LengthOnlyGroup.children[0] = length;
+                    }
+
+                    m_LengthOnlyGroup.position = group.position;
+                    m_TooltipUISystem.groups[i] = m_LengthOnlyGroup;
+                    m_TooltipUISystem.mouseGroup.children.Add(slope);
+                    movedSlopes++;
+                }
             }
 
             int removedHints = 0;
             int removedModes = 0;
+            int removedCosts = 0;
             var mouseHints = m_TooltipUISystem.mouseGroup.children;
             for (int i = mouseHints.Count - 1; i >= 0; i--)
             {
-                if (mouseHints[i] is StringTooltip mode && mode.path == "etNetToolMode")
+                if (mouseHints[i] is IntTooltip cost && cost.path == "cost")
+                {
+                    // Vanilla TempCostTooltipSystem: suppress cost only when road
+                    // hint filtering is ON. Do not affect refunds or other tool costs.
+                    mouseHints.RemoveAt(i);
+                    removedCosts++;
+                }
+                else if (mouseHints[i] is StringTooltip mode && mode.path == "etNetToolMode")
                 {
                     // Extended Tooltip 1.7.0 adds the current Net Tool mode here.
                     // Match its widget path without referencing that mod's assembly.
@@ -85,11 +127,14 @@ namespace HoverColors.Systems
 
             // Only once per city/world: proof in HoverColors.log that the filter ran.
             // No frame-by-frame logging.
-            if (!m_FilterLogged && (removedAngles != 0 || removedHints != 0 || removedModes != 0))
+            if (!m_FilterLogged &&
+                (removedAngles != 0 || removedHints != 0 || removedModes != 0 ||
+                 removedCosts != 0 || movedSlopes != 0))
             {
                 m_FilterLogged = true;
                 LogUtils.Info(() => $"{Mod.ModTag} Road tooltip filter active: " +
-                    $"removed {removedAngles} angle, {removedHints} Place/Undo, {removedModes} mode hints");
+                    $"removed {removedAngles} angle, {removedHints} Place/Undo, " +
+                    $"{removedModes} mode, {removedCosts} cost; relocated {movedSlopes} slope hints");
             }
         }
 
