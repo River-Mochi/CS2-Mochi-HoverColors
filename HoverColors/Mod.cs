@@ -20,7 +20,6 @@ namespace HoverColors
     using Game.Modding;
     using Game.Rendering;
     using Game.SceneFlow;
-    using Game.UI.Tooltip;
     using HoverColors.Systems;
     using HoverColors.UI;
     using Unity.Entities;
@@ -126,12 +125,9 @@ namespace HoverColors
             updateSystem.UpdateAfter<BuildingLotPreviewApplySystem, BuildingLotRenderSystem>(
                 SystemUpdatePhase.Rendering);
 
-            // Strip angle-only tooltip entries BEFORE vanilla builds UI groups.
-            // Existing post-pass still filters Place/Undo and catches any remaining angle groups.
-            updateSystem.UpdateBefore<RoadAngleTooltipPruneSystem, GuideLineTooltipSystem>(
-                SystemUpdatePhase.UITooltip);
-            // Run after ordinary UITooltip producers, including other mods that add
-            // mouse hints with UpdateAt after the vanilla InputHintsTooltipSystem.
+            // Single late filter: keep angle and length labels; move slope to
+            // the cursor while hiding selected input, road-mode and cost hints.
+            // Run after other UITooltip producers (including Extended Tooltip).
             updateSystem.UpdateAfter<RoadAngleTooltipFilterSystem>(
                 SystemUpdatePhase.UITooltip);
 

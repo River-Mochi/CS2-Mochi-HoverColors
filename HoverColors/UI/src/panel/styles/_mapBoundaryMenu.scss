@@ -40,7 +40,7 @@
 // Larger transparent eye glyph, with the button's existing background showing through.
 .mapBoundaryEyeIcon {
     position: relative;
-    left: 1.5rem;
+    left: 0.75rem;
     width: 23rem;
     height: 23rem;
     display: block;
@@ -100,6 +100,12 @@
     position: relative;
     border-radius: 4rem;
     cursor: pointer;
+    transform-origin: center center;
+    transition: transform 120ms ease-out, box-shadow 120ms ease-out;
+}
+
+.mapBoundarySwatch:hover {
+    transform: scale(1.06);
 }
 
 .mapBoundarySwatchPreview {
@@ -170,6 +176,12 @@
     border: 0 !important;
     border-radius: 4rem;
     cursor: pointer;
+    transition: background-color 120ms ease-out;
+}
+
+.mapBoundarySmallEye:hover,
+.mapBoundarySmallEye:focus {
+    background-color: rgba(82, 112, 129, 0.70) !important;
 }
 
 .mapBoundarySmallEyeIcon {
@@ -177,6 +189,12 @@
     width: 19rem;
     height: 19rem;
     pointer-events: none;
+    transform-origin: center center;
+    transition: transform 120ms ease-out, opacity 120ms ease-out;
+}
+
+.mapBoundarySmallEye:hover .mapBoundarySmallEyeIcon {
+    transform: scale(1.12);
 }
 
 .mapBoundaryReset {

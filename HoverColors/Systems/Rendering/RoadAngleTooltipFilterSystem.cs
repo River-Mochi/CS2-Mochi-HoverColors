@@ -7,7 +7,7 @@
 // ================= </copyright> ======================
 
 // File: Systems/Rendering/RoadAngleTooltipFilterSystem.cs
-// Purpose: Hide road/path angles, placement, mode and cost hints; keep length and slope.
+// Purpose: Reduce road/path tooltip clutter: retain angles and lengths, relocate slope; hide cost, placement and mode hints.
 
 namespace HoverColors.Systems
 {
@@ -49,22 +49,13 @@ namespace HoverColors.Systems
             }
 
             // Runs after UITooltip producers, before TooltipUISystem serializes groups.
-            // Keep road length and slope. Extended Tooltip's replacement for
-            // GuideLineTooltipSystem leaves angle groups at the default category.
-            int removedAngles = 0;
+            // Keep vanilla / Extended Tooltip angle groups intact; only move slope
+            // away from potentially overlapping length and angle boxes.
             int movedSlopes = 0;
             for (int i = m_TooltipUISystem.groups.Count - 1; i >= 0; i--)
             {
                 TooltipGroup group = m_TooltipUISystem.groups[i];
-                if (group.children.Count == 1
-                    && group.children[0] is FloatTooltip angle
-                    && angle.unit == "angle"
-                    && angle.icon == "Media/Glyphs/Angle.svg")
-                {
-                    m_TooltipUISystem.groups.RemoveAt(i);
-                    removedAngles++;
-                }
-                else if (group.path == "tempNetEdgeStart"
+                if (group.path == "tempNetEdgeStart"
                     && group.children.Count == 2
                     && group.children[0] is FloatTooltip length
                     && group.children[1] is FloatTooltip slope
@@ -128,17 +119,17 @@ namespace HoverColors.Systems
             // Only once per city/world: proof in HoverColors.log that the filter ran.
             // No frame-by-frame logging.
             if (!m_FilterLogged &&
-                (removedAngles != 0 || removedHints != 0 || removedModes != 0 ||
+                (removedHints != 0 || removedModes != 0 ||
                  removedCosts != 0 || movedSlopes != 0))
             {
                 m_FilterLogged = true;
                 LogUtils.Info(() => $"{Mod.ModTag} Road tooltip filter active: " +
-                    $"removed {removedAngles} angle, {removedHints} Place/Undo, " +
-                    $"{removedModes} mode, {removedCosts} cost; relocated {movedSlopes} slope hints");
+                    $"removed {removedHints} Place/Undo, {removedModes} mode, " +
+                    $"{removedCosts} cost; relocated {movedSlopes} slope hints (angles retained)");
             }
         }
 
-        // Shared by the before-guide-angle pass and the final tooltip pass.
+        // Used by the single, late UITooltip filter pass.
         // Do not suppress anything in rail, subway, pipe, or upgrade tools.
         internal static bool ShouldFilter(ToolSystem? toolSystem)
         {

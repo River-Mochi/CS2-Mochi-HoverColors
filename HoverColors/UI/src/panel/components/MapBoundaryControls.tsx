@@ -68,6 +68,8 @@ export const MapBoundaryControls = ({
 
     const [tileColor, setTileColor] = React.useState<Color>(boundTile);
     const [mapColor, setMapColor] = React.useState<Color>(boundMap);
+    const [tileHovered, setTileHovered] = React.useState(false);
+    const [mapHovered, setMapHovered] = React.useState(false);
     const [menuOpen, setMenuOpen] = React.useState(false);
     const [activePicker, setActivePicker] = React.useState<"tile" | "map" | null>(null);
     const [pickerDirection, setPickerDirection] = React.useState<PickerDirection>("up");
@@ -196,11 +198,15 @@ export const MapBoundaryControls = ({
                     <div className={styles.mapBoundaryColorRow}>
                         <SideTooltip tooltip={tt(text.tooltipMapBoundaryTile)} side={menuOnLeft ? "below" : "right"}>
                             <div ref={tileSwatchRef} className={styles.mapBoundarySwatch}
-                                onMouseOver={() => updatePickerDirection(tileSwatchRef.current)}
+                                onMouseOver={() => {
+                                    setTileHovered(true);
+                                    updatePickerDirection(tileSwatchRef.current);
+                                }}
+                                onMouseLeave={() => setTileHovered(false)}
                                 onMouseDown={() => updatePickerDirection(tileSwatchRef.current)}
-                                style={compactSwatchStyle(tileColor, activePicker === "tile", useDarkerPanel)}>
+                                style={compactSwatchStyle(tileColor, tileHovered || activePicker === "tile", useDarkerPanel)}>
                                 <span className={styles.mapBoundarySwatchPreview}
-                                    style={compactSwatchStyle(tileColor)} aria-hidden="true" />
+                                    style={compactSwatchStyle(tileColor, tileHovered || activePicker === "tile", useDarkerPanel)} aria-hidden="true" />
                                 <ColorField
                                     focusKey={focusDisabled}
                                     className={styles.mapBoundaryColorField}
@@ -223,7 +229,7 @@ export const MapBoundaryControls = ({
                                 focusKey={focusDisabled}
                                 aria-pressed={!tileVisible}
                                 aria-label={text.tooltipMapBoundaryTileVisible}>
-                                <img src={tileVisible ? "Media/PhotoMode/HideUIOff.svg" : eyeOffIconSrc}
+                                <img src={tileVisible ? eyeOnIconSrc : eyeOffIconSrc}
                                     className={styles.mapBoundarySmallEyeIcon} alt="" />
                             </Button>
                         </SideTooltip>
@@ -232,11 +238,15 @@ export const MapBoundaryControls = ({
                     <div className={styles.mapBoundaryColorRow}>
                         <SideTooltip tooltip={tt(text.tooltipMapBoundaryMap)} side={menuOnLeft ? "below" : "right"}>
                             <div ref={mapSwatchRef} className={styles.mapBoundarySwatch}
-                                onMouseOver={() => updatePickerDirection(mapSwatchRef.current)}
+                                onMouseOver={() => {
+                                    setMapHovered(true);
+                                    updatePickerDirection(mapSwatchRef.current);
+                                }}
+                                onMouseLeave={() => setMapHovered(false)}
                                 onMouseDown={() => updatePickerDirection(mapSwatchRef.current)}
-                                style={compactSwatchStyle(mapColor, activePicker === "map", useDarkerPanel)}>
+                                style={compactSwatchStyle(mapColor, mapHovered || activePicker === "map", useDarkerPanel)}>
                                 <span className={styles.mapBoundarySwatchPreview}
-                                    style={compactSwatchStyle(mapColor)} aria-hidden="true" />
+                                    style={compactSwatchStyle(mapColor, mapHovered || activePicker === "map", useDarkerPanel)} aria-hidden="true" />
                                 <ColorField
                                     focusKey={focusDisabled}
                                     className={styles.mapBoundaryColorField}
@@ -259,7 +269,7 @@ export const MapBoundaryControls = ({
                                 focusKey={focusDisabled}
                                 aria-pressed={!mapVisible}
                                 aria-label={text.tooltipMapBoundaryMapVisible}>
-                                <img src={mapVisible ? "Media/PhotoMode/HideUIOff.svg" : eyeOffIconSrc}
+                                <img src={mapVisible ? eyeOnIconSrc : eyeOffIconSrc}
                                     className={styles.mapBoundarySmallEyeIcon} alt="" />
                             </Button>
                         </SideTooltip>
