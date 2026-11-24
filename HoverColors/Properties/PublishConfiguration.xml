@@ -79,6 +79,43 @@ English, Français, Deutsch, Español, Italiano, Polski, Português Brasil, Port
 - You can safely rename this mod's folder to **HoverColors**
 - Don't use "+" in manually installed folder names. It can prevent mod icons and UI from loading in the city.
 
+┌─────────────────────────────────────────────────────────────┐
+
+## Hover Colors · 高亮颜色与辅助线美化
+
+**告别刺眼的蓝色高亮，让城市画面更清爽！**
+
+自由调整颜色、透明度和线条粗细，也可以一键隐藏。
+
+### 主要功能
+
+- **高亮颜色：** 自定义建筑、车辆、树木、道路等物体的高亮颜色、描边粗细及填充透明度。
+- **一键隐藏：** 随时关闭或恢复鼠标悬停高亮。
+- **4 组自定义预设：** 保存喜欢的配色，随时切换。
+- **道路辅助线：** 自定义颜色、透明度和线条粗细。
+- **道路提示精简：** 隐藏费用和多余操作提示，保留角度和辅助线长度，坡度与道路总长度显示在鼠标旁。
+- **区域工具：** 隐藏地表和专业工业区的预览填充，调整边框粗细及行政区颜色。
+
+### 🆕 地图边界
+
+- 分别调整已解锁地块边界和地图最外缘的颜色、透明度。
+- 自由调整边界粗细和虚线大小。
+- 一键隐藏或显示地图边界，不影响普通高亮。
+- 随时恢复游戏默认设置。
+
+### 使用说明
+
+- 点击游戏左上角的调色板图标即可使用。
+- 支持深色和半透明面板，可拖动、折叠。
+- 支持编辑器模式，默认快捷键 J。
+- 完整简体中文界面及操作提示。
+- 轻量运行，无 Harmony 补丁，可随时安全卸载。
+
+**作者：River-Mochi**
+
+如果喜欢这个免费模组，欢迎点个赞 👍！
+
+
 tags: hover colors, remove blue, disable hover, highlight color, outline thickness, fill color, guidelines, districts, surface tool, transparent overlays, industry surfaces
 </LongDescription>
 
