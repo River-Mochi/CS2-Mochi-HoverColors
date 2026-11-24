@@ -137,6 +137,8 @@ namespace HoverColors
             DistrictB = district.b;
             DistrictA = district.a;
 
+            // Restore the original tile/map border color, visibility and geometry as well.
+            ResetMapBoundarySettings();
             ApplyAndSave();
         }
     }

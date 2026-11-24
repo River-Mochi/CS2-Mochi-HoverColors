@@ -176,13 +176,13 @@ namespace HoverColors
                 },
                 { m_Settings.GetBindingKeyLocaleID(Mod.kToggleHighlightsActionName), "Schnelles Auge Ein/Aus" },
 
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleRoadAngleTooltipsBinding)), "Winkel-Tooltips Ein/Aus" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleRoadAngleTooltipsBinding)), "Straßenhinweise filtern" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ToggleRoadAngleTooltipsBinding)),
-                    "Hotkey für Winkel- sowie Platzieren/Rückgängig-Hinweise.\n" +
-                    "Funktioniert beim Zeichnen neuer Straßen oder Wege.\n" +
-                    "Kosten, Länge und Steigung bleiben sichtbar."
+                    "Hotkey für weniger Hinweise beim Bau neuer Straßen oder Wege.\n" +
+                    "Blendet Kosten, Platzieren/Rückgängig und Straßenmodus aus.\n" +
+                    "Winkel und Längen bleiben sichtbar. Die Steigung steht am Mauszeiger, ohne Überlappung."
                 },
-                { m_Settings.GetBindingKeyLocaleID(Mod.kToggleRoadAngleTooltipsActionName), "Winkel- und Maushinweise Ein/Aus" },
+                { m_Settings.GetBindingKeyLocaleID(Mod.kToggleRoadAngleTooltipsActionName), "Straßenhinweise filtern" },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.TogglePresetBinding)), "Presets 1+2 umschalten" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.TogglePresetBinding)),

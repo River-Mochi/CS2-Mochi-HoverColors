@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+  <!-- Compact folded map icon. Three paper panels with cyan highlights. -->
+  <path d="M2.8 8.7 11.8 5.1 20.7 8.4 29.2 4.9V23.2L20.7 26.9 11.8 23.7 2.8 27.2Z"
+        fill="#2D6178" stroke="#D5EEF8" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M11.8 5.1V23.7L20.7 26.9V8.4Z" fill="#32B6E8" fill-opacity="0.50"/>
+  <path d="M11.8 5.1V23.7M20.7 8.4V26.9" fill="none"
+        stroke="#E5F6FC" stroke-width="1.8" stroke-linejoin="round"/>
+  <path d="m5.3 15.3 4.1-1.6m4.3 3.5 5 1.8m4.3-4.7 3.5-1.5" fill="none"
+        stroke="#B2E4F6" stroke-width="1.5" stroke-linecap="round"/>
+</svg>

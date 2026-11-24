@@ -17,6 +17,7 @@ import { MochiSlider } from "./MochiSlider";
 import { PanelSectionToggle } from "./MochiPanelPieces";
 import { compactSwatchStyle, holdBarStyle } from "../helpers/MochiPanelColorUtils";
 import { useMochiPanelText } from "../hooks/useMochiPanelText";
+import { MapBoundaryControls } from "./MapBoundaryControls";
 import lotToolIconSrc from "../../../images/LotTool03.svg";
 import specializedIndustryIconSrc from "../../../images/LotToolSpecializedIndustry.svg";
 import surfaceIconSrc from "../../../images/Districts03.svg";
@@ -36,6 +37,8 @@ interface MochiPanelActionBarProps {
     useDarkerPanel: boolean;
     areasExpanded: boolean;
     handleToggleAreas: () => void;
+    onMapOpen: () => void;
+    onMapPickerOpenChange: (open: boolean) => void;
     surfaceBorderThicknessScale: number;
     handleSurfaceBorderThicknessChange: (value: number) => void;
     handleResetSurfaceBorderThickness: () => void;
@@ -79,6 +82,8 @@ export const MochiPanelActionBar = ({
     useDarkerPanel,
     areasExpanded,
     handleToggleAreas,
+    onMapOpen,
+    onMapPickerOpenChange,
     surfaceBorderThicknessScale,
     handleSurfaceBorderThicknessChange,
     handleResetSurfaceBorderThickness,
@@ -204,7 +209,19 @@ export const MochiPanelActionBar = ({
             </div>
 
             <div className={styles.districtActionsRow}>
-                <SideTooltip tooltip={tt(text.tooltipDistrictColors)} side="below">
+                <MapBoundaryControls
+                    text={text}
+                    tt={tt}
+                    ColorField={ColorField}
+                    focusDisabled={focusDisabled}
+                    useDarkerPanel={useDarkerPanel}
+                    districtMenuOpen={districtMenuOpen}
+                    onOpen={onMapOpen}
+                    onPickerOpenChange={onMapPickerOpenChange}
+                />
+                <div className={styles.districtActionSpacer} />
+                <div className={styles.districtActionLauncher}>
+                    <SideTooltip tooltip={tt(text.tooltipDistrictColors)} side="below">
                     <div ref={districtPickerRef}>
                         <Button
                             className={`${styles.actionButton} ${styles.surfaceButton} ${styles.districtPickerButton} ${districtMenuOpen ? styles.districtPickerButtonActive : ""}`}
@@ -221,7 +238,8 @@ export const MochiPanelActionBar = ({
                             <img src={surfaceIconSrc} className={`${styles.controlIcon} ${styles.idleIcon} ${styles.districtPickerIcon}`} alt="" />
                         </Button>
                     </div>
-                </SideTooltip>
+                    </SideTooltip>
+                </div>
             </div>
 
             {districtMenuOpen && (

@@ -20,7 +20,6 @@ namespace HoverColors
     using Game.Modding;
     using Game.Rendering;
     using Game.SceneFlow;
-    using Game.UI.Tooltip;
     using HoverColors.Systems;
     using HoverColors.UI;
     using Unity.Entities;
@@ -126,11 +125,15 @@ namespace HoverColors
             updateSystem.UpdateAfter<BuildingLotPreviewApplySystem, BuildingLotRenderSystem>(
                 SystemUpdatePhase.Rendering);
 
-            updateSystem.UpdateAfter<RoadAngleTooltipFilterSystem, InputHintsTooltipSystem>(
+            // Single late filter: keep angle and length labels; move slope to
+            // the cursor while hiding selected input, road-mode and cost hints.
+            // Run after other UITooltip producers (including Extended Tooltip).
+            updateSystem.UpdateAfter<RoadAngleTooltipFilterSystem>(
                 SystemUpdatePhase.UITooltip);
 
-            world.GetOrCreateSystemManaged<RoadAngleTooltipFilterSystem>().Enabled =
-                setting.RoadAngleTooltipsHidden;
+            // Keep the system scheduled even when the button starts OFF. The system's
+            // own first conditional handles the setting without toggling ECS Enabled.
+            world.GetOrCreateSystemManaged<RoadAngleTooltipFilterSystem>().Enabled = true;
 
             world.GetOrCreateSystemManaged<AreaToolOverlaySystem>();
             updateSystem.UpdateAt<AreaToolOverlaySystem>(
@@ -139,6 +142,11 @@ namespace HoverColors
             world.GetOrCreateSystemManaged<DistrictColorSystem>();
             updateSystem.UpdateAt<DistrictColorSystem>(
                 SystemUpdatePhase.Rendering);
+
+            // Apply changes immediately before the vanilla boundary mesh is generated.
+            world.GetOrCreateSystemManaged<MapBoundaryColorSystem>();
+            updateSystem.UpdateBefore<MapBoundaryColorSystem, CityBoundaryMeshSystem>(
+                SystemUpdatePhase.PreCulling);
 
             // Keep this explicit: the UI bridge owns the J hotkey and bindings used by
             // Game/Editor/GTL/GTR/UMM, so create it during normal mod startup.
@@ -149,6 +157,18 @@ namespace HoverColors
 
         public void OnDispose()
         {
+            // Hand the original boundary prefab back when disabling in a live city.
+            // The game world may already be disposed during application shutdown.
+            try
+            {
+                World.DefaultGameObjectInjectionWorld?
+                    .GetExistingSystemManaged<MapBoundaryColorSystem>()?.RestoreVanilla();
+            }
+            catch (System.Exception ex)
+            {
+                LogUtils.Warn(() => $"{ModTag} Could not restore map borders on shutdown: {ex.Message}");
+            }
+
             Settings?.UnregisterInOptionsUI();
             Settings = null;
         }

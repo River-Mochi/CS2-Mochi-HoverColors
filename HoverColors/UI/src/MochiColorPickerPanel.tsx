@@ -91,6 +91,7 @@ import infoIconSrc from "../images/AdvisorInfoViewWhite.svg";
 import closeIconSrc from "../images/Close.svg";
 // Highlights-OFF eye: mod icon so the slash can be red. ON state keeps the vanilla eye.
 import eyeOffIconSrc from "../images/EyeOffRedSlash.svg";
+import eyeOnIconSrc from "../images/EyeOnTransparent.svg";
 import styles from "./MochiColorPickerPanel.module.scss";
 
 // Snaps to the 5-step grid the Options slider produces and looks up the matching background
@@ -267,6 +268,7 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
     const [fillPickerOpen, setFillPickerOpen] = React.useState(false);
     const [ownerPickerOpen, setOwnerPickerOpen] = React.useState(false);
     const [districtPickerOpen, setDistrictPickerOpen] = React.useState(false);
+    const [mapBoundaryPickerOpen, setMapBoundaryPickerOpen] = React.useState(false);
     const [districtMenuOpen, setDistrictMenuOpen] = React.useState(false);
     const [guidelineLinesPickerOpen, setGuidelineLinesPickerOpen] = React.useState(false);
     const [guidelinePreviewPickerOpen, setGuidelinePreviewPickerOpen] = React.useState(false);
@@ -351,6 +353,7 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
             || fillPickerOpen
             || ownerPickerOpen
             || districtPickerOpen
+            || mapBoundaryPickerOpen
             || guidelineLinesPickerOpen
             || guidelinePreviewPickerOpen
             || guidelineDashedPickerOpen;
@@ -360,6 +363,7 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
         return () => document.body.classList.remove(PICKER_OPEN_BODY_CLASS);
     }, [
         districtPickerOpen,
+        mapBoundaryPickerOpen,
         fillPickerOpen,
         guidelineDashedPickerOpen,
         guidelineLinesPickerOpen,
@@ -374,7 +378,7 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
         }
 
         // Fill is a compact (colorWheel=false) picker too, so it needs the hex spacing fix.
-        const compactPickerOpen = fillPickerOpen || ownerPickerOpen || districtPickerOpen || guidelineLinesPickerOpen || guidelinePreviewPickerOpen || guidelineDashedPickerOpen;
+        const compactPickerOpen = fillPickerOpen || ownerPickerOpen || districtPickerOpen || mapBoundaryPickerOpen || guidelineLinesPickerOpen || guidelinePreviewPickerOpen || guidelineDashedPickerOpen;
         document.body.classList.toggle(COMPACT_PICKER_BODY_CLASS, compactPickerOpen);
 
         // The Outline picker is full-size, but it still has to close on an outside click.
@@ -416,7 +420,7 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
             document.removeEventListener("mousedown", onMouseDown);
             document.body.classList.remove(COMPACT_PICKER_BODY_CLASS);
         };
-    }, [districtPickerOpen, fillPickerOpen, guidelineDashedPickerOpen, guidelineLinesPickerOpen, guidelinePreviewPickerOpen, outlinePickerOpen, ownerPickerOpen]);
+    }, [districtPickerOpen, mapBoundaryPickerOpen, fillPickerOpen, guidelineDashedPickerOpen, guidelineLinesPickerOpen, guidelinePreviewPickerOpen, outlinePickerOpen, ownerPickerOpen]);
 
     React.useEffect(() => {
         if (!districtMenuOpen || typeof document === "undefined") {
@@ -659,7 +663,7 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
                                 <img
                                     src={hoverHighlightsSuppressed
                                         ? eyeOffIconSrc
-                                        : "Media/PhotoMode/HideUIOff.svg"}
+                                        : eyeOnIconSrc}
                                     className={`${styles.eyeIcon} ${hoverHighlightsSuppressed ? styles.eyeIconOff : ""}`}
                                     alt=""
                                 />
@@ -804,7 +808,13 @@ export const MochiColorPickerPanel = ({ editorMode = false }: MochiColorPickerPa
                                     trigger(CHANNEL, "SetAreasExpanded", !areasExpanded);
                                     setDistrictMenuOpen(false);
                                     setDistrictPickerOpen(false);
+                                    setMapBoundaryPickerOpen(false);
                                 }}
+                                onMapOpen={() => {
+                                    setDistrictMenuOpen(false);
+                                    setDistrictPickerOpen(false);
+                                }}
+                                onMapPickerOpenChange={setMapBoundaryPickerOpen}
                                 surfaceBorderThicknessScale={surfaceBorderThicknessScale}
                                 handleSurfaceBorderThicknessChange={handleSurfaceBorderThicknessChange}
                                 handleResetSurfaceBorderThickness={handleResetSurfaceBorderThickness}

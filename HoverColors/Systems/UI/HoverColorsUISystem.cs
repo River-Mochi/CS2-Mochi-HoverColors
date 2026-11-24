@@ -112,6 +112,7 @@ namespace HoverColors.UI
             InitializeKeybindActions();
             RegisterValueBindings();
             RegisterTriggerBindings();
+            RegisterMapBoundaryTriggerBindings();
             RegisterHoverToggleBindings();  // Behavior: toggle Outlines all off, only click object shows it.
 
             // If this appears but no frontend "registrar-start" follows, the C# bridge
@@ -206,6 +207,7 @@ namespace HoverColors.UI
             m_DistrictGBinding = AddValueBinding("DistrictG", settings?.DistrictG ?? 128f / 255f);
             m_DistrictBBinding = AddValueBinding("DistrictB", settings?.DistrictB ?? 128f / 255f);
             m_DistrictABinding = AddValueBinding("DistrictA", settings?.DistrictA ?? 64f / 255f);
+            RegisterMapBoundaryValueBindings(settings);
 
             UnityEngine.Color guidelineLinesColor = GuidelineColorSystem.GetGuidelineLinesColor(settings);
             UnityEngine.Color guidelinePreviewColor = GuidelineColorSystem.GetGuidelinePreviewColor(settings);
@@ -300,6 +302,7 @@ namespace HoverColors.UI
             UpdateIfChanged(m_DistrictGBinding, settings?.DistrictG ?? 128f / 255f);
             UpdateIfChanged(m_DistrictBBinding, settings?.DistrictB ?? 128f / 255f);
             UpdateIfChanged(m_DistrictABinding, settings?.DistrictA ?? 64f / 255f);
+            SyncMapBoundaryValueBindings(settings);
 
             UnityEngine.Color guidelineLinesColor = GuidelineColorSystem.GetGuidelineLinesColor(settings);
             UnityEngine.Color guidelinePreviewColor = GuidelineColorSystem.GetGuidelinePreviewColor(settings);

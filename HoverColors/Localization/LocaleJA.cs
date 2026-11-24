@@ -176,13 +176,13 @@ namespace HoverColors
                 },
                 { m_Settings.GetBindingKeyLocaleID(Mod.kToggleHighlightsActionName), "クイック目アイコン On/Off" },
 
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleRoadAngleTooltipsBinding)), "角度ツールチップ On/Off" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleRoadAngleTooltipsBinding)), "道路ヒント整理" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ToggleRoadAngleTooltipsBinding)),
-                    "角度ボックスと配置/元に戻すボックス用のショートカット。\n" +
-                    "新しい道路や歩道を描画中に使えます。\n" +
-                    "費用、長さ、勾配は表示されたままです。"
+                    "新しい道路や歩道を引くときの表示を減らすショートカット。\n" +
+                    "費用、配置/戻す、道路モードを非表示にします。\n" +
+                    "角度と長さは表示したまま。勾配はカーソル横に移し、角度と重ならないようにします。"
                 },
-                { m_Settings.GetBindingKeyLocaleID(Mod.kToggleRoadAngleTooltipsActionName), "角度とマウスヒント On/Off" },
+                { m_Settings.GetBindingKeyLocaleID(Mod.kToggleRoadAngleTooltipsActionName), "道路ヒント整理" },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.TogglePresetBinding)), "プリセット1+2を切替" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.TogglePresetBinding)),

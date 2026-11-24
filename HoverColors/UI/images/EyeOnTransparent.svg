@@ -1,0 +1,11 @@
+<!-- File: EyeOnTransparent.svg -->
+<!-- Purpose: Transparent eye glyph for in-city controls; no built-in button backdrop. -->
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="38" height="38" viewBox="0 0 38 38"
+     aria-hidden="true">
+  <g fill="none" stroke="#FFFFFF" stroke-width="3"
+     stroke-linecap="round" stroke-linejoin="round">
+    <path d="M4.4 19Q19 0 33.6 19Q19 38 4.4 19Z"/>
+    <circle cx="19" cy="19" r="4.6"/>
+  </g>
+</svg>

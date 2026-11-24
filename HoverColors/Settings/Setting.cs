@@ -189,24 +189,11 @@ namespace HoverColors
         [SettingsUIHidden]
         public float GuidelineDashedThicknessScale { get; set; }
 
-        private bool m_RoadAngleTooltipsHidden;
-
-        // In-city Guidelines button. A visible-angle setting disables the filter system entirely.
+        // Keep the UITooltip filter system registered and enabled. Its OnUpdate checks
+        // this setting before doing any filtering, so toggling works immediately even
+        // when the user starts with the default (visible) state.
         [SettingsUIHidden]
-        public bool RoadAngleTooltipsHidden
-        {
-            get => m_RoadAngleTooltipsHidden;
-            set
-            {
-                m_RoadAngleTooltipsHidden = value;
-                RoadAngleTooltipFilterSystem? filter = World.DefaultGameObjectInjectionWorld?
-                    .GetExistingSystemManaged<RoadAngleTooltipFilterSystem>();
-                if (filter != null)
-                {
-                    filter.Enabled = value;
-                }
-            }
-        }
+        public bool RoadAngleTooltipsHidden { get; set; }
 
         // Inert, like FillColorInitialized. Triggers.cs reads it in three places, but it is always
         // true so `&& OutlineThicknessInitialized` never changes the result.

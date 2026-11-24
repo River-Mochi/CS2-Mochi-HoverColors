@@ -1,0 +1,245 @@
+// <copyright file="_mapBoundaryMenu.scss" company="River-Mochi">
+// Copyright (C) 2026 River-Mochi.
+// Licensed under the GNU General Public License v3.0 or later,
+// with the Cities: Skylines II Linking Exception.
+// See LICENSE and LICENSE-EXCEPTION in the project root.
+// Copyright and license notices MUST be preserved.
+// ================= </copyright> ======================
+
+// File: UI/src/panel/styles/_mapBoundaryMenu.scss
+// Small, optional map-border menu placed beside the existing District button.
+// The familiar RGBA/hex ColorField popup is handled by vanilla game UI.
+
+.mapBoundaryLauncher {
+    display: flex;
+    align-items: center;
+    gap: 4rem;
+    margin-right: 9rem;
+}
+
+.mapBoundaryButtonActive {
+    border-color: rgba(84, 215, 255, 0.88) !important;
+}
+
+.mapBoundaryIcon {
+    width: 23rem;
+    height: 23rem;
+    display: block;
+    pointer-events: none;
+}
+
+.mapBoundaryEyeButton {
+    width: 30rem;
+    min-width: 30rem;
+}
+
+.mapBoundaryEyeOff {
+    background-color: rgba(86, 63, 67, 0.82) !important;
+}
+
+// Larger transparent eye glyph, with the button's existing background showing through.
+.mapBoundaryEyeIcon {
+    position: relative;
+    left: 0.75rem;
+    width: 23rem;
+    height: 23rem;
+    display: block;
+    pointer-events: none;
+}
+
+.mapBoundaryMenu {
+    position: absolute;
+    left: 100%;
+    bottom: 0;
+    width: 195rem;
+    margin-left: 7rem;
+    padding: 8rem;
+    box-sizing: border-box;
+    border-radius: 7rem;
+    overflow: visible;
+    background-color: rgba(17, 27, 35, 0.96);
+    box-shadow: 0 7rem 18rem rgba(0, 0, 0, 0.28);
+    z-index: 85;
+}
+
+.mapBoundaryMenuLeft {
+    left: auto;
+    right: 100%;
+    margin-left: 0;
+    margin-right: 7rem;
+}
+
+.mapBoundaryMenuHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6rem;
+    margin-bottom: 8rem;
+}
+
+.mapBoundaryMenuTitle {
+    flex: 1 1 auto;
+    min-width: 0;
+    color: rgba(255, 255, 255, 0.96);
+    font-size: 13.5rem;
+    font-weight: 700;
+    margin-left: 1rem;
+}
+
+.mapBoundaryColorRow {
+    min-height: 29rem;
+    display: flex;
+    align-items: center;
+    gap: 8rem;
+}
+
+.mapBoundarySwatch {
+    width: 23rem;
+    height: 23rem;
+    flex: 0 0 23rem;
+    position: relative;
+    border-radius: 4rem;
+    cursor: pointer;
+    transform-origin: center center;
+    transition: transform 120ms ease-out, box-shadow 120ms ease-out;
+}
+
+.mapBoundarySwatch:hover {
+    transform: scale(1.06);
+}
+
+.mapBoundarySwatchPreview {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 3;
+    pointer-events: none;
+    border-radius: 4rem;
+}
+
+.mapBoundaryColorField {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100% !important;
+    height: 100% !important;
+    background-color: transparent !important;
+    display: block !important;
+    overflow: visible !important;
+    z-index: 2;
+}
+
+.mapBoundaryColorField > button,
+.mapBoundaryColorField button {
+    position: absolute !important;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100% !important;
+    height: 100% !important;
+    padding: 0 !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    background-color: transparent !important;
+    opacity: 0 !important;
+    cursor: pointer !important;
+}
+
+.mapBoundaryColorField button * {
+    opacity: 0 !important;
+    border-color: transparent !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
+}
+
+.mapBoundaryColorLabel {
+    flex: 1 1 auto;
+    min-width: 0;
+    color: rgba(255, 255, 255, 0.92);
+    font-size: 12rem;
+    line-height: 1.12;
+    // Allow longer translated names to wrap in the narrower panel.
+    white-space: normal;
+}
+
+.mapBoundarySmallEye {
+    width: 25rem;
+    height: 25rem;
+    min-width: 25rem;
+    padding: 2rem;
+    background-color: rgba(36, 54, 66, 0.6) !important;
+    border: 0 !important;
+    border-radius: 4rem;
+    cursor: pointer;
+    transition: background-color 120ms ease-out;
+}
+
+.mapBoundarySmallEye:hover,
+.mapBoundarySmallEye:focus {
+    background-color: rgba(82, 112, 129, 0.70) !important;
+}
+
+.mapBoundarySmallEyeIcon {
+    display: block;
+    width: 19rem;
+    height: 19rem;
+    pointer-events: none;
+    transform-origin: center center;
+    transition: transform 120ms ease-out, opacity 120ms ease-out;
+}
+
+.mapBoundarySmallEye:hover .mapBoundarySmallEyeIcon {
+    transform: scale(1.12);
+}
+
+.mapBoundaryReset {
+    flex: 0 0 auto;
+    width: auto;
+    min-width: 57rem;
+    min-height: 26rem;
+    padding: 0 10rem;
+    border: 1rem solid rgba(148, 182, 198, 0.25) !important;
+    border-radius: 4rem;
+    background-color: rgba(36, 54, 66, 0.78) !important;
+    color: rgba(255, 255, 255, 0.92) !important;
+    font-size: 11.5rem;
+    font-weight: 650;
+    line-height: 1;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.mapBoundaryReset:hover,
+.mapBoundaryReset:focus {
+    background-color: rgba(72, 99, 114, 0.92) !important;
+}
+
+.mapBoundarySliders {
+    margin-top: 7rem;
+    padding-top: 5rem;
+    border-top: 1rem solid rgba(254, 255, 255, 0.18);
+}
+
+.mapBoundarySliderBlock {
+    margin: 5rem 2rem 10rem;
+}
+
+.mapBoundarySliderTitle {
+    display: flex;
+    justify-content: space-between;
+    font-size: 10rem;
+    color: rgba(255, 255, 255, 0.88);
+    margin-bottom: 2rem;
+}
+
+.mapBoundarySlider {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    background-color: transparent;
+}

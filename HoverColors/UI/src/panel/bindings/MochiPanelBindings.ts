@@ -57,6 +57,21 @@ export const districtG$ = bindValue<number>(CHANNEL, "DistrictG", 128 / 255);
 export const districtB$ = bindValue<number>(CHANNEL, "DistrictB", 128 / 255);
 export const districtA$ = bindValue<number>(CHANNEL, "DistrictA", 64 / 255);
 
+// Map tile and outer-map boundary colors are independent of District overlays.
+export const mapBoundaryTileR$ = bindValue<number>(CHANNEL, "MapBoundaryTileR", 1);
+export const mapBoundaryTileG$ = bindValue<number>(CHANNEL, "MapBoundaryTileG", 1);
+export const mapBoundaryTileB$ = bindValue<number>(CHANNEL, "MapBoundaryTileB", 1);
+export const mapBoundaryTileA$ = bindValue<number>(CHANNEL, "MapBoundaryTileA", 0.75);
+export const mapBoundaryMapR$ = bindValue<number>(CHANNEL, "MapBoundaryMapR", 1);
+export const mapBoundaryMapG$ = bindValue<number>(CHANNEL, "MapBoundaryMapG", 1);
+export const mapBoundaryMapB$ = bindValue<number>(CHANNEL, "MapBoundaryMapB", 1);
+export const mapBoundaryMapA$ = bindValue<number>(CHANNEL, "MapBoundaryMapA", 0.25);
+export const mapBoundaryTileVisible$ = bindValue<boolean>(CHANNEL, "MapBoundaryTileVisible", true);
+export const mapBoundaryMapVisible$ = bindValue<boolean>(CHANNEL, "MapBoundaryMapVisible", true);
+// Game units, updated to the captured vanilla width when the city loads.
+export const mapBoundaryWidth$ = bindValue<number>(CHANNEL, "MapBoundaryWidth", 20);
+export const mapBoundaryDashScale$ = bindValue<number>(CHANNEL, "MapBoundaryDashScale", 1);
+
 export const guidelineLinesColorR$ = bindValue<number>(CHANNEL, "GuidelineLinesColorR", 0.7);
 export const guidelineLinesColorG$ = bindValue<number>(CHANNEL, "GuidelineLinesColorG", 0.7);
 export const guidelineLinesColorB$ = bindValue<number>(CHANNEL, "GuidelineLinesColorB", 1);

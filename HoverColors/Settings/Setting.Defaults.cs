@@ -61,6 +61,9 @@ namespace HoverColors
             DistrictB = 128f / 255f;
             DistrictA = 64f / 255f;
 
+            // Map borders start exactly vanilla, independently of District overrides.
+            ResetMapBoundarySettings();
+
             // Starter presets. Players can overwrite P1/P2 with the panel's Save button.
             // Set A is visible first. Reset switches the panel to Set B.
             // An upgrading save keeps its existing P1/P2 as Set A: those keys load unchanged and

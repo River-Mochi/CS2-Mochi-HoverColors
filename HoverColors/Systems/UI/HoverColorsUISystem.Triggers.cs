@@ -13,6 +13,7 @@ namespace HoverColors.UI
 {
     using System;
     using Colossal.UI.Binding;
+    using CS2Shared.RiverMochi;
     using HoverColors.Systems;
 
     public partial class HoverColorsUISystem
@@ -547,6 +548,8 @@ namespace HoverColors.UI
             }
 
             settings.RoadAngleTooltipsHidden = !settings.RoadAngleTooltipsHidden;
+            LogUtils.Info(() => $"{Mod.ModTag} Road angle tooltip filter: " +
+                (settings.RoadAngleTooltipsHidden ? "ON (hide hints)" : "OFF (show hints)"));
             ApplySaveAndSync(settings);
         }
 

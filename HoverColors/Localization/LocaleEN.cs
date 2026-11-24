@@ -170,13 +170,13 @@ namespace HoverColors
                     "Ships unbound to avoid key conflicts." },
                 { m_Settings.GetBindingKeyLocaleID(Mod.kToggleHighlightsActionName), "Quick Eyeball On/Off" },
 
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleRoadAngleTooltipsBinding)), "Angle tooltips on/off" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.ToggleRoadAngleTooltipsBinding)), "Road Clutter Filter" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.ToggleRoadAngleTooltipsBinding)),
-                    "Hotkey for angle tooltip boxes and Place/Undo boxes\n" +
-                    "Works while drawing new roads or paths.\n" +
-                    "Cost, length, and slope stay visible."
+                    "Hotkey to reduce clutter while drawing new roads or paths.\n" +
+                    "Hides Cost, Place/Undo, and road mode hints.\n" +
+                    "Angles and lengths stay visible. Slope is now beside the cursor so it's never hidden behind an angle tooltip."
                 },
-                { m_Settings.GetBindingKeyLocaleID(Mod.kToggleRoadAngleTooltipsActionName), "Angle and mouse hints on/off" },
+                { m_Settings.GetBindingKeyLocaleID(Mod.kToggleRoadAngleTooltipsActionName), "Road Clutter Filter" },
 
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.TogglePresetBinding)), "Toggle presets 1+2" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.TogglePresetBinding)),
