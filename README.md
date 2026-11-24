@@ -31,7 +31,7 @@ Thanks to StarQ for the Map Borders concept from the retired Boundary Lines Modi
 ## Compatibility
 
 - Save-game safe, safe to remove, no Harmony patches.
-- Works with Recolor (actual object colors) and Extended Tooltip (optional).
+- Works with Recolor (actual object colors).
 
 ## Languages
 

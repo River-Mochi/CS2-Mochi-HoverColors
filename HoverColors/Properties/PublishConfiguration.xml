@@ -8,6 +8,7 @@
 <!--Long description of the mod. Single line or multi line. Supports minimal markdown subset-->
 <LongDescription>
 ## Mochi's Hover Colors
+告别刺眼蓝色高亮！自定义辅助线和地图边界。中文详情见下方 ↓
 
 Bright blue highlights getting in the way? Want cleaner road guides, thinner color borders, or less distracting tool previews?
 
@@ -24,10 +25,10 @@ Bright blue highlights getting in the way? Want cleaner road guides, thinner col
 ### Guidelines + Area Tools
 
 - Change guideline colors, opacity, and line thickness.
-- **Road Clutter Filter:** hide cost and not needed mouse hints. Keep angles and guide distances, with slope and total road length now beside your cursor.
+- Road Clutter Filter button: hide cost and unnecessary mouse hints. Keep angles and guide distances; slope and total length now beside your cursor.
 - Adjust Surface and Extractor border thickness.
 - Hide Surface and Specialized Industry preview fills.
-- Change District border and overlay colors only single color for now.
+- Change District border and overlay color/opacity (one shared color for now).
 
 ### NEW: Map Borders
 
@@ -50,13 +51,12 @@ Bright blue highlights getting in the way? Want cleaner road guides, thinner col
 * **Works with Recolor:** Hover Colors changes highlights, guides, overlays, and previews. Recolor changes the actual objects.
 * **Lightweight:** no Harmony patches and safe to remove anytime. Performance friendly, settings update when needed.
 * Hover over controls for quick tooltip help.
-* Compatible with Extended Tooltip: Road Clutter Filter works with or without it.
 
 ### Support + Feedback
 
-- Support by clicking Like 👍 button (top right) — no donations requested, just free like for many months of work and testing.
-- Feedback: [Discord](https://discord.gg/gwXgvtyhjc) | [GitHub](https://github.com/River-Mochi/CS2-Mochi-HoverColors),
-- Mod is GPL-3.0-or-later license. PR's or code contributions are welcome. Clones/Forks must stay GPL and credit the original, see Github for details.
+- Support by clicking the Like 👍 button (top right) — no donations requested, just a free like for many months of work and testing.
+- Feedback: use the [Discord](https://discord.gg/gwXgvtyhjc) | [GitHub](https://github.com/River-Mochi/CS2-Mochi-HoverColors) icon links on this page.
+- Mod is GPL-3.0 license. PR's or code contributions are welcome. Clones/Forks must stay GPL and credit the original, see Github for details.
 
 ### ❤️ Credits and Thanks
 
@@ -66,7 +66,8 @@ Bright blue highlights getting in the way? Want cleaner road guides, thinner col
 - Flashbond - collab, tech feedback, testing
 - yenyang (Recolor, Anarchy) - collab, tech feedback, testing
 - StarQ's mod Boundary Lines Modifier is retired and concept moved to Hover Colors "Map Borders" on StarQ's request.
-- Testing: StarQ, Dx, BugsyG, Necko1996, ElGendo87, Maestro
+- Gagaxm, Mayor Cheeks - surface-hide requests and testing
+- Testing: StarQ, Dx, BugsyG, ElGendo87, Maestro
 - =Noel= (MapExt) images and testing
 - rzzirrah - image consultant
 
@@ -107,7 +108,7 @@ tags: hover colors, remove blue, disable hover, highlight color, outline thickne
 <RequiredDLC Value="" />
 <!--Change log for new version. Single line or multi line. Supports minimal markdown subset-->
 <ChangeLog>
-- **NEW: Map Borders** — customize colors, opacity, width, dash size and visibility.
+- NEW: Map Borders, customize colors, opacity, width, dash size and visibility.
 - Improved Road Clutter Filter — when drawing roads: slope and total length are now beside the cursor, and fewer distracting mouse tooltips.
 - Extended Tooltip compatibility.
 - Improved icons, panel controls and translations.
