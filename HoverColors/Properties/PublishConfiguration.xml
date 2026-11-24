@@ -7,116 +7,117 @@
 <ShortDescription Value="Change or hide blue Highlights, Outline thickness, Fill colors, Guidelines, Map Borders, Districts and tool overlays. Reduce road-building tooltip clutter."/>
 <!--Long description of the mod. Single line or multi line. Supports minimal markdown subset-->
 <LongDescription>
-## Mochi's Hover Colors
-告别刺眼蓝色高亮！自定义辅助线和地图边界。中文详情见下方 ↓
+    ## Mochi's Hover Colors
+    告别刺眼蓝色高亮！自定义辅助线和地图边界。中文详情见下方 ↓
 
-Bright blue highlights getting in the way? Want cleaner road guides, thinner color borders, or less distracting tool previews?
+    Bright blue highlights getting in the way? Want cleaner road guides, thinner color borders, or less distracting tool previews?
 
-**Hover Colors lets you Dim, Hide, or Change highlights, guidelines, and tool overlays so you can see your city instead of the UI.**
+    **Hover Colors lets you Dim, Hide, or Change highlights, guidelines, and tool overlays so you can see your city instead of the UI.**
 
-### Highlights
+    ### Highlights
 
-- Change highlight color, transparency, fill, and outline thickness.
-- **1-Click Eye button** hides/shows highlights instantly.
-- Works on buildings, cars, trees, citizens, props, roads, property lots, and more.
-- Full color picker with HEX support.
-- Save and quickly switch between **4 custom color presets**.
+    - Change highlight color, transparency, fill, and outline thickness.
+    - **1-Click Eye button** hides/shows highlights instantly.
+    - Works on buildings, cars, trees, citizens, props, roads, property lots, and more.
+    - Full color picker with HEX support.
+    - Save and quickly switch between **4 custom color presets**.
 
-### Guidelines + Area Tools
+    ### Guidelines + Area Tools
 
-- Change guideline colors, opacity, and line thickness.
-- Road Clutter Filter button: hide cost and unnecessary mouse hints. Keep angles and guide distances; slope and total length now beside your cursor.
-- Adjust Surface and Extractor border thickness.
-- Hide Surface and Specialized Industry preview fills.
-- Change District border and overlay color/opacity (one shared color for now).
+    - Change guideline colors, opacity, and line thickness.
+    - Road Clutter Filter button: hide cost and unnecessary mouse hints. Keep angles and guide distances; slope and total length now beside your cursor.
+Optional toggle button: leave off if you prefer vanilla's excess tooltips when drawing roads.
+    - Adjust Surface and Extractor border thickness.
+    - Hide Surface and Specialized Industry preview fills.
+    - Change District border and overlay color/opacity (one shared color for now).
 
-### NEW: Map Borders
+    ### NEW: Map Borders
 
-- Change unlocked-tile borders and outer map edge colors and opacity separately.
-- Adjust border width and dash size.
-- **1-click Eye button** to hide/show all map borders independently of hover highlights.
-- Reset to game defaults anytime.
+    - Change unlocked-tile borders and outer map edge colors and opacity separately.
+    - Adjust border width and dash size.
+    - **1-click Eye button** to hide/show all map borders independently of hover highlights.
+    - Reset to game defaults anytime.
 
-### Panel + Options
+    ### Panel + Options
 
-- Glass or Dark panel styles.
-- Collapsible sections and remembered panel position.
-- Choose Top Left or Top Right button or Universal alone. Changes apply instantly.
-- Works in **Editor Mode**, use the panel hotkey to open (default J).
-- Extra Bulldozer and other options in the Options menu.
+    - Glass or Dark panel styles.
+    - Collapsible sections and remembered panel position.
+    - Choose Top Left or Top Right button or Universal alone. Changes apply instantly.
+    - Works in **Editor Mode**, use the panel hotkey to open (default J).
+    - Extra Bulldozer and other options in the Options menu.
 
-## Good to Know
+    ## Good to Know
 
-* **To start:** click the Hover Colors palette icon. New install shows it in both Top Left plus a Universal location (paradox icon bottom right).
-* **Works with Recolor:** Hover Colors changes highlights, guides, overlays, and previews. Recolor changes the actual objects.
-* **Lightweight:** no Harmony patches and safe to remove anytime. Performance friendly, settings update when needed.
-* Hover over controls for quick tooltip help.
+    * **To start:** click the Hover Colors palette icon. New install shows it in both Top Left plus a Universal location (paradox icon bottom right).
+    * **Works with Recolor:** Hover Colors changes highlights, guides, overlays, and previews. Recolor changes the actual objects.
+    * **Lightweight:** no Harmony patches and safe to remove anytime. Performance friendly, settings update when needed.
+    * Hover over controls for quick tooltip help.
 
-### Support + Feedback
+    ### Support + Feedback
 
-- Support by clicking the Like 👍 button (top right) — no donations requested, just a free like for many months of work and testing.
-- Feedback: use the [Discord](https://discord.gg/gwXgvtyhjc) | [GitHub](https://github.com/River-Mochi/CS2-Mochi-HoverColors) icon links on this page.
-- PR's or code contributions are welcome. Mod is GPL-3.0-or-later license. Clones/Forks must stay GPL and credit the original, see Github for details.
+    - Support by clicking the Like 👍 button (top right) — no donations requested, just a free like for many months of work and testing.
+    - Feedback: use the [Discord](https://discord.gg/gwXgvtyhjc) | [GitHub](https://github.com/River-Mochi/CS2-Mochi-HoverColors) icon links on this page.
+    - PR's or code contributions are welcome. Mod is GPL-3.0-or-later license. Clones/Forks must stay GPL and credit the original, see Github for details.
 
-### ❤️ Credits and Thanks
+    ### ❤️ Credits and Thanks
 
-**Huge thanks to everyone who helped test and support.**
+    **Huge thanks to everyone who helped test and support.**
 
-- River-Mochi - mod author
-- Flashbond - collab, tech feedback, testing
-- yenyang (Recolor, Anarchy) - collab, tech feedback, testing
-- StarQ's mod Boundary Lines Modifier is retired and concept moved to Hover Colors "Map Borders" on StarQ's request.
-- Gagaxm, Mayor Cheeks - surface-hide requests and testing
-- Testing: StarQ, Dx, BugsyG, ElGendo87, Maestro
-- =Noel= (MapExt) images and testing
-- rzzirrah - image consultant
+    - River-Mochi - mod author
+    - Flashbond - collab, tech feedback, testing
+    - yenyang (Recolor, Anarchy) - collab, tech feedback, testing
+    - StarQ's request: mod Boundary Lines Modifier is retired and concept added as "Map Borders" feature.
+    - Gagaxm, Mayor Cheeks - surface-hide requests and testing
+    - Testing: StarQ, Dx, BugsyG, ElGendo87, Maestro
+    - =Noel= (MapExt) images and testing
+    - rzzirrah - image consultant
 
-### Languages
-English, Français, Deutsch, Español, Italiano, Polski, Português Brasil, Português Portugal, 日本語, 한국어, 简体中文, 繁體中文, ภาษาไทย Thai, Tiếng Việt, Türkçe
+    ### Languages
+    English, Français, Deutsch, Español, Italiano, Polski, Português Brasil, Português Portugal, 日本語, 한국어, 简体中文, 繁體中文, ภาษาไทย Thai, Tiếng Việt, Türkçe
 
-### Manual Download Installs of any mod
-- Paradox manual downloads use a long generated folder name (not human readable).
-- You can safely rename this mod's folder to **HoverColors**
-- Don't use "+" in manually installed folder names. It can prevent mod icons and UI from loading in the city.
+    ### Manual Download Installs of any mod
+    - Paradox manual downloads use a long generated folder name (not human readable).
+    - You can safely rename this mod's folder to **HoverColors**
+    - Don't use "+" in manually installed folder names. It can prevent mod icons and UI from loading in the city.
 
-┌──────────────────────────────────────┐
+    ┌──────────────────────────────────────┐
 
-## Hover Colors · 高亮颜色与辅助线美化
+    ## Hover Colors · 高亮颜色与辅助线美化
 
-**告别刺眼的蓝色高亮，让城市画面更清爽！**
+    **告别刺眼的蓝色高亮，让城市画面更清爽！**
 
-自由调整颜色、透明度和线条粗细，也可以一键隐藏。
+    自由调整颜色、透明度和线条粗细，也可以一键隐藏。
 
-### 主要功能
+    ### 主要功能
 
-- **高亮颜色：** 自定义建筑、车辆、树木、道路等物体的高亮颜色、描边粗细及填充透明度。
-- **一键隐藏：** 随时关闭或恢复鼠标悬停高亮。
-- **4 组自定义预设：** 保存喜欢的配色，随时切换。
-- **道路辅助线：** 自定义颜色、透明度和线条粗细。
-- **道路提示精简：** 隐藏费用和多余操作提示，保留角度和辅助线长度，坡度与道路总长度显示在鼠标旁。
-- **区域工具：** 隐藏地表和专业工业区的预览填充，调整边框粗细及行政区颜色。
+    - **高亮颜色：** 自定义建筑、车辆、树木、道路等物体的高亮颜色、描边粗细及填充透明度。
+    - **一键隐藏：** 随时关闭或恢复鼠标悬停高亮。
+    - **4 组自定义预设：** 保存喜欢的配色，随时切换。
+    - **道路辅助线：** 自定义颜色、透明度和线条粗细。
+    - **道路提示精简：** 隐藏费用和多余操作提示，保留角度和辅助线长度，坡度与道路总长度显示在鼠标旁。
+    - **区域工具：** 隐藏地表和专业工业区的预览填充，调整边框粗细及行政区颜色。
 
-### 🆕 地图边界
+    ### 🆕 地图边界
 
-- 分别调整已解锁地块边界和地图最外缘的颜色、透明度。
-- 自由调整边界粗细和虚线大小。
-- 一键隐藏或显示地图边界，不影响普通高亮。
-- 随时恢复游戏默认设置。
+    - 分别调整已解锁地块边界和地图最外缘的颜色、透明度。
+    - 自由调整边界粗细和虚线大小。
+    - 一键隐藏或显示地图边界，不影响普通高亮。
+    - 随时恢复游戏默认设置。
 
-### 使用说明
+    ### 使用说明
 
-- 点击游戏左上角的调色板图标即可使用。
-- 支持深色和半透明面板，可拖动、折叠。
-- 支持编辑器模式，默认快捷键 J。
-- 完整简体中文界面及操作提示。
-- 轻量运行，无 Harmony 补丁，可随时安全卸载。
+    - 点击游戏左上角的调色板图标即可使用。
+    - 支持深色和半透明面板，可拖动、折叠。
+    - 支持编辑器模式，默认快捷键 J。
+    - 完整简体中文界面及操作提示。
+    - 轻量运行，无 Harmony 补丁，可随时安全卸载。
 
-**作者：River-Mochi**
+    **作者：River-Mochi**
 
-如果喜欢这个免费模组，欢迎点个赞 👍！
+    如果喜欢这个免费模组，欢迎点个赞 👍！
 
 
-tags: hover colors, remove blue, disable hover, highlight color, outline thickness, fill color, guidelines, districts, surface tool, transparent overlays, industry surfaces
+    tags: hover colors, remove blue, disable hover, highlight color, outline thickness, fill color, guidelines, districts, surface tool, transparent overlays, industry surfaces
 </LongDescription>
 
 <!--Thumbnail-->
