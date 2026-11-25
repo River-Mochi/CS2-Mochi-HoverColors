@@ -22,6 +22,7 @@
   "HoverColors.UI.Tooltip.ResetSurfaceBorderThickness": "Flächenrand und Punkte zurücksetzen.",
   "HoverColors.UI.Tooltip.ExtractorBorderThickness": "Rand der Abbaufläche. 1,0 = Standard; kleiner = dünner. Punkte bleiben gleich.",
   "HoverColors.UI.Tooltip.ResetExtractorBorderThickness": "Rand der Abbaufläche zurücksetzen.",
+  "HoverColors.UI.Tooltip.AngleArcColor": "Farbe der Winkelbögen (Straßenfilter an). Nutzt die Hilfslinien-Deckkraft.",
   "HoverColors.UI.Tooltip.RoadAngleTooltipsOn": "Straßenhinweise filtern: Kosten, Platzieren/Rückgängig und Modus ein-/ausblenden.\nWinkel und V1/V2 bleiben am Weg. Steigung zuerst, dann Gesamtlänge am Mauszeiger.",
   "HoverColors.UI.Tooltip.RoadAngleTooltipsOff": "Straßenhinweise filtern: Kosten, Platzieren/Rückgängig und Modus ein-/ausblenden.\nWinkel und V1/V2 bleiben am Weg. Steigung zuerst, dann Gesamtlänge am Mauszeiger.",
   "HoverColors.UI.Tooltip.GuidelineDashedThickness": "Breite von Strich- und Winkelhilfen. 1,0 = Standard; kleiner = dünner. Vorschau bleibt gleich.",

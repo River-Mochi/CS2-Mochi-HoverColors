@@ -22,6 +22,7 @@
   "HoverColors.UI.Tooltip.ResetSurfaceBorderThickness": "Restablecer borde y puntos de superficie.",
   "HoverColors.UI.Tooltip.ExtractorBorderThickness": "Borde de extracción. 1,0 = juego; menor = más fino. Puntos iguales.",
   "HoverColors.UI.Tooltip.ResetExtractorBorderThickness": "Restablecer borde de extracción.",
+  "HoverColors.UI.Tooltip.AngleArcColor": "Color de los arcos de ángulo (filtro de carretera activo). Usa la opacidad de las guías.",
   "HoverColors.UI.Tooltip.RoadAngleTooltipsOn": "Filtro vial: mostrar/ocultar coste, Colocar/Deshacer y modo.\nSe mantienen ángulos y distancias V1/V2. Pendiente primero y longitud total junto al cursor.",
   "HoverColors.UI.Tooltip.RoadAngleTooltipsOff": "Filtro vial: mostrar/ocultar coste, Colocar/Deshacer y modo.\nSe mantienen ángulos y distancias V1/V2. Pendiente primero y longitud total junto al cursor.",
   "HoverColors.UI.Tooltip.GuidelineDashedThickness": "Grosor de guías discontinuas y ángulos. 1,0 = juego; menor = más fino. Vista previa igual.",

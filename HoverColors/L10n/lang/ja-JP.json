@@ -22,6 +22,7 @@
   "HoverColors.UI.Tooltip.ResetSurfaceBorderThickness": "サーフェスの線と点を標準に戻す。",
   "HoverColors.UI.Tooltip.ExtractorBorderThickness": "採掘エリアの境界線。1.0＝標準、下げると細くなります。点は変更なし。",
   "HoverColors.UI.Tooltip.ResetExtractorBorderThickness": "採掘エリアの線幅を標準に戻す。",
+  "HoverColors.UI.Tooltip.AngleArcColor": "角度の弧の色（道路表示整理がオンの時）。ガイドの透明度を使用。",
   "HoverColors.UI.Tooltip.RoadAngleTooltipsOn": "道路ヒント整理：費用、配置/戻す、道路モードを表示/非表示。\n角度とV1/V2距離はそのまま。カーソル横に勾配、その下に道路の全長を表示。",
   "HoverColors.UI.Tooltip.RoadAngleTooltipsOff": "道路ヒント整理：費用、配置/戻す、道路モードを表示/非表示。\n角度とV1/V2距離はそのまま。カーソル横に勾配、その下に道路の全長を表示。",
   "HoverColors.UI.Tooltip.GuidelineDashedThickness": "破線と角度ガイドの太さ。1.0＝標準、下げると細くなります。道路プレビューは変更なし。",
