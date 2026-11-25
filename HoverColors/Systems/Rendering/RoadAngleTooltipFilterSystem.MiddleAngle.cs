@@ -24,9 +24,8 @@ namespace HoverColors.Systems
 
     public partial class RoadAngleTooltipFilterSystem
     {
-        // Screen-space clearance above the circle, scaled by render height.
-        // Tune this value if the vanilla tooltip font/scale requires more room.
-        private const float kMiddleAngleOffsetAt1080 = 36f;
+        // Minimum center offset above the joint, scaled by render height.
+        private const float kMiddleAngleOffsetAt1080 = 30f;
         private const float kWorldPositionTolerance = 0.25f;
         private const float kScreenPositionTolerance = 2f;
 
@@ -174,7 +173,9 @@ namespace HoverColors.Systems
                 }
             }
 
-            float clearance = 30f * scale;
+            // Center-to-circle-edge distance: retain the estimated 24px half-height
+            // plus 2px of breathing room, scaled with game text and screen size.
+            float clearance = 26f * scale;
             float offset = math.max(kMiddleAngleOffsetAt1080 * scale, top - jointScreen.y + clearance);
             float2 above = new(jointScreen.x, Screen.height - jointScreen.y - offset);
             float2 below = new(jointScreen.x, Screen.height - bottom + clearance);
