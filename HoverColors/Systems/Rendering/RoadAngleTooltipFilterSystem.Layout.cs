@@ -28,6 +28,7 @@ namespace HoverColors.Systems
         private readonly List<string> m_GuidelinePaths = new(8);
         private TooltipGroup? m_AnchoredMiddleAngle;
         private float2 m_LayoutStart;
+        private Rect m_LayoutJointBounds;
         private bool m_HasLayoutStart;
         private bool m_LayoutLogged;
 
@@ -64,16 +65,9 @@ namespace HoverColors.Systems
             m_OccupiedMeasurements.Clear();
             // TooltipUISystem sets mouseGroup.position AFTER this update phase.
             // Reserve its predicted on-screen rectangle, not last frame's position.
-            if (tooltipUI.mouseGroup.children.Count > 0 && InputManager.instance.mouseOnScreen)
+            if (TryGetCursorBounds(tooltipUI, scale, out Rect cursorBounds))
             {
-                Vector3 mouse = InputManager.instance.mousePosition;
-                float2 cursor = new(mouse.x, Screen.height - mouse.y + 16f);
-                if (math.all(math.isfinite(cursor)))
-                {
-                    m_OccupiedMeasurements.Add(new Rect(cursor.x - 8f * scale,
-                        cursor.y - 8f * scale, 160f * scale,
-                        (tooltipUI.mouseGroup.children.Count * 38f + 16f) * scale));
-                }
+                m_OccupiedMeasurements.Add(cursorBounds);
             }
 
             // Keep the verified middle angle fixed above its handle. Lengths have
@@ -81,6 +75,7 @@ namespace HoverColors.Systems
             if (m_AnchoredMiddleAngle != null)
             {
                 m_OccupiedMeasurements.Add(MeasurementRect(m_AnchoredMiddleAngle.position, true, scale));
+                m_OccupiedMeasurements.Add(m_LayoutJointBounds);
             }
 
             int moved = 0;
@@ -167,6 +162,26 @@ namespace HoverColors.Systems
             }
 
             return null;
+        }
+
+        private static bool TryGetCursorBounds(TooltipUISystem tooltipUI, float scale, out Rect bounds)
+        {
+            bounds = default;
+            if (tooltipUI.mouseGroup.children.Count == 0 || !InputManager.instance.mouseOnScreen)
+            {
+                return false;
+            }
+
+            Vector3 mouse = InputManager.instance.mousePosition;
+            float2 cursor = new(mouse.x, Screen.height - mouse.y + 16f);
+            if (!math.all(math.isfinite(cursor)))
+            {
+                return false;
+            }
+
+            bounds = new Rect(cursor.x - 8f * scale, cursor.y - 8f * scale,
+                160f * scale, (tooltipUI.mouseGroup.children.Count * 38f + 16f) * scale);
+            return true;
         }
 
         // Approximate native tooltip bounds; actual COHTML text sizes are not

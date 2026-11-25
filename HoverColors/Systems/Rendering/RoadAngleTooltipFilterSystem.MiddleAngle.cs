@@ -157,16 +157,20 @@ namespace HoverColors.Systems
             // zooming in, so a fixed pixel offset alone cannot preserve clearance.
             float top = jointScreen.y;
             float bottom = jointScreen.y;
+            float left = jointScreen.x;
+            float right = jointScreen.x;
             for (int i = 0; i < 8; i++)
             {
-                float radians = i * (math.PI * 0.25f);
+                float radians = i * (Mathf.PI * 0.25f);
                 float3 sample = joint;
                 sample.xz += new float2(math.cos(radians), math.sin(radians)) * radius;
                 Vector3 screen = camera.WorldToScreenPoint(sample);
-                if (screen.z > 0f && math.isfinite(screen.y))
+                if (screen.z > 0f && math.isfinite(screen.y) && math.isfinite(screen.x))
                 {
                     top = math.max(top, screen.y);
                     bottom = math.min(bottom, screen.y);
+                    left = math.min(left, screen.x);
+                    right = math.max(right, screen.x);
                 }
             }
 
@@ -175,7 +179,9 @@ namespace HoverColors.Systems
             float2 newPosition = new(jointScreen.x, Screen.height - jointScreen.y - offset);
             // Prefer above, centered on X. If the top edge has no room, place
             // below the circle rather than clipping or covering it.
-            if (newPosition.y < clearance)
+            if (newPosition.y < clearance
+                || (TryGetCursorBounds(tooltipUI, scale, out Rect cursorBounds)
+                    && MeasurementRect(newPosition, true, scale).Overlaps(cursorBounds)))
             {
                 newPosition.y = Screen.height - bottom + clearance;
             }
@@ -214,6 +220,9 @@ namespace HoverColors.Systems
                 group.position = newPosition;
                 group.SetChildrenChanged();
                 m_AnchoredMiddleAngle = group;
+                float padding = 4f * scale;
+                m_LayoutJointBounds = new Rect(left - padding, Screen.height - top - padding,
+                    right - left + padding * 2f, top - bottom + padding * 2f);
                 Vector3 startScreen = camera.WorldToScreenPoint(points[0].m_Position);
                 m_LayoutStart = new float2(startScreen.x, Screen.height - startScreen.y);
                 m_HasLayoutStart = startScreen.z > 0f && math.all(math.isfinite(m_LayoutStart));

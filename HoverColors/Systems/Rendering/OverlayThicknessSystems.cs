@@ -601,10 +601,10 @@ namespace HoverColors.Systems
                 && m_PrefabSystem != null && netTool.prefab != null
                 && m_PrefabSystem.TryGetEntity(netTool.prefab, out Entity prefabEntity))
             {
-                float snapDistance = EntityManager.HasComponent<PlaceableNetData>(prefabEntity)
+                float roadSnapDistance = EntityManager.HasComponent<PlaceableNetData>(prefabEntity)
                     ? math.min(EntityManager.GetComponentData<PlaceableNetData>(prefabEntity).m_SnapDistance, 16f)
                     : 1f;
-                angleArcWidth = math.max(0f, snapDistance * 0.125f);
+                angleArcWidth = math.max(0f, roadSnapDistance * 0.125f);
             }
             if (surfaceScale >= 0.999f
                 || !OverlayCurveAccess.TryGetSurfaceSnapDistance(
