@@ -29,12 +29,17 @@ namespace HoverColors.Systems
         private const float kMiddleAngleOffsetAt1080 = 30f;
         private const float kWorldPositionTolerance = 0.25f;
         private const float kScreenPositionTolerance = 2f;
+        private const float kContinuousWorldTolerance = 2f;
+        private const float kContinuousScreenTolerance = 16f;
 
         private GuideLinesSystem? m_MiddleAngleGuideLines;
         private PrefabSystem? m_MiddleAnglePrefabs;
         private bool m_MiddleAngleLogged;
         private bool m_MultiAngleLogged;
         private bool m_ContinuousAnglesLogged;
+        private bool m_ContinuousToleranceLogged;
+        private bool m_ContinuousMatchMissLogged;
+        private bool m_ContinuousNearbyLogged;
 
         private void InitializeMiddleAnglePlacement()
         {
@@ -116,10 +121,18 @@ namespace HoverColors.Systems
                     return;
                 }
 
+                // The special vanilla branch appends the two joint angles in
+                // guide order and emits no segment-length entries. Validate BOTH
+                // trailing entries before allowing a small managed/Burst mismatch.
+                // If one joint is missing, use the original strict matching only.
+                bool verifiedPair = TryVerifyContinuousPair(entries, camera, start.m_Position,
+                    firstJoint, secondJoint, end.m_Position, snapDistance, scale);
                 TryPlaceJointAngle(tooltipUI, entries, camera, start.m_Position,
-                    firstJoint, secondJoint, snapDistance, scale, true, hasCursor, cursorBounds);
+                    firstJoint, secondJoint, snapDistance, scale, true, hasCursor, cursorBounds,
+                    generatedContinuous: true, verifiedIndex: verifiedPair ? entries.Length - 2 : -1);
                 TryPlaceJointAngle(tooltipUI, entries, camera, firstJoint,
-                    secondJoint, end.m_Position, snapDistance, scale, true, hasCursor, cursorBounds);
+                    secondJoint, end.m_Position, snapDistance, scale, true, hasCursor, cursorBounds,
+                    generatedContinuous: true, verifiedIndex: verifiedPair ? entries.Length - 1 : -1);
 
                 if (m_AnchoredMiddleAngles.Count == 2 && !m_ContinuousAnglesLogged)
                 {
@@ -213,11 +226,11 @@ namespace HoverColors.Systems
             return math.all(math.isfinite(firstJoint)) && math.all(math.isfinite(secondJoint));
         }
 
-        private void TryPlaceJointAngle(TooltipUISystem tooltipUI,
-            NativeList<GuideLinesSystem.TooltipInfo> entries, Camera camera,
-            float3 previous, float3 joint, float3 next, float snapDistance, float scale,
-            bool multiJoint, bool hasCursor, Rect cursorBounds)
+        private static bool TryGetJointMeasurement(float3 previous, float3 joint, float3 next,
+            float snapDistance, out int expectedAngle, out float3 expectedWorldPosition)
         {
+            expectedAngle = 0;
+            expectedWorldPosition = default;
             float2 incoming = joint.xz - previous.xz;
             float2 reverseOutgoing = joint.xz - next.xz;
             float incomingLength = math.length(incoming);
@@ -227,41 +240,126 @@ namespace HoverColors.Systems
                 || !(snapDistance > 0f) || !(incomingLength > minLength)
                 || !(outgoingLength > minLength))
             {
-                return;
+                return false;
             }
 
             float2 dir1 = incoming / incomingLength;
             float2 dir2 = reverseOutgoing / outgoingLength;
-            int expectedAngle = Mathf.RoundToInt(math.degrees(math.acos(math.clamp(math.dot(dir1, dir2), -1f, 1f))));
+            expectedAngle = Mathf.RoundToInt(math.degrees(math.acos(math.clamp(math.dot(dir1, dir2), -1f, 1f))));
             // Zero has no angle widget; 180 uses a different side-dependent anchor.
             if (expectedAngle <= 0 || expectedAngle >= 180)
+            {
+                return false;
+            }
+
+            float size = math.min(snapDistance * 4f, math.min(incomingLength, outgoingLength)) * 0.5f;
+            expectedWorldPosition = joint;
+            expectedWorldPosition.xz -= math.normalizesafe(dir1 + dir2) * (size * 1.5f);
+            return math.all(math.isfinite(expectedWorldPosition));
+        }
+
+        private bool TryVerifyContinuousPair(NativeList<GuideLinesSystem.TooltipInfo> entries,
+            Camera camera, float3 start, float3 first, float3 second, float3 end,
+            float snapDistance, float scale)
+        {
+            if (entries.Length < 2
+                || !TryGetJointMeasurement(start, first, second, snapDistance,
+                    out int firstAngle, out float3 firstAnchor)
+                || !TryGetJointMeasurement(first, second, end, snapDistance,
+                    out int secondAngle, out float3 secondAnchor))
+            {
+                return false;
+            }
+
+            // The native sequence must consist only of angles (at most two
+            // starting reference angles followed by the two generated PI angles).
+            if (entries.Length > 4) return false;
+            for (int i = 0; i < entries.Length; i++)
+            {
+                if (entries[i].m_Type != GuideLinesSystem.TooltipType.Angle) return false;
+            }
+
+            GuideLinesSystem.TooltipInfo firstEntry = entries[entries.Length - 2];
+            GuideLinesSystem.TooltipInfo secondEntry = entries[entries.Length - 1];
+            // Do not use relaxed matching if the same native anchor could
+            // reasonably belong to either joint.
+            if (math.distancesq(firstAnchor, secondAnchor)
+                <= 4f * kContinuousWorldTolerance * kContinuousWorldTolerance)
+            {
+                return false;
+            }
+
+            bool verified = MatchesContinuousAnchor(firstEntry, firstAngle, firstAnchor, camera, scale)
+                && MatchesContinuousAnchor(secondEntry, secondAngle, secondAnchor, camera, scale);
+            if (!verified && !m_ContinuousMatchMissLogged)
+            {
+                m_ContinuousMatchMissLogged = true;
+                LogUtils.Info(() => $"{Mod.ModTag} Road Clutter Continuous: pair verification fallback; "
+                    + $"expected={firstAngle}/{secondAngle}, native={firstEntry.m_Value}/{secondEntry.m_Value}, "
+                    + $"worldDelta={math.distance(firstAnchor, firstEntry.m_Position):F2}/{math.distance(secondAnchor, secondEntry.m_Position):F2}");
+            }
+
+            return verified;
+        }
+
+        private static bool MatchesContinuousAnchor(GuideLinesSystem.TooltipInfo entry,
+            int expectedAngle, float3 expectedAnchor, Camera camera, float scale)
+        {
+            if (entry.m_Type != GuideLinesSystem.TooltipType.Angle
+                || !(entry.m_Value > 0f && entry.m_Value < 180f)
+                || !(math.abs(entry.m_Value - expectedAngle) <= 1f)
+                || !(math.distancesq(entry.m_Position, expectedAnchor)
+                    <= kContinuousWorldTolerance * kContinuousWorldTolerance))
+            {
+                return false;
+            }
+
+            Vector3 actual = camera.WorldToScreenPoint(entry.m_Position);
+            Vector3 predicted = camera.WorldToScreenPoint(expectedAnchor);
+            float screenTolerance = kContinuousScreenTolerance * scale;
+            return actual.z > 0f && predicted.z > 0f
+                && math.distancesq(new float2(actual.x, actual.y), new float2(predicted.x, predicted.y))
+                    <= screenTolerance * screenTolerance;
+        }
+
+        private void TryPlaceJointAngle(TooltipUISystem tooltipUI,
+            NativeList<GuideLinesSystem.TooltipInfo> entries, Camera camera,
+            float3 previous, float3 joint, float3 next, float snapDistance, float scale,
+            bool multiJoint, bool hasCursor, Rect cursorBounds,
+            bool generatedContinuous = false, int verifiedIndex = -1)
+        {
+            if (!TryGetJointMeasurement(previous, joint, next, snapDistance,
+                out int expectedAngle, out float3 expectedWorldPosition))
             {
                 return;
             }
 
-            float size = math.min(snapDistance * 4f, math.min(incomingLength, outgoingLength)) * 0.5f;
-            float3 expectedWorldPosition = joint;
-            expectedWorldPosition.xz -= math.normalizesafe(dir1 + dir2) * (size * 1.5f);
-
             // Match both the rounded angle and vanilla world-space anchor.
             // Four-point curves have two intermediate entries; never identify
             // a widget by its angle alone, or guess when two entries coincide.
-            int index = -1;
-            for (int i = entries.Length - 1; i >= 0; i--)
+            int index = verifiedIndex;
+            if (index < 0)
             {
-                GuideLinesSystem.TooltipInfo candidate = entries[i];
-                if (candidate.m_Type != GuideLinesSystem.TooltipType.Angle
-                    || candidate.m_Value != expectedAngle
-                    || !(math.distancesq(candidate.m_Position, expectedWorldPosition)
-                        <= kWorldPositionTolerance * kWorldPositionTolerance))
+                for (int i = entries.Length - 1; i >= 0; i--)
                 {
-                    continue;
+                    GuideLinesSystem.TooltipInfo candidate = entries[i];
+                    if (candidate.m_Type != GuideLinesSystem.TooltipType.Angle
+                        || candidate.m_Value != expectedAngle
+                        || !(math.distancesq(candidate.m_Position, expectedWorldPosition)
+                            <= kWorldPositionTolerance * kWorldPositionTolerance))
+                    {
+                        continue;
+                    }
+                    if (index >= 0) return;
+                    index = i;
                 }
-                if (index >= 0) return;
-                index = i;
             }
+
             if (index < 0) return;
             GuideLinesSystem.TooltipInfo entry = entries[index];
+            bool usedTolerance = verifiedIndex >= 0 && (entry.m_Value != expectedAngle
+                || math.distancesq(entry.m_Position, expectedWorldPosition)
+                    > kWorldPositionTolerance * kWorldPositionTolerance);
 
             Vector3 oldScreen = camera.WorldToScreenPoint(entry.m_Position);
             Vector3 jointScreen = camera.WorldToScreenPoint(joint);
@@ -316,13 +414,34 @@ namespace HoverColors.Systems
                     : jointScreen.y < math.min(startScreen.y, endScreen.y) - 18f * scale);
             float aboveCost = MiddleSideCost(above, tooltipUI, oldPosition, scale, hasCursor, cursorBounds);
             float belowCost = MiddleSideCost(below, tooltipUI, oldPosition, scale, hasCursor, cursorBounds);
-            if (float.IsPositiveInfinity(aboveCost) && float.IsPositiveInfinity(belowCost)) return;
             // The other labels can move, so a modest overlap should not make
             // the anchor flicker between sides. Cursor/edge obstruction wins.
             Rect labelBounds = MeasurementRect(above, true, scale);
             float preference = (multiJoint ? 0.75f : 0.5f) * labelBounds.width * labelBounds.height;
-            float2 newPosition = belowCost + (preferBelow ? 0f : preference)
-                < aboveCost + (preferBelow ? preference : 0f) ? below : above;
+            float2 newPosition;
+            if (float.IsPositiveInfinity(aboveCost) && float.IsPositiveInfinity(belowCost))
+            {
+                // Keep a verified Continuous PI near its handle even if the
+                // centered positions are blocked. Do not jump straight to the
+                // original inside-arc position unless this bounded search fails.
+                if (!generatedContinuous || !TryFindNearbyContinuousPosition(above, below,
+                    preferBelow, tooltipUI, oldPosition, scale, hasCursor, cursorBounds,
+                    out newPosition))
+                {
+                    return;
+                }
+
+                if (!m_ContinuousNearbyLogged)
+                {
+                    m_ContinuousNearbyLogged = true;
+                    LogUtils.Info(() => $"{Mod.ModTag} Road Clutter Continuous: used near-handle placement fallback");
+                }
+            }
+            else
+            {
+                newPosition = belowCost + (preferBelow ? 0f : preference)
+                    < aboveCost + (preferBelow ? preference : 0f) ? below : above;
+            }
 
             // Only reposition the verified existing widget, never its value.
             group.position = newPosition;
@@ -331,11 +450,51 @@ namespace HoverColors.Systems
             float padding = 4f * scale;
             m_LayoutJointBounds.Add(new Rect(left - padding, Screen.height - top - padding,
                 right - left + padding * 2f, top - bottom + padding * 2f));
+            if (usedTolerance && !m_ContinuousToleranceLogged)
+            {
+                m_ContinuousToleranceLogged = true;
+                LogUtils.Info(() => $"{Mod.ModTag} Road Clutter Continuous: verified ordered PI with bounded tolerance "
+                    + $"(expected={expectedAngle}, native={entry.m_Value}, worldDelta={math.distance(expectedWorldPosition, entry.m_Position):F2})");
+            }
             if (!m_MiddleAngleLogged)
             {
                 m_MiddleAngleLogged = true;
                 LogUtils.Info(() => $"{Mod.ModTag} Road Clutter Phase 2: moved middle {expectedAngle}° angle {(newPosition.y < Screen.height - jointScreen.y ? "above" : "below")} control point");
             }
+        }
+
+        private bool TryFindNearbyContinuousPosition(float2 above, float2 below, bool preferBelow,
+            TooltipUISystem tooltipUI, float2 oldPosition, float scale, bool hasCursor,
+            Rect cursorBounds, out float2 result)
+        {
+            result = default;
+            float bestCost = float.PositiveInfinity;
+            // At most 24 candidates: small sideways or outward shifts, never
+            // inside the handle. The established PI and cursor remain hard obstacles.
+            for (int side = 0; side < 2; side++)
+            {
+                bool isBelow = side == 1;
+                float2 center = isBelow ? below : above;
+                float direction = isBelow ? 1f : -1f;
+                for (int step = 1; step <= 4; step++)
+                {
+                    float delta = step * 12f * scale;
+                    for (int axis = 0; axis < 3; axis++)
+                    {
+                        float2 candidate = center + (axis == 0 ? new float2(-delta, 0f)
+                            : axis == 1 ? new float2(delta, 0f) : new float2(0f, direction * delta));
+                        float overlap = MiddleSideCost(candidate, tooltipUI, oldPosition, scale, hasCursor, cursorBounds);
+                        float cost = overlap + delta * delta + (isBelow == preferBelow ? 0f : 144f * scale * scale);
+                        if (cost < bestCost)
+                        {
+                            bestCost = cost;
+                            result = candidate;
+                        }
+                    }
+                }
+            }
+
+            return !float.IsPositiveInfinity(bestCost);
         }
 
         private float MiddleSideCost(float2 center, TooltipUISystem tooltipUI,
