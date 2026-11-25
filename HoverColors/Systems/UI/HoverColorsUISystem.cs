@@ -203,9 +203,10 @@ namespace HoverColors.UI
                 settings?.GuidelineDashedThicknessScale ?? HoverColorsSettings.kMaxOverlayThicknessScale);
             m_RoadAngleTooltipsHiddenBinding = AddValueBinding(
                 "RoadAngleTooltipsHidden", settings?.RoadAngleTooltipsHidden ?? false);
-            m_AngleArcRBinding = AddValueBinding("AngleArcR", settings?.AngleArcR ?? HoverColorsSettings.kDefaultAngleArcR);
-            m_AngleArcGBinding = AddValueBinding("AngleArcG", settings?.AngleArcG ?? HoverColorsSettings.kDefaultAngleArcG);
-            m_AngleArcBBinding = AddValueBinding("AngleArcB", settings?.AngleArcB ?? HoverColorsSettings.kDefaultAngleArcB);
+            UnityEngine.Color angleIndicatorColor = GuidelineColorSystem.GetAngleIndicatorColor(settings);
+            m_AngleArcRBinding = AddValueBinding("AngleArcR", angleIndicatorColor.r);
+            m_AngleArcGBinding = AddValueBinding("AngleArcG", angleIndicatorColor.g);
+            m_AngleArcBBinding = AddValueBinding("AngleArcB", angleIndicatorColor.b);
             m_PanelOpacityPercentBinding = AddValueBinding(
                 "PanelOpacityPercent",
                 settings?.PanelOpacityPercent ?? HoverColorsSettings.kDefaultPanelOpacityPercent);
@@ -301,9 +302,10 @@ namespace HoverColors.UI
                 m_GuidelineDashedThicknessScaleBinding,
                 settings?.GuidelineDashedThicknessScale ?? HoverColorsSettings.kMaxOverlayThicknessScale);
             UpdateIfChanged(m_RoadAngleTooltipsHiddenBinding, settings?.RoadAngleTooltipsHidden ?? false);
-            UpdateIfChanged(m_AngleArcRBinding, settings?.AngleArcR ?? HoverColorsSettings.kDefaultAngleArcR);
-            UpdateIfChanged(m_AngleArcGBinding, settings?.AngleArcG ?? HoverColorsSettings.kDefaultAngleArcG);
-            UpdateIfChanged(m_AngleArcBBinding, settings?.AngleArcB ?? HoverColorsSettings.kDefaultAngleArcB);
+            UnityEngine.Color angleIndicatorColor = GuidelineColorSystem.GetAngleIndicatorColor(settings);
+            UpdateIfChanged(m_AngleArcRBinding, angleIndicatorColor.r);
+            UpdateIfChanged(m_AngleArcGBinding, angleIndicatorColor.g);
+            UpdateIfChanged(m_AngleArcBBinding, angleIndicatorColor.b);
             UpdateIfChanged(
                 m_PanelOpacityPercentBinding,
                 settings?.PanelOpacityPercent ?? HoverColorsSettings.kDefaultPanelOpacityPercent);

@@ -22,7 +22,7 @@
   "HoverColors.UI.Tooltip.ResetSurfaceBorderThickness": "Restaurar borda e pontos da superfície.",
   "HoverColors.UI.Tooltip.ExtractorBorderThickness": "Borda do lote de extração. 1,0 = padrão; menor = mais fina. Pontos iguais.",
   "HoverColors.UI.Tooltip.ResetExtractorBorderThickness": "Restaurar borda da extração.",
-  "HoverColors.UI.Tooltip.AngleArcColor": "Cor dos arcos de ângulo (filtro viário ativo). Usa a opacidade das guias.",
+  "HoverColors.UI.Tooltip.AngleArcColor": "Cor dos indicadores de ângulo. Usa a opacidade das guias.",
   "HoverColors.UI.Tooltip.RoadAngleTooltipsOn": "Filtro de avisos de via: mostrar/ocultar custo, Colocar/Desfazer e modo.\nÂngulos e distâncias V1/V2 ficam. Ao lado do cursor: inclinação, depois comprimento total.",
   "HoverColors.UI.Tooltip.RoadAngleTooltipsOff": "Filtro de avisos de via: mostrar/ocultar custo, Colocar/Desfazer e modo.\nÂngulos e distâncias V1/V2 ficam. Ao lado do cursor: inclinação, depois comprimento total.",
   "HoverColors.UI.Tooltip.GuidelineDashedThickness": "Espessura dos tracejados e guias de ângulo. 1,0 = padrão; menor = mais fino. Prévia igual.",

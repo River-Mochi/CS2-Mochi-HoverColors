@@ -22,7 +22,7 @@
   "HoverColors.UI.Tooltip.ResetSurfaceBorderThickness": "Przywróć obrys powierzchni i punkty.",
   "HoverColors.UI.Tooltip.ExtractorBorderThickness": "Obrys działki wydobywczej. 1,0 = domyślnie; mniej = cieńszy. Punkty bez zmian.",
   "HoverColors.UI.Tooltip.ResetExtractorBorderThickness": "Przywróć obrys działki wydobywczej.",
-  "HoverColors.UI.Tooltip.AngleArcColor": "Kolor łuków kątowych (filtr drogowy włączony). Używa krycia prowadnic.",
+  "HoverColors.UI.Tooltip.AngleArcColor": "Kolor oznaczeń kątów. Używa krycia prowadnic.",
   "HoverColors.UI.Tooltip.RoadAngleTooltipsOn": "Filtr wskazówek drogowych: pokaż/ukryj koszt, Umieść/Cofnij i tryb.\nKąty oraz odległości V1/V2 zostają. Przy kursorze najpierw nachylenie, potem łączna długość.",
   "HoverColors.UI.Tooltip.RoadAngleTooltipsOff": "Filtr wskazówek drogowych: pokaż/ukryj koszt, Umieść/Cofnij i tryb.\nKąty oraz odległości V1/V2 zostają. Przy kursorze najpierw nachylenie, potem łączna długość.",
   "HoverColors.UI.Tooltip.GuidelineDashedThickness": "Grubość kresek i prowadnic kątów. 1,0 = domyślnie; mniej = cieńsze. Podgląd bez zmian.",

@@ -22,7 +22,7 @@
   "HoverColors.UI.Tooltip.ResetSurfaceBorderThickness": "Yüzey kenarını ve noktaları sıfırla.",
   "HoverColors.UI.Tooltip.ExtractorBorderThickness": "Çıkarma alanı kenarı. 1,0 = varsayılan; düşük = daha ince. Noktalar değişmez.",
   "HoverColors.UI.Tooltip.ResetExtractorBorderThickness": "Çıkarma alanı kenarını sıfırla.",
-  "HoverColors.UI.Tooltip.AngleArcColor": "Açı yaylarının rengi (yol filtresi açıkken). Kılavuz opaklığını kullanır.",
+  "HoverColors.UI.Tooltip.AngleArcColor": "Açı göstergelerinin rengi. Kılavuz opaklığını kullanır.",
   "HoverColors.UI.Tooltip.RoadAngleTooltipsOn": "Yol ipucu filtresi: maliyet, Yerleştir/Geri al ve modu göster/gizle.\nAçı ve V1/V2 mesafeleri kalır. İmleç yanında önce eğim, ardından toplam yol uzunluğu.",
   "HoverColors.UI.Tooltip.RoadAngleTooltipsOff": "Yol ipucu filtresi: maliyet, Yerleştir/Geri al ve modu göster/gizle.\nAçı ve V1/V2 mesafeleri kalır. İmleç yanında önce eğim, ardından toplam yol uzunluğu.",
   "HoverColors.UI.Tooltip.GuidelineDashedThickness": "Kesik ve açı kılavuzu kalınlığı. 1,0 = varsayılan; düşük = daha ince. Yol önizlemesi değişmez.",

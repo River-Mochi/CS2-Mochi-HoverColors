@@ -662,11 +662,14 @@ namespace HoverColors.Systems
             float dashedScale = Mod.Settings?.GuidelineDashedThicknessScale ?? 1f;
             float surfaceScale = Mod.Settings?.SurfaceBorderThicknessScale ?? 1f;
             float angleArcWidth = 0f;
-            // Only roads/paths with the clutter filter enabled. Curved angle
-            // marks and verified right-angle stroke pairs use the angle swatch.
-            // Straight reference rays and 180-degree marks stay unchanged.
-            if (RoadAngleTooltipFilterSystem.ShouldFilter(m_ToolSystem)
+            // Angle color is independent of tooltip filtering. Restore native
+            // guideline colors during the temporary vanilla guideline toggle.
+            // Only road/path curved arcs and verified square marks are recolored.
+            if (Mod.Settings is HoverColorsSettings settings
+                && !settings.GuidelineVanillaToggleActive
                 && m_ToolSystem?.activeTool is NetToolSystem netTool
+                && netTool.actualMode != NetToolSystem.Mode.Replace
+                && (netTool.GetPrefab() is RoadPrefab or PathwayPrefab)
                 && m_PrefabSystem != null && netTool.prefab != null
                 && m_PrefabSystem.TryGetEntity(netTool.prefab, out Entity prefabEntity))
             {

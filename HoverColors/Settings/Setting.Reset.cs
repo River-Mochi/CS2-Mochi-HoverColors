@@ -89,9 +89,6 @@ namespace HoverColors
             ExtractorBorderThicknessScale = kMaxOverlayThicknessScale;
             GuidelineDashedThicknessScale = kMaxOverlayThicknessScale;
             RoadAngleTooltipsHidden = false;
-            AngleArcR = kDefaultAngleArcR;
-            AngleArcG = kDefaultAngleArcG;
-            AngleArcB = kDefaultAngleArcB;
 
             // Global Eye toggle: vanilla behavior is normal hover highlights visible.
             HoverHighlightsSuppressed = false;
@@ -122,6 +119,9 @@ namespace HoverColors
             GuidelineDashedR = guidelineDashed.r;
             GuidelineDashedG = guidelineDashed.g;
             GuidelineDashedB = guidelineDashed.b;
+            AngleArcR = guidelineDashed.r;
+            AngleArcG = guidelineDashed.g;
+            AngleArcB = guidelineDashed.b;
 
             // GuidelineColorSystem multiplies the captured vanilla alpha by this percentage,
             // so 100 restores the actual vanilla alpha rather than HC's 30% default.

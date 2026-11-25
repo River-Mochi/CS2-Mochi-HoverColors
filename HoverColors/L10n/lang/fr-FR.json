@@ -22,7 +22,7 @@
   "HoverColors.UI.Tooltip.ResetSurfaceBorderThickness": "Réinitialiser bord et points de surface.",
   "HoverColors.UI.Tooltip.ExtractorBorderThickness": "Bord de zone d'extraction. 1,0 = jeu ; plus bas = plus fin. Points inchangés.",
   "HoverColors.UI.Tooltip.ResetExtractorBorderThickness": "Réinitialiser le bord d'extraction.",
-  "HoverColors.UI.Tooltip.AngleArcColor": "Couleur des arcs d’angle (filtre routier actif). Même opacité que les guides.",
+  "HoverColors.UI.Tooltip.AngleArcColor": "Couleur des repères d’angle. Même opacité que les guides.",
   "HoverColors.UI.Tooltip.RoadAngleTooltipsOn": "Filtre routier : afficher/masquer coût, Placer/Annuler et mode.\nGardez angles et distances V1/V2. Pente puis longueur totale près du curseur.",
   "HoverColors.UI.Tooltip.RoadAngleTooltipsOff": "Filtre routier : afficher/masquer coût, Placer/Annuler et mode.\nGardez angles et distances V1/V2. Pente puis longueur totale près du curseur.",
   "HoverColors.UI.Tooltip.GuidelineDashedThickness": "Épaisseur des tirets et repères d'angle. 1,0 = jeu ; plus bas = plus fin. Aperçu inchangé.",

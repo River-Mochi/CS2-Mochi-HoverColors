@@ -218,6 +218,19 @@ namespace HoverColors.Systems
                 CapturedVanillaGuidelinePreviewColor);
         }
 
+        public static Color GetAngleIndicatorColor(HoverColorsSettings? settings)
+        {
+            if (settings?.GuidelineVanillaToggleActive == true)
+            {
+                return CapturedVanillaGuidelineDashedColor;
+            }
+
+            return new Color(
+                settings?.AngleArcR ?? HoverColorsSettings.kDefaultAngleArcR,
+                settings?.AngleArcG ?? HoverColorsSettings.kDefaultAngleArcG,
+                settings?.AngleArcB ?? HoverColorsSettings.kDefaultAngleArcB, 1f);
+        }
+
         public static Color GetGuidelineDashedColor(HoverColorsSettings? settings)
         {
             if (settings == null)

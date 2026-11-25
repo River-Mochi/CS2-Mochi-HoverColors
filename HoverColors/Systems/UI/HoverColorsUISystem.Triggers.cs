@@ -548,12 +548,14 @@ namespace HoverColors.UI
             r = Clamp01(r);
             g = Clamp01(g);
             b = Clamp01(b);
-            if (ApproxEqual(settings.AngleArcR, r) && ApproxEqual(settings.AngleArcG, g)
+            if (!settings.GuidelineVanillaToggleActive
+                && ApproxEqual(settings.AngleArcR, r) && ApproxEqual(settings.AngleArcG, g)
                 && ApproxEqual(settings.AngleArcB, b)) return;
 
             settings.AngleArcR = r;
             settings.AngleArcG = g;
             settings.AngleArcB = b;
+            settings.GuidelineVanillaToggleActive = false;
             ApplySaveAndSync(settings);
         }
 

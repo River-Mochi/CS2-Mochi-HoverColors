@@ -22,7 +22,7 @@
   "HoverColors.UI.Tooltip.ResetSurfaceBorderThickness": "표면 경계선과 점을 기본값으로 초기화.",
   "HoverColors.UI.Tooltip.ExtractorBorderThickness": "채굴 구역 경계선 두께. 1.0 = 기본, 낮추면 얇아짐. 점은 그대로.",
   "HoverColors.UI.Tooltip.ResetExtractorBorderThickness": "채굴 구역 경계선 초기화.",
-  "HoverColors.UI.Tooltip.AngleArcColor": "각도 호 색상 (도로 표시 정리 켜짐). 가이드 투명도 사용.",
+  "HoverColors.UI.Tooltip.AngleArcColor": "각도 표시 색상. 가이드 투명도 사용.",
   "HoverColors.UI.Tooltip.RoadAngleTooltipsOn": "도로 안내 정리: 비용, 배치/취소, 도로 모드 표시/숨김.\n각도와 V1/V2 거리는 유지. 커서 옆에 경사를 먼저, 그 아래에 도로 총길이를 표시.",
   "HoverColors.UI.Tooltip.RoadAngleTooltipsOff": "도로 안내 정리: 비용, 배치/취소, 도로 모드 표시/숨김.\n각도와 V1/V2 거리는 유지. 커서 옆에 경사를 먼저, 그 아래에 도로 총길이를 표시.",
   "HoverColors.UI.Tooltip.GuidelineDashedThickness": "점선과 각도 안내선 두께. 1.0 = 기본, 낮추면 얇아짐. 도로 미리보기는 그대로.",
