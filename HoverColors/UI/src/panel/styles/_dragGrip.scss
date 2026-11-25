@@ -7,77 +7,38 @@
 // ================= </copyright> ======================
 
 // File: UI/src/panel/styles/_dragGrip.scss
-// Purpose: Tiny draggable foot for MochiColorPickerPanel.module.scss.
-//
-// Final design: no dots. The small pill turns blue on hover/drag, which is enough
-// affordance without adding visual noise.
+// The entire reserved footer is draggable; the icon is only a visual affordance.
 
 .dragGrip {
     position: absolute;
-    right: 8rem;
-    bottom: 9rem; // increase = moves up, decrease = moves down
-    width: 20rem !important;
-    min-width: 20rem !important;
-    height: 11rem !important;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    // Matches the footer reserved by .actions in _actionBar.scss.
+    height: 25rem;
     display: flex;
     align-items: center;
-    justify-content: center;
-    padding-top: 0 !important;
-    padding-right: 0 !important;
-    padding-bottom: 0 !important;
-    padding-left: 0 !important;
-    // No gap property: Cohtml logs it as unsupported.
-    background-color: rgba(155, 178, 190, 0.24);
-    border-top-width: 1rem;
-    border-top-style: solid;
-    border-top-color: rgba(254, 255, 255, 0.12);
-    border-right-width: 1rem;
-    border-right-style: solid;
-    border-right-color: rgba(254, 255, 255, 0.12);
-    border-bottom-width: 1rem;
-    border-bottom-style: solid;
-    border-bottom-color: rgba(254, 255, 255, 0.12);
-    border-left-width: 1rem;
-    border-left-style: solid;
-    border-left-color: rgba(254, 255, 255, 0.12);
-    border-top-left-radius: 4rem;
-    border-top-right-radius: 4rem;
-    border-bottom-right-radius: 4rem;
-    border-bottom-left-radius: 4rem;
+    justify-content: flex-end;
+    padding-right: 8rem;
     box-sizing: border-box;
-    cursor: move;
+    background-color: transparent;
+    cursor: grab;
     user-select: none;
-    transition-property: background-color, border-top-color, border-right-color, border-bottom-color, border-left-color, box-shadow;
-    transition-duration: 120ms, 120ms, 120ms, 120ms, 120ms, 120ms;
-    transition-timing-function: ease-out, ease-out, ease-out, ease-out, ease-out, ease-out;
-    transition-delay: 0ms, 0ms, 0ms, 0ms, 0ms, 0ms;
 }
 
-.dragGrip:hover,
+.dragGripIcon {
+    width: 34rem;
+    height: 11rem;
+    margin-right: 4rem;
+    opacity: 0.65;
+    pointer-events: none;
+}
+
+.dragGrip:hover .dragGripIcon,
+.dragGripActive .dragGripIcon {
+    opacity: 1;
+}
+
 .dragGripActive {
-    background-color: #1E83AA;
-    border-top-color: rgba(254, 255, 255, 0.34);
-    border-right-color: rgba(254, 255, 255, 0.34);
-    border-bottom-color: rgba(254, 255, 255, 0.34);
-    border-left-color: rgba(254, 255, 255, 0.34);
-    box-shadow: 0 0 3rem rgba(84, 215, 255, 0.20);
-}
-
-// Darker panel gets the same hover behavior, with a slightly quieter idle fill.
-.panelDarker .dragGrip {
-    background-color: rgba(130, 155, 168, 0.38);
-    border-top-color: rgba(254, 255, 255, 0.10);
-    border-right-color: rgba(254, 255, 255, 0.10);
-    border-bottom-color: rgba(254, 255, 255, 0.10);
-    border-left-color: rgba(254, 255, 255, 0.10);
-}
-
-.panelDarker .dragGrip:hover,
-.panelDarker .dragGripActive {
-    background-color: #1E83AA;
-    border-top-color: rgba(254, 255, 255, 0.34);
-    border-right-color: rgba(254, 255, 255, 0.34);
-    border-bottom-color: rgba(254, 255, 255, 0.34);
-    border-left-color: rgba(254, 255, 255, 0.34);
-    box-shadow: 0 0 3rem rgba(84, 215, 255, 0.20);
+    cursor: grabbing;
 }

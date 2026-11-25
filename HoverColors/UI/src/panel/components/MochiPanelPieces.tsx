@@ -14,6 +14,7 @@ import { Button } from "cs2/ui";
 import { Color } from "cs2/bindings";
 import { SideTooltip, type SideTooltipSide } from "../tooltip/SideTooltip";
 import styles from "../../MochiColorPickerPanel.module.scss";
+import dragGripIcon from "../../../images/mochi-drag-grip.svg";
 
 type PanelSectionToggleProps = {
     label: string;
@@ -113,12 +114,13 @@ type DragGripProps = {
 };
 
 export const DragGrip = ({ active, tooltip, tooltipSide, onMouseDown }: DragGripProps) => (
-    // Always centred under the panel: the grip sits bottom-right, so a left-flush tooltip looked
-    // detached from it.
+    // The footer is the drag target; only the small right-aligned SVG is visible.
     <SideTooltip tooltip={tooltip} side={tooltipSide ?? "below"} align="center">
         <div
             className={`${styles.dragGrip} ${active ? styles.dragGripActive : ""}`}
             onMouseDown={onMouseDown}
-        />
+        >
+            <img src={dragGripIcon} className={styles.dragGripIcon} alt="" />
+        </div>
     </SideTooltip>
 );
