@@ -15,6 +15,7 @@ namespace HoverColors.Systems
     using CS2Shared.RiverMochi;
     using Game.Input;
     using Game.Rendering;
+    using Game.Settings;
     using Game.Tools;
     using Game.UI.Tooltip;
     using Unity.Collections;
@@ -31,11 +32,16 @@ namespace HoverColors.Systems
         private Rect m_LayoutJointBounds;
         private bool m_HasLayoutStart;
         private bool m_LayoutLogged;
+        private bool m_LayoutScaleLogged;
         private bool m_LayoutCrowdedLogged;
 
         private static float GetLayoutScale()
         {
-            return Mathf.Clamp(Screen.height / 1080f, 0.65f, 3f);
+            // The game also exposes a separate accessibility text scale.
+            // Multiply the resolution estimate by that scale so larger UI text
+            // receives more clearance. Do not assume the startup resolution.
+            float textScale = SharedSettings.instance?.userInterface?.textScale ?? 1f;
+            return Mathf.Clamp(Screen.height / 1080f * Mathf.Clamp(textScale, 1f, 1.5f), 0.65f, 4.5f);
         }
 
         private void ArrangeCurveMeasurements(NetToolSystem netTool, TooltipUISystem tooltipUI)
@@ -64,6 +70,12 @@ namespace HoverColors.Systems
             }
 
             float scale = GetLayoutScale();
+            if (!m_LayoutScaleLogged)
+            {
+                m_LayoutScaleLogged = true;
+                InterfaceSettings? uiSettings = SharedSettings.instance?.userInterface;
+                LogUtils.Info(() => $"{Mod.ModTag} Road Clutter layout: screen={Screen.width}x{Screen.height}, textScale={uiSettings?.textScale ?? 1f:F2}, interfaceScaling={uiSettings?.interfaceScaling}, estimateScale={scale:F2}");
+            }
             if (mode == NetToolSystem.Mode.Straight)
             {
                 NativeList<ControlPoint> points = netTool.GetControlPoints(out JobHandle pointDependencies);
