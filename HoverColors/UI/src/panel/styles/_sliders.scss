@@ -18,7 +18,9 @@
 }
 
 .slider {
-    flex: 1 1 auto;
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: auto;
     min-width: 0;
     margin-right: 8rem; // gap between slider track and percent box
     background-color: transparent;
@@ -27,12 +29,28 @@
 .valueField {
     width: 40rem;
     height: 28rem;
-    flex: 0 0 40rem;
+    flex-grow: 0;
+    flex-shrink: 0;
+    flex-basis: 40rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 6rem;
-    border: 0;
+    border-top-left-radius: 6rem;
+    border-top-right-radius: 6rem;
+    border-bottom-right-radius: 6rem;
+    border-bottom-left-radius: 6rem;
+    border-top-width: 0;
+    border-top-style: none;
+    border-top-color: transparent;
+    border-right-width: 0;
+    border-right-style: none;
+    border-right-color: transparent;
+    border-bottom-width: 0;
+    border-bottom-style: none;
+    border-bottom-color: transparent;
+    border-left-width: 0;
+    border-left-style: none;
+    border-left-color: transparent;
     background-color: transparent; // plain text readout; dark boxes make Standard panel heavy
     box-shadow: none;
     color: rgba(254, 255, 255, 0.96);
@@ -46,7 +64,9 @@
 
 .guidelineSliderRow {
     width: auto;
-    flex: 1 1 auto;
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: auto;
     padding-left: 0;
     margin-left: 6rem; // gap after three guideline swatches
 }
@@ -61,7 +81,9 @@
 
 .fillSliderRow {
     width: auto;
-    flex: 1 1 auto;
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: auto;
     padding-left: 0;
     margin-left: 6rem; // gap after the fill swatch
 }

@@ -21,6 +21,9 @@
     right: 5rem;
     bottom: 2rem;
     height: 2.5rem;
-    border-radius: 2rem;
+    border-top-left-radius: 2rem;
+    border-top-right-radius: 2rem;
+    border-bottom-right-radius: 2rem;
+    border-bottom-left-radius: 2rem;
     background-color: rgba(84, 215, 255, 0.68) !important;
 }

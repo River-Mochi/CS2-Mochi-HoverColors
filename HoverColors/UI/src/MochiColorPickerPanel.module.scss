@@ -54,7 +54,8 @@
 
 .panelFrame {
     position: relative;
-    overflow: visible;
+    overflow-x: visible;
+    overflow-y: visible;
 
 }
 
@@ -82,7 +83,8 @@
     --hc-title-font-size: 13rem;
     --hc-title-letter-spacing: 0.80rem;
     position: relative;
-    overflow: visible;
+    overflow-x: visible;
+    overflow-y: visible;
 
     // The vanilla content wrapper's padding differs between Modern and Legacy UI, and every
     // negative-margin hack in this file existed to cancel it. Zeroing it once makes the layout
@@ -115,8 +117,22 @@
     // sliders lost their edges against high-contrast ground like crosswalks and signage. Blur
     // removes that detail; a tint alone only lightens it, so no colour choice substitutes for this.
     background-color: transparent;
-    border: 0;
-    border-radius: 12rem;
+    border-top-width: 0;
+    border-top-style: none;
+    border-top-color: transparent;
+    border-right-width: 0;
+    border-right-style: none;
+    border-right-color: transparent;
+    border-bottom-width: 0;
+    border-bottom-style: none;
+    border-bottom-color: transparent;
+    border-left-width: 0;
+    border-left-style: none;
+    border-left-color: transparent;
+    border-top-left-radius: 12rem;
+    border-top-right-radius: 12rem;
+    border-bottom-right-radius: 12rem;
+    border-bottom-left-radius: 12rem;
 
     // The header must stay unpainted so .titleBar's own alpha is the only thing between the player
     // and the city. That used to be done with `rgba(...) 33rem` colour stops - but Gameface does
@@ -181,12 +197,18 @@
     margin-right: 0;
     margin-bottom: 0;
     margin-left: 0;
-    padding: 4rem 6rem;
+    padding-top: 4rem;
+    padding-right: 6rem;
+    padding-bottom: 4rem;
+    padding-left: 6rem;
     border-top-left-radius: 12rem;
     border-top-right-radius: 12rem;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
-    transition: background-color 120ms ease-out;
+    transition-property: background-color;
+    transition-duration: 120ms;
+    transition-timing-function: ease-out;
+    transition-delay: 0ms;
 }
 
 // Standard: see-through header. Hover goes lighter AND thinner so it opens up rather than
@@ -230,16 +252,25 @@
 }
 
 .titleDragHandle {
-    flex: 1 1 auto;
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: auto;
     min-width: 0;
     min-height: 26rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0 6rem;
+    padding-top: 0;
+    padding-right: 6rem;
+    padding-bottom: 0;
+    padding-left: 6rem;
     margin-left: 4rem;
-    border-radius: 7rem;
-    overflow: hidden;
+    border-top-left-radius: 7rem;
+    border-top-right-radius: 7rem;
+    border-bottom-right-radius: 7rem;
+    border-bottom-left-radius: 7rem;
+    overflow-x: hidden;
+    overflow-y: hidden;
     cursor: move;
     user-select: none;
 }
@@ -253,7 +284,10 @@
     line-height: 1;
     white-space: nowrap;
     pointer-events: none;
-    transition: color 120ms ease-out;
+    transition-property: color;
+    transition-duration: 120ms;
+    transition-timing-function: ease-out;
+    transition-delay: 0ms;
 }
 
 .titleBar:hover .titleText,
@@ -264,13 +298,19 @@
 .eyeButton,
 .collapseButton,
 .closeButton {
-  flex: 0 0 26rem;
+  flex-grow: 0;
+  flex-shrink: 0;
+  flex-basis: 26rem;
   width: 26rem;
   height: 26rem;
   min-width: 26rem;
   margin-left: 6rem;
-  padding: 0 !important;
-  overflow: visible;
+  padding-top: 0 !important;
+  padding-right: 0 !important;
+  padding-bottom: 0 !important;
+  padding-left: 0 !important;
+  overflow-x: visible;
+  overflow-y: visible;
 }
 .closeButton {
   margin-left: 5rem;
@@ -283,7 +323,10 @@
   pointer-events: none;
   transform: scale(1);
   transform-origin: center;
-  transition: opacity 120ms ease-out, transform 120ms ease-out;
+  transition-property: opacity, transform;
+  transition-duration: 120ms, 120ms;
+  transition-timing-function: ease-out, ease-out;
+  transition-delay: 0ms, 0ms;
 }
 
 .closeButton .closeIcon {
@@ -329,33 +372,64 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 4rem;
-    border: 1rem solid transparent;
+    border-top-left-radius: 4rem;
+    border-top-right-radius: 4rem;
+    border-bottom-right-radius: 4rem;
+    border-bottom-left-radius: 4rem;
+    border-top-width: 1rem;
+    border-top-style: solid;
+    border-top-color: transparent;
+    border-right-width: 1rem;
+    border-right-style: solid;
+    border-right-color: transparent;
+    border-bottom-width: 1rem;
+    border-bottom-style: solid;
+    border-bottom-color: transparent;
+    border-left-width: 1rem;
+    border-left-style: solid;
+    border-left-color: transparent;
     background-color: rgba(36, 54, 66, 0.58);
     box-shadow: none;
-    transition: background-color 120ms ease-out, border-color 120ms ease-out, box-shadow 120ms ease-out;
+    transition-property: background-color, border-top-color, border-right-color, border-bottom-color, border-left-color, box-shadow;
+    transition-duration: 120ms, 120ms, 120ms, 120ms, 120ms, 120ms;
+    transition-timing-function: ease-out, ease-out, ease-out, ease-out, ease-out, ease-out;
+    transition-delay: 0ms, 0ms, 0ms, 0ms, 0ms, 0ms;
 }
 
 .infoButton:hover,
 .controlIconButton:hover {
     background-color: rgba(108, 136, 150, 0.34);
-    border-color: transparent;
+    border-top-color: transparent;
+    border-right-color: transparent;
+    border-bottom-color: transparent;
+    border-left-color: transparent;
     box-shadow: none;
 }
 
 .infoButton {
     width: 24rem;
     height: 24rem;
-    flex: 0 0 24rem;
+    flex-grow: 0;
+    flex-shrink: 0;
+    flex-basis: 24rem;
     margin-left: 6rem;
-    border-radius: 50%;
-    border-color: transparent;
+    border-top-left-radius: 50%;
+    border-top-right-radius: 50%;
+    border-bottom-right-radius: 50%;
+    border-bottom-left-radius: 50%;
+    border-top-color: transparent;
+    border-right-color: transparent;
+    border-bottom-color: transparent;
+    border-left-color: transparent;
     background-color: transparent;
     cursor: pointer;
 
     &:hover {
         background-color: rgba(84, 215, 255, 0.14);
-        border-color: transparent;
+        border-top-color: transparent;
+        border-right-color: transparent;
+        border-bottom-color: transparent;
+        border-left-color: transparent;
         box-shadow: none;
     }
 }
@@ -364,7 +438,10 @@
 
 .infoButtonTooltipsOff {
     background-color: transparent !important;
-    border-color: transparent !important;
+    border-top-color: transparent !important;
+    border-right-color: transparent !important;
+    border-bottom-color: transparent !important;
+    border-left-color: transparent !important;
     box-shadow: none !important;
 
     .infoIcon {
@@ -374,7 +451,10 @@
 
     &:hover {
         background-color: rgba(245, 96, 96, 0.10) !important;
-        border-color: transparent !important;
+        border-top-color: transparent !important;
+        border-right-color: transparent !important;
+        border-bottom-color: transparent !important;
+        border-left-color: transparent !important;
         box-shadow: none !important;
     }
 }
@@ -384,7 +464,10 @@
     height: 24rem;
     display: block;
     pointer-events: none;
-    transition: opacity 120ms ease-out, transform 120ms ease-out;
+    transition-property: opacity, transform;
+    transition-duration: 120ms, 120ms;
+    transition-timing-function: ease-out, ease-out;
+    transition-delay: 0ms, 0ms;
 }
 
 .infoButton:hover .infoIcon {
@@ -394,9 +477,17 @@
 .controlIconButton {
     width: 32rem;
     height: 32rem;
-    flex: 0 0 32rem;
-    padding: 0;
-    margin: 0;
+    flex-grow: 0;
+    flex-shrink: 0;
+    flex-basis: 32rem;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
     position: relative;
     z-index: 2;
     background-image: none;
@@ -413,7 +504,10 @@
 
 .idleIcon {
     opacity: 0.80;
-    transition: opacity 120ms ease-out, transform 120ms ease-out;
+    transition-property: opacity, transform;
+    transition-duration: 120ms, 120ms;
+    transition-timing-function: ease-out, ease-out;
+    transition-delay: 0ms, 0ms;
 }
 
 .controlIconButton:hover .idleIcon,
@@ -430,11 +524,16 @@
     width: 24rem !important;
     min-width: 24rem !important;
     height: 24rem !important;
-    flex: 0 0 24rem;
+    flex-grow: 0;
+    flex-shrink: 0;
+    flex-basis: 24rem;
     margin-left: 0;
     margin-right: 4rem;
     transform-origin: center center;
-    transition: transform 120ms ease-out;
+    transition-property: transform;
+    transition-duration: 120ms;
+    transition-timing-function: ease-out;
+    transition-delay: 0ms;
 }
 
 .angleTooltipButton:hover {
@@ -451,7 +550,10 @@
 .angleTooltipButtonOff,
 .panelDarker .angleTooltipButtonOff {
     background-color: rgba(130, 91, 22, 0.48) !important;
-    border-color: rgba(255, 213, 77, 0.92) !important;
+    border-top-color: rgba(255, 213, 77, 0.92) !important;
+    border-right-color: rgba(255, 213, 77, 0.92) !important;
+    border-bottom-color: rgba(255, 213, 77, 0.92) !important;
+    border-left-color: rgba(255, 213, 77, 0.92) !important;
     box-shadow: inset 0 0 0 1rem rgba(255, 213, 77, 0.18) !important;
 }
 
@@ -462,14 +564,20 @@
 
 .angleTooltipButtonOff:hover,
 .panelDarker .angleTooltipButtonOff:hover {
-    border-color: #ffe28a !important;
+    border-top-color: #ffe28a !important;
+    border-right-color: #ffe28a !important;
+    border-bottom-color: #ffe28a !important;
+    border-left-color: #ffe28a !important;
     background-color: rgba(160, 112, 27, 0.56) !important;
 }
 
 .body {
     display: flex;
     flex-direction: column;
-    padding: 6rem 8rem 5rem 8rem;
+    padding-top: 6rem;
+    padding-right: 8rem;
+    padding-bottom: 5rem;
+    padding-left: 8rem;
 }
 
 // Collapsed hides the action bar entirely, so this padding is the only thing between the outline
@@ -493,7 +601,8 @@
     display: flex;
     align-items: center;
     min-height: 36rem;
-    overflow: visible;
+    overflow-x: visible;
+    overflow-y: visible;
 }
 
 .controlRow + .controlRow {
@@ -519,12 +628,32 @@
     box-sizing: border-box;
     min-height: 20rem;
     height: 20rem;
-    padding: 0 3rem !important;
+    padding-top: 0 !important;
+    padding-right: 3rem !important;
+    padding-bottom: 0 !important;
+    padding-left: 3rem !important;
     margin-top: 3rem;
-    border: 0 !important;
-    border-top: 1rem solid rgba(254, 255, 255, 0.16) !important;
-    border-radius: 0;
-    background: transparent !important;
+    border-top-width: 0 !important;
+    border-top-style: none !important;
+    border-top-color: transparent !important;
+    border-right-width: 0 !important;
+    border-right-style: none !important;
+    border-right-color: transparent !important;
+    border-bottom-width: 0 !important;
+    border-bottom-style: none !important;
+    border-bottom-color: transparent !important;
+    border-left-width: 0 !important;
+    border-left-style: none !important;
+    border-left-color: transparent !important;
+    border-top-width: 1rem !important;
+    border-top-style: solid !important;
+    border-top-color: rgba(254, 255, 255, 0.16) !important;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+    background-color: transparent !important;
+    background-image: none !important;
     box-shadow: none !important;
     color: rgba(254, 255, 255, 0.88) !important;
     font-size: 10rem;
@@ -562,12 +691,15 @@
 }
 
 .controlBody {
-    flex: 1 1 auto;
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: auto;
     min-width: 0;
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    overflow: visible;
+    overflow-x: visible;
+    overflow-y: visible;
     margin-left: 8rem;
 }
 

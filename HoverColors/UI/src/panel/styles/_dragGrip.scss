@@ -22,33 +22,62 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0 !important;
+    padding-top: 0 !important;
+    padding-right: 0 !important;
+    padding-bottom: 0 !important;
+    padding-left: 0 !important;
     // No gap property: Cohtml logs it as unsupported.
     background-color: rgba(155, 178, 190, 0.24);
-    border: 1rem solid rgba(254, 255, 255, 0.12);
-    border-radius: 4rem;
+    border-top-width: 1rem;
+    border-top-style: solid;
+    border-top-color: rgba(254, 255, 255, 0.12);
+    border-right-width: 1rem;
+    border-right-style: solid;
+    border-right-color: rgba(254, 255, 255, 0.12);
+    border-bottom-width: 1rem;
+    border-bottom-style: solid;
+    border-bottom-color: rgba(254, 255, 255, 0.12);
+    border-left-width: 1rem;
+    border-left-style: solid;
+    border-left-color: rgba(254, 255, 255, 0.12);
+    border-top-left-radius: 4rem;
+    border-top-right-radius: 4rem;
+    border-bottom-right-radius: 4rem;
+    border-bottom-left-radius: 4rem;
     box-sizing: border-box;
     cursor: move;
     user-select: none;
-    transition: background-color 120ms ease-out, border-color 120ms ease-out, box-shadow 120ms ease-out;
+    transition-property: background-color, border-top-color, border-right-color, border-bottom-color, border-left-color, box-shadow;
+    transition-duration: 120ms, 120ms, 120ms, 120ms, 120ms, 120ms;
+    transition-timing-function: ease-out, ease-out, ease-out, ease-out, ease-out, ease-out;
+    transition-delay: 0ms, 0ms, 0ms, 0ms, 0ms, 0ms;
 }
 
 .dragGrip:hover,
 .dragGripActive {
     background-color: #1E83AA;
-    border-color: rgba(254, 255, 255, 0.34);
+    border-top-color: rgba(254, 255, 255, 0.34);
+    border-right-color: rgba(254, 255, 255, 0.34);
+    border-bottom-color: rgba(254, 255, 255, 0.34);
+    border-left-color: rgba(254, 255, 255, 0.34);
     box-shadow: 0 0 3rem rgba(84, 215, 255, 0.20);
 }
 
 // Darker panel gets the same hover behavior, with a slightly quieter idle fill.
 .panelDarker .dragGrip {
     background-color: rgba(130, 155, 168, 0.38);
-    border-color: rgba(254, 255, 255, 0.10);
+    border-top-color: rgba(254, 255, 255, 0.10);
+    border-right-color: rgba(254, 255, 255, 0.10);
+    border-bottom-color: rgba(254, 255, 255, 0.10);
+    border-left-color: rgba(254, 255, 255, 0.10);
 }
 
 .panelDarker .dragGrip:hover,
 .panelDarker .dragGripActive {
     background-color: #1E83AA;
-    border-color: rgba(254, 255, 255, 0.34);
+    border-top-color: rgba(254, 255, 255, 0.34);
+    border-right-color: rgba(254, 255, 255, 0.34);
+    border-bottom-color: rgba(254, 255, 255, 0.34);
+    border-left-color: rgba(254, 255, 255, 0.34);
     box-shadow: 0 0 3rem rgba(84, 215, 255, 0.20);
 }

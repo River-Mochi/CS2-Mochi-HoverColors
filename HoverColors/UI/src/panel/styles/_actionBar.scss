@@ -11,18 +11,26 @@
 
 .actions {
     position: relative;
-    overflow: visible;
+    overflow-x: visible;
+    overflow-y: visible;
     display: flex;
     flex-direction: column;
     margin-top: -2rem;
     // Reserve a footer for the drag grip below the District row or collapsed Areas header.
-    padding: 4rem 8rem 25rem 8rem;
-    border-top: 1rem solid rgba(254, 255, 255, 0.16);
+    padding-top: 4rem;
+    padding-right: 8rem;
+    padding-bottom: 25rem;
+    padding-left: 8rem;
+    border-top-width: 1rem;
+    border-top-style: solid;
+    border-top-color: rgba(254, 255, 255, 0.16);
 }
 
 .actions .sectionToggle {
     margin-bottom: 3rem;
-    border-top: 0 !important;
+    border-top-width: 0 !important;
+    border-top-style: none !important;
+    border-top-color: transparent !important;
 }
 
 .surfaceControlsRow,
@@ -46,7 +54,9 @@
     flex-direction: column;
     align-items: stretch;
     justify-content: center;
-    flex: 1 1 auto;
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: auto;
     min-width: 0;
     margin-left: 4rem;
     margin-right: 0;
@@ -67,7 +77,9 @@
 }
 
 .areaThicknessSlider {
-    flex: 1 1 auto;
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: auto;
     min-width: 0;
     margin-right: 3rem;
     background-color: transparent;
@@ -75,7 +87,9 @@
 
 .areaThicknessValue {
     width: 24rem;
-    flex: 0 0 24rem;
+    flex-grow: 0;
+    flex-shrink: 0;
+    flex-basis: 24rem;
     color: rgba(254, 255, 255, 0.96);
     font-size: 12rem;
     text-align: center;
@@ -87,18 +101,24 @@
     min-height: 32rem;
     margin-top: 4rem;
     padding-top: 5rem;
-    border-top: 1rem solid rgba(254, 255, 255, 0.16);
+    border-top-width: 1rem;
+    border-top-style: solid;
+    border-top-color: rgba(254, 255, 255, 0.16);
 }
 
 // Cohtml does not reliably expand margin-left:auto on a flex child.
 // A real expanding spacer separates Map Borders from District.
 .districtActionSpacer {
-    flex: 1 1 auto;
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: auto;
     min-width: 0;
 }
 
 .districtActionLauncher {
-    flex: 0 0 32rem;
+    flex-grow: 0;
+    flex-shrink: 0;
+    flex-basis: 32rem;
     display: flex;
     align-items: center;
 }
@@ -109,12 +129,29 @@
 
 .actionButton {
     height: 32rem;
-    padding: 0;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 4rem;
-    border: 1rem solid transparent;
+    border-top-left-radius: 4rem;
+    border-top-right-radius: 4rem;
+    border-bottom-right-radius: 4rem;
+    border-bottom-left-radius: 4rem;
+    border-top-width: 1rem;
+    border-top-style: solid;
+    border-top-color: transparent;
+    border-right-width: 1rem;
+    border-right-style: solid;
+    border-right-color: transparent;
+    border-bottom-width: 1rem;
+    border-bottom-style: solid;
+    border-bottom-color: transparent;
+    border-left-width: 1rem;
+    border-left-style: solid;
+    border-left-color: transparent;
     background-color: rgba(36, 54, 66, 0.58) !important;
     background-image: none !important;
     box-shadow: none !important;
@@ -127,14 +164,21 @@
     white-space: nowrap;
     cursor: pointer;
     position: relative;
-    overflow: visible;
-    transition: background-color 120ms ease-out, border-color 120ms ease-out, color 120ms ease-out;
+    overflow-x: visible;
+    overflow-y: visible;
+    transition-property: background-color, border-top-color, border-right-color, border-bottom-color, border-left-color, color;
+    transition-duration: 120ms, 120ms, 120ms, 120ms, 120ms, 120ms;
+    transition-timing-function: ease-out, ease-out, ease-out, ease-out, ease-out, ease-out;
+    transition-delay: 0ms, 0ms, 0ms, 0ms, 0ms, 0ms;
 
     &:hover,
     &:focus,
     &:active {
         background-color: rgba(108, 136, 150, 0.34) !important;
-        border-color: transparent;
+        border-top-color: transparent;
+        border-right-color: transparent;
+        border-bottom-color: transparent;
+        border-left-color: transparent;
         box-shadow: none !important;
         color: #ffffff !important;
     }
@@ -143,16 +187,21 @@
 .surfaceButton {
     width: 32rem;
     min-width: 32rem;
-    overflow: visible !important;
+    overflow-x: visible !important;
+    overflow-y: visible !important;
 }
 
 .districtPickerButton {
     position: relative;
-    overflow: visible;
+    overflow-x: visible;
+    overflow-y: visible;
 }
 
 .districtPickerButtonActive {
-    border-color: rgba(84, 215, 255, 0.88);
+    border-top-color: rgba(84, 215, 255, 0.88);
+    border-right-color: rgba(84, 215, 255, 0.88);
+    border-bottom-color: rgba(84, 215, 255, 0.88);
+    border-left-color: rgba(84, 215, 255, 0.88);
 }
 
 .districtPickerIcon {
