@@ -27,9 +27,9 @@ namespace HoverColors.Systems
     {
         private readonly List<Rect> m_OccupiedMeasurements = new(12);
         private readonly List<string> m_GuidelinePaths = new(8);
-        private TooltipGroup? m_AnchoredMiddleAngle;
+        private readonly List<TooltipGroup> m_AnchoredMiddleAngles = new(2);
+        private readonly List<Rect> m_LayoutJointBounds = new(2);
         private float2 m_LayoutStart;
-        private Rect m_LayoutJointBounds;
         private bool m_HasLayoutStart;
         private bool m_LayoutLogged;
         private bool m_LayoutScaleLogged;
@@ -64,10 +64,7 @@ namespace HoverColors.Systems
                 return;
             }
 
-            while (m_GuidelinePaths.Count < entries.Length)
-            {
-                m_GuidelinePaths.Add($"guideLineTooltip{m_GuidelinePaths.Count}");
-            }
+            EnsureGuidelinePaths(entries.Length);
 
             float scale = GetLayoutScale();
             if (!m_LayoutScaleLogged)
@@ -96,14 +93,12 @@ namespace HoverColors.Systems
                 m_OccupiedMeasurements.Add(cursorBounds);
             }
 
-            // Keep the verified middle angle fixed on its selected side of the handle.
-            // Starting alignment angles have priority over lengths: the lengths
-            // can slide locally without losing their associated guide segment.
-            if (m_AnchoredMiddleAngle != null)
+            // Reserve every verified PI and its handle before arranging other labels.
+            for (int i = 0; i < m_AnchoredMiddleAngles.Count; i++)
             {
-                m_OccupiedMeasurements.Add(MeasurementRect(m_AnchoredMiddleAngle.position, true, scale));
-                m_OccupiedMeasurements.Add(m_LayoutJointBounds);
+                m_OccupiedMeasurements.Add(MeasurementRect(m_AnchoredMiddleAngles[i].position, true, scale));
             }
+            m_OccupiedMeasurements.AddRange(m_LayoutJointBounds);
 
             int moved = 0;
             int crowded = 0;
@@ -120,7 +115,7 @@ namespace HoverColors.Systems
                     }
 
                     TooltipGroup? group = FindMeasurement(tooltipUI, i, angle);
-                    if (group == null || ReferenceEquals(group, m_AnchoredMiddleAngle))
+                    if (group == null || m_AnchoredMiddleAngles.Contains(group))
                     {
                         continue;
                     }
@@ -179,6 +174,14 @@ namespace HoverColors.Systems
             }
         }
 
+        private void EnsureGuidelinePaths(int count)
+        {
+            while (m_GuidelinePaths.Count < count)
+            {
+                m_GuidelinePaths.Add($"guideLineTooltip{m_GuidelinePaths.Count}");
+            }
+        }
+
         private TooltipGroup? FindMeasurement(TooltipUISystem tooltipUI, int index, bool angle)
         {
             string icon = angle ? "Media/Glyphs/Angle.svg" : "Media/Glyphs/Length.svg";
@@ -220,12 +223,13 @@ namespace HoverColors.Systems
             return true;
         }
 
-        // Approximate native tooltip bounds; actual COHTML text sizes are not
-        // exposed here. Extra padding provides clearance for unit formats.
+        // Estimate visible boxes from 1080p in-game measurements, with modest
+        // padding. Large conservative boxes sent distances too far from their guides.
+        // COHTML does not expose the actual rendered bounds to this C# pass.
         private static Rect MeasurementRect(float2 center, bool angle, float scale)
         {
-            float width = (angle ? 132f : 160f) * scale;
-            float height = 48f * scale;
+            float width = (angle ? 108f : 126f) * scale;
+            float height = 38f * scale;
             return new Rect(center.x - width * 0.5f, center.y - height * 0.5f, width, height);
         }
 
@@ -269,9 +273,41 @@ namespace HoverColors.Systems
                 return best;
             }
 
-            float step = 18f * scale;
-            float maxDistance = 240f * scale;
-            for (int ring = 1; ring <= 12; ring++)
+            // Try the nearest edges of occupied boxes first, rather than
+            // jumping a whole search step past a narrow but usable gap.
+            Rect preferredBounds = MeasurementRect(preferred, angle, scale);
+            float halfWidth = preferredBounds.width * 0.5f;
+            float halfHeight = preferredBounds.height * 0.5f;
+            float maxDistance = 216f * scale;
+            for (int i = 0; i < m_OccupiedMeasurements.Count; i++)
+            {
+                Rect obstacle = m_OccupiedMeasurements[i];
+                for (int side = 0; side < 4; side++)
+                {
+                    float2 candidate = preferred;
+                    switch (side)
+                    {
+                        case 0: candidate.x = obstacle.xMin - halfWidth - scale; break;
+                        case 1: candidate.x = obstacle.xMax + halfWidth + scale; break;
+                        case 2: candidate.y = obstacle.yMin - halfHeight - scale; break;
+                        default: candidate.y = obstacle.yMax + halfHeight + scale; break;
+                    }
+
+                    candidate = ClampToScreen(candidate, angle, scale);
+                    if (math.distancesq(candidate, original) > maxDistance * maxDistance) continue;
+                    float overlap = GetOverlap(MeasurementRect(candidate, angle, scale));
+                    float cost = math.distancesq(candidate, preferred);
+                    if (overlap < bestOverlap || (overlap == bestOverlap && cost < bestCost))
+                    {
+                        best = candidate;
+                        bestOverlap = overlap;
+                        bestCost = cost;
+                    }
+                }
+            }
+
+            float step = 12f * scale;
+            for (int ring = 1; ring <= 18; ring++)
             {
                 for (int y = -ring; y <= ring; y++)
                 {

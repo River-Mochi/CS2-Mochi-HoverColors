@@ -6,7 +6,7 @@
 // Copyright and license notices MUST be preserved.
 // ================= </copyright> ======================
 
-// Phase 2 experiment: move the existing V1/V2 angle label above its control point.
+// Phase 2: place verified intermediate angle labels beside their control points.
 // Do not change road geometry, snapping, guide lines, or the displayed angle.
 
 namespace HoverColors.Systems
@@ -31,9 +31,8 @@ namespace HoverColors.Systems
 
         private GuideLinesSystem? m_MiddleAngleGuideLines;
         private PrefabSystem? m_MiddleAnglePrefabs;
-        private int m_LastMiddleAngleIndex = -1;
-        private string m_MiddleAnglePath = string.Empty;
         private bool m_MiddleAngleLogged;
+        private bool m_MultiAngleLogged;
 
         private void InitializeMiddleAnglePlacement()
         {
@@ -58,31 +57,26 @@ namespace HoverColors.Systems
             NativeList<GuideLinesSystem.TooltipInfo> entries =
                 m_MiddleAngleGuideLines.GetTooltips(out JobHandle guideDependencies);
             guideDependencies.Complete();
-            if (entries.Length == 0)
+            if (entries.Length == 0 || entries.Length > 32)
             {
                 return;
             }
 
             NativeList<ControlPoint> points = netTool.GetControlPoints(out JobHandle pointDependencies);
             pointDependencies.Complete();
-            if (points.Length != 3)
+            bool multiJoint = mode == NetToolSystem.Mode.ComplexCurve && points.Length == 4;
+            if (points.Length != 3 && !multiJoint)
             {
                 return;
             }
 
             // Continuous can synthesize two different intermediate points.
-            // Leave that special path, and all multi-joint curves, entirely vanilla.
+            // Do not assume its generated geometry matches the tool's raw points.
             if (mode == NetToolSystem.Mode.Continuous
                 && math.dot(points[2].m_Direction, points[1].m_Direction) <= -0.01f)
             {
                 return;
             }
-
-            float3 joint = points[1].m_Position;
-            float2 incoming = joint.xz - points[0].m_Position.xz;
-            float2 reverseOutgoing = joint.xz - points[2].m_Position.xz;
-            float incomingLength = math.length(incoming);
-            float outgoingLength = math.length(reverseOutgoing);
 
             // Match the 1.6.4 NetToolGuideLinesJob.DrawControlPoints size rules.
             // The optional prefab lookup is local to this experiment only; a miss
@@ -102,6 +96,43 @@ namespace HoverColors.Systems
                 }
             }
 
+            Camera? camera = Camera.main;
+            if (camera == null || !(snapDistance > 0f)) return;
+
+            EnsureGuidelinePaths(entries.Length);
+            float scale = GetLayoutScale();
+            bool hasCursor = TryGetCursorBounds(tooltipUI, scale, out Rect cursorBounds);
+            for (int jointIndex = 1; jointIndex < points.Length - 1; jointIndex++)
+            {
+                TryPlaceJointAngle(tooltipUI, entries, camera, points[jointIndex - 1].m_Position,
+                    points[jointIndex].m_Position, points[jointIndex + 1].m_Position,
+                    snapDistance, scale, multiJoint, hasCursor, cursorBounds);
+            }
+
+            // Retain the verified three-point reference-angle refinement only.
+            if (!multiJoint && m_AnchoredMiddleAngles.Count == 1)
+            {
+                Vector3 start = camera.WorldToScreenPoint(points[0].m_Position);
+                m_LayoutStart = new float2(start.x, Screen.height - start.y);
+                m_HasLayoutStart = start.z > 0f && math.all(math.isfinite(m_LayoutStart));
+            }
+
+            if (multiJoint && m_AnchoredMiddleAngles.Count == 2 && !m_MultiAngleLogged)
+            {
+                m_MultiAngleLogged = true;
+                LogUtils.Info(() => $"{Mod.ModTag} Road Clutter Phase 2: anchored both Complex curve PI angles");
+            }
+        }
+
+        private void TryPlaceJointAngle(TooltipUISystem tooltipUI,
+            NativeList<GuideLinesSystem.TooltipInfo> entries, Camera camera,
+            float3 previous, float3 joint, float3 next, float snapDistance, float scale,
+            bool multiJoint, bool hasCursor, Rect cursorBounds)
+        {
+            float2 incoming = joint.xz - previous.xz;
+            float2 reverseOutgoing = joint.xz - next.xz;
+            float incomingLength = math.length(incoming);
+            float outgoingLength = math.length(reverseOutgoing);
             float minLength = snapDistance * 0.125f * 7f;
             if (!math.isfinite(incomingLength) || !math.isfinite(outgoingLength)
                 || !(snapDistance > 0f) || !(incomingLength > minLength)
@@ -123,24 +154,25 @@ namespace HoverColors.Systems
             float3 expectedWorldPosition = joint;
             expectedWorldPosition.xz -= math.normalizesafe(dir1 + dir2) * (size * 1.5f);
 
-            // For the ordinary three-point road preview the joint angle is appended
-            // last, after start/snap angles and V1/V2 lengths. Verify its geometry
-            // AND angle so a different 90-degree label cannot be selected by value.
-            int index = entries.Length - 1;
+            // Match both the rounded angle and vanilla world-space anchor.
+            // Four-point curves have two intermediate entries; never identify
+            // a widget by its angle alone, or guess when two entries coincide.
+            int index = -1;
+            for (int i = entries.Length - 1; i >= 0; i--)
+            {
+                GuideLinesSystem.TooltipInfo candidate = entries[i];
+                if (candidate.m_Type != GuideLinesSystem.TooltipType.Angle
+                    || candidate.m_Value != expectedAngle
+                    || !(math.distancesq(candidate.m_Position, expectedWorldPosition)
+                        <= kWorldPositionTolerance * kWorldPositionTolerance))
+                {
+                    continue;
+                }
+                if (index >= 0) return;
+                index = i;
+            }
+            if (index < 0) return;
             GuideLinesSystem.TooltipInfo entry = entries[index];
-            if (entry.m_Type != GuideLinesSystem.TooltipType.Angle
-                || entry.m_Value != expectedAngle
-                || !(math.distancesq(entry.m_Position, expectedWorldPosition)
-                    <= kWorldPositionTolerance * kWorldPositionTolerance))
-            {
-                return;
-            }
-
-            Camera? camera = Camera.main;
-            if (camera == null)
-            {
-                return;
-            }
 
             Vector3 oldScreen = camera.WorldToScreenPoint(entry.m_Position);
             Vector3 jointScreen = camera.WorldToScreenPoint(joint);
@@ -150,7 +182,14 @@ namespace HoverColors.Systems
             }
 
             float2 oldPosition = new(oldScreen.x, Screen.height - oldScreen.y);
-            float scale = GetLayoutScale();
+            TooltipGroup? group = FindMeasurement(tooltipUI, index, true);
+            if (group == null || m_AnchoredMiddleAngles.Contains(group)
+                || group.children[0] is not FloatTooltip angle || angle.value != entry.m_Value
+                || !(math.distancesq(group.position, oldPosition)
+                    <= kScreenPositionTolerance * kScreenPositionTolerance))
+            {
+                return;
+            }
             float radius = snapDistance * 0.125f * 2.5f;
             // The handle is a world-space circle. Its apparent radius grows when
             // zooming in, so a fixed pixel offset alone cannot preserve clearance.
@@ -173,72 +212,44 @@ namespace HoverColors.Systems
                 }
             }
 
-            // Center-to-circle-edge distance: retain the estimated 24px half-height
-            // plus 2px of breathing room, scaled with game text and screen size.
+            // Keep the successful PI clearance while shrinking collision boxes.
             float clearance = 26f * scale;
             float offset = math.max(kMiddleAngleOffsetAt1080 * scale, top - jointScreen.y + clearance);
             float2 above = new(jointScreen.x, Screen.height - jointScreen.y - offset);
             float2 below = new(jointScreen.x, Screen.height - bottom + clearance);
-            Vector3 startScreen = camera.WorldToScreenPoint(points[0].m_Position);
-            Vector3 endScreen = camera.WorldToScreenPoint(points[2].m_Position);
+            Vector3 startScreen = camera.WorldToScreenPoint(previous);
+            Vector3 endScreen = camera.WorldToScreenPoint(next);
             // Choose the outward side: above for a high apex, below for a low
             // apex. For side-facing curves retain above as the stable default.
             bool preferBelow = startScreen.z > 0f && endScreen.z > 0f
-                && jointScreen.y < math.min(startScreen.y, endScreen.y) - 18f * scale;
-            bool hasCursor = TryGetCursorBounds(tooltipUI, scale, out Rect cursorBounds);
+                && (multiJoint
+                    ? jointScreen.y < (startScreen.y + endScreen.y) * 0.5f
+                    : jointScreen.y < math.min(startScreen.y, endScreen.y) - 18f * scale);
             float aboveCost = MiddleSideCost(above, tooltipUI, oldPosition, scale, hasCursor, cursorBounds);
             float belowCost = MiddleSideCost(below, tooltipUI, oldPosition, scale, hasCursor, cursorBounds);
             if (float.IsPositiveInfinity(aboveCost) && float.IsPositiveInfinity(belowCost)) return;
             // The other labels can move, so a modest overlap should not make
             // the anchor flicker between sides. Cursor/edge obstruction wins.
-            float preference = 0.5f * 132f * 48f * scale * scale;
+            Rect labelBounds = MeasurementRect(above, true, scale);
+            float preference = (multiJoint ? 0.75f : 0.5f) * labelBounds.width * labelBounds.height;
             float2 newPosition = belowCost + (preferBelow ? 0f : preference)
                 < aboveCost + (preferBelow ? preference : 0f) ? below : above;
 
-            // Both vanilla and Extended Tooltip use the index as the widget path.
-            // Cache the path instead of allocating one every frame.
-            if (m_LastMiddleAngleIndex != index)
+            // Only reposition the verified existing widget, never its value.
+            group.position = newPosition;
+            group.SetChildrenChanged();
+            m_AnchoredMiddleAngles.Add(group);
+            float padding = 4f * scale;
+            m_LayoutJointBounds.Add(new Rect(left - padding, Screen.height - top - padding,
+                right - left + padding * 2f, top - bottom + padding * 2f));
+            if (!m_MiddleAngleLogged)
             {
-                m_LastMiddleAngleIndex = index;
-                m_MiddleAnglePath = $"guideLineTooltip{index}";
-            }
-
-            for (int i = 0; i < tooltipUI.groups.Count; i++)
-            {
-                TooltipGroup group = tooltipUI.groups[i];
-                if (group.path != m_MiddleAnglePath
-                    || group.children.Count != 1
-                    || group.children[0] is not FloatTooltip angle
-                    || angle.unit != "angle"
-                    || angle.icon != "Media/Glyphs/Angle.svg"
-                    || angle.value != entry.m_Value
-                    || !(math.distancesq(group.position, oldPosition)
-                        <= kScreenPositionTolerance * kScreenPositionTolerance))
-                {
-                    continue;
-                }
-
-                // Only reposition the existing widget. Vanilla resets the position
-                // next frame; with the filter OFF this method is never called.
-                group.position = newPosition;
-                group.SetChildrenChanged();
-                m_AnchoredMiddleAngle = group;
-                float padding = 4f * scale;
-                m_LayoutJointBounds = new Rect(left - padding, Screen.height - top - padding,
-                    right - left + padding * 2f, top - bottom + padding * 2f);
-                m_LayoutStart = new float2(startScreen.x, Screen.height - startScreen.y);
-                m_HasLayoutStart = startScreen.z > 0f && math.all(math.isfinite(m_LayoutStart));
-                if (!m_MiddleAngleLogged)
-                {
-                    m_MiddleAngleLogged = true;
-                    LogUtils.Info(() => $"{Mod.ModTag} Road Clutter Phase 2: moved middle {expectedAngle}° angle {(newPosition.y < Screen.height - jointScreen.y ? "above" : "below")} control point ({mode})");
-                }
-
-                return;
+                m_MiddleAngleLogged = true;
+                LogUtils.Info(() => $"{Mod.ModTag} Road Clutter Phase 2: moved middle {expectedAngle}° angle {(newPosition.y < Screen.height - jointScreen.y ? "above" : "below")} control point");
             }
         }
 
-        private static float MiddleSideCost(float2 center, TooltipUISystem tooltipUI,
+        private float MiddleSideCost(float2 center, TooltipUISystem tooltipUI,
             float2 oldPosition, float scale, bool hasCursor, Rect cursorBounds)
         {
             if (!math.all(math.isfinite(center))) return float.PositiveInfinity;
@@ -249,11 +260,28 @@ namespace HoverColors.Systems
                 return float.PositiveInfinity;
             }
 
-            float cost = hasCursor ? OverlapArea(bounds, cursorBounds) * 10f : 0f;
+            // Never lock two PI labels on top of each other, a reserved handle,
+            // or the cursor. If neither centered side fits, the general layout
+            // can still search inward and around the existing measurements.
+            if (hasCursor && OverlapArea(bounds, cursorBounds) > 0f)
+            {
+                return float.PositiveInfinity;
+            }
+            for (int i = 0; i < m_AnchoredMiddleAngles.Count; i++)
+            {
+                if (OverlapArea(bounds, MeasurementRect(m_AnchoredMiddleAngles[i].position, true, scale)) > 0f
+                    || OverlapArea(bounds, m_LayoutJointBounds[i]) > 0f)
+                {
+                    return float.PositiveInfinity;
+                }
+            }
+
+            float cost = 0f;
             for (int i = 0; i < tooltipUI.groups.Count; i++)
             {
                 TooltipGroup group = tooltipUI.groups[i];
-                if (group.children.Count != 1 || group.children[0] is not FloatTooltip value
+                if (m_AnchoredMiddleAngles.Contains(group)
+                    || group.children.Count != 1 || group.children[0] is not FloatTooltip value
                     || group.horizontalAlignment != TooltipGroup.Alignment.Center
                     || group.verticalAlignment != TooltipGroup.Alignment.Center
                     || math.distancesq(group.position, oldPosition) <= 4f)

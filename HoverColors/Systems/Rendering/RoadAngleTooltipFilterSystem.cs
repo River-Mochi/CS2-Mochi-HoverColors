@@ -109,7 +109,8 @@ namespace HoverColors.Systems
             // Phase 2: reposition a verified middle angle without changing its value.
             if (m_ToolSystem?.activeTool is NetToolSystem netTool)
             {
-                m_AnchoredMiddleAngle = null;
+                m_AnchoredMiddleAngles.Clear();
+                m_LayoutJointBounds.Clear();
                 m_HasLayoutStart = false;
                 TryMoveMiddleAngle(netTool, m_TooltipUISystem);
                 ArrangeCurveMeasurements(netTool, m_TooltipUISystem);
