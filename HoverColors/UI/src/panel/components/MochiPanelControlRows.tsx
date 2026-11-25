@@ -747,13 +747,13 @@ export const MochiPanelControlRows = ({
             <SideTooltip tooltip={tt(text.tooltipAngleArcColor)} side="left">
               <div
                 ref={angleArcPickerRef}
-                className={styles.guidelineColorShell}
+                className={`${styles.guidelineColorShell} ${styles.angleArcColorShell}`}
                 style={compactShellStyle(angleArcColor, angleArcHovered)}
                 onMouseOver={() => {
                   setAngleArcHovered(true);
                   updateAngleArcPickerDirection();
                 }}
-                onMouseMove={() => setAngleArcHovered(true)}
+                onMouseMove={() => { if (!angleArcHovered) setAngleArcHovered(true); }}
                 onMouseLeave={() => setAngleArcHovered(false)}
                 onMouseDown={updateAngleArcPickerDirection}
               >

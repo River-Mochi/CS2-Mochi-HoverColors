@@ -14,6 +14,18 @@ exports.CSSPresencePlugin = class CSSPresencePlugin {
           );
           const hasCSS = cssFiles.length > 0;
 
+          for (const file of cssFiles) {
+            const css = String(compilation.getAsset(file).source.source())
+              .replace(/\/\*[\s\S]*?\*\//g, "");
+            const unsupported = css.match(/:not\s*\(/);
+            const shorthand = css.match(/(?:^|[;{])\s*(?:border(?:-(?:top|right|bottom|left|color|width|style|radius))?|margin|padding|background|flex|transition|overflow|gap|font|animation|inset|outline)\s*:/);
+            if (unsupported || shorthand) {
+              compilation.errors.push(new Error(
+                `HC CSS compatibility: ${file} contains ${(unsupported || shorthand)[0].trim()}. Use explicit supported properties/selectors.`
+              ));
+            }
+          }
+
           // Inject the `hasCSS` export into the main module source
           for (const chunk of compilation.chunks) {
             for (const file of chunk.files) {
