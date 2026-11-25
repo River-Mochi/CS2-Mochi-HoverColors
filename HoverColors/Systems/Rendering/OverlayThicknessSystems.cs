@@ -337,6 +337,9 @@ namespace HoverColors.Systems
 
             private void ScaleRange(NativeList<OverlayRenderSystem.CurveData> curves, int start, bool projected)
             {
+                // Match both halves before scaling/recoloring the first half.
+                // The second half is still untouched when its iteration arrives.
+                int rightAngleSecond = -1;
                 for (int i = math.clamp(start, 0, curves.Length); i < curves.Length; i++)
                 {
                     OverlayRenderSystem.CurveData curve = curves[i];
@@ -344,10 +347,20 @@ namespace HoverColors.Systems
                     {
                         bool highSolid = !projected && HasHighPriorityColor
                             && !IsCircle(curve) && MatchesHighPriorityColor(curve);
-                        bool angleArc = AngleArcWidth > 0f && highSolid
-                            && curve.m_DashLengths.x == 0f
-                            && math.abs(curve.m_Size.x - AngleArcWidth) <= 0.001f
-                            && IsCurved(curve);
+                        bool angleArc = false;
+                        if (!projected && AngleArcWidth > 0f && highSolid && IsAngleStroke(curve))
+                        {
+                            if (i == rightAngleSecond || IsCurved(curve))
+                            {
+                                angleArc = true;
+                            }
+                            else if (i + 1 < curves.Length
+                                && IsRightAnglePair(curve, curves[i + 1]))
+                            {
+                                angleArc = true;
+                                rightAngleSecond = i + 1;
+                            }
+                        }
                         if (Scale < 0.999f && (curve.m_DashLengths.x > 0f || highSolid))
                         {
                             // Solid high-priority angle guides share the dashed swatch. Exclude
@@ -407,6 +420,57 @@ namespace HoverColors.Systems
                     // Scaling only m_Size avoids changing snap geometry or overlay culling.
                     curves[i] = curve;
                 }
+            }
+
+            private bool IsAngleStroke(OverlayRenderSystem.CurveData curve)
+            {
+                return HasHighPriorityColor && MatchesHighPriorityColor(curve)
+                    && !IsCircle(curve) && curve.m_DashLengths.x == 0f
+                    && math.abs(curve.m_Size.x - AngleArcWidth) <= 0.001f
+                    && curve.m_OutlineWidth == 0f
+                    && curve.m_FillStyle == 0f && curve.m_DepthFadeStyle == 0f;
+            }
+
+            private bool IsRightAnglePair(OverlayRenderSystem.CurveData first,
+                OverlayRenderSystem.CurveData second)
+            {
+                // Vanilla DrawAngleIndicator(angle == 90) emits two consecutive
+                // straight strokes of lengths size - width/2 and size + width/2.
+                // Their near-corner endpoints differ by half a width along each
+                // direction. Match that exact geometry, not merely a 90-degree
+                // bend between unrelated lines. Angles are rounded in vanilla.
+                if (!IsAngleStroke(second) || IsCurved(first) || IsCurved(second))
+                {
+                    return false;
+                }
+
+                float2 a = new(first.m_Curve.m00, first.m_Curve.m20);
+                float2 b = new(first.m_Curve.m03, first.m_Curve.m23);
+                float2 c = new(second.m_Curve.m00, second.m_Curve.m20);
+                float2 d = new(second.m_Curve.m03, second.m_Curve.m23);
+                float2 firstDir = b - a;
+                float2 secondDir = d - c;
+                float firstLength = math.length(firstDir);
+                float secondLength = math.length(secondDir);
+                float width = AngleArcWidth;
+                // DrawAngleIndicator is only invoked when both source lines
+                // exceed seven widths; its square size exceeds 3.5 widths.
+                float tolerance = math.max(0.015f, width * 0.04f);
+                if (!(firstLength >= width * 3f - tolerance)
+                    || !(math.abs(secondLength - firstLength - width) <= tolerance))
+                {
+                    return false;
+                }
+
+                firstDir /= firstLength;
+                secondDir /= secondLength;
+                if (!(math.abs(math.dot(firstDir, secondDir)) <= 0.012f))
+                {
+                    return false;
+                }
+
+                float2 expectedGap = (firstDir - secondDir) * (width * 0.5f);
+                return math.distancesq(c - b, expectedGap) <= tolerance * tolerance;
             }
 
             private static bool IsCurved(OverlayRenderSystem.CurveData curve)
@@ -598,8 +662,9 @@ namespace HoverColors.Systems
             float dashedScale = Mod.Settings?.GuidelineDashedThicknessScale ?? 1f;
             float surfaceScale = Mod.Settings?.SurfaceBorderThicknessScale ?? 1f;
             float angleArcWidth = 0f;
-            // Only roads/paths with the clutter filter enabled. Right-angle
-            // square marks and straight reference rays remain vanilla-colored.
+            // Only roads/paths with the clutter filter enabled. Curved angle
+            // marks and verified right-angle stroke pairs use the angle swatch.
+            // Straight reference rays and 180-degree marks stay unchanged.
             if (RoadAngleTooltipFilterSystem.ShouldFilter(m_ToolSystem)
                 && m_ToolSystem?.activeTool is NetToolSystem netTool
                 && m_PrefabSystem != null && netTool.prefab != null
