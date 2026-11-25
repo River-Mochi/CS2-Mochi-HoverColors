@@ -31,6 +31,7 @@ namespace HoverColors.Systems
         private Rect m_LayoutJointBounds;
         private bool m_HasLayoutStart;
         private bool m_LayoutLogged;
+        private bool m_LayoutCrowdedLogged;
 
         private static float GetLayoutScale()
         {
@@ -41,7 +42,8 @@ namespace HoverColors.Systems
         {
             NetToolSystem.Mode mode = netTool.actualMode;
             if (m_MiddleAngleGuideLines == null || tooltipUI.groups.Count < 1
-                || (mode != NetToolSystem.Mode.SimpleCurve
+                || (mode != NetToolSystem.Mode.Straight
+                    && mode != NetToolSystem.Mode.SimpleCurve
                     && mode != NetToolSystem.Mode.ComplexCurve
                     && mode != NetToolSystem.Mode.Continuous))
             {
@@ -62,6 +64,18 @@ namespace HoverColors.Systems
             }
 
             float scale = GetLayoutScale();
+            if (mode == NetToolSystem.Mode.Straight)
+            {
+                NativeList<ControlPoint> points = netTool.GetControlPoints(out JobHandle pointDependencies);
+                pointDependencies.Complete();
+                Camera? camera = Camera.main;
+                if (points.Length == 2 && camera != null)
+                {
+                    Vector3 start = camera.WorldToScreenPoint(points[0].m_Position);
+                    m_LayoutStart = new float2(start.x, Screen.height - start.y);
+                    m_HasLayoutStart = start.z > 0f && math.all(math.isfinite(m_LayoutStart));
+                }
+            }
             m_OccupiedMeasurements.Clear();
             // TooltipUISystem sets mouseGroup.position AFTER this update phase.
             // Reserve its predicted on-screen rectangle, not last frame's position.
@@ -70,8 +84,9 @@ namespace HoverColors.Systems
                 m_OccupiedMeasurements.Add(cursorBounds);
             }
 
-            // Keep the verified middle angle fixed above its handle. Lengths have
-            // next priority; starting alignment angles move only when useful.
+            // Keep the verified middle angle fixed on its selected side of the handle.
+            // Starting alignment angles have priority over lengths: the lengths
+            // can slide locally without losing their associated guide segment.
             if (m_AnchoredMiddleAngle != null)
             {
                 m_OccupiedMeasurements.Add(MeasurementRect(m_AnchoredMiddleAngle.position, true, scale));
@@ -79,13 +94,14 @@ namespace HoverColors.Systems
             }
 
             int moved = 0;
+            int crowded = 0;
             for (int pass = 0; pass < 2; pass++)
             {
                 for (int i = 0; i < entries.Length; i++)
                 {
                     GuideLinesSystem.TooltipInfo entry = entries[i];
                     bool angle = entry.m_Type == GuideLinesSystem.TooltipType.Angle;
-                    if ((pass == 0 && angle) || (pass == 1 && !angle)
+                    if ((pass == 0 && !angle) || (pass == 1 && angle)
                         || (!angle && entry.m_Type != GuideLinesSystem.TooltipType.Length))
                     {
                         continue;
@@ -104,7 +120,7 @@ namespace HoverColors.Systems
                     }
 
                     // Never pull a genuinely off-screen guide into the viewport.
-                    float margin = 50f * scale;
+                    float margin = 90f * scale;
                     if (original.x < -margin || original.x > Screen.width + margin
                         || original.y < -margin || original.y > Screen.height + margin)
                     {
@@ -119,13 +135,16 @@ namespace HoverColors.Systems
                         // the arc radius; move distant labels slightly toward it.
                         float2 radial = original - m_LayoutStart;
                         float distance = math.length(radial);
-                        if (distance > 120f * scale)
+                        if (distance > 85f * scale)
                         {
-                            preferred -= radial / distance * math.min(distance * 0.2f, 40f * scale);
+                            // Aim nearer the arc, not at the start point itself.
+                            float shift = math.min(distance * 0.30f, 100f * scale);
+                            preferred -= radial / distance * shift;
                         }
                     }
 
-                    float2 position = FindClearPosition(original, preferred, angle, scale);
+                    float2 position = FindClearPosition(original, preferred, angle, scale, out bool clear);
+                    if (!clear) crowded++;
                     m_OccupiedMeasurements.Add(MeasurementRect(position, angle, scale));
                     if (!position.Equals(original))
                     {
@@ -139,7 +158,12 @@ namespace HoverColors.Systems
             if (moved > 0 && !m_LayoutLogged)
             {
                 m_LayoutLogged = true;
-                LogUtils.Info(() => $"{Mod.ModTag} Road Clutter Phase 2: adjusted {moved} measurement label positions");
+                LogUtils.Info(() => $"{Mod.ModTag} Road Clutter Phase 2: adjusted {moved} measurement label positions; screen={Screen.width}x{Screen.height}, scale={scale:F2}");
+            }
+            if (crowded > 0 && !m_LayoutCrowdedLogged)
+            {
+                m_LayoutCrowdedLogged = true;
+                LogUtils.Info(() => $"{Mod.ModTag} Road Clutter Phase 2: {crowded} crowded labels after bounded search ({mode}, screen={Screen.width}x{Screen.height})");
             }
         }
 
@@ -188,58 +212,85 @@ namespace HoverColors.Systems
         // exposed here. Extra padding provides clearance for unit formats.
         private static Rect MeasurementRect(float2 center, bool angle, float scale)
         {
-            float width = (angle ? 110f : 142f) * scale;
-            float height = 40f * scale;
+            float width = (angle ? 132f : 160f) * scale;
+            float height = 48f * scale;
             return new Rect(center.x - width * 0.5f, center.y - height * 0.5f, width, height);
         }
 
-        private float2 FindClearPosition(float2 original, float2 preferred, bool angle, float scale)
+        private static float2 ClampToScreen(float2 point, bool angle, float scale)
         {
-            // A bounded local search keeps labels associated with their own
-            // guideline. Never hide a label just because no free slot exists.
-            float2 best = original;
-            float bestCost = float.PositiveInfinity;
-            for (int y = -3; y <= 3; y++)
+            Rect bounds = MeasurementRect(point, angle, scale);
+            float halfWidth = bounds.width * 0.5f + 4f;
+            float halfHeight = bounds.height * 0.5f + 4f;
+            return new float2(
+                Mathf.Clamp(point.x, halfWidth, math.max(halfWidth, Screen.width - halfWidth)),
+                Mathf.Clamp(point.y, halfHeight, math.max(halfHeight, Screen.height - halfHeight)));
+        }
+
+        private static float OverlapArea(Rect a, Rect b)
+        {
+            return math.max(0f, math.min(a.xMax, b.xMax) - math.max(a.xMin, b.xMin))
+                * math.max(0f, math.min(a.yMax, b.yMax) - math.max(a.yMin, b.yMin));
+        }
+
+        private float GetOverlap(Rect bounds)
+        {
+            float area = 0f;
+            for (int i = 0; i < m_OccupiedMeasurements.Count; i++)
             {
-                for (int x = -3; x <= 3; x++)
+                area += OverlapArea(bounds, m_OccupiedMeasurements[i]);
+            }
+            return area;
+        }
+
+        private float2 FindClearPosition(float2 original, float2 preferred, bool angle, float scale, out bool clear)
+        {
+            // First attempt the desired position. If crowded, expand in rings
+            // around it. Clamping also keeps partially clipped edge labels visible.
+            preferred = ClampToScreen(preferred, angle, scale);
+            float2 best = preferred;
+            float bestOverlap = GetOverlap(MeasurementRect(best, angle, scale));
+            float bestCost = 0f;
+            if (bestOverlap == 0f)
+            {
+                clear = true;
+                return best;
+            }
+
+            float step = 18f * scale;
+            float maxDistance = 240f * scale;
+            for (int ring = 1; ring <= 12; ring++)
+            {
+                for (int y = -ring; y <= ring; y++)
                 {
-                    float2 candidate = preferred + new float2(x, y) * (20f * scale);
-                    Rect bounds = MeasurementRect(candidate, angle, scale);
-                    if (bounds.xMin < 4f || bounds.yMin < 4f
-                        || bounds.xMax > Screen.width - 4f || bounds.yMax > Screen.height - 4f
-                        || math.distancesq(candidate, original) > 110f * scale * (110f * scale))
+                    for (int x = -ring; x <= ring; x++)
                     {
-                        continue;
-                    }
+                        if (math.abs(x) != ring && math.abs(y) != ring) continue;
+                        float2 candidate = ClampToScreen(preferred + new float2(x, y) * step, angle, scale);
+                        if (math.distancesq(candidate, original) > maxDistance * maxDistance) continue;
 
-                    bool overlaps = false;
-                    for (int i = 0; i < m_OccupiedMeasurements.Count; i++)
-                    {
-                        if (bounds.Overlaps(m_OccupiedMeasurements[i]))
+                        float overlap = GetOverlap(MeasurementRect(candidate, angle, scale));
+                        float cost = math.distancesq(candidate, preferred);
+                        if (overlap < bestOverlap || (overlap == bestOverlap && cost < bestCost))
                         {
-                            overlaps = true;
-                            break;
-                        }
-                    }
-
-                    if (overlaps)
-                    {
-                        continue;
-                    }
-
-                    float cost = math.distancesq(candidate, preferred);
-                    if (cost < bestCost)
-                    {
-                        best = candidate;
-                        bestCost = cost;
-                        if (cost == 0f)
-                        {
-                            return best;
+                            best = candidate;
+                            bestOverlap = overlap;
+                            bestCost = cost;
                         }
                     }
                 }
+
+                if (bestOverlap == 0f)
+                {
+                    // Next ring can only improve on a diagonal solution.
+                    float nextDistance = (ring + 1) * step;
+                    if (bestCost <= nextDistance * nextDistance) break;
+                }
             }
 
+            clear = bestOverlap == 0f;
+            // Never drop a measurement; least-overlapping fallback is preferable
+            // to the old behavior of restoring a fully obscured vanilla label.
             return best;
         }
     }

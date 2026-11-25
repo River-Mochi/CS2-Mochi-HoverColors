@@ -174,23 +174,25 @@ namespace HoverColors.Systems
                 }
             }
 
-            float clearance = 25f * scale;
+            float clearance = 30f * scale;
             float offset = math.max(kMiddleAngleOffsetAt1080 * scale, top - jointScreen.y + clearance);
-            float2 newPosition = new(jointScreen.x, Screen.height - jointScreen.y - offset);
-            // Prefer above, centered on X. If the top edge has no room, place
-            // below the circle rather than clipping or covering it.
-            if (newPosition.y < clearance
-                || (TryGetCursorBounds(tooltipUI, scale, out Rect cursorBounds)
-                    && MeasurementRect(newPosition, true, scale).Overlaps(cursorBounds)))
-            {
-                newPosition.y = Screen.height - bottom + clearance;
-            }
-            if (!math.all(math.isfinite(newPosition))
-                || newPosition.x < 55f * scale || newPosition.x > Screen.width - 55f * scale
-                || newPosition.y < clearance || newPosition.y > Screen.height - clearance)
-            {
-                return;
-            }
+            float2 above = new(jointScreen.x, Screen.height - jointScreen.y - offset);
+            float2 below = new(jointScreen.x, Screen.height - bottom + clearance);
+            Vector3 startScreen = camera.WorldToScreenPoint(points[0].m_Position);
+            Vector3 endScreen = camera.WorldToScreenPoint(points[2].m_Position);
+            // Choose the outward side: above for a high apex, below for a low
+            // apex. For side-facing curves retain above as the stable default.
+            bool preferBelow = startScreen.z > 0f && endScreen.z > 0f
+                && jointScreen.y < math.min(startScreen.y, endScreen.y) - 18f * scale;
+            bool hasCursor = TryGetCursorBounds(tooltipUI, scale, out Rect cursorBounds);
+            float aboveCost = MiddleSideCost(above, tooltipUI, oldPosition, scale, hasCursor, cursorBounds);
+            float belowCost = MiddleSideCost(below, tooltipUI, oldPosition, scale, hasCursor, cursorBounds);
+            if (float.IsPositiveInfinity(aboveCost) && float.IsPositiveInfinity(belowCost)) return;
+            // The other labels can move, so a modest overlap should not make
+            // the anchor flicker between sides. Cursor/edge obstruction wins.
+            float preference = 0.5f * 132f * 48f * scale * scale;
+            float2 newPosition = belowCost + (preferBelow ? 0f : preference)
+                < aboveCost + (preferBelow ? preference : 0f) ? below : above;
 
             // Both vanilla and Extended Tooltip use the index as the widget path.
             // Cache the path instead of allocating one every frame.
@@ -223,17 +225,48 @@ namespace HoverColors.Systems
                 float padding = 4f * scale;
                 m_LayoutJointBounds = new Rect(left - padding, Screen.height - top - padding,
                     right - left + padding * 2f, top - bottom + padding * 2f);
-                Vector3 startScreen = camera.WorldToScreenPoint(points[0].m_Position);
                 m_LayoutStart = new float2(startScreen.x, Screen.height - startScreen.y);
                 m_HasLayoutStart = startScreen.z > 0f && math.all(math.isfinite(m_LayoutStart));
                 if (!m_MiddleAngleLogged)
                 {
                     m_MiddleAngleLogged = true;
-                    LogUtils.Info(() => $"{Mod.ModTag} Road Clutter Phase 2: moved middle {expectedAngle}° angle above control point ({mode})");
+                    LogUtils.Info(() => $"{Mod.ModTag} Road Clutter Phase 2: moved middle {expectedAngle}° angle {(newPosition.y < Screen.height - jointScreen.y ? "above" : "below")} control point ({mode})");
                 }
 
                 return;
             }
+        }
+
+        private static float MiddleSideCost(float2 center, TooltipUISystem tooltipUI,
+            float2 oldPosition, float scale, bool hasCursor, Rect cursorBounds)
+        {
+            if (!math.all(math.isfinite(center))) return float.PositiveInfinity;
+            Rect bounds = MeasurementRect(center, true, scale);
+            if (bounds.xMin < 4f || bounds.yMin < 4f
+                || bounds.xMax > Screen.width - 4f || bounds.yMax > Screen.height - 4f)
+            {
+                return float.PositiveInfinity;
+            }
+
+            float cost = hasCursor ? OverlapArea(bounds, cursorBounds) * 10f : 0f;
+            for (int i = 0; i < tooltipUI.groups.Count; i++)
+            {
+                TooltipGroup group = tooltipUI.groups[i];
+                if (group.children.Count != 1 || group.children[0] is not FloatTooltip value
+                    || group.horizontalAlignment != TooltipGroup.Alignment.Center
+                    || group.verticalAlignment != TooltipGroup.Alignment.Center
+                    || math.distancesq(group.position, oldPosition) <= 4f)
+                {
+                    continue;
+                }
+
+                bool angle = value.icon == "Media/Glyphs/Angle.svg";
+                if (angle || value.icon == "Media/Glyphs/Length.svg")
+                {
+                    cost += OverlapArea(bounds, MeasurementRect(group.position, angle, scale));
+                }
+            }
+            return cost;
         }
     }
 }
