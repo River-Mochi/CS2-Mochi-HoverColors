@@ -22,6 +22,7 @@
   "HoverColors.UI.Tooltip.ResetSurfaceBorderThickness": "Đặt lại viền và chấm nối bề mặt.",
   "HoverColors.UI.Tooltip.ExtractorBorderThickness": "Độ dày viền khu khai thác. 1.0 = mặc định; giảm để mỏng. Chấm giữ nguyên.",
   "HoverColors.UI.Tooltip.ResetExtractorBorderThickness": "Đặt lại viền khu khai thác.",
+  "HoverColors.UI.Tooltip.AngleArcColor": "Màu cung góc (khi bật bộ lọc đường). Dùng độ mờ của đường dẫn hướng.",
   "HoverColors.UI.Tooltip.RoadAngleTooltipsOn": "Lọc gợi ý đường: hiện/ẩn chi phí, Đặt/Hoàn tác và chế độ.\nGiữ góc và khoảng cách V1/V2. Bên con trỏ: độ dốc trước, rồi tổng chiều dài đường.",
   "HoverColors.UI.Tooltip.RoadAngleTooltipsOff": "Lọc gợi ý đường: hiện/ẩn chi phí, Đặt/Hoàn tác và chế độ.\nGiữ góc và khoảng cách V1/V2. Bên con trỏ: độ dốc trước, rồi tổng chiều dài đường.",
   "HoverColors.UI.Tooltip.GuidelineDashedThickness": "Độ dày nét đứt và đường góc. 1.0 = mặc định; giảm để mỏng. Xem trước đường không đổi.",

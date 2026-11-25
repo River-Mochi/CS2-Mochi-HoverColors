@@ -22,6 +22,7 @@
   "HoverColors.UI.Tooltip.ResetSurfaceBorderThickness": "重設地表工具邊框和連接點。",
   "HoverColors.UI.Tooltip.ExtractorBorderThickness": "採掘區邊框粗細。1.0 = 遊戲預設；調低變細，連接點不變。",
   "HoverColors.UI.Tooltip.ResetExtractorBorderThickness": "重設採掘區邊框粗細。",
+  "HoverColors.UI.Tooltip.AngleArcColor": "角度弧線顏色（道路提示精簡開啟時）。沿用輔助線透明度。",
   "HoverColors.UI.Tooltip.RoadAngleTooltipsOn": "道路雜項提示篩選：顯示/隱藏費用、放置/復原和道路模式。\n保留角度與 V1/V2 距離。游標旁先顯示坡度，下方顯示道路總長度。",
   "HoverColors.UI.Tooltip.RoadAngleTooltipsOff": "道路雜項提示篩選：顯示/隱藏費用、放置/復原和道路模式。\n保留角度與 V1/V2 距離。游標旁先顯示坡度，下方顯示道路總長度。",
   "HoverColors.UI.Tooltip.GuidelineDashedThickness": "虛線和角度輔助線粗細。1.0 = 預設；調低變細，不影響道路預覽。",

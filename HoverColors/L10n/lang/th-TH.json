@@ -22,6 +22,7 @@
   "HoverColors.UI.Tooltip.ResetSurfaceBorderThickness": "รีเซ็ตขอบและจุดต่อของพื้นผิว",
   "HoverColors.UI.Tooltip.ExtractorBorderThickness": "ความหนาขอบพื้นที่ขุด 1.0 = ค่าเกม ลดลง = บางลง จุดต่อคงเดิม",
   "HoverColors.UI.Tooltip.ResetExtractorBorderThickness": "รีเซ็ตขอบพื้นที่ขุด",
+  "HoverColors.UI.Tooltip.AngleArcColor": "สีส่วนโค้งมุม (เมื่อเปิดตัวกรองถนน) ใช้ความทึบของเส้นไกด์",
   "HoverColors.UI.Tooltip.RoadAngleTooltipsOn": "ตัวกรองข้อความถนน: แสดง/ซ่อนราคา วาง/ย้อนกลับ และโหมดถนน\nคงมุมและระยะ V1/V2 ไว้ ข้างเคอร์เซอร์แสดงความชันก่อน แล้วตามด้วยความยาวรวม",
   "HoverColors.UI.Tooltip.RoadAngleTooltipsOff": "ตัวกรองข้อความถนน: แสดง/ซ่อนราคา วาง/ย้อนกลับ และโหมดถนน\nคงมุมและระยะ V1/V2 ไว้ ข้างเคอร์เซอร์แสดงความชันก่อน แล้วตามด้วยความยาวรวม",
   "HoverColors.UI.Tooltip.GuidelineDashedThickness": "ความหนาเส้นประและเส้นช่วยวัดมุม 1.0 = ค่าเกม ลดลง = บางลง ไม่เปลี่ยนภาพถนน",
