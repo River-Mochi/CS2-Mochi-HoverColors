@@ -34,6 +34,7 @@ namespace HoverColors.UI
             AddBinding(new TriggerBinding<float>(Mod.ModId, "SetGuidelineDashedThickness", SetGuidelineDashedThickness));
             AddBinding(new TriggerBinding(Mod.ModId, "ResetGuidelineDashedThickness", ResetGuidelineDashedThickness));
             AddBinding(new TriggerBinding(Mod.ModId, "ToggleRoadAngleTooltips", ToggleRoadAngleTooltips));
+            AddBinding(new TriggerBinding<float, float, float>(Mod.ModId, "SetAngleArcColor", SetAngleArcColor));
             AddBinding(new TriggerBinding<int>(Mod.ModId, "SetGuidelineOpacity", SetGuidelineOpacity));
             AddBinding(new TriggerBinding<float, float, float, float>(Mod.ModId, "SetGuidelineLinesColor", SetGuidelineLinesColor));
             AddBinding(new TriggerBinding<float, float, float, float>(Mod.ModId, "SetGuidelinePreviewColor", SetGuidelinePreviewColor));
@@ -536,6 +537,23 @@ namespace HoverColors.UI
             settings.OwnerG = owner.g;
             settings.OwnerB = owner.b;
             settings.OwnerA = owner.a;
+            ApplySaveAndSync(settings);
+        }
+
+        private void SetAngleArcColor(float r, float g, float b)
+        {
+            HoverColorsSettings? settings = Mod.Settings;
+            if (settings == null) return;
+
+            r = Clamp01(r);
+            g = Clamp01(g);
+            b = Clamp01(b);
+            if (ApproxEqual(settings.AngleArcR, r) && ApproxEqual(settings.AngleArcG, g)
+                && ApproxEqual(settings.AngleArcB, b)) return;
+
+            settings.AngleArcR = r;
+            settings.AngleArcG = g;
+            settings.AngleArcB = b;
             ApplySaveAndSync(settings);
         }
 

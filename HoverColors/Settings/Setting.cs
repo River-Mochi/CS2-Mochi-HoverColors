@@ -195,6 +195,19 @@ namespace HoverColors
         [SettingsUIHidden]
         public bool RoadAngleTooltipsHidden { get; set; }
 
+        internal const float kDefaultAngleArcR = 0.35f;
+        internal const float kDefaultAngleArcG = 1f;
+        internal const float kDefaultAngleArcB = 0.45f;
+
+        [SettingsUIHidden]
+        public float AngleArcR { get; set; } = kDefaultAngleArcR;
+
+        [SettingsUIHidden]
+        public float AngleArcG { get; set; } = kDefaultAngleArcG;
+
+        [SettingsUIHidden]
+        public float AngleArcB { get; set; } = kDefaultAngleArcB;
+
         // Inert, like FillColorInitialized. Triggers.cs reads it in three places, but it is always
         // true so `&& OutlineThicknessInitialized` never changes the result.
         [SettingsUIHidden]

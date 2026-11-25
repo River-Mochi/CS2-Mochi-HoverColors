@@ -181,7 +181,11 @@ namespace HoverColors.Systems
         private static UnityEngine.Color GetAngleArcColor(float alpha)
         {
             // Same alpha as the dashed swatch; only the arc RGB is changed.
-            UnityEngine.Color color = new UnityEngine.Color(0.35f, 1f, 0.45f, alpha).linear;
+            HoverColorsSettings? settings = Mod.Settings;
+            UnityEngine.Color color = new UnityEngine.Color(
+                math.saturate(settings?.AngleArcR ?? HoverColorsSettings.kDefaultAngleArcR),
+                math.saturate(settings?.AngleArcG ?? HoverColorsSettings.kDefaultAngleArcG),
+                math.saturate(settings?.AngleArcB ?? HoverColorsSettings.kDefaultAngleArcB), alpha).linear;
             return color;
         }
 

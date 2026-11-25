@@ -89,6 +89,9 @@ namespace HoverColors
             ExtractorBorderThicknessScale = kMaxOverlayThicknessScale;
             GuidelineDashedThicknessScale = kMaxOverlayThicknessScale;
             RoadAngleTooltipsHidden = false;
+            AngleArcR = kDefaultAngleArcR;
+            AngleArcG = kDefaultAngleArcG;
+            AngleArcB = kDefaultAngleArcB;
 
             // Global Eye toggle: vanilla behavior is normal hover highlights visible.
             HoverHighlightsSuppressed = false;
