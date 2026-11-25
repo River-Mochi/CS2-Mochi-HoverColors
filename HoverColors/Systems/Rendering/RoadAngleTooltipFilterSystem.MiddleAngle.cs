@@ -11,6 +11,7 @@
 
 namespace HoverColors.Systems
 {
+    using Colossal.Mathematics;
     using CS2Shared.RiverMochi;
     using Game.Prefabs;
     using Game.Rendering;
@@ -33,6 +34,7 @@ namespace HoverColors.Systems
         private PrefabSystem? m_MiddleAnglePrefabs;
         private bool m_MiddleAngleLogged;
         private bool m_MultiAngleLogged;
+        private bool m_ContinuousAnglesLogged;
 
         private void InitializeMiddleAnglePlacement()
         {
@@ -64,16 +66,15 @@ namespace HoverColors.Systems
 
             NativeList<ControlPoint> points = netTool.GetControlPoints(out JobHandle pointDependencies);
             pointDependencies.Complete();
-            bool multiJoint = mode == NetToolSystem.Mode.ComplexCurve && points.Length == 4;
+            // Match the special Continuous branch of vanilla DrawControlPoints.
+            // Its rendered guide handles need not coincide with raw tool points.
+            bool generatedContinuous = mode == NetToolSystem.Mode.Continuous
+                && points.Length >= 3
+                && math.dot(points[points.Length - 1].m_Direction,
+                    points[points.Length - 2].m_Direction) <= -0.01f;
+            bool multiJoint = generatedContinuous
+                || (mode == NetToolSystem.Mode.ComplexCurve && points.Length == 4);
             if (points.Length != 3 && !multiJoint)
-            {
-                return;
-            }
-
-            // Continuous can synthesize two different intermediate points.
-            // Do not assume its generated geometry matches the tool's raw points.
-            if (mode == NetToolSystem.Mode.Continuous
-                && math.dot(points[2].m_Direction, points[1].m_Direction) <= -0.01f)
             {
                 return;
             }
@@ -102,6 +103,33 @@ namespace HoverColors.Systems
             EnsureGuidelinePaths(entries.Length);
             float scale = GetLayoutScale();
             bool hasCursor = TryGetCursorBounds(tooltipUI, scale, out Rect cursorBounds);
+            if (generatedContinuous)
+            {
+                // Reconstruct only the two guide positions in local values.
+                // Never write to the tool's control points or native tooltip list.
+                ControlPoint start = points[0];
+                ControlPoint middle = points[points.Length - 2];
+                ControlPoint end = points[points.Length - 1];
+                if (!TryGetContinuousGuideJoints(start, middle, end,
+                    out float3 firstJoint, out float3 secondJoint))
+                {
+                    return;
+                }
+
+                TryPlaceJointAngle(tooltipUI, entries, camera, start.m_Position,
+                    firstJoint, secondJoint, snapDistance, scale, true, hasCursor, cursorBounds);
+                TryPlaceJointAngle(tooltipUI, entries, camera, firstJoint,
+                    secondJoint, end.m_Position, snapDistance, scale, true, hasCursor, cursorBounds);
+
+                if (m_AnchoredMiddleAngles.Count == 2 && !m_ContinuousAnglesLogged)
+                {
+                    m_ContinuousAnglesLogged = true;
+                    LogUtils.Info(() => $"{Mod.ModTag} Road Clutter Phase 2: anchored both generated Continuous curve PI angles");
+                }
+
+                return;
+            }
+
             for (int jointIndex = 1; jointIndex < points.Length - 1; jointIndex++)
             {
                 TryPlaceJointAngle(tooltipUI, entries, camera, points[jointIndex - 1].m_Position,
@@ -122,6 +150,67 @@ namespace HoverColors.Systems
                 m_MultiAngleLogged = true;
                 LogUtils.Info(() => $"{Mod.ModTag} Road Clutter Phase 2: anchored both Complex curve PI angles");
             }
+        }
+
+        // Mirrors the guide-only Continuous calculation in 1.6.4f1
+        // GuideLinesSystem.NetToolGuideLinesJob.DrawControlPoints. Reuse the
+        // game's curve and intersection helpers to avoid a second approximation.
+        private static bool TryGetContinuousGuideJoints(ControlPoint start, ControlPoint middle,
+            ControlPoint end, out float3 firstJoint, out float3 secondJoint)
+        {
+            firstJoint = middle.m_Position;
+            secondJoint = middle.m_Position;
+            if (!math.all(math.isfinite(start.m_Position))
+                || !math.all(math.isfinite(middle.m_Position))
+                || !math.all(math.isfinite(end.m_Position))
+                || !math.all(math.isfinite(middle.m_Direction))
+                || !math.all(math.isfinite(end.m_Direction)))
+            {
+                return false;
+            }
+
+            float3 startTangent = new(middle.m_Direction.x, 0f, middle.m_Direction.y);
+            float3 endTangent = new(end.m_Direction.x, 0f, end.m_Direction.y);
+            float alignment = math.dot(math.normalizesafe(end.m_Position.xz - start.m_Position.xz),
+                middle.m_Direction);
+            Bezier4x3 curve;
+            if (alignment <= -0.01f)
+            {
+                float3 endPosition = end.m_Position + endTangent * alignment;
+                curve = Game.Net.NetUtils.FitCurve(start.m_Position, startTangent, endTangent, endPosition);
+                curve.d = end.m_Position;
+            }
+            else
+            {
+                curve = Game.Net.NetUtils.FitCurve(start.m_Position, startTangent, endTangent, end.m_Position);
+            }
+
+            float2 midpoint = MathUtils.Position(curve, 0.5f).xz;
+            float2 tangent = MathUtils.Tangent(curve, 0.5f).xz;
+            if (!math.all(math.isfinite(midpoint)) || !math.all(math.isfinite(tangent)))
+            {
+                return false;
+            }
+
+            Line2 middleLine = new(midpoint, midpoint + tangent);
+            Line2 startLine = new(start.m_Position.xz, start.m_Position.xz + middle.m_Direction);
+            Line2 endLine = new(end.m_Position.xz, end.m_Position.xz - end.m_Direction);
+
+            // Vanilla leaves the corresponding intermediate point unchanged on
+            // a failed intersection. Preserve that fallback and its original Y.
+            if (MathUtils.Intersect(startLine, middleLine, out float2 firstIntersection))
+            {
+                firstJoint.xz = MathUtils.Position(startLine, firstIntersection.x);
+            }
+
+            if (MathUtils.Intersect(endLine, middleLine, out float2 secondIntersection))
+            {
+                secondJoint.xz = MathUtils.Position(endLine, secondIntersection.x);
+            }
+
+            // Each resulting joint must still match a unique native tooltip's
+            // angle, world anchor and screen position before it can be moved.
+            return math.all(math.isfinite(firstJoint)) && math.all(math.isfinite(secondJoint));
         }
 
         private void TryPlaceJointAngle(TooltipUISystem tooltipUI,
