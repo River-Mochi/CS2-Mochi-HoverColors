@@ -47,6 +47,7 @@ export const useMochiPanelText = () => {
             tooltipExtractorBorderThickness: l("HoverColors.UI.Tooltip.ExtractorBorderThickness"),
             tooltipResetExtractorBorderThickness: l("HoverColors.UI.Tooltip.ResetExtractorBorderThickness"),
             tooltipGuidelineDashedThickness: l("HoverColors.UI.Tooltip.GuidelineDashedThickness"),
+            tooltipAngleArcColor: l("HoverColors.UI.Tooltip.AngleArcColor"),
             tooltipRoadAngleTooltipsOn: l("HoverColors.UI.Tooltip.RoadAngleTooltipsOn"),
             tooltipRoadAngleTooltipsOff: l("HoverColors.UI.Tooltip.RoadAngleTooltipsOff"),
             tooltipResetGuidelineDashedThickness: l("HoverColors.UI.Tooltip.ResetGuidelineDashedThickness"),

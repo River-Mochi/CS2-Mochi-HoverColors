@@ -55,6 +55,7 @@ interface MochiPanelControlRowsProps {
   guidelineLinesColor: Color;
   guidelinePreviewColor: Color;
   guidelineDashedColor: Color;
+  angleArcColor: Color;
   guidelineOpacity: number;
   preset1Color: Color;
   preset2Color: Color;
@@ -65,6 +66,7 @@ interface MochiPanelControlRowsProps {
   guidelineLinesPickerDirection: PickerDirection;
   guidelinePreviewPickerDirection: PickerDirection;
   guidelineDashedPickerDirection: PickerDirection;
+  angleArcPickerDirection: PickerDirection;
 
   vanillaOutlineActive: boolean;
   preset1Active: boolean;
@@ -76,6 +78,7 @@ interface MochiPanelControlRowsProps {
   guidelineLinesHovered: boolean;
   guidelinePreviewHovered: boolean;
   guidelineDashedHovered: boolean;
+  angleArcHovered: boolean;
   preset1Hovered: boolean;
   preset2Hovered: boolean;
 
@@ -85,6 +88,7 @@ interface MochiPanelControlRowsProps {
   setGuidelineLinesHovered: React.Dispatch<React.SetStateAction<boolean>>;
   setGuidelinePreviewHovered: React.Dispatch<React.SetStateAction<boolean>>;
   setGuidelineDashedHovered: React.Dispatch<React.SetStateAction<boolean>>;
+  setAngleArcHovered: React.Dispatch<React.SetStateAction<boolean>>;
   setPreset1Hovered: React.Dispatch<React.SetStateAction<boolean>>;
   setPreset2Hovered: React.Dispatch<React.SetStateAction<boolean>>;
   setOutlinePickerOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -93,6 +97,7 @@ interface MochiPanelControlRowsProps {
   setGuidelineLinesPickerOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setGuidelinePreviewPickerOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setGuidelineDashedPickerOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setAngleArcPickerOpen: React.Dispatch<React.SetStateAction<boolean>>;
 
   holdSlot: number | null;
   holdProgress: number;
@@ -106,6 +111,7 @@ interface MochiPanelControlRowsProps {
   guidelineLinesPickerRef: React.RefObject<HTMLDivElement>;
   guidelinePreviewPickerRef: React.RefObject<HTMLDivElement>;
   guidelineDashedPickerRef: React.RefObject<HTMLDivElement>;
+  angleArcPickerRef: React.RefObject<HTMLDivElement>;
 
   handleOutlineChange: (value: Color) => void;
   handleOwnerColorChange: (value: Color) => void;
@@ -119,6 +125,7 @@ interface MochiPanelControlRowsProps {
   handleGuidelineLinesColorChange: (value: Color) => void;
   handleGuidelinePreviewColorChange: (value: Color) => void;
   handleGuidelineDashedColorChange: (value: Color) => void;
+  handleAngleArcColorChange: (value: Color) => void;
   handleGuidelineChange: (value: number) => void;
   handleResetOutline: () => void;
   handleResetFill: () => void;
@@ -131,6 +138,7 @@ interface MochiPanelControlRowsProps {
   updateGuidelineLinesPickerDirection: () => void;
   updateGuidelinePreviewPickerDirection: () => void;
   updateGuidelineDashedPickerDirection: () => void;
+  updateAngleArcPickerDirection: () => void;
 }
 
 export const MochiPanelControlRows = ({
@@ -153,6 +161,7 @@ export const MochiPanelControlRows = ({
   guidelineLinesColor,
   guidelinePreviewColor,
   guidelineDashedColor,
+  angleArcColor,
   guidelineOpacity,
   preset1Color,
   preset2Color,
@@ -162,6 +171,7 @@ export const MochiPanelControlRows = ({
   guidelineLinesPickerDirection,
   guidelinePreviewPickerDirection,
   guidelineDashedPickerDirection,
+  angleArcPickerDirection,
   vanillaOutlineActive,
   preset1Active,
   preset2Active,
@@ -171,6 +181,7 @@ export const MochiPanelControlRows = ({
   guidelineLinesHovered,
   guidelinePreviewHovered,
   guidelineDashedHovered,
+  angleArcHovered,
   preset1Hovered,
   preset2Hovered,
   setSwatchHovered,
@@ -179,6 +190,7 @@ export const MochiPanelControlRows = ({
   setGuidelineLinesHovered,
   setGuidelinePreviewHovered,
   setGuidelineDashedHovered,
+  setAngleArcHovered,
   setPreset1Hovered,
   setPreset2Hovered,
   setOutlinePickerOpen,
@@ -187,6 +199,7 @@ export const MochiPanelControlRows = ({
   setGuidelineLinesPickerOpen,
   setGuidelinePreviewPickerOpen,
   setGuidelineDashedPickerOpen,
+  setAngleArcPickerOpen,
   holdSlot,
   holdProgress,
   cancelHold,
@@ -198,6 +211,7 @@ export const MochiPanelControlRows = ({
   guidelineLinesPickerRef,
   guidelinePreviewPickerRef,
   guidelineDashedPickerRef,
+  angleArcPickerRef,
   handleOutlineChange,
   handleOwnerColorChange,
   handleFillAChange,
@@ -210,6 +224,7 @@ export const MochiPanelControlRows = ({
   handleGuidelineLinesColorChange,
   handleGuidelinePreviewColorChange,
   handleGuidelineDashedColorChange,
+  handleAngleArcColorChange,
   handleGuidelineChange,
   handleResetOutline,
   handleResetFill,
@@ -222,6 +237,7 @@ export const MochiPanelControlRows = ({
   updateGuidelineLinesPickerDirection,
   updateGuidelinePreviewPickerDirection,
   updateGuidelineDashedPickerDirection,
+  updateAngleArcPickerDirection,
 }: MochiPanelControlRowsProps) => {
   const compactShellStyle = React.useCallback(
     (color: Color, hovered: boolean) => compactSwatchStyle(color, hovered, useDarkerPanel),
@@ -726,6 +742,42 @@ export const MochiPanelControlRows = ({
                   </span>
                 </div>
                 <span className={styles.areaThicknessLabel}>{text.labelDashedGuides}</span>
+              </div>
+            </SideTooltip>
+            <SideTooltip tooltip={tt(text.tooltipAngleArcColor)} side="left">
+              <div
+                ref={angleArcPickerRef}
+                className={styles.guidelineColorShell}
+                style={compactShellStyle(angleArcColor, angleArcHovered)}
+                onMouseOver={() => {
+                  setAngleArcHovered(true);
+                  updateAngleArcPickerDirection();
+                }}
+                onMouseMove={() => setAngleArcHovered(true)}
+                onMouseLeave={() => setAngleArcHovered(false)}
+                onMouseDown={updateAngleArcPickerDirection}
+              >
+                <ColorField
+                  focusKey={focusDisabled}
+                  className={styles.guidelineColorField}
+                  value={angleArcColor}
+                  alpha={false}
+                  popupDirection={angleArcPickerDirection}
+                  hideHint={true}
+                  hexInput={true}
+                  colorWheel={false}
+                  onChange={handleAngleArcColorChange}
+                  onOpenPicker={() => {
+                    setAngleArcPickerOpen(true);
+                    updateAngleArcPickerDirection();
+                  }}
+                  onClosePicker={() => setAngleArcPickerOpen(false)}
+                />
+                <span
+                  className={styles.guidelineColorPreview}
+                  style={compactSwatchStyle(angleArcColor, angleArcHovered, useDarkerPanel)}
+                  aria-hidden="true"
+                />
               </div>
             </SideTooltip>
             <SideTooltip

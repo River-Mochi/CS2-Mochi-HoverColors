@@ -51,6 +51,9 @@ export const surfaceBorderThicknessScale$ = bindValue<number>(CHANNEL, "SurfaceB
 export const extractorBorderThicknessScale$ = bindValue<number>(CHANNEL, "ExtractorBorderThicknessScale", 1);
 export const guidelineDashedThicknessScale$ = bindValue<number>(CHANNEL, "GuidelineDashedThicknessScale", 1);
 export const roadAngleTooltipsHidden$ = bindValue<boolean>(CHANNEL, "RoadAngleTooltipsHidden", false);
+export const angleArcR$ = bindValue<number>(CHANNEL, "AngleArcR", 0.35);
+export const angleArcG$ = bindValue<number>(CHANNEL, "AngleArcG", 1);
+export const angleArcB$ = bindValue<number>(CHANNEL, "AngleArcB", 0.45);
 
 export const districtR$ = bindValue<number>(CHANNEL, "DistrictR", 128 / 255);
 export const districtG$ = bindValue<number>(CHANNEL, "DistrictG", 128 / 255);
