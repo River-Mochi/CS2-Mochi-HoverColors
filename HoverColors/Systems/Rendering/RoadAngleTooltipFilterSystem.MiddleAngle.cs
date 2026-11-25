@@ -26,7 +26,7 @@ namespace HoverColors.Systems
     {
         // Screen-space clearance above the circle, scaled by render height.
         // Tune this value if the vanilla tooltip font/scale requires more room.
-        private const float kMiddleAngleOffsetAt1080 = 32f;
+        private const float kMiddleAngleOffsetAt1080 = 36f;
         private const float kWorldPositionTolerance = 0.25f;
         private const float kScreenPositionTolerance = 2f;
 
@@ -151,11 +151,37 @@ namespace HoverColors.Systems
             }
 
             float2 oldPosition = new(oldScreen.x, Screen.height - oldScreen.y);
-            float offset = Mathf.Clamp(kMiddleAngleOffsetAt1080 * Screen.height / 1080f, 20f, 80f);
+            float scale = GetLayoutScale();
+            float radius = snapDistance * 0.125f * 2.5f;
+            // The handle is a world-space circle. Its apparent radius grows when
+            // zooming in, so a fixed pixel offset alone cannot preserve clearance.
+            float top = jointScreen.y;
+            float bottom = jointScreen.y;
+            for (int i = 0; i < 8; i++)
+            {
+                float radians = i * (math.PI * 0.25f);
+                float3 sample = joint;
+                sample.xz += new float2(math.cos(radians), math.sin(radians)) * radius;
+                Vector3 screen = camera.WorldToScreenPoint(sample);
+                if (screen.z > 0f && math.isfinite(screen.y))
+                {
+                    top = math.max(top, screen.y);
+                    bottom = math.min(bottom, screen.y);
+                }
+            }
+
+            float clearance = 25f * scale;
+            float offset = math.max(kMiddleAngleOffsetAt1080 * scale, top - jointScreen.y + clearance);
             float2 newPosition = new(jointScreen.x, Screen.height - jointScreen.y - offset);
+            // Prefer above, centered on X. If the top edge has no room, place
+            // below the circle rather than clipping or covering it.
+            if (newPosition.y < clearance)
+            {
+                newPosition.y = Screen.height - bottom + clearance;
+            }
             if (!math.all(math.isfinite(newPosition))
-                || newPosition.x < offset || newPosition.x > Screen.width - offset
-                || newPosition.y < offset || newPosition.y > Screen.height - offset)
+                || newPosition.x < 55f * scale || newPosition.x > Screen.width - 55f * scale
+                || newPosition.y < clearance || newPosition.y > Screen.height - clearance)
             {
                 return;
             }
@@ -187,6 +213,10 @@ namespace HoverColors.Systems
                 // next frame; with the filter OFF this method is never called.
                 group.position = newPosition;
                 group.SetChildrenChanged();
+                m_AnchoredMiddleAngle = group;
+                Vector3 startScreen = camera.WorldToScreenPoint(points[0].m_Position);
+                m_LayoutStart = new float2(startScreen.x, Screen.height - startScreen.y);
+                m_HasLayoutStart = startScreen.z > 0f && math.all(math.isfinite(m_LayoutStart));
                 if (!m_MiddleAngleLogged)
                 {
                     m_MiddleAngleLogged = true;

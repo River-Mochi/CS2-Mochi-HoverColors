@@ -109,7 +109,10 @@ namespace HoverColors.Systems
             // Phase 2: reposition a verified middle angle without changing its value.
             if (m_ToolSystem?.activeTool is NetToolSystem netTool)
             {
+                m_AnchoredMiddleAngle = null;
+                m_HasLayoutStart = false;
                 TryMoveMiddleAngle(netTool, m_TooltipUISystem);
+                ArrangeCurveMeasurements(netTool, m_TooltipUISystem);
             }
 
             // Only once per city/world: proof in HoverColors.log that the filter ran.

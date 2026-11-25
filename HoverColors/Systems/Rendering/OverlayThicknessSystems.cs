@@ -107,13 +107,14 @@ namespace HoverColors.Systems
         private float m_AreaSnapDistance;
         private float m_SurfaceCircleScale;
         private bool m_ScaleAreaCircles;
+        private float m_AngleArcWidth;
         private float4 m_LotHoveredColor;
         private float4 m_LotOutlineColor;
         private float4 m_LotFillColor;
         private bool m_HideLot;
 
         public bool IsActive => m_Active;
-        public bool NeedsHighPriorityColor => m_Scale < 0.999f;
+        public bool NeedsHighPriorityColor => m_Scale < 0.999f || m_AngleArcWidth > 0f;
 
         public OverlayCurveSpan(OverlayRenderSystem overlay)
         {
@@ -122,12 +123,13 @@ namespace HoverColors.Systems
         }
 
         public void Capture(float scale, float areaSnapDistance = 0f, float surfaceCircleScale = 1f,
-            bool scaleAreaCircles = true)
+            bool scaleAreaCircles = true, float angleArcWidth = 0f)
         {
             m_Active = false;
             scale = math.clamp(scale, 0.1f, 1f);
             surfaceCircleScale = math.clamp(surfaceCircleScale, 0.1f, 1f);
-            if ((scale >= 0.999f && surfaceCircleScale >= 0.999f)
+            m_AngleArcWidth = angleArcWidth;
+            if ((scale >= 0.999f && surfaceCircleScale >= 0.999f && angleArcWidth <= 0f)
                 || !OverlayCurveAccess.TryGetLists(m_Overlay, out NativeList<OverlayRenderSystem.CurveData> projected,
                     out NativeList<OverlayRenderSystem.CurveData> absolute, out JobHandle dependencies))
             {
@@ -169,9 +171,18 @@ namespace HoverColors.Systems
                 ScaleAreaCircles = m_ScaleAreaCircles,
                 HighPriorityColor = highPriorityColor,
                 HasHighPriorityColor = hasHighPriorityColor,
+                AngleArcWidth = m_AngleArcWidth,
+                AngleArcColor = GetAngleArcColor(highPriorityColor.w),
             }.Schedule(dependencies);
             m_Overlay.AddBufferWriter(m_LastJob);
             m_Active = false;
+        }
+
+        private static UnityEngine.Color GetAngleArcColor(float alpha)
+        {
+            // Same alpha as the dashed swatch; only the arc RGB is changed.
+            UnityEngine.Color color = new UnityEngine.Color(0.35f, 1f, 0.45f, alpha).linear;
+            return color;
         }
 
         public void CaptureLotPreview(float scale, float4 hoveredColor, float4 outlineColor, float4 fillColor,
@@ -310,6 +321,8 @@ namespace HoverColors.Systems
             public bool ScaleAreaCircles;
             public float4 HighPriorityColor;
             public bool HasHighPriorityColor;
+            public float AngleArcWidth;
+            public UnityEngine.Color AngleArcColor;
 
             public void Execute()
             {
@@ -325,9 +338,13 @@ namespace HoverColors.Systems
                     OverlayRenderSystem.CurveData curve = curves[i];
                     if (DashedOnly)
                     {
-                        if (Scale < 0.999f && (curve.m_DashLengths.x > 0f
-                            || (!projected && HasHighPriorityColor && !IsCircle(curve)
-                                && MatchesHighPriorityColor(curve))))
+                        bool highSolid = !projected && HasHighPriorityColor
+                            && !IsCircle(curve) && MatchesHighPriorityColor(curve);
+                        bool angleArc = AngleArcWidth > 0f && highSolid
+                            && curve.m_DashLengths.x == 0f
+                            && math.abs(curve.m_Size.x - AngleArcWidth) <= 0.001f
+                            && IsCurved(curve);
+                        if (Scale < 0.999f && (curve.m_DashLengths.x > 0f || highSolid))
                         {
                             // Solid high-priority angle guides share the dashed swatch. Exclude
                             // projected curves so road-width previews retain their real width.
@@ -341,9 +358,15 @@ namespace HoverColors.Systems
                             curve.m_Size *= SurfaceCircleScale;
                             curve.m_DashLengths.y *= SurfaceCircleScale;
                         }
-                        else
+                        else if (!angleArc)
                         {
                             continue;
+                        }
+
+                        if (angleArc)
+                        {
+                            curve.m_FillColor = AngleArcColor;
+                            curve.m_OutlineColor = AngleArcColor;
                         }
 
                         curves[i] = curve;
@@ -380,6 +403,25 @@ namespace HoverColors.Systems
                     // Scaling only m_Size avoids changing snap geometry or overlay culling.
                     curves[i] = curve;
                 }
+            }
+
+            private static bool IsCurved(OverlayRenderSystem.CurveData curve)
+            {
+                // BuildCurveMatrix stores the four Bezier points in its columns.
+                float2 a = new(curve.m_Curve.m00, curve.m_Curve.m20);
+                float2 b = new(curve.m_Curve.m01, curve.m_Curve.m21);
+                float2 c = new(curve.m_Curve.m02, curve.m_Curve.m22);
+                float2 d = new(curve.m_Curve.m03, curve.m_Curve.m23);
+                float2 chord = d - a;
+                float length = math.length(chord);
+                if (length < 0.01f)
+                {
+                    return false;
+                }
+                float2 normal = new(-chord.y, chord.x);
+                normal /= length;
+                return math.abs(math.dot(b - a, normal)) > 0.01f
+                    || math.abs(math.dot(c - a, normal)) > 0.01f;
             }
 
             private static bool IsCircle(OverlayRenderSystem.CurveData curve)
@@ -551,11 +593,24 @@ namespace HoverColors.Systems
         {
             float dashedScale = Mod.Settings?.GuidelineDashedThicknessScale ?? 1f;
             float surfaceScale = Mod.Settings?.SurfaceBorderThicknessScale ?? 1f;
+            float angleArcWidth = 0f;
+            // Only roads/paths with the clutter filter enabled. Right-angle
+            // square marks and straight reference rays remain vanilla-colored.
+            if (RoadAngleTooltipFilterSystem.ShouldFilter(m_ToolSystem)
+                && m_ToolSystem?.activeTool is NetToolSystem netTool
+                && m_PrefabSystem != null && netTool.prefab != null
+                && m_PrefabSystem.TryGetEntity(netTool.prefab, out Entity prefabEntity))
+            {
+                float snapDistance = EntityManager.HasComponent<PlaceableNetData>(prefabEntity)
+                    ? math.min(EntityManager.GetComponentData<PlaceableNetData>(prefabEntity).m_SnapDistance, 16f)
+                    : 1f;
+                angleArcWidth = math.max(0f, snapDistance * 0.125f);
+            }
             if (surfaceScale >= 0.999f
                 || !OverlayCurveAccess.TryGetSurfaceSnapDistance(
                     EntityManager, m_ToolSystem, m_AreaToolSystem, m_PrefabSystem, out float snapDistance))
             {
-                m_Span?.Capture(dashedScale);
+                m_Span?.Capture(dashedScale, angleArcWidth: angleArcWidth);
                 return;
             }
 
