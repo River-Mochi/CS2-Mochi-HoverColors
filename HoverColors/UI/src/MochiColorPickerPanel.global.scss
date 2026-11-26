@@ -19,14 +19,21 @@ body.mochiCompactColorPickerOpen .color-picker-container_Sj5 .hex_c98 {
 
 // Road measurement appearance proof of concept. Class is applied only to
 // verified native numeric road/path measurement widgets while RCF is ON.
-// Compact vertical spacing; preserve horizontal padding, fonts and native transitions.
+// Compact spacing; preserve fonts, icons and native transitions.
 .row-item_oHU.mochiRoadMeasurementBadge {
     background-color: #23394D;
     min-height: 24rem;
     padding-top: 2rem;
     padding-bottom: 2rem;
-    border-top-left-radius: 6rem;
-    border-top-right-radius: 6rem;
-    border-bottom-left-radius: 6rem;
-    border-bottom-right-radius: 6rem;
+    padding-left: 4rem;
+    padding-right: 4rem;
+    border-top-left-radius: 5rem;
+    border-top-right-radius: 5rem;
+    border-bottom-left-radius: 5rem;
+    border-bottom-right-radius: 5rem;
+}
+
+.row-item_oHU.mochiRoadMeasurementBadge .value_uLz {
+    margin-left: 3rem;
+    margin-right: 3rem;
 }
