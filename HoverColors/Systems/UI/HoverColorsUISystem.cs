@@ -18,6 +18,7 @@ namespace HoverColors.UI
     using CS2Shared.RiverMochi;
     using Game;     // GameMode
     using Game.Input;
+    using Game.Tools;
     using Game.UI;
     using HoverColors.Systems;
 
@@ -52,6 +53,8 @@ namespace HoverColors.UI
         private ValueBinding<float> m_ExtractorBorderThicknessScaleBinding = null!;
         private ValueBinding<float> m_GuidelineDashedThicknessScaleBinding = null!;
         private ValueBinding<bool> m_RoadAngleTooltipsHiddenBinding = null!;
+        private ValueBinding<bool> m_RoadMeasurementStyleActiveBinding = null!;
+        private ToolSystem? m_RoadMeasurementToolSystem;
         private ValueBinding<float> m_AngleArcRBinding = null!;
         private ValueBinding<float> m_AngleArcGBinding = null!;
         private ValueBinding<float> m_AngleArcBBinding = null!;
@@ -112,6 +115,7 @@ namespace HoverColors.UI
         {
             base.OnCreate();
 
+            m_RoadMeasurementToolSystem = World.GetOrCreateSystemManaged<ToolSystem>();
             InitializeKeybindActions();
             RegisterValueBindings();
             RegisterTriggerBindings();
@@ -203,6 +207,7 @@ namespace HoverColors.UI
                 settings?.GuidelineDashedThicknessScale ?? HoverColorsSettings.kMaxOverlayThicknessScale);
             m_RoadAngleTooltipsHiddenBinding = AddValueBinding(
                 "RoadAngleTooltipsHidden", settings?.RoadAngleTooltipsHidden ?? false);
+            m_RoadMeasurementStyleActiveBinding = AddValueBinding("RoadMeasurementStyleActive", false);
             UnityEngine.Color angleIndicatorColor = GuidelineColorSystem.GetAngleIndicatorColor(settings);
             m_AngleArcRBinding = AddValueBinding("AngleArcR", angleIndicatorColor.r);
             m_AngleArcGBinding = AddValueBinding("AngleArcG", angleIndicatorColor.g);
@@ -302,6 +307,8 @@ namespace HoverColors.UI
                 m_GuidelineDashedThicknessScaleBinding,
                 settings?.GuidelineDashedThicknessScale ?? HoverColorsSettings.kMaxOverlayThicknessScale);
             UpdateIfChanged(m_RoadAngleTooltipsHiddenBinding, settings?.RoadAngleTooltipsHidden ?? false);
+            UpdateIfChanged(m_RoadMeasurementStyleActiveBinding,
+                RoadAngleTooltipFilterSystem.ShouldFilter(m_RoadMeasurementToolSystem));
             UnityEngine.Color angleIndicatorColor = GuidelineColorSystem.GetAngleIndicatorColor(settings);
             UpdateIfChanged(m_AngleArcRBinding, angleIndicatorColor.r);
             UpdateIfChanged(m_AngleArcGBinding, angleIndicatorColor.g);

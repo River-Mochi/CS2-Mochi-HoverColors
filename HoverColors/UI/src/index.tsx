@@ -21,6 +21,7 @@ import { VanillaComponentResolver } from "./utils/vanilla/VanillaComponentResolv
 import "./MochiColorPickerPanel.global.scss";
 
 import ModIconButton from "./entry/ModIconButton";
+import { registerRoadMeasurementStyle } from "./entry/RoadMeasurementStyle";
 
 const reportUIStatus = (detail: string) => {
   try {
@@ -168,6 +169,14 @@ const register: ModRegistrar = (moduleRegistry) => {
     reportUIStatus("registered:UniversalModMenu");
   } catch (error) {
     reportUIFailure("UniversalModMenu", error);
+  }
+
+  // Optional visual experiment; failure must not prevent the native UI.
+  try {
+    registerRoadMeasurementStyle(moduleRegistry);
+    reportUIStatus("registered:RoadMeasurementStyle");
+  } catch (error) {
+    reportUIFailure("RoadMeasurementStyle", error);
   }
 
   reportUIStatus("registrar-complete");
