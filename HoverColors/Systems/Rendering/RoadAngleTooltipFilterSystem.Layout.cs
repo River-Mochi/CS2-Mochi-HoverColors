@@ -6,7 +6,7 @@
 // Copyright and license notices MUST be preserved.
 // ================= </copyright> ======================
 
-// Experimental, bounded screen-space layout of existing road measurements.
+// Stable native-anchor layout of existing road measurements.
 // Never change geometry, tooltip values, alignment, units or visibility.
 
 namespace HoverColors.Systems
@@ -14,6 +14,7 @@ namespace HoverColors.Systems
     using System.Collections.Generic;
     using CS2Shared.RiverMochi;
     using Game.Input;
+    using Game.Prefabs;
     using Game.Rendering;
     using Game.Settings;
     using Game.Tools;
@@ -25,16 +26,58 @@ namespace HoverColors.Systems
 
     public partial class RoadAngleTooltipFilterSystem
     {
+        private const int kMaxMeasurements = 32;
         private readonly List<Rect> m_OccupiedMeasurements = new(12);
         private readonly List<string> m_GuidelinePaths = new(8);
-        private readonly List<TooltipGroup> m_AnchoredMiddleAngles = new(2);
-        private readonly List<Rect> m_LayoutJointBounds = new(2);
-        private float2 m_LayoutStart;
-        private bool m_HasLayoutStart;
-        private int m_LayoutStartAngleCount;
+        private readonly float2[] m_LayoutOffsets = new float2[kMaxMeasurements];
+        private GuideLinesSystem? m_LayoutGuideLines;
+        private uint m_ValidOffsets;
+        private uint m_PreviewAngleMask;
+        private int m_PreviewFrame = -1;
+        private int m_PreviewEntryCount;
+        private int m_PreviewPointCount;
+        private NetToolSystem.Mode m_PreviewMode;
+        private NetPrefab? m_PreviewPrefab;
+        private float3 m_PreviewStart;
+        private bool m_PreviewGenerated;
         private bool m_LayoutLogged;
         private bool m_LayoutScaleLogged;
         private bool m_LayoutCrowdedLogged;
+
+        private void InitializeMeasurementLayout()
+        {
+            m_LayoutGuideLines = World.GetOrCreateSystemManaged<GuideLinesSystem>();
+        }
+
+        private void ResetMeasurementLayout()
+        {
+            m_PreviewFrame = -1;
+            m_PreviewPrefab = null;
+            m_ValidOffsets = 0;
+        }
+
+        private void PrepareMeasurementLayout(NetToolSystem netTool, float3 start, int pointCount,
+            int entryCount, uint angleMask, bool generated)
+        {
+            int frame = UnityEngine.Time.frameCount;
+            if (m_PreviewFrame < 0 || frame - m_PreviewFrame > 3
+                || m_PreviewMode != netTool.actualMode || m_PreviewPrefab != netTool.prefab
+                || m_PreviewPointCount != pointCount || m_PreviewEntryCount != entryCount
+                || m_PreviewAngleMask != angleMask || m_PreviewGenerated != generated
+                || math.distancesq(start, m_PreviewStart) > 0.0625f)
+            {
+                m_ValidOffsets = 0;
+                m_PreviewStart = start;
+            }
+
+            m_PreviewFrame = frame;
+            m_PreviewMode = netTool.actualMode;
+            m_PreviewPrefab = netTool.prefab;
+            m_PreviewPointCount = pointCount;
+            m_PreviewEntryCount = entryCount;
+            m_PreviewAngleMask = angleMask;
+            m_PreviewGenerated = generated;
+        }
 
         private static float GetLayoutScale()
         {
@@ -48,23 +91,78 @@ namespace HoverColors.Systems
         private void ArrangeCurveMeasurements(NetToolSystem netTool, TooltipUISystem tooltipUI)
         {
             NetToolSystem.Mode mode = netTool.actualMode;
-            if (m_MiddleAngleGuideLines == null || tooltipUI.groups.Count < 1
+            if (m_LayoutGuideLines == null || tooltipUI.groups.Count == 0
                 || (mode != NetToolSystem.Mode.Straight
                     && mode != NetToolSystem.Mode.SimpleCurve
                     && mode != NetToolSystem.Mode.ComplexCurve
                     && mode != NetToolSystem.Mode.Continuous))
             {
+                ResetMeasurementLayout();
                 return;
             }
 
             NativeList<GuideLinesSystem.TooltipInfo> entries =
-                m_MiddleAngleGuideLines.GetTooltips(out JobHandle dependencies);
+                m_LayoutGuideLines.GetTooltips(out JobHandle dependencies);
             dependencies.Complete();
-            if (entries.Length == 0 || entries.Length > 32)
+            if (entries.Length == 0 || entries.Length > kMaxMeasurements)
             {
+                ResetMeasurementLayout();
                 return;
             }
 
+            NativeList<ControlPoint> points = netTool.GetControlPoints(out JobHandle pointDependencies);
+            pointDependencies.Complete();
+            if (points.Length < 2 || !math.all(math.isfinite(points[0].m_Position)))
+            {
+                ResetMeasurementLayout();
+                return;
+            }
+
+            // Native DrawControlPoints emits the start references first, then
+            // guide distances, then PI angles. Special Continuous emits up to
+            // two start references followed by up to two generated PI angles.
+            // Do not reconstruct PI geometry or infer identities from values.
+            bool generated = mode == NetToolSystem.Mode.Continuous && points.Length >= 3
+                && math.dot(points[points.Length - 1].m_Direction,
+                    points[points.Length - 2].m_Direction) <= -0.01f;
+            int firstLength = -1;
+            uint angleMask = 0;
+            bool allAngles = true;
+            for (int i = 0; i < entries.Length; i++)
+            {
+                if (entries[i].m_Type == GuideLinesSystem.TooltipType.Angle)
+                {
+                    angleMask |= 1u << i;
+                }
+                else
+                {
+                    allAngles = false;
+                    if (firstLength < 0 && entries[i].m_Type == GuideLinesSystem.TooltipType.Length)
+                    {
+                        firstLength = i;
+                    }
+                }
+            }
+
+            int startCount = 0;
+            if (firstLength > 0 && firstLength <= 2
+                && (angleMask & ((1u << firstLength) - 1u)) == (1u << firstLength) - 1u)
+            {
+                startCount = firstLength;
+            }
+            else if (allAngles && mode == NetToolSystem.Mode.Straight && points.Length == 2 && entries.Length <= 2)
+            {
+                startCount = entries.Length;
+            }
+            else if (allAngles && generated && entries.Length <= 4)
+            {
+                // At most two PI entries exist, so only this many prefix
+                // entries are certainly start references if a PI is absent.
+                startCount = math.max(0, entries.Length - 2);
+            }
+
+            PrepareMeasurementLayout(netTool, points[0].m_Position, points.Length,
+                entries.Length, angleMask, generated);
             EnsureGuidelinePaths(entries.Length);
 
             float scale = GetLayoutScale();
@@ -74,61 +172,51 @@ namespace HoverColors.Systems
                 InterfaceSettings? uiSettings = SharedSettings.instance?.userInterface;
                 LogUtils.Info(() => $"{Mod.ModTag} Road Clutter layout: screen={Screen.width}x{Screen.height}, textScale={uiSettings?.textScale ?? 1f:F2}, interfaceScaling={uiSettings?.interfaceScaling}, estimateScale={scale:F2}");
             }
-            if (mode == NetToolSystem.Mode.Straight)
+
+            float2 startScreen = default;
+            bool hasStart = false;
+            Camera? camera = Camera.main;
+            if (startCount > 0 && camera != null)
             {
-                NativeList<ControlPoint> points = netTool.GetControlPoints(out JobHandle pointDependencies);
-                pointDependencies.Complete();
-                Camera? camera = Camera.main;
-                if (points.Length == 2 && camera != null)
-                {
-                    Vector3 start = camera.WorldToScreenPoint(points[0].m_Position);
-                    m_LayoutStart = new float2(start.x, Screen.height - start.y);
-                    m_HasLayoutStart = start.z > 0f && math.all(math.isfinite(m_LayoutStart));
-                    m_LayoutStartAngleCount = entries.Length;
-                }
+                Vector3 projected = camera.WorldToScreenPoint(points[0].m_Position);
+                startScreen = new float2(projected.x, Screen.height - projected.y);
+                hasStart = projected.z > 0f && math.all(math.isfinite(startScreen));
             }
+
             m_OccupiedMeasurements.Clear();
-            // TooltipUISystem sets mouseGroup.position AFTER this update phase.
-            // Reserve its predicted on-screen rectangle, not last frame's position.
             if (TryGetCursorBounds(tooltipUI, scale, out Rect cursorBounds))
             {
                 m_OccupiedMeasurements.Add(cursorBounds);
             }
 
-            // Reserve every verified PI and its handle before arranging other labels.
-            for (int i = 0; i < m_AnchoredMiddleAngles.Count; i++)
-            {
-                m_OccupiedMeasurements.Add(MeasurementRect(m_AnchoredMiddleAngles[i].position, true, scale));
-            }
-            m_OccupiedMeasurements.AddRange(m_LayoutJointBounds);
-
             int moved = 0;
             int crowded = 0;
-            for (int pass = 0; pass < 2; pass++)
+            uint seen = 0;
+            // First guide (usually the already placed V1 leg) has priority
+            // over moving measurements. Then process native angles in order,
+            // then the remaining guide lengths. Do not swap a PI across its
+            // handle: all angles start at the native inside/reference anchor.
+            for (int pass = 0; pass < 3; pass++)
             {
                 for (int i = 0; i < entries.Length; i++)
                 {
                     GuideLinesSystem.TooltipInfo entry = entries[i];
                     bool angle = entry.m_Type == GuideLinesSystem.TooltipType.Angle;
-                    if ((pass == 0 && !angle) || (pass == 1 && angle)
-                        || (!angle && entry.m_Type != GuideLinesSystem.TooltipType.Length))
+                    bool length = entry.m_Type == GuideLinesSystem.TooltipType.Length;
+                    if ((pass == 0 && i != firstLength)
+                        || (pass == 1 && !angle)
+                        || (pass == 2 && (!length || i == firstLength)))
                     {
                         continue;
                     }
 
                     TooltipGroup? group = FindMeasurement(tooltipUI, i, angle);
-                    if (group == null || m_AnchoredMiddleAngles.Contains(group))
-                    {
-                        continue;
-                    }
+                    if (group == null) continue;
 
                     float2 original = group.position;
-                    if (!math.all(math.isfinite(original)))
-                    {
-                        continue;
-                    }
+                    if (!math.all(math.isfinite(original))) continue;
 
-                    // Never pull a genuinely off-screen guide into the viewport.
+                    // Never pull a genuinely off-screen measurement into view.
                     float margin = 90f * scale;
                     if (original.x < -margin || original.x > Screen.width + margin
                         || original.y < -margin || original.y > Screen.height + margin)
@@ -137,24 +225,34 @@ namespace HoverColors.Systems
                     }
 
                     float2 preferred = original;
-                    if (angle && m_HasLayoutStart && i < m_LayoutStartAngleCount
+                    if (angle && hasStart && i < startCount
                         && group.children[0] is FloatTooltip startAngle && startAngle.value == entry.m_Value)
                     {
-                        // Preserve the native radial direction so the reference
-                        // remains associated with its own arc. Small angles get
-                        // a shorter radius; larger angles stay nearer the arc.
-                        float2 radial = original - m_LayoutStart;
+                        // Continuous radial compression, not a threshold jump.
+                        // Keep the native bearing and avoid the start handle.
+                        float2 radial = original - startScreen;
                         float distance = math.length(radial);
-                        if (distance > 85f * scale)
+                        if (distance > 0.01f)
                         {
-                            float fraction = entry.m_Value <= 20f ? 0.40f : 0.30f;
-                            float shift = math.min(distance * fraction, 120f * scale);
-                            shift = math.min(shift, distance - 70f * scale);
+                            float shift = math.min(distance * 0.30f, 100f * scale);
+                            shift = math.min(shift, math.max(0f, distance - 70f * scale));
                             preferred -= radial / distance * shift;
                         }
                     }
 
-                    float2 position = FindClearPosition(original, preferred, angle, scale, out bool clear);
+                    float2 anchor = ClampToScreen(preferred, angle, scale);
+                    uint bit = 1u << i;
+                    float2 desired = anchor;
+                    if ((m_ValidOffsets & bit) != 0)
+                    {
+                        // Reuse the offset, not the old screen position.
+                        // The label continues tracking its live native anchor.
+                        desired = anchor + m_LayoutOffsets[i] * scale;
+                    }
+
+                    float2 position = FindClearPosition(anchor, desired, angle, scale, out bool clear);
+                    m_LayoutOffsets[i] = (position - anchor) / scale;
+                    seen |= bit;
                     if (!clear) crowded++;
                     m_OccupiedMeasurements.Add(MeasurementRect(position, angle, scale));
                     if (!position.Equals(original))
@@ -165,16 +263,17 @@ namespace HoverColors.Systems
                     }
                 }
             }
+            m_ValidOffsets = seen;
 
             if (moved > 0 && !m_LayoutLogged)
             {
                 m_LayoutLogged = true;
-                LogUtils.Info(() => $"{Mod.ModTag} Road Clutter Phase 2: adjusted {moved} measurement label positions; screen={Screen.width}x{Screen.height}, scale={scale:F2}");
+                LogUtils.Info(() => $"{Mod.ModTag} Road Clutter Phase 2: native-anchor layout active; adjusted {moved} labels (first guide priority, persistent local offsets)");
             }
             if (crowded > 0 && !m_LayoutCrowdedLogged)
             {
                 m_LayoutCrowdedLogged = true;
-                LogUtils.Info(() => $"{Mod.ModTag} Road Clutter Phase 2: {crowded} crowded labels after bounded search ({mode}, screen={Screen.width}x{Screen.height})");
+                LogUtils.Info(() => $"{Mod.ModTag} Road Clutter Phase 2: {crowded} crowded labels after bounded local search ({mode}, screen={Screen.width}x{Screen.height})");
             }
         }
 
@@ -263,11 +362,18 @@ namespace HoverColors.Systems
             return area;
         }
 
-        private float2 FindClearPosition(float2 original, float2 preferred, bool angle, float scale, out bool clear)
+        private float2 FindClearPosition(float2 anchor, float2 preferred, bool angle, float scale, out bool clear)
         {
-            // First attempt the desired position. If crowded, expand in rings
-            // around it. Clamping also keeps partially clipped edge labels visible.
+            // Prefer the last clear local offset during this preview. Bound all
+            // candidates relative to the native anchor, not the previous offset.
+            // There is no separate outside/inside placement state to oscillate.
+            float maxDistance = (angle ? 96f : 144f) * scale;
+            float maxDistanceSq = maxDistance * maxDistance;
             preferred = ClampToScreen(preferred, angle, scale);
+            if (math.distancesq(preferred, anchor) > maxDistanceSq)
+            {
+                preferred = anchor;
+            }
             float2 best = preferred;
             float bestOverlap = GetOverlap(MeasurementRect(best, angle, scale));
             float bestCost = 0f;
@@ -277,12 +383,19 @@ namespace HoverColors.Systems
                 return best;
             }
 
+            float anchorOverlap = GetOverlap(MeasurementRect(anchor, angle, scale));
+            if (anchorOverlap < bestOverlap)
+            {
+                best = anchor;
+                bestOverlap = anchorOverlap;
+                bestCost = math.distancesq(anchor, preferred);
+            }
+
             // Try the nearest edges of occupied boxes first, rather than
             // jumping a whole search step past a narrow but usable gap.
             Rect preferredBounds = MeasurementRect(preferred, angle, scale);
             float halfWidth = preferredBounds.width * 0.5f;
             float halfHeight = preferredBounds.height * 0.5f;
-            float maxDistance = 216f * scale;
             for (int i = 0; i < m_OccupiedMeasurements.Count; i++)
             {
                 Rect obstacle = m_OccupiedMeasurements[i];
@@ -298,7 +411,7 @@ namespace HoverColors.Systems
                     }
 
                     candidate = ClampToScreen(candidate, angle, scale);
-                    if (math.distancesq(candidate, original) > maxDistance * maxDistance) continue;
+                    if (math.distancesq(candidate, anchor) > maxDistanceSq) continue;
                     float overlap = GetOverlap(MeasurementRect(candidate, angle, scale));
                     float cost = math.distancesq(candidate, preferred);
                     if (overlap < bestOverlap || (overlap == bestOverlap && cost < bestCost))
@@ -311,7 +424,8 @@ namespace HoverColors.Systems
             }
 
             float step = 12f * scale;
-            for (int ring = 1; ring <= 18; ring++)
+            int maxRings = angle ? 8 : 12;
+            for (int ring = 1; ring <= maxRings; ring++)
             {
                 for (int y = -ring; y <= ring; y++)
                 {
@@ -319,7 +433,7 @@ namespace HoverColors.Systems
                     {
                         if (math.abs(x) != ring && math.abs(y) != ring) continue;
                         float2 candidate = ClampToScreen(preferred + new float2(x, y) * step, angle, scale);
-                        if (math.distancesq(candidate, original) > maxDistance * maxDistance) continue;
+                        if (math.distancesq(candidate, anchor) > maxDistanceSq) continue;
 
                         float overlap = GetOverlap(MeasurementRect(candidate, angle, scale));
                         float cost = math.distancesq(candidate, preferred);
@@ -341,8 +455,8 @@ namespace HoverColors.Systems
             }
 
             clear = bestOverlap == 0f;
-            // Never drop a measurement; least-overlapping fallback is preferable
-            // to the old behavior of restoring a fully obscured vanilla label.
+            // Never drop a measurement. If a tight curve cannot fit all labels
+            // locally, prefer a small overlap to a distant, misleading label.
             return best;
         }
     }
