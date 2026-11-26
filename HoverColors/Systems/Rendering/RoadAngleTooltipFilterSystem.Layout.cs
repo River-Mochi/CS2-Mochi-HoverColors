@@ -29,8 +29,9 @@ namespace HoverColors.Systems
         private const int kMaxMeasurements = 32;
         private const int kGuideReturnClearUpdates = 8;
         private const float kGuideReturnStep = 2f;
-        private const float kPiAnchorMaxRadius = 58f;
-        private const float kPiCollisionLimit = 40f;
+        private const float kPiAnchorRadius = 48f;
+        private const float kPiMaxRadius = 64f;
+        private const float kPiIncomingAngle = 12f;
         private readonly List<Rect> m_OccupiedMeasurements = new(12);
         private readonly List<string> m_GuidelinePaths = new(8);
         private readonly float2[] m_LayoutOffsets = new float2[kMaxMeasurements];
@@ -195,16 +196,21 @@ namespace HoverColors.Systems
                 m_OccupiedMeasurements.Add(cursorBounds);
             }
 
-            uint fixedGuides = GetFixedGuideMask(points, entries, mode, firstLength, out bool completeGuideBlock);
-            int piStart = firstLength + points.Length - 1;
-            bool orderedPiSuffix = completeGuideBlock && entries.Length == piStart + points.Length - 2;
+            uint fixedGuides = GetFixedGuideMask(points, entries, mode, firstLength);
+            bool ordinary = (mode == NetToolSystem.Mode.SimpleCurve && points.Length == 3)
+                || (mode == NetToolSystem.Mode.ComplexCurve && (points.Length == 3 || points.Length == 4));
+            int lastLength = -1;
+            for (int i = 0; i < entries.Length; i++)
+            {
+                if (entries[i].m_Type == GuideLinesSystem.TooltipType.Length) lastLength = i;
+            }
             int moved = 0;
             int crowded = 0;
             uint seen = 0;
-            // Reserve fixed guide legs before angles and the moving final leg.
-            // When native identity is uncertain, keep the existing first-guide
-            // priority. All angles retain their native inside/reference anchor.
-            for (int pass = 0; pass < 3; pass++)
+            // Fixed leg distances first; PI labels next, before movable
+            // starting references and final leg. Unknown ordinary angles keep
+            // their native positions instead of inheriting arbitrary offsets.
+            for (int pass = 0; pass < 4; pass++)
             {
                 for (int i = 0; i < entries.Length; i++)
                 {
@@ -213,9 +219,11 @@ namespace HoverColors.Systems
                     bool length = entry.m_Type == GuideLinesSystem.TooltipType.Length;
                     uint bit = 1u << i;
                     bool fixedGuide = (fixedGuides & bit) != 0;
+                    bool protectPi = ordinary && angle && i > lastLength && i >= startCount;
                     if ((pass == 0 && !fixedGuide)
-                        || (pass == 1 && !angle)
-                        || (pass == 2 && (!length || fixedGuide)))
+                        || (pass == 1 && !protectPi)
+                        || (pass == 2 && (!angle || protectPi))
+                        || (pass == 3 && (!length || fixedGuide)))
                     {
                         continue;
                     }
@@ -234,21 +242,41 @@ namespace HoverColors.Systems
                         continue;
                     }
 
-                    float2 preferred = original;
-                    float2 piCenter = default;
-                    float2 piInward = default;
-                    bool compactPi = angle && orderedPiSuffix && i >= piStart && camera != null
-                        && group.children[0] is FloatTooltip piValue && piValue.value == entry.m_Value
-                        && TryGetCompactPiAnchor(camera, points, i - piStart + 1, entry,
-                            original, scale, out preferred, out piCenter, out piInward);
-                    if (!compactPi) preferred = original;
-                    if (compactPi && !m_CompactPiLogged)
+                    // Never apply the general collision offset cache to an
+                    // ordinary PI. Native angle suffix follows the length block.
+                    // Match each PI independently, including when the other PI
+                    // is too short to emit a tooltip. If uncertain, keep native.
+                    if (protectPi)
                     {
-                        m_CompactPiLogged = true;
-                        LogUtils.Info(() => $"{Mod.ModTag} Road Clutter Phase 2: compact inside-PI anchor active");
+                        float2 piPosition = original;
+                        if (lastLength >= 0 && camera != null
+                            && group.children[0] is FloatTooltip piValue && piValue.value == entry.m_Value
+                            && TryGetCompactPiAnchor(camera, points, entry, original, scale,
+                                out float2 center, out float2 direction, out float radius))
+                        {
+                            piPosition = FindPiPosition(center, direction, radius, original, scale);
+                            if (!m_CompactPiLogged)
+                            {
+                                m_CompactPiLogged = true;
+                                LogUtils.Info(() => $"{Mod.ModTag} Road Clutter Phase 2: fixed-leg interior PI anchor active");
+                            }
+                        }
+
+                        Rect piBounds = MeasurementRect(piPosition, true, scale);
+                        if (GetOverlap(piBounds) > 0f) crowded++;
+                        m_OccupiedMeasurements.Add(piBounds);
+                        m_GuideClearUpdates[i] = 0;
+                        if (!piPosition.Equals(original))
+                        {
+                            group.position = piPosition;
+                            group.SetChildrenChanged();
+                            moved++;
+                        }
+                        continue;
                     }
 
-                    if (!compactPi && angle && hasStart && i < startCount
+                    float2 preferred = original;
+                    if (angle && hasStart && i < startCount
                         && group.children[0] is FloatTooltip startAngle && startAngle.value == entry.m_Value)
                     {
                         // Continuous radial compression, not a threshold jump.
@@ -287,10 +315,7 @@ namespace HoverColors.Systems
                         m_GuideClearUpdates[i] = 0;
                     }
 
-                    // Bound the extra movement of a verified PI more tightly than
-                    // other angles. Never send it across the joint to clear a label.
-                    float2 position = FindClearPosition(anchor, desired, angle, scale,
-                        compactPi, piCenter, piInward, out bool clear);
+                    float2 position = FindClearPosition(anchor, desired, angle, scale, out bool clear);
                     if (!clear || !position.Equals(desired))
                     {
                         m_GuideClearUpdates[i] = 0;
@@ -312,7 +337,7 @@ namespace HoverColors.Systems
             if (moved > 0 && !m_LayoutLogged)
             {
                 m_LayoutLogged = true;
-                LogUtils.Info(() => $"{Mod.ModTag} Road Clutter Phase 2: native-anchor layout active; adjusted {moved} labels (fixed guide priority, persistent local offsets, compact PI anchors)");
+                LogUtils.Info(() => $"{Mod.ModTag} Road Clutter Phase 2: native-anchor layout active; adjusted {moved} labels (fixed guide priority, persistent local offsets, fixed-leg interior PI anchors)");
             }
             if (crowded > 0 && !m_LayoutCrowdedLogged)
             {
@@ -326,10 +351,8 @@ namespace HoverColors.Systems
         // Ordinary Simple/Complex previews have one moving final leg.
         // Keep the previous first-guide priority in other configurations.
         private static uint GetFixedGuideMask(NativeList<ControlPoint> points,
-            NativeList<GuideLinesSystem.TooltipInfo> entries, NetToolSystem.Mode mode, int firstLength,
-            out bool completeGuideBlock)
+            NativeList<GuideLinesSystem.TooltipInfo> entries, NetToolSystem.Mode mode, int firstLength)
         {
-            completeGuideBlock = false;
             if (firstLength < 0) return 0;
             uint fallback = 1u << firstLength;
             bool ordinary = (mode == NetToolSystem.Mode.SimpleCurve && points.Length == 3)
@@ -353,7 +376,6 @@ namespace HoverColors.Systems
             }
 
             // Exclude the final leg (the live mouse-controlled endpoint).
-            completeGuideBlock = true;
             uint mask = 0;
             for (int leg = 0; leg < legCount - 1; leg++)
             {
@@ -362,71 +384,147 @@ namespace HoverColors.Systems
             return mask;
         }
 
-        // The complete native length block and PI count establish joint order.
-        // Retain the native angle's interior side, but bias toward its fixed
-        // incoming leg and reduce the radius. This reduces movement when only
-        // the outgoing leg changes, symmetrically in either drawing direction.
+        // Native DrawAngleIndicator places ordinary angle labels on the
+        // interior bisector, at 1.5 times its arc radius. Verify the value,
+        // height and native radial direction for a unique joint, not its index
+        // or rounded value alone. A 180-degree reference has no unique interior
+        // and keeps vanilla placement.
         private static bool TryGetCompactPiAnchor(Camera camera, NativeList<ControlPoint> points,
-            int jointIndex, GuideLinesSystem.TooltipInfo entry, float2 original, float scale,
-            out float2 preferred, out float2 center, out float2 inward)
+            GuideLinesSystem.TooltipInfo entry, float2 original, float scale,
+            out float2 center, out float2 direction, out float radius)
         {
-            preferred = original;
             center = default;
-            inward = default;
-            if (jointIndex < 1 || jointIndex >= points.Length - 1
-                || entry.m_Type != GuideLinesSystem.TooltipType.Angle
-                || !(entry.m_Value > 0f && entry.m_Value <= 180f))
+            direction = default;
+            radius = 0f;
+            if (entry.m_Type != GuideLinesSystem.TooltipType.Angle
+                || !(entry.m_Value > 0f && entry.m_Value < 180f)
+                || !math.all(math.isfinite(entry.m_Position)))
             {
                 return false;
             }
 
-            float3 joint = points[jointIndex].m_Position;
-            float3 previous = points[jointIndex - 1].m_Position;
-            float3 next = points[jointIndex + 1].m_Position;
-            float2 back = math.normalizesafe(previous.xz - joint.xz);
-            float2 forward = math.normalizesafe(next.xz - joint.xz);
-            if (math.lengthsq(back) < 0.5f || math.lengthsq(forward) < 0.5f) return false;
+            int match = -1;
+            float2 matchedBack = default;
+            float2 matchedForward = default;
+            float matchedAngle = 0f;
+            for (int j = 1; j < points.Length - 1; j++)
+            {
+                float3 joint = points[j].m_Position;
+                float2 backVector = points[j - 1].m_Position.xz - joint.xz;
+                float2 forwardVector = points[j + 1].m_Position.xz - joint.xz;
+                float backLength = math.length(backVector);
+                float forwardLength = math.length(forwardVector);
+                if (!(backLength > 0.01f) || !(forwardLength > 0.01f)
+                    || !math.isfinite(backLength) || !math.isfinite(forwardLength))
+                {
+                    continue;
+                }
 
-            float angle = math.degrees(math.acos(math.clamp(math.dot(back, forward), -1f, 1f)));
-            if (!math.isfinite(angle) || math.abs(angle - entry.m_Value) > 1f
-                || !math.all(math.isfinite(entry.m_Position))
-                || math.abs(entry.m_Position.y - joint.y) > 0.05f)
+                float2 back = backVector / backLength;
+                float2 forward = forwardVector / forwardLength;
+                float radians = math.acos(math.clamp(math.dot(back, forward), -1f, 1f));
+                float2 nativeRadial = entry.m_Position.xz - joint.xz;
+                float nativeRadius = math.length(nativeRadial);
+                // Vanilla caps the arc radius by half the shorter leg.
+                if (!math.isfinite(radians) || math.abs(math.degrees(radians) - entry.m_Value) > 1f
+                    || math.abs(entry.m_Position.y - joint.y) > 0.05f
+                    || !(nativeRadius > 0.01f)
+                    || !(nativeRadius <= math.min(backLength, forwardLength) * 0.75f + 0.05f)
+                    || math.dot(nativeRadial / nativeRadius, math.normalizesafe(back + forward)) < 0.995f)
+                {
+                    continue;
+                }
+
+                if (match >= 0) return false;
+                match = j;
+                matchedBack = back;
+                matchedForward = forward;
+                matchedAngle = radians;
+            }
+
+            if (match < 0) return false;
+            float3 pi = points[match].m_Position;
+            Vector3 projected = camera.WorldToScreenPoint(pi);
+            if (!(projected.z > 0f)) return false;
+            center = new float2(projected.x, Screen.height - projected.y);
+            float nativeScreenRadius = math.distance(original, center);
+            if (!math.all(math.isfinite(center)) || !math.isfinite(nativeScreenRadius)
+                || nativeScreenRadius <= 0.01f)
             {
                 return false;
             }
 
-            Vector3 jointScreen = camera.WorldToScreenPoint(joint);
-            Vector3 backScreen = camera.WorldToScreenPoint(previous);
-            if (jointScreen.z <= 0f || backScreen.z <= 0f) return false;
-            center = new float2(jointScreen.x, Screen.height - jointScreen.y);
-            float2 backPos = new(backScreen.x, Screen.height - backScreen.y);
-            float2 radial = original - center;
-            float radius = math.length(radial);
-            if (!math.all(math.isfinite(center)) || !math.all(math.isfinite(backPos))
-                || !math.isfinite(radius) || radius < 0.01f)
+            // A fixed angle from the incoming leg, on the interior side.
+            // The direction is unchanged for a fixed incoming leg and turn
+            // side until the angle becomes narrower than twice this offset.
+            // No horizontal screen-axis preference: mirrored curves work alike.
+            float turn = matchedBack.x * matchedForward.y - matchedBack.y * matchedForward.x;
+            if (math.abs(turn) < 0.0001f) return false;
+            float offset = math.min(math.radians(kPiIncomingAngle), matchedAngle * 0.5f)
+                * math.sign(turn);
+            float sin = math.sin(offset);
+            float cos = math.cos(offset);
+            float2 inward = new(matchedBack.x * cos - matchedBack.y * sin,
+                matchedBack.x * sin + matchedBack.y * cos);
+
+            // Project a ray in the same horizontal plane as the native arc.
+            // This keeps the label center inside the sector under camera tilt.
+            float3 sample = pi;
+            sample.xz += inward;
+            Vector3 ray = camera.WorldToScreenPoint(sample);
+            if (!(ray.z > 0f)) return false;
+            float2 radial = new float2(ray.x, Screen.height - ray.y) - center;
+            direction = math.normalizesafe(radial);
+            radius = math.min(nativeScreenRadius, kPiAnchorRadius * scale);
+            return math.all(math.isfinite(direction)) && math.lengthsq(direction) > 0.5f
+                && math.isfinite(radius);
+        }
+
+        private float2 FindPiPosition(float2 center, float2 direction, float radius,
+            float2 original, float scale)
+        {
+            // All candidates lie on the same verified interior ray. No
+            // arbitrary X/Y shift or persistent screen offset is allowed.
+            // Prefer the fixed compact position; only consider radial changes
+            // if a substantial part of the badge would overlap another label.
+            float2 preferred = center + direction * radius;
+            if (!preferred.Equals(ClampToScreen(preferred, true, scale)))
             {
-                return false;
+                // Avoid clamping a label to a point outside its own angle.
+                // Native fallback is safer when the ray leaves the viewport.
+                return original;
             }
 
-            inward = radial / radius;
-            // For ordinary angles the native anchor must lie along the
-            // interior bisector. At 180 degrees the native normal is retained.
-            float2 nativeWorld = math.normalizesafe(entry.m_Position.xz - joint.xz);
-            if (entry.m_Value < 180f
-                && math.dot(nativeWorld, math.normalizesafe(back + forward)) < 0.98f)
+            Rect bounds = MeasurementRect(preferred, true, scale);
+            float bestOverlap = GetOverlap(bounds);
+            float threshold = bounds.width * bounds.height * 0.25f;
+            if (bestOverlap <= threshold) return preferred;
+
+            float2 best = preferred;
+            for (int step = 1; step <= 2; step++)
             {
-                return false;
+                for (int side = -1; side <= 1; side += 2)
+                {
+                    float candidateRadius = radius + side * step * 8f * scale;
+                    if (candidateRadius < math.min(radius, 24f * scale)
+                        || candidateRadius > math.min(kPiMaxRadius * scale, radius + 16f * scale))
+                    {
+                        continue;
+                    }
+
+                    float2 candidate = center + direction * candidateRadius;
+                    if (!candidate.Equals(ClampToScreen(candidate, true, scale))) continue;
+                    float overlap = GetOverlap(MeasurementRect(candidate, true, scale));
+                    // Do not move for negligible collision improvements.
+                    if (overlap + threshold * 0.5f < bestOverlap)
+                    {
+                        best = candidate;
+                        bestOverlap = overlap;
+                    }
+                }
             }
 
-            // Keep the location within the native radius (including tight
-            // curves), so this does not push a label away from its own joint.
-            // Bias toward the incoming leg, using screen-space direction only.
-            float2 backDirection = math.normalizesafe(backPos - center);
-            float2 direction = math.normalizesafe(inward * 0.65f + backDirection * 0.35f, inward);
-            float compactRadius = math.min(radius, math.min(kPiAnchorMaxRadius * scale,
-                math.max(26f * scale, radius * 0.60f)));
-            preferred = center + direction * compactRadius;
-            return math.all(math.isfinite(preferred));
+            return best;
         }
 
         private float2 EaseGuideOffset(int index, float2 anchor, float2 desired, float scale)
@@ -543,23 +641,16 @@ namespace HoverColors.Systems
             return area;
         }
 
-        private static bool IsLocalCandidate(float2 candidate, float2 anchor, float maxDistanceSq,
-            bool compactPi, float2 piCenter, float2 piInward)
-        {
-            return math.distancesq(candidate, anchor) <= maxDistanceSq
-                && (!compactPi || math.dot(candidate - piCenter, piInward) >= 0f);
-        }
-
         private float2 FindClearPosition(float2 anchor, float2 preferred, bool angle, float scale,
-            bool compactPi, float2 piCenter, float2 piInward, out bool clear)
+            out bool clear)
         {
             // Prefer the last clear local offset during this preview. Bound all
             // candidates relative to the native anchor, not the previous offset.
             // There is no separate outside/inside placement state to oscillate.
-            float maxDistance = (compactPi ? kPiCollisionLimit : angle ? 96f : 144f) * scale;
+            float maxDistance = (angle ? 96f : 144f) * scale;
             float maxDistanceSq = maxDistance * maxDistance;
             preferred = ClampToScreen(preferred, angle, scale);
-            if (!IsLocalCandidate(preferred, anchor, maxDistanceSq, compactPi, piCenter, piInward))
+            if (math.distancesq(preferred, anchor) > maxDistanceSq)
             {
                 preferred = anchor;
             }
@@ -588,9 +679,7 @@ namespace HoverColors.Systems
             for (int i = 0; i < m_OccupiedMeasurements.Count; i++)
             {
                 Rect obstacle = m_OccupiedMeasurements[i];
-                // For compact PI labels also try a vertically aligned badge
-                // beside a nearby obstacle, without moving or merging widgets.
-                for (int side = 0; side < (compactPi ? 6 : 4); side++)
+                for (int side = 0; side < 4; side++)
                 {
                     float2 candidate = preferred;
                     switch (side)
@@ -598,19 +687,11 @@ namespace HoverColors.Systems
                         case 0: candidate.x = obstacle.xMin - halfWidth - scale; break;
                         case 1: candidate.x = obstacle.xMax + halfWidth + scale; break;
                         case 2: candidate.y = obstacle.yMin - halfHeight - scale; break;
-                        case 3: candidate.y = obstacle.yMax + halfHeight + scale; break;
-                        case 4:
-                            candidate.x = obstacle.center.x;
-                            candidate.y = obstacle.yMin - halfHeight - scale;
-                            break;
-                        default:
-                            candidate.x = obstacle.center.x;
-                            candidate.y = obstacle.yMax + halfHeight + scale;
-                            break;
+                        default: candidate.y = obstacle.yMax + halfHeight + scale; break;
                     }
 
                     candidate = ClampToScreen(candidate, angle, scale);
-                    if (!IsLocalCandidate(candidate, anchor, maxDistanceSq, compactPi, piCenter, piInward)) continue;
+                    if (math.distancesq(candidate, anchor) > maxDistanceSq) continue;
                     float overlap = GetOverlap(MeasurementRect(candidate, angle, scale));
                     float cost = math.distancesq(candidate, preferred);
                     if (overlap < bestOverlap || (overlap == bestOverlap && cost < bestCost))
@@ -623,7 +704,7 @@ namespace HoverColors.Systems
             }
 
             float step = 12f * scale;
-            int maxRings = compactPi ? 4 : angle ? 8 : 12;
+            int maxRings = angle ? 8 : 12;
             for (int ring = 1; ring <= maxRings; ring++)
             {
                 for (int y = -ring; y <= ring; y++)
@@ -632,7 +713,7 @@ namespace HoverColors.Systems
                     {
                         if (math.abs(x) != ring && math.abs(y) != ring) continue;
                         float2 candidate = ClampToScreen(preferred + new float2(x, y) * step, angle, scale);
-                        if (!IsLocalCandidate(candidate, anchor, maxDistanceSq, compactPi, piCenter, piInward)) continue;
+                        if (math.distancesq(candidate, anchor) > maxDistanceSq) continue;
 
                         float overlap = GetOverlap(MeasurementRect(candidate, angle, scale));
                         float cost = math.distancesq(candidate, preferred);
