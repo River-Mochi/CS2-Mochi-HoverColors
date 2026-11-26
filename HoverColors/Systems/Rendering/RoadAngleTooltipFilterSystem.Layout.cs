@@ -29,6 +29,7 @@ namespace HoverColors.Systems
         private const int kMaxMeasurements = 32;
         private const int kGuideReturnClearUpdates = 8;
         private const float kGuideReturnStep = 2f;
+        private const float kPiRadiusScale = 1.1f / 1.5f;
         private readonly List<Rect> m_OccupiedMeasurements = new(12);
         private readonly List<string> m_GuidelinePaths = new(8);
         private readonly float2[] m_LayoutOffsets = new float2[kMaxMeasurements];
@@ -125,7 +126,7 @@ namespace HoverColors.Systems
             // Native DrawControlPoints emits the start references first, then
             // guide distances, then PI angles. Special Continuous emits up to
             // two start references followed by up to two generated PI angles.
-            // Only use the ordered PI suffix after verifying the complete guide block.
+            // Use the ordered PI suffix only when all intermediate joints are represented.
             bool generated = mode == NetToolSystem.Mode.Continuous && points.Length >= 3
                 && math.dot(points[points.Length - 1].m_Direction,
                     points[points.Length - 2].m_Direction) <= -0.01f;
@@ -206,12 +207,17 @@ namespace HoverColors.Systems
             {
                 if (entries[i].m_Type == GuideLinesSystem.TooltipType.Length) lastLength = i;
             }
+            // Vanilla emits ordinary PI angles in consecutive joint order.
+            // If an angle is absent, preserve the native placement rather
+            // than assigning the remaining angle to the wrong joint.
+            bool completePiSuffix = ordinary && firstLength >= 0
+                && entries.Length - lastLength - 1 == points.Length - 2;
             int moved = 0;
             int crowded = 0;
             uint seen = 0;
-            // Fixed leg distances first; reserve native PI labels next, before
-            // movable starting references and final leg. PI positions are never
-            // modified by this pass in ordinary curves.
+            // Fixed leg distances first; reserve PI labels next, before
+            // movable starting references and final leg. Use only the native
+            // radial direction for PI labels, never a collision-search offset.
             for (int pass = 0; pass < 4; pass++)
             {
                 for (int i = 0; i < entries.Length; i++)
@@ -244,20 +250,41 @@ namespace HoverColors.Systems
                         continue;
                     }
 
-                    // Preserve native PI placement. Switching between a custom
-                    // compact anchor and the native anchor caused rapid jumps
-                    // during dragging. Reserve the native badge for subsequent
-                    // measurements, but do not relocate it or refresh its children.
+                    // Vanilla emits each PI at 1.5 times its indicator size.
+                    // Shorten that exact world-space radius to 1.1 before
+                    // projection. No alternate ray, collision search, or cached
+                    // PI offset. Preserve native positions if identity is unclear.
                     if (protectPi)
                     {
-                        Rect piBounds = MeasurementRect(original, true, scale);
+                        float2 piPosition = original;
+                        if (completePiSuffix && camera != null)
+                        {
+                            int jointIndex = i - lastLength;
+                            float3 joint = points[jointIndex].m_Position;
+                            float3 target = math.lerp(joint, entry.m_Position, kPiRadiusScale);
+                            Vector3 projected = camera.WorldToScreenPoint(target);
+                            float2 candidate = new(projected.x, Screen.height - projected.y);
+                            if (projected.z > 0f && math.all(math.isfinite(candidate)))
+                            {
+                                piPosition = candidate;
+                                if (!m_NativePiLogged)
+                                {
+                                    m_NativePiLogged = true;
+                                    LogUtils.Info(() => $"{Mod.ModTag} Road Clutter Phase 2: native PI radial scale 1.1/1.5 active");
+                                }
+                            }
+                        }
+
+                        Rect piBounds = MeasurementRect(piPosition, true, scale);
                         if (GetOverlap(piBounds) > 0f) crowded++;
                         m_OccupiedMeasurements.Add(piBounds);
                         m_GuideClearUpdates[i] = 0;
-                        if (!m_NativePiLogged)
+                        if (!piPosition.Equals(original))
                         {
-                            m_NativePiLogged = true;
-                            LogUtils.Info(() => $"{Mod.ModTag} Road Clutter Phase 2: native PI placement preserved");
+                            // The position setter marks properties changed.
+                            // Do not force a child refresh for a position edit.
+                            group.position = piPosition;
+                            moved++;
                         }
                         continue;
                     }
@@ -324,7 +351,7 @@ namespace HoverColors.Systems
             if (moved > 0 && !m_LayoutLogged)
             {
                 m_LayoutLogged = true;
-                LogUtils.Info(() => $"{Mod.ModTag} Road Clutter Phase 2: native-anchor layout active; adjusted {moved} labels (fixed guide priority, persistent local offsets, native PI placement)");
+                LogUtils.Info(() => $"{Mod.ModTag} Road Clutter Phase 2: native-anchor layout active; adjusted {moved} labels (fixed guide priority, persistent local offsets, shortened native PI radius)");
             }
             if (crowded > 0 && !m_LayoutCrowdedLogged)
             {
