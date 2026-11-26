@@ -27,9 +27,12 @@ namespace HoverColors.Systems
     public partial class RoadAngleTooltipFilterSystem
     {
         private const int kMaxMeasurements = 32;
+        private const int kGuideReturnClearUpdates = 8;
+        private const float kGuideReturnStep = 2f;
         private readonly List<Rect> m_OccupiedMeasurements = new(12);
         private readonly List<string> m_GuidelinePaths = new(8);
         private readonly float2[] m_LayoutOffsets = new float2[kMaxMeasurements];
+        private readonly byte[] m_GuideClearUpdates = new byte[kMaxMeasurements];
         private GuideLinesSystem? m_LayoutGuideLines;
         private uint m_ValidOffsets;
         private uint m_PreviewAngleMask;
@@ -189,13 +192,13 @@ namespace HoverColors.Systems
                 m_OccupiedMeasurements.Add(cursorBounds);
             }
 
+            uint fixedGuides = GetFixedGuideMask(points, entries, mode, firstLength);
             int moved = 0;
             int crowded = 0;
             uint seen = 0;
-            // First guide (usually the already placed V1 leg) has priority
-            // over moving measurements. Then process native angles in order,
-            // then the remaining guide lengths. Do not swap a PI across its
-            // handle: all angles start at the native inside/reference anchor.
+            // Reserve fixed guide legs before angles and the moving final leg.
+            // When native identity is uncertain, keep the existing first-guide
+            // priority. All angles retain their native inside/reference anchor.
             for (int pass = 0; pass < 3; pass++)
             {
                 for (int i = 0; i < entries.Length; i++)
@@ -203,9 +206,11 @@ namespace HoverColors.Systems
                     GuideLinesSystem.TooltipInfo entry = entries[i];
                     bool angle = entry.m_Type == GuideLinesSystem.TooltipType.Angle;
                     bool length = entry.m_Type == GuideLinesSystem.TooltipType.Length;
-                    if ((pass == 0 && i != firstLength)
+                    uint bit = 1u << i;
+                    bool fixedGuide = (fixedGuides & bit) != 0;
+                    if ((pass == 0 && !fixedGuide)
                         || (pass == 1 && !angle)
-                        || (pass == 2 && (!length || i == firstLength)))
+                        || (pass == 2 && (!length || fixedGuide)))
                     {
                         continue;
                     }
@@ -241,16 +246,34 @@ namespace HoverColors.Systems
                     }
 
                     float2 anchor = ClampToScreen(preferred, angle, scale);
-                    uint bit = 1u << i;
                     float2 desired = anchor;
                     if ((m_ValidOffsets & bit) != 0)
                     {
                         // Reuse the offset, not the old screen position.
                         // The label continues tracking its live native anchor.
                         desired = anchor + m_LayoutOffsets[i] * scale;
+                        if (length && !fixedGuide)
+                        {
+                            // Only a displaced, non-fixed distance may ease back
+                            // toward its own guide. Wait for sustained clear space
+                            // and never jump straight back after a brief opening.
+                            desired = EaseGuideOffset(i, anchor, desired, scale);
+                        }
+                        else
+                        {
+                            m_GuideClearUpdates[i] = 0;
+                        }
+                    }
+                    else
+                    {
+                        m_GuideClearUpdates[i] = 0;
                     }
 
                     float2 position = FindClearPosition(anchor, desired, angle, scale, out bool clear);
+                    if (!clear || !position.Equals(desired))
+                    {
+                        m_GuideClearUpdates[i] = 0;
+                    }
                     m_LayoutOffsets[i] = (position - anchor) / scale;
                     seen |= bit;
                     if (!clear) crowded++;
@@ -268,13 +291,80 @@ namespace HoverColors.Systems
             if (moved > 0 && !m_LayoutLogged)
             {
                 m_LayoutLogged = true;
-                LogUtils.Info(() => $"{Mod.ModTag} Road Clutter Phase 2: native-anchor layout active; adjusted {moved} labels (first guide priority, persistent local offsets)");
+                LogUtils.Info(() => $"{Mod.ModTag} Road Clutter Phase 2: native-anchor layout active; adjusted {moved} labels (fixed guide priority, persistent local offsets, tighter spacing)");
             }
             if (crowded > 0 && !m_LayoutCrowdedLogged)
             {
                 m_LayoutCrowdedLogged = true;
                 LogUtils.Info(() => $"{Mod.ModTag} Road Clutter Phase 2: {crowded} crowded labels after bounded local search ({mode}, screen={Screen.width}x{Screen.height})");
             }
+        }
+
+        // Verify native guide-length entries against the actual consecutive
+        // control-point midpoints before assigning earlier legs priority.
+        // Ordinary Simple/Complex previews have one moving final leg.
+        // Keep the previous first-guide priority in other configurations.
+        private static uint GetFixedGuideMask(NativeList<ControlPoint> points,
+            NativeList<GuideLinesSystem.TooltipInfo> entries, NetToolSystem.Mode mode, int firstLength)
+        {
+            if (firstLength < 0) return 0;
+            uint fallback = 1u << firstLength;
+            bool ordinary = (mode == NetToolSystem.Mode.SimpleCurve && points.Length == 3)
+                || (mode == NetToolSystem.Mode.ComplexCurve && (points.Length == 3 || points.Length == 4));
+            int legCount = points.Length - 1;
+            if (!ordinary || firstLength + legCount > entries.Length) return fallback;
+
+            for (int leg = 0; leg < legCount; leg++)
+            {
+                GuideLinesSystem.TooltipInfo entry = entries[firstLength + leg];
+                float3 start = points[leg].m_Position;
+                float3 end = points[leg + 1].m_Position;
+                float length = math.distance(start.xz, end.xz);
+                if (entry.m_Type != GuideLinesSystem.TooltipType.Length
+                    || !math.isfinite(length) || !(entry.m_Value > 0f)
+                    || Mathf.RoundToInt(length * 2f) * 0.5f != entry.m_Value
+                    || !(math.distancesq(entry.m_Position, (start + end) * 0.5f) <= 0.0025f))
+                {
+                    return fallback;
+                }
+            }
+
+            // Exclude the final leg (the live mouse-controlled endpoint).
+            uint mask = 0;
+            for (int leg = 0; leg < legCount - 1; leg++)
+            {
+                mask |= 1u << (firstLength + leg);
+            }
+            return mask;
+        }
+
+        private float2 EaseGuideOffset(int index, float2 anchor, float2 desired, float scale)
+        {
+            float2 delta = anchor - desired;
+            float distance = math.length(delta);
+            if (distance <= 0.01f || !math.isfinite(distance)
+                || GetOverlap(MeasurementRect(anchor, false, scale)) > 0f
+                || GetOverlap(MeasurementRect(desired, false, scale)) > 0f)
+            {
+                m_GuideClearUpdates[index] = 0;
+                return desired;
+            }
+
+            if (m_GuideClearUpdates[index] < kGuideReturnClearUpdates)
+            {
+                m_GuideClearUpdates[index]++;
+                return desired;
+            }
+
+            float2 candidate = ClampToScreen(desired + delta / distance
+                * math.min(distance, kGuideReturnStep * scale), false, scale);
+            if (GetOverlap(MeasurementRect(candidate, false, scale)) == 0f)
+            {
+                return candidate;
+            }
+
+            m_GuideClearUpdates[index] = 0;
+            return desired;
         }
 
         private void EnsureGuidelinePaths(int count)
@@ -331,8 +421,8 @@ namespace HoverColors.Systems
         // COHTML does not expose the actual rendered bounds to this C# pass.
         private static Rect MeasurementRect(float2 center, bool angle, float scale)
         {
-            float width = (angle ? 108f : 126f) * scale;
-            float height = 38f * scale;
+            float width = (angle ? 100f : 116f) * scale;
+            float height = 34f * scale;
             return new Rect(center.x - width * 0.5f, center.y - height * 0.5f, width, height);
         }
 
