@@ -197,8 +197,14 @@ namespace HoverColors.Systems
             }
 
             uint fixedGuides = GetFixedGuideMask(points, entries, mode, firstLength);
+            // Ordinary Continuous uses the same native raw-point angle suffix
+            // as Simple. Generated Continuous uses fitted/intersected joints
+            // instead; retain its previously tested layout until independently
+            // verified. The native guide-length block must exist for Continuous.
             bool ordinary = (mode == NetToolSystem.Mode.SimpleCurve && points.Length == 3)
-                || (mode == NetToolSystem.Mode.ComplexCurve && (points.Length == 3 || points.Length == 4));
+                || (mode == NetToolSystem.Mode.ComplexCurve && (points.Length == 3 || points.Length == 4))
+                || (mode == NetToolSystem.Mode.Continuous && !generated
+                    && points.Length == 3 && firstLength >= 0);
             int lastLength = -1;
             for (int i = 0; i < entries.Length; i++)
             {
