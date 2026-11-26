@@ -29,6 +29,7 @@ namespace HoverColors.Systems
         private const int kMaxMeasurements = 32;
         private const int kGuideReturnClearUpdates = 8;
         private const float kGuideReturnStep = 2f;
+        private const float kMovingGuideMaxOffset = 60f;
         private const float kPiRadiusScale = 1.1f / 1.5f;
         private readonly List<Rect> m_OccupiedMeasurements = new(12);
         private readonly List<string> m_GuidelinePaths = new(8);
@@ -329,7 +330,10 @@ namespace HoverColors.Systems
                         m_GuideClearUpdates[i] = 0;
                     }
 
-                    float2 position = FindClearPosition(anchor, desired, angle, scale, out bool clear);
+                    // A moving leg must remain recognizable as a measurement
+                    // of its own guide. Prefer a small overlap to a long detour.
+                    float2 position = FindClearPosition(anchor, desired, angle, length && !fixedGuide,
+                        scale, out bool clear);
                     if (!clear || !position.Equals(desired))
                     {
                         m_GuideClearUpdates[i] = 0;
@@ -512,13 +516,13 @@ namespace HoverColors.Systems
             return area;
         }
 
-        private float2 FindClearPosition(float2 anchor, float2 preferred, bool angle, float scale,
-            out bool clear)
+        private float2 FindClearPosition(float2 anchor, float2 preferred, bool angle,
+            bool movingGuide, float scale, out bool clear)
         {
             // Prefer the last clear local offset during this preview. Bound all
             // candidates relative to the native anchor, not the previous offset.
             // There is no separate outside/inside placement state to oscillate.
-            float maxDistance = (angle ? 96f : 144f) * scale;
+            float maxDistance = (angle ? 96f : movingGuide ? kMovingGuideMaxOffset : 144f) * scale;
             float maxDistanceSq = maxDistance * maxDistance;
             preferred = ClampToScreen(preferred, angle, scale);
             if (math.distancesq(preferred, anchor) > maxDistanceSq)
@@ -575,7 +579,7 @@ namespace HoverColors.Systems
             }
 
             float step = 12f * scale;
-            int maxRings = angle ? 8 : 12;
+            int maxRings = angle ? 8 : movingGuide ? 5 : 12;
             for (int ring = 1; ring <= maxRings; ring++)
             {
                 for (int y = -ring; y <= ring; y++)
