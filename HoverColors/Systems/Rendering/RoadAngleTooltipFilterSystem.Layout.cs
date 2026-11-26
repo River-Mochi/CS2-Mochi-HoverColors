@@ -31,6 +31,7 @@ namespace HoverColors.Systems
         private readonly List<Rect> m_LayoutJointBounds = new(2);
         private float2 m_LayoutStart;
         private bool m_HasLayoutStart;
+        private int m_LayoutStartAngleCount;
         private bool m_LayoutLogged;
         private bool m_LayoutScaleLogged;
         private bool m_LayoutCrowdedLogged;
@@ -83,6 +84,7 @@ namespace HoverColors.Systems
                     Vector3 start = camera.WorldToScreenPoint(points[0].m_Position);
                     m_LayoutStart = new float2(start.x, Screen.height - start.y);
                     m_HasLayoutStart = start.z > 0f && math.all(math.isfinite(m_LayoutStart));
+                    m_LayoutStartAngleCount = entries.Length;
                 }
             }
             m_OccupiedMeasurements.Clear();
@@ -135,17 +137,19 @@ namespace HoverColors.Systems
                     }
 
                     float2 preferred = original;
-                    if (angle && m_HasLayoutStart)
+                    if (angle && m_HasLayoutStart && i < m_LayoutStartAngleCount
+                        && group.children[0] is FloatTooltip startAngle && startAngle.value == entry.m_Value)
                     {
-                        // In a verified three-point curve the other angles are
-                        // start alignment references. Vanilla places text at 1.5x
-                        // the arc radius; move distant labels slightly toward it.
+                        // Preserve the native radial direction so the reference
+                        // remains associated with its own arc. Small angles get
+                        // a shorter radius; larger angles stay nearer the arc.
                         float2 radial = original - m_LayoutStart;
                         float distance = math.length(radial);
                         if (distance > 85f * scale)
                         {
-                            // Aim nearer the arc, not at the start point itself.
-                            float shift = math.min(distance * 0.30f, 100f * scale);
+                            float fraction = entry.m_Value <= 20f ? 0.40f : 0.30f;
+                            float shift = math.min(distance * fraction, 120f * scale);
+                            shift = math.min(shift, distance - 70f * scale);
                             preferred -= radial / distance * shift;
                         }
                     }

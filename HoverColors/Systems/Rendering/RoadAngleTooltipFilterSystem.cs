@@ -37,6 +37,7 @@ namespace HoverColors.Systems
         {
             if (m_TooltipUISystem == null || !ShouldFilter(m_ToolSystem))
             {
+                ResetPiPlacementState();
                 return;
             }
 
@@ -112,6 +113,7 @@ namespace HoverColors.Systems
                 m_AnchoredMiddleAngles.Clear();
                 m_LayoutJointBounds.Clear();
                 m_HasLayoutStart = false;
+                m_LayoutStartAngleCount = 0;
                 TryMoveMiddleAngle(netTool, m_TooltipUISystem);
                 ArrangeCurveMeasurements(netTool, m_TooltipUISystem);
             }

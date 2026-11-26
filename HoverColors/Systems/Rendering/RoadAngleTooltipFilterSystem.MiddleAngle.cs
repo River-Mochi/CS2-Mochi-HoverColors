@@ -39,7 +39,18 @@ namespace HoverColors.Systems
         private bool m_ContinuousAnglesLogged;
         private bool m_ContinuousToleranceLogged;
         private bool m_ContinuousMatchMissLogged;
-        private bool m_ContinuousNearbyLogged;
+        private bool m_PiNearbyLogged;
+        // 0 = undecided, -1 = above, +1 = below. Keep only the side,
+        // never a stale screen coordinate or native widget reference.
+        private int m_FirstPiSide;
+        private int m_SecondPiSide;
+        private int m_PiPreviewFrame = -1;
+        private NetToolSystem.Mode m_PiPreviewMode;
+        private NetPrefab? m_PiPreviewPrefab;
+        private float3 m_PiPreviewStart;
+        private int m_PiPreviewPointCount;
+        private bool m_PiPreviewGenerated;
+        private bool m_StablePiLogged;
 
         private void InitializeMiddleAnglePlacement()
         {
@@ -56,6 +67,7 @@ namespace HoverColors.Systems
                     && mode != NetToolSystem.Mode.ComplexCurve
                     && mode != NetToolSystem.Mode.Continuous))
             {
+                ResetPiPlacementState();
                 return;
             }
 
@@ -81,8 +93,12 @@ namespace HoverColors.Systems
                 || (mode == NetToolSystem.Mode.ComplexCurve && points.Length == 4);
             if (points.Length != 3 && !multiJoint)
             {
+                ResetPiPlacementState();
                 return;
             }
+
+            PreparePiPlacementState(netTool, mode, points[0].m_Position,
+                points.Length, generatedContinuous);
 
             // Match the 1.6.4 NetToolGuideLinesJob.DrawControlPoints size rules.
             // The optional prefab lookup is local to this experiment only; a miss
@@ -127,12 +143,19 @@ namespace HoverColors.Systems
                 // If one joint is missing, use the original strict matching only.
                 bool verifiedPair = TryVerifyContinuousPair(entries, camera, start.m_Position,
                     firstJoint, secondJoint, end.m_Position, snapDistance, scale);
+                if (verifiedPair)
+                {
+                    SetStartingReferenceLayout(camera, start.m_Position, entries.Length - 2);
+                }
+
+                ReservePiHandle(camera, firstJoint, snapDistance, scale);
+                ReservePiHandle(camera, secondJoint, snapDistance, scale);
                 TryPlaceJointAngle(tooltipUI, entries, camera, start.m_Position,
                     firstJoint, secondJoint, snapDistance, scale, true, hasCursor, cursorBounds,
-                    generatedContinuous: true, verifiedIndex: verifiedPair ? entries.Length - 2 : -1);
+                    jointSlot: 0, verifiedIndex: verifiedPair ? entries.Length - 2 : -1);
                 TryPlaceJointAngle(tooltipUI, entries, camera, firstJoint,
                     secondJoint, end.m_Position, snapDistance, scale, true, hasCursor, cursorBounds,
-                    generatedContinuous: true, verifiedIndex: verifiedPair ? entries.Length - 1 : -1);
+                    jointSlot: 1, verifiedIndex: verifiedPair ? entries.Length - 1 : -1);
 
                 if (m_AnchoredMiddleAngles.Count == 2 && !m_ContinuousAnglesLogged)
                 {
@@ -143,19 +166,30 @@ namespace HoverColors.Systems
                 return;
             }
 
+            // Vanilla adds starting angles before segment lengths, then PI
+            // angles. A length boundary is required before classifying a prefix.
+            // If that boundary is missing, do not guess which angles are starts.
+            int startingCount = 0;
+            while (startingCount < entries.Length
+                && entries[startingCount].m_Type == GuideLinesSystem.TooltipType.Angle)
+            {
+                startingCount++;
+            }
+            if (startingCount > 0 && startingCount <= 2 && startingCount < entries.Length
+                && entries[startingCount].m_Type == GuideLinesSystem.TooltipType.Length)
+            {
+                SetStartingReferenceLayout(camera, points[0].m_Position, startingCount);
+            }
+
+            for (int jointIndex = 1; jointIndex < points.Length - 1; jointIndex++)
+            {
+                ReservePiHandle(camera, points[jointIndex].m_Position, snapDistance, scale);
+            }
             for (int jointIndex = 1; jointIndex < points.Length - 1; jointIndex++)
             {
                 TryPlaceJointAngle(tooltipUI, entries, camera, points[jointIndex - 1].m_Position,
                     points[jointIndex].m_Position, points[jointIndex + 1].m_Position,
-                    snapDistance, scale, multiJoint, hasCursor, cursorBounds);
-            }
-
-            // Retain the verified three-point reference-angle refinement only.
-            if (!multiJoint && m_AnchoredMiddleAngles.Count == 1)
-            {
-                Vector3 start = camera.WorldToScreenPoint(points[0].m_Position);
-                m_LayoutStart = new float2(start.x, Screen.height - start.y);
-                m_HasLayoutStart = start.z > 0f && math.all(math.isfinite(m_LayoutStart));
+                    snapDistance, scale, multiJoint, hasCursor, cursorBounds, jointSlot: jointIndex - 1);
             }
 
             if (multiJoint && m_AnchoredMiddleAngles.Count == 2 && !m_MultiAngleLogged)
@@ -163,6 +197,79 @@ namespace HoverColors.Systems
                 m_MultiAngleLogged = true;
                 LogUtils.Info(() => $"{Mod.ModTag} Road Clutter Phase 2: anchored both Complex curve PI angles");
             }
+        }
+
+        private void ResetPiPlacementState()
+        {
+            m_PiPreviewFrame = -1;
+            m_PiPreviewPrefab = null;
+            m_FirstPiSide = 0;
+            m_SecondPiSide = 0;
+        }
+
+        private void PreparePiPlacementState(NetToolSystem netTool, NetToolSystem.Mode mode,
+            float3 start, int pointCount, bool generated)
+        {
+            int frame = UnityEngine.Time.frameCount;
+            if (m_PiPreviewFrame < 0 || frame - m_PiPreviewFrame > 3
+                || m_PiPreviewMode != mode || m_PiPreviewPrefab != netTool.prefab
+                || m_PiPreviewPointCount != pointCount || m_PiPreviewGenerated != generated
+                || math.distancesq(start, m_PiPreviewStart) > 0.0625f)
+            {
+                m_FirstPiSide = 0;
+                m_SecondPiSide = 0;
+                m_PiPreviewStart = start;
+            }
+
+            m_PiPreviewFrame = frame;
+            m_PiPreviewMode = mode;
+            m_PiPreviewPrefab = netTool.prefab;
+            m_PiPreviewPointCount = pointCount;
+            m_PiPreviewGenerated = generated;
+        }
+
+        private void SetStartingReferenceLayout(Camera camera, float3 start, int count)
+        {
+            Vector3 screen = camera.WorldToScreenPoint(start);
+            m_LayoutStart = new float2(screen.x, Screen.height - screen.y);
+            m_HasLayoutStart = count > 0 && screen.z > 0f && math.all(math.isfinite(m_LayoutStart));
+            m_LayoutStartAngleCount = count;
+        }
+
+        // Reserve both actual intermediate handles before placing either angle.
+        // A default rect keeps the slot index stable when projection is invalid.
+        private void ReservePiHandle(Camera camera, float3 joint, float snapDistance, float scale)
+        {
+            Vector3 center = camera.WorldToScreenPoint(joint);
+            if (!(center.z > 0f) || !math.isfinite(center.x) || !math.isfinite(center.y))
+            {
+                m_LayoutJointBounds.Add(default);
+                return;
+            }
+
+            float radius = snapDistance * 0.125f * 2.5f;
+            float top = center.y;
+            float bottom = center.y;
+            float left = center.x;
+            float right = center.x;
+            for (int i = 0; i < 8; i++)
+            {
+                float radians = i * (Mathf.PI * 0.25f);
+                float3 sample = joint;
+                sample.xz += new float2(math.cos(radians), math.sin(radians)) * radius;
+                Vector3 screen = camera.WorldToScreenPoint(sample);
+                if (screen.z > 0f && math.isfinite(screen.x) && math.isfinite(screen.y))
+                {
+                    top = math.max(top, screen.y);
+                    bottom = math.min(bottom, screen.y);
+                    left = math.min(left, screen.x);
+                    right = math.max(right, screen.x);
+                }
+            }
+
+            float padding = 4f * scale;
+            m_LayoutJointBounds.Add(new Rect(left - padding, Screen.height - top - padding,
+                right - left + padding * 2f, top - bottom + padding * 2f));
         }
 
         // Mirrors the guide-only Continuous calculation in 1.6.4f1
@@ -326,7 +433,7 @@ namespace HoverColors.Systems
             NativeList<GuideLinesSystem.TooltipInfo> entries, Camera camera,
             float3 previous, float3 joint, float3 next, float snapDistance, float scale,
             bool multiJoint, bool hasCursor, Rect cursorBounds,
-            bool generatedContinuous = false, int verifiedIndex = -1)
+            int jointSlot, int verifiedIndex = -1)
         {
             if (!TryGetJointMeasurement(previous, joint, next, snapDistance,
                 out int expectedAngle, out float3 expectedWorldPosition))
@@ -377,79 +484,73 @@ namespace HoverColors.Systems
             {
                 return;
             }
-            float radius = snapDistance * 0.125f * 2.5f;
-            // The handle is a world-space circle. Its apparent radius grows when
-            // zooming in, so a fixed pixel offset alone cannot preserve clearance.
-            float top = jointScreen.y;
-            float bottom = jointScreen.y;
-            float left = jointScreen.x;
-            float right = jointScreen.x;
-            for (int i = 0; i < 8; i++)
+            Rect handle = m_LayoutJointBounds[jointSlot];
+            if (!(handle.width > 0f) || !(handle.height > 0f)) return;
+
+            // Handle bounds already include 4px of padding. Preserve the
+            // previously tested 26px clearance from the real circle edge.
+            float clearance = 22f * scale;
+            float2 above = new(jointScreen.x, math.min(Screen.height - jointScreen.y
+                - kMiddleAngleOffsetAt1080 * scale, handle.yMin - clearance));
+            float2 below = new(jointScreen.x, handle.yMax + clearance);
+
+            int side = jointSlot == 0 ? m_FirstPiSide : m_SecondPiSide;
+            if (side == 0)
             {
-                float radians = i * (Mathf.PI * 0.25f);
-                float3 sample = joint;
-                sample.xz += new float2(math.cos(radians), math.sin(radians)) * radius;
-                Vector3 screen = camera.WorldToScreenPoint(sample);
-                if (screen.z > 0f && math.isfinite(screen.y) && math.isfinite(screen.x))
+                Vector3 startScreen = camera.WorldToScreenPoint(previous);
+                Vector3 endScreen = camera.WorldToScreenPoint(next);
+                bool preferBelow = startScreen.z > 0f && endScreen.z > 0f
+                    && (multiJoint
+                        ? jointScreen.y < (startScreen.y + endScreen.y) * 0.5f
+                        : jointScreen.y < math.min(startScreen.y, endScreen.y) - 18f * scale);
+                side = preferBelow ? 1 : -1;
+            }
+
+            // Keep the chosen side for this preview. Other ordinary angle and
+            // length labels can move later; they must not cause a PI side flip.
+            float2 preferred = side > 0 ? below : above;
+            float2 opposite = side > 0 ? above : below;
+            bool nearby = false;
+            float2 newPosition = preferred;
+            if (!IsPiPositionClear(preferred, scale, hasCursor, cursorBounds))
+            {
+                if (TryFindNearbyPiPosition(preferred, side, scale, hasCursor, cursorBounds, out newPosition))
                 {
-                    top = math.max(top, screen.y);
-                    bottom = math.min(bottom, screen.y);
-                    left = math.min(left, screen.x);
-                    right = math.max(right, screen.x);
+                    nearby = true;
+                }
+                else
+                {
+                    side = -side;
+                    newPosition = opposite;
+                    if (!IsPiPositionClear(opposite, scale, hasCursor, cursorBounds))
+                    {
+                        if (!TryFindNearbyPiPosition(opposite, side, scale, hasCursor, cursorBounds, out newPosition))
+                        {
+                            return;
+                        }
+                        nearby = true;
+                    }
                 }
             }
 
-            // Keep the successful PI clearance while shrinking collision boxes.
-            float clearance = 26f * scale;
-            float offset = math.max(kMiddleAngleOffsetAt1080 * scale, top - jointScreen.y + clearance);
-            float2 above = new(jointScreen.x, Screen.height - jointScreen.y - offset);
-            float2 below = new(jointScreen.x, Screen.height - bottom + clearance);
-            Vector3 startScreen = camera.WorldToScreenPoint(previous);
-            Vector3 endScreen = camera.WorldToScreenPoint(next);
-            // Choose the outward side: above for a high apex, below for a low
-            // apex. For side-facing curves retain above as the stable default.
-            bool preferBelow = startScreen.z > 0f && endScreen.z > 0f
-                && (multiJoint
-                    ? jointScreen.y < (startScreen.y + endScreen.y) * 0.5f
-                    : jointScreen.y < math.min(startScreen.y, endScreen.y) - 18f * scale);
-            float aboveCost = MiddleSideCost(above, tooltipUI, oldPosition, scale, hasCursor, cursorBounds);
-            float belowCost = MiddleSideCost(below, tooltipUI, oldPosition, scale, hasCursor, cursorBounds);
-            // The other labels can move, so a modest overlap should not make
-            // the anchor flicker between sides. Cursor/edge obstruction wins.
-            Rect labelBounds = MeasurementRect(above, true, scale);
-            float preference = (multiJoint ? 0.75f : 0.5f) * labelBounds.width * labelBounds.height;
-            float2 newPosition;
-            if (float.IsPositiveInfinity(aboveCost) && float.IsPositiveInfinity(belowCost))
-            {
-                // Keep a verified Continuous PI near its handle even if the
-                // centered positions are blocked. Do not jump straight to the
-                // original inside-arc position unless this bounded search fails.
-                if (!generatedContinuous || !TryFindNearbyContinuousPosition(above, below,
-                    preferBelow, tooltipUI, oldPosition, scale, hasCursor, cursorBounds,
-                    out newPosition))
-                {
-                    return;
-                }
+            // Persist the successful side, even after an obstruction clears.
+            // Reproject the position from the live circle every frame.
+            if (jointSlot == 0) m_FirstPiSide = side;
+            else m_SecondPiSide = side;
 
-                if (!m_ContinuousNearbyLogged)
-                {
-                    m_ContinuousNearbyLogged = true;
-                    LogUtils.Info(() => $"{Mod.ModTag} Road Clutter Continuous: used near-handle placement fallback");
-                }
-            }
-            else
-            {
-                newPosition = belowCost + (preferBelow ? 0f : preference)
-                    < aboveCost + (preferBelow ? preference : 0f) ? below : above;
-            }
-
-            // Only reposition the verified existing widget, never its value.
             group.position = newPosition;
             group.SetChildrenChanged();
             m_AnchoredMiddleAngles.Add(group);
-            float padding = 4f * scale;
-            m_LayoutJointBounds.Add(new Rect(left - padding, Screen.height - top - padding,
-                right - left + padding * 2f, top - bottom + padding * 2f));
+            if (!m_StablePiLogged)
+            {
+                m_StablePiLogged = true;
+                LogUtils.Info(() => $"{Mod.ModTag} Road Clutter Phase 2: stable PI side placement active");
+            }
+            if (nearby && !m_PiNearbyLogged)
+            {
+                m_PiNearbyLogged = true;
+                LogUtils.Info(() => $"{Mod.ModTag} Road Clutter Phase 2: used near-handle placement fallback");
+            }
             if (usedTolerance && !m_ContinuousToleranceLogged)
             {
                 m_ContinuousToleranceLogged = true;
@@ -463,87 +564,54 @@ namespace HoverColors.Systems
             }
         }
 
-        private bool TryFindNearbyContinuousPosition(float2 above, float2 below, bool preferBelow,
-            TooltipUISystem tooltipUI, float2 oldPosition, float scale, bool hasCursor,
-            Rect cursorBounds, out float2 result)
+        private bool TryFindNearbyPiPosition(float2 center, int side, float scale,
+            bool hasCursor, Rect cursorBounds, out float2 result)
         {
             result = default;
-            float bestCost = float.PositiveInfinity;
-            // At most 24 candidates: small sideways or outward shifts, never
-            // inside the handle. The established PI and cursor remain hard obstacles.
-            for (int side = 0; side < 2; side++)
+            // Prefer the smallest shift on the current side. At most twelve
+            // candidates, with no scan of movable angle/distance widgets.
+            for (int step = 1; step <= 4; step++)
             {
-                bool isBelow = side == 1;
-                float2 center = isBelow ? below : above;
-                float direction = isBelow ? 1f : -1f;
-                for (int step = 1; step <= 4; step++)
+                float delta = step * 12f * scale;
+                for (int axis = 0; axis < 3; axis++)
                 {
-                    float delta = step * 12f * scale;
-                    for (int axis = 0; axis < 3; axis++)
+                    float2 candidate = center + (axis == 0 ? new float2(0f, side * delta)
+                        : axis == 1 ? new float2(-delta, 0f) : new float2(delta, 0f));
+                    if (IsPiPositionClear(candidate, scale, hasCursor, cursorBounds))
                     {
-                        float2 candidate = center + (axis == 0 ? new float2(-delta, 0f)
-                            : axis == 1 ? new float2(delta, 0f) : new float2(0f, direction * delta));
-                        float overlap = MiddleSideCost(candidate, tooltipUI, oldPosition, scale, hasCursor, cursorBounds);
-                        float cost = overlap + delta * delta + (isBelow == preferBelow ? 0f : 144f * scale * scale);
-                        if (cost < bestCost)
-                        {
-                            bestCost = cost;
-                            result = candidate;
-                        }
+                        result = candidate;
+                        return true;
                     }
                 }
             }
 
-            return !float.IsPositiveInfinity(bestCost);
+            return false;
         }
 
-        private float MiddleSideCost(float2 center, TooltipUISystem tooltipUI,
-            float2 oldPosition, float scale, bool hasCursor, Rect cursorBounds)
+        private bool IsPiPositionClear(float2 center, float scale, bool hasCursor, Rect cursorBounds)
         {
-            if (!math.all(math.isfinite(center))) return float.PositiveInfinity;
+            if (!math.all(math.isfinite(center))) return false;
             Rect bounds = MeasurementRect(center, true, scale);
             if (bounds.xMin < 4f || bounds.yMin < 4f
-                || bounds.xMax > Screen.width - 4f || bounds.yMax > Screen.height - 4f)
+                || bounds.xMax > Screen.width - 4f || bounds.yMax > Screen.height - 4f
+                || (hasCursor && OverlapArea(bounds, cursorBounds) > 0f))
             {
-                return float.PositiveInfinity;
+                return false;
             }
 
-            // Never lock two PI labels on top of each other, a reserved handle,
-            // or the cursor. If neither centered side fits, the general layout
-            // can still search inward and around the existing measurements.
-            if (hasCursor && OverlapArea(bounds, cursorBounds) > 0f)
-            {
-                return float.PositiveInfinity;
-            }
             for (int i = 0; i < m_AnchoredMiddleAngles.Count; i++)
             {
-                if (OverlapArea(bounds, MeasurementRect(m_AnchoredMiddleAngles[i].position, true, scale)) > 0f
-                    || OverlapArea(bounds, m_LayoutJointBounds[i]) > 0f)
+                if (OverlapArea(bounds, MeasurementRect(m_AnchoredMiddleAngles[i].position, true, scale)) > 0f)
                 {
-                    return float.PositiveInfinity;
+                    return false;
                 }
             }
-
-            float cost = 0f;
-            for (int i = 0; i < tooltipUI.groups.Count; i++)
+            for (int i = 0; i < m_LayoutJointBounds.Count; i++)
             {
-                TooltipGroup group = tooltipUI.groups[i];
-                if (m_AnchoredMiddleAngles.Contains(group)
-                    || group.children.Count != 1 || group.children[0] is not FloatTooltip value
-                    || group.horizontalAlignment != TooltipGroup.Alignment.Center
-                    || group.verticalAlignment != TooltipGroup.Alignment.Center
-                    || math.distancesq(group.position, oldPosition) <= 4f)
-                {
-                    continue;
-                }
-
-                bool angle = value.icon == "Media/Glyphs/Angle.svg";
-                if (angle || value.icon == "Media/Glyphs/Length.svg")
-                {
-                    cost += OverlapArea(bounds, MeasurementRect(group.position, angle, scale));
-                }
+                if (OverlapArea(bounds, m_LayoutJointBounds[i]) > 0f) return false;
             }
-            return cost;
+
+            return true;
         }
     }
 }
