@@ -27,6 +27,7 @@ namespace HoverColors.UI
         private ValueBinding<float> m_RoadBadgeG = null!;
         private ValueBinding<float> m_RoadBadgeB = null!;
         private ValueBinding<float> m_RoadBadgeA = null!;
+        private ValueBinding<bool> m_RoadBadgeNativeBackground = null!;
         private ValueBinding<bool> m_RoadBadgeCustomText = null!;
         private ValueBinding<float> m_RoadBadgeTextR = null!;
         private ValueBinding<float> m_RoadBadgeTextG = null!;
@@ -52,6 +53,7 @@ namespace HoverColors.UI
             m_RoadBadgeG = AddValueBinding("RoadBadgeG", HoverColorsSettings.kDefaultRoadBadgeG);
             m_RoadBadgeB = AddValueBinding("RoadBadgeB", HoverColorsSettings.kDefaultRoadBadgeB);
             m_RoadBadgeA = AddValueBinding("RoadBadgeA", 1f);
+            m_RoadBadgeNativeBackground = AddValueBinding("RoadBadgeNativeBackground", false);
             m_RoadBadgeCustomText = AddValueBinding("RoadBadgeCustomText", false);
             m_RoadBadgeTextR = AddValueBinding("RoadBadgeTextR", 1f);
             m_RoadBadgeTextG = AddValueBinding("RoadBadgeTextG", 1f);
@@ -66,6 +68,7 @@ namespace HoverColors.UI
             AddBinding(new TriggerBinding(Mod.ModId, "CloseRoadEngineer", CloseRoadEngineer));
             AddBinding(new TriggerBinding<float, float, float>(Mod.ModId, "SetRoadBadgeTextColor", SetRoadBadgeTextColor));
             AddBinding(new TriggerBinding(Mod.ModId, "ResetRoadBadgeTextColor", ResetRoadBadgeTextColor));
+            AddBinding(new TriggerBinding<bool>(Mod.ModId, "ResetRoadAppearance", ResetRoadAppearance));
             AddBinding(new TriggerBinding(Mod.ModId, "OpenRoadEngineerSettings", OpenRoadEngineerSettings));
             AddBinding(new TriggerBinding<bool>(Mod.ModId, "SetRoadEngineerSettingsOpen", SetRoadEngineerSettingsOpen));
             AddBinding(new TriggerBinding<bool>(Mod.ModId, "SetRoadEngineerEnabled", SetRoadEngineerEnabled));
@@ -83,7 +86,7 @@ namespace HoverColors.UI
         private void SetRoadEngineerSettingsOpen(bool open)
         {
             m_RoadEngineerSettingsOpen = open;
-            if (!open) m_RoadEngineerSettingsPinned = false;
+            // Expanding/collapsing settings is independent of manual panel visibility.
             UpdateIfChanged(m_RoadEngineerSettingsOpenBinding, open);
             UpdateIfChanged(m_RoadEngineerSettingsPinnedBinding, m_RoadEngineerSettingsPinned);
         }
@@ -97,6 +100,12 @@ namespace HoverColors.UI
             UpdateIfChanged(m_RoadEngineerEnabled, enabled);
             if (!enabled)
             {
+                // Keep the currently opened settings available for editing.
+                if (m_RoadEngineerSettingsOpen)
+                {
+                    m_RoadEngineerSettingsPinned = true;
+                    UpdateIfChanged(m_RoadEngineerSettingsPinnedBinding, true);
+                }
                 UpdateIfChanged(m_RoadEngineerActive, false);
                 UpdateIfChanged(m_RoadEngineerCourse, string.Empty);
                 m_RoadEngineerNextRead = 0f;
@@ -105,8 +114,28 @@ namespace HoverColors.UI
 
         private void CloseRoadEngineer()
         {
+            m_RoadEngineerSettingsPinned = false;
             SetRoadEngineerSettingsOpen(false);
             SetRoadEngineerEnabled(false);
+        }
+
+        private void ResetRoadAppearance(bool native)
+        {
+            HoverColorsSettings? settings = Mod.Settings;
+            if (settings == null) return;
+            settings.RoadBadgeNativeBackground = native;
+            // Native mode leaves background painting to the game's tooltip style.
+            // Store a representative dark swatch for the next custom edit.
+            settings.RoadBadgeR = native ? 20f / 255f : HoverColorsSettings.kDefaultRoadBadgeR;
+            settings.RoadBadgeG = native ? 27f / 255f : HoverColorsSettings.kDefaultRoadBadgeG;
+            settings.RoadBadgeB = native ? 34f / 255f : HoverColorsSettings.kDefaultRoadBadgeB;
+            settings.RoadBadgeA = 1f;
+            settings.RoadBadgeCustomText = false;
+            settings.RoadBadgeTextR = settings.RoadBadgeTextG = settings.RoadBadgeTextB = 1f;
+            settings.RoadEngineerUseUnits = false;
+            // Arc color, filter, visibility and position are independent choices.
+            settings.ApplyAndSave();
+            SyncRoadEngineerSettings();
         }
 
         private void SetRoadBadgeTextColor(float r, float g, float b)
@@ -158,8 +187,9 @@ namespace HoverColors.UI
             g = Clamp01(g);
             b = Clamp01(b);
             a = Clamp01(a);
-            if (ApproxEqual(settings.RoadBadgeR, r) && ApproxEqual(settings.RoadBadgeG, g)
+            if (!settings.RoadBadgeNativeBackground && ApproxEqual(settings.RoadBadgeR, r) && ApproxEqual(settings.RoadBadgeG, g)
                 && ApproxEqual(settings.RoadBadgeB, b) && ApproxEqual(settings.RoadBadgeA, a)) return;
+            settings.RoadBadgeNativeBackground = false;
             settings.RoadBadgeR = r;
             settings.RoadBadgeG = g;
             settings.RoadBadgeB = b;
@@ -184,6 +214,7 @@ namespace HoverColors.UI
             UpdateIfChanged(m_RoadBadgeG, settings?.RoadBadgeG ?? HoverColorsSettings.kDefaultRoadBadgeG);
             UpdateIfChanged(m_RoadBadgeB, settings?.RoadBadgeB ?? HoverColorsSettings.kDefaultRoadBadgeB);
             UpdateIfChanged(m_RoadBadgeA, settings?.RoadBadgeA ?? 1f);
+            UpdateIfChanged(m_RoadBadgeNativeBackground, settings?.RoadBadgeNativeBackground ?? false);
             UpdateIfChanged(m_RoadBadgeCustomText, settings?.RoadBadgeCustomText ?? false);
             UpdateIfChanged(m_RoadBadgeTextR, settings?.RoadBadgeTextR ?? 1f);
             UpdateIfChanged(m_RoadBadgeTextG, settings?.RoadBadgeTextG ?? 1f);

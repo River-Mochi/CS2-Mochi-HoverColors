@@ -6,16 +6,18 @@
 // Copyright and license notices MUST be preserved.
 // ================= </copyright> ======================
 
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { bindValue, trigger, useValue } from "cs2/api";
-import { useCallback, useEffect } from "react";
-import { usePanelDrag } from "../panel/hooks/usePanelDrag";
-import dragGripIcon from "../../images/mochi-drag-grip.svg";
-import { Button, Tooltip } from "cs2/ui";
-import hcStyles from "../MochiColorPickerPanel.module.scss";
-import { compactSwatchStyle, normalizeColorFieldValue } from "../panel/helpers/MochiPanelColorUtils";
+import { Button } from "cs2/ui";
 import { Color } from "cs2/bindings";
+import { usePanelDrag } from "../panel/hooks/usePanelDrag";
+import { SideTooltip, SideTooltipProvider } from "../panel/tooltip/SideTooltip";
+import { compactSwatchStyle, normalizeColorFieldValue } from "../panel/helpers/MochiPanelColorUtils";
 import { VanillaComponentResolver } from "../utils/vanilla/VanillaComponentResolver";
 import { CHANNEL, angleArcR$, angleArcG$, angleArcB$, roadAngleTooltipsHidden$ } from "../panel/bindings/MochiPanelBindings";
+import closeIconSrc from "../../images/Close.svg";
+import dragGripIcon from "../../images/mochi-drag-grip.svg";
+import hcStyles from "../MochiColorPickerPanel.module.scss";
 import styles from "./RoadEngineerPanel.module.scss";
 
 const active$ = bindValue<boolean>(CHANNEL, "RoadEngineerActive", false);
@@ -38,6 +40,10 @@ const offsetY$ = bindValue<number>(CHANNEL, "RoadEngineerOffsetY", 0);
 
 const byte = (v: number) => Math.round(Math.max(0, Math.min(1, Number.isFinite(v) ? v : 0)) * 255);
 const cssColor = (r: number, g: number, b: number, a: number) => "rgba(" + byte(r) + "," + byte(g) + "," + byte(b) + "," + Math.max(0, Math.min(1, Number.isFinite(a) ? a : 1)) + ")";
+
+const nativeBackground$ = bindValue<boolean>(CHANNEL, "RoadBadgeNativeBackground", false);
+const PANEL_WIDTH = 184;
+type PickerDirection = "up" | "down";
 
 export const RoadEngineerEntry = () => {
     const active = useValue(active$);
@@ -64,16 +70,16 @@ export const RoadEngineerEntry = () => {
 
 const RoadEngineerPanel = ({ badge, textColor }: { badge: Color; textColor: Color }) => {
     const customText = useValue(customText$);
+    const nativeBackground = useValue(nativeBackground$);
     const expanded = useValue(settingsOpen$);
     const enabled = useValue(enabled$);
-    const setExpanded = (open: boolean) => trigger(CHANNEL, "SetRoadEngineerSettingsOpen", open);
     const positionSet = useValue(positionSet$);
     const offsetX = useValue(offsetX$);
     const offsetY = useValue(offsetY$);
+    const [picker, setPicker] = useState<PickerDirection | null>(null);
     const savePosition = useCallback((x: number, y: number) => {
         trigger(CHANNEL, "SetRoadEngineerPosition", Math.round(x), Math.round(y));
     }, []);
-    // Saved offsets are relative to the top-right CSS anchor, not the HC panel.
     const { panelElementRef, panelOffset, panelDragging, handlePanelDragStart } = usePanelDrag(
         "road", { left: 0, top: 0 }, positionSet ? { left: offsetX, top: offsetY } : null,
         savePosition, expanded);
@@ -85,94 +91,155 @@ const RoadEngineerPanel = ({ badge, textColor }: { badge: Color; textColor: Colo
     const arcB = useValue(angleArcB$);
     const resolver = VanillaComponentResolver.instance;
     const focus = resolver.FOCUS_DISABLED;
+    const roundButton = resolver.roundHighlightButtonTheme["button"] ?? "";
     const values = course.split("|").map(Number);
     const valid = course.length > 0 && values.length === 5 && values.every(Number.isFinite);
-    const distance = (value: number) => (units ? value / 8 : value).toFixed(2) + (units ? " U" : " m");
-    const vertical = (value: number) => value.toFixed(2) + " m";
-    // Keep every row mounted, even when the tool has no valid preview.
+    const distance = (v: number) => (units ? v / 8 : v).toFixed(2) + (units ? " U" : " m");
+    const vertical = (v: number) => v.toFixed(2) + " m";
     const rows = [
-        ["Total length", valid ? distance(values[0]) : "—", "Length along the road."],
-        ["Distance", valid ? distance(values[1]) : "—", "Straight-line distance."],
-        ["Elevation", valid ? vertical(values[2]) : "—", "End point world elevation."],
-        ["Relief", valid ? (values[3] > 0 ? "+" : "") + vertical(values[3]) : "—", "End minus start elevation."],
-        ["Slope", valid ? (values[4] > 0 ? "+" : "") + values[4].toFixed(2) + "%" : "—", "Average slope."],
+        ["Length", valid ? distance(values[0]) : "—", "Horizontal length along the road."],
+        ["Distance", valid ? distance(values[1]) : "—", "Straight-line distance between endpoints."],
+        ["Elevation", valid ? vertical(values[2]) : "—", "Endpoint world height, not height above ground."],
+        ["Relief", valid ? (values[3] > 0 ? "+" : "") + vertical(values[3]) : "—", "End height minus start height."],
+        ["Slope", valid ? (values[4] > 0 ? "+" : "") + values[4].toFixed(2) + "%" : "—", "Average slope along the road."],
     ];
-    const panelBase = resolver.panelBaseTheme;
-    const panelTheme = resolver.panelTheme;
-    const menuTheme = resolver.infoviewMenuTheme;
     const setBadge = (value: Color) => {
-        const color = normalizeColorFieldValue(value);
-        trigger(CHANNEL, "SetRoadBadgeColor", color.r, color.g, color.b, color.a);
+        const c = normalizeColorFieldValue(value);
+        trigger(CHANNEL, "SetRoadBadgeColor", c.r, c.g, c.b, c.a);
     };
+    // Use a separate body class so HC and RE cannot remove each other's picker state.
+    useEffect(() => {
+        document.body.classList.toggle("mochiRoadCompactPickerOpen", picker !== null);
+        return () => { document.body.classList.remove("mochiRoadCompactPickerOpen"); };
+    }, [picker]);
+    useEffect(() => { if (!expanded) setPicker(null); }, [expanded]);
+    const preview = <span className={styles.preview} style={{
+        backgroundColor: nativeBackground ? "var(--tooltipColor)" : cssColor(badge.r, badge.g, badge.b, badge.a),
+        color: customText ? cssColor(textColor.r, textColor.g, textColor.b, 1) : undefined,
+    }}><img src="Media/Glyphs/Angle.svg" alt="" className={styles.previewIcon} />82°</span>;
 
-    return <div ref={panelElementRef} className={`${panelBase.panel ?? "panel_YqS"} ${menuTheme.menu ?? "menu_O_M"} ${hcStyles.panelFrame} ${styles.panel}`}
-        style={{ position: "fixed", top: "72rem", right: "18rem", transform: "translate(" + panelOffset.x + "px," + panelOffset.y + "px)" }}>
-        <div className={`${panelTheme.content ?? "content_XD5 content_AD7 child-opacity-transition_nkS"} ${menuTheme.content ?? "content_Hzl"} ${hcStyles.panelContent} ${hcStyles.panelDarker} ${styles.content}`}>
-        <div className={`${hcStyles.titleBar} ${styles.header}`}>
-            <div className={`${hcStyles.titleDragHandle} ${styles.dragTitle}`} onMouseDown={handlePanelDragStart}><span className={hcStyles.titleText}>Road Engineer</span></div>
-            <Button className={styles.iconButton} variant="icon" focusKey={focus} onSelect={() => setExpanded(!expanded)}
-                tooltipLabel="Settings" aria-label="Road Engineer settings" aria-pressed={expanded}>
-                <img src="Media/Glyphs/Gear.svg" className={styles.icon} alt="" />
-            </Button>
-            <Button className={styles.iconButton} variant="icon" focusKey={focus} onSelect={() => trigger(CHANNEL, "CloseRoadEngineer")}
-                tooltipLabel="Close panel. Reopen from HC gear." aria-label="Close Road Engineer">
-                <img src="Media/Glyphs/Close.svg" className={styles.icon} alt="" />
-            </Button>
-        </div>
-        <div className={styles.body}>
-        {rows.map(([label, value, hint]) =>
-            <Tooltip key={label} tooltip={hint} direction="left">
-                <div className={styles.row}><span className={styles.label}>{label}</span><span className={styles.value}>{value}</span></div>
-            </Tooltip>)}
-        {expanded && <div className={styles.settings}>
-            <div className={styles.row}><span>Show panel</span>
-                <Button className={styles.optionButton} variant="flat" focusKey={focus} selected={enabled}
-                    onSelect={() => trigger(CHANNEL, "SetRoadEngineerEnabled", !enabled)}>{enabled ? "ON" : "OFF"}</Button>
+    const toggle = (label: string, checked: boolean, action: () => void) =>
+        <Button className={`${styles.toggle} ${checked ? styles.toggleOn : ""}`} variant="icon" focusKey={focus}
+            aria-pressed={checked} aria-label={label} onSelect={action}>
+            <span className={`${styles.toggleDot} ${checked ? styles.toggleDotOn : ""}`} />
+            <span>{checked ? "ON" : "OFF"}</span>
+        </Button>;
+    const choice = (label: string, selected: boolean, action: () => void) =>
+        <Button className={`${styles.choice} ${selected ? styles.choiceOn : ""}`} variant="icon"
+            focusKey={focus} aria-pressed={selected} onSelect={action}>{label}</Button>;
+
+    return <div ref={panelElementRef} className={styles.panel}
+        style={{ transform: "translate(" + panelOffset.x + "px," + panelOffset.y + "px)" }}>
+        <SideTooltipProvider anchorRef={panelElementRef} panelRef={panelElementRef} panelWidthRem={PANEL_WIDTH}
+            disabled={picker !== null || panelDragging}>
+            <div className={styles.header}>
+                <SideTooltip tooltip="Drag panel" side="above" align="center">
+                    <div className={styles.dragTitle} onMouseDown={handlePanelDragStart}>Road Engineer</div>
+                </SideTooltip>
+                <SideTooltip tooltip="Settings" side="above">
+                    <Button className={`${roundButton} ${styles.iconButton} ${expanded ? styles.iconActive : ""}`}
+                        variant="icon" focusKey={focus} onSelect={() => trigger(CHANNEL, "SetRoadEngineerSettingsOpen", !expanded)}
+                        aria-label="Road Engineer settings" aria-pressed={expanded}>
+                        <img src="Media/Glyphs/Gear.svg" className={`${styles.icon} ${styles.whiteIcon}`} alt="" />
+                    </Button>
+                </SideTooltip>
+                <SideTooltip tooltip="Close. Reopen from HC gear." side="above">
+                    <Button className={`${roundButton} ${styles.iconButton}`} variant="icon" focusKey={focus}
+                        onSelect={() => trigger(CHANNEL, "CloseRoadEngineer")} aria-label="Close Road Engineer">
+                        <img src={closeIconSrc} className={styles.icon} alt="" />
+                    </Button>
+                </SideTooltip>
             </div>
-            <div className={styles.row}><span>Distance units</span><div className={styles.buttons}>
-                <Button className={styles.optionButton} variant="flat" focusKey={focus} selected={!units} onSelect={() => trigger(CHANNEL, "SetRoadEngineerUseUnits", false)}>m</Button>
-                <Button className={styles.optionButton} variant="flat" focusKey={focus} selected={units} onSelect={() => trigger(CHANNEL, "SetRoadEngineerUseUnits", true)}>U</Button>
-            </div></div>
-            <div className={styles.row}><span>Label background</span>
-                <RoadColorField value={badge} alpha={true} onChange={setBadge} />
+            <div className={styles.summary}>
+                {rows.map(([label, value, hint]) => <SideTooltip key={label} tooltip={hint} side="left">
+                    <div className={styles.row}><span className={styles.label}>{label}</span><span className={styles.value}>{value}</span></div>
+                </SideTooltip>)}
             </div>
-            <div className={styles.row}><span>Label text</span><div className={styles.buttons}>
-                <Button className={styles.optionButton} variant="flat" focusKey={focus} selected={!customText}
-                    tooltipLabel="Restore native text color" onSelect={() => trigger(CHANNEL, "ResetRoadBadgeTextColor")}>Auto</Button>
-                <RoadColorField value={textColor} alpha={false} onChange={value => trigger(CHANNEL, "SetRoadBadgeTextColor", value.r, value.g, value.b)} />
-            </div></div>
-            <div className={styles.row}><span>Angle color</span>
-                <RoadColorField value={{ r: arcR, g: arcG, b: arcB, a: 1 }} alpha={false}
-                    onChange={value => trigger(CHANNEL, "SetAngleArcColor", value.r, value.g, value.b)} />
+            {expanded && <div className={styles.settings}>
+                <SideTooltip tooltip="Automatically show measurements when drawing roads or paths. OFF stops measurement queries; the HC gear still opens settings." side="left">
+                    <div className={styles.settingRow}><span>Show panel</span>
+                        {toggle("Show panel", enabled, () => trigger(CHANNEL, "SetRoadEngineerEnabled", !enabled))}
+                    </div>
+                </SideTooltip>
+                <SideTooltip tooltip="Metres or 8 m construction units. Floating lengths change with Clutter Filter ON." side="left">
+                    <div className={styles.settingRow}><span>Distance units</span><div className={styles.buttons}>
+                        {choice("m", !units, () => trigger(CHANNEL, "SetRoadEngineerUseUnits", false))}
+                        {choice("U", units, () => trigger(CHANNEL, "SetRoadEngineerUseUnits", true))}
+                    </div></div>
+                </SideTooltip>
+                <SideTooltip tooltip="Live preview of the floating measurement style." side="left">
+                    <div className={styles.settingRow}><span>Label preview</span>{preview}</div>
+                </SideTooltip>
+                <SideTooltip tooltip="Floating label background. Alpha 0% hides the background only." side="left">
+                    <div className={styles.settingRow}><span>Background</span>
+                        <RoadColorField value={badge} alpha={true} onChange={setBadge} onPicker={setPicker} />
+                    </div>
+                </SideTooltip>
+                <SideTooltip tooltip="Change the floating measurement text color. White restores the native text color; icons are unchanged." side="left">
+                    <div className={styles.settingRow}><span>Label text</span><div className={styles.buttons}>
+                        {choice("White", !customText, () => trigger(CHANNEL, "ResetRoadBadgeTextColor"))}
+                        <RoadColorField value={customText ? textColor : {r:1,g:1,b:1,a:1}} alpha={false}
+                            onChange={v => trigger(CHANNEL, "SetRoadBadgeTextColor", v.r, v.g, v.b)} onPicker={setPicker} />
+                    </div></div>
+                </SideTooltip>
+                <SideTooltip tooltip="Color of the road angle indicator." side="left">
+                    <div className={styles.settingRow}><span>Angle color</span>
+                        <RoadColorField value={{r:arcR,g:arcG,b:arcB,a:1}} alpha={false}
+                            onChange={v => trigger(CHANNEL, "SetAngleArcColor", v.r, v.g, v.b)} onPicker={setPicker} />
+                    </div>
+                </SideTooltip>
+                <SideTooltip tooltip="Hide unnecessary road hints and reduce measurement overlaps. Same as the HC angle button and hotkey." side="left">
+                    <div className={styles.settingRow}><span>Clutter filter</span>
+                        {toggle("Clutter filter", filtered, () => trigger(CHANNEL, "ToggleRoadAngleTooltips"))}
+                    </div>
+                </SideTooltip>
+                <div className={styles.resetRow}>
+                    <SideTooltip tooltip="Restore denim, native text and default distance units. Keep arc color and filter unchanged." side="left">
+                        <Button className={styles.resetButton} variant="icon" focusKey={focus}
+                            onSelect={() => trigger(CHANNEL, "ResetRoadAppearance", false)}>Mod defaults</Button>
+                    </SideTooltip>
+                    <SideTooltip tooltip="Use the game's background, text color and distance formatter. Keep arc color and filter unchanged." side="left">
+                        <Button className={styles.resetButton} variant="icon" focusKey={focus}
+                            onSelect={() => trigger(CHANNEL, "ResetRoadAppearance", true)}>Vanilla</Button>
+                    </SideTooltip>
+                </div>
+            </div>}
+            <div className={styles.footer}>
+                {/* Upward picker can cover the main preview. Repeat the sample below
+                    the swatches in reserved footer space only while that picker is open. */}
+                {expanded && picker === "up" && preview}
+                <div className={`${styles.dragGrip} ${panelDragging ? styles.dragging : ""}`} onMouseDown={handlePanelDragStart}>
+                    <img src={dragGripIcon} alt="" />
+                </div>
             </div>
-            <div className={styles.row}><span>Clutter filter</span>
-                <Button className={styles.optionButton} variant="flat" focusKey={focus} selected={filtered} onSelect={() => trigger(CHANNEL, "ToggleRoadAngleTooltips")}>{filtered ? "ON" : "OFF"}</Button>
-            </div>
-            <div className={styles.row}><span>Label preview</span><span className={styles.preview}
-                style={{ backgroundColor: cssColor(badge.r, badge.g, badge.b, badge.a),
-                    color: customText ? cssColor(textColor.r, textColor.g, textColor.b, 1) : undefined }}>∠ 82°</span></div>
-            <Button className={styles.resetButton} variant="flat" focusKey={focus}
-                onSelect={() => { trigger(CHANNEL, "SetRoadBadgeColor", 35 / 255, 57 / 255, 77 / 255, 1); trigger(CHANNEL, "ResetRoadBadgeTextColor"); }}>Reset colors</Button>
-        </div>}
-        </div>
-        <div className={styles.dragFooter}>
-            <div className={styles.dragGrip} onMouseDown={handlePanelDragStart}
-                style={{ cursor: panelDragging ? "grabbing" : "grab" }}>
-                <img src={dragGripIcon} alt="" />
-            </div>
-        </div>
-        </div>
+        </SideTooltipProvider>
     </div>;
 };
 
-// Same visible shell and native ColorField click target as the HC swatches.
-const RoadColorField = ({ value, alpha, onChange }: { value: Color; alpha: boolean; onChange: (value: Color) => void }) => {
+// Reuse HC's visible color shell and native click target. Match HC's direction
+// selection using the actual screen rectangle, not a fixed left popup.
+const RoadColorField = ({ value, alpha, onChange, onPicker }: {
+    value: Color; alpha: boolean; onChange: (value: Color) => void; onPicker: (direction: PickerDirection | null) => void;
+}) => {
     const resolver = VanillaComponentResolver.instance;
     const ColorField = resolver.ColorField;
-    return <div className={`${hcStyles.guidelineColorShell} ${styles.swatch}`}>
+    const shell = useRef<HTMLDivElement>(null);
+    const [hovered, setHovered] = useState(false);
+    const [direction, setDirection] = useState<PickerDirection>("down");
+    const updateDirection = () => {
+        const rect = shell.current?.getBoundingClientRect();
+        const next = rect && rect.top + rect.height / 2 >= window.innerHeight / 2 ? "up" : "down";
+        setDirection(next);
+        return next;
+    };
+    const colorStyle = compactSwatchStyle(value, hovered, true);
+    return <div ref={shell} className={`${hcStyles.guidelineColorShell} ${styles.swatch} ${hovered ? styles.swatchHovered : ""}`}
+        style={colorStyle} onMouseOver={() => { setHovered(true); updateDirection(); }}
+        onMouseLeave={() => setHovered(false)} onMouseDown={updateDirection}>
         <ColorField focusKey={resolver.FOCUS_DISABLED} className={hcStyles.guidelineColorField}
-            value={value} alpha={alpha} popupDirection="left" hexInput={true} hideHint={true}
-            colorWheel={false} onChange={onChange} />
-        <span className={hcStyles.guidelineColorPreview} style={compactSwatchStyle(value, false, true)} aria-hidden="true" />
+            value={value} alpha={alpha} popupDirection={direction} hexInput={true} hideHint={true}
+            colorWheel={false} onChange={onChange} onOpenPicker={() => onPicker(updateDirection())}
+            onClosePicker={() => onPicker(null)} />
+        <span className={hcStyles.guidelineColorPreview} style={colorStyle} aria-hidden="true" />
     </div>;
 };

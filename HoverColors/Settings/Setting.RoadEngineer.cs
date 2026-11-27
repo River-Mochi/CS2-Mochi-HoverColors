@@ -25,6 +25,8 @@ namespace HoverColors
         [SettingsUIHidden]
         public float RoadBadgeA { get; set; } = 1f;
         [SettingsUIHidden]
+        public bool RoadBadgeNativeBackground { get; set; }
+        [SettingsUIHidden]
         public bool RoadBadgeCustomText { get; set; }
         [SettingsUIHidden]
         public float RoadBadgeTextR { get; set; } = 1f;
@@ -53,6 +55,7 @@ namespace HoverColors
             RoadBadgeG = kDefaultRoadBadgeG;
             RoadBadgeB = kDefaultRoadBadgeB;
             RoadBadgeA = 1f;
+            RoadBadgeNativeBackground = false;
             RoadBadgeCustomText = false;
             RoadBadgeTextR = RoadBadgeTextG = RoadBadgeTextB = 1f;
             RoadEngineerUseUnits = false;

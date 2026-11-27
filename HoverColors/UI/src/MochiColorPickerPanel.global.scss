@@ -13,7 +13,8 @@
 // section spacing that the full outline picker gets naturally. The popup is rendered by the
 // game's balloon system outside the panel DOM, so a local CSS-module selector cannot reach it.
 // Scoped by body class; active only while a Hover Colors compact picker is open.
-body.mochiCompactColorPickerOpen .color-picker-container_Sj5 .hex_c98 {
+body.mochiCompactColorPickerOpen .color-picker-container_Sj5 .hex_c98,
+body.mochiRoadCompactPickerOpen .color-picker-container_Sj5 .hex_c98 {
     margin-top: 8rem !important;
 }
 
@@ -26,8 +27,10 @@ body.mochiCompactColorPickerOpen .color-picker-container_Sj5 .hex_c98 {
     --mochi-road-badge-color: #23394D;
     --mochi-road-text-color: #ffffff;
 }
-.row-item_oHU.mochiRoadMeasurementBadge {
+.row-item_oHU.mochiRoadMeasurementCustomBackground {
     background-color: var(--mochi-road-badge-color);
+}
+.row-item_oHU.mochiRoadMeasurementBadge {
     min-height: 24rem;
     padding-top: 2rem;
     padding-bottom: 2rem;

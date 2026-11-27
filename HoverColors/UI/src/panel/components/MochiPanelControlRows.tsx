@@ -739,7 +739,7 @@ export const MochiPanelControlRows = ({
                 <span className={styles.areaThicknessLabel}>{text.labelDashedGuides}</span>
               </div>
             </SideTooltip>
-            <SideTooltip tooltip={tt("Road Engineer settings")} side="left">
+            <SideTooltip tooltip={tt("Road Engineer settings")} side="right">
               <Button
                 className={`${styles.actionButton} ${styles.surfaceButton} ${styles.angleTooltipButton}`}
                 variant="icon"
@@ -747,7 +747,7 @@ export const MochiPanelControlRows = ({
                 onSelect={() => trigger(CHANNEL, "OpenRoadEngineerSettings")}
                 aria-label="Road Engineer settings"
               >
-                <img src="Media/Glyphs/Gear.svg" className={`${styles.angleTooltipIcon} ${styles.idleIcon}`} alt="" />
+                <img src="Media/Glyphs/Gear.svg" className={`${styles.angleTooltipIcon} ${styles.idleIcon}`} style={{ filter: "brightness(0) invert(1)" }} alt="" />
               </Button>
             </SideTooltip>
             <SideTooltip

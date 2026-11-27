@@ -74,10 +74,11 @@ type ProviderProps = {
     anchorRef: RefObject<HTMLElement | null>;
     panelRef: RefObject<HTMLElement | null>;
     disabled?: boolean;
+    panelWidthRem?: number;
     children: ReactNode;
 };
 
-export const SideTooltipProvider = ({ anchorRef, panelRef, disabled = false, children }: ProviderProps) => {
+export const SideTooltipProvider = ({ anchorRef, panelRef, disabled = false, panelWidthRem = PANEL_WIDTH_REM, children }: ProviderProps) => {
     const [tip, setTip] = useState<TipState>(null);
 
     React.useEffect(() => {
@@ -105,7 +106,7 @@ export const SideTooltipProvider = ({ anchorRef, panelRef, disabled = false, chi
         // The layer is never wider than the panel, so the panel's own width is a safe stand-in for
         // the tooltip's width in the fit tests below.
         const maxWidth = panel.width;
-        const remPx = panel.width / PANEL_WIDTH_REM;
+        const remPx = panel.width / panelWidthRem;
 
         let placed = side;
         if (side === "left" && panel.left - GAP_PX - maxWidth < EDGE_PX) {
