@@ -115,7 +115,7 @@ const RoadEngineerPanel = ({ badge, textColor }: { badge: Color; textColor: Colo
                 <img src="Media/Glyphs/Gear.svg" className={styles.icon} alt="" />
             </Button>
             <Button className={styles.iconButton} variant="icon" focusKey={focus} onSelect={() => trigger(CHANNEL, "CloseRoadEngineer")}
-                tooltipLabel="Close. Reopen in Options." aria-label="Close Road Engineer">
+                tooltipLabel="Close panel. Reopen from HC gear." aria-label="Close Road Engineer">
                 <img src="Media/Glyphs/Close.svg" className={styles.icon} alt="" />
             </Button>
         </div>

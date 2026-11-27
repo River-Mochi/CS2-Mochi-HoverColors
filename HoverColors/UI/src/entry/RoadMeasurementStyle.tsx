@@ -37,9 +37,9 @@ const isMeasurement = (child: WidgetData | null | undefined) => {
       || props.icon === "Media/Glyphs/Slope.svg");
 };
 
-// Preserve the vanilla BoundTooltipGroup and its numeric renderer. Only
-// augment the className of matching child props; no DOM walks, replacement
-// widgets, new tooltip keys, or custom position/animation calculations.
+// Preserve native group positions and native row renderers. Add appearance
+// classes and, only for explicit U lengths, use a native localized string.
+// No DOM walks, custom tooltip keys, or position/animation calculations.
 export const registerRoadMeasurementStyle = (registry: ModuleRegistry) => {
   registry.extend(MODULE, "BoundTooltipGroup", (Original) => {
     const MeasurementGroup = (props: any) => {

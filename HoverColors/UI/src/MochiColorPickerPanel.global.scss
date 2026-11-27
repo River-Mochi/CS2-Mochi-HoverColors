@@ -22,7 +22,7 @@ body.mochiCompactColorPickerOpen .color-picker-container_Sj5 .hex_c98 {
 // Compact spacing; preserve fonts, icons and native transitions.
 // Cohtml 2.2 does not parse var(--name, fallback). Declare the default
 // on the document root and use the same single-argument form as vanilla.
-html {
+:root {
     --mochi-road-badge-color: #23394D;
     --mochi-road-text-color: #ffffff;
 }
