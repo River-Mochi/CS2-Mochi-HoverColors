@@ -85,6 +85,8 @@ namespace HoverColors
                 },
 
                 // Panel style
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.RoadEngineerEnabled)), "Mostra pannello stradale" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.RoadEngineerEnabled)), "Mostra le misure durante la costruzione di strade o percorsi. Disattiva per fermare gli aggiornamenti. Il filtro resta indipendente." },
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelStyle)), "▪ Scegli pannello scuro o vetro" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelStyle)),
                     "**Scuro (Vanilla)** usa il pannello del gioco.\n" +

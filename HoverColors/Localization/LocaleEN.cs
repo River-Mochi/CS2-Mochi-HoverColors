@@ -86,6 +86,8 @@ namespace HoverColors
                 },
 
                 // Panel style
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.RoadEngineerEnabled)), "Show Road Engineer panel" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.RoadEngineerEnabled)), "Show road measurements while building roads or paths. Turn off to stop panel measurement updates. Road Clutter Filter works independently." },
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelStyle)), "▪ Pick dark or glass panel" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelStyle)),
                     "**Dark (Vanilla)** uses the game's own panel surface.\n" +

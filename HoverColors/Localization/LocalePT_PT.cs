@@ -85,6 +85,8 @@ namespace HoverColors
                 },
 
                 // Panel style
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.RoadEngineerEnabled)), "Mostrar painel de engenharia rodoviária" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.RoadEngineerEnabled)), "Mostra medidas ao construir estradas ou caminhos. Desative para parar as atualizações do painel. O filtro funciona separadamente." },
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelStyle)), "▪ Escolhe painel escuro ou de vidro" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelStyle)),
                     "**Escuro (Vanilla)** usa o painel do próprio jogo.\n" +

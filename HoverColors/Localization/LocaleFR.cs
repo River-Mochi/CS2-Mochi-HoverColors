@@ -85,6 +85,8 @@ namespace HoverColors
                 },
 
                 // Panel style
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.RoadEngineerEnabled)), "Afficher le panneau routier" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.RoadEngineerEnabled)), "Affiche les mesures pendant la construction de routes ou chemins. Désactivez-le pour arrêter les mises à jour du panneau. Le filtre reste indépendant." },
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelStyle)), "▪ Choisir panneau sombre ou vitré" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelStyle)),
                     "**Sombre (Vanilla)** utilise le panneau du jeu.\n" +

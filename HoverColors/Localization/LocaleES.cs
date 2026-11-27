@@ -85,6 +85,8 @@ namespace HoverColors
                 },
 
                 // Panel style
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.RoadEngineerEnabled)), "Mostrar panel de ingeniería vial" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.RoadEngineerEnabled)), "Muestra medidas al construir calles o caminos. Desactívalo para detener sus actualizaciones. El filtro funciona por separado." },
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelStyle)), "▪ Elige panel oscuro o de cristal" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelStyle)),
                     "**Oscuro (Vanilla)** usa el panel del propio juego.\n" +

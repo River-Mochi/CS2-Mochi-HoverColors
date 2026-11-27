@@ -85,6 +85,8 @@ namespace HoverColors
                 },
 
                 // Panel style
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.RoadEngineerEnabled)), "도로 측정 패널 표시" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.RoadEngineerEnabled)), "도로와 보행로 건설 중 측정값을 표시합니다. 끄면 패널 업데이트가 중지됩니다. 툴팁 필터는 별도로 작동합니다." },
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelStyle)), "▪ 다크 또는 글래스 패널 선택" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelStyle)),
                     "**어두움 (바닐라)** 은 게임 기본 패널을 사용합니다.\n" +

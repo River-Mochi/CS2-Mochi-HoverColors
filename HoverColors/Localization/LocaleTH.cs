@@ -85,6 +85,8 @@ namespace HoverColors
                 },
 
                 // Panel style
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.RoadEngineerEnabled)), "แสดงแผงวัดถนน" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.RoadEngineerEnabled)), "แสดงค่าการวัดขณะสร้างถนนหรือทางเดิน ปิดเพื่อหยุดอัปเดตแผง ตัวกรองทำงานแยกกัน" },
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelStyle)), "▪ เลือกแผงแบบมืดหรือกระจก" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelStyle)),
                     "**มืด (แบบเกม)** ใช้แผงของเกมโดยตรง\n" +

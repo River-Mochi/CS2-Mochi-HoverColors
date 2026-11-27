@@ -85,6 +85,8 @@ namespace HoverColors
                 },
 
                 // Panel style
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.RoadEngineerEnabled)), "Straßenbau-Info anzeigen" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.RoadEngineerEnabled)), "Zeigt Maße beim Bau von Straßen oder Wegen. Aus: keine Messaktualisierung im Panel. Der Tooltip-Filter bleibt unabhängig." },
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelStyle)), "▪ Dunkles oder Glas-Panel wählen" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelStyle)),
                     "**Dunkel (Vanilla)** nutzt das Panel des Spiels.\n" +

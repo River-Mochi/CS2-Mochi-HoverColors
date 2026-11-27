@@ -85,6 +85,8 @@ namespace HoverColors
                 },
 
                 // Panel style
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.RoadEngineerEnabled)), "Pokaż panel drogowy" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.RoadEngineerEnabled)), "Pokazuje pomiary podczas budowy dróg i ścieżek. Wyłączenie zatrzymuje aktualizacje panelu. Filtr działa niezależnie." },
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelStyle)), "▪ Wybierz ciemny lub szklany panel" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelStyle)),
                     "**Ciemny (Vanilla)** używa panelu z gry.\n" +

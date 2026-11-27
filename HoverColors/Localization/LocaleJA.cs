@@ -85,6 +85,8 @@ namespace HoverColors
                 },
 
                 // Panel style
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.RoadEngineerEnabled)), "道路計測パネルを表示" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.RoadEngineerEnabled)), "道路や小道の建設中に計測値を表示します。オフにするとパネルの更新を停止します。ツールチップフィルターは独立して動作します。" },
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelStyle)), "▪ ダークまたはガラスパネルを選択" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelStyle)),
                     "**ダーク (バニラ)** はゲーム標準パネルを使います。\n" +
