@@ -31,7 +31,7 @@ namespace HoverColors.Systems
         private const int kGuideReturnClearUpdates = 8;
         private const float kGuideReturnStep = 2f;
         private const float kMovingGuideMaxOffset = 60f;
-        private const int kFixedGuideClearUpdates = 30;
+        private const int kFixedGuideClearUpdates = 15;
         private const int kFixedGuideBlockedUpdates = 12;
         private const float kFixedGuideReturnStep = 2f;
 
@@ -638,14 +638,20 @@ namespace HoverColors.Systems
                 return false;
             }
 
+            float fontScale = GetRoadLabelFontScale();
             bounds = new Rect(cursor.x - 8f * scale, cursor.y - 8f * scale,
-                160f * scale, (tooltipUI.mouseGroup.children.Count * 38f + 16f) * scale);
+                160f * scale * fontScale, (tooltipUI.mouseGroup.children.Count * 38f * fontScale + 16f) * scale);
             return true;
         }
 
         // Estimate visible boxes from 1080p in-game measurements, with modest
         // padding. Large conservative boxes sent distances too far from their guides.
         // COHTML does not expose the actual rendered bounds to this C# pass.
+        private static float GetRoadLabelFontScale()
+        {
+            return HoverColorsSettings.NormalizeRoadLabelFontPercent(Mod.Settings?.RoadLabelFontPercent ?? 100) / 100f;
+        }
+
         private static Rect MeasurementRect(float2 center, bool angle, float scale)
         {
             HoverColorsSettings? settings = Mod.Settings;
@@ -654,8 +660,9 @@ namespace HoverColors.Systems
                 : 0;
             // Reserve room for the added decimal separator and digits. Do not
             // change the native PI anchor or bounded displacement limits.
-            float width = ((angle ? 100f : 116f) + (decimals > 0 ? 8f * (decimals + 1) : 0f)) * scale;
-            float height = 34f * scale;
+            float fontScale = GetRoadLabelFontScale();
+            float width = ((angle ? 100f : 116f) + (decimals > 0 ? 8f * (decimals + 1) : 0f)) * scale * fontScale;
+            float height = 34f * scale * fontScale;
             return new Rect(center.x - width * 0.5f, center.y - height * 0.5f, width, height);
         }
 

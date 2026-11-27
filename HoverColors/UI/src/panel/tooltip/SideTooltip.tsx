@@ -75,10 +75,11 @@ type ProviderProps = {
     panelRef: RefObject<HTMLElement | null>;
     disabled?: boolean;
     panelWidthRem?: number;
+    preferOppositeSide?: boolean;
     children: ReactNode;
 };
 
-export const SideTooltipProvider = ({ anchorRef, panelRef, disabled = false, panelWidthRem = PANEL_WIDTH_REM, children }: ProviderProps) => {
+export const SideTooltipProvider = ({ anchorRef, panelRef, disabled = false, panelWidthRem = PANEL_WIDTH_REM, preferOppositeSide = false, children }: ProviderProps) => {
     const [tip, setTip] = useState<TipState>(null);
 
     React.useEffect(() => {
@@ -110,9 +111,9 @@ export const SideTooltipProvider = ({ anchorRef, panelRef, disabled = false, pan
 
         let placed = side;
         if (side === "left" && panel.left - GAP_PX - maxWidth < EDGE_PX) {
-            placed = "below";
+            placed = preferOppositeSide && panel.right + GAP_PX + maxWidth <= window.innerWidth - EDGE_PX ? "right" : "below";
         } else if (side === "right" && panel.right + GAP_PX + maxWidth > window.innerWidth - EDGE_PX) {
-            placed = "below";
+            placed = preferOppositeSide && panel.left - GAP_PX - maxWidth >= EDGE_PX ? "left" : "below";
         } else if (side === "above" && panel.top - GAP_PX < ABOVE_MIN_ROOM_REM * remPx) {
             // No tooltip is ever measured here, so "does it fit above" uses a generous fixed
             // allowance instead. Falls back sideways rather than below, which would land the

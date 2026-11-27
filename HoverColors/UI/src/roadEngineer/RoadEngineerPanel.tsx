@@ -37,6 +37,7 @@ const units$ = bindValue<boolean>(CHANNEL, "RoadEngineerUseUnits", false);
 const distanceDecimals$ = bindValue<number>(CHANNEL, "RoadDistanceDecimals", 2);
 const angleDecimals$ = bindValue<number>(CHANNEL, "RoadAngleDecimals", 2);
 const preciseFloating$ = bindValue<boolean>(CHANNEL, "RoadPreciseFloatingLabels", false);
+const labelFontPercent$ = bindValue<number>(CHANNEL, "RoadLabelFontPercent", 100);
 const unitSettings$ = bindValue<{unitSystem: number}>("options", "unitSettings", {unitSystem: 0});
 const positionSet$ = bindValue<boolean>(CHANNEL, "RoadEngineerPositionSet", false);
 const offsetX$ = bindValue<number>(CHANNEL, "RoadEngineerOffsetX", 0);
@@ -92,6 +93,7 @@ const RoadEngineerPanel = ({ badge, textColor }: { badge: Color; textColor: Colo
     const distanceDecimals = useValue(distanceDecimals$);
     const angleDecimals = useValue(angleDecimals$);
     const preciseFloating = useValue(preciseFloating$);
+    const labelFontPercent = useValue(labelFontPercent$);
     const imperial = useValue(unitSettings$)?.unitSystem === 1;
     const filtered = useValue(roadAngleTooltipsHidden$);
     const arcR = useValue(angleArcR$);
@@ -131,7 +133,7 @@ const RoadEngineerPanel = ({ badge, textColor }: { badge: Color; textColor: Colo
     const preview = <span className={styles.preview} style={{
         backgroundColor: nativeBackground ? "var(--tooltipColor)" : cssColor(badge.r, badge.g, badge.b, badge.a),
         color: customText ? cssColor(textColor.r, textColor.g, textColor.b, 1) : undefined,
-    }}><img src="Media/Glyphs/Angle.svg" alt="" className={styles.previewIcon} />{(82.347).toFixed(preciseFloating ? angleDecimals : 0)}°</span>;
+    }}><img src="Media/Glyphs/Angle.svg" alt="" className={styles.previewIcon} /><span style={{ fontSize: labelFontPercent + "%" }}>{(82.347).toFixed(preciseFloating ? angleDecimals : 0)}°</span></span>;
 
     const toggle = (label: string, checked: boolean, action: () => void) =>
         <Button className={`${styles.toggle} ${checked ? styles.toggleOn : ""}`} variant="icon" focusKey={focus}
@@ -139,14 +141,14 @@ const RoadEngineerPanel = ({ badge, textColor }: { badge: Color; textColor: Colo
             <span className={`${styles.toggleDot} ${checked ? styles.toggleDotOn : ""}`} />
             <span>{checked ? "ON" : "OFF"}</span>
         </Button>;
-    const choice = (label: string, selected: boolean, action: () => void) =>
-        <Button className={`${styles.choice} ${selected ? styles.choiceOn : ""}`} variant="icon"
-            focusKey={focus} aria-pressed={selected} onSelect={action}>{label}</Button>;
+    const choice = (label: string, selected: boolean, action: () => void, disabled = false) =>
+        <Button className={`${styles.choice} ${label.length > 2 ? styles.wideChoice : ""} ${selected ? styles.choiceOn : ""}`} variant="icon"
+            focusKey={focus} disabled={disabled} aria-pressed={selected} onSelect={action}>{label}</Button>;
 
     return <div ref={panelElementRef} className={styles.panel}
         style={{ transform: "translate(" + panelOffset.x + "px," + panelOffset.y + "px)" }}>
         <SideTooltipProvider anchorRef={panelElementRef} panelRef={panelElementRef} panelWidthRem={PANEL_WIDTH}
-            disabled={picker !== null || panelDragging}>
+            disabled={picker !== null || panelDragging} preferOppositeSide={true}>
             <div className={styles.header}>
                 <SideTooltip tooltip="Drag panel" side="above" align="center">
                     <div className={styles.dragTitle} onMouseDown={handlePanelDragStart}>Road Engineer</div>
@@ -171,64 +173,71 @@ const RoadEngineerPanel = ({ badge, textColor }: { badge: Color; textColor: Colo
                 </SideTooltip>)}
             </div>
             {expanded && <div className={styles.settings}>
-                <SideTooltip tooltip="Automatically show measurements when drawing roads or paths. OFF stops measurement queries; the HC gear still opens settings." side="left">
+                <SideTooltip tooltip="Automatically show measurements when drawing roads or paths. OFF stops measurement queries; the HC gear still opens settings." side="right">
                     <div className={styles.settingRow}><span>Show panel</span>
                         {toggle("Show panel", enabled, () => trigger(CHANNEL, "SetRoadEngineerEnabled", !enabled))}
                     </div>
                 </SideTooltip>
-                <SideTooltip tooltip="Metres or 8 m construction units. Floating lengths change with Clutter Filter ON." side="left">
+                <SideTooltip tooltip="Metres or 8 m construction units. Floating lengths change with Clutter Filter ON." side="right">
                     <div className={styles.settingRow}><span>Distance units</span><div className={styles.buttons}>
                         {choice(imperial ? "yd" : "m", !units, () => trigger(CHANNEL, "SetRoadEngineerUseUnits", false))}
                         {choice("U", units, () => trigger(CHANNEL, "SetRoadEngineerUseUnits", true))}
                     </div></div>
                 </SideTooltip>
-                <SideTooltip tooltip="Decimals for summary lengths, heights and slope. Also used for floating lengths when Precise labels is ON." side="left">
+                <SideTooltip tooltip="Decimals for summary lengths, heights and slope. Also used for floating lengths when Precise labels is ON." side="right">
                     <div className={styles.settingRow}><span>Length decimals</span><div className={styles.buttons}>
                         {[0,1,2].map(n => <React.Fragment key={n}>{choice(String(n), distanceDecimals === n, () => trigger(CHANNEL, "SetRoadPrecision", false, n))}</React.Fragment>)}
                     </div></div>
                 </SideTooltip>
-                <SideTooltip tooltip="Decimals for summary bearing and verified floating PI angles when Precise labels is ON." side="left">
+                <SideTooltip tooltip="Decimals for summary bearing and verified floating PI angles when Precise labels is ON." side="right">
                     <div className={styles.settingRow}><span>Angle decimals</span><div className={styles.buttons}>
                         {[0,1,2].map(n => <React.Fragment key={n}>{choice(String(n), angleDecimals === n, () => trigger(CHANNEL, "SetRoadPrecision", true, n))}</React.Fragment>)}
                     </div></div>
                 </SideTooltip>
-                <SideTooltip tooltip="OFF: compact floating labels. ON: use the chosen decimals where verified geometry is available. Requires Clutter Filter. Summary precision and m/U are independent." side="left">
+                <SideTooltip tooltip="OFF: compact floating labels. ON: use the chosen decimals where verified geometry is available. Requires Clutter Filter. Summary precision and m/U are independent." side="right">
                     <div className={styles.settingRow}><span>Precise labels</span>
                         {toggle("Precise floating labels", preciseFloating, () => trigger(CHANNEL, "SetRoadPreciseFloatingLabels", !preciseFloating))}
                     </div>
                 </SideTooltip>
-                <SideTooltip tooltip="Live preview of the floating measurement style." side="left">
+                <SideTooltip tooltip="Increase floating measurement text relative to vanilla. Summary text is unchanged. Requires Clutter Filter." side="right">
+                    <div className={styles.settingRow}><span>Label size</span><div className={styles.buttons}>
+                        {choice("−", false, () => trigger(CHANNEL, "SetRoadLabelFontPercent", labelFontPercent - 15), labelFontPercent <= 100)}
+                        <span className={styles.sizeValue}>{labelFontPercent}%</span>
+                        {choice("+", false, () => trigger(CHANNEL, "SetRoadLabelFontPercent", labelFontPercent + 15), labelFontPercent >= 130)}
+                    </div></div>
+                </SideTooltip>
+                <SideTooltip tooltip="Live preview of the floating measurement style." side="right">
                     <div className={styles.settingRow}><span>Label preview</span>{preview}</div>
                 </SideTooltip>
-                <SideTooltip tooltip="Floating label background. Alpha 0% hides the background only." side="left">
+                <SideTooltip tooltip="Floating label background. Alpha 0% hides the background only." side="right">
                     <div className={styles.settingRow}><span>Background</span>
                         <RoadColorField value={badge} alpha={true} onChange={setBadge} onPicker={setPicker} />
                     </div>
                 </SideTooltip>
-                <SideTooltip tooltip="Change the floating measurement text color. White restores the native text color; icons are unchanged." side="left">
+                <SideTooltip tooltip="Change the floating measurement text color. White restores the native text color; icons are unchanged." side="right">
                     <div className={styles.settingRow}><span>Label text</span><div className={styles.buttons}>
                         {choice("White", !customText, () => trigger(CHANNEL, "ResetRoadBadgeTextColor"))}
                         <RoadColorField value={customText ? textColor : {r:1,g:1,b:1,a:1}} alpha={false}
                             onChange={v => trigger(CHANNEL, "SetRoadBadgeTextColor", v.r, v.g, v.b)} onPicker={setPicker} />
                     </div></div>
                 </SideTooltip>
-                <SideTooltip tooltip="Color of the road angle indicator." side="left">
+                <SideTooltip tooltip="Color of the road angle indicator." side="right">
                     <div className={styles.settingRow}><span>Angle color</span>
                         <RoadColorField value={{r:arcR,g:arcG,b:arcB,a:1}} alpha={false}
                             onChange={v => trigger(CHANNEL, "SetAngleArcColor", v.r, v.g, v.b)} onPicker={setPicker} />
                     </div>
                 </SideTooltip>
-                <SideTooltip tooltip="Hide unnecessary road hints and reduce measurement overlaps. Same as the HC angle button and hotkey." side="left">
+                <SideTooltip tooltip="Hide unnecessary road hints and reduce measurement overlaps. Same as the HC angle button and hotkey." side="right">
                     <div className={styles.settingRow}><span>Clutter filter</span>
                         {toggle("Clutter filter", filtered, () => trigger(CHANNEL, "ToggleRoadAngleTooltips"))}
                     </div>
                 </SideTooltip>
                 <div className={styles.resetRow}>
-                    <SideTooltip tooltip="Restore denim, native text, default units, two summary decimals and compact floating labels. Keep arc color and filter unchanged." side="left">
+                    <SideTooltip tooltip="Restore denim, native text, default units, two summary decimals, compact floating labels and native text size. Keep arc color and filter unchanged." side="right">
                         <Button className={styles.resetButton} variant="icon" focusKey={focus}
                             onSelect={() => trigger(CHANNEL, "ResetRoadAppearance", false)}>Mod defaults</Button>
                     </SideTooltip>
-                    <SideTooltip tooltip="Use the game's background, text color and floating precision. Keep arc color and filter unchanged." side="left">
+                    <SideTooltip tooltip="Use the game's background, text color and floating precision. Keep arc color and filter unchanged." side="right">
                         <Button className={styles.resetButton} variant="icon" focusKey={focus}
                             onSelect={() => trigger(CHANNEL, "ResetRoadAppearance", true)}>Vanilla</Button>
                     </SideTooltip>

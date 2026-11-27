@@ -43,6 +43,7 @@ namespace HoverColors.UI
         private ValueBinding<int> m_RoadDistanceDecimals = null!;
         private ValueBinding<int> m_RoadAngleDecimals = null!;
         private ValueBinding<bool> m_RoadPreciseFloatingLabels = null!;
+        private ValueBinding<int> m_RoadLabelFontPercent = null!;
         private ValueBinding<bool> m_RoadEngineerPositionSet = null!;
         private ValueBinding<int> m_RoadEngineerOffsetX = null!;
         private ValueBinding<int> m_RoadEngineerOffsetY = null!;
@@ -71,6 +72,7 @@ namespace HoverColors.UI
             m_RoadDistanceDecimals = AddValueBinding("RoadDistanceDecimals", 2);
             m_RoadAngleDecimals = AddValueBinding("RoadAngleDecimals", 2);
             m_RoadPreciseFloatingLabels = AddValueBinding("RoadPreciseFloatingLabels", false);
+            m_RoadLabelFontPercent = AddValueBinding("RoadLabelFontPercent", 100);
             m_RoadEngineerPositionSet = AddValueBinding("RoadEngineerPositionSet", false);
             m_RoadEngineerOffsetX = AddValueBinding("RoadEngineerOffsetX", 0);
             m_RoadEngineerOffsetY = AddValueBinding("RoadEngineerOffsetY", 0);
@@ -86,6 +88,7 @@ namespace HoverColors.UI
             AddBinding(new TriggerBinding<bool>(Mod.ModId, "SetRoadEngineerUseUnits", SetRoadEngineerUnits));
             AddBinding(new TriggerBinding<bool, int>(Mod.ModId, "SetRoadPrecision", SetRoadPrecision));
             AddBinding(new TriggerBinding<bool>(Mod.ModId, "SetRoadPreciseFloatingLabels", SetRoadPreciseFloatingLabels));
+            AddBinding(new TriggerBinding<int>(Mod.ModId, "SetRoadLabelFontPercent", SetRoadLabelFontPercent));
         }
 
         private void OpenRoadEngineerSettings()
@@ -146,6 +149,7 @@ namespace HoverColors.UI
             settings.RoadEngineerUseUnits = false;
             settings.RoadDistanceDecimals = settings.RoadAngleDecimals = native ? 0 : 2;
             settings.RoadPreciseFloatingLabels = false;
+            settings.RoadLabelFontPercent = 100;
             // Arc color, filter, visibility and position are independent choices.
             settings.ApplyAndSave();
             SyncRoadEngineerSettings();
@@ -220,6 +224,17 @@ namespace HoverColors.UI
             SyncRoadEngineerSettings();
         }
 
+        private void SetRoadLabelFontPercent(int percent)
+        {
+            HoverColorsSettings? settings = Mod.Settings;
+            if (settings == null) return;
+            percent = HoverColorsSettings.NormalizeRoadLabelFontPercent(percent);
+            if (settings.RoadLabelFontPercent == percent) return;
+            settings.RoadLabelFontPercent = percent;
+            settings.ApplyAndSave();
+            SyncRoadEngineerSettings();
+        }
+
         private void SetRoadPreciseFloatingLabels(bool enabled)
         {
             HoverColorsSettings? settings = Mod.Settings;
@@ -265,6 +280,7 @@ namespace HoverColors.UI
             UpdateIfChanged(m_RoadDistanceDecimals, math.clamp(settings?.RoadDistanceDecimals ?? 2, 0, 2));
             UpdateIfChanged(m_RoadAngleDecimals, math.clamp(settings?.RoadAngleDecimals ?? 2, 0, 2));
             UpdateIfChanged(m_RoadPreciseFloatingLabels, settings?.RoadPreciseFloatingLabels ?? false);
+            UpdateIfChanged(m_RoadLabelFontPercent, HoverColorsSettings.NormalizeRoadLabelFontPercent(settings?.RoadLabelFontPercent ?? 100));
             UpdateIfChanged(m_RoadEngineerPositionSet, settings?.RoadEngineerPositionSet ?? false);
             UpdateIfChanged(m_RoadEngineerOffsetX, settings?.RoadEngineerOffsetX ?? 0);
             UpdateIfChanged(m_RoadEngineerOffsetY, settings?.RoadEngineerOffsetY ?? 0);

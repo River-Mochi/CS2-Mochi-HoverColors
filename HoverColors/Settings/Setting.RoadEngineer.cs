@@ -42,6 +42,13 @@ namespace HoverColors
         public int RoadAngleDecimals { get; set; } = 2;
         [SettingsUIHidden]
         public bool RoadPreciseFloatingLabels { get; set; }
+        [SettingsUIHidden]
+        public int RoadLabelFontPercent { get; set; } = 100;
+
+        internal static int NormalizeRoadLabelFontPercent(int value)
+        {
+            return value >= 130 ? 130 : value >= 115 ? 115 : 100;
+        }
 
         [SettingsUISection(Actions, kPanel)]
         public bool RoadEngineerEnabled { get; set; } = true;
@@ -67,6 +74,7 @@ namespace HoverColors
             RoadEngineerUseUnits = false;
             RoadDistanceDecimals = RoadAngleDecimals = 2;
             RoadPreciseFloatingLabels = false;
+            RoadLabelFontPercent = 100;
             RoadEngineerEnabled = true;
             RoadEngineerPositionSet = false;
             RoadEngineerOffsetX = 0;

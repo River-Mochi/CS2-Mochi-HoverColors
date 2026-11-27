@@ -17,6 +17,7 @@ const units$ = bindValue<boolean>(CHANNEL, "RoadEngineerUseUnits", false);
 const distanceDecimals$ = bindValue<number>(CHANNEL, "RoadDistanceDecimals", 2);
 const angleDecimals$ = bindValue<number>(CHANNEL, "RoadAngleDecimals", 2);
 const preciseFloating$ = bindValue<boolean>(CHANNEL, "RoadPreciseFloatingLabels", false);
+const labelFontPercent$ = bindValue<number>(CHANNEL, "RoadLabelFontPercent", 100);
 const unitSettings$ = bindValue<{unitSystem: number}>("options", "unitSettings", {unitSystem: 0});
 const customText$ = bindValue<boolean>(CHANNEL, "RoadBadgeCustomText", false);
 const nativeBackground$ = bindValue<boolean>(CHANNEL, "RoadBadgeNativeBackground", false);
@@ -51,6 +52,7 @@ export const registerRoadMeasurementStyle = (registry: ModuleRegistry) => {
       const active = useValue(roadMeasurementStyleActive$);
       const units = useValue(units$);
       const preciseFloating = useValue(preciseFloating$);
+      const labelFontPercent = useValue(labelFontPercent$);
       const selectedDistanceDecimals = useValue(distanceDecimals$);
       const selectedAngleDecimals = useValue(angleDecimals$);
       const distanceDecimals = preciseFloating ? selectedDistanceDecimals : 0;
@@ -65,7 +67,7 @@ export const registerRoadMeasurementStyle = (registry: ModuleRegistry) => {
         const className = child.props.className;
         const styled: NonNullable<WidgetData["props"]> = {
           ...child.props,
-          className: [className, BADGE_CLASS, nativeBackground ? "" : "mochiRoadMeasurementCustomBackground", customText ? "mochiRoadMeasurementCustomText" : ""].filter(Boolean).join(" "),
+          className: [className, BADGE_CLASS, nativeBackground ? "" : "mochiRoadMeasurementCustomBackground", customText ? "mochiRoadMeasurementCustomText" : "", labelFontPercent === 130 ? "mochiRoadFont130" : labelFontPercent === 115 ? "mochiRoadFont115" : ""].filter(Boolean).join(" "),
         };
         // Only native course lengths and geometry-recovered guide values
         // can provide additional meaningful digits. Leave unverified rounded

@@ -119,6 +119,15 @@
     flex-direction: row;
     align-items: center;
 }
+.buttons {
+    flex-shrink: 0;
+    margin-left: auto;
+    justify-content: flex-end;
+}
+.settingRow > span:first-child {
+    flex-shrink: 0;
+    white-space: nowrap;
+}
 .choice, .toggle, .resetButton {
     display: flex;
     flex-direction: row;
@@ -140,6 +149,27 @@
     font-size: 12rem;
     white-space: nowrap;
     cursor: pointer;
+}
+.choice {
+    width: 22rem;
+    min-width: 22rem;
+    max-width: 22rem;
+    box-sizing: border-box;
+    flex-shrink: 0;
+    padding-left: 0;
+    padding-right: 0;
+}
+.wideChoice {
+    width: 45rem;
+    min-width: 45rem;
+    max-width: 45rem;
+}
+.sizeValue {
+    width: 37rem;
+    min-width: 37rem;
+    text-align: center;
+    white-space: nowrap;
+    margin-left: 3rem;
 }
 .choiceOn, .toggleOn {
     color: #d8f6ff !important;
@@ -181,7 +211,7 @@
     justify-content: center;
     padding-left: 4rem;
     padding-right: 4rem;
-    height: 20rem;
+    min-height: 20rem;
     font-size: var(--fontSizeS);
     color: var(--textColorDim);
     border-top-left-radius: 5rem;
@@ -197,12 +227,18 @@
     margin-right: 3rem;
 }
 .resetRow {
-    justify-content: flex-end;
+    justify-content: space-between;
     height: 27rem;
 }
 .resetButton {
-    padding-left: 7rem;
-    padding-right: 7rem;
+    width: 80rem;
+    min-width: 80rem;
+    max-width: 80rem;
+    box-sizing: border-box;
+    flex-shrink: 0;
+    margin-left: 0;
+    padding-left: 0;
+    padding-right: 0;
 }
 .footer {
     display: flex;
