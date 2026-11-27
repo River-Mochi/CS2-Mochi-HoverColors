@@ -93,15 +93,22 @@ const RoadEngineerPanel = ({ badge, textColor }: { badge: Color; textColor: Colo
     const focus = resolver.FOCUS_DISABLED;
     const roundButton = resolver.roundHighlightButtonTheme["button"] ?? "";
     const values = course.split("|").map(Number);
-    const valid = course.length > 0 && values.length === 5 && values.every(Number.isFinite);
+    const valid = course.length > 0 && values.length === 7 && values.slice(0, 5).every(Number.isFinite);
     const distance = (v: number) => (units ? v / 8 : v).toFixed(2) + (units ? " U" : " m");
     const vertical = (v: number) => v.toFixed(2) + " m";
+    const signed = (v: number) => (v > 0 ? "+" : "") + vertical(v);
+    const compassPoints = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
+    const bearing = valid && Number.isFinite(values[6])
+        ? compassPoints[Math.round(values[6] / 45) % 8] + " " + (Math.round(values[6] * 10) % 3600 / 10).toFixed(1) + "°"
+        : "—";
     const rows = [
         ["Length", valid ? distance(values[0]) : "—", "Horizontal length along the road."],
         ["Distance", valid ? distance(values[1]) : "—", "Straight-line distance between endpoints."],
         ["Elevation", valid ? vertical(values[2]) : "—", "Endpoint world height, not height above ground."],
+        ["Height/depth", valid && Number.isFinite(values[5]) ? signed(values[5]) : "—", "Endpoint height above (+) or below (−) terrain. Uses the cached terrain surface."],
         ["Relief", valid ? (values[3] > 0 ? "+" : "") + vertical(values[3]) : "—", "End height minus start height."],
         ["Slope", valid ? (values[4] > 0 ? "+" : "") + values[4].toFixed(2) + "%" : "—", "Average slope along the road."],
+        ["Direction", bearing, "Map-relative start-to-end bearing. Independent of camera rotation."],
     ];
     const setBadge = (value: Color) => {
         const c = normalizeColorFieldValue(value);

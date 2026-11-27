@@ -22,6 +22,7 @@ namespace HoverColors.Systems
         public readonly float Elevation;
         public readonly float Relief;
         public readonly float Slope;
+        public readonly float Bearing;
         public readonly float3 Start;
         public readonly float3 End;
 
@@ -34,6 +35,12 @@ namespace HoverColors.Systems
             Elevation = end.y;
             Relief = end.y - start.y;
             Slope = 100f * Relief / totalLength;
+            // Map-relative north is +Z (camera yaw zero), east is +X.
+            // A closed/zero-chord preview has no meaningful endpoint bearing.
+            float2 direction = end.xz - start.xz;
+            Bearing = Distance > 0.01f
+                ? (math.degrees(math.atan2(direction.x, direction.y)) + 360f) % 360f
+                : float.NaN;
         }
 
         // Same eligibility as vanilla 1.6.4f1 NetCourseTooltipSystem.OnUpdate.

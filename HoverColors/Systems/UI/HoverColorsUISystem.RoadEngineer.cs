@@ -12,6 +12,7 @@ namespace HoverColors.UI
     using Colossal.UI.Binding;
     using Game.Input;
     using Game.Prefabs;
+    using Game.Simulation;
     using Game.Tools;
     using HoverColors.Systems;
     using Unity.Collections;
@@ -21,6 +22,7 @@ namespace HoverColors.UI
     public partial class HoverColorsUISystem
     {
         private EntityQuery m_RoadEngineerQuery;
+        private TerrainSystem? m_RoadEngineerTerrain;
         private ValueBinding<bool> m_RoadEngineerActive = null!;
         private ValueBinding<string> m_RoadEngineerCourse = null!;
         private ValueBinding<float> m_RoadBadgeR = null!;
@@ -45,6 +47,7 @@ namespace HoverColors.UI
 
         private void RegisterRoadEngineerBindings()
         {
+            m_RoadEngineerTerrain = World.GetOrCreateSystemManaged<TerrainSystem>();
             m_RoadEngineerQuery = GetEntityQuery(ComponentType.ReadOnly<CreationDefinition>(),
                 ComponentType.ReadOnly<NetCourse>());
             m_RoadEngineerActive = AddValueBinding("RoadEngineerActive", false);
@@ -281,8 +284,38 @@ namespace HoverColors.UI
                 result.Distance.ToString("R", CultureInfo.InvariantCulture),
                 result.Elevation.ToString("R", CultureInfo.InvariantCulture),
                 result.Relief.ToString("R", CultureInfo.InvariantCulture),
-                result.Slope.ToString("R", CultureInfo.InvariantCulture));
+                result.Slope.ToString("R", CultureInfo.InvariantCulture),
+                ReadGroundOffset(result.End).ToString("R", CultureInfo.InvariantCulture),
+                result.Bearing.ToString("R", CultureInfo.InvariantCulture));
             UpdateIfChanged(m_RoadEngineerCourse, snapshot);
+        }
+
+        // Read the cached native terrain height on the main thread. No GPU
+        // readback, new job, or terrain update is requested. Skip unavailable
+        // data and out-of-range points rather than report a misleading depth.
+        private float ReadGroundOffset(float3 endpoint)
+        {
+            if (m_RoadEngineerTerrain == null) return float.NaN;
+            TerrainHeightData heightData = m_RoadEngineerTerrain.GetHeightData();
+            int3 resolution = heightData.resolution;
+            if (!heightData.isCreated || resolution.y != 65536
+                || resolution.x < 2 || resolution.z < 2
+                || (long)resolution.x * resolution.z != heightData.heights.Length
+                || !math.all(math.isfinite(heightData.scale)) || heightData.scale.y <= 0f)
+            {
+                return float.NaN;
+            }
+
+            float2 sample = TerrainUtils.ToHeightmapSpace(ref heightData, endpoint).xz;
+            if (!math.all(math.isfinite(sample))
+                || math.any(sample < 0f)
+                || math.any(sample >= new float2(resolution.x - 1, resolution.z - 1)))
+            {
+                return float.NaN;
+            }
+
+            float ground = TerrainUtils.SampleHeight(ref heightData, endpoint);
+            return math.isfinite(ground) ? endpoint.y - ground : float.NaN;
         }
     }
 }
