@@ -42,7 +42,7 @@ const isMeasurement = (child: WidgetData | null | undefined) => {
 };
 
 // Preserve native group positions and native row renderers. Add appearance
-// classes and, only for explicit U lengths, use a native localized string.
+// classes and use native StringTooltip rows for explicit precision and U lengths.
 // No DOM walks, custom tooltip keys, or position/animation calculations.
 export const registerRoadMeasurementStyle = (registry: ModuleRegistry) => {
   registry.extend(MODULE, "BoundTooltipGroup", (Original) => {
@@ -69,7 +69,7 @@ export const registerRoadMeasurementStyle = (registry: ModuleRegistry) => {
         const value = styled.value;
         if (typeof value === "number" && Number.isFinite(value)) {
           let display: string | undefined;
-          const guide = /^guideLineTooltip\\d+$/.test(props.path);
+          const guide = /^guideLineTooltip\d+$/.test(props.path);
           const course = props.path === "tempNetEdgeStart" || props.path === "mouse";
           if (styled.icon === "Media/Glyphs/Length.svg" && styled.unit === "length") {
             const recovered = guide && Math.abs(value * 2 - Math.round(value * 2)) > 0.00001;

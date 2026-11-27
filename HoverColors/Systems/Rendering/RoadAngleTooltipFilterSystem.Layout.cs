@@ -407,6 +407,7 @@ namespace HoverColors.Systems
             {
                 GuideLinesSystem.TooltipInfo entry = entries[i];
                 bool angle = entry.m_Type == GuideLinesSystem.TooltipType.Angle;
+                if (!angle && entry.m_Type != GuideLinesSystem.TooltipType.Length) continue;
                 if (angle ? settings.RoadAngleDecimals <= 0 : settings.RoadDistanceDecimals <= 0) continue;
                 TooltipGroup? group = FindMeasurement(tooltipUI, i, angle);
                 if (group == null || group.children[0] is not FloatTooltip tooltip

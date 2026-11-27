@@ -180,7 +180,7 @@ const RoadEngineerPanel = ({ badge, textColor }: { badge: Color; textColor: Colo
                         {choice("U", units, () => trigger(CHANNEL, "SetRoadEngineerUseUnits", true))}
                     </div></div>
                 </SideTooltip>
-                <SideTooltip tooltip="Decimal places for distances, heights and slope. 0 keeps native floating-label formatting. Extra digits appear only where geometry is available." side="left">
+                <SideTooltip tooltip="Decimals for lengths, summary heights and slope. 0 keeps native floating formatting. Unverified guides retain native precision." side="left">
                     <div className={styles.settingRow}><span>Length decimals</span><div className={styles.buttons}>
                         {[0,1,2].map(n => <React.Fragment key={n}>{choice(String(n), distanceDecimals === n, () => trigger(CHANNEL, "SetRoadPrecision", false, n))}</React.Fragment>)}
                     </div></div>
