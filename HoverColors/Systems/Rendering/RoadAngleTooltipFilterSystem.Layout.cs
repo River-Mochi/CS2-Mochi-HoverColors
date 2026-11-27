@@ -33,7 +33,8 @@ namespace HoverColors.Systems
         private const float kMovingGuideMaxOffset = 60f;
         private const int kFixedGuideClearUpdates = 30;
         private const int kFixedGuideBlockedUpdates = 12;
-        private const float kFixedGuideReturnStep = 1f;
+        private const float kFixedGuideReturnStep = 2f;
+
         private const float kFixedGuideCorrectionLimit = 48f;
         private const float kPiRadiusScale = 1.1f / 1.5f;
         private readonly List<Rect> m_OccupiedMeasurements = new(12);
