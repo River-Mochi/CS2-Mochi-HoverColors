@@ -30,8 +30,16 @@ namespace HoverColors.Systems
         private const int kGuideReturnClearUpdates = 8;
         private const float kGuideReturnStep = 2f;
         private const float kMovingGuideMaxOffset = 60f;
+        private const int kFixedGuideClearUpdates = 30;
+        private const int kFixedGuideBlockedUpdates = 12;
+        private const float kFixedGuideReturnStep = 1f;
+        private const float kFixedGuideCorrectionLimit = 48f;
         private const float kPiRadiusScale = 1.1f / 1.5f;
         private readonly List<Rect> m_OccupiedMeasurements = new(12);
+        private readonly List<Rect> m_ProtectedPiBounds = new(2);
+        private readonly float2[] m_ProtectedPiPositions = new float2[kMaxMeasurements];
+        private readonly byte[] m_FixedGuideClearUpdates = new byte[kMaxMeasurements];
+        private readonly byte[] m_FixedGuideBlockedUpdates = new byte[kMaxMeasurements];
         private readonly List<string> m_GuidelinePaths = new(8);
         private readonly float2[] m_LayoutOffsets = new float2[kMaxMeasurements];
         private readonly byte[] m_GuideClearUpdates = new byte[kMaxMeasurements];
@@ -73,6 +81,8 @@ namespace HoverColors.Systems
                 || math.distancesq(start, m_PreviewStart) > 0.0625f)
             {
                 m_ValidOffsets = 0;
+                System.Array.Clear(m_FixedGuideClearUpdates, 0, kMaxMeasurements);
+                System.Array.Clear(m_FixedGuideBlockedUpdates, 0, kMaxMeasurements);
                 m_PreviewStart = start;
             }
 
@@ -213,6 +223,27 @@ namespace HoverColors.Systems
             // than assigning the remaining angle to the wrong joint.
             bool completePiSuffix = ordinary && firstLength >= 0
                 && entries.Length - lastLength - 1 == points.Length - 2;
+            // Read protected PI positions ahead of the fixed-leg pass. This
+            // does not change placement priority: fixed legs consider these
+            // bounds only for slow recovery or sustained severe obstruction.
+            m_ProtectedPiBounds.Clear();
+            uint protectedPiMask = 0;
+            if (ordinary)
+            {
+                for (int i = math.max(lastLength + 1, startCount); i < entries.Length; i++)
+                {
+                    GuideLinesSystem.TooltipInfo entry = entries[i];
+                    if (entry.m_Type != GuideLinesSystem.TooltipType.Angle) continue;
+                    TooltipGroup? group = FindMeasurement(tooltipUI, i, true);
+                    if (group == null || !IsNearViewport(group.position, scale)) continue;
+                    float2 position = GetProtectedPiPosition(group.position, entry, points,
+                        i - lastLength, completePiSuffix, camera);
+                    m_ProtectedPiPositions[i] = position;
+                    protectedPiMask |= 1u << i;
+                    m_ProtectedPiBounds.Add(MeasurementRect(position, true, scale));
+                }
+            }
+
             int moved = 0;
             int crowded = 0;
             uint seen = 0;
@@ -244,12 +275,7 @@ namespace HoverColors.Systems
                     if (!math.all(math.isfinite(original))) continue;
 
                     // Never pull a genuinely off-screen measurement into view.
-                    float margin = 90f * scale;
-                    if (original.x < -margin || original.x > Screen.width + margin
-                        || original.y < -margin || original.y > Screen.height + margin)
-                    {
-                        continue;
-                    }
+                    if (!IsNearViewport(original, scale)) continue;
 
                     // Vanilla emits each PI at 1.5 times its indicator size.
                     // Shorten that exact world-space radius to 1.1 before
@@ -257,24 +283,8 @@ namespace HoverColors.Systems
                     // PI offset. Preserve native positions if identity is unclear.
                     if (protectPi)
                     {
-                        float2 piPosition = original;
-                        if (completePiSuffix && camera != null)
-                        {
-                            int jointIndex = i - lastLength;
-                            float3 joint = points[jointIndex].m_Position;
-                            float3 target = math.lerp(joint, entry.m_Position, kPiRadiusScale);
-                            Vector3 projected = camera.WorldToScreenPoint(target);
-                            float2 candidate = new(projected.x, Screen.height - projected.y);
-                            if (projected.z > 0f && math.all(math.isfinite(candidate)))
-                            {
-                                piPosition = candidate;
-                                if (!m_NativePiLogged)
-                                {
-                                    m_NativePiLogged = true;
-                                    LogUtils.Info(() => $"{Mod.ModTag} Road Clutter Phase 2: native PI radial scale 1.1/1.5 active");
-                                }
-                            }
-                        }
+                        float2 piPosition = (protectedPiMask & bit) != 0
+                            ? m_ProtectedPiPositions[i] : original;
 
                         Rect piBounds = MeasurementRect(piPosition, true, scale);
                         if (GetOverlap(piBounds) > 0f) crowded++;
@@ -338,6 +348,14 @@ namespace HoverColors.Systems
                     {
                         m_GuideClearUpdates[i] = 0;
                     }
+
+                    if (fixedGuide && ordinary)
+                    {
+                        bool stable = (m_ValidOffsets & bit) != 0 && position.Equals(desired);
+                        position = AdjustFixedGuide(i, anchor, position, stable, scale);
+                        clear = GetOverlap(MeasurementRect(position, false, scale)) == 0f;
+                    }
+
                     m_LayoutOffsets[i] = (position - anchor) / scale;
                     seen |= bit;
                     if (!clear) crowded++;
@@ -361,6 +379,104 @@ namespace HoverColors.Systems
             {
                 m_LayoutCrowdedLogged = true;
                 LogUtils.Info(() => $"{Mod.ModTag} Road Clutter Phase 2: {crowded} crowded labels after bounded local search ({mode}, screen={Screen.width}x{Screen.height})");
+            }
+        }
+
+        private static bool IsNearViewport(float2 position, float scale)
+        {
+            float margin = 90f * scale;
+            return math.all(math.isfinite(position))
+                && position.x >= -margin && position.x <= Screen.width + margin
+                && position.y >= -margin && position.y <= Screen.height + margin;
+        }
+
+        // Same native radial placement as the tested 1.1x implementation.
+        private float2 GetProtectedPiPosition(float2 original, GuideLinesSystem.TooltipInfo entry,
+            NativeList<ControlPoint> points, int jointIndex, bool completePiSuffix, Camera? camera)
+        {
+            if (!completePiSuffix || camera == null) return original;
+            float3 joint = points[jointIndex].m_Position;
+            float3 target = math.lerp(joint, entry.m_Position, kPiRadiusScale);
+            Vector3 projected = camera.WorldToScreenPoint(target);
+            float2 candidate = new(projected.x, Screen.height - projected.y);
+            if (!(projected.z > 0f) || !math.all(math.isfinite(candidate))) return original;
+
+            if (!m_NativePiLogged)
+            {
+                m_NativePiLogged = true;
+                LogUtils.Info(() => $"{Mod.ModTag} Road Clutter Phase 2: native PI radial scale 1.1/1.5 active");
+            }
+            return candidate;
+        }
+
+        private float2 AdjustFixedGuide(int index, float2 anchor, float2 position,
+            bool stable, float scale)
+        {
+            if (!stable)
+            {
+                m_FixedGuideClearUpdates[index] = 0;
+                m_FixedGuideBlockedUpdates[index] = 0;
+                return position;
+            }
+
+            // Include the PI rectangles only during this fixed-leg refinement.
+            // The ordinary placement pass still reserves fixed legs first.
+            int occupiedCount = m_OccupiedMeasurements.Count;
+            m_OccupiedMeasurements.AddRange(m_ProtectedPiBounds);
+            try
+            {
+                Rect bounds = MeasurementRect(position, false, scale);
+                float overlap = GetOverlap(bounds);
+                if (overlap > bounds.width * bounds.height * 0.25f)
+                {
+                    m_FixedGuideClearUpdates[index] = 0;
+                    if (m_FixedGuideBlockedUpdates[index] < kFixedGuideBlockedUpdates)
+                    {
+                        m_FixedGuideBlockedUpdates[index]++;
+                        return position;
+                    }
+
+                    // Try once per sustained obstruction, not every frame.
+                    // Accept only a useful local improvement; never push a PI.
+                    m_FixedGuideBlockedUpdates[index] = 0;
+                    float2 candidate = FindClearPosition(position, position, false, true, scale, out _);
+                    float limit = kFixedGuideCorrectionLimit * scale;
+                    float anchorLimit = 144f * scale;
+                    if (math.distancesq(candidate, position) <= limit * limit
+                        && math.distancesq(candidate, anchor) <= anchorLimit * anchorLimit
+                        && GetOverlap(MeasurementRect(candidate, false, scale)) <= overlap * 0.25f)
+                    {
+                        return candidate;
+                    }
+                    return position;
+                }
+
+                m_FixedGuideBlockedUpdates[index] = 0;
+                float2 delta = anchor - position;
+                float distance = math.length(delta);
+                if (overlap > 0f || distance <= 0.01f || !math.isfinite(distance)
+                    || GetOverlap(MeasurementRect(anchor, false, scale)) > 0f)
+                {
+                    m_FixedGuideClearUpdates[index] = 0;
+                    return position;
+                }
+
+                if (m_FixedGuideClearUpdates[index] < kFixedGuideClearUpdates)
+                {
+                    m_FixedGuideClearUpdates[index]++;
+                    return position;
+                }
+
+                float2 next = ClampToScreen(position + delta / distance
+                    * math.min(distance, kFixedGuideReturnStep * scale), false, scale);
+                if (GetOverlap(MeasurementRect(next, false, scale)) == 0f) return next;
+                m_FixedGuideClearUpdates[index] = 0;
+                return position;
+            }
+            finally
+            {
+                m_OccupiedMeasurements.RemoveRange(occupiedCount,
+                    m_OccupiedMeasurements.Count - occupiedCount);
             }
         }
 
