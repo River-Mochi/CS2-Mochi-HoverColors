@@ -33,7 +33,7 @@ export const RoadEngineerEntry = () => {
     // No per-frame DOM scans or replacement numeric tooltip renderers.
     useEffect(() => {
         document.documentElement.style.setProperty("--mochi-road-badge-color", cssColor(r, g, b));
-        return () => document.documentElement.style.removeProperty("--mochi-road-badge-color");
+        return () => { document.documentElement.style.removeProperty("--mochi-road-badge-color"); };
     }, [r, g, b]);
 
     return active ? <RoadEngineerPanel badge={{ r, g, b, a: 1 }} /> : null;

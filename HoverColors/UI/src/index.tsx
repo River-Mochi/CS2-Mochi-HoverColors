@@ -182,10 +182,15 @@ const register: ModRegistrar = (moduleRegistry) => {
 
   try {
     moduleRegistry.append("Game", RoadEngineerEntry);
-    moduleRegistry.append("Editor", RoadEngineerEntry);
-    reportUIStatus("registered:RoadEngineer");
+    reportUIStatus("registered:RoadEngineer:Game");
   } catch (error) {
-    reportUIFailure("RoadEngineer", error);
+    reportUIFailure("RoadEngineer:Game", error);
+  }
+  try {
+    moduleRegistry.append("Editor", RoadEngineerEntry);
+    reportUIStatus("registered:RoadEngineer:Editor");
+  } catch (error) {
+    reportUIFailure("RoadEngineer:Editor", error);
   }
 
   reportUIStatus("registrar-complete");
