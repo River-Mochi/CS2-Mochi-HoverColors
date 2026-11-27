@@ -11,6 +11,8 @@
 
 import React from "react";
 import { Button } from "cs2/ui";
+import { trigger } from "cs2/api";
+import { CHANNEL } from "../bindings/MochiPanelBindings";
 import { Color } from "cs2/bindings";
 import { SideTooltip } from "../tooltip/SideTooltip";
 import { MochiSlider } from "./MochiSlider";
@@ -161,7 +163,6 @@ export const MochiPanelControlRows = ({
   guidelineLinesColor,
   guidelinePreviewColor,
   guidelineDashedColor,
-  angleArcColor,
   guidelineOpacity,
   preset1Color,
   preset2Color,
@@ -171,7 +172,6 @@ export const MochiPanelControlRows = ({
   guidelineLinesPickerDirection,
   guidelinePreviewPickerDirection,
   guidelineDashedPickerDirection,
-  angleArcPickerDirection,
   vanillaOutlineActive,
   preset1Active,
   preset2Active,
@@ -181,7 +181,6 @@ export const MochiPanelControlRows = ({
   guidelineLinesHovered,
   guidelinePreviewHovered,
   guidelineDashedHovered,
-  angleArcHovered,
   preset1Hovered,
   preset2Hovered,
   setSwatchHovered,
@@ -190,7 +189,6 @@ export const MochiPanelControlRows = ({
   setGuidelineLinesHovered,
   setGuidelinePreviewHovered,
   setGuidelineDashedHovered,
-  setAngleArcHovered,
   setPreset1Hovered,
   setPreset2Hovered,
   setOutlinePickerOpen,
@@ -199,7 +197,6 @@ export const MochiPanelControlRows = ({
   setGuidelineLinesPickerOpen,
   setGuidelinePreviewPickerOpen,
   setGuidelineDashedPickerOpen,
-  setAngleArcPickerOpen,
   holdSlot,
   holdProgress,
   cancelHold,
@@ -211,7 +208,6 @@ export const MochiPanelControlRows = ({
   guidelineLinesPickerRef,
   guidelinePreviewPickerRef,
   guidelineDashedPickerRef,
-  angleArcPickerRef,
   handleOutlineChange,
   handleOwnerColorChange,
   handleFillAChange,
@@ -224,7 +220,6 @@ export const MochiPanelControlRows = ({
   handleGuidelineLinesColorChange,
   handleGuidelinePreviewColorChange,
   handleGuidelineDashedColorChange,
-  handleAngleArcColorChange,
   handleGuidelineChange,
   handleResetOutline,
   handleResetFill,
@@ -237,7 +232,6 @@ export const MochiPanelControlRows = ({
   updateGuidelineLinesPickerDirection,
   updateGuidelinePreviewPickerDirection,
   updateGuidelineDashedPickerDirection,
-  updateAngleArcPickerDirection,
 }: MochiPanelControlRowsProps) => {
   const compactShellStyle = React.useCallback(
     (color: Color, hovered: boolean) => compactSwatchStyle(color, hovered, useDarkerPanel),
@@ -745,41 +739,16 @@ export const MochiPanelControlRows = ({
                 <span className={styles.areaThicknessLabel}>{text.labelDashedGuides}</span>
               </div>
             </SideTooltip>
-            <SideTooltip tooltip={tt(text.tooltipAngleArcColor)} side="left">
-              <div
-                ref={angleArcPickerRef}
-                className={`${styles.guidelineColorShell} ${styles.angleArcColorShell}`}
-                style={compactShellStyle(angleArcColor, angleArcHovered)}
-                onMouseOver={() => {
-                  setAngleArcHovered(true);
-                  updateAngleArcPickerDirection();
-                }}
-                onMouseMove={() => { if (!angleArcHovered) setAngleArcHovered(true); }}
-                onMouseLeave={() => setAngleArcHovered(false)}
-                onMouseDown={updateAngleArcPickerDirection}
+            <SideTooltip tooltip={tt("Road Engineer settings")} side="left">
+              <Button
+                className={`${styles.actionButton} ${styles.surfaceButton} ${styles.angleTooltipButton}`}
+                variant="icon"
+                focusKey={focusDisabled}
+                onSelect={() => trigger(CHANNEL, "OpenRoadEngineerSettings")}
+                aria-label="Road Engineer settings"
               >
-                <ColorField
-                  focusKey={focusDisabled}
-                  className={styles.guidelineColorField}
-                  value={angleArcColor}
-                  alpha={false}
-                  popupDirection={angleArcPickerDirection}
-                  hideHint={true}
-                  hexInput={true}
-                  colorWheel={false}
-                  onChange={handleAngleArcColorChange}
-                  onOpenPicker={() => {
-                    setAngleArcPickerOpen(true);
-                    updateAngleArcPickerDirection();
-                  }}
-                  onClosePicker={() => setAngleArcPickerOpen(false)}
-                />
-                <span
-                  className={styles.guidelineColorPreview}
-                  style={compactSwatchStyle(angleArcColor, angleArcHovered, useDarkerPanel)}
-                  aria-hidden="true"
-                />
-              </div>
+                <img src="Media/Glyphs/Gear.svg" className={`${styles.angleTooltipIcon} ${styles.idleIcon}`} alt="" />
+              </Button>
             </SideTooltip>
             <SideTooltip
               tooltip={tt(roadAngleTooltipsHidden

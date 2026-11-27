@@ -7,11 +7,12 @@
 // ================= </copyright> ======================
 
 import { bindValue, trigger, useValue } from "cs2/api";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect } from "react";
 import { usePanelDrag } from "../panel/hooks/usePanelDrag";
 import dragGripIcon from "../../images/mochi-drag-grip.svg";
 import { Button, Tooltip } from "cs2/ui";
 import hcStyles from "../MochiColorPickerPanel.module.scss";
+import { compactSwatchStyle, normalizeColorFieldValue } from "../panel/helpers/MochiPanelColorUtils";
 import { Color } from "cs2/bindings";
 import { VanillaComponentResolver } from "../utils/vanilla/VanillaComponentResolver";
 import { CHANNEL, angleArcR$, angleArcG$, angleArcB$, roadAngleTooltipsHidden$ } from "../panel/bindings/MochiPanelBindings";
@@ -23,6 +24,9 @@ const badgeR$ = bindValue<number>(CHANNEL, "RoadBadgeR", 35 / 255);
 const badgeG$ = bindValue<number>(CHANNEL, "RoadBadgeG", 57 / 255);
 const badgeB$ = bindValue<number>(CHANNEL, "RoadBadgeB", 77 / 255);
 const badgeA$ = bindValue<number>(CHANNEL, "RoadBadgeA", 1);
+const enabled$ = bindValue<boolean>(CHANNEL, "RoadEngineerEnabled", true);
+const settingsOpen$ = bindValue<boolean>(CHANNEL, "RoadEngineerSettingsOpen", false);
+const settingsPinned$ = bindValue<boolean>(CHANNEL, "RoadEngineerSettingsPinned", false);
 const units$ = bindValue<boolean>(CHANNEL, "RoadEngineerUseUnits", false);
 const positionSet$ = bindValue<boolean>(CHANNEL, "RoadEngineerPositionSet", false);
 const offsetX$ = bindValue<number>(CHANNEL, "RoadEngineerOffsetX", 0);
@@ -33,6 +37,7 @@ const cssColor = (r: number, g: number, b: number, a: number) => "rgba(" + byte(
 
 export const RoadEngineerEntry = () => {
     const active = useValue(active$);
+    const pinned = useValue(settingsPinned$);
     const r = useValue(badgeR$);
     const g = useValue(badgeG$);
     const b = useValue(badgeB$);
@@ -43,11 +48,13 @@ export const RoadEngineerEntry = () => {
         document.documentElement.style.setProperty("--mochi-road-badge-color", cssColor(r, g, b, a));
     }, [r, g, b, a]);
 
-    return active ? <RoadEngineerPanel badge={{ r, g, b, a }} /> : null;
+    return active || pinned ? <RoadEngineerPanel badge={{ r, g, b, a }} /> : null;
 };
 
 const RoadEngineerPanel = ({ badge }: { badge: Color }) => {
-    const [expanded, setExpanded] = useState(false);
+    const expanded = useValue(settingsOpen$);
+    const enabled = useValue(enabled$);
+    const setExpanded = (open: boolean) => trigger(CHANNEL, "SetRoadEngineerSettingsOpen", open);
     const positionSet = useValue(positionSet$);
     const offsetX = useValue(offsetX$);
     const offsetY = useValue(offsetY$);
@@ -65,7 +72,6 @@ const RoadEngineerPanel = ({ badge }: { badge: Color }) => {
     const arcG = useValue(angleArcG$);
     const arcB = useValue(angleArcB$);
     const resolver = VanillaComponentResolver.instance;
-    const ColorField = resolver.ColorField;
     const focus = resolver.FOCUS_DISABLED;
     const values = course.split("|").map(Number);
     const valid = course.length > 0 && values.length === 5 && values.every(Number.isFinite);
@@ -82,10 +88,13 @@ const RoadEngineerPanel = ({ badge }: { badge: Color }) => {
     const panelBase = resolver.panelBaseTheme;
     const panelTheme = resolver.panelTheme;
     const menuTheme = resolver.infoviewMenuTheme;
-    const setBadge = (value: Color) => trigger(CHANNEL, "SetRoadBadgeColor", value.r, value.g, value.b, value.a);
+    const setBadge = (value: Color) => {
+        const color = normalizeColorFieldValue(value);
+        trigger(CHANNEL, "SetRoadBadgeColor", color.r, color.g, color.b, color.a);
+    };
 
     return <div ref={panelElementRef} className={`${panelBase.panel ?? "panel_YqS"} ${menuTheme.menu ?? "menu_O_M"} ${hcStyles.panelFrame} ${styles.panel}`}
-        style={{ transform: "translate(" + panelOffset.x + "px," + panelOffset.y + "px)" }}>
+        style={{ position: "fixed", top: "72rem", right: "18rem", transform: "translate(" + panelOffset.x + "px," + panelOffset.y + "px)" }}>
         <div className={`${panelTheme.content ?? "content_XD5 content_AD7 child-opacity-transition_nkS"} ${menuTheme.content ?? "content_Hzl"} ${hcStyles.panelContent} ${hcStyles.panelDarker} ${styles.content}`}>
         <div className={`${hcStyles.titleBar} ${styles.header}`}>
             <div className={`${hcStyles.titleDragHandle} ${styles.dragTitle}`} onMouseDown={handlePanelDragStart}><span className={hcStyles.titleText}>Road Engineer</span></div>
@@ -104,25 +113,28 @@ const RoadEngineerPanel = ({ badge }: { badge: Color }) => {
                 <div className={styles.row}><span className={styles.label}>{label}</span><span className={styles.value}>{value}</span></div>
             </Tooltip>)}
         {expanded && <div className={styles.settings}>
+            <div className={styles.row}><span>Show panel</span>
+                <Button className={styles.optionButton} variant="flat" focusKey={focus} selected={enabled}
+                    onSelect={() => trigger(CHANNEL, "SetRoadEngineerEnabled", !enabled)}>{enabled ? "ON" : "OFF"}</Button>
+            </div>
             <div className={styles.row}><span>Distance units</span><div className={styles.buttons}>
-                <Button focusKey={focus} onSelect={() => trigger(CHANNEL, "SetRoadEngineerUseUnits", false)} aria-pressed={!units}>m</Button>
-                <Button focusKey={focus} onSelect={() => trigger(CHANNEL, "SetRoadEngineerUseUnits", true)} aria-pressed={units}>U</Button>
+                <Button className={styles.optionButton} variant="flat" focusKey={focus} selected={!units} onSelect={() => trigger(CHANNEL, "SetRoadEngineerUseUnits", false)}>m</Button>
+                <Button className={styles.optionButton} variant="flat" focusKey={focus} selected={units} onSelect={() => trigger(CHANNEL, "SetRoadEngineerUseUnits", true)}>U</Button>
             </div></div>
             <div className={styles.row}><span>Label background</span>
-                <ColorField focusKey={focus} className={styles.swatch} value={badge} alpha={true}
-                    popupDirection="left" hexInput={true} hideHint={true}
-                    colorWheel={false} onChange={setBadge} />
+                <RoadColorField value={badge} alpha={true} onChange={setBadge} />
             </div>
             <div className={styles.row}><span>Angle color</span>
-                <ColorField focusKey={focus} className={styles.swatch} value={{ r: arcR, g: arcG, b: arcB, a: 1 }} alpha={false}
-                    popupDirection="left" hexInput={true} hideHint={true} colorWheel={false}
+                <RoadColorField value={{ r: arcR, g: arcG, b: arcB, a: 1 }} alpha={false}
                     onChange={value => trigger(CHANNEL, "SetAngleArcColor", value.r, value.g, value.b)} />
             </div>
-            <div className={styles.row}><span>Clutter filter (L)</span>
-                <Button focusKey={focus} aria-pressed={filtered} onSelect={() => trigger(CHANNEL, "ToggleRoadAngleTooltips")}>{filtered ? "ON" : "OFF"}</Button>
+            <div className={styles.row}><span>Clutter filter</span>
+                <Button className={styles.optionButton} variant="flat" focusKey={focus} selected={filtered} onSelect={() => trigger(CHANNEL, "ToggleRoadAngleTooltips")}>{filtered ? "ON" : "OFF"}</Button>
             </div>
-            <div className={styles.row}><span>Label preview</span><span className={styles.preview} style={{ backgroundColor: cssColor(badge.r, badge.g, badge.b, badge.a) }}>∠ 82°</span></div>
-            <Button focusKey={focus} onSelect={() => trigger(CHANNEL, "SetRoadBadgeColor", 35 / 255, 57 / 255, 77 / 255, 1)}>Reset color</Button>
+            <div className={styles.row}><span>Label preview</span><span className={styles.preview}
+                style={{ backgroundColor: cssColor(badge.r, badge.g, badge.b, badge.a) }}>∠ 82°</span></div>
+            <Button className={styles.resetButton} variant="flat" focusKey={focus}
+                onSelect={() => trigger(CHANNEL, "SetRoadBadgeColor", 35 / 255, 57 / 255, 77 / 255, 1)}>Reset color</Button>
         </div>}
         </div>
         <div className={styles.dragFooter}>
@@ -132,5 +144,17 @@ const RoadEngineerPanel = ({ badge }: { badge: Color }) => {
             </div>
         </div>
         </div>
+    </div>;
+};
+
+// Same visible shell and native ColorField click target as the HC swatches.
+const RoadColorField = ({ value, alpha, onChange }: { value: Color; alpha: boolean; onChange: (value: Color) => void }) => {
+    const resolver = VanillaComponentResolver.instance;
+    const ColorField = resolver.ColorField;
+    return <div className={`${hcStyles.guidelineColorShell} ${styles.swatch}`}>
+        <ColorField focusKey={resolver.FOCUS_DISABLED} className={hcStyles.guidelineColorField}
+            value={value} alpha={alpha} popupDirection="left" hexInput={true} hideHint={true}
+            colorWheel={false} onChange={onChange} />
+        <span className={hcStyles.guidelineColorPreview} style={compactSwatchStyle(value, false, true)} aria-hidden="true" />
     </div>;
 };

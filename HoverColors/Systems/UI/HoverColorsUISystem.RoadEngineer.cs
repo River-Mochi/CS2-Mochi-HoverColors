@@ -27,6 +27,11 @@ namespace HoverColors.UI
         private ValueBinding<float> m_RoadBadgeG = null!;
         private ValueBinding<float> m_RoadBadgeB = null!;
         private ValueBinding<float> m_RoadBadgeA = null!;
+        private ValueBinding<bool> m_RoadEngineerEnabled = null!;
+        private ValueBinding<bool> m_RoadEngineerSettingsOpenBinding = null!;
+        private ValueBinding<bool> m_RoadEngineerSettingsPinnedBinding = null!;
+        private bool m_RoadEngineerSettingsOpen;
+        private bool m_RoadEngineerSettingsPinned;
         private ValueBinding<bool> m_RoadEngineerUnits = null!;
         private ValueBinding<bool> m_RoadEngineerPositionSet = null!;
         private ValueBinding<int> m_RoadEngineerOffsetX = null!;
@@ -43,25 +48,55 @@ namespace HoverColors.UI
             m_RoadBadgeG = AddValueBinding("RoadBadgeG", HoverColorsSettings.kDefaultRoadBadgeG);
             m_RoadBadgeB = AddValueBinding("RoadBadgeB", HoverColorsSettings.kDefaultRoadBadgeB);
             m_RoadBadgeA = AddValueBinding("RoadBadgeA", 1f);
+            m_RoadEngineerEnabled = AddValueBinding("RoadEngineerEnabled", Mod.Settings?.RoadEngineerEnabled ?? true);
+            m_RoadEngineerSettingsOpenBinding = AddValueBinding("RoadEngineerSettingsOpen", false);
+            m_RoadEngineerSettingsPinnedBinding = AddValueBinding("RoadEngineerSettingsPinned", false);
             m_RoadEngineerUnits = AddValueBinding("RoadEngineerUseUnits", false);
             m_RoadEngineerPositionSet = AddValueBinding("RoadEngineerPositionSet", false);
             m_RoadEngineerOffsetX = AddValueBinding("RoadEngineerOffsetX", 0);
             m_RoadEngineerOffsetY = AddValueBinding("RoadEngineerOffsetY", 0);
             AddBinding(new TriggerBinding(Mod.ModId, "CloseRoadEngineer", CloseRoadEngineer));
+            AddBinding(new TriggerBinding(Mod.ModId, "OpenRoadEngineerSettings", OpenRoadEngineerSettings));
+            AddBinding(new TriggerBinding<bool>(Mod.ModId, "SetRoadEngineerSettingsOpen", SetRoadEngineerSettingsOpen));
+            AddBinding(new TriggerBinding<bool>(Mod.ModId, "SetRoadEngineerEnabled", SetRoadEngineerEnabled));
             AddBinding(new TriggerBinding<int, int>(Mod.ModId, "SetRoadEngineerPosition", SetRoadEngineerPosition));
             AddBinding(new TriggerBinding<float, float, float, float>(Mod.ModId, "SetRoadBadgeColor", SetRoadBadgeColor));
             AddBinding(new TriggerBinding<bool>(Mod.ModId, "SetRoadEngineerUseUnits", SetRoadEngineerUnits));
         }
 
-        private void CloseRoadEngineer()
+        private void OpenRoadEngineerSettings()
+        {
+            m_RoadEngineerSettingsPinned = true;
+            SetRoadEngineerSettingsOpen(true);
+        }
+
+        private void SetRoadEngineerSettingsOpen(bool open)
+        {
+            m_RoadEngineerSettingsOpen = open;
+            if (!open) m_RoadEngineerSettingsPinned = false;
+            UpdateIfChanged(m_RoadEngineerSettingsOpenBinding, open);
+            UpdateIfChanged(m_RoadEngineerSettingsPinnedBinding, m_RoadEngineerSettingsPinned);
+        }
+
+        private void SetRoadEngineerEnabled(bool enabled)
         {
             HoverColorsSettings? settings = Mod.Settings;
-            if (settings == null || !settings.RoadEngineerEnabled) return;
-            settings.RoadEngineerEnabled = false;
+            if (settings == null || settings.RoadEngineerEnabled == enabled) return;
+            settings.RoadEngineerEnabled = enabled;
             settings.ApplyAndSave();
-            UpdateIfChanged(m_RoadEngineerActive, false);
-            UpdateIfChanged(m_RoadEngineerCourse, string.Empty);
-            m_RoadEngineerNextRead = 0f;
+            UpdateIfChanged(m_RoadEngineerEnabled, enabled);
+            if (!enabled)
+            {
+                UpdateIfChanged(m_RoadEngineerActive, false);
+                UpdateIfChanged(m_RoadEngineerCourse, string.Empty);
+                m_RoadEngineerNextRead = 0f;
+            }
+        }
+
+        private void CloseRoadEngineer()
+        {
+            SetRoadEngineerSettingsOpen(false);
+            SetRoadEngineerEnabled(false);
         }
 
         private void SetRoadEngineerPosition(int x, int y)
@@ -113,6 +148,7 @@ namespace HoverColors.UI
             UpdateIfChanged(m_RoadBadgeG, settings?.RoadBadgeG ?? HoverColorsSettings.kDefaultRoadBadgeG);
             UpdateIfChanged(m_RoadBadgeB, settings?.RoadBadgeB ?? HoverColorsSettings.kDefaultRoadBadgeB);
             UpdateIfChanged(m_RoadBadgeA, settings?.RoadBadgeA ?? 1f);
+            UpdateIfChanged(m_RoadEngineerEnabled, settings?.RoadEngineerEnabled ?? true);
             UpdateIfChanged(m_RoadEngineerUnits, settings?.RoadEngineerUseUnits ?? false);
             UpdateIfChanged(m_RoadEngineerPositionSet, settings?.RoadEngineerPositionSet ?? false);
             UpdateIfChanged(m_RoadEngineerOffsetX, settings?.RoadEngineerOffsetX ?? 0);
@@ -130,6 +166,8 @@ namespace HoverColors.UI
                 UpdateIfChanged(m_RoadEngineerActive, false);
                 UpdateIfChanged(m_RoadEngineerCourse, string.Empty);
                 m_RoadEngineerNextRead = 0f;
+                if (m_RoadEngineerSettingsOpen && !m_RoadEngineerSettingsPinned)
+                    SetRoadEngineerSettingsOpen(false);
                 return;
             }
 

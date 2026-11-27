@@ -63,7 +63,9 @@ export const registerRoadMeasurementStyle = (registry: ModuleRegistry) => {
           return { ...child, props: { ...styled,
             __Type: "Game.UI.Tooltip.StringTooltip",
             value: { __Type: "Game.UI.Localization.LocalizedString",
-              id: null, value: value.toString() + " U", args: null },
+              id: null, value: "{VALUE} U", args: { VALUE: {
+                __Type: "Game.UI.Localization.LocalizedNumber", value, unit: "floatTwoFractions", signed: false,
+              } } },
           } };
         }
         return { ...child, props: styled };

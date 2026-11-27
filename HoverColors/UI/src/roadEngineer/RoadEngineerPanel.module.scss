@@ -111,3 +111,16 @@
     opacity: 0.65;
     pointer-events: none;
 }
+
+.optionButton {
+    min-width: 32rem;
+    height: 24rem;
+    margin-right: 3rem;
+    padding-left: 5rem;
+    padding-right: 5rem;
+}
+.resetButton {
+    height: 26rem;
+    margin-top: 5rem;
+    align-self: flex-end;
+}
