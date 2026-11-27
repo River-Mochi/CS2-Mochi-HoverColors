@@ -20,8 +20,13 @@ body.mochiCompactColorPickerOpen .color-picker-container_Sj5 .hex_c98 {
 // Road measurement appearance proof of concept. Class is applied only to
 // verified native numeric road/path measurement widgets while RCF is ON.
 // Compact spacing; preserve fonts, icons and native transitions.
+// Cohtml 2.2 does not parse var(--name, fallback). Declare the default
+// on the document root and use the same single-argument form as vanilla.
+html {
+    --mochi-road-badge-color: #23394D;
+}
 .row-item_oHU.mochiRoadMeasurementBadge {
-    background-color: var(--mochi-road-badge-color, #23394D);
+    background-color: var(--mochi-road-badge-color);
     min-height: 24rem;
     padding-top: 2rem;
     padding-bottom: 2rem;

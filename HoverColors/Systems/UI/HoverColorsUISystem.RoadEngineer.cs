@@ -26,6 +26,7 @@ namespace HoverColors.UI
         private ValueBinding<float> m_RoadBadgeR = null!;
         private ValueBinding<float> m_RoadBadgeG = null!;
         private ValueBinding<float> m_RoadBadgeB = null!;
+        private ValueBinding<float> m_RoadBadgeA = null!;
         private ValueBinding<bool> m_RoadEngineerUnits = null!;
         private ValueBinding<bool> m_RoadEngineerPositionSet = null!;
         private ValueBinding<int> m_RoadEngineerOffsetX = null!;
@@ -41,13 +42,14 @@ namespace HoverColors.UI
             m_RoadBadgeR = AddValueBinding("RoadBadgeR", HoverColorsSettings.kDefaultRoadBadgeR);
             m_RoadBadgeG = AddValueBinding("RoadBadgeG", HoverColorsSettings.kDefaultRoadBadgeG);
             m_RoadBadgeB = AddValueBinding("RoadBadgeB", HoverColorsSettings.kDefaultRoadBadgeB);
+            m_RoadBadgeA = AddValueBinding("RoadBadgeA", 1f);
             m_RoadEngineerUnits = AddValueBinding("RoadEngineerUseUnits", false);
             m_RoadEngineerPositionSet = AddValueBinding("RoadEngineerPositionSet", false);
             m_RoadEngineerOffsetX = AddValueBinding("RoadEngineerOffsetX", 0);
             m_RoadEngineerOffsetY = AddValueBinding("RoadEngineerOffsetY", 0);
             AddBinding(new TriggerBinding(Mod.ModId, "CloseRoadEngineer", CloseRoadEngineer));
             AddBinding(new TriggerBinding<int, int>(Mod.ModId, "SetRoadEngineerPosition", SetRoadEngineerPosition));
-            AddBinding(new TriggerBinding<float, float, float>(Mod.ModId, "SetRoadBadgeColor", SetRoadBadgeColor));
+            AddBinding(new TriggerBinding<float, float, float, float>(Mod.ModId, "SetRoadBadgeColor", SetRoadBadgeColor));
             AddBinding(new TriggerBinding<bool>(Mod.ModId, "SetRoadEngineerUseUnits", SetRoadEngineerUnits));
         }
 
@@ -77,18 +79,20 @@ namespace HoverColors.UI
             SyncRoadEngineerSettings();
         }
 
-        private void SetRoadBadgeColor(float r, float g, float b)
+        private void SetRoadBadgeColor(float r, float g, float b, float a)
         {
             HoverColorsSettings? settings = Mod.Settings;
-            if (settings == null || !math.isfinite(r) || !math.isfinite(g) || !math.isfinite(b)) return;
+            if (settings == null || !math.isfinite(r) || !math.isfinite(g) || !math.isfinite(b) || !math.isfinite(a)) return;
             r = Clamp01(r);
             g = Clamp01(g);
             b = Clamp01(b);
+            a = Clamp01(a);
             if (ApproxEqual(settings.RoadBadgeR, r) && ApproxEqual(settings.RoadBadgeG, g)
-                && ApproxEqual(settings.RoadBadgeB, b)) return;
+                && ApproxEqual(settings.RoadBadgeB, b) && ApproxEqual(settings.RoadBadgeA, a)) return;
             settings.RoadBadgeR = r;
             settings.RoadBadgeG = g;
             settings.RoadBadgeB = b;
+            settings.RoadBadgeA = a;
             settings.ApplyAndSave();
             SyncRoadEngineerSettings();
         }
@@ -108,6 +112,7 @@ namespace HoverColors.UI
             UpdateIfChanged(m_RoadBadgeR, settings?.RoadBadgeR ?? HoverColorsSettings.kDefaultRoadBadgeR);
             UpdateIfChanged(m_RoadBadgeG, settings?.RoadBadgeG ?? HoverColorsSettings.kDefaultRoadBadgeG);
             UpdateIfChanged(m_RoadBadgeB, settings?.RoadBadgeB ?? HoverColorsSettings.kDefaultRoadBadgeB);
+            UpdateIfChanged(m_RoadBadgeA, settings?.RoadBadgeA ?? 1f);
             UpdateIfChanged(m_RoadEngineerUnits, settings?.RoadEngineerUseUnits ?? false);
             UpdateIfChanged(m_RoadEngineerPositionSet, settings?.RoadEngineerPositionSet ?? false);
             UpdateIfChanged(m_RoadEngineerOffsetX, settings?.RoadEngineerOffsetX ?? 0);

@@ -6,13 +6,14 @@
 // Copyright and license notices MUST be preserved.
 // ================= </copyright> ======================
 
-import { useValue } from "cs2/api";
+import { bindValue, useValue } from "cs2/api";
 import { ModuleRegistry } from "cs2/modding";
-import { roadMeasurementStyleActive$ } from "../panel/bindings/MochiPanelBindings";
+import { CHANNEL, roadMeasurementStyleActive$ } from "../panel/bindings/MochiPanelBindings";
 
 const MODULE = "game-ui/common/tooltip/tooltip-renderer/tooltip-renderer.tsx";
 const NUMBER_TYPE = "Game.UI.Tooltip.NumberTooltip";
 const BADGE_CLASS = "mochiRoadMeasurementBadge";
+const units$ = bindValue<boolean>(CHANNEL, "RoadEngineerUseUnits", false);
 
 type WidgetData = {
   path?: string;
@@ -42,18 +43,30 @@ export const registerRoadMeasurementStyle = (registry: ModuleRegistry) => {
   registry.extend(MODULE, "BoundTooltipGroup", (Original) => {
     const MeasurementGroup = (props: any) => {
       const active = useValue(roadMeasurementStyleActive$);
+      const units = useValue(units$);
       if (!active) return <Original {...props} />;
 
       const children = (props.children as WidgetData[]).map((child) => {
         if (!isMeasurement(child) || !child.props) return child;
         const className = child.props.className;
-        return {
-          ...child,
-          props: {
-            ...child.props,
-            className: className ? className + " " + BADGE_CLASS : BADGE_CLASS,
-          },
+        const styled: NonNullable<WidgetData["props"]> = {
+          ...child.props,
+          className: className ? className + " " + BADGE_CLASS : BADGE_CLASS,
         };
+        // Vanilla supports length, but has no construction-unit formatter.
+        // Preserve native NumberTooltip for all other values. The native
+        // StringTooltip uses the same row, icon, value class and color.
+        if (units && styled.icon === "Media/Glyphs/Length.svg"
+          && styled.unit === "length" && typeof styled.value === "number"
+          && Number.isFinite(styled.value)) {
+          const value = Number((styled.value / 8).toFixed(2));
+          return { ...child, props: { ...styled,
+            __Type: "Game.UI.Tooltip.StringTooltip",
+            value: { __Type: "Game.UI.Localization.LocalizedString",
+              id: null, value: value.toString() + " U", args: null },
+          } };
+        }
+        return { ...child, props: styled };
       });
 
       return <Original {...props} children={children} />;
