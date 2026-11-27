@@ -42,6 +42,7 @@ namespace HoverColors.UI
         private ValueBinding<bool> m_RoadEngineerUnits = null!;
         private ValueBinding<int> m_RoadDistanceDecimals = null!;
         private ValueBinding<int> m_RoadAngleDecimals = null!;
+        private ValueBinding<bool> m_RoadPreciseFloatingLabels = null!;
         private ValueBinding<bool> m_RoadEngineerPositionSet = null!;
         private ValueBinding<int> m_RoadEngineerOffsetX = null!;
         private ValueBinding<int> m_RoadEngineerOffsetY = null!;
@@ -69,6 +70,7 @@ namespace HoverColors.UI
             m_RoadEngineerUnits = AddValueBinding("RoadEngineerUseUnits", false);
             m_RoadDistanceDecimals = AddValueBinding("RoadDistanceDecimals", 2);
             m_RoadAngleDecimals = AddValueBinding("RoadAngleDecimals", 2);
+            m_RoadPreciseFloatingLabels = AddValueBinding("RoadPreciseFloatingLabels", false);
             m_RoadEngineerPositionSet = AddValueBinding("RoadEngineerPositionSet", false);
             m_RoadEngineerOffsetX = AddValueBinding("RoadEngineerOffsetX", 0);
             m_RoadEngineerOffsetY = AddValueBinding("RoadEngineerOffsetY", 0);
@@ -83,6 +85,7 @@ namespace HoverColors.UI
             AddBinding(new TriggerBinding<float, float, float, float>(Mod.ModId, "SetRoadBadgeColor", SetRoadBadgeColor));
             AddBinding(new TriggerBinding<bool>(Mod.ModId, "SetRoadEngineerUseUnits", SetRoadEngineerUnits));
             AddBinding(new TriggerBinding<bool, int>(Mod.ModId, "SetRoadPrecision", SetRoadPrecision));
+            AddBinding(new TriggerBinding<bool>(Mod.ModId, "SetRoadPreciseFloatingLabels", SetRoadPreciseFloatingLabels));
         }
 
         private void OpenRoadEngineerSettings()
@@ -142,6 +145,7 @@ namespace HoverColors.UI
             settings.RoadBadgeTextR = settings.RoadBadgeTextG = settings.RoadBadgeTextB = 1f;
             settings.RoadEngineerUseUnits = false;
             settings.RoadDistanceDecimals = settings.RoadAngleDecimals = native ? 0 : 2;
+            settings.RoadPreciseFloatingLabels = false;
             // Arc color, filter, visibility and position are independent choices.
             settings.ApplyAndSave();
             SyncRoadEngineerSettings();
@@ -216,6 +220,15 @@ namespace HoverColors.UI
             SyncRoadEngineerSettings();
         }
 
+        private void SetRoadPreciseFloatingLabels(bool enabled)
+        {
+            HoverColorsSettings? settings = Mod.Settings;
+            if (settings == null || settings.RoadPreciseFloatingLabels == enabled) return;
+            settings.RoadPreciseFloatingLabels = enabled;
+            settings.ApplyAndSave();
+            SyncRoadEngineerSettings();
+        }
+
         private void SetRoadPrecision(bool angle, int decimals)
         {
             HoverColorsSettings? settings = Mod.Settings;
@@ -251,6 +264,7 @@ namespace HoverColors.UI
             UpdateIfChanged(m_RoadEngineerUnits, settings?.RoadEngineerUseUnits ?? false);
             UpdateIfChanged(m_RoadDistanceDecimals, math.clamp(settings?.RoadDistanceDecimals ?? 2, 0, 2));
             UpdateIfChanged(m_RoadAngleDecimals, math.clamp(settings?.RoadAngleDecimals ?? 2, 0, 2));
+            UpdateIfChanged(m_RoadPreciseFloatingLabels, settings?.RoadPreciseFloatingLabels ?? false);
             UpdateIfChanged(m_RoadEngineerPositionSet, settings?.RoadEngineerPositionSet ?? false);
             UpdateIfChanged(m_RoadEngineerOffsetX, settings?.RoadEngineerOffsetX ?? 0);
             UpdateIfChanged(m_RoadEngineerOffsetY, settings?.RoadEngineerOffsetY ?? 0);

@@ -16,6 +16,7 @@ const BADGE_CLASS = "mochiRoadMeasurementBadge";
 const units$ = bindValue<boolean>(CHANNEL, "RoadEngineerUseUnits", false);
 const distanceDecimals$ = bindValue<number>(CHANNEL, "RoadDistanceDecimals", 2);
 const angleDecimals$ = bindValue<number>(CHANNEL, "RoadAngleDecimals", 2);
+const preciseFloating$ = bindValue<boolean>(CHANNEL, "RoadPreciseFloatingLabels", false);
 const unitSettings$ = bindValue<{unitSystem: number}>("options", "unitSettings", {unitSystem: 0});
 const customText$ = bindValue<boolean>(CHANNEL, "RoadBadgeCustomText", false);
 const nativeBackground$ = bindValue<boolean>(CHANNEL, "RoadBadgeNativeBackground", false);
@@ -49,8 +50,11 @@ export const registerRoadMeasurementStyle = (registry: ModuleRegistry) => {
     const MeasurementGroup = (props: any) => {
       const active = useValue(roadMeasurementStyleActive$);
       const units = useValue(units$);
-      const distanceDecimals = useValue(distanceDecimals$);
-      const angleDecimals = useValue(angleDecimals$);
+      const preciseFloating = useValue(preciseFloating$);
+      const selectedDistanceDecimals = useValue(distanceDecimals$);
+      const selectedAngleDecimals = useValue(angleDecimals$);
+      const distanceDecimals = preciseFloating ? selectedDistanceDecimals : 0;
+      const angleDecimals = preciseFloating ? selectedAngleDecimals : 0;
       const imperial = useValue(unitSettings$)?.unitSystem === 1;
       const customText = useValue(customText$);
       const nativeBackground = useValue(nativeBackground$);
@@ -76,7 +80,12 @@ export const registerRoadMeasurementStyle = (registry: ModuleRegistry) => {
             if (units || (distanceDecimals > 0 && (course || recovered))) {
               const decimals = distanceDecimals > 0 ? distanceDecimals : 2;
               const converted = units ? value / 8 : imperial ? value / 0.9144 : value;
-              display = converted.toFixed(decimals) + (units ? " U" : imperial ? " yd" : " m");
+              // U is an explicit unit choice, independent of precision.
+              // Compact U retains useful fractional grid units without trailing zeros.
+              const formatted = units && distanceDecimals === 0
+                ? Number(converted.toFixed(decimals)).toString()
+                : converted.toFixed(decimals);
+              display = formatted + (units ? " U" : imperial ? " yd" : " m");
             }
           } else if (styled.icon === "Media/Glyphs/Angle.svg" && styled.unit === "angle"
               && angleDecimals > 0 && guide && Math.abs(value - Math.round(value)) > 0.00001) {

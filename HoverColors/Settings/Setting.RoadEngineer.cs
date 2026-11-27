@@ -40,6 +40,8 @@ namespace HoverColors
         public int RoadDistanceDecimals { get; set; } = 2;
         [SettingsUIHidden]
         public int RoadAngleDecimals { get; set; } = 2;
+        [SettingsUIHidden]
+        public bool RoadPreciseFloatingLabels { get; set; }
 
         [SettingsUISection(Actions, kPanel)]
         public bool RoadEngineerEnabled { get; set; } = true;
@@ -64,6 +66,7 @@ namespace HoverColors
             RoadBadgeTextR = RoadBadgeTextG = RoadBadgeTextB = 1f;
             RoadEngineerUseUnits = false;
             RoadDistanceDecimals = RoadAngleDecimals = 2;
+            RoadPreciseFloatingLabels = false;
             RoadEngineerEnabled = true;
             RoadEngineerPositionSet = false;
             RoadEngineerOffsetX = 0;

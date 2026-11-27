@@ -392,7 +392,7 @@ namespace HoverColors.Systems
             NativeList<ControlPoint> points, NativeList<GuideLinesSystem.TooltipInfo> entries, bool ordinary)
         {
             HoverColorsSettings? settings = Mod.Settings;
-            if (!ordinary || settings == null
+            if (!ordinary || settings?.RoadPreciseFloatingLabels != true
                 || (settings.RoadDistanceDecimals <= 0 && settings.RoadAngleDecimals <= 0)) return;
 
             float snap = 1f;
@@ -647,7 +647,10 @@ namespace HoverColors.Systems
         // COHTML does not expose the actual rendered bounds to this C# pass.
         private static Rect MeasurementRect(float2 center, bool angle, float scale)
         {
-            int decimals = math.clamp(angle ? Mod.Settings?.RoadAngleDecimals ?? 2 : Mod.Settings?.RoadDistanceDecimals ?? 2, 0, 2);
+            HoverColorsSettings? settings = Mod.Settings;
+            int decimals = settings?.RoadPreciseFloatingLabels == true
+                ? math.clamp(angle ? settings.RoadAngleDecimals : settings.RoadDistanceDecimals, 0, 2)
+                : 0;
             // Reserve room for the added decimal separator and digits. Do not
             // change the native PI anchor or bounded displacement limits.
             float width = ((angle ? 100f : 116f) + (decimals > 0 ? 8f * (decimals + 1) : 0f)) * scale;
