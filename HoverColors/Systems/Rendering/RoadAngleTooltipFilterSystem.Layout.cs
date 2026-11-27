@@ -7,7 +7,8 @@
 // ================= </copyright> ======================
 
 // Stable native-anchor layout of existing road measurements.
-// Never change geometry, tooltip values, alignment, units or visibility.
+// Layout never changes geometry. A separate post-layout precision pass may
+// recover verified native guide values for the Road Engineer display.
 
 namespace HoverColors.Systems
 {
@@ -44,6 +45,7 @@ namespace HoverColors.Systems
         private readonly float2[] m_LayoutOffsets = new float2[kMaxMeasurements];
         private readonly byte[] m_GuideClearUpdates = new byte[kMaxMeasurements];
         private GuideLinesSystem? m_LayoutGuideLines;
+        private PrefabSystem? m_PrecisionPrefabs;
         private uint m_ValidOffsets;
         private uint m_PreviewAngleMask;
         private int m_PreviewFrame = -1;
@@ -61,6 +63,7 @@ namespace HoverColors.Systems
         private void InitializeMeasurementLayout()
         {
             m_LayoutGuideLines = World.GetOrCreateSystemManaged<GuideLinesSystem>();
+            m_PrecisionPrefabs = World.GetOrCreateSystemManaged<PrefabSystem>();
         }
 
         private void ResetMeasurementLayout()
@@ -370,6 +373,9 @@ namespace HoverColors.Systems
             }
             m_ValidOffsets = seen;
 
+            // Recover values only AFTER all native identity and placement checks.
+            ApplyGuidePrecision(netTool, tooltipUI, points, entries, ordinary);
+
             if (moved > 0 && !m_LayoutLogged)
             {
                 m_LayoutLogged = true;
@@ -379,6 +385,45 @@ namespace HoverColors.Systems
             {
                 m_LayoutCrowdedLogged = true;
                 LogUtils.Info(() => $"{Mod.ModTag} Road Clutter Phase 2: {crowded} crowded labels after bounded local search ({mode}, screen={Screen.width}x{Screen.height})");
+            }
+        }
+
+        private void ApplyGuidePrecision(NetToolSystem netTool, TooltipUISystem tooltipUI,
+            NativeList<ControlPoint> points, NativeList<GuideLinesSystem.TooltipInfo> entries, bool ordinary)
+        {
+            HoverColorsSettings? settings = Mod.Settings;
+            if (!ordinary || settings == null
+                || (settings.RoadDistanceDecimals <= 0 && settings.RoadAngleDecimals <= 0)) return;
+
+            float snap = 1f;
+            if (settings.RoadAngleDecimals > 0 && m_PrecisionPrefabs != null
+                && netTool.GetPrefab() is PrefabBase prefab
+                && m_PrecisionPrefabs.TryGetComponentData<PlaceableNetData>(prefab, out PlaceableNetData placeable))
+            {
+                snap = placeable.m_SnapDistance;
+            }
+
+            for (int i = 0; i < entries.Length; i++)
+            {
+                GuideLinesSystem.TooltipInfo entry = entries[i];
+                bool angle = entry.m_Type == GuideLinesSystem.TooltipType.Angle;
+                if (angle ? settings.RoadAngleDecimals <= 0 : settings.RoadDistanceDecimals <= 0) continue;
+                TooltipGroup? group = FindMeasurement(tooltipUI, i, angle);
+                if (group == null || group.children[0] is not FloatTooltip tooltip
+                    || tooltip.value != entry.m_Value || tooltip.unit != (angle ? "angle" : "length")) continue;
+
+                float precise;
+                bool matched = angle
+                    ? RoadEngineerGuideMeasurements.TryReadOrdinaryPi(points, entries, i,
+                        netTool.actualMode, snap, out precise)
+                    : RoadEngineerGuideMeasurements.TryReadDistance(points, entry, out precise);
+                if (matched && math.isfinite(precise) && tooltip.value != precise)
+                {
+                    // Native GuideLineTooltipSystem rewrites both value and unit
+                    // each update, so OFF/0 restores the original automatically.
+                    tooltip.value = precise;
+                    group.SetChildrenChanged();
+                }
             }
         }
 
@@ -601,7 +646,10 @@ namespace HoverColors.Systems
         // COHTML does not expose the actual rendered bounds to this C# pass.
         private static Rect MeasurementRect(float2 center, bool angle, float scale)
         {
-            float width = (angle ? 100f : 116f) * scale;
+            int decimals = math.clamp(angle ? Mod.Settings?.RoadAngleDecimals ?? 2 : Mod.Settings?.RoadDistanceDecimals ?? 2, 0, 2);
+            // Reserve room for the added decimal separator and digits. Do not
+            // change the native PI anchor or bounded displacement limits.
+            float width = ((angle ? 100f : 116f) + (decimals > 0 ? 8f * (decimals + 1) : 0f)) * scale;
             float height = 34f * scale;
             return new Rect(center.x - width * 0.5f, center.y - height * 0.5f, width, height);
         }

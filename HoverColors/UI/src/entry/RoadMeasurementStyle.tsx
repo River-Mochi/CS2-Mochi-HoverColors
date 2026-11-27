@@ -14,6 +14,9 @@ const MODULE = "game-ui/common/tooltip/tooltip-renderer/tooltip-renderer.tsx";
 const NUMBER_TYPE = "Game.UI.Tooltip.NumberTooltip";
 const BADGE_CLASS = "mochiRoadMeasurementBadge";
 const units$ = bindValue<boolean>(CHANNEL, "RoadEngineerUseUnits", false);
+const distanceDecimals$ = bindValue<number>(CHANNEL, "RoadDistanceDecimals", 2);
+const angleDecimals$ = bindValue<number>(CHANNEL, "RoadAngleDecimals", 2);
+const unitSettings$ = bindValue<{unitSystem: number}>("options", "unitSettings", {unitSystem: 0});
 const customText$ = bindValue<boolean>(CHANNEL, "RoadBadgeCustomText", false);
 const nativeBackground$ = bindValue<boolean>(CHANNEL, "RoadBadgeNativeBackground", false);
 
@@ -46,6 +49,9 @@ export const registerRoadMeasurementStyle = (registry: ModuleRegistry) => {
     const MeasurementGroup = (props: any) => {
       const active = useValue(roadMeasurementStyleActive$);
       const units = useValue(units$);
+      const distanceDecimals = useValue(distanceDecimals$);
+      const angleDecimals = useValue(angleDecimals$);
+      const imperial = useValue(unitSettings$)?.unitSystem === 1;
       const customText = useValue(customText$);
       const nativeBackground = useValue(nativeBackground$);
       if (!active) return <Original {...props} />;
@@ -57,20 +63,35 @@ export const registerRoadMeasurementStyle = (registry: ModuleRegistry) => {
           ...child.props,
           className: [className, BADGE_CLASS, nativeBackground ? "" : "mochiRoadMeasurementCustomBackground", customText ? "mochiRoadMeasurementCustomText" : ""].filter(Boolean).join(" "),
         };
-        // Vanilla supports length, but has no construction-unit formatter.
-        // Preserve native NumberTooltip for all other values. The native
-        // StringTooltip uses the same row, icon, value class and color.
-        if (units && styled.icon === "Media/Glyphs/Length.svg"
-          && styled.unit === "length" && typeof styled.value === "number"
-          && Number.isFinite(styled.value)) {
-          const value = Number((styled.value / 8).toFixed(2));
-          return { ...child, props: { ...styled,
-            __Type: "Game.UI.Tooltip.StringTooltip",
-            value: { __Type: "Game.UI.Localization.LocalizedString",
-              id: null, value: "{VALUE} U", args: { VALUE: {
-                __Type: "Game.UI.Localization.LocalizedNumber", value, unit: "floatTwoFractions", signed: false,
-              } } },
-          } };
+        // Only native course lengths and geometry-recovered guide values
+        // can provide additional meaningful digits. Leave unverified rounded
+        // starting angles and generated Continuous measurements native.
+        const value = styled.value;
+        if (typeof value === "number" && Number.isFinite(value)) {
+          let display: string | undefined;
+          const guide = /^guideLineTooltip\\d+$/.test(props.path);
+          const course = props.path === "tempNetEdgeStart" || props.path === "mouse";
+          if (styled.icon === "Media/Glyphs/Length.svg" && styled.unit === "length") {
+            const recovered = guide && Math.abs(value * 2 - Math.round(value * 2)) > 0.00001;
+            if (units || (distanceDecimals > 0 && (course || recovered))) {
+              const decimals = distanceDecimals > 0 ? distanceDecimals : 2;
+              const converted = units ? value / 8 : imperial ? value / 0.9144 : value;
+              display = converted.toFixed(decimals) + (units ? " U" : imperial ? " yd" : " m");
+            }
+          } else if (styled.icon === "Media/Glyphs/Angle.svg" && styled.unit === "angle"
+              && angleDecimals > 0 && guide && Math.abs(value - Math.round(value)) > 0.00001) {
+            display = value.toFixed(angleDecimals) + "°";
+          }
+          if (display !== undefined) {
+            // Same native StringTooltip renderer used by the existing U option.
+            // Do not use FloatTwoFractions: vanilla rounds magnitudes >=100
+            // to integers even with that unit.
+            return { ...child, props: { ...styled,
+              __Type: "Game.UI.Tooltip.StringTooltip",
+              value: { __Type: "Game.UI.Localization.LocalizedString",
+                id: null, value: display, args: null },
+            } };
+          }
         }
         return { ...child, props: styled };
       });

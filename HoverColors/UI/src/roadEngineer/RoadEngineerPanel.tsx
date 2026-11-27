@@ -34,6 +34,9 @@ const enabled$ = bindValue<boolean>(CHANNEL, "RoadEngineerEnabled", true);
 const settingsOpen$ = bindValue<boolean>(CHANNEL, "RoadEngineerSettingsOpen", false);
 const settingsPinned$ = bindValue<boolean>(CHANNEL, "RoadEngineerSettingsPinned", false);
 const units$ = bindValue<boolean>(CHANNEL, "RoadEngineerUseUnits", false);
+const distanceDecimals$ = bindValue<number>(CHANNEL, "RoadDistanceDecimals", 2);
+const angleDecimals$ = bindValue<number>(CHANNEL, "RoadAngleDecimals", 2);
+const unitSettings$ = bindValue<{unitSystem: number}>("options", "unitSettings", {unitSystem: 0});
 const positionSet$ = bindValue<boolean>(CHANNEL, "RoadEngineerPositionSet", false);
 const offsetX$ = bindValue<number>(CHANNEL, "RoadEngineerOffsetX", 0);
 const offsetY$ = bindValue<number>(CHANNEL, "RoadEngineerOffsetY", 0);
@@ -85,6 +88,9 @@ const RoadEngineerPanel = ({ badge, textColor }: { badge: Color; textColor: Colo
         savePosition, expanded);
     const course = useValue(course$);
     const units = useValue(units$);
+    const distanceDecimals = useValue(distanceDecimals$);
+    const angleDecimals = useValue(angleDecimals$);
+    const imperial = useValue(unitSettings$)?.unitSystem === 1;
     const filtered = useValue(roadAngleTooltipsHidden$);
     const arcR = useValue(angleArcR$);
     const arcG = useValue(angleArcG$);
@@ -94,12 +100,12 @@ const RoadEngineerPanel = ({ badge, textColor }: { badge: Color; textColor: Colo
     const roundButton = resolver.roundHighlightButtonTheme["button"] ?? "";
     const values = course.split("|").map(Number);
     const valid = course.length > 0 && values.length === 7 && values.slice(0, 5).every(Number.isFinite);
-    const distance = (v: number) => (units ? v / 8 : v).toFixed(2) + (units ? " U" : " m");
-    const vertical = (v: number) => v.toFixed(2) + " m";
+    const distance = (v: number) => (units ? v / 8 : imperial ? v / 0.9144 : v).toFixed(distanceDecimals) + (units ? " U" : imperial ? " yd" : " m");
+    const vertical = (v: number) => (imperial ? v / 0.3048 : v).toFixed(distanceDecimals) + (imperial ? " ft" : " m");
     const signed = (v: number) => (v > 0 ? "+" : "") + vertical(v);
     const compassPoints = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
     const bearing = valid && Number.isFinite(values[6])
-        ? compassPoints[Math.round(values[6] / 45) % 8] + " " + (Math.round(values[6] * 10) % 3600 / 10).toFixed(1) + "°"
+        ? compassPoints[Math.round(values[6] / 45) % 8] + " " + (Number(values[6].toFixed(angleDecimals)) % 360).toFixed(angleDecimals) + "°"
         : "—";
     const rows = [
         ["Length", valid ? distance(values[0]) : "—", "Horizontal length along the road."],
@@ -107,7 +113,7 @@ const RoadEngineerPanel = ({ badge, textColor }: { badge: Color; textColor: Colo
         ["Elevation", valid ? vertical(values[2]) : "—", "Endpoint world height, not height above ground."],
         ["Height/depth", valid && Number.isFinite(values[5]) ? signed(values[5]) : "—", "Endpoint height above (+) or below (−) terrain. Uses the cached terrain surface."],
         ["Relief", valid ? (values[3] > 0 ? "+" : "") + vertical(values[3]) : "—", "End height minus start height."],
-        ["Slope", valid ? (values[4] > 0 ? "+" : "") + values[4].toFixed(2) + "%" : "—", "Average slope along the road."],
+        ["Slope", valid ? (values[4] > 0 ? "+" : "") + values[4].toFixed(distanceDecimals) + "%" : "—", "Average slope along the road."],
         ["Direction", bearing, "Map-relative start-to-end bearing. Independent of camera rotation."],
     ];
     const setBadge = (value: Color) => {
@@ -123,7 +129,7 @@ const RoadEngineerPanel = ({ badge, textColor }: { badge: Color; textColor: Colo
     const preview = <span className={styles.preview} style={{
         backgroundColor: nativeBackground ? "var(--tooltipColor)" : cssColor(badge.r, badge.g, badge.b, badge.a),
         color: customText ? cssColor(textColor.r, textColor.g, textColor.b, 1) : undefined,
-    }}><img src="Media/Glyphs/Angle.svg" alt="" className={styles.previewIcon} />82°</span>;
+    }}><img src="Media/Glyphs/Angle.svg" alt="" className={styles.previewIcon} />{(82.347).toFixed(angleDecimals)}°</span>;
 
     const toggle = (label: string, checked: boolean, action: () => void) =>
         <Button className={`${styles.toggle} ${checked ? styles.toggleOn : ""}`} variant="icon" focusKey={focus}
@@ -170,8 +176,18 @@ const RoadEngineerPanel = ({ badge, textColor }: { badge: Color; textColor: Colo
                 </SideTooltip>
                 <SideTooltip tooltip="Metres or 8 m construction units. Floating lengths change with Clutter Filter ON." side="left">
                     <div className={styles.settingRow}><span>Distance units</span><div className={styles.buttons}>
-                        {choice("m", !units, () => trigger(CHANNEL, "SetRoadEngineerUseUnits", false))}
+                        {choice(imperial ? "yd" : "m", !units, () => trigger(CHANNEL, "SetRoadEngineerUseUnits", false))}
                         {choice("U", units, () => trigger(CHANNEL, "SetRoadEngineerUseUnits", true))}
+                    </div></div>
+                </SideTooltip>
+                <SideTooltip tooltip="Decimal places for distances, heights and slope. 0 keeps native floating-label formatting. Extra digits appear only where geometry is available." side="left">
+                    <div className={styles.settingRow}><span>Length decimals</span><div className={styles.buttons}>
+                        {[0,1,2].map(n => <React.Fragment key={n}>{choice(String(n), distanceDecimals === n, () => trigger(CHANNEL, "SetRoadPrecision", false, n))}</React.Fragment>)}
+                    </div></div>
+                </SideTooltip>
+                <SideTooltip tooltip="Decimal places for bearing and verified PI angles. 0 keeps vanilla floating angles." side="left">
+                    <div className={styles.settingRow}><span>Angle decimals</span><div className={styles.buttons}>
+                        {[0,1,2].map(n => <React.Fragment key={n}>{choice(String(n), angleDecimals === n, () => trigger(CHANNEL, "SetRoadPrecision", true, n))}</React.Fragment>)}
                     </div></div>
                 </SideTooltip>
                 <SideTooltip tooltip="Live preview of the floating measurement style." side="left">
@@ -201,11 +217,11 @@ const RoadEngineerPanel = ({ badge, textColor }: { badge: Color; textColor: Colo
                     </div>
                 </SideTooltip>
                 <div className={styles.resetRow}>
-                    <SideTooltip tooltip="Restore denim, native text and default distance units. Keep arc color and filter unchanged." side="left">
+                    <SideTooltip tooltip="Restore denim, native text, default units and two decimals. Keep arc color and filter unchanged." side="left">
                         <Button className={styles.resetButton} variant="icon" focusKey={focus}
                             onSelect={() => trigger(CHANNEL, "ResetRoadAppearance", false)}>Mod defaults</Button>
                     </SideTooltip>
-                    <SideTooltip tooltip="Use the game's background, text color and distance formatter. Keep arc color and filter unchanged." side="left">
+                    <SideTooltip tooltip="Use the game's background, text color and floating precision. Keep arc color and filter unchanged." side="left">
                         <Button className={styles.resetButton} variant="icon" focusKey={focus}
                             onSelect={() => trigger(CHANNEL, "ResetRoadAppearance", true)}>Vanilla</Button>
                     </SideTooltip>
