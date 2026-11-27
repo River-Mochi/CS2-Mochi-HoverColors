@@ -14,6 +14,7 @@ const MODULE = "game-ui/common/tooltip/tooltip-renderer/tooltip-renderer.tsx";
 const NUMBER_TYPE = "Game.UI.Tooltip.NumberTooltip";
 const BADGE_CLASS = "mochiRoadMeasurementBadge";
 const units$ = bindValue<boolean>(CHANNEL, "RoadEngineerUseUnits", false);
+const customText$ = bindValue<boolean>(CHANNEL, "RoadBadgeCustomText", false);
 
 type WidgetData = {
   path?: string;
@@ -44,6 +45,7 @@ export const registerRoadMeasurementStyle = (registry: ModuleRegistry) => {
     const MeasurementGroup = (props: any) => {
       const active = useValue(roadMeasurementStyleActive$);
       const units = useValue(units$);
+      const customText = useValue(customText$);
       if (!active) return <Original {...props} />;
 
       const children = (props.children as WidgetData[]).map((child) => {
@@ -51,7 +53,7 @@ export const registerRoadMeasurementStyle = (registry: ModuleRegistry) => {
         const className = child.props.className;
         const styled: NonNullable<WidgetData["props"]> = {
           ...child.props,
-          className: className ? className + " " + BADGE_CLASS : BADGE_CLASS,
+          className: [className, BADGE_CLASS, customText ? "mochiRoadMeasurementCustomText" : ""].filter(Boolean).join(" "),
         };
         // Vanilla supports length, but has no construction-unit formatter.
         // Preserve native NumberTooltip for all other values. The native

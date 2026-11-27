@@ -25,6 +25,14 @@ namespace HoverColors
         [SettingsUIHidden]
         public float RoadBadgeA { get; set; } = 1f;
         [SettingsUIHidden]
+        public bool RoadBadgeCustomText { get; set; }
+        [SettingsUIHidden]
+        public float RoadBadgeTextR { get; set; } = 1f;
+        [SettingsUIHidden]
+        public float RoadBadgeTextG { get; set; } = 1f;
+        [SettingsUIHidden]
+        public float RoadBadgeTextB { get; set; } = 1f;
+        [SettingsUIHidden]
         public bool RoadEngineerUseUnits { get; set; }
 
         [SettingsUISection(Actions, kPanel)]
@@ -45,6 +53,8 @@ namespace HoverColors
             RoadBadgeG = kDefaultRoadBadgeG;
             RoadBadgeB = kDefaultRoadBadgeB;
             RoadBadgeA = 1f;
+            RoadBadgeCustomText = false;
+            RoadBadgeTextR = RoadBadgeTextG = RoadBadgeTextB = 1f;
             RoadEngineerUseUnits = false;
             RoadEngineerEnabled = true;
             RoadEngineerPositionSet = false;

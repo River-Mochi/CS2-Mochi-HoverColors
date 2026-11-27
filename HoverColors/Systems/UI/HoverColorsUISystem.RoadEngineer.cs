@@ -27,6 +27,10 @@ namespace HoverColors.UI
         private ValueBinding<float> m_RoadBadgeG = null!;
         private ValueBinding<float> m_RoadBadgeB = null!;
         private ValueBinding<float> m_RoadBadgeA = null!;
+        private ValueBinding<bool> m_RoadBadgeCustomText = null!;
+        private ValueBinding<float> m_RoadBadgeTextR = null!;
+        private ValueBinding<float> m_RoadBadgeTextG = null!;
+        private ValueBinding<float> m_RoadBadgeTextB = null!;
         private ValueBinding<bool> m_RoadEngineerEnabled = null!;
         private ValueBinding<bool> m_RoadEngineerSettingsOpenBinding = null!;
         private ValueBinding<bool> m_RoadEngineerSettingsPinnedBinding = null!;
@@ -48,6 +52,10 @@ namespace HoverColors.UI
             m_RoadBadgeG = AddValueBinding("RoadBadgeG", HoverColorsSettings.kDefaultRoadBadgeG);
             m_RoadBadgeB = AddValueBinding("RoadBadgeB", HoverColorsSettings.kDefaultRoadBadgeB);
             m_RoadBadgeA = AddValueBinding("RoadBadgeA", 1f);
+            m_RoadBadgeCustomText = AddValueBinding("RoadBadgeCustomText", false);
+            m_RoadBadgeTextR = AddValueBinding("RoadBadgeTextR", 1f);
+            m_RoadBadgeTextG = AddValueBinding("RoadBadgeTextG", 1f);
+            m_RoadBadgeTextB = AddValueBinding("RoadBadgeTextB", 1f);
             m_RoadEngineerEnabled = AddValueBinding("RoadEngineerEnabled", Mod.Settings?.RoadEngineerEnabled ?? true);
             m_RoadEngineerSettingsOpenBinding = AddValueBinding("RoadEngineerSettingsOpen", false);
             m_RoadEngineerSettingsPinnedBinding = AddValueBinding("RoadEngineerSettingsPinned", false);
@@ -56,6 +64,8 @@ namespace HoverColors.UI
             m_RoadEngineerOffsetX = AddValueBinding("RoadEngineerOffsetX", 0);
             m_RoadEngineerOffsetY = AddValueBinding("RoadEngineerOffsetY", 0);
             AddBinding(new TriggerBinding(Mod.ModId, "CloseRoadEngineer", CloseRoadEngineer));
+            AddBinding(new TriggerBinding<float, float, float>(Mod.ModId, "SetRoadBadgeTextColor", SetRoadBadgeTextColor));
+            AddBinding(new TriggerBinding(Mod.ModId, "ResetRoadBadgeTextColor", ResetRoadBadgeTextColor));
             AddBinding(new TriggerBinding(Mod.ModId, "OpenRoadEngineerSettings", OpenRoadEngineerSettings));
             AddBinding(new TriggerBinding<bool>(Mod.ModId, "SetRoadEngineerSettingsOpen", SetRoadEngineerSettingsOpen));
             AddBinding(new TriggerBinding<bool>(Mod.ModId, "SetRoadEngineerEnabled", SetRoadEngineerEnabled));
@@ -97,6 +107,32 @@ namespace HoverColors.UI
         {
             SetRoadEngineerSettingsOpen(false);
             SetRoadEngineerEnabled(false);
+        }
+
+        private void SetRoadBadgeTextColor(float r, float g, float b)
+        {
+            HoverColorsSettings? settings = Mod.Settings;
+            if (settings == null || !math.isfinite(r) || !math.isfinite(g) || !math.isfinite(b)) return;
+            r = Clamp01(r);
+            g = Clamp01(g);
+            b = Clamp01(b);
+            if (settings.RoadBadgeCustomText && ApproxEqual(settings.RoadBadgeTextR, r)
+                && ApproxEqual(settings.RoadBadgeTextG, g) && ApproxEqual(settings.RoadBadgeTextB, b)) return;
+            settings.RoadBadgeTextR = r;
+            settings.RoadBadgeTextG = g;
+            settings.RoadBadgeTextB = b;
+            settings.RoadBadgeCustomText = true;
+            settings.ApplyAndSave();
+            SyncRoadEngineerSettings();
+        }
+
+        private void ResetRoadBadgeTextColor()
+        {
+            HoverColorsSettings? settings = Mod.Settings;
+            if (settings == null || !settings.RoadBadgeCustomText) return;
+            settings.RoadBadgeCustomText = false;
+            settings.ApplyAndSave();
+            SyncRoadEngineerSettings();
         }
 
         private void SetRoadEngineerPosition(int x, int y)
@@ -148,6 +184,10 @@ namespace HoverColors.UI
             UpdateIfChanged(m_RoadBadgeG, settings?.RoadBadgeG ?? HoverColorsSettings.kDefaultRoadBadgeG);
             UpdateIfChanged(m_RoadBadgeB, settings?.RoadBadgeB ?? HoverColorsSettings.kDefaultRoadBadgeB);
             UpdateIfChanged(m_RoadBadgeA, settings?.RoadBadgeA ?? 1f);
+            UpdateIfChanged(m_RoadBadgeCustomText, settings?.RoadBadgeCustomText ?? false);
+            UpdateIfChanged(m_RoadBadgeTextR, settings?.RoadBadgeTextR ?? 1f);
+            UpdateIfChanged(m_RoadBadgeTextG, settings?.RoadBadgeTextG ?? 1f);
+            UpdateIfChanged(m_RoadBadgeTextB, settings?.RoadBadgeTextB ?? 1f);
             UpdateIfChanged(m_RoadEngineerEnabled, settings?.RoadEngineerEnabled ?? true);
             UpdateIfChanged(m_RoadEngineerUnits, settings?.RoadEngineerUseUnits ?? false);
             UpdateIfChanged(m_RoadEngineerPositionSet, settings?.RoadEngineerPositionSet ?? false);

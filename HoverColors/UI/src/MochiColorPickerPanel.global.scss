@@ -24,6 +24,7 @@ body.mochiCompactColorPickerOpen .color-picker-container_Sj5 .hex_c98 {
 // on the document root and use the same single-argument form as vanilla.
 html {
     --mochi-road-badge-color: #23394D;
+    --mochi-road-text-color: #ffffff;
 }
 .row-item_oHU.mochiRoadMeasurementBadge {
     background-color: var(--mochi-road-badge-color);
@@ -41,4 +42,8 @@ html {
 .row-item_oHU.mochiRoadMeasurementBadge .value_uLz {
     margin-left: 3rem;
     margin-right: 3rem;
+}
+
+.row-item_oHU.mochiRoadMeasurementCustomText .value_uLz {
+    color: var(--mochi-road-text-color);
 }

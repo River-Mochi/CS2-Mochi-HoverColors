@@ -24,6 +24,10 @@ const badgeR$ = bindValue<number>(CHANNEL, "RoadBadgeR", 35 / 255);
 const badgeG$ = bindValue<number>(CHANNEL, "RoadBadgeG", 57 / 255);
 const badgeB$ = bindValue<number>(CHANNEL, "RoadBadgeB", 77 / 255);
 const badgeA$ = bindValue<number>(CHANNEL, "RoadBadgeA", 1);
+const customText$ = bindValue<boolean>(CHANNEL, "RoadBadgeCustomText", false);
+const textR$ = bindValue<number>(CHANNEL, "RoadBadgeTextR", 1);
+const textG$ = bindValue<number>(CHANNEL, "RoadBadgeTextG", 1);
+const textB$ = bindValue<number>(CHANNEL, "RoadBadgeTextB", 1);
 const enabled$ = bindValue<boolean>(CHANNEL, "RoadEngineerEnabled", true);
 const settingsOpen$ = bindValue<boolean>(CHANNEL, "RoadEngineerSettingsOpen", false);
 const settingsPinned$ = bindValue<boolean>(CHANNEL, "RoadEngineerSettingsPinned", false);
@@ -38,6 +42,9 @@ const cssColor = (r: number, g: number, b: number, a: number) => "rgba(" + byte(
 export const RoadEngineerEntry = () => {
     const active = useValue(active$);
     const pinned = useValue(settingsPinned$);
+    const textR = useValue(textR$);
+    const textG = useValue(textG$);
+    const textB = useValue(textB$);
     const r = useValue(badgeR$);
     const g = useValue(badgeG$);
     const b = useValue(badgeB$);
@@ -48,10 +55,15 @@ export const RoadEngineerEntry = () => {
         document.documentElement.style.setProperty("--mochi-road-badge-color", cssColor(r, g, b, a));
     }, [r, g, b, a]);
 
-    return active || pinned ? <RoadEngineerPanel badge={{ r, g, b, a }} /> : null;
+    useEffect(() => {
+        document.documentElement.style.setProperty("--mochi-road-text-color", cssColor(textR, textG, textB, 1));
+    }, [textR, textG, textB]);
+
+    return active || pinned ? <RoadEngineerPanel badge={{ r, g, b, a }} textColor={{ r: textR, g: textG, b: textB, a: 1 }} /> : null;
 };
 
-const RoadEngineerPanel = ({ badge }: { badge: Color }) => {
+const RoadEngineerPanel = ({ badge, textColor }: { badge: Color; textColor: Color }) => {
+    const customText = useValue(customText$);
     const expanded = useValue(settingsOpen$);
     const enabled = useValue(enabled$);
     const setExpanded = (open: boolean) => trigger(CHANNEL, "SetRoadEngineerSettingsOpen", open);
@@ -124,6 +136,11 @@ const RoadEngineerPanel = ({ badge }: { badge: Color }) => {
             <div className={styles.row}><span>Label background</span>
                 <RoadColorField value={badge} alpha={true} onChange={setBadge} />
             </div>
+            <div className={styles.row}><span>Label text</span><div className={styles.buttons}>
+                <Button className={styles.optionButton} variant="flat" focusKey={focus} selected={!customText}
+                    tooltipLabel="Restore native text color" onSelect={() => trigger(CHANNEL, "ResetRoadBadgeTextColor")}>Auto</Button>
+                <RoadColorField value={textColor} alpha={false} onChange={value => trigger(CHANNEL, "SetRoadBadgeTextColor", value.r, value.g, value.b)} />
+            </div></div>
             <div className={styles.row}><span>Angle color</span>
                 <RoadColorField value={{ r: arcR, g: arcG, b: arcB, a: 1 }} alpha={false}
                     onChange={value => trigger(CHANNEL, "SetAngleArcColor", value.r, value.g, value.b)} />
@@ -132,9 +149,10 @@ const RoadEngineerPanel = ({ badge }: { badge: Color }) => {
                 <Button className={styles.optionButton} variant="flat" focusKey={focus} selected={filtered} onSelect={() => trigger(CHANNEL, "ToggleRoadAngleTooltips")}>{filtered ? "ON" : "OFF"}</Button>
             </div>
             <div className={styles.row}><span>Label preview</span><span className={styles.preview}
-                style={{ backgroundColor: cssColor(badge.r, badge.g, badge.b, badge.a) }}>∠ 82°</span></div>
+                style={{ backgroundColor: cssColor(badge.r, badge.g, badge.b, badge.a),
+                    color: customText ? cssColor(textColor.r, textColor.g, textColor.b, 1) : undefined }}>∠ 82°</span></div>
             <Button className={styles.resetButton} variant="flat" focusKey={focus}
-                onSelect={() => trigger(CHANNEL, "SetRoadBadgeColor", 35 / 255, 57 / 255, 77 / 255, 1)}>Reset color</Button>
+                onSelect={() => { trigger(CHANNEL, "SetRoadBadgeColor", 35 / 255, 57 / 255, 77 / 255, 1); trigger(CHANNEL, "ResetRoadBadgeTextColor"); }}>Reset colors</Button>
         </div>}
         </div>
         <div className={styles.dragFooter}>
