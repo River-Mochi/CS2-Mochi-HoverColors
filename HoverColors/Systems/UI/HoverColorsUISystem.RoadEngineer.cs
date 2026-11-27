@@ -27,6 +27,9 @@ namespace HoverColors.UI
         private ValueBinding<float> m_RoadBadgeG = null!;
         private ValueBinding<float> m_RoadBadgeB = null!;
         private ValueBinding<bool> m_RoadEngineerUnits = null!;
+        private ValueBinding<bool> m_RoadEngineerPositionSet = null!;
+        private ValueBinding<int> m_RoadEngineerOffsetX = null!;
+        private ValueBinding<int> m_RoadEngineerOffsetY = null!;
         private float m_RoadEngineerNextRead;
 
         private void RegisterRoadEngineerBindings()
@@ -39,8 +42,39 @@ namespace HoverColors.UI
             m_RoadBadgeG = AddValueBinding("RoadBadgeG", HoverColorsSettings.kDefaultRoadBadgeG);
             m_RoadBadgeB = AddValueBinding("RoadBadgeB", HoverColorsSettings.kDefaultRoadBadgeB);
             m_RoadEngineerUnits = AddValueBinding("RoadEngineerUseUnits", false);
+            m_RoadEngineerPositionSet = AddValueBinding("RoadEngineerPositionSet", false);
+            m_RoadEngineerOffsetX = AddValueBinding("RoadEngineerOffsetX", 0);
+            m_RoadEngineerOffsetY = AddValueBinding("RoadEngineerOffsetY", 0);
+            AddBinding(new TriggerBinding(Mod.ModId, "CloseRoadEngineer", CloseRoadEngineer));
+            AddBinding(new TriggerBinding<int, int>(Mod.ModId, "SetRoadEngineerPosition", SetRoadEngineerPosition));
             AddBinding(new TriggerBinding<float, float, float>(Mod.ModId, "SetRoadBadgeColor", SetRoadBadgeColor));
             AddBinding(new TriggerBinding<bool>(Mod.ModId, "SetRoadEngineerUseUnits", SetRoadEngineerUnits));
+        }
+
+        private void CloseRoadEngineer()
+        {
+            HoverColorsSettings? settings = Mod.Settings;
+            if (settings == null || !settings.RoadEngineerEnabled) return;
+            settings.RoadEngineerEnabled = false;
+            settings.ApplyAndSave();
+            UpdateIfChanged(m_RoadEngineerActive, false);
+            UpdateIfChanged(m_RoadEngineerCourse, string.Empty);
+            m_RoadEngineerNextRead = 0f;
+        }
+
+        private void SetRoadEngineerPosition(int x, int y)
+        {
+            HoverColorsSettings? settings = Mod.Settings;
+            if (settings == null) return;
+            x = System.Math.Max(-16384, System.Math.Min(16384, x));
+            y = System.Math.Max(-16384, System.Math.Min(16384, y));
+            if (settings.RoadEngineerPositionSet && settings.RoadEngineerOffsetX == x
+                && settings.RoadEngineerOffsetY == y) return;
+            settings.RoadEngineerPositionSet = true;
+            settings.RoadEngineerOffsetX = x;
+            settings.RoadEngineerOffsetY = y;
+            settings.ApplyAndSave();
+            SyncRoadEngineerSettings();
         }
 
         private void SetRoadBadgeColor(float r, float g, float b)
@@ -75,12 +109,16 @@ namespace HoverColors.UI
             UpdateIfChanged(m_RoadBadgeG, settings?.RoadBadgeG ?? HoverColorsSettings.kDefaultRoadBadgeG);
             UpdateIfChanged(m_RoadBadgeB, settings?.RoadBadgeB ?? HoverColorsSettings.kDefaultRoadBadgeB);
             UpdateIfChanged(m_RoadEngineerUnits, settings?.RoadEngineerUseUnits ?? false);
+            UpdateIfChanged(m_RoadEngineerPositionSet, settings?.RoadEngineerPositionSet ?? false);
+            UpdateIfChanged(m_RoadEngineerOffsetX, settings?.RoadEngineerOffsetX ?? 0);
+            UpdateIfChanged(m_RoadEngineerOffsetY, settings?.RoadEngineerOffsetY ?? 0);
         }
 
         private void UpdateRoadEngineer()
         {
             SyncRoadEngineerSettings();
-            if (m_RoadMeasurementToolSystem?.activeTool is not NetToolSystem netTool
+            if (Mod.Settings?.RoadEngineerEnabled != true
+                || m_RoadMeasurementToolSystem?.activeTool is not NetToolSystem netTool
                 || netTool.actualMode == NetToolSystem.Mode.Replace
                 || (netTool.GetPrefab() is not RoadPrefab && netTool.GetPrefab() is not PathwayPrefab))
             {

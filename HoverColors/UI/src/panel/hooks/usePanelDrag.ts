@@ -28,13 +28,14 @@ type PanelDragState = {
     moved: boolean;
 };
 
-type PanelDragContext = "game" | "editor";
+type PanelDragContext = "game" | "editor" | "road";
 
 type PanelPosition = { left: number; top: number };
 
 const sessionPanelOffsets: Record<PanelDragContext, PanelOffset> = {
     game: { x: 0, y: 0 },
     editor: { x: 0, y: 0 },
+    road: { x: 0, y: 0 },
 };
 
 export const usePanelDrag = (
@@ -42,6 +43,7 @@ export const usePanelDrag = (
     origin: PanelPosition,
     savedPosition: PanelPosition | null,
     onPositionChanged: (left: number, top: number) => void,
+    layoutRevision?: boolean,
 ) => {
     const [panelOffset, setPanelOffset] = useState<PanelOffset>(() => savedPosition === null
         ? sessionPanelOffsets[context]
@@ -55,9 +57,9 @@ export const usePanelDrag = (
     const panelDragRef = useRef<PanelDragState | null>(null);
 
     useEffect(() => {
-        if (context !== "game" || savedPosition === null || panelDragRef.current !== null) return;
+        if (context === "editor" || savedPosition === null || panelDragRef.current !== null) return;
         const restored = { x: savedPosition.left - origin.left, y: savedPosition.top - origin.top };
-        sessionPanelOffsets.game = restored;
+        sessionPanelOffsets[context] = restored;
         panelDragPendingOffsetRef.current = restored;
         setPanelOffset(restored);
     }, [context, origin.left, origin.top, savedPosition?.left, savedPosition?.top]);
@@ -82,7 +84,7 @@ export const usePanelDrag = (
             window.clearTimeout(timeout);
             window.removeEventListener("resize", clamp);
         };
-    }, [context, origin.left, origin.top, savedPosition?.left, savedPosition?.top]);
+    }, [context, origin.left, origin.top, savedPosition?.left, savedPosition?.top, layoutRevision]);
 
     useEffect(() => {
         if (!panelDragging) {
@@ -139,7 +141,7 @@ export const usePanelDrag = (
             setPanelDragging(false);
             sessionPanelOffsets[context] = panelDragPendingOffsetRef.current;
             setPanelOffset(panelDragPendingOffsetRef.current);
-            if (context === "game" && moved) {
+            if (context !== "editor" && moved) {
                 onPositionChanged(
                     origin.left + panelDragPendingOffsetRef.current.x,
                     origin.top + panelDragPendingOffsetRef.current.y,

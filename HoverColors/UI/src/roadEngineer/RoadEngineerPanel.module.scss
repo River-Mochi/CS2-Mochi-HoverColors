@@ -67,3 +67,31 @@
     border-bottom-left-radius: 5rem;
     border-bottom-right-radius: 5rem;
 }
+
+.dragTitle {
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-width: 0;
+    cursor: grab;
+    user-select: none;
+}
+.dragFooter {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    margin-top: 4rem;
+}
+.dragGrip {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32rem;
+    height: 16rem;
+    user-select: none;
+}
+.dragGrip img {
+    width: 26rem;
+    height: 11rem;
+    opacity: 0.65;
+    pointer-events: none;
+}

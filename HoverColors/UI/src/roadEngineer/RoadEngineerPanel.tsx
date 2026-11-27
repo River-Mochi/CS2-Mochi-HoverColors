@@ -7,7 +7,9 @@
 // ================= </copyright> ======================
 
 import { bindValue, trigger, useValue } from "cs2/api";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { usePanelDrag } from "../panel/hooks/usePanelDrag";
+import dragGripIcon from "../../images/mochi-drag-grip.svg";
 import { Button } from "cs2/ui";
 import { Color } from "cs2/bindings";
 import { VanillaComponentResolver } from "../utils/vanilla/VanillaComponentResolver";
@@ -20,6 +22,9 @@ const badgeR$ = bindValue<number>(CHANNEL, "RoadBadgeR", 35 / 255);
 const badgeG$ = bindValue<number>(CHANNEL, "RoadBadgeG", 57 / 255);
 const badgeB$ = bindValue<number>(CHANNEL, "RoadBadgeB", 77 / 255);
 const units$ = bindValue<boolean>(CHANNEL, "RoadEngineerUseUnits", false);
+const positionSet$ = bindValue<boolean>(CHANNEL, "RoadEngineerPositionSet", false);
+const offsetX$ = bindValue<number>(CHANNEL, "RoadEngineerOffsetX", 0);
+const offsetY$ = bindValue<number>(CHANNEL, "RoadEngineerOffsetY", 0);
 
 const byte = (v: number) => Math.round(Math.max(0, Math.min(1, Number.isFinite(v) ? v : 0)) * 255);
 const cssColor = (r: number, g: number, b: number) => "rgb(" + byte(r) + "," + byte(g) + "," + byte(b) + ")";
@@ -41,6 +46,16 @@ export const RoadEngineerEntry = () => {
 
 const RoadEngineerPanel = ({ badge }: { badge: Color }) => {
     const [expanded, setExpanded] = useState(false);
+    const positionSet = useValue(positionSet$);
+    const offsetX = useValue(offsetX$);
+    const offsetY = useValue(offsetY$);
+    const savePosition = useCallback((x: number, y: number) => {
+        trigger(CHANNEL, "SetRoadEngineerPosition", Math.round(x), Math.round(y));
+    }, []);
+    // Saved offsets are relative to the top-right CSS anchor, not the HC panel.
+    const { panelElementRef, panelOffset, panelDragging, handlePanelDragStart } = usePanelDrag(
+        "road", { left: 0, top: 0 }, positionSet ? { left: offsetX, top: offsetY } : null,
+        savePosition, expanded);
     const course = useValue(course$);
     const units = useValue(units$);
     const filtered = useValue(roadAngleTooltipsHidden$);
@@ -62,11 +77,14 @@ const RoadEngineerPanel = ({ badge }: { badge: Color }) => {
         ["Slope", (values[4] > 0 ? "+" : "") + values[4].toFixed(2) + "%", "Relief divided by horizontal course length."],
     ] : [];
 
-    return <div className={styles.panel}>
+    return <div ref={panelElementRef} className={styles.panel}
+        style={{ transform: "translate(" + panelOffset.x + "px," + panelOffset.y + "px)" }}>
         <div className={styles.header}>
-            <span>Road Engineer</span>
+            <div className={styles.dragTitle} onMouseDown={handlePanelDragStart}>Road Engineer</div>
             <Button variant="icon" focusKey={focus} onSelect={() => setExpanded(!expanded)}
                 aria-label="Road Engineer settings" aria-pressed={expanded}>⚙</Button>
+            <Button variant="icon" focusKey={focus} onSelect={() => trigger(CHANNEL, "CloseRoadEngineer")}
+                tooltipLabel="Close panel. Reopen in Options." aria-label="Close Road Engineer">×</Button>
         </div>
         {valid ? rows.map(([label, value, hint]) =>
             <div key={label} className={styles.row} title={hint}><span>{label}</span><span>{value}</span></div>)
@@ -92,5 +110,11 @@ const RoadEngineerPanel = ({ badge }: { badge: Color }) => {
             <div className={styles.row}><span>Label preview</span><span className={styles.preview} style={{ backgroundColor: cssColor(badge.r, badge.g, badge.b) }}>∠ 82°</span></div>
             <Button focusKey={focus} onSelect={() => trigger(CHANNEL, "SetRoadBadgeColor", 35 / 255, 57 / 255, 77 / 255)}>Reset denim</Button>
         </div>}
+        <div className={styles.dragFooter}>
+            <div className={styles.dragGrip} onMouseDown={handlePanelDragStart}
+                style={{ cursor: panelDragging ? "grabbing" : "grab" }}>
+                <img src={dragGripIcon} alt="" />
+            </div>
+        </div>
     </div>;
 };

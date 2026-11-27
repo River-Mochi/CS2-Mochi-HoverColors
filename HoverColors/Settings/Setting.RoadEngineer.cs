@@ -25,12 +25,28 @@ namespace HoverColors
         [SettingsUIHidden]
         public bool RoadEngineerUseUnits { get; set; }
 
+        [SettingsUISection(Actions, kPanel)]
+        public bool RoadEngineerEnabled { get; set; } = true;
+
+        [SettingsUIHidden]
+        public bool RoadEngineerPositionSet { get; set; }
+
+        [SettingsUIHidden]
+        public int RoadEngineerOffsetX { get; set; }
+
+        [SettingsUIHidden]
+        public int RoadEngineerOffsetY { get; set; }
+
         internal void ResetRoadEngineerAppearance()
         {
             RoadBadgeR = kDefaultRoadBadgeR;
             RoadBadgeG = kDefaultRoadBadgeG;
             RoadBadgeB = kDefaultRoadBadgeB;
             RoadEngineerUseUnits = false;
+            RoadEngineerEnabled = true;
+            RoadEngineerPositionSet = false;
+            RoadEngineerOffsetX = 0;
+            RoadEngineerOffsetY = 0;
         }
     }
 }
