@@ -21,6 +21,8 @@ import { VanillaComponentResolver } from "./utils/vanilla/VanillaComponentResolv
 import "./MochiColorPickerPanel.global.scss";
 
 import ModIconButton from "./entry/ModIconButton";
+import { registerRoadMeasurementStyle } from "./entry/RoadMeasurementStyle";
+import { RoadEngineerEntry } from "./roadEngineer/RoadEngineerPanel";
 
 const reportUIStatus = (detail: string) => {
   try {
@@ -168,6 +170,22 @@ const register: ModRegistrar = (moduleRegistry) => {
     reportUIStatus("registered:UniversalModMenu");
   } catch (error) {
     reportUIFailure("UniversalModMenu", error);
+  }
+
+  // Optional visual experiment; failure must not prevent the native UI.
+  try {
+    registerRoadMeasurementStyle(moduleRegistry);
+    reportUIStatus("registered:RoadMeasurementStyle");
+  } catch (error) {
+    reportUIFailure("RoadMeasurementStyle", error);
+  }
+
+  try {
+    moduleRegistry.append("Game", RoadEngineerEntry);
+    moduleRegistry.append("Editor", RoadEngineerEntry);
+    reportUIStatus("registered:RoadEngineer");
+  } catch (error) {
+    reportUIFailure("RoadEngineer", error);
   }
 
   reportUIStatus("registrar-complete");

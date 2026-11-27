@@ -30,13 +30,14 @@ namespace HoverColors.Systems
             base.OnCreate();
             m_ToolSystem = World.GetOrCreateSystemManaged<ToolSystem>();
             m_TooltipUISystem = World.GetOrCreateSystemManaged<TooltipUISystem>();
-            InitializeMiddleAnglePlacement();
+            InitializeMeasurementLayout();
         }
 
         protected override void OnUpdate()
         {
             if (m_TooltipUISystem == null || !ShouldFilter(m_ToolSystem))
             {
+                ResetMeasurementLayout();
                 return;
             }
 
@@ -106,13 +107,9 @@ namespace HoverColors.Systems
                 }
             }
 
-            // Phase 2: reposition a verified middle angle without changing its value.
+            // Keep native inside-angle anchors; resolve only nearby collisions.
             if (m_ToolSystem?.activeTool is NetToolSystem netTool)
             {
-                m_AnchoredMiddleAngles.Clear();
-                m_LayoutJointBounds.Clear();
-                m_HasLayoutStart = false;
-                TryMoveMiddleAngle(netTool, m_TooltipUISystem);
                 ArrangeCurveMeasurements(netTool, m_TooltipUISystem);
             }
 

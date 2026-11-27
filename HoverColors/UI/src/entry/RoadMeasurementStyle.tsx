@@ -1,0 +1,73 @@
+// <copyright file="RoadMeasurementStyle.tsx" company="River-Mochi">
+// Copyright (C) 2026 River-Mochi.
+// Licensed under the GNU General Public License v3.0 or later,
+// with the Cities: Skylines II Linking Exception.
+// See LICENSE and LICENSE-EXCEPTION in the project root.
+// Copyright and license notices MUST be preserved.
+// ================= </copyright> ======================
+
+import { useValue } from "cs2/api";
+import { ModuleRegistry } from "cs2/modding";
+import { roadMeasurementStyleActive$ } from "../panel/bindings/MochiPanelBindings";
+
+const MODULE = "game-ui/common/tooltip/tooltip-renderer/tooltip-renderer.tsx";
+const NUMBER_TYPE = "Game.UI.Tooltip.NumberTooltip";
+const BADGE_CLASS = "mochiRoadMeasurementBadge";
+
+type WidgetData = {
+  path?: string;
+  props?: {
+    __Type?: string;
+    icon?: string;
+    color?: number;
+    className?: string;
+    [key: string]: unknown;
+  };
+  [key: string]: unknown;
+};
+
+const isMeasurement = (child: WidgetData | null | undefined) => {
+  const props = child?.props;
+  return props?.__Type === NUMBER_TYPE
+    && (props.color === undefined || props.color === 0)
+    && (props.icon === "Media/Glyphs/Angle.svg"
+      || props.icon === "Media/Glyphs/Length.svg"
+      || props.icon === "Media/Glyphs/Slope.svg");
+};
+
+// Preserve the vanilla BoundTooltipGroup and its numeric renderer. Only
+// augment the className of matching child props; no DOM walks, replacement
+// widgets, new tooltip keys, or custom position/animation calculations.
+export const registerRoadMeasurementStyle = (registry: ModuleRegistry) => {
+  registry.extend(MODULE, "BoundTooltipGroup", (Original) => {
+    const MeasurementGroup = (props: any) => {
+      const active = useValue(roadMeasurementStyleActive$);
+      if (!active) return <Original {...props} />;
+
+      const children = (props.children as WidgetData[]).map((child) => {
+        if (!isMeasurement(child) || !child.props) return child;
+        const className = child.props.className;
+        return {
+          ...child,
+          props: {
+            ...child.props,
+            className: className ? className + " " + BADGE_CLASS : BADGE_CLASS,
+          },
+        };
+      });
+
+      return <Original {...props} children={children} />;
+    };
+
+    return (props: any) => {
+      const path = props.path;
+      if (typeof path !== "string"
+        || !(path === "mouse" || path === "tempNetEdgeStart" || /^guideLineTooltip\d+$/.test(path))
+        || !Array.isArray(props.children)) {
+        return <Original {...props} />;
+      }
+
+      return <MeasurementGroup {...props} />;
+    };
+  });
+};

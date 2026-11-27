@@ -53,6 +53,7 @@ namespace HoverColors
             AngleArcR = kDefaultAngleArcR;
             AngleArcG = kDefaultAngleArcG;
             AngleArcB = kDefaultAngleArcB;
+            ResetRoadEngineerAppearance();
 
             PanelOpacityPercent = kDefaultPanelOpacityPercent;
 

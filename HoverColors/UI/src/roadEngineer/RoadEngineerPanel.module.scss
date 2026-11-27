@@ -1,0 +1,69 @@
+// <copyright file="RoadEngineerPanel.module.scss" company="River-Mochi">
+// Copyright (C) 2026 River-Mochi.
+// Licensed under the GNU General Public License v3.0 or later,
+// with the Cities: Skylines II Linking Exception.
+// See LICENSE and LICENSE-EXCEPTION in the project root.
+// Copyright and license notices MUST be preserved.
+// ================= </copyright> ======================
+
+.panel {
+    position: fixed;
+    top: 72rem;
+    right: 18rem;
+    width: 235rem;
+    padding-top: 8rem;
+    padding-bottom: 8rem;
+    padding-left: 10rem;
+    padding-right: 10rem;
+    background-color: rgba(27, 45, 59, 0.96);
+    color: white;
+    font-size: 15rem;
+    border-top-left-radius: 8rem;
+    border-top-right-radius: 8rem;
+    border-bottom-left-radius: 8rem;
+    border-bottom-right-radius: 8rem;
+    pointer-events: auto;
+}
+.header, .row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 27rem;
+}
+.header {
+    font-weight: bold;
+    font-size: 17rem;
+    margin-bottom: 4rem;
+}
+.row {
+    border-bottom-width: 1rem;
+    border-bottom-style: solid;
+    border-bottom-color: rgba(255,255,255,0.12);
+}
+.settings {
+    margin-top: 8rem;
+}
+.buttons {
+    display: flex;
+    flex-direction: row;
+}
+.swatch {
+    width: 29rem;
+    height: 26rem;
+}
+.empty {
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+    color: rgba(255,255,255,0.75);
+}
+.preview {
+    padding-left: 6rem;
+    padding-right: 6rem;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    border-top-left-radius: 5rem;
+    border-top-right-radius: 5rem;
+    border-bottom-left-radius: 5rem;
+    border-bottom-right-radius: 5rem;
+}
