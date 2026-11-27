@@ -28,7 +28,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    // Narrower than before so the dashed-line swatch fits before the opacity slider.
+    // Compact swatch width shared by both guideline rows.
     width: 20rem;
     height: 24rem;
     flex-grow: 0;
@@ -55,7 +55,7 @@
 }
 
 .guidelineDashedColorShell {
-    margin-left: 4rem; // third swatch: dashed alignment guideline color
+    margin-left: 8rem; // align with the first swatch in the row above
 }
 
 .angleArcColorShell {

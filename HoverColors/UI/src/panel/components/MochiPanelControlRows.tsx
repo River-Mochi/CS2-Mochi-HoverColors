@@ -650,48 +650,6 @@ export const MochiPanelControlRows = ({
                   </div>
                 </SideTooltip>
 
-                <SideTooltip tooltip={tt(text.tooltipGuidelinesDashedColor)} side="right">
-                  <div
-                    ref={guidelineDashedPickerRef}
-                    className={`${styles.guidelineColorShell} ${styles.guidelineDashedColorShell} ${guidelineDashedHovered ? styles.guidelineColorShellHovered : ""}`}
-                    style={compactShellStyle(guidelineDashedColor, guidelineDashedHovered)}
-                    onMouseOver={() => {
-                      if (!guidelineDashedHovered) {
-                        setGuidelineDashedHovered(true);
-                      }
-                      updateGuidelineDashedPickerDirection();
-                    }}
-                    onMouseMove={() => {
-                      if (!guidelineDashedHovered) {
-                        setGuidelineDashedHovered(true);
-                      }
-                    }}
-                    onMouseLeave={() => setGuidelineDashedHovered(false)}
-                    onMouseDown={updateGuidelineDashedPickerDirection}
-                  >
-                    <ColorField
-                      focusKey={focusDisabled}
-                      className={styles.guidelineColorField}
-                      value={guidelineDashedColor}
-                      alpha={true}
-                      popupDirection={guidelineDashedPickerDirection}
-                      hideHint={true}
-                      hexInput={true}
-                      colorWheel={false}
-                      onChange={handleGuidelineDashedColorChange}
-                      onOpenPicker={() => {
-                        setGuidelineDashedPickerOpen(true);
-                        updateGuidelineDashedPickerDirection();
-                      }}
-                      onClosePicker={() => setGuidelineDashedPickerOpen(false)}
-                    />
-                    <span
-                      className={styles.guidelineColorPreview}
-                      style={compactSwatchStyle(guidelineDashedColor, guidelineDashedHovered, useDarkerPanel)}
-                      aria-hidden="true"
-                    />
-                  </div>
-                </SideTooltip>
               </div>
 
               <SideTooltip tooltip={tt(text.tooltipGuidelinesOpacity)} side="right">
@@ -723,6 +681,49 @@ export const MochiPanelControlRows = ({
               >
                 <img src={outlineThicknessIconSrc} className={`${styles.controlIcon} ${styles.idleIcon}`} alt="" />
               </Button>
+            </SideTooltip>
+
+            <SideTooltip tooltip={tt(text.tooltipGuidelinesDashedColor)} side="right">
+              <div
+                ref={guidelineDashedPickerRef}
+                className={`${styles.guidelineColorShell} ${styles.guidelineDashedColorShell} ${guidelineDashedHovered ? styles.guidelineColorShellHovered : ""}`}
+                style={compactShellStyle(guidelineDashedColor, guidelineDashedHovered)}
+                onMouseOver={() => {
+                  if (!guidelineDashedHovered) {
+                    setGuidelineDashedHovered(true);
+                  }
+                  updateGuidelineDashedPickerDirection();
+                }}
+                onMouseMove={() => {
+                  if (!guidelineDashedHovered) {
+                    setGuidelineDashedHovered(true);
+                  }
+                }}
+                onMouseLeave={() => setGuidelineDashedHovered(false)}
+                onMouseDown={updateGuidelineDashedPickerDirection}
+              >
+                <ColorField
+                  focusKey={focusDisabled}
+                  className={styles.guidelineColorField}
+                  value={guidelineDashedColor}
+                  alpha={true}
+                  popupDirection={guidelineDashedPickerDirection}
+                  hideHint={true}
+                  hexInput={true}
+                  colorWheel={false}
+                  onChange={handleGuidelineDashedColorChange}
+                  onOpenPicker={() => {
+                    setGuidelineDashedPickerOpen(true);
+                    updateGuidelineDashedPickerDirection();
+                  }}
+                  onClosePicker={() => setGuidelineDashedPickerOpen(false)}
+                />
+                <span
+                  className={styles.guidelineColorPreview}
+                  style={compactSwatchStyle(guidelineDashedColor, guidelineDashedHovered, useDarkerPanel)}
+                  aria-hidden="true"
+                />
+              </div>
             </SideTooltip>
 
             <SideTooltip tooltip={tt(text.tooltipGuidelineDashedThickness)} side="right">
