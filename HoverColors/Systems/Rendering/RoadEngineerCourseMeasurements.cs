@@ -23,12 +23,14 @@ namespace HoverColors.Systems
         public readonly float Relief;
         public readonly float Slope;
         public readonly float Bearing;
+        public readonly float MaxCourseGrade;
         public readonly float3 Start;
         public readonly float3 End;
 
-        private RoadEngineerCourseMeasurements(float totalLength, float3 start, float3 end)
+        private RoadEngineerCourseMeasurements(float totalLength, float3 start, float3 end, float maxCourseGrade)
         {
             TotalLength = totalLength;
+            MaxCourseGrade = maxCourseGrade;
             Start = start;
             End = end;
             Distance = math.distance(start.xz, end.xz);
@@ -71,6 +73,7 @@ namespace HoverColors.Systems
             int first = -1;
             int last = -1;
             float length = 0f;
+            float maxGrade = 0f;
 
             for (int i = 0; i < count; i++)
             {
@@ -100,10 +103,13 @@ namespace HoverColors.Systems
                     return false;
                 }
 
-                float segmentLength = MathUtils.Length(MathUtils.Cut(
-                    t: delta, curve: course.m_Curve).xz);
+                Bezier4x3 cut = MathUtils.Cut(t: delta, curve: course.m_Curve);
+                float segmentLength = MathUtils.Length(cut.xz);
                 if (!math.isfinite(segmentLength) || segmentLength < 0f) return false;
                 length += segmentLength;
+                // Advisory: preview-course average grade, not final edge/node validation.
+                float grade = 100f * math.abs(cut.d.y - cut.a.y) / math.max(0.1f, segmentLength);
+                maxGrade = math.max(maxGrade, grade);
             }
 
             if (first < 0 || last < 0 || !math.isfinite(length) || length <= 0.001f)
@@ -127,7 +133,7 @@ namespace HoverColors.Systems
                     if (step != count - 1) return false;
                     result = new RoadEngineerCourseMeasurements(length,
                         courses[first].m_StartPosition.m_Position,
-                        courses[last].m_EndPosition.m_Position);
+                        courses[last].m_EndPosition.m_Position, maxGrade);
                     return math.isfinite(result.Distance) && math.isfinite(result.Relief)
                         && math.isfinite(result.Slope);
                 }

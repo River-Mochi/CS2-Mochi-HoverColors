@@ -12,9 +12,9 @@ namespace HoverColors
 
     public partial class HoverColorsSettings
     {
-        internal const float kDefaultRoadBadgeR = 35f / 255f;
-        internal const float kDefaultRoadBadgeG = 57f / 255f;
-        internal const float kDefaultRoadBadgeB = 77f / 255f;
+        internal const float kDefaultRoadBadgeR = 8f / 255f;
+        internal const float kDefaultRoadBadgeG = 41f / 255f;
+        internal const float kDefaultRoadBadgeB = 2f / 255f;
 
         [SettingsUIHidden]
         public float RoadBadgeR { get; set; } = kDefaultRoadBadgeR;
@@ -27,13 +27,13 @@ namespace HoverColors
         [SettingsUIHidden]
         public bool RoadBadgeNativeBackground { get; set; }
         [SettingsUIHidden]
-        public bool RoadBadgeCustomText { get; set; }
+        public bool RoadBadgeCustomText { get; set; } = true;
         [SettingsUIHidden]
         public float RoadBadgeTextR { get; set; } = 1f;
         [SettingsUIHidden]
-        public float RoadBadgeTextG { get; set; } = 1f;
+        public float RoadBadgeTextG { get; set; } = 235f / 255f;
         [SettingsUIHidden]
-        public float RoadBadgeTextB { get; set; } = 1f;
+        public float RoadBadgeTextB { get; set; } = 128f / 255f;
         [SettingsUIHidden]
         public bool RoadEngineerUseUnits { get; set; }
         [SettingsUIHidden]
@@ -53,6 +53,9 @@ namespace HoverColors
         [SettingsUISection(Actions, kPanel)]
         public bool RoadEngineerEnabled { get; set; } = true;
 
+        [SettingsUISection(Actions, kPanel)]
+        public bool RoadEngineerMatchHC { get; set; }
+
         [SettingsUIHidden]
         public bool RoadEngineerPositionSet { get; set; }
 
@@ -69,13 +72,16 @@ namespace HoverColors
             RoadBadgeB = kDefaultRoadBadgeB;
             RoadBadgeA = 1f;
             RoadBadgeNativeBackground = false;
-            RoadBadgeCustomText = false;
-            RoadBadgeTextR = RoadBadgeTextG = RoadBadgeTextB = 1f;
+            RoadBadgeCustomText = true;
+            RoadBadgeTextR = 1f;
+            RoadBadgeTextG = 235f / 255f;
+            RoadBadgeTextB = 128f / 255f;
             RoadEngineerUseUnits = false;
             RoadDistanceDecimals = RoadAngleDecimals = 2;
             RoadPreciseFloatingLabels = false;
             RoadLabelFontPercent = 100;
             RoadEngineerEnabled = true;
+            RoadEngineerMatchHC = false;
             RoadEngineerPositionSet = false;
             RoadEngineerOffsetX = 0;
             RoadEngineerOffsetY = 0;

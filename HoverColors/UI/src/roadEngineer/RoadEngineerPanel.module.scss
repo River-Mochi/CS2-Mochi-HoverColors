@@ -34,7 +34,7 @@
     height: 28rem;
     padding-left: 8rem;
     padding-right: 4rem;
-    background-color: rgba(0, 0, 0, 0.16);
+    background-color: #141b22;
     border-top-left-radius: 6rem;
     border-top-right-radius: 6rem;
 }
@@ -167,6 +167,10 @@
 .sizeValue {
     width: 37rem;
     min-width: 37rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13rem;
     text-align: center;
     white-space: nowrap;
     margin-left: 3rem;
@@ -269,4 +273,40 @@
 }
 .dragging {
     cursor: grabbing;
+}
+
+.matchHC {
+    background-color: var(--panelColorNormal);
+    background-image: linear-gradient(var(--panelGradientStart), var(--panelGradientEnd));
+}
+.gradeDot {
+    width: 7rem;
+    height: 7rem;
+    margin-right: 5rem;
+    border-top-left-radius: 50%;
+    border-top-right-radius: 50%;
+    border-bottom-left-radius: 50%;
+    border-bottom-right-radius: 50%;
+    flex-shrink: 0;
+}
+.value {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+}
+.secondaryPreview {
+    align-items: flex-start;
+    padding-left: 8rem;
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+    min-height: 26rem;
+}
+.confirmBox {
+    font-size: 12rem;
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+}
+.toggle:disabled {
+    opacity: 0.5;
 }

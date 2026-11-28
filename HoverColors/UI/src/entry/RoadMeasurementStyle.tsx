@@ -19,7 +19,7 @@ const angleDecimals$ = bindValue<number>(CHANNEL, "RoadAngleDecimals", 2);
 const preciseFloating$ = bindValue<boolean>(CHANNEL, "RoadPreciseFloatingLabels", false);
 const labelFontPercent$ = bindValue<number>(CHANNEL, "RoadLabelFontPercent", 100);
 const unitSettings$ = bindValue<{unitSystem: number}>("options", "unitSettings", {unitSystem: 0});
-const customText$ = bindValue<boolean>(CHANNEL, "RoadBadgeCustomText", false);
+const customText$ = bindValue<boolean>(CHANNEL, "RoadBadgeCustomText", true);
 const nativeBackground$ = bindValue<boolean>(CHANNEL, "RoadBadgeNativeBackground", false);
 
 type WidgetData = {

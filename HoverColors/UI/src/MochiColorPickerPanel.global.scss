@@ -24,8 +24,8 @@ body.mochiRoadCompactPickerOpen .color-picker-container_Sj5 .hex_c98 {
 // Cohtml 2.2 does not parse var(--name, fallback). Declare the default
 // on the document root and use the same single-argument form as vanilla.
 :root {
-    --mochi-road-badge-color: #23394D;
-    --mochi-road-text-color: #ffffff;
+    --mochi-road-badge-color: #082902;
+    --mochi-road-text-color: #FFEB80;
 }
 .row-item_oHU.mochiRoadMeasurementCustomBackground {
     background-color: var(--mochi-road-badge-color);

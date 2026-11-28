@@ -23,6 +23,8 @@ namespace HoverColors.UI
     {
         private EntityQuery m_RoadEngineerQuery;
         private TerrainSystem? m_RoadEngineerTerrain;
+        private PrefabSystem? m_RoadEngineerPrefabs;
+        private ValueBinding<bool> m_RoadEngineerMatchHC = null!;
         private ValueBinding<bool> m_RoadEngineerActive = null!;
         private ValueBinding<string> m_RoadEngineerCourse = null!;
         private ValueBinding<float> m_RoadBadgeR = null!;
@@ -52,6 +54,8 @@ namespace HoverColors.UI
         private void RegisterRoadEngineerBindings()
         {
             m_RoadEngineerTerrain = World.GetOrCreateSystemManaged<TerrainSystem>();
+            m_RoadEngineerPrefabs = World.GetOrCreateSystemManaged<PrefabSystem>();
+            m_RoadEngineerMatchHC = AddValueBinding("RoadEngineerMatchHC", false);
             m_RoadEngineerQuery = GetEntityQuery(ComponentType.ReadOnly<CreationDefinition>(),
                 ComponentType.ReadOnly<NetCourse>());
             m_RoadEngineerActive = AddValueBinding("RoadEngineerActive", false);
@@ -61,10 +65,10 @@ namespace HoverColors.UI
             m_RoadBadgeB = AddValueBinding("RoadBadgeB", HoverColorsSettings.kDefaultRoadBadgeB);
             m_RoadBadgeA = AddValueBinding("RoadBadgeA", 1f);
             m_RoadBadgeNativeBackground = AddValueBinding("RoadBadgeNativeBackground", false);
-            m_RoadBadgeCustomText = AddValueBinding("RoadBadgeCustomText", false);
+            m_RoadBadgeCustomText = AddValueBinding("RoadBadgeCustomText", true);
             m_RoadBadgeTextR = AddValueBinding("RoadBadgeTextR", 1f);
-            m_RoadBadgeTextG = AddValueBinding("RoadBadgeTextG", 1f);
-            m_RoadBadgeTextB = AddValueBinding("RoadBadgeTextB", 1f);
+            m_RoadBadgeTextG = AddValueBinding("RoadBadgeTextG", 235f / 255f);
+            m_RoadBadgeTextB = AddValueBinding("RoadBadgeTextB", 128f / 255f);
             m_RoadEngineerEnabled = AddValueBinding("RoadEngineerEnabled", Mod.Settings?.RoadEngineerEnabled ?? true);
             m_RoadEngineerSettingsOpenBinding = AddValueBinding("RoadEngineerSettingsOpen", false);
             m_RoadEngineerSettingsPinnedBinding = AddValueBinding("RoadEngineerSettingsPinned", false);
@@ -100,7 +104,8 @@ namespace HoverColors.UI
         private void SetRoadEngineerSettingsOpen(bool open)
         {
             m_RoadEngineerSettingsOpen = open;
-            // Expanding/collapsing settings is independent of manual panel visibility.
+            // Auto-show OFF: keep settings accessible until the gear is closed.
+            if (!open && Mod.Settings?.RoadEngineerEnabled != true) m_RoadEngineerSettingsPinned = false;
             UpdateIfChanged(m_RoadEngineerSettingsOpenBinding, open);
             UpdateIfChanged(m_RoadEngineerSettingsPinnedBinding, m_RoadEngineerSettingsPinned);
         }
@@ -144,8 +149,10 @@ namespace HoverColors.UI
             settings.RoadBadgeG = native ? 27f / 255f : HoverColorsSettings.kDefaultRoadBadgeG;
             settings.RoadBadgeB = native ? 34f / 255f : HoverColorsSettings.kDefaultRoadBadgeB;
             settings.RoadBadgeA = 1f;
-            settings.RoadBadgeCustomText = false;
-            settings.RoadBadgeTextR = settings.RoadBadgeTextG = settings.RoadBadgeTextB = 1f;
+            settings.RoadBadgeCustomText = !native;
+            settings.RoadBadgeTextR = 1f;
+            settings.RoadBadgeTextG = native ? 1f : 235f / 255f;
+            settings.RoadBadgeTextB = native ? 1f : 128f / 255f;
             settings.RoadEngineerUseUnits = false;
             settings.RoadDistanceDecimals = settings.RoadAngleDecimals = native ? 0 : 2;
             settings.RoadPreciseFloatingLabels = false;
@@ -238,7 +245,8 @@ namespace HoverColors.UI
         private void SetRoadPreciseFloatingLabels(bool enabled)
         {
             HoverColorsSettings? settings = Mod.Settings;
-            if (settings == null || settings.RoadPreciseFloatingLabels == enabled) return;
+            if (settings == null || settings.RoadPreciseFloatingLabels == enabled
+                || !settings.RoadAngleTooltipsHidden) return;
             settings.RoadPreciseFloatingLabels = enabled;
             settings.ApplyAndSave();
             SyncRoadEngineerSettings();
@@ -271,10 +279,11 @@ namespace HoverColors.UI
             UpdateIfChanged(m_RoadBadgeB, settings?.RoadBadgeB ?? HoverColorsSettings.kDefaultRoadBadgeB);
             UpdateIfChanged(m_RoadBadgeA, settings?.RoadBadgeA ?? 1f);
             UpdateIfChanged(m_RoadBadgeNativeBackground, settings?.RoadBadgeNativeBackground ?? false);
-            UpdateIfChanged(m_RoadBadgeCustomText, settings?.RoadBadgeCustomText ?? false);
+            UpdateIfChanged(m_RoadBadgeCustomText, settings?.RoadBadgeCustomText ?? true);
             UpdateIfChanged(m_RoadBadgeTextR, settings?.RoadBadgeTextR ?? 1f);
-            UpdateIfChanged(m_RoadBadgeTextG, settings?.RoadBadgeTextG ?? 1f);
-            UpdateIfChanged(m_RoadBadgeTextB, settings?.RoadBadgeTextB ?? 1f);
+            UpdateIfChanged(m_RoadBadgeTextG, settings?.RoadBadgeTextG ?? 235f / 255f);
+            UpdateIfChanged(m_RoadBadgeTextB, settings?.RoadBadgeTextB ?? 128f / 255f);
+            UpdateIfChanged(m_RoadEngineerMatchHC, settings?.RoadEngineerMatchHC ?? false);
             UpdateIfChanged(m_RoadEngineerEnabled, settings?.RoadEngineerEnabled ?? true);
             UpdateIfChanged(m_RoadEngineerUnits, settings?.RoadEngineerUseUnits ?? false);
             UpdateIfChanged(m_RoadDistanceDecimals, math.clamp(settings?.RoadDistanceDecimals ?? 2, 0, 2));
@@ -323,10 +332,22 @@ namespace HoverColors.UI
             using NativeArray<NetCourse> courses =
                 m_RoadEngineerQuery.ToComponentDataArray<NetCourse>(Allocator.Temp);
             using NativeList<NetCourse> eligible = new(courses.Length, Allocator.Temp);
+            Entity selectedEntity = Entity.Null;
+            float slopeLimit = float.NaN;
+            if (m_RoadEngineerPrefabs != null && netTool.GetPrefab() is RoadPrefab road
+                && m_RoadEngineerPrefabs.TryGetEntity(road, out selectedEntity)
+                && m_RoadEngineerPrefabs.TryGetComponentData<NetGeometryData>(road, out NetGeometryData geometry)
+                && math.isfinite(geometry.m_MaxSlopeSteepness) && geometry.m_MaxSlopeSteepness > 0f)
+            {
+                slopeLimit = 100f * geometry.m_MaxSlopeSteepness;
+            }
             for (int i = 0; i < courses.Length; i++)
             {
                 if (RoadEngineerCourseMeasurements.IsEligible(definitions[i], courses[i]))
+                {
                     eligible.Add(courses[i]);
+                    if (definitions[i].m_Prefab != selectedEntity) slopeLimit = float.NaN;
+                }
             }
 
             if (!RoadEngineerCourseMeasurements.TryRead(eligible.AsArray(), out RoadEngineerCourseMeasurements result))
@@ -343,7 +364,9 @@ namespace HoverColors.UI
                 result.Relief.ToString("R", CultureInfo.InvariantCulture),
                 result.Slope.ToString("R", CultureInfo.InvariantCulture),
                 ReadGroundOffset(result.End).ToString("R", CultureInfo.InvariantCulture),
-                result.Bearing.ToString("R", CultureInfo.InvariantCulture));
+                result.Bearing.ToString("R", CultureInfo.InvariantCulture),
+                result.MaxCourseGrade.ToString("R", CultureInfo.InvariantCulture),
+                slopeLimit.ToString("R", CultureInfo.InvariantCulture));
             UpdateIfChanged(m_RoadEngineerCourse, snapshot);
         }
 
