@@ -85,6 +85,8 @@ namespace HoverColors
                 },
 
                 // Panel style
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.RoadEngineerMatchHC)), "Color como Hover Colors" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.RoadEngineerMatchHC)), "Usa el mismo fondo nativo que Hover Colors. Desactivado: diseño oscuro." },
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.RoadEngineerEnabled)), "Mostrar panel de ingeniería vial" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.RoadEngineerEnabled)), "Muestra medidas al construir calles o caminos. Desactívalo para detener sus actualizaciones. El filtro funciona por separado." },
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelStyle)), "▪ Elige panel oscuro o de cristal" },

@@ -85,6 +85,8 @@ namespace HoverColors
                 },
 
                 // Panel style
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.RoadEngineerMatchHC)), "與 Hover Colors 同色" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.RoadEngineerMatchHC)), "使用與 Hover Colors 相同的原生面板背景。關閉則使用深色樣式。" },
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.RoadEngineerEnabled)), "顯示道路工程面板" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.RoadEngineerEnabled)), "修建道路或小徑時顯示測量資料。關閉後停止面板更新，標籤過濾功能可獨立使用。" },
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelStyle)), "▪ 選擇深色或玻璃面板" },
