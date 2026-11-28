@@ -32,6 +32,7 @@ const textG$ = bindValue<number>(CHANNEL, "RoadBadgeTextG", 235 / 255);
 const textB$ = bindValue<number>(CHANNEL, "RoadBadgeTextB", 128 / 255);
 const enabled$ = bindValue<boolean>(CHANNEL, "RoadEngineerEnabled", true);
 const matchHC$ = bindValue<boolean>(CHANNEL, "RoadEngineerMatchHC", false);
+const panelOpacity$ = bindValue<number>(CHANNEL, "RoadEngineerPanelOpacity", 100);
 const settingsOpen$ = bindValue<boolean>(CHANNEL, "RoadEngineerSettingsOpen", false);
 const settingsPinned$ = bindValue<boolean>(CHANNEL, "RoadEngineerSettingsPinned", false);
 const units$ = bindValue<boolean>(CHANNEL, "RoadEngineerUseUnits", false);
@@ -80,6 +81,7 @@ const RoadEngineerPanel = ({ badge, textColor }: { badge: Color; textColor: Colo
     const expanded = useValue(settingsOpen$);
     const enabled = useValue(enabled$);
     const matchHC = useValue(matchHC$);
+    const panelAlpha = useValue(panelOpacity$) / 100;
     const [confirmOff, setConfirmOff] = useState(false);
     const positionSet = useValue(positionSet$);
     const offsetX = useValue(offsetX$);
@@ -154,8 +156,11 @@ const RoadEngineerPanel = ({ badge, textColor }: { badge: Color; textColor: Colo
         <Button className={`${styles.choice} ${label.length > 2 ? styles.wideChoice : ""} ${selected ? styles.choiceOn : ""}`} variant="icon"
             focusKey={focus} disabled={disabled} aria-pressed={selected} onSelect={action}>{label}</Button>;
 
-    return <div ref={panelElementRef} className={`${styles.panel} ${matchHC ? styles.matchHC : ""}`}
-        style={{ transform: "translate(" + panelOffset.x + "px," + panelOffset.y + "px)" }}>
+    return <div ref={panelElementRef} className={styles.panel}
+        style={{ transform: "translate(" + panelOffset.x + "px," + panelOffset.y + "px)",
+            backgroundColor: matchHC ? "transparent" : cssColor(20 / 255, 27 / 255, 34 / 255, panelAlpha),
+            backgroundImage: matchHC ? "linear-gradient(" + cssColor(39 / 255, 61 / 255, 72 / 255, panelAlpha) + "," + cssColor(29 / 255, 42 / 255, 59 / 255, panelAlpha) + ")" : "none",
+        }}>
         <SideTooltipProvider anchorRef={panelElementRef} panelRef={panelElementRef} panelWidthRem={PANEL_WIDTH}
             disabled={picker !== null || panelDragging} preferOppositeSide={true}>
             <div className={styles.header}>
@@ -169,24 +174,24 @@ const RoadEngineerPanel = ({ badge, textColor }: { badge: Color; textColor: Colo
                         <img src="Media/Glyphs/Gear.svg" className={`${styles.icon} ${styles.whiteIcon}`} alt="" />
                     </Button>
                 </SideTooltip>
-                <SideTooltip tooltip="Close. Reopen from HC gear." side="above">
+                <SideTooltip tooltip="Close for now. Reopens next road-tool session if Auto show is ON." side="above">
                     <Button className={`${roundButton} ${styles.iconButton}`} variant="icon" focusKey={focus}
                         onSelect={() => trigger(CHANNEL, "CloseRoadEngineer")} aria-label="Close Road Engineer">
                         <img src={closeIconSrc} className={styles.icon} alt="" />
                     </Button>
                 </SideTooltip>
             </div>
-            {enabled && <div className={styles.summary}>
+            <div className={styles.summary}>
                 {rows.map(([label, value, hint]) => <SideTooltip key={label} tooltip={hint} side="left">
                     <div className={styles.row}><span className={styles.label}>{label}</span><span className={styles.value}>{label === "Slope" && valid && <span className={styles.gradeDot} style={{ backgroundColor: gradeColor }} />}{value}</span></div>
                 </SideTooltip>)}
-            </div>}
+            </div>
             {expanded && <div className={styles.settings}>
                 <SideTooltip tooltip="Increase floating measurement text relative to vanilla. Summary text is unchanged. Requires Clutter Filter." side="right">
                     <div className={styles.settingRow}><span>Label Font</span><div className={styles.buttons}>
-                        {choice("−", false, () => trigger(CHANNEL, "SetRoadLabelFontPercent", labelFontPercent - 15), labelFontPercent <= 100)}
+                        {choice("−", false, () => trigger(CHANNEL, "SetRoadLabelFontPercent", labelFontPercent - 10), labelFontPercent <= 100)}
                         <span className={styles.sizeValue}>{labelFontPercent}%</span>
-                        {choice("+", false, () => trigger(CHANNEL, "SetRoadLabelFontPercent", labelFontPercent + 15), labelFontPercent >= 130)}
+                        {choice("+", false, () => trigger(CHANNEL, "SetRoadLabelFontPercent", labelFontPercent + 10), labelFontPercent >= 120)}
                     </div></div>
                 </SideTooltip>
                 <SideTooltip tooltip="Floating label background. Alpha 0% hides the background only." side="right">
@@ -201,13 +206,13 @@ const RoadEngineerPanel = ({ badge, textColor }: { badge: Color; textColor: Colo
                             onChange={v => trigger(CHANNEL, "SetRoadBadgeTextColor", v.r, v.g, v.b)} onPicker={setPicker} />
                     </div></div>
                 </SideTooltip>
-                <SideTooltip tooltip="Color of the road angle indicator." side="right">
-                    <div className={styles.settingRow}><span>Angle color</span>
+                <SideTooltip tooltip="Color of the angle arc and right-angle guide in the world, not the white angle icon inside the label." side="right">
+                    <div className={styles.settingRow}><span>Arc color</span>
                         <RoadColorField value={{r:arcR,g:arcG,b:arcB,a:1}} alpha={false}
                             onChange={v => trigger(CHANNEL, "SetAngleArcColor", v.r, v.g, v.b)} onPicker={setPicker} />
                     </div>
                 </SideTooltip>
-                <SideTooltip tooltip="Live preview of the floating measurement style." side="right">
+                <SideTooltip tooltip="Preview of the floating measurement label. Its white icon is separate from the world arc color." side="right">
                     <div className={`${styles.settingRow} ${styles.previewRow}`}>{preview}<span>Label preview</span></div>
                 </SideTooltip>
                 <SideTooltip tooltip="Metres or 8 m construction units. Floating lengths change with Clutter Filter ON." side="right">
@@ -236,7 +241,7 @@ const RoadEngineerPanel = ({ badge, textColor }: { badge: Color; textColor: Colo
                         {toggle("Clutter filter", filtered, () => trigger(CHANNEL, "ToggleRoadAngleTooltips"))}
                     </div>
                 </SideTooltip>
-                <SideTooltip tooltip="Auto-open the summary while drawing roads. OFF stops measurement updates. Close settings to hide it; reopen from HC gear." side="right">
+                <SideTooltip tooltip="Auto-open when drawing roads. OFF disables automatic opening only. Open manually from HC gear; X closes for now." side="right">
                     <div className={styles.settingRow}><span>Auto show panel</span>
                         {toggle("Auto show panel", enabled, () => {
                             if (enabled) setConfirmOff(true);
@@ -245,7 +250,7 @@ const RoadEngineerPanel = ({ badge, textColor }: { badge: Color; textColor: Colo
                     </div>
                 </SideTooltip>
                 {confirmOff && enabled && <div className={styles.confirmBox}>
-                    <span>Hide road info while drawing?</span>
+                    <span>Disable automatic opening?</span>
                     <div className={styles.buttons}>
                         {choice("No", false, () => setConfirmOff(false))}
                         {choice("Yes", false, () => { setConfirmOff(false); trigger(CHANNEL, "SetRoadEngineerEnabled", false); })}

@@ -9,6 +9,7 @@
 namespace HoverColors
 {
     using Game.Settings;
+    using Game.UI;
 
     public partial class HoverColorsSettings
     {
@@ -47,7 +48,7 @@ namespace HoverColors
 
         internal static int NormalizeRoadLabelFontPercent(int value)
         {
-            return value >= 130 ? 130 : value >= 115 ? 115 : 100;
+            return value >= 120 ? 120 : value >= 110 ? 110 : 100;
         }
 
         [SettingsUISection(Actions, kPanel)]
@@ -55,6 +56,10 @@ namespace HoverColors
 
         [SettingsUISection(Actions, kPanel)]
         public bool RoadEngineerMatchHC { get; set; }
+
+        [SettingsUISection(Actions, kPanel)]
+        [SettingsUISlider(min = 60, max = 100, step = 5, scalarMultiplier = 1, unit = Unit.kPercentage)]
+        public int RoadEngineerPanelOpacity { get; set; } = 100;
 
         [SettingsUIHidden]
         public bool RoadEngineerPositionSet { get; set; }
@@ -82,6 +87,7 @@ namespace HoverColors
             RoadLabelFontPercent = 100;
             RoadEngineerEnabled = true;
             RoadEngineerMatchHC = false;
+            RoadEngineerPanelOpacity = 100;
             RoadEngineerPositionSet = false;
             RoadEngineerOffsetX = 0;
             RoadEngineerOffsetY = 0;

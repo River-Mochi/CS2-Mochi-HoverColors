@@ -41,6 +41,9 @@ namespace HoverColors.UI
         private ValueBinding<bool> m_RoadEngineerSettingsPinnedBinding = null!;
         private bool m_RoadEngineerSettingsOpen;
         private bool m_RoadEngineerSettingsPinned;
+        private bool m_RoadEngineerDismissed;
+        private bool m_RoadEngineerWasInRoadTool;
+        private ValueBinding<int> m_RoadEngineerPanelOpacity = null!;
         private ValueBinding<bool> m_RoadEngineerUnits = null!;
         private ValueBinding<int> m_RoadDistanceDecimals = null!;
         private ValueBinding<int> m_RoadAngleDecimals = null!;
@@ -56,6 +59,7 @@ namespace HoverColors.UI
             m_RoadEngineerTerrain = World.GetOrCreateSystemManaged<TerrainSystem>();
             m_RoadEngineerPrefabs = World.GetOrCreateSystemManaged<PrefabSystem>();
             m_RoadEngineerMatchHC = AddValueBinding("RoadEngineerMatchHC", false);
+            m_RoadEngineerPanelOpacity = AddValueBinding("RoadEngineerPanelOpacity", 100);
             m_RoadEngineerQuery = GetEntityQuery(ComponentType.ReadOnly<CreationDefinition>(),
                 ComponentType.ReadOnly<NetCourse>());
             m_RoadEngineerActive = AddValueBinding("RoadEngineerActive", false);
@@ -97,15 +101,17 @@ namespace HoverColors.UI
 
         private void OpenRoadEngineerSettings()
         {
+            // Opening explicitly outside a road session keeps the summary available
+            // even after the gear is collapsed. Within a road session, close on tool exit.
+            m_RoadEngineerDismissed = false;
             m_RoadEngineerSettingsPinned = true;
             SetRoadEngineerSettingsOpen(true);
         }
 
         private void SetRoadEngineerSettingsOpen(bool open)
         {
+            // The gear never changes visibility or a saved preference.
             m_RoadEngineerSettingsOpen = open;
-            // Auto-show OFF: keep settings accessible until the gear is closed.
-            if (!open) m_RoadEngineerSettingsPinned = false;
             UpdateIfChanged(m_RoadEngineerSettingsOpenBinding, open);
             UpdateIfChanged(m_RoadEngineerSettingsPinnedBinding, m_RoadEngineerSettingsPinned);
         }
@@ -117,25 +123,22 @@ namespace HoverColors.UI
             settings.RoadEngineerEnabled = enabled;
             settings.ApplyAndSave();
             UpdateIfChanged(m_RoadEngineerEnabled, enabled);
-            if (!enabled)
-            {
-                // Keep the currently opened settings available for editing.
-                if (m_RoadEngineerSettingsOpen)
-                {
-                    m_RoadEngineerSettingsPinned = true;
-                    UpdateIfChanged(m_RoadEngineerSettingsPinnedBinding, true);
-                }
-                UpdateIfChanged(m_RoadEngineerActive, false);
-                UpdateIfChanged(m_RoadEngineerCourse, string.Empty);
-                m_RoadEngineerNextRead = 0f;
-            }
+            // A change made from the open panel must not close it.
+            m_RoadEngineerSettingsPinned = true;
+            m_RoadEngineerDismissed = false;
+            UpdateIfChanged(m_RoadEngineerSettingsPinnedBinding, true);
         }
 
         private void CloseRoadEngineer()
         {
+            // Temporary dismissal: reset on leaving the road/path tool.
+            // Do not call SetRoadEngineerEnabled or save settings here.
+            m_RoadEngineerDismissed = true;
             m_RoadEngineerSettingsPinned = false;
             SetRoadEngineerSettingsOpen(false);
-            SetRoadEngineerEnabled(false);
+            UpdateIfChanged(m_RoadEngineerActive, false);
+            UpdateIfChanged(m_RoadEngineerCourse, string.Empty);
+            m_RoadEngineerNextRead = 0f;
         }
 
         private void ResetRoadAppearance(bool native)
@@ -284,6 +287,7 @@ namespace HoverColors.UI
             UpdateIfChanged(m_RoadBadgeTextG, settings?.RoadBadgeTextG ?? 235f / 255f);
             UpdateIfChanged(m_RoadBadgeTextB, settings?.RoadBadgeTextB ?? 128f / 255f);
             UpdateIfChanged(m_RoadEngineerMatchHC, settings?.RoadEngineerMatchHC ?? false);
+            UpdateIfChanged(m_RoadEngineerPanelOpacity, math.clamp(settings?.RoadEngineerPanelOpacity ?? 100, 60, 100));
             UpdateIfChanged(m_RoadEngineerEnabled, settings?.RoadEngineerEnabled ?? true);
             UpdateIfChanged(m_RoadEngineerUnits, settings?.RoadEngineerUseUnits ?? false);
             UpdateIfChanged(m_RoadDistanceDecimals, math.clamp(settings?.RoadDistanceDecimals ?? 2, 0, 2));
@@ -298,21 +302,35 @@ namespace HoverColors.UI
         private void UpdateRoadEngineer()
         {
             SyncRoadEngineerSettings();
-            if (Mod.Settings?.RoadEngineerEnabled != true
-                || m_RoadMeasurementToolSystem?.activeTool is not NetToolSystem netTool
+            if (m_RoadMeasurementToolSystem?.activeTool is not NetToolSystem netTool
                 || netTool.actualMode == NetToolSystem.Mode.Replace
                 || (netTool.GetPrefab() is not RoadPrefab && netTool.GetPrefab() is not PathwayPrefab))
             {
+                if (m_RoadEngineerWasInRoadTool)
+                {
+                    m_RoadEngineerSettingsPinned = false;
+                    SetRoadEngineerSettingsOpen(false);
+                }
+                m_RoadEngineerWasInRoadTool = false;
+                m_RoadEngineerDismissed = false;
                 UpdateIfChanged(m_RoadEngineerActive, false);
                 UpdateIfChanged(m_RoadEngineerCourse, string.Empty);
                 m_RoadEngineerNextRead = 0f;
-                if (m_RoadEngineerSettingsOpen && !m_RoadEngineerSettingsPinned)
-                    SetRoadEngineerSettingsOpen(false);
                 return;
             }
 
-            // Keep settings accessible before drawing and while using a picker.
-            UpdateIfChanged(m_RoadEngineerActive, true);
+            m_RoadEngineerWasInRoadTool = true;
+            bool visible = !m_RoadEngineerDismissed
+                && (Mod.Settings?.RoadEngineerEnabled == true || m_RoadEngineerSettingsPinned);
+            UpdateIfChanged(m_RoadEngineerActive, visible);
+            if (!visible)
+            {
+                UpdateIfChanged(m_RoadEngineerCourse, string.Empty);
+                m_RoadEngineerNextRead = 0f;
+                if (m_RoadEngineerSettingsOpen) SetRoadEngineerSettingsOpen(false);
+                return;
+            }
+
             if (InputManager.instance.mouseOverUI) return;
             float now = UnityEngine.Time.unscaledTime;
             if (now < m_RoadEngineerNextRead) return;
