@@ -85,8 +85,10 @@ namespace HoverColors
                 },
 
                 // Panel style
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.RoadEngineerMatchHC)), "สีเหมือน Hover Colors" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.RoadEngineerMatchHC)), "ใช้พื้นหลังแบบเดียวกับ Hover Colors ปิดเพื่อใช้แบบสีเข้ม" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.RoadEngineerMatchHC)), "สีแผงถนนแบบเกม" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.RoadEngineerMatchHC)), "ปิด: แผงสีเข้ม เปิด: แผงสีเทาอมฟ้า" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.RoadEngineerPanelOpacity)), "ความทึบของแผงถนน" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.RoadEngineerPanelOpacity)), "ปรับเฉพาะพื้นหลัง ตัวอักษรและไอคอนยังคงทึบ" },
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.RoadEngineerEnabled)), "แสดงแผงวัดถนน" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.RoadEngineerEnabled)), "แสดงค่าการวัดขณะสร้างถนนหรือทางเดิน ปิดเพื่อหยุดอัปเดตแผง ตัวกรองทำงานแยกกัน" },
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelStyle)), "▪ เลือกแผงแบบมืดหรือกระจก" },
