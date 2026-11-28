@@ -85,8 +85,8 @@ namespace HoverColors
                 },
 
                 // Panel style
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.RoadEngineerMatchHC)), "Kolory panelu drogowego jak w grze" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.RoadEngineerMatchHC)), "Wył.: ciemny panel. Wł.: niebieskoszary panel." },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.RoadEngineerMatchHC)), "Panel drogowy - styl gry" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.RoadEngineerMatchHC)), "**Wył. (domyślnie):** prosty czarny panel.\n**Wł.:** niebieskoszary panel w stylu gry." },
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.RoadEngineerPanelOpacity)), "Krycie panelu drogowego" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.RoadEngineerPanelOpacity)), "Zmienia tylko tło; tekst i ikony pozostają nieprzezroczyste." },
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.RoadEngineerEnabled)), "Automatycznie otwieraj panel drogowy" },

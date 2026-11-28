@@ -85,8 +85,8 @@ namespace HoverColors
                 },
 
                 // Panel style
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.RoadEngineerMatchHC)), "道路パネルをゲーム風の色にする" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.RoadEngineerMatchHC)), "オフ：黒系。オン：青灰色。" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.RoadEngineerMatchHC)), "道路計測パネル - ゲーム風" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.RoadEngineerMatchHC)), "**オフ（既定）：** シンプルな黒いパネル。\n**オン：** ゲーム風の青灰色パネル。" },
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.RoadEngineerPanelOpacity)), "道路パネルの不透明度" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.RoadEngineerPanelOpacity)), "背景のみ変更。文字とアイコンは不透明のまま。" },
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.RoadEngineerEnabled)), "道路パネルを自動表示" },

@@ -85,8 +85,8 @@ namespace HoverColors
                 },
 
                 // Panel style
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.RoadEngineerMatchHC)), "Colori del pannello come il gioco" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.RoadEngineerMatchHC)), "No: pannello scuro. Sì: pannello grigio-blu." },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.RoadEngineerMatchHC)), "Pannello stradale - stile del gioco" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.RoadEngineerMatchHC)), "**No (predefinito):** pannello nero minimalista.\n**Sì:** pannello grigio-blu, stile del gioco." },
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.RoadEngineerPanelOpacity)), "Opacità del pannello stradale" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.RoadEngineerPanelOpacity)), "Cambia solo lo sfondo; testo e icone restano opachi." },
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.RoadEngineerEnabled)), "Apri automaticamente il pannello stradale" },

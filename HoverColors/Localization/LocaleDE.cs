@@ -85,8 +85,8 @@ namespace HoverColors
                 },
 
                 // Panel style
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.RoadEngineerMatchHC)), "Vanilla-Farben für Straßenbau-Info" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.RoadEngineerMatchHC)), "Aus: dunkles Panel. Ein: blau-graues Panel." },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.RoadEngineerMatchHC)), "Straßenbau-Info – Vanilla-Stil" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.RoadEngineerMatchHC)), "**Aus (Standard):** schlichtes schwarzes Panel.\n**Ein:** blaugraues Panel im Spielstil." },
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.RoadEngineerPanelOpacity)), "Deckkraft der Straßenbau-Info" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.RoadEngineerPanelOpacity)), "Nur der Hintergrund wird transparenter; Text und Symbole bleiben sichtbar." },
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.RoadEngineerEnabled)), "Straßenbau-Info automatisch öffnen" },

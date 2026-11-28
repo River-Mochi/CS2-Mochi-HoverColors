@@ -85,8 +85,8 @@ namespace HoverColors
                 },
 
                 // Panel style
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.RoadEngineerMatchHC)), "Couleurs du panneau comme le jeu" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.RoadEngineerMatchHC)), "Non : panneau sombre. Oui : panneau bleu-gris." },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.RoadEngineerMatchHC)), "Panneau routier - style du jeu" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.RoadEngineerMatchHC)), "**Non (par défaut) :** panneau noir minimaliste.\n**Oui :** panneau bleu-gris, style du jeu." },
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.RoadEngineerPanelOpacity)), "Opacité du panneau routier" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.RoadEngineerPanelOpacity)), "Seul le fond change ; le texte et les icônes restent opaques." },
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.RoadEngineerEnabled)), "Ouvrir le panneau routier automatiquement" },
