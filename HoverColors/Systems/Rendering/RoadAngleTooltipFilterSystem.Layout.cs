@@ -101,11 +101,13 @@ namespace HoverColors.Systems
 
         private static float GetLayoutScale()
         {
-            // The game also exposes a separate accessibility text scale.
-            // Multiply the resolution estimate by that scale so larger UI text
-            // receives more clearance. Do not assume the startup resolution.
-            float textScale = SharedSettings.instance?.userInterface?.textScale ?? 1f;
-            return Mathf.Clamp(Screen.height / 1080f * Mathf.Clamp(textScale, 1f, 1.5f), 0.65f, 4.5f);
+            // Vanilla UI root rem follows viewport width when Interface Scaling
+            // is enabled, otherwise it uses 1px. Font XS uses the native
+            // accessibility multiplier plus 1.15 times its change from 100%.
+            float textScale = Mathf.Clamp(SharedSettings.instance?.userInterface?.textScale ?? 1f, 1f, 1.5f);
+            bool interfaceScaling = SharedSettings.instance?.userInterface?.interfaceScaling ?? true;
+            float remScale = interfaceScaling ? Screen.width / 1920f : 1f;
+            return Mathf.Clamp(remScale * textScale, 0.65f, 4.5f);
         }
 
         private void ArrangeCurveMeasurements(NetToolSystem netTool, TooltipUISystem tooltipUI)
@@ -649,7 +651,11 @@ namespace HoverColors.Systems
         // COHTML does not expose the actual rendered bounds to this C# pass.
         private static float GetRoadLabelFontScale()
         {
-            return HoverColorsSettings.NormalizeRoadLabelFontPercent(Mod.Settings?.RoadLabelFontPercent ?? 100) / 100f;
+            float textScale = Mathf.Clamp(SharedSettings.instance?.userInterface?.textScale ?? 1f, 1f, 1.5f);
+            // GetLayoutScale already includes textScale. Account for the extra
+            // native XS accessibility growth only in estimated badge bounds.
+            float nativeFontCorrection = (textScale + 1.15f * (textScale - 1f)) / textScale;
+            return nativeFontCorrection * HoverColorsSettings.NormalizeRoadLabelFontPercent(Mod.Settings?.RoadLabelFontPercent ?? 100) / 100f;
         }
 
         private static Rect MeasurementRect(float2 center, bool angle, float scale)
