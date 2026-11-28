@@ -17,6 +17,7 @@ import { VanillaComponentResolver } from "../utils/vanilla/VanillaComponentResol
 import { CHANNEL, angleArcR$, angleArcG$, angleArcB$, roadAngleTooltipsHidden$ } from "../panel/bindings/MochiPanelBindings";
 import closeIconSrc from "../../images/Close.svg";
 import dragGripIcon from "../../images/mochi-drag-grip.svg";
+import dragGripHoverIcon from "../../images/mochi-drag-grip-hover.svg";
 import hcStyles from "../MochiColorPickerPanel.module.scss";
 import styles from "./RoadEngineerPanel.module.scss";
 
@@ -114,8 +115,9 @@ const RoadEngineerPanel = ({ badge, textColor }: { badge: Color; textColor: Colo
     const signed = (v: number) => (v > 0 ? "+" : "") + vertical(v);
     const compassPoints = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
     const bearing = valid && Number.isFinite(values[6])
-        ? compassPoints[Math.round(values[6] / 45) % 8] + " " + (Number(values[6].toFixed(angleDecimals)) % 360).toFixed(angleDecimals) + "°"
+        ? (Number(values[6].toFixed(angleDecimals)) % 360).toFixed(angleDecimals) + "°"
         : "—";
+    const compass = valid && Number.isFinite(values[6]) ? compassPoints[Math.round(values[6] / 45) % 8] : "";
     const gradeKnown = valid && Number.isFinite(values[7]) && Number.isFinite(values[8]) && values[8] > 0;
     const ratio = gradeKnown ? values[7] / values[8] : 0;
     const gradeColor = !gradeKnown ? "#87939b" : ratio >= 1 ? "#ef5350" : ratio >= 0.75 ? "#f5ce42" : "#55d881";
@@ -140,7 +142,7 @@ const RoadEngineerPanel = ({ badge, textColor }: { badge: Color; textColor: Colo
         document.body.classList.toggle("mochiRoadCompactPickerOpen", picker !== null);
         return () => { document.body.classList.remove("mochiRoadCompactPickerOpen"); };
     }, [picker]);
-    useEffect(() => { if (!expanded) { setPicker(null); setConfirmOff(false); } }, [expanded]);
+    useEffect(() => { if (!expanded) { setPicker(null); } }, [expanded]);
     const preview = <span className={styles.preview} style={{
         backgroundColor: nativeBackground ? "var(--tooltipColor)" : cssColor(badge.r, badge.g, badge.b, badge.a),
         color: customText ? cssColor(textColor.r, textColor.g, textColor.b, 1) : undefined,
@@ -162,7 +164,7 @@ const RoadEngineerPanel = ({ badge, textColor }: { badge: Color; textColor: Colo
             backgroundImage: matchHC ? "linear-gradient(" + cssColor(39 / 255, 61 / 255, 72 / 255, panelAlpha) + "," + cssColor(29 / 255, 42 / 255, 59 / 255, panelAlpha) + ")" : "none",
         }}>
         <SideTooltipProvider anchorRef={panelElementRef} panelRef={panelElementRef} panelWidthRem={PANEL_WIDTH}
-            disabled={picker !== null || panelDragging} preferOppositeSide={true}>
+            disabled={picker !== null || panelDragging || confirmOff} preferOppositeSide={true} adaptivePanelWidth={true}>
             <div className={styles.header}>
                 <SideTooltip tooltip="Drag panel" side="above" align="center">
                     <div className={styles.dragTitle} onMouseDown={handlePanelDragStart}>Road Engineer</div>
@@ -171,7 +173,7 @@ const RoadEngineerPanel = ({ badge, textColor }: { badge: Color; textColor: Colo
                     <Button className={`${roundButton} ${styles.iconButton} ${expanded ? styles.iconActive : ""}`}
                         variant="icon" focusKey={focus} onSelect={() => trigger(CHANNEL, "SetRoadEngineerSettingsOpen", !expanded)}
                         aria-label="Road Engineer settings" aria-pressed={expanded}>
-                        <img src="Media/Glyphs/Gear.svg" className={`${styles.icon} ${styles.whiteIcon}`} alt="" />
+                        <img src="Media/Glyphs/Gear.svg" className={`${styles.icon} ${styles.whiteIcon} ${styles.gearIcon}`} alt="" />
                     </Button>
                 </SideTooltip>
                 <SideTooltip tooltip="Close for now. Reopens next road-tool session if Auto show is ON." side="above">
@@ -183,7 +185,10 @@ const RoadEngineerPanel = ({ badge, textColor }: { badge: Color; textColor: Colo
             </div>
             <div className={styles.summary}>
                 {rows.map(([label, value, hint]) => <SideTooltip key={label} tooltip={hint} side="left">
-                    <div className={styles.row}><span className={styles.label}>{label}</span><span className={styles.value}>{label === "Slope" && valid && <span className={styles.gradeDot} style={{ backgroundColor: gradeColor }} />}{value}</span></div>
+                    <div className={styles.row}>
+                        <span className={styles.label}>{label}{label === "Slope" && valid && <span className={styles.gradeDot} style={{ backgroundColor: gradeColor }} />}</span>
+                        <span className={styles.value}>{label === "Direction" && compass && <><span className={styles.compass}>{compass}</span><span className={styles.bearing}>{value}</span></>}{(label !== "Direction" || !compass) && value}</span>
+                    </div>
                 </SideTooltip>)}
             </div>
             {expanded && <div className={styles.settings}>
@@ -249,13 +254,6 @@ const RoadEngineerPanel = ({ badge, textColor }: { badge: Color; textColor: Colo
                         })}
                     </div>
                 </SideTooltip>
-                {confirmOff && enabled && <div className={styles.confirmBox}>
-                    <span>Disable automatic opening?</span>
-                    <div className={styles.buttons}>
-                        {choice("No", false, () => setConfirmOff(false))}
-                        {choice("Yes", false, () => { setConfirmOff(false); trigger(CHANNEL, "SetRoadEngineerEnabled", false); })}
-                    </div>
-                </div>}
                 <div className={styles.resetRow}>
                     <SideTooltip tooltip="Restore green background, yellow text, default units, two summary decimals, compact floating labels and native text size. Keep arc color and filter unchanged." side="right">
                         <Button className={styles.resetButton} variant="icon" focusKey={focus}
@@ -267,9 +265,20 @@ const RoadEngineerPanel = ({ badge, textColor }: { badge: Color; textColor: Colo
                     </SideTooltip>
                 </div>
             </div>}
+            {confirmOff && enabled && <div className={styles.confirmBox}>
+                <span className={styles.confirmTitle}>Are you sure?</span>
+                <span className={styles.confirmHint}>Disable Auto show panel?</span>
+                <div className={styles.confirmActions}>
+                    <Button className={styles.confirmButton} variant="icon" focusKey={focus}
+                        onSelect={() => setConfirmOff(false)}>No</Button>
+                    <Button className={`${styles.confirmButton} ${styles.confirmYes}`} variant="icon" focusKey={focus}
+                        onSelect={() => { setConfirmOff(false); trigger(CHANNEL, "SetRoadEngineerEnabled", false); }}>Yes</Button>
+                </div>
+            </div>}
             <div className={styles.footer}>
                 <div className={`${styles.dragGrip} ${panelDragging ? styles.dragging : ""}`} onMouseDown={handlePanelDragStart}>
-                    <img src={dragGripIcon} alt="" />
+                    <img src={dragGripIcon} className={styles.gripNormal} alt="" />
+                    <img src={dragGripHoverIcon} className={styles.gripHover} alt="" />
                 </div>
             </div>
         </SideTooltipProvider>

@@ -75,11 +75,12 @@ type ProviderProps = {
     panelRef: RefObject<HTMLElement | null>;
     disabled?: boolean;
     panelWidthRem?: number;
+    adaptivePanelWidth?: boolean;
     preferOppositeSide?: boolean;
     children: ReactNode;
 };
 
-export const SideTooltipProvider = ({ anchorRef, panelRef, disabled = false, panelWidthRem = PANEL_WIDTH_REM, preferOppositeSide = false, children }: ProviderProps) => {
+export const SideTooltipProvider = ({ anchorRef, panelRef, disabled = false, panelWidthRem = PANEL_WIDTH_REM, preferOppositeSide = false, adaptivePanelWidth = false, children }: ProviderProps) => {
     const [tip, setTip] = useState<TipState>(null);
 
     React.useEffect(() => {
@@ -107,7 +108,11 @@ export const SideTooltipProvider = ({ anchorRef, panelRef, disabled = false, pan
         // The layer is never wider than the panel, so the panel's own width is a safe stand-in for
         // the tooltip's width in the fit tests below.
         const maxWidth = panel.width;
-        const remPx = panel.width / panelWidthRem;
+        const nativeRem = adaptivePanelWidth ? (document.documentElement.getBoundingClientRect().width || window.innerWidth) / 1920 : 0;
+        const rootFont = adaptivePanelWidth ? getComputedStyle(document.documentElement).fontSize : "";
+        const remPx = adaptivePanelWidth && rootFont.endsWith("vw") ? window.innerWidth * parseFloat(rootFont) / 100
+            : adaptivePanelWidth && rootFont.endsWith("px") ? parseFloat(rootFont)
+            : nativeRem || panel.width / panelWidthRem;
 
         let placed = side;
         if (side === "left" && panel.left - GAP_PX - maxWidth < EDGE_PX) {

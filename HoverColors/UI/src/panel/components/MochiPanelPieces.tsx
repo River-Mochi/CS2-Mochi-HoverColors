@@ -15,6 +15,7 @@ import { Color } from "cs2/bindings";
 import { SideTooltip, type SideTooltipSide } from "../tooltip/SideTooltip";
 import styles from "../../MochiColorPickerPanel.module.scss";
 import dragGripIcon from "../../../images/mochi-drag-grip.svg";
+import dragGripHoverIcon from "../../../images/mochi-drag-grip-hover.svg";
 
 type PanelSectionToggleProps = {
     label: string;
@@ -121,6 +122,7 @@ export const DragGrip = ({ active, tooltip, tooltipSide, onMouseDown }: DragGrip
             onMouseDown={onMouseDown}
         >
             <img src={dragGripIcon} className={styles.dragGripIcon} alt="" />
+                <img src={dragGripHoverIcon} className={styles.dragGripHoverIcon} alt="" />
         </div>
     </SideTooltip>
 );

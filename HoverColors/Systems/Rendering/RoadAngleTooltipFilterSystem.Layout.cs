@@ -29,11 +29,11 @@ namespace HoverColors.Systems
     {
         private const int kMaxMeasurements = 32;
         private const int kGuideReturnClearUpdates = 8;
-        private const float kGuideReturnStep = 2f;
+        private const float kGuideReturnStep = 3f;
         private const float kMovingGuideMaxOffset = 60f;
         private const int kFixedGuideClearUpdates = 15;
         private const int kFixedGuideBlockedUpdates = 12;
-        private const float kFixedGuideReturnStep = 2f;
+        private const float kFixedGuideReturnStep = 3f;
 
         private const float kFixedGuideCorrectionLimit = 48f;
         private const float kPiRadiusScale = 1.1f / 1.5f;
@@ -642,7 +642,7 @@ namespace HoverColors.Systems
 
             float fontScale = GetRoadLabelFontScale();
             bounds = new Rect(cursor.x - 8f * scale, cursor.y - 8f * scale,
-                160f * scale * fontScale, (tooltipUI.mouseGroup.children.Count * 38f * fontScale + 16f) * scale);
+                132f * scale * fontScale, (tooltipUI.mouseGroup.children.Count * 32f * fontScale + 16f) * scale);
             return true;
         }
 
@@ -667,8 +667,10 @@ namespace HoverColors.Systems
             // Reserve room for the added decimal separator and digits. Do not
             // change the native PI anchor or bounded displacement limits.
             float fontScale = GetRoadLabelFontScale();
-            float width = ((angle ? 100f : 116f) + (decimals > 0 ? 8f * (decimals + 1) : 0f)) * scale * fontScale;
-            float height = 34f * scale * fontScale;
+            // Two 2560x1440 captures at 100% text: PI ~72-74 rem,
+            // leg ~80-83 rem, height 24 rem. Keep spare room for longer values.
+            float width = ((angle ? 78f : 92f) + (decimals > 0 ? 6f * (decimals + 1) : 0f)) * scale * fontScale;
+            float height = 29f * scale * fontScale;
             return new Rect(center.x - width * 0.5f, center.y - height * 0.5f, width, height);
         }
 

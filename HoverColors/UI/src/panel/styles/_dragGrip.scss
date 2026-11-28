@@ -34,9 +34,20 @@
     pointer-events: none;
 }
 
+.dragGripHoverIcon {
+    width: 26rem;
+    height: 11rem;
+    margin-right: 4rem;
+    pointer-events: none;
+    display: none;
+}
 .dragGrip:hover .dragGripIcon,
 .dragGripActive .dragGripIcon {
-    opacity: 1;
+    display: none;
+}
+.dragGrip:hover .dragGripHoverIcon,
+.dragGripActive .dragGripHoverIcon {
+    display: block;
 }
 
 .dragGripActive {

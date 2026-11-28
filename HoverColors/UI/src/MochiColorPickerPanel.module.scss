@@ -547,6 +547,13 @@
     pointer-events: none;
 }
 
+.roadGearIcon {
+    transform: translateY(-1rem);
+}
+.angleTooltipButton:hover .roadGearIcon {
+    transform: translateY(-1rem) scale(1.10);
+}
+
 .angleTooltipButtonOff,
 .panelDarker .angleTooltipButtonOff {
     background-color: rgba(130, 91, 22, 0.48) !important;
