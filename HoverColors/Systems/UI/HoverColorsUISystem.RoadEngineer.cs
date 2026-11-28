@@ -105,7 +105,7 @@ namespace HoverColors.UI
         {
             m_RoadEngineerSettingsOpen = open;
             // Auto-show OFF: keep settings accessible until the gear is closed.
-            if (!open && Mod.Settings?.RoadEngineerEnabled != true) m_RoadEngineerSettingsPinned = false;
+            if (!open) m_RoadEngineerSettingsPinned = false;
             UpdateIfChanged(m_RoadEngineerSettingsOpenBinding, open);
             UpdateIfChanged(m_RoadEngineerSettingsPinnedBinding, m_RoadEngineerSettingsPinned);
         }

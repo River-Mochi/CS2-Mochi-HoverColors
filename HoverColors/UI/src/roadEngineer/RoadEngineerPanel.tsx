@@ -182,27 +182,6 @@ const RoadEngineerPanel = ({ badge, textColor }: { badge: Color; textColor: Colo
                 </SideTooltip>)}
             </div>}
             {expanded && <div className={styles.settings}>
-                <SideTooltip tooltip="Metres or 8 m construction units. Floating lengths change with Clutter Filter ON." side="right">
-                    <div className={styles.settingRow}><span>Distance units</span><div className={styles.buttons}>
-                        {choice(imperial ? "yd" : "m", !units, () => trigger(CHANNEL, "SetRoadEngineerUseUnits", false))}
-                        {choice("U", units, () => trigger(CHANNEL, "SetRoadEngineerUseUnits", true))}
-                    </div></div>
-                </SideTooltip>
-                <SideTooltip tooltip="Decimals for summary lengths, heights and slope. Also used for floating lengths when Precise labels is ON." side="right">
-                    <div className={styles.settingRow}><span>Length decimals</span><div className={styles.buttons}>
-                        {[0,1,2].map(n => <React.Fragment key={n}>{choice(String(n), distanceDecimals === n, () => trigger(CHANNEL, "SetRoadPrecision", false, n))}</React.Fragment>)}
-                    </div></div>
-                </SideTooltip>
-                <SideTooltip tooltip="Decimals for bearing and verified Point of Intersection (PI) angles when Precise labels is ON." side="right">
-                    <div className={styles.settingRow}><span>Angle decimals</span><div className={styles.buttons}>
-                        {[0,1,2].map(n => <React.Fragment key={n}>{choice(String(n), angleDecimals === n, () => trigger(CHANNEL, "SetRoadPrecision", true, n))}</React.Fragment>)}
-                    </div></div>
-                </SideTooltip>
-                <SideTooltip tooltip="OFF: compact floating labels. ON: use the chosen decimals where verified geometry is available. Requires Clutter Filter. Summary precision and m/U are independent." side="right">
-                    <div className={styles.settingRow}><span>Precise labels</span>
-                        {toggle("Precise floating labels", filtered && preciseFloating, () => trigger(CHANNEL, "SetRoadPreciseFloatingLabels", !preciseFloating), !filtered)}
-                    </div>
-                </SideTooltip>
                 <SideTooltip tooltip="Increase floating measurement text relative to vanilla. Summary text is unchanged. Requires Clutter Filter." side="right">
                     <div className={styles.settingRow}><span>Label Font</span><div className={styles.buttons}>
                         {choice("−", false, () => trigger(CHANNEL, "SetRoadLabelFontPercent", labelFontPercent - 15), labelFontPercent <= 100)}
@@ -229,7 +208,28 @@ const RoadEngineerPanel = ({ badge, textColor }: { badge: Color; textColor: Colo
                     </div>
                 </SideTooltip>
                 <SideTooltip tooltip="Live preview of the floating measurement style." side="right">
-                    <div className={styles.settingRow}>{preview}<span>Label preview</span></div>
+                    <div className={`${styles.settingRow} ${styles.previewRow}`}>{preview}<span>Label preview</span></div>
+                </SideTooltip>
+                <SideTooltip tooltip="Metres or 8 m construction units. Floating lengths change with Clutter Filter ON." side="right">
+                    <div className={styles.settingRow}><span>Distance units</span><div className={styles.buttons}>
+                        {choice(imperial ? "yd" : "m", !units, () => trigger(CHANNEL, "SetRoadEngineerUseUnits", false))}
+                        {choice("U", units, () => trigger(CHANNEL, "SetRoadEngineerUseUnits", true))}
+                    </div></div>
+                </SideTooltip>
+                <SideTooltip tooltip="Decimals for summary lengths, heights and slope. Also used for floating lengths when Precise labels is ON." side="right">
+                    <div className={styles.settingRow}><span>Length decimals</span><div className={styles.buttons}>
+                        {[0,1,2].map(n => <React.Fragment key={n}>{choice(String(n), distanceDecimals === n, () => trigger(CHANNEL, "SetRoadPrecision", false, n))}</React.Fragment>)}
+                    </div></div>
+                </SideTooltip>
+                <SideTooltip tooltip="Decimals for bearing and verified Point of Intersection (PI) angles when Precise labels is ON." side="right">
+                    <div className={styles.settingRow}><span>Angle decimals</span><div className={styles.buttons}>
+                        {[0,1,2].map(n => <React.Fragment key={n}>{choice(String(n), angleDecimals === n, () => trigger(CHANNEL, "SetRoadPrecision", true, n))}</React.Fragment>)}
+                    </div></div>
+                </SideTooltip>
+                <SideTooltip tooltip="OFF: compact floating labels. ON: use the chosen decimals where verified geometry is available. Requires Clutter Filter. Summary precision and m/U are independent." side="right">
+                    <div className={styles.settingRow}><span>Precise labels</span>
+                        {toggle("Precise floating labels", filtered && preciseFloating, () => trigger(CHANNEL, "SetRoadPreciseFloatingLabels", !preciseFloating), !filtered)}
+                    </div>
                 </SideTooltip>
                 <SideTooltip tooltip="Hide unnecessary road hints and reduce measurement overlaps. Same as the HC angle button and hotkey." side="right">
                     <div className={styles.settingRow}><span>Clutter filter</span>
@@ -262,7 +262,6 @@ const RoadEngineerPanel = ({ badge, textColor }: { badge: Color; textColor: Colo
                     </SideTooltip>
                 </div>
             </div>}
-            {expanded && picker === "up" && <div className={styles.secondaryPreview}>{preview}</div>}
             <div className={styles.footer}>
                 <div className={`${styles.dragGrip} ${panelDragging ? styles.dragging : ""}`} onMouseDown={handlePanelDragStart}>
                     <img src={dragGripIcon} alt="" />
@@ -285,7 +284,7 @@ const RoadColorField = ({ value, alpha, onChange, onPicker }: {
     const updateDirection = () => {
         const rect = shell.current?.getBoundingClientRect();
         // Prefer below; use the available screen height rather than the midpoint.
-        const rem = window.innerWidth / 1920;
+        const rem = Math.max(0.65, (shell.current?.getBoundingClientRect().width ?? 20) / 20);
         const needed = (alpha ? 225 : 190) * rem + 16;
         const next = rect && window.innerHeight - rect.bottom < needed && rect.top > window.innerHeight - rect.bottom ? "up" : "down";
         setDirection(next);

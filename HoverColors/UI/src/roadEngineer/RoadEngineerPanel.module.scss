@@ -277,6 +277,8 @@
 
 .matchHC {
     background-color: var(--panelColorNormal);
+}
+:global(.overwrite-legacy) .matchHC {
     background-image: linear-gradient(var(--panelGradientStart), var(--panelGradientEnd));
 }
 .gradeDot {
@@ -295,12 +297,11 @@
     align-items: center;
     justify-content: flex-end;
 }
-.secondaryPreview {
-    align-items: flex-start;
-    padding-left: 8rem;
+.previewRow {
+    min-height: 30rem;
+    height: auto;
     padding-top: 3rem;
     padding-bottom: 3rem;
-    min-height: 26rem;
 }
 .confirmBox {
     font-size: 12rem;
