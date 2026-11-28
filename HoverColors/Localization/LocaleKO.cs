@@ -89,8 +89,8 @@ namespace HoverColors
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.RoadEngineerMatchHC)), "끔: 어두운 패널. 켬: 청회색 패널." },
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.RoadEngineerPanelOpacity)), "도로 패널 불투명도" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.RoadEngineerPanelOpacity)), "배경만 변경하며 글자와 아이콘은 불투명하게 유지합니다." },
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.RoadEngineerEnabled)), "도로 측정 패널 표시" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.RoadEngineerEnabled)), "도로와 보행로 건설 중 측정값을 표시합니다. 끄면 패널 업데이트가 중지됩니다. 툴팁 필터는 별도로 작동합니다." },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.RoadEngineerEnabled)), "도로 패널 자동 표시" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.RoadEngineerEnabled)), "도로 또는 길을 그릴 때 자동 표시. 끄면 HC 톱니바퀴에서 열 수 있습니다." },
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelStyle)), "▪ 다크 또는 글래스 패널 선택" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelStyle)),
                     "**어두움 (바닐라)** 은 게임 기본 패널을 사용합니다.\n" +

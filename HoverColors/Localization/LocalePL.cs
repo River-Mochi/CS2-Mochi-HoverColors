@@ -89,8 +89,8 @@ namespace HoverColors
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.RoadEngineerMatchHC)), "Wył.: ciemny panel. Wł.: niebieskoszary panel." },
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.RoadEngineerPanelOpacity)), "Krycie panelu drogowego" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.RoadEngineerPanelOpacity)), "Zmienia tylko tło; tekst i ikony pozostają nieprzezroczyste." },
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.RoadEngineerEnabled)), "Pokaż panel drogowy" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.RoadEngineerEnabled)), "Pokazuje pomiary podczas budowy dróg i ścieżek. Wyłączenie zatrzymuje aktualizacje panelu. Filtr działa niezależnie." },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.RoadEngineerEnabled)), "Automatycznie otwieraj panel drogowy" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.RoadEngineerEnabled)), "Otwiera przy budowie dróg lub ścieżek. Wył.: otwórz zębatką HC." },
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelStyle)), "▪ Wybierz ciemny lub szklany panel" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelStyle)),
                     "**Ciemny (Vanilla)** używa panelu z gry.\n" +

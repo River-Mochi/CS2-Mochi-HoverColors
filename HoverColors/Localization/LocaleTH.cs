@@ -89,8 +89,8 @@ namespace HoverColors
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.RoadEngineerMatchHC)), "ปิด: แผงสีเข้ม เปิด: แผงสีเทาอมฟ้า" },
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.RoadEngineerPanelOpacity)), "ความทึบของแผงถนน" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.RoadEngineerPanelOpacity)), "ปรับเฉพาะพื้นหลัง ตัวอักษรและไอคอนยังคงทึบ" },
-                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.RoadEngineerEnabled)), "แสดงแผงวัดถนน" },
-                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.RoadEngineerEnabled)), "แสดงค่าการวัดขณะสร้างถนนหรือทางเดิน ปิดเพื่อหยุดอัปเดตแผง ตัวกรองทำงานแยกกัน" },
+                { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.RoadEngineerEnabled)), "เปิดแผงถนนอัตโนมัติ" },
+                { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.RoadEngineerEnabled)), "เปิดเมื่อวาดถนนหรือทางเดิน ปิดแล้วเปิดเองได้จากรูปเฟือง HC" },
                 { m_Settings.GetOptionLabelLocaleID(nameof(HoverColorsSettings.PanelStyle)), "▪ เลือกแผงแบบมืดหรือกระจก" },
                 { m_Settings.GetOptionDescLocaleID(nameof(HoverColorsSettings.PanelStyle)),
                     "**มืด (แบบเกม)** ใช้แผงของเกมโดยตรง\n" +
