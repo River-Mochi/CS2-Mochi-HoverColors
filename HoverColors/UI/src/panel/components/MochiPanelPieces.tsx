@@ -122,7 +122,7 @@ export const DragGrip = ({ active, tooltip, tooltipSide, onMouseDown }: DragGrip
             onMouseDown={onMouseDown}
         >
             <img src={dragGripIcon} className={styles.dragGripIcon} alt="" />
-                <img src={dragGripHoverIcon} className={styles.dragGripHoverIcon} alt="" />
+            <img src={dragGripHoverIcon} className={styles.dragGripHoverIcon} alt="" />
         </div>
     </SideTooltip>
 );

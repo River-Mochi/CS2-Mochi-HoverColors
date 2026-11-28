@@ -78,8 +78,10 @@
 .gearIcon {
     transform: translateY(-1rem);
 }
-.iconButton:hover .gearIcon,
 .iconActive .gearIcon {
+    transform: translateY(-1rem);
+}
+.iconButton:hover .gearIcon {
     transform: translateY(-1rem) scale(1.18);
 }
 .summary {

@@ -143,6 +143,7 @@ const RoadEngineerPanel = ({ badge, textColor }: { badge: Color; textColor: Colo
         return () => { document.body.classList.remove("mochiRoadCompactPickerOpen"); };
     }, [picker]);
     useEffect(() => { if (!expanded) { setPicker(null); } }, [expanded]);
+    useEffect(() => { if (!enabled) setConfirmOff(false); }, [enabled]);
     const preview = <span className={styles.preview} style={{
         backgroundColor: nativeBackground ? "var(--tooltipColor)" : cssColor(badge.r, badge.g, badge.b, badge.a),
         color: customText ? cssColor(textColor.r, textColor.g, textColor.b, 1) : undefined,
@@ -183,6 +184,16 @@ const RoadEngineerPanel = ({ badge, textColor }: { badge: Color; textColor: Colo
                     </Button>
                 </SideTooltip>
             </div>
+            {confirmOff && enabled && <div className={styles.confirmBox}>
+                <span className={styles.confirmTitle}>Are you sure?</span>
+                <span className={styles.confirmHint}>Disable Auto show panel?</span>
+                <div className={styles.confirmActions}>
+                    <Button className={styles.confirmButton} variant="icon" focusKey={focus}
+                        onSelect={() => setConfirmOff(false)}>No</Button>
+                    <Button className={`${styles.confirmButton} ${styles.confirmYes}`} variant="icon" focusKey={focus}
+                        onSelect={() => { setConfirmOff(false); trigger(CHANNEL, "SetRoadEngineerEnabled", false); }}>Yes</Button>
+                </div>
+            </div>}
             <div className={styles.summary}>
                 {rows.map(([label, value, hint]) => <SideTooltip key={label} tooltip={hint} side="left">
                     <div className={styles.row}>
@@ -263,16 +274,6 @@ const RoadEngineerPanel = ({ badge, textColor }: { badge: Color; textColor: Colo
                         <Button className={styles.resetButton} variant="icon" focusKey={focus}
                             onSelect={() => trigger(CHANNEL, "ResetRoadAppearance", true)}>Vanilla</Button>
                     </SideTooltip>
-                </div>
-            </div>}
-            {confirmOff && enabled && <div className={styles.confirmBox}>
-                <span className={styles.confirmTitle}>Are you sure?</span>
-                <span className={styles.confirmHint}>Disable Auto show panel?</span>
-                <div className={styles.confirmActions}>
-                    <Button className={styles.confirmButton} variant="icon" focusKey={focus}
-                        onSelect={() => setConfirmOff(false)}>No</Button>
-                    <Button className={`${styles.confirmButton} ${styles.confirmYes}`} variant="icon" focusKey={focus}
-                        onSelect={() => { setConfirmOff(false); trigger(CHANNEL, "SetRoadEngineerEnabled", false); }}>Yes</Button>
                 </div>
             </div>}
             <div className={styles.footer}>
